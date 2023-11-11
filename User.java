@@ -8,7 +8,7 @@ public class User {
     private static byte[] getSecureHash(String s) {
         KeySpec spec = new PBEKeySpec(s.toCharArray(),
                 Salts.getSaltByDay(LocalDate.now().getDayOfWeek().getValue() - 1),
-                94155, 265); // Gets hashing key using day of the week
+                141551, 265); // Gets hashing key using day of the week
         byte[] hash = null;
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1"); // Hashing algorithm

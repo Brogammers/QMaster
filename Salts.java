@@ -28,7 +28,7 @@ public class Salts {
                     -102, 9, -17, -113, -19, -114, -85, -18, -121, 58, 86, -8, 110, 33, 79, -116, 57, -47, 109, 34, 68,
                     -89, -8, 35, 126, 68, 57, -93, -4, -18, 119, 52, 8, 94, -87, -81, 21, -55, -33, 22, -37 } };
 
-    // Returns the salt for each day Sun -> 0 Mon -> 1 .....
+    // Returns the salt for each day Mon -> 0 Tues -> 1.....
     public static byte[] getSaltByDay(int x) {
         if (x > 6 || x < 0) {
             return null;
