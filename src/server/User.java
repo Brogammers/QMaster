@@ -83,15 +83,15 @@ public class User {
     return password;
   }
 
-  public void setPassword(byte[] password) {
-    this.password = password;
+  public void setPassword(String password) {
+    this.password = getSecureHash(password);
   }
 
   public byte[] getEmail() {
     return email;
   }
 
-  public void setEmail(byte[] email) {
-    this.email = email;
+  public void setEmail(String email) {
+    this.email = getSecureHash(email);
   }
 }
