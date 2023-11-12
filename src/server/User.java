@@ -44,4 +44,54 @@ public class User {
       return null;
     }
   }
+
+  //getter and setter functions
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public Date getDateOfRegistration() {
+    return dateOfRegistration;
+  }
+
+  public void setDateOfRegistration(Date dateOfRegistration) {
+    this.dateOfRegistration = dateOfRegistration;
+  }
+
+  public Date getDateOfBirth() {
+    return dateOfBirth;
+  }
+
+  public void setDateOfBirth(Date dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  public String getCountryOfOrigin() {
+    return countryOfOrigin;
+  }
+
+  public void setCountryOfOrigin(String countryOfOrigin) {
+    this.countryOfOrigin = countryOfOrigin;
+  }
+
+  public byte[] getPassword() {
+    return password;
+  }
+
+  public void setPassword(byte[] password) {
+    this.password = password;
+  }
+
+  public byte[] getEmail() {
+    return email;
+  }
+
+  public void setEmail(byte[] email) {
+    this.email = email;
+  }
 }
