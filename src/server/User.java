@@ -13,6 +13,8 @@ public class User {
   private byte[] password;
   private byte[] email;
 
+  //meow
+
   public User(
     String name,
     Date dateOfRegistration,
