@@ -14,6 +14,7 @@ public class User {
   private byte[] email;
 
   //testing, pls delete this
+  //testing
 
   public User(
     String name,
