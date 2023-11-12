@@ -48,8 +48,6 @@ public class User {
     }
   }
 
-  //getter and setter functions
-
   public String getName() {
     return name;
   }
