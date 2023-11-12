@@ -13,7 +13,7 @@ public class User {
   private byte[] password;
   private byte[] email;
 
-  //meow
+  //testing, pls delete this
 
   public User(
     String name,
