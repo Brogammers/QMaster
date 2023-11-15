@@ -1,4 +1,4 @@
-package server.inprogress;
+package com.que.que.User;
 
 import java.security.spec.KeySpec;
 import java.sql.Date;
@@ -14,6 +14,7 @@ public class User {
   private Date dateOfRegistration;
   private Date dateOfBirth;
   private String countryOfOrigin;
+  private String username;
   private byte[] password;
   private byte[] email;
 
@@ -23,13 +24,15 @@ public class User {
       Date dateOfBirth,
       String countryOfOrigin,
       String password,
-      String email) {
+      String email,
+      String username) {
     this.name = name;
     this.dateOfRegistration = dateOfRegistration;
     this.dateOfBirth = dateOfBirth;
     this.countryOfOrigin = countryOfOrigin;
     this.password = getSecureHash(password);
     this.email = getSecureHash(email);
+    this.username = username;
   }
 
   private static byte[] getSecureHash(String s) {
@@ -71,6 +74,18 @@ public class User {
     return dateOfBirth;
   }
 
+  public String getUserPassword() {
+    String res = "";
+    for (byte b : password) {
+      res += b + ":";
+    }
+    return res;
+  }
+
+  public String getUserUsername() {
+    return this.username;
+  }
+
   public void setDateOfBirth(Date dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
   }
@@ -81,10 +96,6 @@ public class User {
 
   public void setCountryOfOrigin(String countryOfOrigin) {
     this.countryOfOrigin = countryOfOrigin;
-  }
-
-  public byte[] getPassword() {
-    return password;
   }
 
   public void setPassword(String password) {
