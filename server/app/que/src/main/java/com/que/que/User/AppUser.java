@@ -39,7 +39,7 @@ public class AppUser extends User implements UserDetails {
             AppUserRole appUserRole,
             boolean locked,
             boolean enabled) {
-        super(name, dateOfRegistration, dateOfBirth, countryOfOrigin, password, email, username);
+        super(name, dateOfRegistration, dateOfBirth, countryOfOrigin, password, email);
         this.appUserRole = appUserRole;
         this.locked = locked;
         this.enabled = enabled;
@@ -58,7 +58,7 @@ public class AppUser extends User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.getUserUsername();
+        return this.getEmail();
     }
 
     @Override

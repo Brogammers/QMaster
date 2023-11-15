@@ -14,7 +14,6 @@ public class User {
   private Date dateOfRegistration;
   private Date dateOfBirth;
   private String countryOfOrigin;
-  private String username;
   private byte[] password;
   private byte[] email;
 
@@ -24,15 +23,13 @@ public class User {
       Date dateOfBirth,
       String countryOfOrigin,
       String password,
-      String email,
-      String username) {
+      String email) {
     this.name = name;
     this.dateOfRegistration = dateOfRegistration;
     this.dateOfBirth = dateOfBirth;
     this.countryOfOrigin = countryOfOrigin;
     this.password = getSecureHash(password);
     this.email = getSecureHash(email);
-    this.username = username;
   }
 
   private static byte[] getSecureHash(String s) {
@@ -80,10 +77,6 @@ public class User {
       res.append(b + ":");
     }
     return res.toString();
-  }
-
-  public String getUserUsername() {
-    return this.username;
   }
 
   public void setDateOfBirth(Date dateOfBirth) {
