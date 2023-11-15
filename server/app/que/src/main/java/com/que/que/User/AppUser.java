@@ -18,67 +18,66 @@ import jakarta.persistence.SequenceGenerator;
 
 @Entity
 public class AppUser extends User implements UserDetails {
+  @Id
+  @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+  private Long id;
+  @Enumerated(EnumType.STRING)
+  private AppUserRole appUserRole;
+  private boolean locked;
+  private boolean enabled;
 
-    @Id
-    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
-    private Long id;
-    @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
-    private boolean locked;
-    private boolean enabled;
+  public AppUser(
+      String name,
+      Date dateOfRegistration,
+      Date dateOfBirth,
+      String countryOfOrigin,
+      String password,
+      String email,
+      String username,
+      AppUserRole appUserRole,
+      boolean locked,
+      boolean enabled) {
+    super(name, dateOfRegistration, dateOfBirth, countryOfOrigin, password, email);
+    this.appUserRole = appUserRole;
+    this.locked = locked;
+    this.enabled = enabled;
+  }
 
-    public AppUser(
-            String name,
-            Date dateOfRegistration,
-            Date dateOfBirth,
-            String countryOfOrigin,
-            String password,
-            String email,
-            String username,
-            AppUserRole appUserRole,
-            boolean locked,
-            boolean enabled) {
-        super(name, dateOfRegistration, dateOfBirth, countryOfOrigin, password, email);
-        this.appUserRole = appUserRole;
-        this.locked = locked;
-        this.enabled = enabled;
-    }
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
+    return Collections.singletonList(authority);
+  }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
-        return Collections.singletonList(authority);
-    }
+  @Override
+  public String getPassword() {
+    return this.getUserPassword();
+  }
 
-    @Override
-    public String getPassword() {
-        return this.getUserPassword();
-    }
+  @Override
+  public String getUsername() {
+    return this.getEmail();
+  }
 
-    @Override
-    public String getUsername() {
-        return this.getEmail();
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return !locked;
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return !locked;
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
+  @Override
+  public boolean isEnabled() {
+    return enabled;
+  }
 
 }

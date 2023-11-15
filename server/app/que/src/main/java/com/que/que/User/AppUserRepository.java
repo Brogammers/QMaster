@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 @org.springframework.transaction.annotation.Transactional(readOnly = true)
 public interface AppUserRepository {
-    Optional<AppUser> findByEmail(String email);
+  Optional<AppUser> findByEmail(String email);
 }
