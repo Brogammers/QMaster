@@ -75,11 +75,11 @@ public class User {
   }
 
   public String getUserPassword() {
-    String res = "";
+    StringBuilder res = new StringBuilder();
     for (byte b : password) {
-      res += b + ":";
+      res.append(b + ":");
     }
-    return res;
+    return res.toString();
   }
 
   public String getUserUsername() {
@@ -102,8 +102,12 @@ public class User {
     this.password = getSecureHash(password);
   }
 
-  public byte[] getEmail() {
-    return email;
+  public String getEmail() {
+    StringBuilder res = new StringBuilder();
+    for (byte b : email) {
+      res.append(b + ":");
+    }
+    return res.toString();
   }
 
   public void setEmail(String email) {
