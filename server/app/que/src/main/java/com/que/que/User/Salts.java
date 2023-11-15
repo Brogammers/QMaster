@@ -1,4 +1,4 @@
-package server.inprogress;
+package com.que.que.User;
 
 public class Salts {
 

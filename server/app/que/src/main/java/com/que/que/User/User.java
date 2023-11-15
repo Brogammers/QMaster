@@ -1,4 +1,4 @@
-package server.inprogress;
+package com.que.que.User;
 
 import java.security.spec.KeySpec;
 import java.sql.Date;
@@ -71,6 +71,14 @@ public class User {
     return dateOfBirth;
   }
 
+  public String getUserPassword() {
+    StringBuilder res = new StringBuilder();
+    for (byte b : password) {
+      res.append(b + ":");
+    }
+    return res.toString();
+  }
+
   public void setDateOfBirth(Date dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
   }
@@ -83,16 +91,16 @@ public class User {
     this.countryOfOrigin = countryOfOrigin;
   }
 
-  public byte[] getPassword() {
-    return password;
-  }
-
   public void setPassword(String password) {
     this.password = getSecureHash(password);
   }
 
-  public byte[] getEmail() {
-    return email;
+  public String getEmail() {
+    StringBuilder res = new StringBuilder();
+    for (byte b : email) {
+      res.append(b + ":");
+    }
+    return res.toString();
   }
 
   public void setEmail(String email) {
