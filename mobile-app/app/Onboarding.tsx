@@ -1,12 +1,13 @@
 import React from "react"
 import { View, Text } from "../components/Themed"
-import { Image, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
+import Image from 'react-native-remote-svg'
 import Logo from '../shared/icons/logo'
 
 const Onboarding = () => {
     return (
         <View style = {styles.container}>
-            <Image source={require('../assets/images/onboarding1.svg')} style={styles.image}/>
+            <Image source={require('../assets/images/onboarding1.svg')}/>
         </View>
     )
 }
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     image: {
-        width: 100,
+        width: 15,
         height: 15,
         flex: 1,
     }
