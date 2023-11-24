@@ -3,11 +3,18 @@ import { View, Text } from "../components/Themed"
 import { StyleSheet } from "react-native"
 import Image from 'react-native-remote-svg'
 import Logo from '../shared/icons/logo'
+import Onboarding1 from "../shared/images/onboarding1"
+import Onboarding2 from "../shared/images/onboarding2"
+import Onboarding3 from "../shared/images/onboarding3"
+import Onboarding4 from "../shared/images/onboarding4"
+
 
 const Onboarding = () => {
     return (
-        <View style = {styles.container}>
-            <Image source={require('../assets/images/onboarding1.svg')}/>
+        <View className="bg-[#2F2E41] h-screen justify-center items-center">
+            <Logo className="py-[60px]"/>
+            <Onboarding1 />
+
         </View>
     )
 }
@@ -15,7 +22,8 @@ const Onboarding = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: '#2F2E41'
     },
     image: {
         width: 15,
