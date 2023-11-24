@@ -32,8 +32,8 @@ public class AppUser extends User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private AppUserRole appUserRole;
 
-  private boolean locked;
-  private boolean enabled;
+  private boolean locked = false;
+  private boolean enabled = false;
 
   public AppUser(
     String firstName,
