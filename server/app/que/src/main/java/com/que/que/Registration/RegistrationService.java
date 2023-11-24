@@ -1,6 +1,7 @@
 package com.que.que.Registration;
 
-import org.springframework.stereotype.Serivce;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class RegistrationService {
       new AppUser(
         request.getFirstName(),
         request.getLastName(),
-        request.getUserName(),
+        request.getUsername(),
         request.getEmail(),
         request.getPassword(),
         AppUserRole.USER
