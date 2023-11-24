@@ -1,13 +1,5 @@
 package com.que.que.User;
 
-import java.sql.Date;
-import java.util.Collection;
-import java.util.Collections;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,30 +7,56 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
+import java.sql.Date;
+import java.util.Collection;
+import java.util.Collections;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 public class AppUser extends User implements UserDetails {
+
   @Id
-  @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+  @SequenceGenerator(
+    name = "user_sequence",
+    sequenceName = "user_sequence",
+    allocationSize = 1
+  )
+  @GeneratedValue(
+    strategy = GenerationType.SEQUENCE,
+    generator = "user_sequence"
+  )
   private Long id;
+
   @Enumerated(EnumType.STRING)
   private AppUserRole appUserRole;
+
   private boolean locked;
   private boolean enabled;
 
   public AppUser(
-      String name,
-      Date dateOfRegistration,
-      Date dateOfBirth,
-      String countryOfOrigin,
-      String password,
-      String email,
-      String username,
-      AppUserRole appUserRole,
-      boolean locked,
-      boolean enabled) {
-    super(name, dateOfRegistration, dateOfBirth, countryOfOrigin, password, email);
+    String firstName,
+    String lastName,
+    Date dateOfRegistration,
+    Date dateOfBirth,
+    String countryOfOrigin,
+    String password,
+    String email,
+    String username,
+    AppUserRole appUserRole,
+    boolean locked,
+    boolean enabled
+  ) {
+    super(
+      firstName,
+      lastName,
+      dateOfRegistration,
+      dateOfBirth,
+      countryOfOrigin,
+      password,
+      email
+    );
     this.appUserRole = appUserRole;
     this.locked = locked;
     this.enabled = enabled;
@@ -46,7 +64,9 @@ public class AppUser extends User implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
+    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
+      appUserRole.name()
+    );
     return Collections.singletonList(authority);
   }
 
@@ -79,5 +99,4 @@ public class AppUser extends User implements UserDetails {
   public boolean isEnabled() {
     return enabled;
   }
-
 }

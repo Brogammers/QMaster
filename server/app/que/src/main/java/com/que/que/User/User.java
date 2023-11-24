@@ -4,13 +4,13 @@ import java.security.spec.KeySpec;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
-
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 public class User {
 
-  private String name;
+  private String firstName;
+  private String lastName;
   private Date dateOfRegistration;
   private Date dateOfBirth;
   private String countryOfOrigin;
@@ -18,13 +18,16 @@ public class User {
   private byte[] email;
 
   public User(
-      String name,
-      Date dateOfRegistration,
-      Date dateOfBirth,
-      String countryOfOrigin,
-      String password,
-      String email) {
-    this.name = name;
+    String firstName,
+    String lastName,
+    Date dateOfRegistration,
+    Date dateOfBirth,
+    String countryOfOrigin,
+    String password,
+    String email
+  ) {
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.dateOfRegistration = dateOfRegistration;
     this.dateOfBirth = dateOfBirth;
     this.countryOfOrigin = countryOfOrigin;
@@ -34,14 +37,16 @@ public class User {
 
   private static byte[] getSecureHash(String s) {
     KeySpec spec = new PBEKeySpec(
-        s.toCharArray(),
-        Salts.getSaltByDay(LocalDate.now().getDayOfWeek().getValue() - 1),
-        141551,
-        265); // Gets hashing key using day of the week
+      s.toCharArray(),
+      Salts.getSaltByDay(LocalDate.now().getDayOfWeek().getValue() - 1),
+      141551,
+      265
+    ); // Gets hashing key using day of the week
     byte[] hash = null;
     try {
       SecretKeyFactory factory = SecretKeyFactory.getInstance(
-          "PBKDF2WithHmacSHA1"); // Hashing algorithm
+        "PBKDF2WithHmacSHA1"
+      ); // Hashing algorithm
       hash = factory.generateSecret(spec).getEncoded();
       return hash; // Hash was successful
     } catch (Exception e) {
@@ -51,12 +56,20 @@ public class User {
 
   // Getters and Setters
 
-  public String getName() {
-    return name;
+  public String getFirstName() {
+    return firstName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public String setLastName(String lastName) {
+    this.lastName = lastName;
   }
 
   public Date getDateOfRegistration() {
@@ -112,10 +125,17 @@ public class User {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
-    result = prime * result + ((dateOfRegistration == null) ? 0 : dateOfRegistration.hashCode());
-    result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
-    result = prime * result + ((countryOfOrigin == null) ? 0 : countryOfOrigin.hashCode());
+    result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+    result =
+      prime *
+      result +
+      ((dateOfRegistration == null) ? 0 : dateOfRegistration.hashCode());
+    result =
+      prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
+    result =
+      prime *
+      result +
+      ((countryOfOrigin == null) ? 0 : countryOfOrigin.hashCode());
     result = prime * result + Arrays.hashCode(password);
     result = prime * result + Arrays.hashCode(email);
     return result;
@@ -123,37 +143,29 @@ public class User {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     User other = (User) obj;
-    if (name == null) {
-      if (other.name != null)
-        return false;
-    } else if (!name.equals(other.name))
-      return false;
+    if (lastName == null) {
+      if (other.lastName != null) return false;
+    } else if (!lastName.equals(other.lastName)) return false;
+    if (firstName == null) {
+      if (other.firstName != null) return false;
+    } else if (!firstName.equals(other.firstName)) return false;
     if (dateOfRegistration == null) {
-      if (other.dateOfRegistration != null)
-        return false;
-    } else if (!dateOfRegistration.equals(other.dateOfRegistration))
-      return false;
+      if (other.dateOfRegistration != null) return false;
+    } else if (
+      !dateOfRegistration.equals(other.dateOfRegistration)
+    ) return false;
     if (dateOfBirth == null) {
-      if (other.dateOfBirth != null)
-        return false;
-    } else if (!dateOfBirth.equals(other.dateOfBirth))
-      return false;
+      if (other.dateOfBirth != null) return false;
+    } else if (!dateOfBirth.equals(other.dateOfBirth)) return false;
     if (countryOfOrigin == null) {
-      if (other.countryOfOrigin != null)
-        return false;
-    } else if (!countryOfOrigin.equals(other.countryOfOrigin))
-      return false;
-    if (!Arrays.equals(password, other.password))
-      return false;
-    if (!Arrays.equals(email, other.email))
-      return false;
+      if (other.countryOfOrigin != null) return false;
+    } else if (!countryOfOrigin.equals(other.countryOfOrigin)) return false;
+    if (!Arrays.equals(password, other.password)) return false;
+    if (!Arrays.equals(email, other.email)) return false;
     return true;
   }
 }
