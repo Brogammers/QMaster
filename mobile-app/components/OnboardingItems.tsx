@@ -1,15 +1,17 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View, useWindowDimensions} from "react-native";
 import Image from 'react-native-remote-svg'
-import onboarding1 from "../assets/images/onboarding1.svg";
+import { OnboardingData } from "../data";
 
-const OnboardingItems = () => {
+const OnboardingItems = ( { item } ) => {
+  const {width} = useWindowDimensions()
     return (
-        <>
-          <Image source={onboarding1} />
-          <Text className="mt-5 text-center text-white">Say goodbye to waiting in queues to finish a single errand.</Text>
-        </>
+        <View className="flex items-center justify-center w-screen mt-7">
+          <Image source={item.image} />
+          <Text className="w-4/5 mt-5 text-center text-white" >{item.text}</Text>
+        </View>
     )
 }
+
 
 export default OnboardingItems;
