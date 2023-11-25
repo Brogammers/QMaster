@@ -1,34 +1,59 @@
 import React from "react"
 import { View, Text } from "../components/Themed"
-import { StyleSheet } from "react-native"
+import { StyleSheet, Pressable } from "react-native"
 import Image from 'react-native-remote-svg'
-import Logo from '../shared/icons/logo'
-import Onboarding1 from "../shared/images/onboarding1"
-import Onboarding2 from "../shared/images/onboarding2"
-import Onboarding3 from "../shared/images/onboarding3"
-import Onboarding4 from "../shared/images/onboarding4"
+import onboarding1 from '../assets/images/onboarding1.svg';
+import onboarding2 from '../assets/images/onboarding2.svg';
+import onboarding3 from '../assets/images/onboarding3.svg';
+import onboarding4 from '../assets/images/onboarding4.svg';
+import logoImage from '../assets/images/logoImage.svg';
+import { TouchableOpacity } from "react-native-gesture-handler";
+import OnboardingItems from "../components/OnboardingItems";
 
+import { Dimensions } from 'react-native';
+
+const window = Dimensions.get('window');
 
 const Onboarding = () => {
-    return (
-        <View className="bg-[#2F2E41] h-screen justify-center items-center">
-            <Logo className="py-[60px]"/>
-            <Onboarding1 />
-
+  return (
+    <View className="bg-[#2F2E41] h-screen justify-center items-center" style={styles.container}>
+      <View style={styles.row} className="bg-transparent">
+        <View className="bg-transparent">
+          <Image source={logoImage} />
         </View>
-    )
+        <View className="mt-5 bg-transparent">
+          <OnboardingItems />
+        </View>
+        <TouchableOpacity className="bg-[#1DCDFE] mt-8 flex justify-center items-center rounded-lg h-11" style={styles.buttonWidth}>
+          <Text className="text-xl font-bold"> Log In </Text>
+        </TouchableOpacity>
+        <TouchableOpacity className="bg-[#C5C5C5] mt-3.5 flex justify-center items-center rounded-lg h-11" style={styles.buttonWidth}>
+          <Text className="text-xl font-bold text-black"> Sign Up </Text>
+        </TouchableOpacity>
+
+      </View>
+    </View>
+  )
 }
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#2F2E41'
-    },
-    image: {
-        width: 15,
-        height: 15,
-        flex: 1,
-    }
+  container: {
+    backgroundColor: '#17222D',
+    color: '#FFF',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  row: {
+    width: '80%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonWidth: {
+    width: (window.width) * 0.8,
+  }
 })
 export default Onboarding;
