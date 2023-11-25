@@ -7,7 +7,7 @@ import OnboardingItems from "../components/OnboardingItems";
 import TextButton from "../components/TextButton";
 import { Dimensions } from 'react-native';
 import { OnboardingData } from "../data";
-import Paginator from '../components/paginator'
+import Paginator from '../components/paginator';
 
 const window = Dimensions.get('window');
 

@@ -10,14 +10,14 @@ const TextButton = (props: { text: string; buttonColour: string, textColor: stri
 
     if (props.text2 == null){
     return (
-        <TouchableOpacity className="flex items-center justify-center mt-3.5 rounded-lg h-11" style={[styles.buttonWidth, {backgroundColor: props.buttonColour}]}>
+        <TouchableOpacity className="flex items-center justify-center mt-3.5 rounded-lg " style={[styles.buttonWidth, {backgroundColor: props.buttonColour}]}>
           <Text className="text-xl font-bold" style = {{color: props.textColor}}> {props.text} </Text>
         </TouchableOpacity>
     )
     }
     else{
         return (
-        <TouchableOpacity className="flex items-center justify-center mt-3.5 rounded-lg h-11" style={[styles.buttonWidth, {backgroundColor: props.buttonColour}]}>
+        <TouchableOpacity className="flex items-center justify-center mt-3.5 rounded-lg" style={[styles.buttonWidth, {backgroundColor: props.buttonColour}]}>
             <Text className="text-xl font-bold" style = {{color: props.textColor}}> {props.text} </Text>
             <Text className="text-xl font-bold" style = {{color: props.textColor}}> {props.text2} </Text>
         </TouchableOpacity>
@@ -28,6 +28,7 @@ const TextButton = (props: { text: string; buttonColour: string, textColor: stri
 const styles = StyleSheet.create({
     buttonWidth: {
         width: (window.width) * 0.8,
+        padding: 14,
       }
 })
 export default TextButton;
