@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.que.que.Email.EmailSender;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.User.AppUser;
@@ -19,13 +20,14 @@ public class RegistrationService {
   private final AppUserService appUserService;
   private final EmailValidator emailValidator;
   private final ConfirmationTokenService confirmationTokenService;
+  private final EmailSender emailSender;
 
   public String register(RegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
     if (!isValidEmail) {
       throw new IllegalStateException("Not Functional");
     }
-    return appUserService.signUpUser(
+    String token = appUserService.signUpUser(
         new AppUser(
             request.getFirstName(),
             request.getLastName(),
@@ -38,6 +40,8 @@ public class RegistrationService {
             AppUserRole.USER,
             true,
             true));
+    emailSender.send(request.getEmail(), "Hello!"); // TODO: Send email
+    return token;
   }
 
   @Transactional
