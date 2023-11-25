@@ -56,4 +56,10 @@ public class AppUserService implements UserDetailsService {
 
     return "Registered!";
   }
+
+  public void enableAppUser(String email) {
+    AppUser appUser = appUserRepository.findByEmail(email)
+        .orElseThrow(() -> new IllegalStateException("User was not found"));
+    appUser.setEnabled(true);
+  }
 }
