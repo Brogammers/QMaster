@@ -1,7 +1,12 @@
 package com.que.que.Registration;
 
 import lombok.AllArgsConstructor;
+
+import java.time.LocalDate;
 import org.springframework.stereotype.Service;
+import com.que.que.User.AppUser;
+import com.que.que.User.AppUserService;
+import com.que.que.User.AppUserRole;
 
 @Service
 @AllArgsConstructor
@@ -16,14 +21,17 @@ public class RegistrationService {
       throw new IllegalStateException("Not Functional");
     }
     return appUserService.signUpUser(
-      new AppUser(
-        request.getFirstName(),
-        request.getLastName(),
-        request.getUsername(),
-        request.getEmail(),
-        request.getPassword(),
-        AppUserRole.USER
-      )
-    );
+        new AppUser(
+            request.getFirstName(),
+            request.getLastName(),
+            LocalDate.now(),
+            request.getDateOfBirth(),
+            request.getCountryOfOrigin(),
+            request.getPassword(),
+            request.getEmail(),
+            request.getUsername(),
+            AppUserRole.USER,
+            true,
+            true));
   }
 }

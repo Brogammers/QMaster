@@ -1,7 +1,6 @@
 package com.que.que.User;
 
 import java.security.spec.KeySpec;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
 import javax.crypto.SecretKeyFactory;
@@ -11,21 +10,20 @@ public class User {
 
   private String firstName;
   private String lastName;
-  private Date dateOfRegistration;
-  private Date dateOfBirth;
+  private LocalDate dateOfRegistration;
+  private LocalDate dateOfBirth;
   private String countryOfOrigin;
   private byte[] password;
   private byte[] email;
 
   public User(
-    String firstName,
-    String lastName,
-    Date dateOfRegistration,
-    Date dateOfBirth,
-    String countryOfOrigin,
-    String password,
-    String email
-  ) {
+      String firstName,
+      String lastName,
+      LocalDate dateOfRegistration,
+      LocalDate dateOfBirth,
+      String countryOfOrigin,
+      String password,
+      String email) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.dateOfRegistration = dateOfRegistration;
@@ -37,16 +35,14 @@ public class User {
 
   private static byte[] getSecureHash(String s) {
     KeySpec spec = new PBEKeySpec(
-      s.toCharArray(),
-      Salts.getSaltByDay(LocalDate.now().getDayOfWeek().getValue() - 1),
-      141551,
-      265
-    ); // Gets hashing key using day of the week
+        s.toCharArray(),
+        Salts.getSaltByDay(LocalDate.now().getDayOfWeek().getValue() - 1),
+        141551,
+        265); // Gets hashing key using day of the week
     byte[] hash = null;
     try {
       SecretKeyFactory factory = SecretKeyFactory.getInstance(
-        "PBKDF2WithHmacSHA1"
-      ); // Hashing algorithm
+          "PBKDF2WithHmacSHA1"); // Hashing algorithm
       hash = factory.generateSecret(spec).getEncoded();
       return hash; // Hash was successful
     } catch (Exception e) {
@@ -72,15 +68,15 @@ public class User {
     this.lastName = lastName;
   }
 
-  public Date getDateOfRegistration() {
+  public LocalDate getDateOfRegistration() {
     return dateOfRegistration;
   }
 
-  public void setDateOfRegistration(Date dateOfRegistration) {
+  public void setDateOfRegistration(LocalDate dateOfRegistration) {
     this.dateOfRegistration = dateOfRegistration;
   }
 
-  public Date getDateOfBirth() {
+  public LocalDate getDateOfBirth() {
     return dateOfBirth;
   }
 
@@ -92,7 +88,7 @@ public class User {
     return res.toString();
   }
 
-  public void setDateOfBirth(Date dateOfBirth) {
+  public void setDateOfBirth(LocalDate dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
   }
 
@@ -126,16 +122,13 @@ public class User {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-    result =
-      prime *
-      result +
-      ((dateOfRegistration == null) ? 0 : dateOfRegistration.hashCode());
-    result =
-      prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
-    result =
-      prime *
-      result +
-      ((countryOfOrigin == null) ? 0 : countryOfOrigin.hashCode());
+    result = prime *
+        result +
+        ((dateOfRegistration == null) ? 0 : dateOfRegistration.hashCode());
+    result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
+    result = prime *
+        result +
+        ((countryOfOrigin == null) ? 0 : countryOfOrigin.hashCode());
     result = prime * result + Arrays.hashCode(password);
     result = prime * result + Arrays.hashCode(email);
     return result;
@@ -143,29 +136,42 @@ public class User {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
     User other = (User) obj;
     if (lastName == null) {
-      if (other.lastName != null) return false;
-    } else if (!lastName.equals(other.lastName)) return false;
+      if (other.lastName != null)
+        return false;
+    } else if (!lastName.equals(other.lastName))
+      return false;
     if (firstName == null) {
-      if (other.firstName != null) return false;
-    } else if (!firstName.equals(other.firstName)) return false;
+      if (other.firstName != null)
+        return false;
+    } else if (!firstName.equals(other.firstName))
+      return false;
     if (dateOfRegistration == null) {
-      if (other.dateOfRegistration != null) return false;
-    } else if (
-      !dateOfRegistration.equals(other.dateOfRegistration)
-    ) return false;
+      if (other.dateOfRegistration != null)
+        return false;
+    } else if (!dateOfRegistration.equals(other.dateOfRegistration))
+      return false;
     if (dateOfBirth == null) {
-      if (other.dateOfBirth != null) return false;
-    } else if (!dateOfBirth.equals(other.dateOfBirth)) return false;
+      if (other.dateOfBirth != null)
+        return false;
+    } else if (!dateOfBirth.equals(other.dateOfBirth))
+      return false;
     if (countryOfOrigin == null) {
-      if (other.countryOfOrigin != null) return false;
-    } else if (!countryOfOrigin.equals(other.countryOfOrigin)) return false;
-    if (!Arrays.equals(password, other.password)) return false;
-    if (!Arrays.equals(email, other.email)) return false;
+      if (other.countryOfOrigin != null)
+        return false;
+    } else if (!countryOfOrigin.equals(other.countryOfOrigin))
+      return false;
+    if (!Arrays.equals(password, other.password))
+      return false;
+    if (!Arrays.equals(email, other.email))
+      return false;
     return true;
   }
 }
