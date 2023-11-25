@@ -5,7 +5,7 @@ import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import 'react-native-gesture-handler';
-import { SignUp } from './SignUp';
+import { SessionProvider } from '../ctx/AuthContext';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -22,7 +22,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Inter: require('../assets/fonts/Inter-VariableFont.ttf'),
     ...FontAwesome.font,
   });
 
@@ -49,10 +49,12 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
+      <SessionProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        </Stack>
+      </SessionProvider>
     </ThemeProvider>
   );
 }

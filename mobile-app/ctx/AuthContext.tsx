@@ -1,5 +1,5 @@
 import React from 'react';
-// import { useStorageState } from './useStorageState';
+import { useStorageState } from '../hooks/useStorageState';
 
 const AuthContext = React.createContext<{ signIn: () => void; signOut: () => void; session?: string | null, isLoading: boolean } | null>(null);
 
@@ -16,23 +16,22 @@ export function useSession() {
 }
 
 export function SessionProvider(props: React.PropsWithChildren) {
-  // const [[isLoading, session], setSession] = useStorageState('session');
+  const [[isLoading, session], setSession] = useStorageState('session');
 
   return (
-    // <AuthContext.Provider
-    //   value={{
-    //     signIn: () => {
-    //       // Perform sign-in logic here
-    //       setSession('xxx');
-    //     },
-    //     signOut: () => {
-    //       setSession(null);
-    //     },
-    //     session,
-    //     isLoading,
-    //   }}>
-    //   {props.children}
-    // </AuthContext.Provider>
-    console.log("Authorizing")
+    <AuthContext.Provider
+      value={{
+        signIn: () => {
+          // Perform sign-in logic here
+          setSession('xxx');
+        },
+        signOut: () => {
+          setSession(null);
+        },
+        session,
+        isLoading,
+      }}>
+      {props.children}
+    </AuthContext.Provider>
   );
 }
