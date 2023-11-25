@@ -56,7 +56,7 @@ export default function TabTwoScreen() {
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 secureTextEntry
-                value={values.password}
+                value={values.password}   
               />
               <TextInput
                 style={styles.input}
