@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.que.que.Email.EmailService;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 
@@ -20,6 +21,7 @@ public class AppUserService implements UserDetailsService {
   private final AppUserRepository appUserRepository;
   private static final String USER_NOT_FOUND_MSG = "User with email %s was not found in the database";
   private final ConfirmationTokenService confirmationTokenService;
+  private final EmailService emailService;
 
   @Override
   public UserDetails loadUserByUsername(String username)
@@ -51,9 +53,7 @@ public class AppUserService implements UserDetailsService {
         appUser);
 
     confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-    // TODO: SEND EMAIL
-
+    emailService.send(appUser.getEmail(), "Hello!"); // TODO: Send email
     return "Registered!";
   }
 
