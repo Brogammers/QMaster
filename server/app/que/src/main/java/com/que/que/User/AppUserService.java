@@ -30,7 +30,7 @@ public class AppUserService implements UserDetailsService {
       throw new IllegalStateException("Email is already in use.");
     }
 
-    appUserRepository.equals(1);
+    appUserRepository.save(appUser);
 
     appUser.setPassword(appUser.getPassword());
     // TODO: Send confirmation token
