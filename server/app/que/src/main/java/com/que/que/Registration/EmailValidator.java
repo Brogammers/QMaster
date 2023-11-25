@@ -1,5 +1,7 @@
 package com.que.que.Registration;
 
+import java.util.function.Predicate;
+
 public class EmailValidator implements Predicate<String> {
 
   @Override

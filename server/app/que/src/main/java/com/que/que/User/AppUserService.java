@@ -11,30 +11,26 @@ import org.springframework.stereotype.Service;
 public class AppUserService implements UserDetailsService {
 
   private final AppUserRepository appUserRepository;
-  private static final String USER_NOT_FOUND_MSG =
-    "User with email %s was not found in the database";
+  private static final String USER_NOT_FOUND_MSG = "User with email %s was not found in the database";
 
   @Override
   public UserDetails loadUserByUsername(String username)
-    throws UsernameNotFoundException {
+      throws UsernameNotFoundException {
     return appUserRepository
-      .findByEmail(username)
-      .orElseThrow(() ->
-        new UsernameNotFoundException(
-          String.format(USER_NOT_FOUND_MSG, username)
-        )
-      );
+        .findByEmail(username)
+        .orElseThrow(() -> new UsernameNotFoundException(
+            String.format(USER_NOT_FOUND_MSG, username)));
   }
 
   public String signUpUser(AppUser appUser) {
     boolean userExists = appUserRepository
-      .findByEmail(appUser.getEmail())
-      .isPresent();
+        .findByEmail(appUser.getEmail())
+        .isPresent();
     if (userExists) {
       throw new IllegalStateException("Email is already in use.");
     }
 
-    appUserRepository.save(appUser);
+    appUserRepository.equals(1);
 
     appUser.setPassword(appUser.getPassword());
     // TODO: Send confirmation token
