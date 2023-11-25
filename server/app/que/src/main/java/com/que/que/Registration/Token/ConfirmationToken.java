@@ -1,6 +1,6 @@
 package com.que.que.Registration.Token;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.que.que.User.AppUser;
 
@@ -26,16 +26,16 @@ public class ConfirmationToken {
   @Column(nullable = false)
   private String token;
   @Column(nullable = false)
-  private LocalDateTime createdAt;
+  private LocalDate createdAt;
   @Column(nullable = false)
-  private LocalDateTime expiresAt;
-  private LocalDateTime confirmedAt;
+  private LocalDate expiresAt;
+  private LocalDate confirmedAt;
 
   @ManyToOne
   @JoinColumn(nullable = false, name = "app_user_id")
   private AppUser appUser;
 
-  public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiredAt, LocalDateTime confirmedAt,
+  public ConfirmationToken(String token, LocalDate createdAt, LocalDate expiredAt, LocalDate confirmedAt,
       AppUser appUser) {
     this.token = token;
     this.createdAt = createdAt;
