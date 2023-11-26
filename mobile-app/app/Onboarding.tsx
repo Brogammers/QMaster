@@ -11,9 +11,7 @@ const Onboarding = () => {
   return (
     <View className='bg-[#2F2E41] h-screen justify-center items-center' style={styles.container}>
       <View style={styles.row} className='bg-transparent'>
-        <View className='bg-transparent'>
-          <Image source={logoImage} />
-        </View>
+        <Image source={logoImage} />
 
         <Carousel />
 

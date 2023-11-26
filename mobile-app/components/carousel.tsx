@@ -37,6 +37,8 @@ const Carousel: React.FC<CarouselProps> = () => {
         scrollEventThrottle={32}
         onViewableItemsChanged={viewableItemsChanged}
         viewabilityConfig={viewConfig}
+
+        className='mt-5'
       />
 
       <Paginator data={OnboardingData} scrollX={scrollX} />
