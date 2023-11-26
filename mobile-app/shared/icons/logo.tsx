@@ -4,11 +4,9 @@ import logoImage from '../../assets/images/logoImage.svg';
 
 
 const logo = () => {
-    return (
-        <Image
-        source={logoImage}
-      />
-    )
+  return (
+    <Image source={logoImage} />
+  )
 }
 
 export default logo;
