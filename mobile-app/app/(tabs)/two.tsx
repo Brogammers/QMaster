@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { 
   View, 
   Text, 
@@ -11,6 +11,9 @@ import {
 import { Formik } from 'formik';
 
 export default function TabTwoScreen() {
+
+  const [text, setText] = useState<string>('');
+
   const handleSignUp = (values: any) => {
     console.log("Signing up...", values);
   };
@@ -20,11 +23,13 @@ export default function TabTwoScreen() {
       <View style={styles.row}>
         <Text
           style={styles.title}
-          className='font-extrabold'
+          className='text-2xl text-white mb-4'
         >
           Welcome!
         </Text>
-        <Text style={styles.subtitle}>Let's help you save more time.</Text>
+        <Text className='text-base text-white mb-10'>
+          Let's help you save more time.
+        </Text>
 
         <Formik
           initialValues={{
@@ -36,22 +41,27 @@ export default function TabTwoScreen() {
           onSubmit={handleSignUp}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
-            <View style={styles.form}>
+            <View className='w-full'>
               <TextInput
-                style={styles.input}
+                className='rounded-full bg-[#DFDFDF] text-[#515151] text-base w-full h-12 mb-5 p-6 placeholder:text-[#515151] focus:text-black'
                 placeholder='Enter your full name'
-                onChangeText={handleChange('fullName')}
+                placeholderTextColor={'#515151'}
+                onChangeText={newText => setText(values.fullName)}
                 value={values.fullName}
+                autoFocus={true}
+                keyboardAppearance='default'
+                onKeyPress={newText => setText(values.fullName)}
+                autoCapitalize='words'
               />
               <TextInput
-                style={styles.input}
+                className='rounded-full bg-[#DFDFDF] text-[#515151] text-base w-full h12 mb-5 p-6 placeholder:text-[#515151]'
                 placeholder='Enter your email'
                 onChangeText={handleChange('email')}
                 keyboardType='email-address'
                 value={values.email}
               />
               <TextInput
-                style={styles.input}
+                className='rounded-full bg-[#DFDFDF] text-[#515151] text-base w-full h12 mb-5 p-6 placeholder:text-[#515151]'
                 placeholder='Enter password'
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
@@ -59,25 +69,27 @@ export default function TabTwoScreen() {
                 value={values.password}   
               />
               <TextInput
-                style={styles.input}
+                className='rounded-full bg-[#DFDFDF] text-[#515151] text-base w-full h12 mb-5 p-6 placeholder:text-[#515151]'
                 placeholder='Confirm password'
                 onChangeText={handleChange('confirmPassword')}
                 onBlur={handleBlur('confirmPassword')}
                 secureTextEntry
                 value={values.confirmPassword}
               />
-              <View style={styles.buttons}>
+              <View className='w-full mt-8 flex gap-8 flex-col justify-center items-center'>
                 <TouchableOpacity
-                  style={styles.button}
+                  className='rounded-xl w-full bg-[#1DCDFE] mt-2.5 py-4 flex gap-4 flex-row justify-center items-center'
                   onPress={(e: GestureResponderEvent) => handleSubmit(e as unknown as FormEvent<HTMLFormElement>)}
                 >
-                  <Text style={styles.buttonText}>Sign Up</Text>
+                  <Text className='text-base text-white text-center'>
+                    Sign Up
+                  </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.button, styles.googleButton]}
-                >
+                <TouchableOpacity className='rounded-xl w-full bg-white text-[#17222D] mt-2.5 py-4 flex gap-4 flex-row justify-center items-center'>
                   <FontAwesome name="google" size={24} color="#17222D" />
-                  <Text style={[styles.buttonText, styles.googleButtonText]}>Continue with Google</Text>
+                  <Text className='text-base text-[#17222D] text-center'>
+                    Continue with Google
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -99,67 +111,12 @@ const styles = StyleSheet.create({
   row: {
     width: '80%',
     display: 'flex',
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     fontFamily: 'InterBold',
-    fontSize: 32,
-    color: '#FFF',
-    marginBottom: 16,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#FFF',
-    marginBottom: 40,
-  },
-  form: {
-    width: '100%',
-  },
-  input: {
-    borderRadius: 40,
-    backgroundColor: '#DFDFDF',
-    color: '#515151',
-    fontSize: 16,
-    width: '100%',
-    height: 48,
-    marginBottom: 20,
-    paddingVertical: 24,
-    paddingHorizontal: 24,
-  },
-  buttons: {
-    width: '100%',
-    marginTop: 32,
-    display: 'flex',
-    gap: 8,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button: {
-    width: '100%',
-    borderRadius: 10,
-    backgroundColor: '#1DCDFE',
-    display: 'flex',
-    gap: 16,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 16,
-    marginTop: 10,
-  },
-  googleButton: {
-    backgroundColor: '#FFF',
-    color: '#17222D',
-  },
-  buttonText: {
-    fontSize: 16,
-    color: '#FFF',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  googleButtonText: {
-    color: '#17222D',
   },
 });
