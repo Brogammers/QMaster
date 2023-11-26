@@ -14,8 +14,8 @@ public class LoginService {
     return false;
   }
 
-  public String loginUser(String email, String password) {
+  public void loginUser(String email, String password) {
     // TODO
-    return null;
+    return;
   }
 }
