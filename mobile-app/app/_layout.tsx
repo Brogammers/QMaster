@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import Onboarding from './Onboarding';
 import 'react-native-gesture-handler';
 
 export {
@@ -40,7 +41,7 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return <Onboarding />;
 }
 
 function RootLayoutNav() {
