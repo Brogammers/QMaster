@@ -1,18 +1,18 @@
-import React from "react";
+import React from 'react';
 import { View, StyleSheet, Animated, useWindowDimensions, StyleProp, ViewStyle } from 'react-native';
-import { OnboardingItem } from "../data";
+import { OnboardingItem } from '../data';
 
 interface PaginatorProps {
-  data: OnboardingItem[]; 
+  data: OnboardingItem[];
   scrollX: Animated.Value;
 }
 
 const Paginator: React.FC<PaginatorProps> = ({ data, scrollX }) => {
   const { width } = useWindowDimensions();
-  
+
   return (
     <View style={{ flexDirection: 'row', marginTop: 40 }} >
-      {data.map((_, i: number) => { 
+      {data.map((_, i: number) => {
         const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
 
         const dotWidth = scrollX.interpolate({
@@ -31,7 +31,7 @@ const Paginator: React.FC<PaginatorProps> = ({ data, scrollX }) => {
           <Animated.View
             style={[
               styles.dot,
-              { width: dotWidth, opacity } as StyleProp<ViewStyle>, // Type assertion for compatibility
+              { width: dotWidth, opacity } as StyleProp<ViewStyle>,
             ]}
             key={i}
           />

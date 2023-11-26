@@ -1,25 +1,25 @@
-import React from "react"
-import { StyleSheet, View } from "react-native"
-import Image from 'react-native-remote-svg'
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import Image from 'react-native-remote-svg';
 import logoImage from '../assets/images/logoImage.svg';
-import TextButton from "../components/TextButton";
-import Carousel from "../components/carousel";
+import TextButton from '../components/TextButton';
+import Carousel from '../components/carousel';
 
 const Onboarding = () => {
 
-  
+
   return (
-    <View className="bg-[#2F2E41] h-screen justify-center items-center" style={styles.container}>
-      <View style={styles.row} className="bg-transparent">
-        <View className="bg-transparent">
+    <View className='bg-[#2F2E41] h-screen justify-center items-center' style={styles.container}>
+      <View style={styles.row} className='bg-transparent'>
+        <View className='bg-transparent'>
           <Image source={logoImage} />
         </View>
 
         <Carousel />
-        
-        <View className="mt-12">
-          <TextButton text={"Log In"} buttonColour={"#1DCDFE"} textColor={"white"} />
-          <TextButton text={"Sign Up"} buttonColour={"#C5C5C5"} textColor={"black"} />
+
+        <View className='mt-12'>
+          <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
+          <TextButton text={'Sign Up'} buttonColour={'#C5C5C5'} textColor={'black'} />
         </View>
 
       </View>

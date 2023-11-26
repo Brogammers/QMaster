@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
-import { StyleSheet, View, FlatList, Animated, ViewToken } from "react-native";
-import OnboardingItems from "../components/OnboardingItems";
-import { OnboardingData } from "../data";
-import Paginator from "./paginator";
+import React, { useState, useRef } from 'react';
+import { StyleSheet, View, FlatList, Animated, ViewToken } from 'react-native';
+import OnboardingItems from '../components/OnboardingItems';
+import { OnboardingData } from '../data';
+import Paginator from './paginator';
 
-interface CarouselProps {}
+interface CarouselProps { }
 
 const Carousel: React.FC<CarouselProps> = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
