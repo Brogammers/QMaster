@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import 'react-native-gesture-handler';
 import { SessionProvider } from '../ctx/AuthContext';
+import SignUp from './SignUp';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -22,7 +23,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    Inter: require('../assets/fonts/Inter-VariableFont.ttf'),
+    Inter: require('../assets/fonts/Inter.ttf'),
     ...FontAwesome.font,
   });
 
@@ -41,7 +42,7 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return <SignUp />;
 }
 
 function RootLayoutNav() {

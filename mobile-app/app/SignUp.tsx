@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 
-export default function TabTwoScreen() {
+export default function SignUp() {
   const handleSignUp = (values: any) => {
     console.log("Signing up...", values);
   };
@@ -56,7 +56,7 @@ export default function TabTwoScreen() {
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 secureTextEntry
-                value={values.password}
+                value={values.password}   
               />
               <TextInput
                 style={styles.input}
@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Inter',
+    fontWeight: '800',
     fontSize: 32,
     color: '#FFF',
     marginBottom: 16,
