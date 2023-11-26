@@ -7,6 +7,7 @@ import {
   TextInput, 
   TouchableOpacity, 
   GestureResponderEvent,
+  StatusBar
 } from 'react-native';
 import { Formik } from 'formik';
 

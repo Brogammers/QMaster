@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, useColorScheme } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import React, { FormEvent, useState } from 'react';
 import { 
@@ -9,10 +9,27 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
+
+const SignupSchema = Yup.object().shape({
+  fullName: Yup.string()
+    .nullable()
+    .matches(/^[a-zA-Z]+$/, 'Full name must contain only letters')
+    .required('Required'),
+  email: Yup.string().email('Invalid email').required('Required'),
+  password: Yup.string()
+    .min(8, 'Password must be at least 8 characters')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+      'Password must contain at least one lowercase letter, one uppercase letter, and one numeric digit'
+    )
+    .required('Required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Required'),
+});
 
 export default function TabTwoScreen() {
-
-  const [text, setText] = useState<string>('');
 
   const handleSignUp = (values: any) => {
     console.log("Signing up...", values);
@@ -38,6 +55,7 @@ export default function TabTwoScreen() {
             password: '',
             confirmPassword: '',
           }}
+          validationSchema={SignupSchema} 
           onSubmit={handleSignUp}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -46,11 +64,9 @@ export default function TabTwoScreen() {
                 className='rounded-full bg-[#DFDFDF] text-[#515151] text-base w-full h-12 mb-5 p-6 placeholder:text-[#515151] focus:text-black'
                 placeholder='Enter your full name'
                 placeholderTextColor={'#515151'}
-                onChangeText={newText => setText(values.fullName)}
+                onChangeText={handleChange('fullName')}
                 value={values.fullName}
                 autoFocus={true}
-                keyboardAppearance='default'
-                onKeyPress={newText => setText(values.fullName)}
                 autoCapitalize='words'
               />
               <TextInput
