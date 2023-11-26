@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: 'InterBold',
     fontSize: 32,
     color: '#FFF',
     marginBottom: 16,
