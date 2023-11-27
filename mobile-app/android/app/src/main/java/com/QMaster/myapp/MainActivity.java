@@ -1,4 +1,4 @@
-package com.QMaster.app;
+package com.QMaster.myapp;
 
 import android.os.Build;
 import android.os.Bundle;

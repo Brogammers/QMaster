@@ -81,9 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.QMaster.app'
+    namespace 'com.QMaster.myapp'
     defaultConfig {
-        applicationId 'com.QMaster.app'
+        applicationId 'com.QMaster.myapp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
