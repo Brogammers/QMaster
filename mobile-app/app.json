@@ -5,7 +5,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -17,7 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.QMaster.myapp" 
+      "bundleIdentifier": "com.QMaster.myapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -36,6 +35,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "0d7748db-7d8f-4979-ae70-8b7784f3a672"
+      }
+    },
+    "scheme": "my-app"
   }
 }
