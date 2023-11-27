@@ -5,6 +5,7 @@ import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import Onboarding from './Onboarding';
+import GoogleAuth from './googleAuth';
 import 'react-native-gesture-handler';
 
 export {
@@ -41,7 +42,7 @@ export default function RootLayout() {
     return null;
   }
 
-  return <Onboarding />;
+  return <GoogleAuth />;
 }
 
 function RootLayoutNav() {
