@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "91827225433",
+    "project_id": "qmaster-94cc5",
+    "storage_bucket": "qmaster-94cc5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91827225433:android:bbfe66afb34f654e718248",
+        "android_client_info": {
+          "package_name": "com.qmaster.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCWRFCMLSnXM8vb5QfoJU2riqbOTS1nDw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
