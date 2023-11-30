@@ -61,7 +61,7 @@ export default function TabTwoScreen() {
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <View className='w-full'>
               <TextInput
-                className='rounded-full bg-[#DFDFDF] text-[#515151] text-base w-full h-12 mb-5 p-6 placeholder:text-[#515151] focus:text-black'
+              style ={styles.input}
                 placeholder='Enter your full name'
                 placeholderTextColor={'#515151'}
                 onChangeText={handleChange('fullName')}
@@ -70,23 +70,20 @@ export default function TabTwoScreen() {
                 autoCapitalize='words'
               />
               <TextInput
-                className='rounded-full bg-[#DFDFDF] text-[#515151] text-base w-full h12 mb-5 p-6 placeholder:text-[#515151]'
-                placeholder='Enter your email'
+style ={styles.input}                placeholder='Enter your email'
                 onChangeText={handleChange('email')}
                 keyboardType='email-address'
                 value={values.email}
               />
               <TextInput
-                className='rounded-full bg-[#DFDFDF] text-[#515151] text-base w-full h12 mb-5 p-6 placeholder:text-[#515151]'
-                placeholder='Enter password'
+style ={styles.input}                placeholder='Enter password'
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 secureTextEntry
                 value={values.password}   
               />
               <TextInput
-                className='rounded-full bg-[#DFDFDF] text-[#515151] text-base w-full h12 mb-5 p-6 placeholder:text-[#515151]'
-                placeholder='Confirm password'
+style ={styles.input}                placeholder='Confirm password'
                 onChangeText={handleChange('confirmPassword')}
                 onBlur={handleBlur('confirmPassword')}
                 secureTextEntry
@@ -115,7 +112,6 @@ export default function TabTwoScreen() {
     </View>
   )
 }
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#17222D',
@@ -134,5 +130,56 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'InterBold',
+    fontSize: 28, // Corresponds to text-2xl in Tailwind
+    color: '#FFF', // Text color
+    marginBottom: 16, // Corresponds to mb-4 in Tailwind
+  },
+  baseText: {
+    fontSize: 16, // Corresponds to text-base in Tailwind
+    color: '#FFF', // Text color
+    marginBottom: 40, // Corresponds to mb-10 in Tailwind
+  },
+  input: {
+    backgroundColor: '#DFDFDF',
+    color: '#515151',
+    fontSize: 16, // Corresponds to text-base in Tailwind
+    borderRadius: 8,
+    height: 48,
+    marginBottom: 5,
+    paddingHorizontal: 12,
+  },
+  button: {
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  signUpButton: {
+    backgroundColor: '#1DCDFE',
+    marginTop: 10, // Corresponds to mt-2.5 in Tailwind
+    paddingVertical: 16, // Corresponds to py-4 in Tailwind
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  signUpButtonText: {
+    fontSize: 16,
+    color: '#FFF',
+    textAlign: 'center',
+  },
+  googleButton: {
+    backgroundColor: '#FFF',
+    color: '#17222D',
+    marginTop: 10, // Corresponds to mt-2.5 in Tailwind
+    paddingVertical: 16, // Corresponds to py-4 in Tailwind
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  googleButtonText: {
+    fontSize: 16,
+    color: '#17222D',
+    textAlign: 'center',
   },
 });
+
