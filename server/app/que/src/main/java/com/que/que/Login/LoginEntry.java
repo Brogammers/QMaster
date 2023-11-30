@@ -1,5 +1,7 @@
 package com.que.que.Login;
 
+import java.time.LocalDate;
+
 import com.que.que.User.AppUser;
 
 import jakarta.persistence.Entity;
@@ -9,11 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@AllArgsConstructor
 @Setter
 @Getter
 @Entity
@@ -25,5 +25,11 @@ public class LoginEntry {
   private Long id;
   @ManyToOne
   @JoinColumn(nullable = false, name = "app_user_id")
-  private AppUser appUser;
+  private final AppUser appUser;
+  private final LocalDate loginDate;
+
+  public LoginEntry(AppUser appUser) {
+    this.appUser = appUser;
+    this.loginDate = LocalDate.now();
+  }
 }
