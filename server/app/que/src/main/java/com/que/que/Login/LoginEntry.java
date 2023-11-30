@@ -1,12 +1,13 @@
 package com.que.que.Login;
 
-import jakarta.persistence.Column;
+import com.que.que.User.AppUser;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,9 +23,7 @@ public class LoginEntry {
   @SequenceGenerator(name = "login_entry_sequence", sequenceName = "login_entry_sequence", allocationSize = 1)
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "login_entry_sequence")
   private Long id;
-  @OneToOne
-  @JoinColumn(nullable = false, name = "app_user_email")
-  private String email;
-  @Column(nullable = false)
-  private String password;
+  @ManyToOne
+  @JoinColumn(nullable = false, name = "app_user_id")
+  private AppUser appUser;
 }
