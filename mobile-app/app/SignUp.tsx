@@ -1,11 +1,11 @@
 import { StyleSheet, useColorScheme } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import React, { FormEvent, useState } from 'react';
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
   GestureResponderEvent,
 } from 'react-native';
 import { Formik } from 'formik';
@@ -40,11 +40,11 @@ export default function TabTwoScreen() {
       <View style={styles.row}>
         <Text
           style={styles.title}
-          className='text-2xl text-white mb-4'
+          className='mb-4 text-2xl text-white'
         >
           Welcome!
         </Text>
-        <Text className='text-base text-white mb-10'>
+        <Text className='text-base text-white mb-14'>
           Let's help you save more time.
         </Text>
 
@@ -55,13 +55,13 @@ export default function TabTwoScreen() {
             password: '',
             confirmPassword: '',
           }}
-          validationSchema={SignupSchema} 
+          validationSchema={SignupSchema}
           onSubmit={handleSignUp}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
-            <View className='w-full'>
+            <View className='w-full gap-4'>
               <TextInput
-              style ={styles.input}
+                style={styles.input}
                 placeholder='Enter your full name'
                 placeholderTextColor={'#515151'}
                 onChangeText={handleChange('fullName')}
@@ -70,31 +70,34 @@ export default function TabTwoScreen() {
                 autoCapitalize='words'
               />
               <TextInput
-style ={styles.input}                placeholder='Enter your email'
+                style={styles.input} 
+                placeholder='Enter your email'
                 onChangeText={handleChange('email')}
                 keyboardType='email-address'
                 value={values.email}
               />
               <TextInput
-style ={styles.input}                placeholder='Enter password'
+                style={styles.input} 
+                placeholder='Enter new password'
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 secureTextEntry
-                value={values.password}   
+                value={values.password}
               />
               <TextInput
-style ={styles.input}                placeholder='Confirm password'
+                style={styles.input} 
+                placeholder='Confirm new password'
                 onChangeText={handleChange('confirmPassword')}
                 onBlur={handleBlur('confirmPassword')}
                 secureTextEntry
                 value={values.confirmPassword}
               />
-              <View className='w-full mt-8 flex gap-8 flex-col justify-center items-center'>
+              <View className='flex flex-col items-center justify-center w-full gap-8 mt-8'>
                 <TouchableOpacity
                   className='rounded-xl w-full bg-[#1DCDFE] mt-2.5 py-4 flex gap-4 flex-row justify-center items-center'
                   onPress={(e: GestureResponderEvent) => handleSubmit(e as unknown as FormEvent<HTMLFormElement>)}
                 >
-                  <Text className='text-base text-white text-center'>
+                  <Text className='text-base text-center text-white'>
                     Sign Up
                   </Text>
                 </TouchableOpacity>
@@ -143,10 +146,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#DFDFDF',
     color: '#515151',
     fontSize: 16, // Corresponds to text-base in Tailwind
-    borderRadius: 8,
-    height: 48,
+    borderRadius: 42,
+    height: 56,
     marginBottom: 5,
-    paddingHorizontal: 12,
+    paddingVertical: 4,
+    paddingHorizontal: 24,
   },
   button: {
     borderRadius: 10,
