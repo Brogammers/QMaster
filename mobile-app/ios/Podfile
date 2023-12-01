@@ -57,12 +57,48 @@ target 'myapp' do
     :flipper_configuration => flipper_config
   )
 
+  # post_install do |installer|
+  #   react_native_post_install(
+  #     installer,
+  #     config[:reactNativePath],
+  #     :mac_catalyst_enabled => false
+  #   )
+  #   __apply_Xcode_12_5_M1_post_install_workaround(installer)
+
+  #   # This is necessary for Xcode 14, because it signs resource bundles by default
+  #   # when building for devices.
+  #   installer.target_installation_results.pod_target_installation_results
+  #     .each do |pod_name, target_installation_result|
+  #     target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
+  #       resource_bundle_target.build_configurations.each do |config|
+  #         config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+  #       end
+  #     end
+  #   end
+  # end
+
+  # post_integrate do |installer|
+  #   begin
+  #     expo_patch_react_imports!(installer)
+  #   rescue => e
+  #     Pod::UI.warn e
+  #   end
+  # end
+
   post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', '_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION']
+      end
+    end
+
+    # Additional post_install logic for Xcode versions and code signing
     react_native_post_install(
       installer,
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
 
     # This is necessary for Xcode 14, because it signs resource bundles by default
@@ -75,9 +111,10 @@ target 'myapp' do
         end
       end
     end
-  end
 
-  post_integrate do |installer|
+    # Add any additional post_install logic here
+    # ...
+    
     begin
       expo_patch_react_imports!(installer)
     rescue => e
