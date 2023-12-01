@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import TextButton from '../components/TextButton';
 
 const SignupSchema = Yup.object().shape({
   fullName: Yup.string()
@@ -29,7 +30,7 @@ const SignupSchema = Yup.object().shape({
     .required('Required'),
 });
 
-export default function TabTwoScreen() {
+export default function SignUp() {
 
   const handleSignUp = (values: any) => {
     console.log("Signing up...", values);
@@ -72,6 +73,7 @@ export default function TabTwoScreen() {
               <TextInput
                 style={styles.input} 
                 placeholder='Enter your email'
+                placeholderTextColor={'#515151'}
                 onChangeText={handleChange('email')}
                 keyboardType='email-address'
                 value={values.email}
@@ -79,6 +81,7 @@ export default function TabTwoScreen() {
               <TextInput
                 style={styles.input} 
                 placeholder='Enter new password'
+                placeholderTextColor={'#515151'}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 secureTextEntry
@@ -87,12 +90,13 @@ export default function TabTwoScreen() {
               <TextInput
                 style={styles.input} 
                 placeholder='Confirm new password'
+                placeholderTextColor={'#515151'}
                 onChangeText={handleChange('confirmPassword')}
                 onBlur={handleBlur('confirmPassword')}
                 secureTextEntry
                 value={values.confirmPassword}
               />
-              <View className='flex flex-col items-center justify-center w-full gap-8 mt-8'>
+              {/* <View className='flex flex-col items-center justify-center w-full gap-8 mt-8'>
                 <TouchableOpacity
                   className='rounded-xl w-full bg-[#1DCDFE] mt-2.5 py-4 flex gap-4 flex-row justify-center items-center'
                   onPress={(e: GestureResponderEvent) => handleSubmit(e as unknown as FormEvent<HTMLFormElement>)}
@@ -107,6 +111,10 @@ export default function TabTwoScreen() {
                     Continue with Google
                   </Text>
                 </TouchableOpacity>
+              </View> */}
+              <View className='flex flex-col items-center justify-center w-full gap-8 mt-12'>
+                <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
+                <TextButton text={'Continue with Google'} buttonColour={'white'} textColor={'#17222D'} />
               </View>
             </View>
           )}

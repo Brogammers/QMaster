@@ -43,7 +43,7 @@ export default function RootLayout() {
     return null;
   }
 
-  return <Onboarding />;
+  return <SignUp />;
 }
 
 function RootLayoutNav() {
