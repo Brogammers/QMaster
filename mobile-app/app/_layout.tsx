@@ -7,6 +7,7 @@ import { useColorScheme } from 'react-native';
 import Onboarding from './Onboarding';
 import 'react-native-gesture-handler';
 import { SessionProvider } from '../ctx/AuthContext';
+import SignUp from './SignUp';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -42,7 +43,7 @@ export default function RootLayout() {
     return null;
   }
 
-  return <Onboarding />;
+  return <SignUp />;
 }
 
 function RootLayoutNav() {
