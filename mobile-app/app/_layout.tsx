@@ -6,6 +6,8 @@ import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import Onboarding from './Onboarding';
 import 'react-native-gesture-handler';
+import { SessionProvider } from '../ctx/AuthContext';
+import SignUp from './SignUp';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -22,7 +24,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    InterBold: require('../assets/fonts/static/Inter-Bold.ttf'),
     ...FontAwesome.font,
   });
 
@@ -41,7 +43,7 @@ export default function RootLayout() {
     return null;
   }
 
-  return <Onboarding />;
+  return <SignUp />;
 }
 
 function RootLayoutNav() {
@@ -49,10 +51,12 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
+      <SessionProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        </Stack>
+      </SessionProvider>
     </ThemeProvider>
   );
 }
