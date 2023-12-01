@@ -3,7 +3,9 @@ import { Text, View, useWindowDimensions} from "react-native";
 import Image from 'react-native-remote-svg'
 import { OnboardingData } from "../data";
 
-const OnboardingItems = ( { item } ) => {
+
+
+export default function OnboardingItem({ item }: any) {
   const {width} = useWindowDimensions()
     return (
         <View className="flex items-center justify-center w-screen mt-7">
@@ -12,6 +14,3 @@ const OnboardingItems = ( { item } ) => {
         </View>
     )
 }
-
-
-export default OnboardingItems;

@@ -13,7 +13,7 @@ interface TextButtonProps {
   text2?: any;
 }
 
-const TextButton: React.FC<TextButtonProps> = (props) => {
+export default function TextButton(props: TextButtonProps) {
   const { text, buttonColour } = props;
 
   if (props.text2 == null) {
@@ -52,5 +52,3 @@ const styles = StyleSheet.create({
     fontFamily: 'InterBold',
   }
 });
-
-export default TextButton;
