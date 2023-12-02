@@ -16,7 +16,7 @@ const Onboarding = () => {
         <Carousel />
 
         <View className='mt-12'>
-          <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
+          <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} isGoogle/>
           <TextButton text={'Sign Up'} buttonColour={'#C5C5C5'} textColor={'black'} />
         </View>
 

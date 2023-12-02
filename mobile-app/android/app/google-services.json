@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "91827225433",
+    "project_id": "qmaster-94cc5",
+    "storage_bucket": "qmaster-94cc5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91827225433:android:bbfe66afb34f654e718248",
+        "android_client_info": {
+          "package_name": "com.qmaster.myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91827225433-dgoeg8qu8tqvl93t77kjhpg4ekd7hkta.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.qmaster.myapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "91827225433-htospq1j42j89lg5bdn4nll6unj9g0mf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCWRFCMLSnXM8vb5QfoJU2riqbOTS1nDw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91827225433-htospq1j42j89lg5bdn4nll6unj9g0mf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
