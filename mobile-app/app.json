@@ -17,14 +17,15 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.qmaster.myapp"
+      "bundleIdentifier": "com.qmaster.myapp",
+      "googleServicesFile": "./ios/myapp/GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "googleServicesFile": "./android/app/google-services.json"
+        "backgroundColor": "#ffffff"
       },
+      "googleServicesFile": "./android/app/google-services.json",
       "package": "com.qmaster.myapp"
     },
     "web": {
