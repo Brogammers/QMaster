@@ -4,9 +4,7 @@ import OnboardingItems from '../components/OnboardingItems';
 import { OnboardingData } from '../data';
 import Paginator from './paginator';
 
-interface CarouselProps { }
-
-const Carousel: React.FC<CarouselProps> = () => {
+export default function Carousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -45,5 +43,3 @@ const Carousel: React.FC<CarouselProps> = () => {
     </>
   );
 };
-
-export default Carousel;

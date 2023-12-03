@@ -1,4 +1,4 @@
-import { StyleSheet, useColorScheme } from 'react-native';
+import { StyleSheet, useColorScheme, ImageBackground } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import React, { FormEvent, useState } from 'react';
 import {
@@ -11,6 +11,7 @@ import {
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextButton from '../components/TextButton';
+import background from '../assets/images/background.png';
 
 const SignupSchema = Yup.object().shape({
   fullName: Yup.string()
@@ -37,7 +38,7 @@ export default function SignUp() {
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={background} style={styles.container}>
       <View style={styles.row}>
         <Text
           style={styles.title}
@@ -60,7 +61,7 @@ export default function SignUp() {
           onSubmit={handleSignUp}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
-            <View className='w-full gap-4'>
+            <View className='flex items-center justify-center w-full gap-4'>
               <TextInput
                 style={styles.input}
                 placeholder='Enter your full name'
@@ -71,7 +72,7 @@ export default function SignUp() {
                 autoCapitalize='words'
               />
               <TextInput
-                style={styles.input} 
+                style={styles.input}
                 placeholder='Enter your email'
                 placeholderTextColor={'#515151'}
                 onChangeText={handleChange('email')}
@@ -79,7 +80,7 @@ export default function SignUp() {
                 value={values.email}
               />
               <TextInput
-                style={styles.input} 
+                style={styles.input}
                 placeholder='Enter new password'
                 placeholderTextColor={'#515151'}
                 onChangeText={handleChange('password')}
@@ -88,7 +89,7 @@ export default function SignUp() {
                 value={values.password}
               />
               <TextInput
-                style={styles.input} 
+                style={styles.input}
                 placeholder='Confirm new password'
                 placeholderTextColor={'#515151'}
                 onChangeText={handleChange('confirmPassword')}
@@ -112,15 +113,15 @@ export default function SignUp() {
                   </Text>
                 </TouchableOpacity>
               </View> */}
-              <View className='flex flex-col items-center justify-center w-full gap-8 mt-12'>
-                <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
-                <TextButton text={'Continue with Google'} buttonColour={'white'} textColor={'#17222D'} />
-              </View>
             </View>
           )}
         </Formik>
+        <View className='mt-14'>
+          <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
+          <TextButton text={'Continue with Google'} text2={'google'} buttonColour={'white'} textColor={'#17222D'} />
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   )
 }
 const styles = StyleSheet.create({
@@ -159,6 +160,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     paddingVertical: 4,
     paddingHorizontal: 24,
+    width: '100%'
   },
   button: {
     borderRadius: 10,

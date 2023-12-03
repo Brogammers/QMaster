@@ -7,7 +7,7 @@ interface PaginatorProps {
   scrollX: Animated.Value;
 }
 
-const Paginator: React.FC<PaginatorProps> = ({ data, scrollX }) => {
+export default function Paginator({ data, scrollX }: PaginatorProps) {
   const { width } = useWindowDimensions();
 
   return (
@@ -41,7 +41,6 @@ const Paginator: React.FC<PaginatorProps> = ({ data, scrollX }) => {
   );
 };
 
-export default Paginator;
 
 const styles = StyleSheet.create({
   dot: {
