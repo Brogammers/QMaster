@@ -7,7 +7,6 @@ import { useColorScheme } from 'react-native';
 import Onboarding from './Onboarding';
 import 'react-native-gesture-handler';
 import { SessionProvider } from '../ctx/AuthContext';
-import SignUp from './SignUp';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -16,7 +15,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: 'Onboarding',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -43,7 +42,7 @@ export default function RootLayout() {
     return null;
   }
 
-  return <SignUp />;
+  return <Onboarding />;
 }
 
 function RootLayoutNav() {
