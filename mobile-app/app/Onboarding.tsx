@@ -12,7 +12,7 @@ export default function Onboarding() {
     <View className='bg-[#2F2E41] h-screen justify-center items-center' style={styles.container}>
       <StatusBar
         translucent
-        backgroundColor={'white'} // Semi-transparent white background
+        backgroundColor='rgba(255, 255, 255, 0.5)'  // Semi-transparent white background
         barStyle='light-content'  // Dark text/icons on a light background
       />
       <View style={styles.row} className='bg-transparent'>

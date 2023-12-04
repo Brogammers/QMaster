@@ -11,6 +11,7 @@ import { Formik } from 'formik';
 import TextButton from '../components/TextButton';
 import background from '../assets/images/background.png';
 import LoginImg from '../assets/images/login.png';
+import { Link } from '@react-navigation/native';
 
 export default function Login() {
 
@@ -23,11 +24,11 @@ export default function Login() {
       <View style={styles.row}>
         <Text
           style={styles.title}
-          className='mb-10 text-2xl text-white'
+          className='mt-14 mb-10 text-2xl text-white'
         >
           Welcome Back!
         </Text>
-        <Image source={LoginImg} className='w-full my-10' />
+        <Image source={LoginImg} className='mt-6 mb-12' />
 
         <Formik
           initialValues={{
@@ -47,6 +48,7 @@ export default function Login() {
                 onChangeText={handleChange('email')}
                 keyboardType='email-address'
                 value={values.email}
+                autoCapitalize='none'
               />
               <TextInput
                 style={styles.input}
@@ -60,7 +62,12 @@ export default function Login() {
             </View>
           )}
         </Formik>
-        <View className='mt-14'>
+        <Text
+          className='text-[#1DCDFE] underline mt-2 text-sm'
+        >
+          Forgot password?
+        </Text>
+        <View className='mt-8'>
           <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
           <TextButton text={'Continue with Google'} text2={'google'} buttonColour={'white'} textColor={'#17222D'} />
         </View>
@@ -99,6 +106,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#DFDFDF',
     color: '#515151',
     fontSize: 16, // Corresponds to text-base in Tailwind
+    fontFamily: 'InterBold',
     borderRadius: 42,
     height: 56,
     marginBottom: 5,

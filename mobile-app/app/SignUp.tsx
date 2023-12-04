@@ -42,11 +42,11 @@ export default function SignUp() {
       <View style={styles.row}>
         <Text
           style={styles.title}
-          className='mb-4 text-2xl text-white'
+          className='mt-10 mb-4 text-2xl text-white'
         >
           Welcome!
         </Text>
-        <Text className='text-base text-white mb-14'>
+        <Text className='text-base text-white mb-16'>
           Let's help you save more time.
         </Text>
 
@@ -115,7 +115,7 @@ export default function SignUp() {
             </View>
           )}
         </Formik>
-        <View className='mt-14'>
+        <View className='mt-16'>
           <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
           <TextButton text={'Continue with Google'} text2={'google'} buttonColour={'white'} textColor={'#17222D'} />
         </View>
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#DFDFDF',
     color: '#515151',
     fontSize: 16, // Corresponds to text-base in Tailwind
+    fontFamily: 'InterBold',
     borderRadius: 42,
     height: 56,
     marginBottom: 5,
