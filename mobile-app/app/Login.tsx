@@ -5,7 +5,7 @@ import {
   Image,
   View,
   Text,
-  TextInput, 
+  TextInput,
 } from 'react-native';
 import { Formik } from 'formik';
 import TextButton from '../components/TextButton';
@@ -23,11 +23,11 @@ export default function Login() {
       <View style={styles.row}>
         <Text
           style={styles.title}
-          className='mb-4 text-2xl text-white'
+          className='mb-10 text-2xl text-white'
         >
-          Welcome!
+          Welcome Back!
         </Text>
-        <Image source={LoginImg} className='w-full' />
+        <Image source={LoginImg} className='w-full my-10' />
 
         <Formik
           initialValues={{
