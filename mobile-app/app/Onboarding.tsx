@@ -16,7 +16,7 @@ export default function Onboarding() {
         <Carousel />
 
         <View className='mt-12'>
-          <Link href='/SignUp'>
+          <Link href='/Login'>
             <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
           </Link>
           <Link href='/SignUp'>
