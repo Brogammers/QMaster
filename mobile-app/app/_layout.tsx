@@ -5,6 +5,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Onboarding from './Onboarding';
 import SignUp from './SignUp';
+import Login from './Login';
 
 export const unstable_settings = {
   initialRouteName: 'Onboarding',
@@ -35,7 +36,7 @@ export default function RootLayout() {
   }
 
   return (
-      <RootLayoutNav />
+    <RootLayoutNav />
   );
 }
 
@@ -44,6 +45,7 @@ function RootLayoutNav() {
     <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Onboarding" component={Onboarding} />
       <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="Login" component={Login} />
     </Stack.Navigator>
   );
 }
