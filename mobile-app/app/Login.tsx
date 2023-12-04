@@ -1,37 +1,19 @@
-import { StyleSheet, useColorScheme, ImageBackground } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import React, { FormEvent, useState } from 'react';
-import {
+import React from 'react';
+import { 
+  StyleSheet, 
+  ImageBackground, 
+  Image,
   View,
   Text,
   TextInput,
-  TouchableOpacity,
-  GestureResponderEvent,
 } from 'react-native';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import TextButton from '../components/TextButton';
 import background from '../assets/images/background.png';
+import LoginImg from '../assets/images/login.png';
+import { Link } from '@react-navigation/native';
 
-const SignupSchema = Yup.object().shape({
-  fullName: Yup.string()
-    .nullable()
-    .matches(/^[a-zA-Z]+$/, 'Full name must contain only letters')
-    .required('Required'),
-  email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string()
-    .min(8, 'Password must be at least 8 characters')
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      'Password must contain at least one lowercase letter, one uppercase letter, and one numeric digit'
-    )
-    .required('Required'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password')], 'Passwords must match')
-    .required('Required'),
-});
-
-export default function SignUp() {
+export default function Login() {
 
   const handleSignUp = (values: any) => {
     console.log("Signing up...", values);
@@ -42,13 +24,11 @@ export default function SignUp() {
       <View style={styles.row}>
         <Text
           style={styles.title}
-          className='mt-10 mb-4 text-2xl text-white'
+          className='mt-14 mb-10 text-2xl text-white'
         >
-          Welcome!
+          Welcome Back!
         </Text>
-        <Text className='text-base text-white mb-16'>
-          Let's help you save more time.
-        </Text>
+        <Image source={LoginImg} className='mt-6 mb-12' />
 
         <Formik
           initialValues={{
@@ -57,19 +37,10 @@ export default function SignUp() {
             password: '',
             confirmPassword: '',
           }}
-          validationSchema={SignupSchema}
           onSubmit={handleSignUp}
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({ handleChange, handleBlur, values }) => (
             <View className='flex items-center justify-center w-full gap-4'>
-              <TextInput
-                style={styles.input}
-                placeholder='Enter your full name'
-                placeholderTextColor={'#515151'}
-                onChangeText={handleChange('fullName')}
-                value={values.fullName}
-                autoCapitalize='words'
-              />
               <TextInput
                 style={styles.input}
                 placeholder='Enter your email'
@@ -81,42 +52,22 @@ export default function SignUp() {
               />
               <TextInput
                 style={styles.input}
-                placeholder='Enter new password'
+                placeholder='Enter your password'
                 placeholderTextColor={'#515151'}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 secureTextEntry
                 value={values.password}
               />
-              <TextInput
-                style={styles.input}
-                placeholder='Confirm new password'
-                placeholderTextColor={'#515151'}
-                onChangeText={handleChange('confirmPassword')}
-                onBlur={handleBlur('confirmPassword')}
-                secureTextEntry
-                value={values.confirmPassword}
-              />
-              {/* <View className='flex flex-col items-center justify-center w-full gap-8 mt-8'>
-                <TouchableOpacity
-                  className='rounded-xl w-full bg-[#1DCDFE] mt-2.5 py-4 flex gap-4 flex-row justify-center items-center'
-                  onPress={(e: GestureResponderEvent) => handleSubmit(e as unknown as FormEvent<HTMLFormElement>)}
-                >
-                  <Text className='text-base text-center text-white'>
-                    Sign Up
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity className='rounded-xl w-full bg-white text-[#17222D] mt-2.5 py-4 flex gap-4 flex-row justify-center items-center'>
-                  <FontAwesome name="google" size={24} color="#17222D" />
-                  <Text className='text-base text-[#17222D] text-center'>
-                    Continue with Google
-                  </Text>
-                </TouchableOpacity>
-              </View> */}
             </View>
           )}
         </Formik>
-        <View className='mt-16'>
+        <Text
+          className='text-[#1DCDFE] underline mt-2 text-sm'
+        >
+          Forgot password?
+        </Text>
+        <View className='mt-8'>
           <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
           <TextButton text={'Continue with Google'} text2={'google'} buttonColour={'white'} textColor={'#17222D'} />
         </View>
