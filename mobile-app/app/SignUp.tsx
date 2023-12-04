@@ -77,6 +77,7 @@ export default function SignUp() {
                 onChangeText={handleChange('email')}
                 keyboardType='email-address'
                 value={values.email}
+                autoCapitalize='none'
               />
               <TextInput
                 style={styles.input}
