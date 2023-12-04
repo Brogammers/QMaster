@@ -68,7 +68,6 @@ export default function SignUp() {
                 placeholderTextColor={'#515151'}
                 onChangeText={handleChange('fullName')}
                 value={values.fullName}
-                autoFocus={true}
                 autoCapitalize='words'
               />
               <TextInput
