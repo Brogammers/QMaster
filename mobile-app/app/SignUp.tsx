@@ -43,7 +43,7 @@ export default function SignUp() {
         >
           Welcome!
         </Text>
-        <Text className='text-base text-white mb-16'>
+        <Text className='text-base text-white mb-16' style={styles.subTitle}>
           Let's help you save more time.
         </Text>
 
@@ -144,6 +144,9 @@ const styles = StyleSheet.create({
     color: '#FFF', // Text color
     marginBottom: 16, // Corresponds to mb-4 in Tailwind
   },
+  subTitle: {
+    fontFamily: 'JostReg',
+  },
   baseText: {
     fontSize: 16, // Corresponds to text-base in Tailwind
     color: '#FFF', // Text color
@@ -153,7 +156,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#DFDFDF',
     color: '#515151',
     fontSize: 16, // Corresponds to text-base in Tailwind
-    fontFamily: 'InterBold',
+    fontFamily: 'JostBold',
     borderRadius: 42,
     height: 56,
     marginBottom: 5,
