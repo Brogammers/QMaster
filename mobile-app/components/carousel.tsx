@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, View, FlatList, Animated, ViewToken } from 'react-native';
+import { FlatList, Animated, ViewToken } from 'react-native';
 import OnboardingItems from '../components/OnboardingItems';
 import { OnboardingData } from '../data';
 import Paginator from './paginator';

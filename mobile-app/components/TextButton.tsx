@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     padding: 14,
   },
   font: {
-    fontFamily: 'InterBold',
+    fontFamily: 'IstokBold',
   }
 });

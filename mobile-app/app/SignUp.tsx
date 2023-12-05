@@ -1,12 +1,9 @@
-import { StyleSheet, useColorScheme, ImageBackground } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import React, { FormEvent, useState } from 'react';
+import { StyleSheet, ImageBackground } from 'react-native';
+import React from 'react';
 import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
-  GestureResponderEvent,
 } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -124,6 +121,7 @@ export default function SignUp() {
     </ImageBackground>
   )
 }
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#17222D',
