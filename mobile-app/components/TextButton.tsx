@@ -19,7 +19,7 @@ export default function TextButton(props: TextButtonProps) {
   if (props.text2 == null) {
     return (
       <TouchableOpacity
-        className='flex items-center justify-center mt-3.5 rounded-lg'
+        className='flex items-center justify-center mt-5 rounded-lg'
         style={[styles.buttonWidth, { backgroundColor: props.buttonColour }]}
       >
         <Text className='text-xl' font-bold style={[{ color: props.textColor }, styles.font]}>
@@ -30,7 +30,7 @@ export default function TextButton(props: TextButtonProps) {
   } else {
     return (
       <TouchableOpacity
-        className='flex items-center justify-center mt-3.5 rounded-lg flex-row'
+        className='flex items-center justify-center mt-5 rounded-lg flex-row'
         style={[styles.buttonWidth, { backgroundColor: props.buttonColour }]}
       >
         <FontAwesome name={props.text2} size={24} color="#17222D"/>
