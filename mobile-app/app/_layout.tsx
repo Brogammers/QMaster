@@ -18,6 +18,9 @@ const Stack = createNativeStackNavigator();
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     InterBold: require('../assets/fonts/static/Inter-Bold.ttf'),
+    JostBold: require('../assets/fonts/static/Jost-Bold.ttf'),
+    JostReg: require('../assets/fonts/static/Jost-Regular.ttf'),
+    IstokBold: require('../assets/fonts/static/IstokWeb-Bold.ttf')
     // ...Other fonts
   });
 
