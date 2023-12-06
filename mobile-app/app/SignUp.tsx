@@ -9,6 +9,8 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextButton from '../components/TextButton';
 import background from '../assets/images/background.png';
+import Return from '@/components/Return';
+import { Link } from 'expo-router';
 
 const SignupSchema = Yup.object().shape({
   fullName: Yup.string()
@@ -36,7 +38,10 @@ export default function SignUp() {
 
   return (
     <ImageBackground source={background} style={styles.container}>
-      <View style={styles.row}>
+      <Link href='/Onboarding' style={styles.returnButton}>
+        <Return size={36} color='white' />
+      </Link>
+      <View style={styles.row} className='relative'>
         <Text
           style={styles.title}
           className='mt-10 mb-4 text-2xl text-white'
@@ -137,6 +142,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  returnButton: {
+    position: 'absolute',
+    top: 60, // Adjust the top value as needed
+    left: 18, // Adjust the left value as needed
   },
   title: {
     fontFamily: 'InterBold',

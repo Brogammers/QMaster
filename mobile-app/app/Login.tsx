@@ -11,7 +11,8 @@ import { Formik } from 'formik';
 import TextButton from '../components/TextButton';
 import background from '../assets/images/background.png';
 import LoginImg from '../assets/images/login.png';
-import { Link } from '@react-navigation/native';
+import Return from '@/components/Return';
+import { Link } from 'expo-router';
 
 export default function Login() {
 
@@ -21,6 +22,9 @@ export default function Login() {
 
   return (
     <ImageBackground source={background} style={styles.container}>
+      <Link href='/Onboarding' style={styles.returnButton}>
+        <Return size={36} color='white' />
+      </Link>
       <View style={styles.row}>
         <Text
           style={styles.title}
@@ -90,6 +94,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  returnButton: {
+    position: 'absolute',
+    top: 60, // Adjust the top value as needed
+    left:18, // Adjust the left value as needed
   },
   title: {
     fontFamily: 'InterBold',
