@@ -16,10 +16,9 @@ export default function Onboarding() {
         barStyle='light-content'  // Dark text/icons on a light background
       />
       <View style={styles.row} className='bg-transparent'>
+        <View className='my-4' />
         <Image source={logoImage} />
-
         <Carousel />
-
         <View className='mt-12'>
           <Link href='/Login'>
             <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
