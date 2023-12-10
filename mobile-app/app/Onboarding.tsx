@@ -9,7 +9,7 @@ import { Link } from 'expo-router';
 
 export default function Onboarding() {
   return (
-    <View className='bg-[#2F2E41] h-screen justify-center items-center' style={styles.container}>
+    <View className='bg-ocean-blue h-screen justify-center items-center' style={styles.container}>
       <StatusBar
         translucent
         backgroundColor='rgba(000, 000, 000, 0.5)'  

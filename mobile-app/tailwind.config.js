@@ -7,7 +7,8 @@ module.exports = {
         "ocean-blue": "#17222D",
         "baby-blue": "#1DCDFE",
         "shark-grey": "#C5C5C5",
-        "dark-grey": "#515151"
+        "dark-grey": "#515151",
+        "coal-black": "#2F2E41",
       },
     },
   },
