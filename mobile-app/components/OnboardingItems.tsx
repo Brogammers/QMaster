@@ -1,11 +1,17 @@
 import React from "react";
-import { StyleSheet, Text, View, useWindowDimensions} from "react-native";
-import Image from 'react-native-remote-svg'
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  useWindowDimensions
+} from "react-native";
+import Image from 'react-native-remote-svg';
 
 
 
 export default function OnboardingItem({ item }: any) {
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
+
   return (
     <View className="flex items-center justify-center w-screen mt-7">
       <Image source={item.image} />
@@ -15,6 +21,7 @@ export default function OnboardingItem({ item }: any) {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   text: {

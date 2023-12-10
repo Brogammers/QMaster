@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, StyleSheet, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text, StyleSheet } from 'react-native';
+import { Dimensions } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 
@@ -15,7 +16,7 @@ interface TextButtonProps {
 }
 
 
-export default function TextButton(props: TextButtonProps) {
+export default function TextButtons(props: TextButtonProps) {
   const { text, buttonColor } = props;
 
   if (props.text2 == null) {

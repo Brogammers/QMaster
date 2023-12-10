@@ -7,12 +7,12 @@ import {
   Text,
   TextInput,
 } from 'react-native';
-import { Formik } from 'formik';
-import TextButton from '../components/TextButton';
-import background from '../assets/images/background.png';
-import LoginImg from '../assets/images/login.png';
-import Return from '@/components/Return';
 import { Link } from 'expo-router';
+import { Formik } from 'formik';
+import TextButton from '@/components/TextButton';
+import Return from '@/components/Return';
+import background from '@/assets/images/background.png';
+import LoginImg from '@/assets/images/login.png';
 
 
 export default function Login() {

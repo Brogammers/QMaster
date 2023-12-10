@@ -5,12 +5,12 @@ import {
   Text,
   TextInput,
 } from 'react-native';
+import { Link } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import TextButton from '../components/TextButton';
-import background from '../assets/images/background.png';
+import TextButton from '@/components/TextButton';
 import Return from '@/components/Return';
-import { Link } from 'expo-router';
+import background from '@/assets/images/background.png';
 
 
 const SignupSchema = Yup.object().shape({

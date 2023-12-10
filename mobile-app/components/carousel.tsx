@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { FlatList, Animated, ViewToken } from 'react-native';
+import { OnboardingData } from '@/data';
 import OnboardingItems from './OnboardingItems';
-import { OnboardingData } from '../data';
 import Paginator from './Paginator';
 
 export default function Carousel() {
