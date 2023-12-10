@@ -8,8 +8,8 @@ import {
 import { Link } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import TextButton from '@/components/TextButton';
-import Return from '@/components/Return';
+import TextButton from '@/shared/components/TextButton';
+import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 
 

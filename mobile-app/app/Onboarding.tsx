@@ -3,7 +3,7 @@ import { StatusBar, StyleSheet, View } from 'react-native';
 import Image from 'react-native-remote-svg';
 import { Link } from 'expo-router';
 import TextButtons from '@/shared/components/TextButtons';
-import TextButton from '@/components/TextButton';
+import TextButton from '@/shared/components/TextButton';
 import Carousel from '@/components/Carousel';
 import logoImage from '@/assets/images/logoImage.svg';
 

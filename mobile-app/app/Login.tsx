@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { Link } from 'expo-router';
 import { Formik } from 'formik';
-import TextButton from '@/components/TextButton';
-import Return from '@/components/Return';
+import TextButton from '@/shared/components/TextButton';
+import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import LoginImg from '@/assets/images/login.png';
 
