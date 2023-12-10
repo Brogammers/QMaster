@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, View, FlatList, Animated, ViewToken } from 'react-native';
-import OnboardingItems from '../components/OnboardingItems';
-import { OnboardingData } from '../data';
-import Paginator from './paginator';
+import { FlatList, Animated, ViewToken } from 'react-native';
+import { OnboardingData } from '@/data';
+import OnboardingItems from './OnboardingItems';
+import Paginator from './Paginator';
 
 export default function Carousel() {
   const [currentIndex, setCurrentIndex] = useState(0);

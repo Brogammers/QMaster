@@ -7,20 +7,24 @@ import {
   Text,
   TextInput,
 } from 'react-native';
+import { Link } from 'expo-router';
 import { Formik } from 'formik';
-import TextButton from '../components/TextButton';
-import background from '../assets/images/background.png';
-import LoginImg from '../assets/images/login.png';
-import { Link } from '@react-navigation/native';
+import TextButton from '@/shared/components/TextButton';
+import Return from '@/shared/components/Return';
+import background from '@/assets/images/background.png';
+import LoginImg from '@/assets/images/login.png';
+
 
 export default function Login() {
-
   const handleSignUp = (values: any) => {
     console.log("Signing up...", values);
   };
 
   return (
     <ImageBackground source={background} style={styles.container}>
+      <Link href='/Onboarding' style={styles.returnButton}>
+        <Return size={36} color='white' />
+      </Link>
       <View style={styles.row}>
         <Text
           style={styles.title}
@@ -29,7 +33,6 @@ export default function Login() {
           Welcome Back!
         </Text>
         <Image source={LoginImg} className='mt-6 mb-12' />
-
         <Formik
           initialValues={{
             fullName: '',
@@ -63,18 +66,20 @@ export default function Login() {
           )}
         </Formik>
         <Text
-          className='text-[#1DCDFE] underline mt-2 text-sm'
+          className='text-baby-blue underline mt-2 text-sm'
         >
           Forgot password?
         </Text>
         <View className='mt-8'>
-          <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
-          <TextButton text={'Continue with Google'} text2={'google'} buttonColour={'white'} textColor={'#17222D'} />
+          <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
+          <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
         </View>
       </View>
     </ImageBackground>
   )
 }
+
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#17222D',
@@ -91,21 +96,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  returnButton: {
+    position: 'absolute',
+    top: 60, 
+    left:18, 
+  },
   title: {
     fontFamily: 'InterBold',
-    fontSize: 28, // Corresponds to text-2xl in Tailwind
-    color: '#FFF', // Text color
-    marginBottom: 16, // Corresponds to mb-4 in Tailwind
+    fontSize: 28, 
+    color: '#FFF', 
+    marginBottom: 16, 
   },
   baseText: {
-    fontSize: 16, // Corresponds to text-base in Tailwind
-    color: '#FFF', // Text color
-    marginBottom: 40, // Corresponds to mb-10 in Tailwind
+    fontSize: 16, 
+    color: '#FFF', 
+    marginBottom: 40, 
   },
   input: {
     backgroundColor: '#DFDFDF',
     color: '#515151',
-    fontSize: 16, // Corresponds to text-base in Tailwind
+    fontSize: 16,
     fontFamily: 'InterBold',
     borderRadius: 42,
     height: 56,
@@ -120,8 +130,8 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     backgroundColor: '#1DCDFE',
-    marginTop: 10, // Corresponds to mt-2.5 in Tailwind
-    paddingVertical: 16, // Corresponds to py-4 in Tailwind
+    marginTop: 10, 
+    paddingVertical: 16, 
     paddingHorizontal: 12,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -135,8 +145,8 @@ const styles = StyleSheet.create({
   googleButton: {
     backgroundColor: '#FFF',
     color: '#17222D',
-    marginTop: 10, // Corresponds to mt-2.5 in Tailwind
-    paddingVertical: 16, // Corresponds to py-4 in Tailwind
+    marginTop: 10, 
+    paddingVertical: 16, 
     paddingHorizontal: 12,
     flexDirection: 'row',
     justifyContent: 'center',

@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, Animated, useWindowDimensions, StyleProp, ViewStyle } from 'react-native';
-import { OnboardingItem } from '../data';
+import { OnboardingItem } from '@/data';
+
 
 interface PaginatorProps {
   data: OnboardingItem[];
   scrollX: Animated.Value;
 }
+
 
 export default function Paginator({ data, scrollX }: PaginatorProps) {
   const { width } = useWindowDimensions();

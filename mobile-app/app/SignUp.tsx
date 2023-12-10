@@ -1,17 +1,17 @@
-import { StyleSheet, useColorScheme, ImageBackground } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import React, { FormEvent, useState } from 'react';
+import { StyleSheet, ImageBackground } from 'react-native';
+import React from 'react';
 import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
-  GestureResponderEvent,
 } from 'react-native';
+import { Link } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import TextButton from '../components/TextButton';
-import background from '../assets/images/background.png';
+import TextButton from '@/shared/components/TextButton';
+import Return from '@/shared/components/Return';
+import background from '@/assets/images/background.png';
+
 
 const SignupSchema = Yup.object().shape({
   fullName: Yup.string()
@@ -31,25 +31,27 @@ const SignupSchema = Yup.object().shape({
     .required('Required'),
 });
 
-export default function SignUp() {
 
+export default function SignUp() {
   const handleSignUp = (values: any) => {
     console.log("Signing up...", values);
   };
 
   return (
     <ImageBackground source={background} style={styles.container}>
-      <View style={styles.row}>
+      <Link href='/Onboarding' style={styles.returnButton}>
+        <Return size={36} color='white' />
+      </Link>
+      <View style={styles.row} className='relative'>
         <Text
           style={styles.title}
           className='mt-10 mb-4 text-2xl text-white'
         >
           Welcome!
         </Text>
-        <Text className='text-base text-white mb-16'>
+        <Text className='text-base text-white mb-16' style={styles.subTitle}>
           Let's help you save more time.
         </Text>
-
         <Formik
           initialValues={{
             fullName: '',
@@ -97,33 +99,19 @@ export default function SignUp() {
                 secureTextEntry
                 value={values.confirmPassword}
               />
-              {/* <View className='flex flex-col items-center justify-center w-full gap-8 mt-8'>
-                <TouchableOpacity
-                  className='rounded-xl w-full bg-[#1DCDFE] mt-2.5 py-4 flex gap-4 flex-row justify-center items-center'
-                  onPress={(e: GestureResponderEvent) => handleSubmit(e as unknown as FormEvent<HTMLFormElement>)}
-                >
-                  <Text className='text-base text-center text-white'>
-                    Sign Up
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity className='rounded-xl w-full bg-white text-[#17222D] mt-2.5 py-4 flex gap-4 flex-row justify-center items-center'>
-                  <FontAwesome name="google" size={24} color="#17222D" />
-                  <Text className='text-base text-[#17222D] text-center'>
-                    Continue with Google
-                  </Text>
-                </TouchableOpacity>
-              </View> */}
             </View>
           )}
         </Formik>
         <View className='mt-16'>
-          <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
-          <TextButton text={'Continue with Google'} text2={'google'} buttonColour={'white'} textColor={'#17222D'} />
+          <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
+          <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
         </View>
       </View>
     </ImageBackground>
   )
 }
+
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#17222D',
@@ -140,11 +128,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  returnButton: {
+    position: 'absolute',
+    top: 60, // Adjust the top value as needed
+    left: 18, // Adjust the left value as needed
+  },
   title: {
     fontFamily: 'InterBold',
     fontSize: 28, // Corresponds to text-2xl in Tailwind
     color: '#FFF', // Text color
     marginBottom: 16, // Corresponds to mb-4 in Tailwind
+  },
+  subTitle: {
+    fontFamily: 'JostReg',
   },
   baseText: {
     fontSize: 16, // Corresponds to text-base in Tailwind
@@ -155,7 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#DFDFDF',
     color: '#515151',
     fontSize: 16, // Corresponds to text-base in Tailwind
-    fontFamily: 'InterBold',
+    fontFamily: 'JostBold',
     borderRadius: 42,
     height: 56,
     marginBottom: 5,
