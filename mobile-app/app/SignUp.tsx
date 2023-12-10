@@ -12,6 +12,7 @@ import background from '../assets/images/background.png';
 import Return from '@/components/Return';
 import { Link } from 'expo-router';
 
+
 const SignupSchema = Yup.object().shape({
   fullName: Yup.string()
     .nullable()
@@ -30,8 +31,8 @@ const SignupSchema = Yup.object().shape({
     .required('Required'),
 });
 
-export default function SignUp() {
 
+export default function SignUp() {
   const handleSignUp = (values: any) => {
     console.log("Signing up...", values);
   };
@@ -51,7 +52,6 @@ export default function SignUp() {
         <Text className='text-base text-white mb-16' style={styles.subTitle}>
           Let's help you save more time.
         </Text>
-
         <Formik
           initialValues={{
             fullName: '',
@@ -103,13 +103,14 @@ export default function SignUp() {
           )}
         </Formik>
         <View className='mt-16'>
-          <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
-          <TextButton text={'Continue with Google'} text2={'google'} buttonColour={'white'} textColor={'#17222D'} />
+          <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
+          <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
         </View>
       </View>
     </ImageBackground>
   )
 }
+
 
 const styles = StyleSheet.create({
   container: {

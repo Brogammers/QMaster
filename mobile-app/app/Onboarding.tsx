@@ -21,13 +21,12 @@ export default function Onboarding() {
         <Carousel />
         <View className='mt-12'>
           <Link href='/Login'>
-            <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
+            <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
           </Link>
           <Link href='/SignUp'>
-            <TextButton text={'Sign Up'} buttonColour={'#C5C5C5'} textColor={'black'} />
+            <TextButton text={'Sign Up'} buttonColor={'#C5C5C5'} textColor={'black'} />
           </Link>
         </View>
-
       </View>
     </View>
   )

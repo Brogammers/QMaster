@@ -14,8 +14,8 @@ import LoginImg from '../assets/images/login.png';
 import Return from '@/components/Return';
 import { Link } from 'expo-router';
 
-export default function Login() {
 
+export default function Login() {
   const handleSignUp = (values: any) => {
     console.log("Signing up...", values);
   };
@@ -33,7 +33,6 @@ export default function Login() {
           Welcome Back!
         </Text>
         <Image source={LoginImg} className='mt-6 mb-12' />
-
         <Formik
           initialValues={{
             fullName: '',
@@ -72,13 +71,15 @@ export default function Login() {
           Forgot password?
         </Text>
         <View className='mt-8'>
-          <TextButton text={'Log In'} buttonColour={'#1DCDFE'} textColor={'white'} />
-          <TextButton text={'Continue with Google'} text2={'google'} buttonColour={'white'} textColor={'#17222D'} />
+          <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
+          <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
         </View>
       </View>
     </ImageBackground>
   )
 }
+
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#17222D',
