@@ -99,22 +99,6 @@ export default function SignUp() {
                 secureTextEntry
                 value={values.confirmPassword}
               />
-              {/* <View className='flex flex-col items-center justify-center w-full gap-8 mt-8'>
-                <TouchableOpacity
-                  className='rounded-xl w-full bg-[#1DCDFE] mt-2.5 py-4 flex gap-4 flex-row justify-center items-center'
-                  onPress={(e: GestureResponderEvent) => handleSubmit(e as unknown as FormEvent<HTMLFormElement>)}
-                >
-                  <Text className='text-base text-center text-white'>
-                    Sign Up
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity className='rounded-xl w-full bg-white text-[#17222D] mt-2.5 py-4 flex gap-4 flex-row justify-center items-center'>
-                  <FontAwesome name="google" size={24} color="#17222D" />
-                  <Text className='text-base text-[#17222D] text-center'>
-                    Continue with Google
-                  </Text>
-                </TouchableOpacity>
-              </View> */}
             </View>
           )}
         </Formik>

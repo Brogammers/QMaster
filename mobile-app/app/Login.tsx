@@ -67,7 +67,7 @@ export default function Login() {
           )}
         </Formik>
         <Text
-          className='text-[#1DCDFE] underline mt-2 text-sm'
+          className='text-baby-blue underline mt-2 text-sm'
         >
           Forgot password?
         </Text>
@@ -97,24 +97,24 @@ const styles = StyleSheet.create({
   },
   returnButton: {
     position: 'absolute',
-    top: 60, // Adjust the top value as needed
-    left:18, // Adjust the left value as needed
+    top: 60, 
+    left:18, 
   },
   title: {
     fontFamily: 'InterBold',
-    fontSize: 28, // Corresponds to text-2xl in Tailwind
-    color: '#FFF', // Text color
-    marginBottom: 16, // Corresponds to mb-4 in Tailwind
+    fontSize: 28, 
+    color: '#FFF', 
+    marginBottom: 16, 
   },
   baseText: {
-    fontSize: 16, // Corresponds to text-base in Tailwind
-    color: '#FFF', // Text color
-    marginBottom: 40, // Corresponds to mb-10 in Tailwind
+    fontSize: 16, 
+    color: '#FFF', 
+    marginBottom: 40, 
   },
   input: {
     backgroundColor: '#DFDFDF',
     color: '#515151',
-    fontSize: 16, // Corresponds to text-base in Tailwind
+    fontSize: 16,
     fontFamily: 'InterBold',
     borderRadius: 42,
     height: 56,
@@ -129,8 +129,8 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     backgroundColor: '#1DCDFE',
-    marginTop: 10, // Corresponds to mt-2.5 in Tailwind
-    paddingVertical: 16, // Corresponds to py-4 in Tailwind
+    marginTop: 10, 
+    paddingVertical: 16, 
     paddingHorizontal: 12,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -144,8 +144,8 @@ const styles = StyleSheet.create({
   googleButton: {
     backgroundColor: '#FFF',
     color: '#17222D',
-    marginTop: 10, // Corresponds to mt-2.5 in Tailwind
-    paddingVertical: 16, // Corresponds to py-4 in Tailwind
+    marginTop: 10, 
+    paddingVertical: 16, 
     paddingHorizontal: 12,
     flexDirection: 'row',
     justifyContent: 'center',
