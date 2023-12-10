@@ -2,7 +2,6 @@ import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import Image from 'react-native-remote-svg';
 import { Link } from 'expo-router';
-import TextButtons from '@/shared/components/TextButtons';
 import TextButton from '@/shared/components/TextButton';
 import Carousel from '@/components/Carousel';
 import logoImage from '@/assets/images/logoImage.svg';
@@ -20,7 +19,7 @@ export default function Onboarding() {
         <View className='my-4' />    
         <Image source={logoImage} />
         <Carousel />
-        <View className='mt-12'>
+        <View className='mt-10'>
           <Link href='/Login'>
             <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
           </Link>

@@ -39,7 +39,6 @@ export default function TextButton(props: TextButtonProps) {
         <Text className='text-xl font-bold pl-3.5' style={[{ color: props.textColor }, styles.font]}>
           {props.text}
         </Text>
-        
       </TouchableOpacity>
     );
   }
