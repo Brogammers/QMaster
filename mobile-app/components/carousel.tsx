@@ -5,14 +5,8 @@ import OnboardingItems from './OnboardingItems';
 import Paginator from './paginator';
 
 export default function Carousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+ 
   const scrollX = useRef(new Animated.Value(0)).current;
-
-  const viewableItemsChanged = useRef(
-    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      setCurrentIndex(viewableItems[0]?.index || 0);
-    }
-  ).current;
 
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
@@ -33,7 +27,6 @@ export default function Carousel() {
           }
         )}
         scrollEventThrottle={32}
-        onViewableItemsChanged={viewableItemsChanged}
         viewabilityConfig={viewConfig}
 
         className='mt-12'
