@@ -12,6 +12,7 @@ public class LoginService {
 
   private final AppUserRepository appUserRepository;
   private final EmailValidator emailValidator;
+  private final LoginRepository loginRepository;
 
   private boolean checkIfValidUser(String email, String password) {
     boolean isValidEmail = emailValidator.test(email);
@@ -23,7 +24,9 @@ public class LoginService {
   }
 
   public void loginUser(String email, String password) {
-    // TODO
-    return;
+    
+    if (checkIfValidUser(email, password)) {
+      loginRepository.save(appUserRepository.findByEmail(email).orElseThrow(() -> new IllegalStateException("User not found.")));
+    }
   }
 }

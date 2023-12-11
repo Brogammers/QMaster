@@ -1,34 +1,31 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import React, { useEffect } from 'react';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
-import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import { SplashScreen } from 'expo-router';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Onboarding from './Onboarding';
-import 'react-native-gesture-handler';
-import { SessionProvider } from '../ctx/AuthContext';
 import SignUp from './SignUp';
+import Login from './Login';
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: 'Onboarding',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+
 SplashScreen.preventAutoHideAsync();
+
+
+const Stack = createNativeStackNavigator();
+
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     InterBold: require('../assets/fonts/static/Inter-Bold.ttf'),
-    ...FontAwesome.font,
+    JostBold: require('../assets/fonts/static/Jost-Bold.ttf'),
+    JostReg: require('../assets/fonts/static/Jost-Regular.ttf'),
+    IstokBold: require('../assets/fonts/static/IstokWeb-Bold.ttf'),
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -43,20 +40,18 @@ export default function RootLayout() {
     return null;
   }
 
-  return <SignUp />;
+  return (
+    <RootLayoutNav />
+  );
 }
 
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
 
+function RootLayoutNav() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <SessionProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-        </Stack>
-      </SessionProvider>
-    </ThemeProvider>
+    <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Onboarding" component={Onboarding} />
+      <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="Login" component={Login} />
+    </Stack.Navigator> 
   );
 }
