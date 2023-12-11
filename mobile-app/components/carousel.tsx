@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { FlatList, Animated, ViewToken } from 'react-native';
 import { OnboardingData } from '@/data';
 import OnboardingItems from './OnboardingItems';
-import Paginator from './Paginator';
+import Paginator from './paginator';
 
 export default function Carousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
