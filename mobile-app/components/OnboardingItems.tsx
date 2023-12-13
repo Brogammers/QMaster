@@ -10,12 +10,11 @@ import Image from 'react-native-remote-svg';
 
 
 export default function OnboardingItem({ item }: any) {
-  const { width } = useWindowDimensions();
 
   return (
     <View className="flex items-center justify-center w-screen mt-7">
       <Image source={item.image} />
-      <Text style={styles.text} className="w-4/5 mt-5 text-center text-white text-base" >
+      <Text style={styles.text} className="w-4/5 mt-5 text-base text-center text-white" >
         {item.text}
       </Text>
     </View>

@@ -22,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.qmaster.myapp"
     },
     "web": {
       "bundler": "metro",
@@ -34,7 +35,7 @@
     ],
     "experiments": {
       "typedRoutes": true,
-      "tsconfigPaths": true,
+      "tsconfigPaths": true
     }
   }
 }

@@ -2,14 +2,14 @@ import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import Image from 'react-native-remote-svg';
 import { Link } from 'expo-router';
-import Carousel from '@/components/Carousel';
+import Carousel from '@/components/carousel';
 import TextButton from '@/shared/components/TextButton';
 import logoImage from '@/assets/images/logoImage.svg';
 
 
 export default function Onboarding() {
   return (
-    <View className='bg-ocean-blue h-screen justify-center items-center' style={styles.container}>
+    <View className='items-center justify-center h-screen bg-ocean-blue' style={styles.container}>
       <StatusBar
         translucent
         backgroundColor='rgba(000, 000, 000, 0.5)'  
