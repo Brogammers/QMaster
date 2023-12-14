@@ -2,10 +2,9 @@ import React, { useState, useRef } from 'react';
 import { FlatList, Animated, ViewToken } from 'react-native';
 import { OnboardingData } from '@/data';
 import OnboardingItems from './OnboardingItems';
-import Paginator from './paginator';
+import Paginator from './Paginator';
 
 export default function Carousel() {
- 
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;

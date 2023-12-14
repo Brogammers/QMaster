@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import Image from 'react-native-remote-svg';
 import { Link } from 'expo-router';
-import Carousel from '@/components/carousel';
+import Carousel from '@/components/Carousel';
 import TextButton from '@/shared/components/TextButton';
 import logoImage from '@/assets/images/logoImage.svg';
 
