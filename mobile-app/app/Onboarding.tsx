@@ -6,7 +6,6 @@ import Carousel from '@/components/carousel';
 import TextButton from '@/shared/components/TextButton';
 import logoImage from '@/assets/images/logoImage.svg';
 
-
 export default function Onboarding() {
   return (
     <View className='items-center justify-center h-screen bg-ocean-blue' style={styles.container}>
