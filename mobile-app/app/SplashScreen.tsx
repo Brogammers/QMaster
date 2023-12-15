@@ -3,10 +3,11 @@ import { StyleSheet, View } from 'react-native';
 import LottieView from 'lottie-react-native';
 import Logo from '@/assets/images/splash.json';
 
-export default function Onboarding() {
+export default function SplashScreen() {
   return (
     <View className='items-center justify-center h-screen bg-ocean-blue' style={styles.container}>
       <LottieView
+        style={{ width: '50%' }}
         source={Logo}
         autoPlay
         loop
