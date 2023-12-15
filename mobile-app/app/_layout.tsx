@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
-import { SplashScreen } from 'expo-router';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Onboarding from './Onboarding';
 import SignUp from './SignUp';
 import Login from './Login';
-import Splash from './SplashScreen';
-
+import Loading from './SplashScreen';
 
 export const unstable_settings = {
   initialRouteName: 'Onboarding',
@@ -24,12 +22,20 @@ export default function RootLayout() {
     IstokBold: require('../assets/fonts/static/IstokWeb-Bold.ttf'),
   });
 
+  const [showLoading, setShowLoading] = useState(true);
+
   useEffect(() => {
     if (error) throw error;
+
+    const timer = setTimeout(() => {
+      setShowLoading(false);
+    }, 5000); // 5000 milliseconds = 5 seconds
+
+    return () => clearTimeout(timer);
   }, [error]);
 
-  if (!loaded) {
-    return <Splash />;
+  if (!loaded || showLoading) {
+    return <Loading />;
   }
 
   return (
