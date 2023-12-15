@@ -5,14 +5,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Onboarding from './Onboarding';
 import SignUp from './SignUp';
 import Login from './Login';
+import Splash from './SplashScreen';
 
 
 export const unstable_settings = {
   initialRouteName: 'Onboarding',
 };
-
-
-SplashScreen.preventAutoHideAsync();
 
 
 const Stack = createNativeStackNavigator();
@@ -30,14 +28,8 @@ export default function RootLayout() {
     if (error) throw error;
   }, [error]);
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
   if (!loaded) {
-    return null;
+    return <Splash />;
   }
 
   return (
