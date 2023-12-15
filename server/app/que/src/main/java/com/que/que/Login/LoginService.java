@@ -16,17 +16,21 @@ public class LoginService {
 
   private boolean checkIfValidUser(String email, String password) {
     boolean isValidEmail = emailValidator.test(email);
-    if (!isValidEmail) return false;
+    if (!isValidEmail)
+      return false;
     AppUser user = appUserRepository
-      .findByEmail(email)
-      .orElseThrow(() -> new IllegalStateException("User not found."));
+        .findByEmail(email)
+        .orElseThrow(() -> new IllegalStateException("User not found."));
     return user.isEnabled();
   }
 
   public void loginUser(String email, String password) {
-    
+
     if (checkIfValidUser(email, password)) {
-      loginRepository.save(appUserRepository.findByEmail(email).orElseThrow(() -> new IllegalStateException("User not found.")));
+      AppUser appUser = appUserRepository.findByEmail(email)
+          .orElseThrow(() -> new IllegalStateException("User not found."));
+      LoginEntry loginEntry = new LoginEntry(appUser);
+      loginRepository.save(loginEntry);
     }
   }
 }
