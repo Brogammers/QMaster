@@ -7,6 +7,7 @@ export default function SplashScreen() {
   return (
     <View className='items-center justify-center h-screen bg-ocean-blue' style={styles.container}>
       <LottieView
+        style={{ width: '50%' }}
         source={Logo}
         autoPlay
         loop
