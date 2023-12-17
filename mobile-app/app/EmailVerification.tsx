@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   StatusBar,
+  Alert,
 } from 'react-native';
 import { Link } from 'expo-router';
 import { Formik } from 'formik';
@@ -25,7 +26,42 @@ export default function EmailVerification() {
 
     setTimeout(() => {
       setLoading(false);
+      showAlertNoAccountFound();
     }, 5000)
+  };
+
+  const showAlertNoAccountFound = () => {
+    Alert.alert(
+      'No Account Found',
+      "It seems we couldn't find an account linked to the provided email. Double-check or consider registering if you're new.",
+      [
+        {
+          text: 'Re-enter',
+          onPress: () => console.log('Re-enter Pressed'),
+        },
+        {
+          text: 'Register',
+          onPress: () => console.log('Register Pressed'),
+        },
+      ],
+    );
+  };
+
+  const showAlertAccountFound = () => {
+    Alert.alert(
+      'Account Found!',
+      'Great news! We found an account linked to this email. Continue to sign in or reset your password if needed.',
+      [
+        {
+          text: 'Login',
+          onPress: () => console.log('Login Pressed'),
+        },
+        {
+          text: 'Reset Password',
+          onPress: () => console.log('Reset Password Pressed'),
+        },
+      ],
+    );
   };
 
   return (
