@@ -6,11 +6,6 @@ import Logo from '@/assets/images/splash.json';
 export default function SplashScreen() {
   return (
     <View className='items-center justify-center h-screen bg-ocean-blue' style={styles.container}>
-      <StatusBar
-        translucent
-        backgroundColor='rgba(000, 000, 000, 0.5)'  
-        barStyle='light-content'  
-      />
       <LottieView
         style={{ width: '50%' }}
         source={Logo}

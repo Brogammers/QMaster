@@ -8,7 +8,7 @@ import Loading from './SplashScreen';
 import EmailVerification from './EmailVerification';
 
 export const unstable_settings = {
-  initialRouteName: 'Onboarding',
+  initialRouteName: 'EmailVerification',
 };
 
 
@@ -47,7 +47,7 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <Stack.Navigator initialRouteName="Loading" screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="EmailVerification" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="EmailVerification" component={EmailVerification} />
       <Stack.Screen name="Onboarding" component={Onboarding} />
       <Stack.Screen name="SignUp" component={SignUp} />

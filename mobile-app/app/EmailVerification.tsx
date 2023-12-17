@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   StyleSheet, 
   ImageBackground, 
@@ -13,10 +13,11 @@ import { Formik } from 'formik';
 import TextButton from '@/shared/components/TextButton';
 import background from '@/assets/images/background.png';
 import EmailVerifImg from '@/assets/images/email-verification.png';
+import Loading from '@/app/SplashScreen';
 
 export default function EmailVerification() {
   const handleEmailSearch = (values: any) => {
-    console.log("Finding your email...", values);
+    console.log('Finding your email...', values);
   };
 
   return (
@@ -58,7 +59,14 @@ export default function EmailVerification() {
           )}
         </Formik>
         <View className='mt-12'>
-          <TextButton text={'Finc My Account'} buttonColor={'#1DCDFE'} textColor={'white'} />
+          <Link href='/SplashScreen'>
+            <TextButton
+              text={'Find My Account'}
+              buttonColor={'#1DCDFE'}
+              textColor={'white'}
+              // onPress={() => !loading && handleEmailSearch('values.email')}
+            />
+          </Link>
           <Link href='/Onboarding'>
             <TextButton text={'Explore QMaster'} buttonColor={'white'} textColor={'#17222D'} />
           </Link>
