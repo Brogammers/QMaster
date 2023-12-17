@@ -5,10 +5,14 @@ import { Link } from 'expo-router';
 import Carousel from '@/components/Carousel';
 import TextButton from '@/shared/components/TextButton';
 import logoImage from '@/assets/images/logoImage.svg';
+import Return from '@/shared/components/Return';
 
 export default function Onboarding() {
   return (
     <View className='items-center justify-center h-screen bg-ocean-blue' style={styles.container}>
+      <Link href='/EmailVerification' style={styles.returnButton}>
+        <Return size={36} color='white' />
+      </Link>
       <StatusBar
         translucent
         backgroundColor='rgba(000, 000, 000, 0.5)'  
@@ -46,5 +50,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  returnButton: {
+    position: 'absolute',
+    top: 60, 
+    left:18, 
   },
 });

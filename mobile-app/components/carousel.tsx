@@ -27,10 +27,8 @@ export default function Carousel() {
         )}
         scrollEventThrottle={32}
         viewabilityConfig={viewConfig}
-
         className='mt-12'
       />
-
       <Paginator data={OnboardingData} scrollX={scrollX} />
     </>
   );
