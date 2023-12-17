@@ -4,6 +4,7 @@ import Onboarding3 from './assets/images/onboarding3.svg';
 import Onboarding4 from './assets/images/onboarding4.svg';
 import { ImageSourcePropType } from 'react-native';
 
+// Onboarding Screen
 export interface OnboardingItem {
   image: ImageSourcePropType;
   text: string;
@@ -27,3 +28,6 @@ export const OnboardingData: OnboardingItem[] = [
     text: 'Spend your time on the important things in life.',
   }
 ];
+
+// Email Verification - SplashScreen 
+export const EmailVerificationText = "Sit tight while we search our database to see if your email has a reservation with us!";

@@ -14,14 +14,27 @@ import TextButton from '@/shared/components/TextButton';
 import background from '@/assets/images/background.png';
 import EmailVerifImg from '@/assets/images/email-verification.png';
 import Loading from '@/app/SplashScreen';
+import { EmailVerificationText } from '@/data';
 
 export default function EmailVerification() {
+  const [loading, setLoading] = useState(false);
+
   const handleEmailSearch = (values: any) => {
+    setLoading(true);
     console.log('Finding your email...', values);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000)
   };
 
   return (
     <ImageBackground source={background} style={styles.container}>
+      { loading && (
+        <LoadingOverlay 
+          backgroundColor="rgba(23, 34, 45, 0.925)"
+        />
+      )}
       <View style={styles.row}>
       <StatusBar
         translucent
@@ -35,7 +48,7 @@ export default function EmailVerification() {
           Find Your Account
         </Text>
         <Image source={EmailVerifImg} className='mt-8 mb-12' />
-        <Text style={styles.description} className="w-4/5 mb-10 text-base text-center text-white">
+        <Text style={styles.description} className="w-full mt-2 mb-10 text-base text-center text-white">
           Already have an account but don't remember the email? Enter it below and we'll check for an existing account.
         </Text>
         <Formik
@@ -59,14 +72,12 @@ export default function EmailVerification() {
           )}
         </Formik>
         <View className='mt-12'>
-          <Link href='/SplashScreen'>
-            <TextButton
-              text={'Find My Account'}
-              buttonColor={'#1DCDFE'}
-              textColor={'white'}
-              // onPress={() => !loading && handleEmailSearch('values.email')}
-            />
-          </Link>
+          <TextButton
+            text={'Find My Account'}
+            buttonColor={'#1DCDFE'}
+            textColor={'white'}
+            onPress={() => !loading && handleEmailSearch('values.email')}
+          />
           <Link href='/Onboarding'>
             <TextButton text={'Explore QMaster'} buttonColor={'white'} textColor={'#17222D'} />
           </Link>
@@ -75,6 +86,13 @@ export default function EmailVerification() {
     </ImageBackground>
   );
 }
+
+
+const LoadingOverlay = ({ backgroundColor }: { backgroundColor: string }) => (
+  <View style={[styles.overlay, { backgroundColor }]}>
+    <Loading additionalText={EmailVerificationText} />
+  </View>
+);
 
 
 const styles = StyleSheet.create({
@@ -90,6 +108,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 10,
+    width: '100%',
+    backgroundColor: 'rgba(23, 34, 45, 0.925)', // Adjust the opacity as needed
+    // rgba(0, 0, 0, 0.5)
     justifyContent: 'center',
     alignItems: 'center',
   },
