@@ -12,6 +12,7 @@ interface TextButtonProps {
   buttonColor: string;
   textColor: string;
   text2?: any;
+  onPress?: () => void;
 }
 
 
@@ -21,6 +22,7 @@ export default function TextButton(props: TextButtonProps) {
   if (props.text2 == null) {
     return (
       <TouchableOpacity
+        onPress={props.onPress}
         className='flex items-center justify-center mt-5 rounded-lg'
         style={[styles.buttonWidth, { backgroundColor: props.buttonColor }]}
       >
@@ -32,6 +34,7 @@ export default function TextButton(props: TextButtonProps) {
   } else {
     return (
       <TouchableOpacity
+        onPress={props.onPress}
         className='flex items-center justify-center mt-5 rounded-lg flex-row'
         style={[styles.buttonWidth, { backgroundColor: props.buttonColor }]}
       >

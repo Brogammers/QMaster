@@ -14,7 +14,7 @@ export default function Paginator({ data, scrollX }: PaginatorProps) {
 
   return (
     <View style={{ flexDirection: 'row', marginTop: 40 }} >
-      {data.map((_, i: number) => {
+      { data.map((_, i: number) => {
         const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
 
         const dotWidth = scrollX.interpolate({
