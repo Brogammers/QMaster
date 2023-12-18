@@ -1,5 +1,5 @@
-import { StyleSheet, ImageBackground } from 'react-native';
-import React, { useState } from 'react';
+import { StyleSheet, ImageBackground, Linking } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,14 @@ import Return from '@/shared/components/Return';
 import Loading from '@/app/SplashScreen';
 import background from '@/assets/images/background.png';
 import { SignUpText } from '@/data';
+import { useNavigation } from '@react-navigation/native';
 
+
+interface LoadingOverlayProps {
+  backgroundColor: string;
+  onStart: () => void;
+  onComplete: () => void;
+}
 
 const SignupSchema = Yup.object().shape({
   fullName: Yup.string()
@@ -36,6 +43,8 @@ const SignupSchema = Yup.object().shape({
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
+  const [loadingComplete, setLoadingComplete] = useState(false);
+  const navigation = useNavigation();
 
   const handleSignUp = (values: any) => {
     setLoading(true);
@@ -43,14 +52,25 @@ export default function SignUp() {
 
     setTimeout(() => {
       setLoading(false);
-    }, 5000)
+      setLoadingComplete(true);
+    }, 5000);
   };
+
+  useEffect(() => {
+    if (loadingComplete) {
+      // Redirect to the tabs layout using React Navigation
+      navigation.navigate('Onboarding'); // Replace 'TabsLayout' with your actual tab layout route name
+    }
+  }, [loadingComplete, navigation]);
+
 
   return (
     <ImageBackground source={background} style={styles.container}>
-      { loading && (
+      {loading && (
         <LoadingOverlay 
           backgroundColor="rgba(23, 34, 45, 0.925)"
+          onStart={() => setLoading(true)}
+          onComplete={() => setLoadingComplete(true)}
         />
       )}
       <Link href='/Onboarding' style={styles.returnButton}>
@@ -117,7 +137,12 @@ export default function SignUp() {
           )}
         </Formik>
         <View className='mt-16'>
-          <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} onPress={() => !loading && handleSignUp('values.email')} />
+          <TextButton 
+            text={'Sign Up'} 
+            buttonColor={'#1DCDFE'} 
+            textColor={'white'} 
+            onPress={() => !loading && handleSignUp('values.email')} 
+          />
           <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
         </View>
       </View>
@@ -125,11 +150,20 @@ export default function SignUp() {
   )
 }
 
-const LoadingOverlay = ({ backgroundColor }: { backgroundColor: string }) => (
-  <View style={[styles.overlay, { backgroundColor }]}>
-    <Loading additionalText={SignUpText} />
-  </View>
-);
+const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ backgroundColor, onStart, onComplete }) => {
+  useEffect(() => {
+    onStart(); // Trigger onStart when the component mounts
+    return () => {
+      onComplete(); // Trigger onComplete when the component unmounts
+    };
+  }, []); // Empty dependency array ensures this effect runs only once (on mount)
+
+  return (
+    <View style={[styles.overlay, { backgroundColor }]}>
+      <Loading additionalText={SignUpText} />
+    </View>
+  );
+};
 
 
 const styles = StyleSheet.create({

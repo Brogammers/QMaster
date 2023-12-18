@@ -26,7 +26,7 @@ export default function EmailVerification() {
 
     setTimeout(() => {
       setLoading(false);
-      showAlertNoAccountFound();
+      showAlertAccountFound();
     }, 5000)
   };
 
