@@ -59,7 +59,7 @@ export default function SignUp() {
   useEffect(() => {
     if (loadingComplete) {
       // Redirect to the tabs layout using React Navigation
-      navigation.navigate('Onboarding'); // Replace 'TabsLayout' with your actual tab layout route name
+      navigation.navigate('Onboarding' as never); // Replace 'TabsLayout' with your actual tab layout route name
     }
   }, [loadingComplete, navigation]);
 
