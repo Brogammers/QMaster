@@ -31,3 +31,6 @@ export const OnboardingData: OnboardingItem[] = [
 
 // Email Verification - SplashScreen 
 export const EmailVerificationText = "Sit tight while we search our database to see if your email has a reservation with us!";
+
+// SignUp - SplashScreen
+export const SignUpText = "Queueing up your email to our records.\nSit tight while we create your new account.";

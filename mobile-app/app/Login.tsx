@@ -71,8 +71,12 @@ export default function Login() {
           Forgot password?
         </Text>
         <View className='mt-8'>
-          <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
-          <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
+          <Link href='/(tabs)/Search'>
+            <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
+          </Link>
+          <Link href='/(tabs)/_layout'>
+            <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
+          </Link>
         </View>
       </View>
     </ImageBackground>

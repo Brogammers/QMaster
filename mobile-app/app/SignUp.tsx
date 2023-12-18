@@ -1,5 +1,5 @@
 import { StyleSheet, ImageBackground } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,9 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
+import Loading from '@/app/SplashScreen';
 import background from '@/assets/images/background.png';
+import { SignUpText } from '@/data';
 
 
 const SignupSchema = Yup.object().shape({
@@ -33,12 +35,24 @@ const SignupSchema = Yup.object().shape({
 
 
 export default function SignUp() {
+  const [loading, setLoading] = useState(false);
+
   const handleSignUp = (values: any) => {
-    console.log("Signing up...", values);
+    setLoading(true);
+    console.log('Signing you up...', values);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000)
   };
 
   return (
     <ImageBackground source={background} style={styles.container}>
+      { loading && (
+        <LoadingOverlay 
+          backgroundColor="rgba(23, 34, 45, 0.925)"
+        />
+      )}
       <Link href='/Onboarding' style={styles.returnButton}>
         <Return size={36} color='white' />
       </Link>
@@ -103,13 +117,19 @@ export default function SignUp() {
           )}
         </Formik>
         <View className='mt-16'>
-          <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
+          <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} onPress={() => !loading && handleSignUp('values.email')} />
           <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
         </View>
       </View>
     </ImageBackground>
   )
 }
+
+const LoadingOverlay = ({ backgroundColor }: { backgroundColor: string }) => (
+  <View style={[styles.overlay, { backgroundColor }]}>
+    <Loading additionalText={SignUpText} />
+  </View>
+);
 
 
 const styles = StyleSheet.create({
@@ -125,6 +145,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 10,
+    width: '100%',
+    backgroundColor: 'rgba(23, 34, 45, 0.925)', // Adjust the opacity as needed
+    // rgba(0, 0, 0, 0.5)
     justifyContent: 'center',
     alignItems: 'center',
   },
