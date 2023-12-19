@@ -54,10 +54,12 @@ export default function SignUp() {
         </Text>
         <Formik
           initialValues={{
-            fullName: '',
+            firstName: '',
+            lastName: '',
+            dateOfBirth: null,
+            countryOfOrigin: null,
             email: '',
             password: '',
-            confirmPassword: '',
           }}
           validationSchema={SignupSchema}
           onSubmit={handleSignUp}
