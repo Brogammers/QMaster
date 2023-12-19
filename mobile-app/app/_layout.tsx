@@ -6,6 +6,7 @@ import SignUp from './SignUp';
 import Login from './Login';
 import Loading from './SplashScreen';
 import EmailVerification from './EmailVerification';
+import Home from './(tabs)/index'
 
 export const unstable_settings = {
   initialRouteName: 'EmailVerification',
@@ -40,7 +41,7 @@ export default function RootLayout() {
   }
 
   return (
-    <RootLayoutNav />
+    <Home />
   );
 }
 
