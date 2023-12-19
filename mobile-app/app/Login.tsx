@@ -9,22 +9,24 @@ import {
 } from 'react-native';
 import { Link } from 'expo-router';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import LoginImg from '@/assets/images/login.png';
-import * as Yup from 'yup';
+
+
+const handleLogin = (values: any) => {
+  console.log("Logging in...", values);
+};
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required("Email required"),
+  password: Yup.string().required("Password required"),
+});
+
 
 export default function Login() {
-  const handleLogin = (values: any) => {
-    console.log("Logging in...", values);
-  };
-
-  const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required("Email required"),
-    password: Yup.string().required("Password required"),
-  });
-
   return (
     <ImageBackground source={background} style={styles.container}>
       <Link href='/Onboarding' style={styles.returnButton}>

@@ -1,5 +1,5 @@
 import { StyleSheet, ImageBackground } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import * as Yup from 'yup';
 import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
+
 
 const handleSignUp = (values: any) => {
   console.log('Form values:', values);
