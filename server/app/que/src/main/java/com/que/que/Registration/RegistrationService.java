@@ -27,6 +27,7 @@ public class RegistrationService {
     if (!isValidEmail) {
       throw new IllegalStateException("Not Functional");
     }
+
     String token = appUserService.signUpUser(
         new AppUser(
             AppUserRole.USER,
@@ -38,8 +39,8 @@ public class RegistrationService {
             request.getCountryOfOrigin(),
             request.getPassword(),
             request.getEmail(),
-            true,
-            true));
+            false,
+            false));
     emailSender.send(request.getEmail(), "Hello!"); // TODO: Send email
     return token;
   }
