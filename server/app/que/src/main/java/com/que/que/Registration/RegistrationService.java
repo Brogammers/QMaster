@@ -29,15 +29,15 @@ public class RegistrationService {
     }
     String token = appUserService.signUpUser(
         new AppUser(
+            AppUserRole.USER,
             request.getFirstName(),
             request.getLastName(),
+            request.getUsername(),
             LocalDate.now(),
             request.getDateOfBirth(),
             request.getCountryOfOrigin(),
             request.getPassword(),
             request.getEmail(),
-            request.getUsername(),
-            AppUserRole.USER,
             true,
             true));
     emailSender.send(request.getEmail(), "Hello!"); // TODO: Send email
