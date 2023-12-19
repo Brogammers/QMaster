@@ -68,7 +68,7 @@ export default function SignUp() {
             confirmPassword: '',
           }}
           validationSchema={SignupSchema}
-          onSubmit={values => console.log(values)}
+          onSubmit={handleSignUp}
 
         >
           {({ 
@@ -134,7 +134,7 @@ export default function SignUp() {
                   text={'Sign Up'} 
                   buttonColor={!isValid ? '#C5C5C5' : '#1DCDFE'} 
                   textColor={'white'} 
-                  onPress={() => handleSubmit()} 
+                  onPress={handleSubmit} 
                   disabled={!isValid} 
                 />
                 <TextButton 
