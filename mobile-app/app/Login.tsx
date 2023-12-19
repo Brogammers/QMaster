@@ -97,7 +97,7 @@ export default function Login() {
                 />
                 <TextButton 
                   text={'Continue with Google'} 
-                  text2={'google'} 
+                  icon={'google'} 
                   buttonColor={'white'} 
                   textColor={'#17222D'} 
                 />
@@ -113,7 +113,7 @@ export default function Login() {
           />
           <TextButton 
             text={'Continue with Google'} 
-            text2={'google'} 
+            icon={'google'} 
             buttonColor={'white'} 
             textColor={'#17222D'} 
           />

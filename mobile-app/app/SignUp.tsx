@@ -140,7 +140,7 @@ export default function SignUp() {
                 />
                 <TextButton 
                   text={'Continue with Google'} 
-                  text2={'google'} 
+                  icon={'google'} 
                   buttonColor={'white'} 
                   textColor={'#17222D'} />
               </View>
@@ -149,7 +149,7 @@ export default function SignUp() {
         </Formik>
         {/* <View className='mt-16'>
           <TextButton text={'Sign Up'} buttonColor={'#1DCDFE'} textColor={'white'} onPress={() => handleSubmit()} />
-          <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
+          <TextButton text={'Continue with Google'} icon={'google'} buttonColor={'white'} textColor={'#17222D'} />
         </View> */}
       </View>
     </ImageBackground>
