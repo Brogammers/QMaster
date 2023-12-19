@@ -53,15 +53,10 @@ public class WebSecurityConfig {
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user = User.withUsername("root")
-                .password(encoder().encode("123456789"))
+                .password(bCryptPasswordEncoder.encode("123456789"))
                 .roles("ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(user);
-    }
-
-    @Bean
-    public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
     }
 
 }

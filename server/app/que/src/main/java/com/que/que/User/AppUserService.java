@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.que.que.Email.EmailService;
@@ -22,6 +23,7 @@ public class AppUserService implements UserDetailsService {
   private static final String USER_NOT_FOUND_MSG = "User with email %s was not found in the database";
   private final ConfirmationTokenService confirmationTokenService;
   private final EmailService emailService;
+  private final BCryptPasswordEncoder passwordEncoder;
 
   @Override
   public UserDetails loadUserByUsername(String username)
@@ -40,9 +42,10 @@ public class AppUserService implements UserDetailsService {
       throw new IllegalStateException("Email is already in use.");
     }
 
-    appUserRepository.save(appUser);
+    String encodedPassword = passwordEncoder.encode(appUser.getPassword());
+    appUser.setPassword(encodedPassword);
 
-    appUser.setPassword(appUser.getPassword());
+    appUserRepository.save(appUser);
 
     String token = UUID.randomUUID().toString();
     ConfirmationToken confirmationToken = new ConfirmationToken(
