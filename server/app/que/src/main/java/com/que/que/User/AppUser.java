@@ -43,6 +43,7 @@ public class AppUser implements UserDetails {
   private String email;
   private boolean locked = false;
   private boolean enabled = false;
+  private int queueId; // If queue id is -1 then there is no queue
 
   public AppUser(AppUserRole appUserRole, String firstName, String lastName, String username,
       LocalDate dateOfRegistration, LocalDate dateOfBirth, String countryOfOrigin, String password, String email,
@@ -58,6 +59,7 @@ public class AppUser implements UserDetails {
     this.email = email;
     this.locked = locked;
     this.enabled = enabled;
+    this.queueId = -1;
   }
 
   @Override
