@@ -20,26 +20,26 @@ const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
     .nullable()
     .matches(/^[a-zA-Z]+$/, 'Full name must contain only letters')
-    .required('Required'),
-  email: Yup.string().email('Invalid email').required('Required'),
+    .required("Name required"),
+  email: Yup.string().email('Invalid email').required("Email required"),
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
       'Password must contain at least one lowercase letter, one uppercase letter, and one numeric digit'
     )
-    .required('Required'),
+    .required("Password required"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match')
-    .required('Required'),
+    .required("Password confirmation required"),
 });
 
 
 export default function SignUp() {
-  const initialValues = { firstName: "", email: "", password: "", confirmPassword: "" };
-  const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const initialValues = { firstName: "", email: "", password: "", confirmPassword: "" };
+  // const [formValues, setFormValues] = useState(initialValues);
+  // const [formErrors, setFormErrors] = useState({});
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <ImageBackground source={background} style={styles.container}>
@@ -71,7 +71,15 @@ export default function SignUp() {
           onSubmit={values => console.log(values)}
 
         >
-          {({ handleChange, handleBlur, handleSubmit, values, errors, isValid }) => (
+          {({ 
+            handleChange, 
+            handleBlur, 
+            handleSubmit, 
+            values, 
+            touched,
+            errors, 
+            isValid 
+          }) => (
             <View className='flex items-center justify-center w-full gap-4'>
               <TextInput
                 style={styles.input}
@@ -81,8 +89,8 @@ export default function SignUp() {
                 value={values.firstName}
                 autoCapitalize='words'
               />
-              {errors.firstName &&
-                <Text style={{ fontSize: 12, color: 'red' }}>{errors.firstName}</Text>
+              {(errors.firstName && touched.firstName) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.firstName}</Text>
               }
               <TextInput
                 style={styles.input}
@@ -93,8 +101,8 @@ export default function SignUp() {
                 value={values.email}
                 autoCapitalize='none'
               />
-              {errors.email &&
-                <Text style={{ fontSize: 12, color: 'red' }}>{errors.email}</Text>
+              {(errors.email && touched.email) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.email}</Text>
               }
               <TextInput
                 style={styles.input}
@@ -105,8 +113,8 @@ export default function SignUp() {
                 secureTextEntry
                 value={values.password}
               />
-              {errors.password &&
-                <Text style={{ fontSize: 12, color: 'red' }}>{errors.password}</Text>
+              {(errors.password && touched.password) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.password}</Text>
               }
               <TextInput
                 style={styles.input}
@@ -117,8 +125,8 @@ export default function SignUp() {
                 secureTextEntry
                 value={values.confirmPassword}
               />
-              {errors.confirmPassword &&
-                <Text style={{ fontSize: 12, color: 'red' }}>{errors.confirmPassword}</Text>
+              {(errors.confirmPassword && touched.confirmPassword) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.confirmPassword}</Text>
               }
               <View className='my-4' />
               <View className='mt-16'>
