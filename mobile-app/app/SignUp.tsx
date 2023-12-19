@@ -61,6 +61,7 @@ export default function SignUp() {
           }}
           validationSchema={SignupSchema}
           onSubmit={handleSignUp}
+          
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <View className='flex items-center justify-center w-full gap-4'>
@@ -103,7 +104,7 @@ export default function SignUp() {
           )}
         </Formik>
         <View className='mt-16'>
-          <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
+          <TextButton text={'Sign Up'} buttonColor={'#1DCDFE'} textColor={'white'} />
           <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
         </View>
       </View>
