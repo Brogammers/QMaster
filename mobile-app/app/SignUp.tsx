@@ -12,8 +12,8 @@ import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 
-const handleSignUp = () => {
-  console.log((values: any) => console.log(values))
+const handleSignUp = (values: any) => {
+  console.log('Form values:', values);
 }
 
 const SignupSchema = Yup.object().shape({
@@ -120,13 +120,18 @@ export default function SignUp() {
               {errors.confirmPassword &&
                 <Text style={{ fontSize: 12, color: 'red' }}>{errors.confirmPassword}</Text>
               }
+              <View className='my-4' />
+              <View className='mt-16'>
+                <TextButton text={'Sign Up'} buttonColor={'#1DCDFE'} textColor={'white'} onPress={() => handleSubmit()} />
+                <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
+              </View>
             </View>
           )}
         </Formik>
-        <View className='mt-16'>
-          <TextButton text={'Sign Up'} buttonColor={'#1DCDFE'} textColor={'white'} />
+        {/* <View className='mt-16'>
+          <TextButton text={'Sign Up'} buttonColor={'#1DCDFE'} textColor={'white'} onPress={() => handleSubmit()} />
           <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
-        </View>
+        </View> */}
       </View>
     </ImageBackground>
   )

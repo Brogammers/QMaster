@@ -17,7 +17,7 @@ interface TextButtonProps {
 
 
 export default function TextButton(props: TextButtonProps) {
-  const { text, buttonColor } = props;
+  const { text, buttonColor} = props;
 
   if (props.text2 == null) {
     return (
