@@ -1,5 +1,5 @@
 import { StyleSheet, ImageBackground } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -33,6 +33,11 @@ const SignupSchema = Yup.object().shape({
 
 
 export default function SignUp() {
+  const initialValues = { firstName: "", email: "", password: "", confirmPassword: "" };
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSignUp = (values: any) => {
     console.log("Signing up...", values);
   };
