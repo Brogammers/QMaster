@@ -27,7 +27,7 @@ export default function Onboarding() {
             <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
           </Link>
           <Link href='/SignUp'>
-            <TextButton text={'Sign Up'} buttonColor={'#C5C5C5'} textColor={'black'} />
+            <TextButton text={'Sign Up'} buttonColor={'white'} textColor={'black'} />
           </Link>
         </View>
       </View>

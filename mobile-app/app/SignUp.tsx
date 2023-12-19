@@ -130,8 +130,18 @@ export default function SignUp() {
               }
               <View className='my-4' />
               <View className='mt-16'>
-                <TextButton text={'Sign Up'} buttonColor={'#1DCDFE'} textColor={'white'} onPress={() => handleSubmit()} />
-                <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
+                <TextButton 
+                  text={'Sign Up'} 
+                  buttonColor={!isValid ? '#C5C5C5' : '#1DCDFE'} 
+                  textColor={'white'} 
+                  onPress={() => handleSubmit()} 
+                  disabled={!isValid} 
+                />
+                <TextButton 
+                  text={'Continue with Google'} 
+                  text2={'google'} 
+                  buttonColor={'white'} 
+                  textColor={'#17222D'} />
               </View>
             </View>
           )}
