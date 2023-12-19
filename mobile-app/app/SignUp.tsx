@@ -54,14 +54,18 @@ export default function SignUp() {
         </Text>
         <Formik
           initialValues={{
-            fullName: '',
+            firstName: '',
+            lastName: '',
+            dateOfBirth: null,
+            counrtyOfOrigin: null,
             email: '',
             password: '',
+            username: null,
             confirmPassword: '',
           }}
           validationSchema={SignupSchema}
           onSubmit={handleSignUp}
-          
+
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <View className='flex items-center justify-center w-full gap-4'>
@@ -69,8 +73,8 @@ export default function SignUp() {
                 style={styles.input}
                 placeholder='Enter your full name'
                 placeholderTextColor={'#515151'}
-                onChangeText={handleChange('fullName')}
-                value={values.fullName}
+                onChangeText={handleChange('firstName')}
+                value={values.firstName}
                 autoCapitalize='words'
               />
               <TextInput
