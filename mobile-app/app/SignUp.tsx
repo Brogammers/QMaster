@@ -12,9 +12,12 @@ import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 
+const handleSignUp = () => {
+  console.log((values: any) => console.log(values))
+}
 
 const SignupSchema = Yup.object().shape({
-  fullName: Yup.string()
+  firstName: Yup.string()
     .nullable()
     .matches(/^[a-zA-Z]+$/, 'Full name must contain only letters')
     .required('Required'),
@@ -38,10 +41,6 @@ export default function SignUp() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSignUp = (values: any) => {
-    console.log("Signing up...", values);
-  };
-
   return (
     <ImageBackground source={background} style={styles.container}>
       <Link href='/Onboarding' style={styles.returnButton}>
@@ -59,25 +58,32 @@ export default function SignUp() {
         </Text>
         <Formik
           initialValues={{
-            fullName: '',
+            firstName: '',
+            lastName: null,
+            dateOfBirth: null,
+            counrtyOfOrigin: null,
             email: '',
             password: '',
+            username: null,
             confirmPassword: '',
           }}
           validationSchema={SignupSchema}
-          onSubmit={handleSignUp}
-          
+          onSubmit={values => console.log(values)}
+
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({ handleChange, handleBlur, handleSubmit, values, errors, isValid }) => (
             <View className='flex items-center justify-center w-full gap-4'>
               <TextInput
                 style={styles.input}
                 placeholder='Enter your full name'
                 placeholderTextColor={'#515151'}
-                onChangeText={handleChange('fullName')}
-                value={values.fullName}
+                onChangeText={handleChange('firstName')}
+                value={values.firstName}
                 autoCapitalize='words'
               />
+              {errors.firstName &&
+                <Text style={{ fontSize: 12, color: 'red' }}>{errors.firstName}</Text>
+              }
               <TextInput
                 style={styles.input}
                 placeholder='Enter your email'
@@ -87,6 +93,9 @@ export default function SignUp() {
                 value={values.email}
                 autoCapitalize='none'
               />
+              {errors.email &&
+                <Text style={{ fontSize: 12, color: 'red' }}>{errors.email}</Text>
+              }
               <TextInput
                 style={styles.input}
                 placeholder='Enter new password'
@@ -96,6 +105,9 @@ export default function SignUp() {
                 secureTextEntry
                 value={values.password}
               />
+              {errors.password &&
+                <Text style={{ fontSize: 12, color: 'red' }}>{errors.password}</Text>
+              }
               <TextInput
                 style={styles.input}
                 placeholder='Confirm new password'
@@ -105,6 +117,9 @@ export default function SignUp() {
                 secureTextEntry
                 value={values.confirmPassword}
               />
+              {errors.confirmPassword &&
+                <Text style={{ fontSize: 12, color: 'red' }}>{errors.confirmPassword}</Text>
+              }
             </View>
           )}
         </Formik>

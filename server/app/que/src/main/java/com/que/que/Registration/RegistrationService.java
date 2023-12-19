@@ -27,7 +27,9 @@ public class RegistrationService {
     if (!isValidEmail) {
       throw new IllegalStateException("Not Functional");
     }
-
+    if (request.getPassword() != request.getConfirmPassword()) {
+      throw new IllegalStateException("Password do not match");
+    }
     String token = appUserService.signUpUser(
         new AppUser(
             AppUserRole.USER,
