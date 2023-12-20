@@ -7,7 +7,7 @@ import QrCode from '../assets/images/QrCode.svg';
 import { Dimensions } from 'react-native';
 
 const { height } = Dimensions.get('window')
-const twoFifth = height * 2 / 5
+const twoFifth = height * 38/100
 
 export default function ScanQr() {
   return (

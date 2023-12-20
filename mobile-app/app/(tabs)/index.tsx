@@ -29,7 +29,7 @@ export default function TabOneScreen() {
             <Category Img={category.Image} Title={category.Text} />
           ))}
         </View>
-        <TouchableOpacity className='flex flex-row items-center self-center justify-between w-full px-5 mt-6 bg-white rounded-lg h-9'>
+        <TouchableOpacity className='flex flex-row items-center self-center justify-between w-full h-10 px-5 mt-6 bg-white rounded-lg'>
           <Text className='font-semibold '>Frequently Asked Questions</Text>
           <AntDesign name="caretright" size={15} color="#444" />
         </TouchableOpacity>
