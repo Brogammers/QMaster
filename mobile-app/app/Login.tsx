@@ -16,14 +16,14 @@ import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import LoginImg from '@/assets/images/login.png';
 import axios, { AxiosError } from 'axios';
-import { API_BASE_URL } from '@env';
+import { API_BASE_URL_LOGIN } from '@env';
 
 
 const handleLogin = async (values: any) => {
   console.log("Logging in...", values);
 
   try {
-    const response = await axios.post(`${API_BASE_URL}`, values);
+    const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
 
     if (response.status === 200 || response.status === 201) {
       console.log('Signup successful', values);
@@ -138,19 +138,6 @@ export default function Login() {
             </View>
           )}
         </Formik>
-        {/* <View className='mt-8'>
-          <TextButton 
-            text={'Log In'} 
-            buttonColor={'#1DCDFE'} 
-            textColor={'white'} 
-          />
-          <TextButton 
-            text={'Continue with Google'} 
-            icon={'google'} 
-            buttonColor={'white'} 
-            textColor={'#17222D'} 
-          />
-        </View> */}
       </View>
     </ImageBackground>
   )
