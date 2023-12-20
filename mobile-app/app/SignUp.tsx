@@ -1,4 +1,4 @@
-import { StyleSheet, ImageBackground } from 'react-native';
+import { StyleSheet, ImageBackground, Alert } from 'react-native';
 import React from 'react';
 import {
   View,
@@ -8,14 +8,12 @@ import {
 import { Link } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
+import { API_BASE_URL } from '@env';
 
-
-const handleSignUp = (values: any) => {
-  console.log('Form values:', values);
-}
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -37,10 +35,23 @@ const SignupSchema = Yup.object().shape({
 
 
 export default function SignUp() {
-  // const initialValues = { firstName: "", email: "", password: "", confirmPassword: "" };
-  // const [formValues, setFormValues] = useState(initialValues);
-  // const [formErrors, setFormErrors] = useState({});
-  // const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleSignUp = async (values: any) => {
+    console.log('Form values:', values);
+
+    try {
+      const response = await axios.post(`${API_BASE_URL}`, values);
+
+      if (response.status === 200 || response.status === 201) {
+        console.log('Signup successful', values);
+      } else {
+        console.error('Signup failed', response.data);
+        Alert.alert('Signup Failed', 'Please check your input and try again.');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
+    }
+  }
 
   return (
     <ImageBackground source={background} style={styles.container}>
