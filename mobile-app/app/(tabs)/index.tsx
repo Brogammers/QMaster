@@ -1,11 +1,13 @@
 import React from 'react';
 import { StatusBar, StyleSheet, SafeAreaView, Platform, Text, TextInput, TouchableOpacity } from 'react-native';
 import { View } from 'react-native';
-import Image from 'react-native-remote-svg';
-import ElipseBackground from '../../assets/images/ElipseBackground.svg';
-import QrCode from '../../assets/images/QrCode.svg';
 import { FontAwesome } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
+import Category from '@/components/Category';
+import { AntDesign } from '@expo/vector-icons';
+import ScanQr from '@/components/ScanQR';
+import SearchBar from '@/components/SearchBar';
+import { Categories } from '@/data';
 
 const { height } = Dimensions.get('window')
 const twoFifth = height * 2 / 5
@@ -19,21 +21,18 @@ export default function TabOneScreen() {
         backgroundColor='#17222D'
         barStyle='light-content'
       />
-      <TouchableOpacity className='items-center justify-center' style={styles.qrcode}>
-        <View style={styles.imageContainer}>
-          <Image source={ElipseBackground} style={styles.image} />
+      <ScanQr />
+      <View className='self-center w-[85%]'>
+        <SearchBar />
+        <View className='flex flex-row flex-wrap self-center justify-between'>
+          {Categories.map((category) => (
+            <Category Img={category.Image} Title={category.Text} />
+          ))}
         </View>
-        <View>
-          <Image source={QrCode} />
-          <Text className='text-3xl text-white mt-2.5 font-semibold'>Scan QR</Text>
-        </View>
-      </TouchableOpacity>
-      <View style={styles.searchBar} className='flex-row items-center self-center mt-6'>
-        <FontAwesome name="search" size={24} color="black" />
-        <TextInput
-          placeholder="Search for the name of queue"
-          className='pl-2.5 w-full'
-        />
+        <TouchableOpacity className='flex flex-row items-center self-center justify-between w-full px-5 mt-6 bg-white rounded-lg h-9'>
+          <Text className='font-semibold '>Frequently Asked Questions</Text>
+          <AntDesign name="caretright" size={15} color="#444" />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -42,6 +41,7 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#D9D9D9',
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight ? StatusBar.currentHeight - 1 : 0 : 0,
   },
   imageContainer: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#969696',
     borderRadius: 20,
-    paddingLeft: 10,
+    paddingLeft: 11,
   },
   qrcode: {
     height: twoFifth,
