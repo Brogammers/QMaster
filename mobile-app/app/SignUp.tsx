@@ -39,7 +39,7 @@ export default function SignUp() {
     console.log('Form values:', values);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/signup`, values);
+      const response = await axios.post(`${API_BASE_URL}`, values);
 
       if (response.status === 200 || response.status === 201) {
         console.log('Signup successful', values);

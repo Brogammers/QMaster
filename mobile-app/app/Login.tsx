@@ -6,6 +6,7 @@ import {
   View,
   Text,
   TextInput,
+  Alert,
 } from 'react-native';
 import { Link } from 'expo-router';
 import { Formik } from 'formik';
@@ -14,10 +15,42 @@ import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import LoginImg from '@/assets/images/login.png';
+import axios, { AxiosError } from 'axios';
+import { API_BASE_URL } from '@env';
 
 
-const handleLogin = (values: any) => {
+const handleLogin = async (values: any) => {
   console.log("Logging in...", values);
+
+  try {
+    const response = await axios.post(`${API_BASE_URL}`, values);
+
+    if (response.status === 200 || response.status === 201) {
+      console.log('Signup successful', values);
+    } else {
+      console.error('Signup failed', response.data);
+      Alert.alert('Signup Failed', 'Please check your input and try again.');
+    }
+  } catch (error) {
+    console.error('Signup error:', error);
+    Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
+
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+
+      if (axiosError.response) {
+        console.error('Axios error status:', axiosError.response.status);
+        console.error('Axios error data:', axiosError.response.data);
+      } else if (axiosError.request) {
+        console.error('Axios error request:', axiosError.request);
+      } else {
+        console.error('Axios error message:', axiosError.message);
+      }
+    } else {
+      // Handle non-Axios errors
+      console.error('Non-Axios error:', error);
+    }
+  }
 };
 
 const LoginSchema = Yup.object().shape({
