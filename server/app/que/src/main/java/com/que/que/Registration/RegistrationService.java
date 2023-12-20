@@ -28,7 +28,7 @@ public class RegistrationService {
       throw new IllegalStateException("Not Functional");
     }
     System.out.println(request.getPassword() + " " + request.getConfirmPassword());
-    if (request.getPassword() != request.getConfirmPassword()) {
+    if (!request.getPassword().equals(request.getConfirmPassword())) {
       throw new IllegalStateException("Password do not match");
     }
     String token = appUserService.signUpUser(
