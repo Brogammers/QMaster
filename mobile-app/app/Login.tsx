@@ -6,20 +6,60 @@ import {
   View,
   Text,
   TextInput,
+  Alert,
 } from 'react-native';
 import { Link } from 'expo-router';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import LoginImg from '@/assets/images/login.png';
+import axios, { AxiosError } from 'axios';
+import { API_BASE_URL_LOGIN } from '@env';
+
+
+const handleLogin = async (values: any) => {
+  console.log("Logging in...", values);
+
+  try {
+    const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
+
+    if (response.status === 200 || response.status === 201) {
+      console.log('Signup successful', values);
+    } else {
+      console.error('Signup failed', response.data);
+      Alert.alert('Signup Failed', 'Please check your input and try again.');
+    }
+  } catch (error) {
+    console.error('Signup error:', error);
+    Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
+
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+
+      if (axiosError.response) {
+        console.error('Axios error status:', axiosError.response.status);
+        console.error('Axios error data:', axiosError.response.data);
+      } else if (axiosError.request) {
+        console.error('Axios error request:', axiosError.request);
+      } else {
+        console.error('Axios error message:', axiosError.message);
+      }
+    } else {
+      // Handle non-Axios errors
+      console.error('Non-Axios error:', error);
+    }
+  }
+};
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required("Email required"),
+  password: Yup.string().required("Password required"),
+});
 
 
 export default function Login() {
-  const handleSignUp = (values: any) => {
-    console.log("Signing up...", values);
-  };
-
   return (
     <ImageBackground source={background} style={styles.container}>
       <Link href='/Onboarding' style={styles.returnButton}>
@@ -35,14 +75,21 @@ export default function Login() {
         <Image source={LoginImg} className='mt-6 mb-12' />
         <Formik
           initialValues={{
-            fullName: '',
             email: '',
             password: '',
-            confirmPassword: '',
           }}
-          onSubmit={handleSignUp}
+          validationSchema={LoginSchema}
+          onSubmit={handleLogin}
         >
-          {({ handleChange, handleBlur, values }) => (
+          {({ 
+            handleChange, 
+            handleBlur, 
+            handleSubmit, 
+            values, 
+            touched,
+            errors, 
+            isValid 
+          }) => (
             <View className='flex items-center justify-center w-full gap-4'>
               <TextInput
                 style={styles.input}
@@ -53,6 +100,9 @@ export default function Login() {
                 value={values.email}
                 autoCapitalize='none'
               />
+              {(errors.email && touched.email) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.email}</Text>
+              }
               <TextInput
                 style={styles.input}
                 placeholder='Enter your password'
@@ -62,18 +112,32 @@ export default function Login() {
                 secureTextEntry
                 value={values.password}
               />
+              {(errors.password && touched.password) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.password}</Text>
+              }
+              <Text
+                className='text-baby-blue underline mt-2 text-sm'
+              >
+                Forgot password?
+              </Text>
+              <View className='mt-8'>
+                <TextButton 
+                  text={'Log In'} 
+                  buttonColor={!isValid ? '#C5C5C5' : '#1DCDFE'} 
+                  textColor={'white'} 
+                  disabled={!isValid}
+                  onPress={handleSubmit}
+                />
+                <TextButton 
+                  text={'Continue with Google'} 
+                  icon={'google'} 
+                  buttonColor={'white'} 
+                  textColor={'#17222D'} 
+                />
+              </View>
             </View>
           )}
         </Formik>
-        <Text
-          className='text-baby-blue underline mt-2 text-sm'
-        >
-          Forgot password?
-        </Text>
-        <View className='mt-8'>
-          <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
-          <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
-        </View>
       </View>
     </ImageBackground>
   )

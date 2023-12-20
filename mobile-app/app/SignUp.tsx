@@ -1,4 +1,4 @@
-import { StyleSheet, ImageBackground } from 'react-native';
+import { StyleSheet, ImageBackground, Alert } from 'react-native';
 import React from 'react';
 import {
   View,
@@ -8,34 +8,66 @@ import {
 import { Link } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import axios, { AxiosError } from 'axios';
 import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
+import { API_BASE_URL } from '@env';
 
 
 const SignupSchema = Yup.object().shape({
-  fullName: Yup.string()
+  firstName: Yup.string()
     .nullable()
     .matches(/^[a-zA-Z]+$/, 'Full name must contain only letters')
-    .required('Required'),
-  email: Yup.string().email('Invalid email').required('Required'),
+    .required("Name required"),
+  email: Yup.string().email('Invalid email').required("Email required"),
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
       'Password must contain at least one lowercase letter, one uppercase letter, and one numeric digit'
     )
-    .required('Required'),
+    .required("Password required"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match')
-    .required('Required'),
+    .required("Password confirmation required"),
 });
 
 
 export default function SignUp() {
-  const handleSignUp = (values: any) => {
-    console.log("Signing up...", values);
-  };
+  const handleSignUp = async (values: any) => {
+    console.log('Form values:', values);
+
+    try {
+      const response = await axios.post(`${API_BASE_URL}`, values);
+
+      if (response.status === 200 || response.status === 201) {
+        console.log('Signup successful', values);
+      } else {
+        console.error('Signup failed', response.data);
+        Alert.alert('Signup Failed', 'Please check your input and try again.');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
+
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+  
+        if (axiosError.response) {
+          console.error('Axios error status:', axiosError.response.status);
+          console.error('Axios error data:', axiosError.response.data);
+        } else if (axiosError.request) {
+          console.error('Axios error request:', axiosError.request);
+        } else {
+          console.error('Axios error message:', axiosError.message);
+        }
+      } else {
+        // Handle non-Axios errors
+        console.error('Non-Axios error:', error);
+      }
+    }
+  }
 
   return (
     <ImageBackground source={background} style={styles.container}>
@@ -55,25 +87,39 @@ export default function SignUp() {
         <Formik
           initialValues={{
             firstName: '',
-            lastName: '',
+            lastName: null,
             dateOfBirth: null,
-            countryOfOrigin: null,
+            counrtyOfOrigin: null,
             email: '',
             password: '',
+            username: null,
+            confirmPassword: '',
           }}
           validationSchema={SignupSchema}
           onSubmit={handleSignUp}
+
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({ 
+            handleChange, 
+            handleBlur, 
+            handleSubmit, 
+            values, 
+            touched,
+            errors, 
+            isValid 
+          }) => (
             <View className='flex items-center justify-center w-full gap-4'>
               <TextInput
                 style={styles.input}
                 placeholder='Enter your full name'
                 placeholderTextColor={'#515151'}
-                onChangeText={handleChange('fullName')}
-                value={values.fullName}
+                onChangeText={handleChange('firstName')}
+                value={values.firstName}
                 autoCapitalize='words'
               />
+              {(errors.firstName && touched.firstName) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.firstName}</Text>
+              }
               <TextInput
                 style={styles.input}
                 placeholder='Enter your email'
@@ -83,6 +129,9 @@ export default function SignUp() {
                 value={values.email}
                 autoCapitalize='none'
               />
+              {(errors.email && touched.email) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.email}</Text>
+              }
               <TextInput
                 style={styles.input}
                 placeholder='Enter new password'
@@ -92,6 +141,9 @@ export default function SignUp() {
                 secureTextEntry
                 value={values.password}
               />
+              {(errors.password && touched.password) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.password}</Text>
+              }
               <TextInput
                 style={styles.input}
                 placeholder='Confirm new password'
@@ -101,13 +153,31 @@ export default function SignUp() {
                 secureTextEntry
                 value={values.confirmPassword}
               />
+              {(errors.confirmPassword && touched.confirmPassword) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.confirmPassword}</Text>
+              }
+              <View className='my-4' />
+              <View className='mt-16'>
+                <TextButton 
+                  text={'Sign Up'} 
+                  buttonColor={!isValid ? '#C5C5C5' : '#1DCDFE'} 
+                  textColor={'white'} 
+                  onPress={handleSubmit} 
+                  disabled={!isValid} 
+                />
+                <TextButton 
+                  text={'Continue with Google'} 
+                  icon={'google'} 
+                  buttonColor={'white'} 
+                  textColor={'#17222D'} />
+              </View>
             </View>
           )}
         </Formik>
-        <View className='mt-16'>
-          <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
-          <TextButton text={'Continue with Google'} text2={'google'} buttonColor={'white'} textColor={'#17222D'} />
-        </View>
+        {/* <View className='mt-16'>
+          <TextButton text={'Sign Up'} buttonColor={'#1DCDFE'} textColor={'white'} onPress={() => handleSubmit()} />
+          <TextButton text={'Continue with Google'} icon={'google'} buttonColor={'white'} textColor={'#17222D'} />
+        </View> */}
       </View>
     </ImageBackground>
   )
