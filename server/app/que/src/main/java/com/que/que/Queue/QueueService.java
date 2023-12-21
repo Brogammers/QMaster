@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import com.que.que.User.AppUser;
@@ -13,24 +14,27 @@ import com.que.que.User.AppUserRepository;
 import lombok.AllArgsConstructor;
 
 @Service
+@Configuration
 @AllArgsConstructor
 public class QueueService {
     private final AppUserRepository appUserRepository;
-    private final ArrayList<ArrayList<Queue<Long>>> queue;
-    private final Stack<Integer> queueSlots;
-    private boolean initializeQueueSlots;
+    private final QueueCreationRepository queueCreationRepository;
+    private final QueueDequeueRepository queueDequeueRepository;
+    private final QueueEnqueueRepository queueEnqueueRepository;
+    private final QueueDeletionRepository queueDeletionRepository;
+    private final ArrayList<ArrayList<Queue<Long>>> queue = queue();
+    private final Stack<Integer> queueSlots = stack();
 
-    public void initializeQueueSlots() {
-        for (int i = 1000000; i >= 0; i++) {
-            queueSlots.add(i);
+    public void initializeQueueSlots(Stack<Integer> temp) {
+        for (int i = 1000000; i >= 0; i--) {
+            temp.push(i);
         }
         print();
     }
 
     public void createNewQueue(Long queueHolderID) {
-        if (!initializeQueueSlots) {
-            initializeQueueSlots();
-            initializeQueueSlots = true;
+        if (queueSlots.size() == 0) {
+            throw new IllegalStateException("Can't add new queue");
         }
         if (!isValidForNewQueue(queueHolderID)) {
             throw new IllegalStateException("Can not create queue for user");
@@ -45,10 +49,14 @@ public class QueueService {
                 queue.add(new ArrayList<Queue<Long>>());
                 queueHolderQueue = queue.get(currentSlot);
             }
+            AppUser appUser = appUserRepository.findById(queueHolderID).orElse(null);
+            appUser.setQueueId(currentSlot);
         } else {
             queueHolderQueue = queue.get(queueLocation);
         }
         queueHolderQueue.add(new LinkedList<>());
+        queueCreationRepository.save(new QueueCreation(appUserRepository
+                .findById(queueHolderID).orElseThrow(() -> new IllegalStateException("Could not find user"))));
         print();
     }
 
@@ -83,6 +91,9 @@ public class QueueService {
         } catch (Exception e) {
             throw new IllegalStateException("Could not add user to queue");
         }
+        queueEnqueueRepository.save(new QueueEnqueue(
+                appUserRepository.findById(queueHolderId)
+                        .orElseThrow(() -> new IllegalStateException("Could not find user"))));
         print();
     }
 
@@ -98,6 +109,9 @@ public class QueueService {
                 return null;
             }
             print();
+            queueDequeueRepository.save(new QueueDequeue(
+                    appUserRepository.findById(specificQueue.peek())
+                            .orElseThrow(() -> new IllegalStateException("Could not find user"))));
             return specificQueue.poll();
         } catch (Exception e) {
             print();
@@ -116,6 +130,13 @@ public class QueueService {
         } catch (Exception e) {
             throw new IllegalStateException("User does not have specific queue");
         }
+        if (queueHolderQueues.size() == 0) {
+            AppUser appUser = appUserRepository.findById(queueHolderId).orElse(null);
+            appUser.setQueueId(-1);
+        }
+        queueDeletionRepository.save(new QueueDeletion(
+                appUserRepository.findById(queueHolderId)
+                        .orElseThrow(() -> new IllegalStateException("Could not find user"))));
         print();
     }
 
@@ -123,8 +144,18 @@ public class QueueService {
         for (int i = 0; i < queue.size(); i++) {
             ArrayList<Queue<Long>> current = queue.get(i);
             for (int j = 0; j < current.size(); j++) {
-                System.out.println(current.get(0));
+                System.out.println(current.get(j));
             }
         }
+    }
+
+    public ArrayList<ArrayList<Queue<Long>>> queue() {
+        return new ArrayList<>();
+    }
+
+    public Stack<Integer> stack() {
+        Stack<Integer> temp = new Stack<>();
+        initializeQueueSlots(temp);
+        return temp;
     }
 }
