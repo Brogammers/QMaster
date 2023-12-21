@@ -1,19 +1,29 @@
 import React from "react";
-import {Text, TouchableOpacity} from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import Image from 'react-native-remote-svg';
-import Restaurant from '../assets/images/Restaurant.svg';
+import Ellipse from '../assets/images/Ellipse.svg';
+import { Dimensions } from 'react-native';
 
-interface CategoryProps{
-    Img: any,
-    Title: String,
+const { width } = Dimensions.get('window')
+const wide = width * 27 / 100
+
+interface CategoryProps {
+  Img: any,
+  Title: String,
 }
 
-export default function Category(props: CategoryProps){
-    const {Img, Title} = props;
-    return (
-        <TouchableOpacity className="flex items-center justify-center w-[31%] h-24 bg-white rounded-2xl mb-2.5 ">
-            <Image source={Img}/>
-            <Text>{Title}</Text>
-        </TouchableOpacity>
-    )
+export default function Category(props: CategoryProps) {
+  const { Img, Title } = props;
+  return (
+    <TouchableOpacity className="flex items-center justify-center h-24 bg-white rounded-2xl mb-2.5 " style={{ width: wide }}>
+      <View>
+        <View className="absolute self-center">
+          <Image source={Ellipse} />
+        </View>
+        <Image source={Img} />
+      </View>
+      <Text>{Title}</Text>
+    </TouchableOpacity>
+  )
 }
+
