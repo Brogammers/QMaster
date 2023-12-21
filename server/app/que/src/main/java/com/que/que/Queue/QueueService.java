@@ -97,7 +97,7 @@ public class QueueService {
         print();
     }
 
-    public Long dequeueUser(Long queueHolderId, int specificQueueId) {
+    public AppUser dequeueUser(Long queueHolderId, int specificQueueId) {
         int queueSlot = getQueueSlot(queueHolderId);
         if (queueSlot == -1) {
             throw new IllegalStateException("User does not have a queue setup");
@@ -109,10 +109,10 @@ public class QueueService {
                 return null;
             }
             print();
-            queueDequeueRepository.save(new QueueDequeue(
-                    appUserRepository.findById(specificQueue.peek())
-                            .orElseThrow(() -> new IllegalStateException("Could not find user"))));
-            return specificQueue.poll();
+            AppUser nextUser = appUserRepository.findById(specificQueue.peek())
+                    .orElseThrow(() -> new IllegalStateException("Could not find user"));
+            queueDequeueRepository.save(new QueueDequeue(nextUser));
+            return nextUser;
         } catch (Exception e) {
             print();
             throw new IllegalStateException("Could not remove first user from queue");
