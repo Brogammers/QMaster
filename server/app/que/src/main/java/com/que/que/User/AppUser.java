@@ -1,5 +1,6 @@
 package com.que.que.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -33,16 +34,22 @@ public class AppUser implements UserDetails {
 
   @Enumerated(EnumType.STRING)
   private AppUserRole appUserRole;
+  @Column(nullable = false)
   private String firstName;
   private String lastName;
   private String userName;
   private LocalDate dateOfRegistration;
   private LocalDate dateOfBirth;
   private String countryOfOrigin;
+  @Column(nullable = false)
   private String password;
+  @Column(nullable = false)
   private String email;
+  @Column(nullable = false)
   private boolean locked = false;
+  @Column(nullable = false)
   private boolean enabled = false;
+  @Column(nullable = false)
   private int queueId; // If queue id is -1 then there is no queue
 
   public AppUser(AppUserRole appUserRole, String firstName, String lastName, String username,
