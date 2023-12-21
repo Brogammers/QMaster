@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.que.que.User.AppUser;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +27,7 @@ public class LoginEntry {
   @ManyToOne
   @JoinColumn(nullable = false, name = "app_user_id")
   private final AppUser appUser;
+  @Column(nullable = false)
   private final LocalDate loginDate;
 
   public LoginEntry(AppUser appUser) {
