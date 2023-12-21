@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.que.que.User.AppUser;
 
 @Repository
-public interface QueueLogRepository extends JpaRepository<QueueLog, Long> {
-    Optional<QueueLog> findByAppUser(AppUser appUser);
+public interface QueueEnqueueRepository extends JpaRepository<QueueEnqueue, Long> {
+    Optional<QueueEnqueue> findByAppUser(AppUser appUser);
 }

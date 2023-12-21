@@ -18,22 +18,19 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-public class QueueLog {
+public class QueueDeletion {
     @Id
-    @SequenceGenerator(name = "login_entry_sequence", sequenceName = "login_entry_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "login_entry_sequence")
+    @SequenceGenerator(name = "queue_deletion_sequence", sequenceName = "queue_deletion_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "queue_deletion_sequence")
     private Long id;
     @ManyToOne
     @JoinColumn(nullable = false, name = "app_user_id")
     private final AppUser appUser;
     @Column(nullable = false)
     private final LocalDate actionDate;
-    @Column(nullable = false)
-    private final Byte actionType; // 0 = queue creation, 1 = queue enqueuing, 2 = queue dequeuing
 
-    public QueueLog(AppUser appUser, Byte actionType) {
+    public QueueDeletion(AppUser appUser) {
         this.appUser = appUser;
         this.actionDate = LocalDate.now();
-        this.actionType = actionType;
     }
 }
