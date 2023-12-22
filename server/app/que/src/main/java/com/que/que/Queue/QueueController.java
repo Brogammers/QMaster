@@ -1,18 +1,15 @@
 package com.que.que.Queue;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.que.que.User.AppUser;
 
 import lombok.AllArgsConstructor;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping(path = "api/v1/queue")
@@ -24,6 +21,11 @@ public class QueueController {
     @PostMapping("create")
     public void createNewQueue(@RequestParam("id") Long id) {
         queueService.createNewQueue(id);
+    }
+
+    @PutMapping("enqueue")
+    public void enqueue(@RequestParam("id") Long id, @RequestParam("appuser") Long appUser, @RequestParam("queue") int queue) {
+        queueService.enqueueUser(id, appUser, queue);
     }
 
     @PutMapping("dequeue")
