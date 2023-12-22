@@ -17,12 +17,12 @@ export default function ScanQr() {
         <Image source={ElipseBackground} style={styles.image} />
       </View>
       <View className='flex-row items-center justify-between w-full px-5 h-max'>
-        <View className='flex-row'>
+        <View className='flex-row '>
           <Image source={Logo}/>
-          <Text className='text-2xl font-medium text-white f'>QMaster</Text>
+          <Text className='ml-1 text-xl font-medium text-white'>QMaster</Text>
         </View>
         <TouchableOpacity >
-          <Ionicons name="notifications" size={24} color="white" />
+          <Ionicons name="notifications" size={25} color="white" />
         </TouchableOpacity>
       </View>
       <TouchableOpacity>

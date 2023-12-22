@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar, StyleSheet, SafeAreaView, Platform, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StatusBar, StyleSheet, SafeAreaView, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import ScanQr from '@/components/ScanQR';
 import SearchBar from '@/components/SearchBar';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -17,12 +17,14 @@ export default function Index() {
         backgroundColor='#17222D'
         barStyle='light-content'
       />
+      <ScrollView className='w-screen ' showsVerticalScrollIndicator={false}>
       <ScanQr />
-      <ScrollView className='self-center w-[85%]' showsVerticalScrollIndicator={false}>
+      <View className='w-[85%] self-center'>
         <SearchBar />
         <CategoriesList />
         <RecentQueues />
         <FrequentlyAsked />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
