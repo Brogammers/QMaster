@@ -5,7 +5,6 @@ import ElipseBackground from '../assets/images/ElipseBackground.svg';
 import QrCode from '../assets/images/QrCode.svg';
 import { Dimensions } from 'react-native';
 import Logo from "../assets/images/Logo.svg";
-import logoImage from '@/assets/images/logoImage.svg';
 import { Ionicons } from '@expo/vector-icons';
 
 const { height } = Dimensions.get('window')
@@ -19,7 +18,7 @@ export default function ScanQr() {
       </View>
       <View className='flex-row items-center justify-between w-full px-5 h-max'>
         <View className='flex-row'>
-          <Image source={Logo} />
+          <Image source={Logo}/>
           <Text className='text-2xl font-medium text-white f'>QMaster</Text>
         </View>
         <TouchableOpacity >

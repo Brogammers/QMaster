@@ -11,7 +11,7 @@ import FrequentlyAsked from '@/components/FrequentlyAsked';
 const { height } = Dimensions.get('window')
 const twoFifth = height * 2 / 5
 
-export default function TabOneScreen() {
+export default function Index() {
 
   return (
     <SafeAreaView style={styles.container}>

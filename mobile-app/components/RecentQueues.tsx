@@ -11,8 +11,8 @@ export default function RecentQueues() {
       <Text className='my-3 text-lg font-semibold'>Recent queues</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} className=''>
         {Categories.map((category, index) => (
-          <View className='mr-2.5'>
-          <Category Img={category.Image} Title={category.Text} key={index} />
+          <View className='mr-2.5' key={index}>
+          <Category Img={category.Image} Title={category.Text}  />
           </View>
         ))}
       </ScrollView>
