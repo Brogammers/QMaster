@@ -1,6 +1,5 @@
 import React from 'react';
 import { StatusBar, StyleSheet, SafeAreaView, Platform, Text, TextInput, TouchableOpacity } from 'react-native';
-import { Dimensions } from 'react-native';
 import ScanQr from '@/components/ScanQR';
 import SearchBar from '@/components/SearchBar';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -8,8 +7,6 @@ import CategoriesList from '@/components/CategoriesList';
 import RecentQueues from '@/components/RecentQueues';
 import FrequentlyAsked from '@/components/FrequentlyAsked';
 
-const { height } = Dimensions.get('window')
-const twoFifth = height * 2 / 5
 
 export default function Index() {
 
