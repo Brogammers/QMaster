@@ -79,7 +79,7 @@ export default function EmailVerification() {
       />
         <Text
           style={styles.title}
-          className='mt-14 mb-10 text-2xl text-white'
+          className='mb-10 text-2xl text-white mt-14'
         >
           Find Your Account
         </Text>
