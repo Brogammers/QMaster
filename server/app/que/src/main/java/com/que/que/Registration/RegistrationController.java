@@ -1,7 +1,7 @@
 package com.que.que.Registration;
 
 import lombok.AllArgsConstructor;
-
+import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +20,7 @@ public class RegistrationController {
   private RegistrationService registrationService;
 
   @PostMapping
-  public String register(@RequestBody RegistrationRequest request) {
+  public Map<String, Object> register(@RequestBody RegistrationRequest request) {
     return registrationService.register(request);
   }
 

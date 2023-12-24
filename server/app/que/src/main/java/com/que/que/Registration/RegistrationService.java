@@ -3,6 +3,9 @@ package com.que.que.Registration;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +25,7 @@ public class RegistrationService {
   private final ConfirmationTokenService confirmationTokenService;
   private final EmailSender emailSender;
 
-  public String register(RegistrationRequest request) {
+  public Map<String, Object> register(RegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
     if (!isValidEmail) {
       throw new IllegalStateException("Not Functional");
@@ -31,21 +34,27 @@ public class RegistrationService {
     if (!request.getPassword().equals(request.getConfirmPassword())) {
       throw new IllegalStateException("Password do not match");
     }
-    String token = appUserService.signUpUser(
-        new AppUser(
-            AppUserRole.USER,
-            request.getFirstName(),
-            request.getLastName(),
-            request.getUsername(),
-            LocalDate.now(),
-            request.getDateOfBirth(),
-            request.getCountryOfOrigin(),
-            request.getPassword(),
-            request.getEmail(),
-            false,
-            false));
+
+    AppUser newUser = new AppUser(
+        AppUserRole.USER,
+        request.getFirstName(),
+        request.getLastName(),
+        request.getUsername(),
+        LocalDate.now(),
+        request.getDateOfBirth(),
+        request.getCountryOfOrigin(),
+        request.getPassword(),
+        request.getEmail(),
+        false,
+        false);
+    appUserService.signUpUser(newUser);
+
     emailSender.send(request.getEmail(), "Hello!"); // TODO: Send email
-    return token;
+    Map<String, Object> object = new HashMap<>();
+    object.put("email", request.getEmail());
+    object.put("username", request.getUsername());
+    object.put("userID", newUser.getId());
+    return object;
   }
 
   @Transactional
