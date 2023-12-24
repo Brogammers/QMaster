@@ -13,6 +13,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import History from './(tabs)/History';
 import Account from './(tabs)/Account';
+import { useSession } from '@/ctx/AuthContext';
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -27,6 +29,7 @@ export default function RootLayout() {
   });
 
   const [showLoading, setShowLoading] = useState(true);
+  const { session, isLoading } = useSession();
 
   useEffect(() => {
     if (error) throw error;
@@ -43,7 +46,7 @@ export default function RootLayout() {
   }
 
   return (
-    <MainUI />
+    <Authentication />
   );
 }
 
