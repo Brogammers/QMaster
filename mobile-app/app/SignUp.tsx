@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
 } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios, { AxiosError } from 'axios';
@@ -13,6 +13,9 @@ import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import { API_BASE_URL } from '@env';
+import { useSession } from '@/ctx/AuthContext';
+import * as AuthSession from 'expo-auth-session';
+// import { ReactSession } from 'react-client-session';
 
 
 const SignupSchema = Yup.object().shape({
@@ -37,6 +40,7 @@ const SignupSchema = Yup.object().shape({
 export default function SignUp() {
   const handleSignUp = async (values: any) => {
     console.log('Form values:', values);
+    const { signIn } = useSession();
 
     try {
       const response = await axios.post(`${API_BASE_URL}`, values);
@@ -45,7 +49,6 @@ export default function SignUp() {
         console.log('Signup successful', values);
 
         // Handle the response data here
-        const responseData = response.data;
 
         // Do something with the responseData, e.g., navigate to the next screen
         

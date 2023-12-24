@@ -8,7 +8,7 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextButton from '@/shared/components/TextButton';
@@ -17,16 +17,20 @@ import background from '@/assets/images/background.png';
 import LoginImg from '@/assets/images/login.png';
 import axios, { AxiosError } from 'axios';
 import { API_BASE_URL_LOGIN } from '@env';
+import { useSession } from '@/ctx/AuthContext';
 
 
 const handleLogin = async (values: any) => {
   console.log("Logging in...", values);
+  const { signIn } = useSession();
 
   try {
     const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
 
     if (response.status === 200 || response.status === 201) {
       console.log('Signup successful', values);
+      signIn();
+      router.replace('/');
     } else {
       console.error('Signup failed', response.data);
       Alert.alert('Signup Failed', 'Please check your input and try again.');
