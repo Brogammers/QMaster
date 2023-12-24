@@ -5,6 +5,9 @@ import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRepository;
 import lombok.AllArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +24,7 @@ public class LoginService {
   private AppUser checkIfValidUser(String email, String password) {
     boolean isValidEmail = emailValidator.test(email);
     if (!isValidEmail) {
-      new IllegalStateException(INVALID_LOGIN_MSG);
-      return null;
+      throw new IllegalStateException(INVALID_LOGIN_MSG);
     }
     AppUser user = appUserRepository
         .findByEmail(email).orElseThrow(() -> new IllegalStateException(INVALID_LOGIN_MSG));
@@ -34,15 +36,19 @@ public class LoginService {
     }
   }
 
-  public boolean loginUser(String email, String password) {
+  public Map<String, Object> loginUser(String email, String password) {
     AppUser user = checkIfValidUser(email, password);
     if (user != null) {
       LoginEntry loginEntry = new LoginEntry(user);
       loginRepository.save(loginEntry);
       System.out.println("Logged in!");
-      return true;
+      Map<String, Object> object = new HashMap<>();
+      object.put("email", email);
+      object.put("username", user.getUsername());
+      object.put("userID", user.getId());
+      return object;
     } else {
-      return false;
+      throw new IllegalStateException("User not found");
     }
   }
 }
