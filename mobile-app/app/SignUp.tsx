@@ -43,6 +43,9 @@ export default function SignUp() {
 
       if (response.status === 200 || response.status === 201) {
         console.log('Signup successful', values);
+        // Handle the response data here
+        const responseData = response.data;
+        // Do something with the responseData, e.g., navigate to the next screen
       } else {
         console.error('Signup failed', response.data);
         Alert.alert('Signup Failed', 'Please check your input and try again.');
