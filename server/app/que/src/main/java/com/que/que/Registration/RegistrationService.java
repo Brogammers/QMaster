@@ -46,7 +46,7 @@ public class RegistrationService {
         request.getPassword(),
         request.getEmail(),
         false,
-        false);
+        true); // Setting enabled to true for testing purposes
     appUserService.signUpUser(newUser);
 
     emailSender.send(request.getEmail(), "Hello!"); // TODO: Send email
