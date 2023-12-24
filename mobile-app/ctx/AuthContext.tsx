@@ -6,14 +6,21 @@ const AuthContext = React.createContext<{ signIn: () => void; signOut: () => voi
 // This hook can be used to access the user info.
 export function useSession() {
   const value = React.useContext(AuthContext);
+
   if (process.env.NODE_ENV !== 'production') {
     if (!value) {
       throw new Error('useSession must be wrapped in a <SessionProvider />');
     }
   }
 
-  return value;
+  // Check if value is not null before accessing its properties
+  if (value && 'isLoading' in value) {
+    return value;
+  } else {
+    throw new Error('isLoading property not found on AuthContext value');
+  }
 }
+
 
 export function SessionProvider(props: React.PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState('session');
