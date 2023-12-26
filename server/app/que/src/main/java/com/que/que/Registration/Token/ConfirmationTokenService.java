@@ -3,7 +3,7 @@ package com.que.que.Registration.Token;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +24,6 @@ public class ConfirmationTokenService {
   public void setConfirmedAt(String token) {
     ConfirmationToken confirmationToken = confirmationTokenRepository.findByToken(token)
         .orElseThrow(() -> new IllegalStateException("Token not found"));
-    confirmationToken.setConfirmedAt(LocalDate.now());
+    confirmationToken.setConfirmedAt(LocalDateTime.now());
   }
 }

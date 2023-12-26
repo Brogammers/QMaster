@@ -16,6 +16,8 @@ import lombok.Setter;
 import java.util.Collection;
 import java.util.Collections;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +40,7 @@ public class AppUser implements UserDetails {
   private String firstName;
   private String lastName;
   private String userName;
-  private LocalDate dateOfRegistration;
+  private LocalDateTime dateOfRegistration;
   private LocalDate dateOfBirth;
   private String countryOfOrigin;
   @Column(nullable = false)
@@ -53,7 +55,7 @@ public class AppUser implements UserDetails {
   private int queueId; // If queue id is -1 then there is no queue
 
   public AppUser(AppUserRole appUserRole, String firstName, String lastName, String username,
-      LocalDate dateOfRegistration, LocalDate dateOfBirth, String countryOfOrigin, String password, String email,
+      LocalDateTime dateOfRegistration, LocalDate dateOfBirth, String countryOfOrigin, String password, String email,
       boolean locked, boolean enabled) {
     this.appUserRole = appUserRole;
     this.firstName = firstName;

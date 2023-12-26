@@ -1,6 +1,6 @@
 package com.que.que.Login;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.que.que.User.AppUser;
 
@@ -28,10 +28,10 @@ public class LoginEntry {
   @JoinColumn(nullable = false, name = "app_user_id")
   private final AppUser appUser;
   @Column(nullable = false)
-  private final LocalDate loginDate;
+  private final LocalDateTime loginDate;
 
   public LoginEntry(AppUser appUser) {
     this.appUser = appUser;
-    this.loginDate = LocalDate.now();
+    this.loginDate = LocalDateTime.now();
   }
 }
