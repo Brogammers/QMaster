@@ -2,7 +2,8 @@ package com.que.que.Registration;
 
 import lombok.AllArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,7 @@ public class RegistrationService {
             request.getFirstName(),
             request.getLastName(),
             request.getUsername(),
-            LocalDate.now(),
+            LocalDateTime.now(),
             request.getDateOfBirth(),
             request.getCountryOfOrigin(),
             request.getPassword(),
@@ -55,9 +56,9 @@ public class RegistrationService {
       throw new IllegalStateException("Email already confirmed");
     }
 
-    LocalDate expiredAt = confirmationToken.getExpiresAt();
+    LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
-    if (expiredAt.isBefore(LocalDate.now())) {
+    if (expiredAt.isBefore(LocalDateTime.now())) {
       throw new IllegalStateException("Token expired");
     }
 

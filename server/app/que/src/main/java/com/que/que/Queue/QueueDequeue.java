@@ -1,6 +1,6 @@
 package com.que.que.Queue;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.que.que.User.AppUser;
 
@@ -27,10 +27,10 @@ public class QueueDequeue {
     @JoinColumn(nullable = false, name = "app_user_id")
     private final AppUser appUser;
     @Column(nullable = false)
-    private final LocalDate actionDate;
+    private final LocalDateTime actionDate;
 
     public QueueDequeue(AppUser appUser) {
         this.appUser = appUser;
-        this.actionDate = LocalDate.now();
+        this.actionDate = LocalDateTime.now();
     }
 }
