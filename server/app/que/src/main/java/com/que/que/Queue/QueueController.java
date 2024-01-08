@@ -18,22 +18,23 @@ public class QueueController {
 
     private final QueueService queueService;
 
-    @PostMapping("create")
+    @PostMapping
     public void createNewQueue(@RequestParam("id") Long id) {
         queueService.createNewQueue(id);
     }
 
-    @PutMapping("enqueue")
-    public void enqueue(@RequestParam("id") Long id, @RequestParam("appuser") Long appUser, @RequestParam("queue") int queue) {
+    @PutMapping(path = "/user")
+    public void enqueue(@RequestParam("id") Long id, @RequestParam("appuser") Long appUser,
+            @RequestParam("queue") int queue) {
         queueService.enqueueUser(id, appUser, queue);
     }
 
-    @PutMapping("dequeue")
+    @PutMapping(path = "/holder")
     public AppUser dequeue(@RequestParam("id") Long id, @RequestParam("queue") int queue) {
         return queueService.dequeueUser(id, queue);
     }
 
-    @DeleteMapping("delete")
+    @DeleteMapping
     public void putMethodName(@RequestParam("id") Long id, @RequestParam("queue") int queue) {
         queueService.deleteQueue(id, queue);
     }

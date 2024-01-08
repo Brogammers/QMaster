@@ -87,6 +87,7 @@ public class QueueService {
         ArrayList<Queue<Long>> queueHolderQueues = queue.get(queueSlot);
         try {
             Queue<Long> specificQueue = queueHolderQueues.get(specificQueueId);
+            appUserRepository.findById(appUser).orElseThrow(() -> new IllegalStateException("No user with such id"));
             specificQueue.add(appUser);
         } catch (Exception e) {
             throw new IllegalStateException("Could not add user to queue");
@@ -109,7 +110,7 @@ public class QueueService {
                 return null;
             }
             print();
-            AppUser nextUser = appUserRepository.findById(specificQueue.peek())
+            AppUser nextUser = appUserRepository.findById(specificQueue.poll())
                     .orElseThrow(() -> new IllegalStateException("Could not find user"));
             queueDequeueRepository.save(new QueueDequeue(nextUser));
             return nextUser;
