@@ -2,7 +2,7 @@ package com.que.que.User;
 
 import lombok.AllArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,8 +50,8 @@ public class AppUserService implements UserDetailsService {
     String token = UUID.randomUUID().toString();
     ConfirmationToken confirmationToken = new ConfirmationToken(
         token,
-        LocalDate.now(),
-        LocalDate.now().plusDays(1),
+        LocalDateTime.now(),
+        LocalDateTime.now().plusDays(1),
         null,
         appUser);
 
