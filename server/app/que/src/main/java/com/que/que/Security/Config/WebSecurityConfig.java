@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,8 +13,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+
 import com.que.que.User.AppUserService;
 import lombok.AllArgsConstructor;
+
+// @PreAuthorize("hasRole('ADMIN')")
 
 @Configuration
 @AllArgsConstructor
@@ -25,6 +30,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .authorizeHttpRequests((authz) -> {
                     authz
@@ -32,6 +38,27 @@ public class WebSecurityConfig {
                             .anyRequest().permitAll();
                 }).csrf().disable();
         return http.build();
+
+        /*
+         * http
+         * .csrf((csrf) -> csrf
+         * .csrfTokenRepository(new HttpSessionCsrfTokenRepository()))
+         * .formLogin((authz) -> {
+         * authz
+         * .loginPage("/api/v1/login").permitAll();
+         * })
+         * .logout((authz) -> {
+         * authz.permitAll();
+         * })
+         * .authorizeHttpRequests((authz) -> {
+         * authz
+         * .requestMatchers("/api/v1/registration").permitAll()
+         * .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+         * .anyRequest().authenticated();
+         * });
+         * 
+         * return http.build();
+         */
     }
 
     @Bean
