@@ -24,9 +24,9 @@ public class QueueController {
     }
 
     @PutMapping(path = "/user")
-    public void enqueue(@RequestParam("id") Long id, @RequestParam("appuser") Long appUser,
+    public void enqueue(@RequestParam("queueHolderId") Long queueHolderId, @RequestParam("appuser") Long appUser,
             @RequestParam("queue") int queue) {
-        queueService.enqueueUser(id, appUser, queue);
+        queueService.enqueueUser(queueHolderId, appUser, queue);
     }
 
     @PutMapping(path = "/holder")
@@ -35,7 +35,7 @@ public class QueueController {
     }
 
     @DeleteMapping
-    public void putMethodName(@RequestParam("id") Long id, @RequestParam("queue") int queue) {
+    public void deleteQueue(@RequestParam("id") Long id, @RequestParam("queue") int queue) {
         queueService.deleteQueue(id, queue);
     }
 }
