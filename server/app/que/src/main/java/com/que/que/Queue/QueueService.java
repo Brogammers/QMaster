@@ -8,6 +8,7 @@ import java.util.Stack;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
+import com.que.que.QRcode.QRCodeService;
 import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRepository;
 
@@ -22,6 +23,7 @@ public class QueueService {
     private final QueueDequeueRepository queueDequeueRepository;
     private final QueueEnqueueRepository queueEnqueueRepository;
     private final QueueDeletionRepository queueDeletionRepository;
+    private final QRCodeService qrCodeService;
     private final ArrayList<ArrayList<Queue<Long>>> queue = queue();
     private final Stack<Integer> queueSlots = stack();
 
