@@ -59,6 +59,11 @@ public class QueueService {
         queueHolderQueue.add(new LinkedList<>());
         queueCreationRepository.save(new QueueCreation(appUserRepository
                 .findById(queueHolderID).orElseThrow(() -> new IllegalStateException("Could not find user"))));
+        try {
+            QRCodeService.createQRCode(queueHolderID, queueHolderQueue.size(), "to be done");
+        } catch (Exception e) {
+            throw new IllegalStateException("Error while creating queue.");
+        }
         print();
     }
 
