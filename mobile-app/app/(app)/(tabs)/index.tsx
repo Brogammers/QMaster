@@ -6,9 +6,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 import CategoriesList from '@/components/CategoriesList';
 import RecentQueues from '@/components/RecentQueues';
 import FrequentlyAsked from '@/components/FrequentlyAsked';
+import TextButton from '@/shared/components/TextButton';
+import { useAuth } from '@/ctx/AuthContext';
 
 
 export default function Index() {
+  const auth = useAuth();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -17,14 +20,20 @@ export default function Index() {
         backgroundColor='#17222D'
         barStyle='light-content'
       />
-      <ScrollView className='w-screen ' showsVerticalScrollIndicator={false}>
+      <ScrollView className='w-screen justify-center items-center' showsVerticalScrollIndicator={false}>
       <ScanQr />
       <View className='w-[85%] self-center'>
         <SearchBar />
         <CategoriesList />
         <RecentQueues />
         <FrequentlyAsked />
-        </View>
+        {/* <TextButton
+          text={'Logout'} 
+          buttonColor={'#1DCDFE'} 
+          textColor={'white'} 
+          onPress={auth?.signOut}
+        /> */}
+      </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -36,5 +45,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#D9D9D9',
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight ? StatusBar.currentHeight - 1 : 0 : 0,
   },
-
 });

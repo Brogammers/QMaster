@@ -56,7 +56,7 @@ export function AuthProvider({children }: React.PropsWithChildren) {
       value={{
         signIn: (userData) => {
           // Perform sign-in logic here
-          console.log('Signing in');
+          console.log('Signing in...' + JSON.stringify(userData));
           setUser(userData);
         },
         signOut: () => {
