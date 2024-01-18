@@ -1,55 +1,56 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import Home from './index';
+import History from './History';
+import Account from './Account';
+import { Entypo } from '@expo/vector-icons';
 
-import Colors from '../../../constants/Colors';
+const Tab = createBottomTabNavigator();
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function AppEntry() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+    <NavigationContainer independent>
+      <Tab.Navigator
+        initialRouteName='Home'
+        screenOptions={{
+          tabBarActiveTintColor: '#00FFFF',
+          tabBarInactiveTintColor: '#FAFAFA',
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: '#17222D',
+            height: 60,
+            display: 'flex',
+            justifyContent: 'space-around',
+            paddingBottom: 10,
+            paddingTop: 10,
+          }
         }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
+      >
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Entypo name="home" size={24} color={focused ? '#00FFFF' : '#FAFAFA'} />
+            )
+          }} />
+        <Tab.Screen name="History"
+          component={History}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <FontAwesome name="history" size={24} color={focused ? '#00FFFF' : '#FAFAFA'} />
+            )
+          }} />
+        <Tab.Screen name="Account"
+          component={Account}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <MaterialCommunityIcons name="account" size={24} color={focused ? '#00FFFF' : '#FAFAFA'} />
+            )
+          }} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  )
 }

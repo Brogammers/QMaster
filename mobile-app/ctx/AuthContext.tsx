@@ -31,11 +31,16 @@ export function AuthProvider({children }: React.PropsWithChildren) {
   const [user, setUser] = useState<string | undefined>("Hatem");  
 
   useEffect(() => {
+    console.log('User:', user); // Log the value of 'user'
+    console.log('Root Segment:', rootSegment); // Log the value of 'rootSegment'
+
     if (user === undefined) return;
 
     if (!user && rootSegment !== "(auth)") {
+      console.log('Navigating to Onboarding screen');
       router.replace("/(auth)/Onboarding");
     } else if (user && rootSegment !== "(app)") {
+      console.log('Navigating to root directory');
       router.replace("/");
     }
   }, [user, rootSegment]);
@@ -45,9 +50,11 @@ export function AuthProvider({children }: React.PropsWithChildren) {
       value={{
         signIn: () => {
           // Perform sign-in logic here
+          console.log('Signing in');
           setUser("Hatem");
         },
         signOut: () => {
+          console.log('Signing out');
           setUser("");
         },
       }}>
