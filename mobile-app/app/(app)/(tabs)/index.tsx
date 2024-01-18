@@ -27,12 +27,12 @@ export default function Index() {
         <CategoriesList />
         <RecentQueues />
         <FrequentlyAsked />
-        {/* <TextButton
+        <TextButton
           text={'Logout'} 
           buttonColor={'#1DCDFE'} 
           textColor={'white'} 
           onPress={auth?.signOut}
-        /> */}
+        />
       </View>
       </ScrollView>
     </SafeAreaView>
