@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class LoginController {
 
-    private final LoginService loginService;
+    private LoginService loginService;
 
     @PostMapping
     public Map<String, Object> login(@RequestBody LoginRequest request) {
