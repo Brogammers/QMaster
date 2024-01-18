@@ -58,6 +58,8 @@ public class QueueService {
         try {
             // this currently has an error because the createQRCode method is not static
             qrCodeService.createQRCode(
+                    queueHolderID,
+                    queueHolderQueue.size(),
                     String.format("http://localhost:8080/api/v1/queue/user?queueHolderId=%d&queue=%d", queueHolderID,
                             queueHolderQueue.size()));
         } catch (Exception e) {
