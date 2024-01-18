@@ -46,7 +46,7 @@ public class WebSecurityConfig {
                         .anyRequest().permitAll())
                 .httpBasic(Customizer.withDefaults())
                 .formLogin((form) -> form
-                        .loginPage("/api/v1/login"));
+                        .loginPage("/api/v1/user-login"));
         return http.build();
     }
 

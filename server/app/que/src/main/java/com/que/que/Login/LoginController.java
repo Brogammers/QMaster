@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 
-@RestController
 // This endpoint is not set yet. It was used in the example and will be changed
 // later on.
-// splandamedia.com/api/v1/registration
-@RequestMapping(path = "api/v1/login")
+// splandamedia.com/api/v1/registration'
+@RestController
+@RequestMapping(path = "api/v1/user-login")
 @AllArgsConstructor
 public class LoginController {
 
-    private LoginService loginService;
+    private final LoginService loginService;
 
     @PostMapping
-    public Map<String, Object> register(@RequestBody LoginRequest request) {
+    public Map<String, Object> login(@RequestBody LoginRequest request) {
         return loginService.loginUser(request.getEmail(), request.getPassword());
     }
 }
