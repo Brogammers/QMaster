@@ -1,5 +1,6 @@
 package com.que.que.Queue;
 
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,23 +20,24 @@ public class QueueController {
     private final QueueService queueService;
 
     @PostMapping
-    public void createNewQueue(@RequestParam("id") Long id) {
+    public void createNewQueue(@RequestParam("id") @NonNull Long id) {
         queueService.createNewQueue(id);
     }
 
     @PutMapping(path = "/user")
-    public void enqueue(@RequestParam("queueHolderId") Long queueHolderId, @RequestParam("appuser") Long appUser,
+    public void enqueue(@RequestParam("queueHolderId") @NonNull Long queueHolderId,
+            @RequestParam("appuser") @NonNull Long appUser,
             @RequestParam("queue") int queue) {
         queueService.enqueueUser(queueHolderId, appUser, queue);
     }
 
     @PutMapping(path = "/holder")
-    public AppUser dequeue(@RequestParam("id") Long id, @RequestParam("queue") int queue) {
+    public AppUser dequeue(@RequestParam("id") @NonNull Long id, @RequestParam("queue") int queue) {
         return queueService.dequeueUser(id, queue);
     }
 
     @DeleteMapping
-    public void deleteQueue(@RequestParam("id") Long id, @RequestParam("queue") int queue) {
+    public void deleteQueue(@RequestParam("id") @NonNull Long id, @RequestParam("queue") int queue) {
         queueService.deleteQueue(id, queue);
     }
 }
