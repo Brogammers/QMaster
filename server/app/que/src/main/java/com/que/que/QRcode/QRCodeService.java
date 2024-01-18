@@ -1,14 +1,14 @@
 package com.que.que.QRcode;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
+
 import com.google.zxing.qrcode.QRCodeWriter;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
+@Service
+@Configuration
 public class QRCodeService {
-    private final QRCodeWriter qrCodeWriter;
-
     public void createQRCode(Long queueHolderId, int queueHolderSpecificQueueId, String qrCodeText) {
-
+        QRCodeWriter writer = new QRCodeWriter();
     }
 }
