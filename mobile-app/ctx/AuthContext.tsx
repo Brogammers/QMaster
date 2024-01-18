@@ -3,8 +3,9 @@ import { useStorageState } from '../hooks/useStorageState';
 import { useRouter, useSegments } from 'expo-router';
 
 const AuthContext = React.createContext<{ 
-  signIn: () => void; 
+  signIn: (userData: string) => void; 
   signOut: () => void; 
+  updateUser: (userData: string) => void;
   session?: string | null, 
   isLoading?: boolean 
 } | null>(null);
@@ -28,7 +29,12 @@ export function useAuth() {
 export function AuthProvider({children }: React.PropsWithChildren) {
   const rootSegment = useSegments()[0];
   const router = useRouter();
-  const [user, setUser] = useState<string | undefined>("Hatem");  
+  const [user, setUser] = useState<string | undefined>("");  
+
+  // Expose a function to set the user
+  const updateUser = (userData: string) => {
+    setUser(userData);
+  };
 
   useEffect(() => {
     console.log('User:', user); // Log the value of 'user'
@@ -48,15 +54,16 @@ export function AuthProvider({children }: React.PropsWithChildren) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: () => {
+        signIn: (userData) => {
           // Perform sign-in logic here
           console.log('Signing in');
-          setUser("Hatem");
+          setUser(userData);
         },
         signOut: () => {
           console.log('Signing out');
           setUser("");
         },
+        updateUser
       }}>
         {children}
     </AuthContext.Provider>
