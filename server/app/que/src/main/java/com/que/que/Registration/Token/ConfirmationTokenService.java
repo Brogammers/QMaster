@@ -1,5 +1,6 @@
 package com.que.que.Registration.Token;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 public class ConfirmationTokenService {
   private final ConfirmationTokenRepository confirmationTokenRepository;
 
-  public void saveConfirmationToken(ConfirmationToken confirmationToken) {
+  public void saveConfirmationToken(@NonNull ConfirmationToken confirmationToken) {
     confirmationTokenRepository.save(confirmationToken);
   }
 
