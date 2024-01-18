@@ -11,11 +11,11 @@ import lombok.AllArgsConstructor;
 // later on.
 // splandamedia.com/api/v1/registration'
 @RestController
-@RequestMapping(path = "api/v1/user-login")
+@RequestMapping(path = "api/v1/login")
 @AllArgsConstructor
 public class LoginController {
 
-    private final LoginService loginService;
+    private LoginService loginService;
 
     @PostMapping
     public Map<String, Object> login(@RequestBody LoginRequest request) {

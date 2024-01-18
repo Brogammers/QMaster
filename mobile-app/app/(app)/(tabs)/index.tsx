@@ -20,7 +20,7 @@ export default function Index() {
         backgroundColor='#17222D'
         barStyle='light-content'
       />
-      <ScrollView className='w-screen justify-center items-center' showsVerticalScrollIndicator={false}>
+      <ScrollView className='w-screen' showsVerticalScrollIndicator={false}>
       <ScanQr />
       <View className='w-[85%] self-center'>
         <SearchBar />
