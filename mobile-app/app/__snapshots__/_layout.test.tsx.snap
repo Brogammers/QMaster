@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RootLayout /> renders RootLayoutNav when fonts are loaded 1`] = `null`;
+
+exports[`<RootLayout /> renders correctly 1`] = `null`;
