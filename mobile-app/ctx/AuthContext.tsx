@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useStorageState } from '../hooks/useStorageState';
 import { useRouter, useSegments } from 'expo-router';
 
-const AuthContext = React.createContext<{ 
+export const AuthContext = React.createContext<{ 
   signIn: (userData: string) => void; 
   signOut: () => void; 
   updateUser: (userData: string) => void;
@@ -10,7 +10,7 @@ const AuthContext = React.createContext<{
   isLoading?: boolean 
 } | null>(null);
 
-export function useAuth() {
+export default function useAuth() {
   return useContext(AuthContext);
 }
 
