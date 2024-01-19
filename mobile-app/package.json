@@ -22,7 +22,10 @@
       "!**/node_modules/**",
       "!**/babel.config.js",
       "!**/jest.setup.js"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/app/$1"
+    }
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
