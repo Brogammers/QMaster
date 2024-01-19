@@ -39,3 +39,10 @@ yarn-error.*
 
 expo-env.d.ts
 # @end expo-cli
+
+# Ignore test files
+tests/
+*.test
+
+# Ignore coverage files
+coverage/
