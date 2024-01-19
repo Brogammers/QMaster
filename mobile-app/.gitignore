@@ -46,3 +46,5 @@ tests/
 
 # Ignore coverage files
 coverage/
+
+.gitignore
