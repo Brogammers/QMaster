@@ -5,14 +5,14 @@ import {
   Text,
   TextInput,
 } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios, { AxiosError } from 'axios';
 import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
-import { useAuth } from '@/ctx/AuthContext';
+import useAuth from '@/ctx/AuthContext';
 import { API_BASE_URL } from '@env';
 
 
@@ -37,6 +37,7 @@ const SignupSchema = Yup.object().shape({
 
 export default function SignUp() {
   const auth = useAuth();
+  const router = useRouter();
 
   const handleSignUp = async (values: any) => {
     console.log('Form values:', values);
@@ -47,8 +48,8 @@ export default function SignUp() {
       if (response.status === 200 || response.status === 201) {
         console.log('Signup successful', values);
         if (auth && auth.signIn) {
-          // auth.updateUser(response.data); 
-          auth.signIn(response.data);
+          auth.signIn(response.data); // Pass user data to signIn
+          // router.replace("/(app)/(tabs)/"); 
         }
       } else {
         console.error('Signup failed', response.data);

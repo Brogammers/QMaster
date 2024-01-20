@@ -2,13 +2,17 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useStorageState } from '../hooks/useStorageState';
 import { useRouter, useSegments } from 'expo-router';
 
-export const AuthContext = React.createContext<{ 
-  signIn: (userData: string) => void; 
-  signOut: () => void; 
-  updateUser: (userData: string) => void;
-  session?: string | null, 
-  isLoading?: boolean 
-} | null>(null);
+const AuthContext = React.createContext<{
+  signIn: (userData: string) => void;
+  signOut: () => void;
+  session?: string | null;
+  isLoading: boolean;
+}>({
+  signIn: () => null,
+  signOut: () => null,
+  session: null,
+  isLoading: false,
+});
 
 export default function useAuth() {
   return useContext(AuthContext);
@@ -26,17 +30,16 @@ export function useSession() {
   return value;
 }
 
-export function SessionProvider({children }: React.PropsWithChildren) {
+export function SessionProvider({ children }: React.PropsWithChildren) {
   const rootSegment = useSegments()[0];
   const router = useRouter();
   const [user, setUser] = useState<string | undefined>("");  
-  const [token, setToken] = useStorageState('userToken'); // Add this line
   const [[isLoading, session], setSession] = useStorageState('session');
 
   // Expose a function to set the user
-  const updateUser = (userData: string) => {
-    setUser(userData);
-  };
+  // const updateUser = (userData: string) => {
+  //   setUser(userData);
+  // };
 
   useEffect(() => {
     console.log('User:', user); // Log the value of 'user'
@@ -48,7 +51,7 @@ export function SessionProvider({children }: React.PropsWithChildren) {
       console.log('Navigating to Onboarding screen');
       router.replace("/(auth)/Onboarding");
     } else if (user && rootSegment !== "(app)") {
-      console.log('Navigating to root directory');
+      console.log('Navigating to root directory' + router);
       router.replace("/");
     }
   }, [user, rootSegment]);
@@ -56,21 +59,19 @@ export function SessionProvider({children }: React.PropsWithChildren) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: (userData) => {
-          // Perform sign-in logic here
-          console.log('Signing in...' + JSON.stringify(userData));
-          setUser(userData);
+        signIn: (userData: string) => {
+          setUser(userData); // Update user state
+          setSession(userData);
+          console.log("session:" + session)
         },
         signOut: () => {
-          console.log('Signing out');
-          setUser("");
-          setToken(null); // Clear the token when the user signs out
+          setUser(""); // Clear user state
+          setSession(null);
         },
-        updateUser,
         session,
         isLoading,
       }}>
-        {children}
+      {children}
     </AuthContext.Provider>
   );
 }

@@ -8,7 +8,7 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextButton from '@/shared/components/TextButton';
@@ -16,7 +16,7 @@ import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import LoginImg from '@/assets/images/login.png';
 import axios, { AxiosError } from 'axios';
-import { useAuth } from '@/ctx/AuthContext';
+import useAuth from '@/ctx/AuthContext';
 import { API_BASE_URL_LOGIN } from '@env';
 
 
@@ -27,10 +27,9 @@ const LoginSchema = Yup.object().shape({
 
 export default function Login() {
   const auth = useAuth();
+  const router = useRouter();
 
   const handleLogin = async (values: any) => {
-    // const auth = useAuth();
-  
     console.log("Logging in...", values);
   
     try {
@@ -39,8 +38,8 @@ export default function Login() {
       if (response.status === 200 || response.status === 201) {
         console.log('Signup successful', values);
         if (auth && auth.signIn) {
-          // auth.updateUser(response.data); 
-          auth.signIn(response.data);
+          auth.signIn(response.data); // Pass user data to signIn
+          // router.replace("/(app)/(tabs)/");
         }
       } else {
         console.error('Signup failed', response.data);
