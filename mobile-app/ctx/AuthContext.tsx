@@ -15,21 +15,23 @@ export default function useAuth() {
 }
 
 // This hook can be used to access the user info.
-// export function useSession() {
-//   const value = React.useContext(AuthContext);
-//   if (process.env.NODE_ENV !== 'production') {
-//     if (!value) {
-//       throw new Error('useSession must be wrapped in a <SessionProvider />');
-//     }
-//   }
+export function useSession() {
+  const value = React.useContext(AuthContext);
+  if (process.env.NODE_ENV !== 'production') {
+    if (!value) {
+      throw new Error('useSession must be wrapped in a <SessionProvider />');
+    }
+  }
 
-//   return value;
-// }
+  return value;
+}
 
-export function AuthProvider({children }: React.PropsWithChildren) {
+export function SessionProvider({children }: React.PropsWithChildren) {
   const rootSegment = useSegments()[0];
   const router = useRouter();
   const [user, setUser] = useState<string | undefined>("");  
+  const [token, setToken] = useStorageState('userToken'); // Add this line
+  const [[isLoading, session], setSession] = useStorageState('session');
 
   // Expose a function to set the user
   const updateUser = (userData: string) => {
@@ -62,8 +64,11 @@ export function AuthProvider({children }: React.PropsWithChildren) {
         signOut: () => {
           console.log('Signing out');
           setUser("");
+          setToken(null); // Clear the token when the user signs out
         },
-        updateUser
+        updateUser,
+        session,
+        isLoading,
       }}>
         {children}
     </AuthContext.Provider>
