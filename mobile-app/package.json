@@ -24,7 +24,7 @@
       "!**/jest.setup.js"
     ],
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/app/$1"
+      "^@/(.*)$": "<rootDir>\\app\\$1"
     }
   },
   "dependencies": {
