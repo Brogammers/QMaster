@@ -24,7 +24,8 @@ public class QRCodeService {
         BitMatrix bitMatrix = writer.encode(qrCodeText, BarcodeFormat.QR_CODE, 300, 150);
         BufferedImage img = MatrixToImageWriter.toBufferedImage(bitMatrix);
         File output = new File(
-                String.format("resources/static/QRS/%d-%d.png", queueHolderId, queueHolderSpecificQueueId));
+                String.format("server/app/que/src/main/resources/static/QRS/%d-%d.png", queueHolderId,
+                        queueHolderSpecificQueueId));
         ImageIO.write(img, "png", output);
     }
 }
