@@ -30,7 +30,6 @@ export function useSession() {
       throw new Error('useSession must be wrapped in a <SessionProvider />');
     }
   }
-
   return value;
 }
 
@@ -42,7 +41,7 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
 
   const email = useSelector((state: RootState) => state.emailSetter.email);
 
-  const handleNavigation = () => {
+  const handleNavigation = _.debounce(() => {
     if (!session && rootSegment !== "(auth)") {
       console.log('Navigating to Onboarding screen');
       router.replace("/(auth)/Onboarding");
@@ -50,16 +49,14 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
       console.log('Navigating to root directory' + router);
       router.replace("/");
     }
-  };
-
-  const debouncedHandleNavigation = _.debounce(handleNavigation, 500); // Delay by 500ms
+  }, 100);
 
   useEffect(() => {
     console.log('User:', user); // Log the value of 'user'
     console.log('Root Segment:', rootSegment); // Log the value of 'rootSegment'
 
-    debouncedHandleNavigation();
-  }, [isLoading, session, rootSegment, router]);
+    handleNavigation();
+  }, [isLoading, session, rootSegment, router, handleNavigation]);
 
   useEffect(() => {
     console.log("This is the session: ", session);
@@ -70,10 +67,7 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
       value={{
         signIn: () => {
           setUser(email);
-          setSession(email);
-          useEffect(() => {
-            console.log("This is the session and the user: ", session);
-          }, [session]);          
+          setSession(email);       
         },
         
         signOut: () => {
