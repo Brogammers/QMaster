@@ -45,9 +45,7 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
     console.log('User:', user); // Log the value of 'user'
     console.log('Root Segment:', rootSegment); // Log the value of 'rootSegment'
 
-    if (session === undefined) {
-      // if (user === undefined) return;
-
+    if (!session || session) {
       if (!session && rootSegment !== "(auth)") {
         console.log('Navigating to Onboarding screen');
         router.replace("/(auth)/Onboarding");
