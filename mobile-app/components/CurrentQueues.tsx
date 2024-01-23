@@ -24,7 +24,7 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
               <FontAwesome5 name="hourglass-start" size={50} color="#D9D9D9" />
             </View>
             <Image source={gradient} className='absolute z-10 self-center w-full h-full' />
-            <Image source={Img} className='w-full h-full' />
+            <Image source={Img} className='w-full h-full rounded-[18px]' />
           </View>
           <View className='justify-around w-3/5 pl-2'>
             <Text className='text-2xl font-black text-white'> {Name} </Text>

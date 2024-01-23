@@ -10,6 +10,8 @@ import Grocery from './assets/images/grocery.svg';
 import Bank from './assets/images/bank.svg';
 import Other from './assets/images/other.svg';
 import Carrefour from '@/assets/images/Carrefour.svg';
+import arabiata from '@/assets/images/arabiata.png' ;
+import elections from '@/assets/images/elections.jpg';
 
 
 // Onboarding Screen
@@ -77,13 +79,13 @@ export const Current = [
     Time: 15,
   },
   {
-    Img: Carrefour,
+    Img: arabiata,
     Name: 'Arabiata',
     People: 20,
     Time: 30,
   },
   {
-    Img: Carrefour,
+    Img: elections,
     Name: 'Elections',
     People: 200,
     Time: 120,
