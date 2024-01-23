@@ -2,26 +2,34 @@ import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import Image from 'react-native-remote-svg';
 import { View } from 'react-native';
-import Carrefour from '@/assets/images/Carrefour.svg';
 import gradient from '@/assets/images/Gradient.png';
 import { FontAwesome5 } from '@expo/vector-icons';
+import arrow from '@/assets/images/arrow-up.svg';
 
 interface CurrentQueuesProps {
   Img: any,
   Name: String,
   People: Number,
   Time: Number,
+  isJoin?: boolean,
+  isLeave?: boolean,
+  isCurrent?: boolean,
+  isPopular?: boolean,
 }
 
 export default function CurrentQueues(props: CurrentQueuesProps) {
-  const { Img, Name, People, Time } = props;
+  const { Img, Name, People, Time, isLeave, isJoin, isCurrent, isPopular } = props;
   return (
     <View>
-      <View className='w-80'>
+      <View className='w-full'>
         <View className='flex flex-row bg-[#17222D] rounded-2xl h-40 w-full' >
           <View className='w-2/5 h-full'>
             <View className='absolute z-20 items-center justify-center w-full h-full'>
-              <FontAwesome5 name="hourglass-start" size={50} color="#D9D9D9" />
+              {isCurrent ? (
+                <FontAwesome5 name="hourglass-start" size={50} color="#D9D9D9" />
+              ) : isPopular ? (
+                <Image source={arrow} />
+              ) : null}
             </View>
             <Image source={gradient} className='absolute z-10 self-center w-full h-full' />
             <Image source={Img} className='w-full h-full rounded-[18px]' />
@@ -32,9 +40,15 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
               <Text className='text-[#D9D9D9] text-base font-medium'> {String(People)} people remaining </Text>
               <Text className='text-[#D9D9D9] text-xs'> ~{String(Time)} min </Text>
             </View>
-            <TouchableOpacity className='items-center self-center justify-center w-9/12 mr-2 bg-red-700 rounded-lg h-7'>
-              <Text className='\ text-white'> Leave Queue</Text>
-            </TouchableOpacity>
+            {isLeave ? (
+              <TouchableOpacity className='items-center self-center justify-center w-9/12 mr-2 bg-red-700 rounded-lg h-7'>
+                <Text className='text-base font-bold text-white'>Leave Queue</Text>
+              </TouchableOpacity>
+            ) : isJoin ? (
+              <TouchableOpacity className='items-center self-center justify-center w-9/12 mr-2 bg-[#1DCDFE] rounded-lg h-7'>
+                <Text className='text-base font-bold text-white'>Join Queue</Text>
+              </TouchableOpacity>
+            ) : null}
           </View>
         </View>
       </View>

@@ -1,35 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, useWindowDimensions } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { Current } from '@/data';
 import CurrentQueues from './CurrentQueues';
 
 // Assuming Current is an array of objects with specific types
 interface CurrentItem {
-    Img: any;
-    Name: String;
-    People: Number;
-    Time: Number;
+  Img: any;
+  Name: String;
+  People: Number;
+  Time: Number;
 }
 
 export default function CurrentQueuesList() {
-    const windowWidth = useWindowDimensions().width;
+  const windowWidth = useWindowDimensions().width;
+  const carouselWidth = windowWidth * 0.85; // 85% of the screen width
+  const [activeSlide, setActiveSlide] = React.useState(0);
 
-    const renderItem = ({ item, index }: { item: CurrentItem, index: number }) => (
-        <CurrentQueues Img={item.Img} Name={item.Name} People={item.People} Time={item.Time} key={index} />
-    );
+  const renderItem = ({ item, index }: { item: CurrentItem, index: number }) => (
+    <CurrentQueues Img={item.Img} Name={item.Name} People={item.People} Time={item.Time} key={index} isLeave isCurrent />
+  );
 
-    return (
-        <View>
-            <Text style={{ marginVertical: 10, fontSize: 18, fontWeight: 'bold' }}>Current Queues</Text>
-            <Carousel
-                data={Current as CurrentItem[]}
-                renderItem={renderItem}
-                sliderWidth={windowWidth} // Set the width of the slider as per your design
-                itemWidth={windowWidth*0.85}   // Set the width of each item as per your design
-                layout="stack"
-                loop  
-            />
-        </View>
-    );
+  return (
+    <View>
+      <Text style={{ marginVertical: 10, fontSize: 18, fontWeight: 'bold' }}>Current Queues</Text>
+      <Carousel
+        data={Current as CurrentItem[]}
+        renderItem={renderItem}
+        sliderWidth={carouselWidth}
+        itemWidth={carouselWidth}
+        onSnapToItem={(index) => setActiveSlide(index)} // Update active slide index
+        layout="default"
+      />
+      <Pagination
+        dotsLength={Current.length}
+        activeDotIndex={activeSlide}
+        containerStyle={{ paddingTop: 10, paddingBottom: 0 }}
+        dotStyle={{
+          width: 10,
+          height: 10,
+          borderRadius: 5,
+          marginHorizontal: 0, // Adjust this value to make dots closer together
+          backgroundColor: 'rgba(0, 0, 0, 0.92)',
+        }}
+        inactiveDotStyle={{
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        }}
+        inactiveDotOpacity={0.4}
+        inactiveDotScale={0.6}
+      />
+    </View>
+  );
 }
