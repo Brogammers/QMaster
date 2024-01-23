@@ -36,11 +36,6 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
   const [user, setUser] = useState<string | undefined>("");  
   const [[isLoading, session], setSession] = useStorageState('session');
 
-  // Expose a function to set the user
-  // const updateUser = (userData: string) => {
-  //   setUser(userData);
-  // };
-
   useEffect(() => {
     console.log('User:', user); // Log the value of 'user'
     console.log('Root Segment:', rootSegment); // Log the value of 'rootSegment'
@@ -60,10 +55,10 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
     <AuthContext.Provider
       value={{
         signIn: (userData: string) => {
-          setUser(userData); // Update user state
+          setUser(userData);
           setSession(userData);
-          console.log("session:" + session)
         },
+        
         signOut: () => {
           setUser(""); // Clear user state
           setSession(null);

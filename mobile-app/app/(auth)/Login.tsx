@@ -27,7 +27,6 @@ const LoginSchema = Yup.object().shape({
 
 export default function Login() {
   const auth = useAuth();
-  const router = useRouter();
 
   const handleLogin = async (values: any) => {
     console.log("Logging in...", values);
@@ -36,17 +35,17 @@ export default function Login() {
       const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
   
       if (response.status === 200 || response.status === 201) {
-        console.log('Signup successful', values);
+        console.log('Login successful', values);
         if (auth && auth.signIn) {
-          auth.signIn(response.data); // Pass user data to signIn
-          // router.replace("/(app)/(tabs)/");
+          console.log("This is the type of response: " + typeof response.data);
+          auth.signIn(response.data); 
         }
       } else {
-        console.error('Signup failed', response.data);
+        console.error('Login failed', response.data);
         Alert.alert('Signup Failed', 'Please check your input and try again.');
       }
     } catch (error) {
-      console.error('Signup error:', error);
+      console.error('Login error:', error);
       Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
   
       if (axios.isAxiosError(error)) {

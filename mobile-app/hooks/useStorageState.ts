@@ -49,7 +49,16 @@ export function useStorageState(key: string): UseStateHook<string> {
       }
     } else {
       SecureStore.getItemAsync(key).then(value => {
-        setState(value);
+        if (value !== null) {
+          try {
+            // Try to parse the JSON string
+            let originalObj = JSON.parse(value);
+            setState(originalObj);
+          } catch (error) {
+            // If an error occurred, log it
+            console.error('Failed to parse JSON:', error);
+          }
+        }
       });
     }
   }, [key]);

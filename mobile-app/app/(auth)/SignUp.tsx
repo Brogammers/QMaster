@@ -37,7 +37,6 @@ const SignupSchema = Yup.object().shape({
 
 export default function SignUp() {
   const auth = useAuth();
-  const router = useRouter();
 
   const handleSignUp = async (values: any) => {
     console.log('Form values:', values);
@@ -48,8 +47,8 @@ export default function SignUp() {
       if (response.status === 200 || response.status === 201) {
         console.log('Signup successful', values);
         if (auth && auth.signIn) {
-          auth.signIn(response.data); // Pass user data to signIn
-          // router.replace("/(app)/(tabs)/"); 
+          console.log("This is the type of response: " + typeof response.data);
+          auth.signIn(response.data); 
         }
       } else {
         console.error('Signup failed', response.data);
