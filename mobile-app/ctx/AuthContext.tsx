@@ -4,21 +4,17 @@ import { useRouter, useSegments } from 'expo-router';
 
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/app/redux/store';
-import axios from 'axios';
-import { API_BASE_URL } from '@env';
 
 const AuthContext = React.createContext<{
   signIn: () => void;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
-  validateUser: (email: string) => Promise<boolean>;
 }>({
   signIn: () => null,
   signOut: () => null,
   session: null,
   isLoading: false,
-  validateUser: async () => false;
 });
 
 export default function useAuth() {
@@ -45,17 +41,6 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
 
   const email = useSelector((state: RootState) => state.emailSetter.email);
 
-  const validateUser = async (email: string) => {
-    try {
-      // Make a request to your backend to validate the user
-      const response = await axios.get(`${API_BASE_URL}/validate-user/${email}`);
-      return response.data.isValidUser;
-    } catch (error) {
-      console.error('Error validating user:', error);
-      return false; // Assume validation failed in case of an error
-    }
-  };
-
   useEffect(() => {
     console.log('User:', user); // Log the value of 'user'
     console.log('Root Segment:', rootSegment); // Log the value of 'rootSegment'
@@ -63,10 +48,10 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
     if (session === undefined) {
       // if (user === undefined) return;
 
-      if (!user && rootSegment !== "(auth)") {
+      if (!session && rootSegment !== "(auth)") {
         console.log('Navigating to Onboarding screen');
         router.replace("/(auth)/Onboarding");
-      } else if (user && rootSegment !== "(app)") {
+      } else if (session && rootSegment !== "(app)") {
         console.log('Navigating to root directory' + router);
         router.replace("/");
       }
@@ -92,7 +77,6 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
         },
         session,
         isLoading,
-        validateUser
     }}>
       {children}
     </AuthContext.Provider>

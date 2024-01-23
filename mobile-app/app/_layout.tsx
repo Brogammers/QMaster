@@ -28,7 +28,7 @@ export default function RootLayout() {
     return () => clearTimeout(timer);
   }, [error]);
 
-  if (!loaded || showLoading) {
+  if (!loaded) {
     return <SplashScreen />;
   }
 

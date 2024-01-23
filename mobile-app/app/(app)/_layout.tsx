@@ -4,11 +4,11 @@ import { useSession } from '@/ctx/AuthContext';
 import SplashScreen from '../SplashScreen';
 
 export default function AppEntry() {
-  const { session, isLoading } = useSession();
+  const { session } = useSession();
 
-  if (isLoading) {
-    return <SplashScreen />;
-  }
+  // if (isLoading) {
+  //   return <SplashScreen />;
+  // }
 
   if (!session) {
     return <Redirect href="/(auth)/Onboarding" />;
