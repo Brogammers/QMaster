@@ -7,6 +7,8 @@ import CategoriesList from '@/components/CategoriesList';
 import RecentQueues from '@/components/RecentQueues';
 import FrequentlyAsked from '@/components/FrequentlyAsked';
 import TextButton from '@/shared/components/TextButton';
+import CurrentQueues from '@/components/CurrentQueues';
+import CurrentQueuesList from '@/components/CurrentQueuesList';
 import { useAuth } from '@/ctx/AuthContext';
 
 
@@ -24,15 +26,16 @@ export default function Index() {
       <ScanQr />
       <View className='w-[85%] self-center'>
         <SearchBar />
+        <CurrentQueuesList />
         <CategoriesList />
         <RecentQueues />
         <FrequentlyAsked />
-        <TextButton
+        {/* <TextButton
           text={'Logout'} 
           buttonColor={'#1DCDFE'} 
           textColor={'white'} 
           onPress={auth?.signOut}
-        />
+        /> */}
       </View>
       </ScrollView>
     </SafeAreaView>

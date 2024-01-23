@@ -3,6 +3,7 @@ import { Slot } from 'expo-router';
 // import * as AuthContextHook from '@/ctx/AuthContext';
 import { AuthProvider } from '@/ctx/AuthContext';
 import { useFonts } from 'expo-font';
+import AppEntry from './(app)/(tabs)/_layout';
 
 
 export default function RootLayout() {
@@ -37,8 +38,11 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <AuthProvider>
-      <Slot />
-    </AuthProvider>
+    // <AuthProvider>
+    //   <Slot />
+    // </AuthProvider>
+    
+      <AppEntry />
+    
   );
 }

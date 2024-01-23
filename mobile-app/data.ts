@@ -9,6 +9,7 @@ import Clinic from './assets/images/clinic.svg';
 import Grocery from './assets/images/grocery.svg';
 import Bank from './assets/images/bank.svg';
 import Other from './assets/images/other.svg';
+import Carrefour from '@/assets/images/Carrefour.svg';
 
 
 // Onboarding Screen
@@ -64,5 +65,27 @@ export const Categories = [
   {
     Image: Other,
     Text: 'Other',
+  },
+]
+
+//Current Queues
+export const Current = [
+  {
+    Img: Carrefour,
+    Name: 'Carrefour',
+    People: 5,
+    Time: 15,
+  },
+  {
+    Img: Carrefour,
+    Name: 'Arabiata',
+    People: 20,
+    Time: 30,
+  },
+  {
+    Img: Carrefour,
+    Name: 'Elections',
+    People: 200,
+    Time: 120,
   },
 ]
