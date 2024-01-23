@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Slot } from 'expo-router';
 // import * as AuthContextHook from '@/ctx/AuthContext';
 import { SessionProvider } from '@/ctx/AuthContext';
+import { store } from './redux/store';
+import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
 
 
@@ -37,8 +39,10 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <SessionProvider>
-      <Slot />
-    </SessionProvider>
+    <Provider store={store}>
+      <SessionProvider>
+        <Slot />
+      </SessionProvider>
+    </Provider>
   );
 }
