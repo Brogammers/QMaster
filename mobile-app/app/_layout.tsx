@@ -5,6 +5,7 @@ import { SessionProvider } from '@/ctx/AuthContext';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
+import SplashScreen from './SplashScreen';
 
 
 export default function RootLayout() {
@@ -28,7 +29,7 @@ export default function RootLayout() {
   }, [error]);
 
   if (!loaded || showLoading) {
-    return null;
+    return <SplashScreen />;
   }
 
   return (

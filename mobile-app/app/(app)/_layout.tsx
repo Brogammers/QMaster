@@ -1,23 +1,22 @@
 import React from 'react';
-import { Stack ,Redirect } from 'expo-router';
+import { Stack, Redirect } from 'expo-router';
 import { useSession } from '@/ctx/AuthContext';
-import { Text } from '@/components/Themed';
-
+import SplashScreen from '../SplashScreen';
 
 export default function AppEntry() {
   const { session, isLoading } = useSession();
-  
+
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <SplashScreen />;
   }
 
   if (!session) {
-    return <Redirect href="/Onboarding" />;
+    return <Redirect href="/(auth)/Onboarding" />;
   }
 
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false, presentation: 'modal' }} />
     </Stack>
-  )
+  );
 }

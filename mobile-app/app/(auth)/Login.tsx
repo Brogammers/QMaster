@@ -19,6 +19,9 @@ import axios, { AxiosError } from 'axios';
 import useAuth from '@/ctx/AuthContext';
 import { API_BASE_URL_LOGIN } from '@env';
 
+import { useDispatch } from 'react-redux';
+import { setEmail } from '../redux/authSlice'; // replace with the actual path
+
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required("Email required"),
@@ -26,6 +29,7 @@ const LoginSchema = Yup.object().shape({
 });
 
 export default function Login() {
+  const dispatch = useDispatch();
   const auth = useAuth();
 
   const handleLogin = async (values: any) => {
@@ -38,7 +42,9 @@ export default function Login() {
         console.log('Login successful', values);
         if (auth && auth.signIn) {
           console.log("This is the type of response: " + typeof response.data);
-          auth.signIn(response.data); 
+          console.log("This is the email of the user: ", response.data.email, " and type: ", typeof response.data.email)
+          dispatch(setEmail(response.data.email));
+          auth.signIn(); 
         }
       } else {
         console.error('Login failed', response.data);

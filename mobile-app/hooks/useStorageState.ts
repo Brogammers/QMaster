@@ -28,7 +28,7 @@ export async function setStorageItemAsync(key: string, value: string | null) {
     if (value == null) {
       await SecureStore.deleteItemAsync(key);
     } else {
-      await SecureStore.setItemAsync(key, value);
+      await SecureStore.setItemAsync(key, JSON.stringify(value));
     }
   }
 }
@@ -51,7 +51,7 @@ export function useStorageState(key: string): UseStateHook<string> {
       SecureStore.getItemAsync(key).then(value => {
         if (value !== null) {
           try {
-            // Try to parse the JSON string
+            // Parse the JSON string back into an object
             let originalObj = JSON.parse(value);
             setState(originalObj);
           } catch (error) {
