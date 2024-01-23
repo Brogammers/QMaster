@@ -1,4 +1,4 @@
-import { StyleSheet, ImageBackground, Alert } from 'react-native';
+import { StyleSheet, ImageBackground, Alert, StatusBar } from 'react-native';
 import React from 'react';
 import {
   View,
@@ -86,6 +86,11 @@ export default function SignUp() {
       <Link href='/Onboarding' style={styles.returnButton}>
         <Return size={36} color='white' />
       </Link>
+      <StatusBar
+        translucent
+        backgroundColor='rgba(000, 000, 000, 0.5)'  
+        barStyle='light-content'  
+      />
       <View style={styles.row} className='relative'>
         <Text
           style={styles.title}

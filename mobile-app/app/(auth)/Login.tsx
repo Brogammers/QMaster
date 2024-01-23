@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   Alert,
+  StatusBar,
 } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { Formik } from 'formik';
@@ -77,6 +78,11 @@ export default function Login() {
       <Link href='/Onboarding' style={styles.returnButton}>
         <Return size={36} color='white' />
       </Link>
+      <StatusBar
+        translucent
+        backgroundColor='rgba(000, 000, 000, 0.5)'  
+        barStyle='light-content'  
+      />
       <View style={styles.row}>
         <Text
           style={styles.title}
