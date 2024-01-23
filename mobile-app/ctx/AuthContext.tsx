@@ -41,19 +41,21 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
 
   const email = useSelector((state: RootState) => state.emailSetter.email);
 
+  const handleNavigation = () => {
+    if (!session && rootSegment !== "(auth)") {
+      console.log('Navigating to Onboarding screen');
+      router.replace("/(auth)/Onboarding");
+    } else if (session && rootSegment !== "(app)") {
+      console.log('Navigating to root directory' + router);
+      router.replace("/");
+    }
+  };
+
   useEffect(() => {
     console.log('User:', user); // Log the value of 'user'
     console.log('Root Segment:', rootSegment); // Log the value of 'rootSegment'
 
-    if (!session || session) {
-      if (!session && rootSegment !== "(auth)") {
-        console.log('Navigating to Onboarding screen');
-        router.replace("/(auth)/Onboarding");
-      } else if (session && rootSegment !== "(app)") {
-        console.log('Navigating to root directory' + router);
-        router.replace("/");
-      }
-    }
+    handleNavigation();
   }, [isLoading, session, rootSegment, router]);
 
   useEffect(() => {
@@ -66,7 +68,9 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
         signIn: () => {
           setUser(email);
           setSession(email);
-          console.log("This is the session and the user: ", session)
+          useEffect(() => {
+            console.log("This is the session and the user: ", session);
+          }, [session]);          
         },
         
         signOut: () => {
