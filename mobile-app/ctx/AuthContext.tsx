@@ -5,6 +5,7 @@ import _ from 'lodash';
 
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/app/redux/store';
+import SplashScreen from '@/app/SplashScreen';
 
 const AuthContext = React.createContext<{
   signIn: () => void;
@@ -38,6 +39,7 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
   const router = useRouter();
   const [user, setUser] = useState<string | undefined | null>("");  
   const [[isLoading, session], setSession] = useStorageState('session');
+  const [isReady, setIsReady] = useState(false); // New state variable
 
   const email = useSelector((state: RootState) => state.emailSetter.email);
 
@@ -51,23 +53,31 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
     }
   };
 
+  // const debouncedSetSession = _.debounce(setSession, 300);
+
   useEffect(() => {
     console.log('User:', user); // Log the value of 'user'
     console.log('Root Segment:', rootSegment); // Log the value of 'rootSegment'
 
-    handleNavigation();
+    setTimeout(() => {
+      handleNavigation();
+      setIsReady(true); // Set isReady to true after timeout
+    }, 1000)
   }, [isLoading, session, rootSegment, router]);
 
   useEffect(() => {
     console.log("This is the session: ", session);
   }, [session]);  
 
+  if (!isReady) return <SplashScreen /> // Check isReady instead of isLoading
+
   return (
     <AuthContext.Provider
       value={{
         signIn: () => {
           setUser(email);
-          setSession(email);    
+          setSession(email);
+          // debouncedSetSession(email);
         },
         
         signOut: () => {
