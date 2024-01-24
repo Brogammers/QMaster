@@ -12,6 +12,8 @@ import Other from './assets/images/other.svg';
 import Carrefour from '@/assets/images/Carrefour.svg';
 import arabiata from '@/assets/images/arabiata.png' ;
 import elections from '@/assets/images/elections.jpg';
+import nationalBank from '@/assets/images/NationalBank.png';
+import alSalamHospital from '@/assets/images/alsalam.png';
 
 
 // Onboarding Screen
@@ -89,5 +91,29 @@ export const Current = [
     Name: 'Elections',
     People: 200,
     Time: 120,
+  },
+]
+
+//Recent Queues
+export const Recent = [
+  {
+    Image: Carrefour,
+    Text: 'Carrefour',
+  },
+  {
+    Image: arabiata,
+    Text: 'Arabiata',
+  },
+  {
+    Image: elections,
+    Text: 'Elections',
+  },
+  {
+    Image: alSalamHospital,
+    Text: 'Al-Salam Hospital ',
+  },
+  {
+    Image: nationalBank,
+    Text: 'National Bank of Egypt',
   },
 ]

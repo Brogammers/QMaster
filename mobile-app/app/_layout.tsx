@@ -4,6 +4,7 @@ import { Slot } from 'expo-router';
 import { AuthProvider } from '@/ctx/AuthContext';
 import { useFonts } from 'expo-font';
 import AppEntry from './(app)/(tabs)/_layout';
+import Search from './Search';
 
 
 export default function RootLayout() {

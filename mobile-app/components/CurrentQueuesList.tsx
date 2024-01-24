@@ -23,7 +23,7 @@ export default function CurrentQueuesList() {
 
   return (
     <View>
-      <Text style={{ marginVertical: 10, fontSize: 18, fontWeight: 'bold' }}>Current Queues</Text>
+      <Text style={{ marginVertical: 10, fontSize: 24, fontWeight: 'bold' }}>Current Queues</Text>
       <Carousel
         data={Current as CurrentItem[]}
         renderItem={renderItem}
