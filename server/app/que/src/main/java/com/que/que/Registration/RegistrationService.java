@@ -43,7 +43,8 @@ public class RegistrationService {
             request.getPassword(),
             request.getEmail(),
             false,
-            false));
+            false,
+            (byte)0));
     emailSender.send(request.getEmail(), "Hello!"); // TODO: Send email
     return token;
   }
