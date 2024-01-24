@@ -1,18 +1,15 @@
 package com.que.que.Registration;
 
-import lombok.AllArgsConstructor;
-
-import java.time.LocalDateTime;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.que.que.Email.EmailSender;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.User.AppUser;
-import com.que.que.User.AppUserService;
 import com.que.que.User.AppUserRole;
+import com.que.que.User.AppUserService;
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -32,26 +29,32 @@ public class RegistrationService {
       throw new IllegalStateException("Password do not match");
     }
     String token = appUserService.signUpUser(
-        new AppUser(
-            AppUserRole.USER,
-            request.getFirstName(),
-            request.getLastName(),
-            request.getUsername(),
-            LocalDateTime.now(),
-            request.getDateOfBirth(),
-            request.getCountryOfOrigin(),
-            request.getPassword(),
-            request.getEmail(),
-            false,
-            false,
-            (byte)0));
+      new AppUser(
+        AppUserRole.USER,
+        request.getFirstName(),
+        request.getLastName(),
+        request.getUsername(),
+        LocalDateTime.now(),
+        request.getDateOfBirth(),
+        request.getCountryOfOrigin(),
+        request.getPassword(),
+        request.getEmail(),
+        false,
+        false,
+        (byte) 0
+      )
+    );
+
+
     emailSender.send(request.getEmail(), "Hello!"); // TODO: Send email
     return token;
   }
 
   @Transactional
   public String confirmToken(String token) {
-    ConfirmationToken confirmationToken = confirmationTokenService.getToken(token);
+    ConfirmationToken confirmationToken = confirmationTokenService.getToken(
+      token
+    );
 
     if (confirmationToken.getConfirmedAt() != null) {
       throw new IllegalStateException("Email already confirmed");
