@@ -10,7 +10,7 @@ export const AuthContext = React.createContext<{
   isLoading?: boolean 
 } | null>(null);
 
-export default function useAuth() {
+export function useAuth() {
   return useContext(AuthContext);
 }
 

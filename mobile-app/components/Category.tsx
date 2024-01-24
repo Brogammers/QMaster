@@ -20,9 +20,9 @@ export default function Category(props: CategoryProps) {
         <View className="absolute self-center">
           <Image source={Ellipse} />
         </View>
-        <Image source={Img} />
+        <Image source={Img} className = ' w-[48] h-[48] rounded-lg'/>
       </View>
-      <Text>{Title}</Text>
+      <Text className="px-2">{Title}</Text>
     </TouchableOpacity>
   )
 }
