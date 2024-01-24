@@ -39,11 +39,9 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    // <AuthProvider>
-    //   <Slot />
-    // </AuthProvider>
-    
-      <AppEntry />
+    <AuthProvider>
+      <Slot />
+    </AuthProvider>
     
   );
 }

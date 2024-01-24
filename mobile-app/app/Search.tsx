@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, Text, StatusBar } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 import { View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import RecentItemsSearch from '@/components/RecentItemsSearch';

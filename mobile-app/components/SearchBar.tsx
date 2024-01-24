@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useLinkTo } from '@react-navigation/native';
