@@ -44,6 +44,8 @@ public class RegistrationService {
         (byte) 0
       )
     );
+
+
     emailSender.send(request.getEmail(), "Hello!"); // TODO: Send email
     return token;
   }
