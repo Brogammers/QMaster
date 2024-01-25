@@ -17,8 +17,8 @@ export interface AuthState {
 export interface CurrentItem {
   image: ImageSourcePropType;
   name: string;
-  people: Number;
-  time: Number;
+  people: number;
+  time: number;
 }
 
 export interface SearchFilterProps {
@@ -39,8 +39,8 @@ export interface CategoryProps {
 export interface CurrentQueuesProps {
   image: ImageSourcePropType;
   name: string;
-  people: Number;
-  time: Number;
+  people: number;
+  time: number;
   isJoin?: boolean;
   isLeave?: boolean;
   isCurrent?: boolean;
