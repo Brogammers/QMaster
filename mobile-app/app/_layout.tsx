@@ -6,6 +6,7 @@ import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import SplashScreen from './SplashScreen';
+import AppEntry from './(app)/_layout';
 
 
 export default function RootLayout() {

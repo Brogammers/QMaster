@@ -17,7 +17,7 @@ import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import LoginImg from '@/assets/images/login.png';
 import axios, { AxiosError } from 'axios';
-import useAuth from '@/ctx/AuthContext';
+import {useAuth} from '@/ctx/AuthContext';
 import { API_BASE_URL_LOGIN } from '@env';
 
 import { useDispatch } from 'react-redux';

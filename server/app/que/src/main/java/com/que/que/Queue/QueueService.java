@@ -61,7 +61,7 @@ public class QueueService {
         queueHolderID,
         queueHolderQueue.size(),
         String.format(
-          "http://localhost:8080/api/v1/queue/user?queueHolderId=%d&queue=%d",
+          "http://192.168.56.1:8080/api/v1/queue/user?queueHolderId=%d&queue=%d",
           queueHolderID,
           queueHolderQueue.size()
         )

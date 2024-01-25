@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from 'react-native';
 import Image from 'react-native-remote-svg';
-import Ellipse from '../assets/images/Ellipse.svg';
+import Ellipse from '@/assets/images/Ellipse.svg';
 import { Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window')
