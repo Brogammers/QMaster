@@ -1,10 +1,13 @@
 package com.que.que.Login;
 
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
+import java.util.HashMap;
 import lombok.AllArgsConstructor;
 
 // This endpoint is not set yet. It was used in the example and will be changed
@@ -18,7 +21,15 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping
-    public Map<String, Object> login(@RequestBody LoginRequest request) {
-        return loginService.loginUser(request.getEmail(), request.getPassword());
+    public ResponseEntity<Object> login(@RequestBody LoginRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+        try {
+            body = loginService.loginUser(request.getEmail(), request.getPassword());
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+            statusCode = HttpStatusCode.valueOf(500);
+        }
+        return new ResponseEntity<Object>(body, statusCode);
     }
 }
