@@ -1,19 +1,21 @@
 import React from 'react';
-import { StatusBar, StyleSheet, SafeAreaView, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { 
+  StatusBar, 
+  StyleSheet, 
+  SafeAreaView, 
+  Platform, 
+  View 
+} from 'react-native';
 import ScanQr from '@/components/ScanQR';
 import SearchBar from '@/components/SearchBar';
 import { ScrollView } from 'react-native-gesture-handler';
 import CategoriesList from '@/components/CategoriesList';
 import RecentQueues from '@/components/RecentQueues';
 import FrequentlyAsked from '@/components/FrequentlyAsked';
-import TextButton from '@/shared/components/TextButton';
-import CurrentQueues from '@/shared/components/CurrentQueues';
 import CurrentQueuesList from '@/components/CurrentQueuesList';
-import { useAuth } from '@/ctx/AuthContext';
 
 
 export default function Index() {
-  const auth = useAuth();
 
   return (
     <SafeAreaView style={styles.container}>
