@@ -7,7 +7,7 @@ import CategoriesList from '@/components/CategoriesList';
 import RecentQueues from '@/components/RecentQueues';
 import FrequentlyAsked from '@/components/FrequentlyAsked';
 import TextButton from '@/shared/components/TextButton';
-import { useAuth } from '@/ctx/AuthContext';
+import useAuth from '@/ctx/AuthContext';
 
 
 export default function Index() {
