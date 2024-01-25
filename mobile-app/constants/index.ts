@@ -14,7 +14,11 @@ import elections from '@/assets/images/elections.jpg';
 import nationalBank from '@/assets/images/NationalBank.png';
 import alSalamHospital from '@/assets/images/alsalam.png';
 
-import { CategoryProps, CurrentQueuesProps, OnboardingItem } from '@/types';
+import { 
+  CategoryProps, 
+  CurrentQueuesProps, 
+  OnboardingItem 
+} from '@/types';
 
 export const OnboardingData: OnboardingItem[] = [
   {
