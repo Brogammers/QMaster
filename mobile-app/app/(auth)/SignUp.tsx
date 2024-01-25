@@ -52,7 +52,7 @@ export default function SignUp() {
 
       if (response.status === 200 || response.status === 201) {
         console.log('Signup successful', values);
-        if (auth) {
+        if (auth && auth.signIn) {
           console.log("This is the type of response: " + typeof response.data);
           console.log("This is the email of the user: ", response.data.email, " and type: ", typeof response.data.email)
           // Update the session state and wait for the update to complete
@@ -61,7 +61,7 @@ export default function SignUp() {
             resolve();
           });
 
-          setStateUpdateComplete(true);
+          auth.signIn();
         }
       } else {
         console.error('Signup failed', response.data);
@@ -87,16 +87,9 @@ export default function SignUp() {
         console.error('Non-Axios error:', error);
       }
       // Add this line to rethrow the error and see the full stack trace in the console
-      throw error;
+      throw error; 
     }
   }
-
-  // useEffect to handle navigation after the state update is complete
-  useEffect(() => {
-    if (isStateUpdateComplete && auth && auth.signIn) {
-      auth.signIn();
-    }
-  }, [isStateUpdateComplete, auth, auth.signIn]);
 
   return (
     <ImageBackground source={background} style={styles.container}>
