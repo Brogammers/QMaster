@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, useWindowDimensions } from 'react-native';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { Carousel } from 'react-native-snap-carousel';
+import { Pagination } from 'react-native-snap-carousel';
 import { Current } from '@/data';
 import CurrentQueues from '../shared/components/CurrentQueues';
 
@@ -29,7 +30,7 @@ export default function CurrentQueuesList() {
         renderItem={renderItem}
         sliderWidth={carouselWidth}
         itemWidth={carouselWidth}
-        onSnapToItem={(index) => setActiveSlide(index)} // Update active slide index
+        onSnapToItem={(index: number) => setActiveSlide(index)} // Update active slide index
         layout="default"
       />
       <Pagination
