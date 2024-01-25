@@ -28,7 +28,7 @@ export async function setStorageItemAsync(key: string, value: string | null) {
     if (value == null) {
       await SecureStore.deleteItemAsync(key);
     } else {
-      await SecureStore.setItemAsync(key, value);
+      await SecureStore.setItemAsync(key, JSON.stringify(value));
     }
   }
 }
@@ -49,7 +49,16 @@ export function useStorageState(key: string): UseStateHook<string> {
       }
     } else {
       SecureStore.getItemAsync(key).then(value => {
-        setState(value);
+        if (value !== null) {
+          try {
+            // Parse the JSON string back into an object
+            let originalObj = JSON.parse(value);
+            setState(originalObj);
+          } catch (error) {
+            // If an error occurred, log it
+            console.error('Failed to parse JSON:', error);
+          }
+        }
       });
     }
   }, [key]);
@@ -57,9 +66,8 @@ export function useStorageState(key: string): UseStateHook<string> {
   // Set
   const setValue = React.useCallback(
     (value: string | null) => {
-      setStorageItemAsync(key, value).then(() => {
-        setState(value);
-      });
+      setState(value);
+      setStorageItemAsync(key, value);
     },
     [key]
   );

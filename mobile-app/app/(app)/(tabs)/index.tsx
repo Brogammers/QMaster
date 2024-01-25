@@ -7,9 +7,13 @@ import CategoriesList from '@/components/CategoriesList';
 import RecentQueues from '@/components/RecentQueues';
 import FrequentlyAsked from '@/components/FrequentlyAsked';
 import TextButton from '@/shared/components/TextButton';
+<<<<<<< HEAD
 import CurrentQueues from '@/shared/components/CurrentQueues';
 import CurrentQueuesList from '@/components/CurrentQueuesList';
 import { useAuth } from '@/ctx/AuthContext';
+=======
+import useAuth from '@/ctx/AuthContext';
+>>>>>>> fbcfd75fba836720357f34d79e7736f26967ca22
 
 
 export default function Index() {

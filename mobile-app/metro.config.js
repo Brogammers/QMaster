@@ -7,4 +7,6 @@ const config = getDefaultConfig(__dirname, {
   isCSSEnabled: true,
 });
 
+config.resolver.blockList = [/(.*.test.tsx?)$/]
+
 module.exports = config;

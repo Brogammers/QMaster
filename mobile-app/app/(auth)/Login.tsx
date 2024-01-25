@@ -7,8 +7,9 @@ import {
   Text,
   TextInput,
   Alert,
+  StatusBar,
 } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextButton from '@/shared/components/TextButton';
@@ -16,8 +17,11 @@ import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import LoginImg from '@/assets/images/login.png';
 import axios, { AxiosError } from 'axios';
-import { useAuth } from '@/ctx/AuthContext';
+import useAuth from '@/ctx/AuthContext';
 import { API_BASE_URL_LOGIN } from '@env';
+
+import { useDispatch } from 'react-redux';
+import { setEmail } from '../redux/authSlice'; // replace with the actual path
 
 
 const LoginSchema = Yup.object().shape({
@@ -26,28 +30,34 @@ const LoginSchema = Yup.object().shape({
 });
 
 export default function Login() {
+  const dispatch = useDispatch();
   const auth = useAuth();
 
   const handleLogin = async (values: any) => {
-    // const auth = useAuth();
-  
     console.log("Logging in...", values);
   
     try {
       const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
   
       if (response.status === 200 || response.status === 201) {
-        console.log('Signup successful', values);
+        console.log('Login successful', values);
         if (auth && auth.signIn) {
-          // auth.updateUser(response.data); 
-          auth.signIn(response.data);
+          console.log("This is the type of response: " + typeof response.data);
+          console.log("This is the email of the user: ", response.data.email, " and type: ", typeof response.data.email)
+          // Update the session state and wait for the update to complete
+          await new Promise<void>(resolve => {
+            dispatch(setEmail(response.data.email));
+            resolve();
+          });
+
+          auth.signIn(); 
         }
       } else {
-        console.error('Signup failed', response.data);
+        console.error('Login failed', response.data);
         Alert.alert('Signup Failed', 'Please check your input and try again.');
       }
     } catch (error) {
-      console.error('Signup error:', error);
+      console.error('Login error:', error);
       Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
   
       if (axios.isAxiosError(error)) {
@@ -73,6 +83,11 @@ export default function Login() {
       <Link href='/Onboarding' style={styles.returnButton}>
         <Return size={36} color='white' />
       </Link>
+      <StatusBar
+        translucent
+        backgroundColor='rgba(000, 000, 000, 0.5)'  
+        barStyle='light-content'  
+      />
       <View style={styles.row}>
         <Text
           style={styles.title}

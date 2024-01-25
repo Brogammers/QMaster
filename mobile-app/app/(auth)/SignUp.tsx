@@ -1,5 +1,5 @@
-import { StyleSheet, ImageBackground, Alert } from 'react-native';
-import React from 'react';
+import { StyleSheet, ImageBackground, Alert, StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -12,9 +12,11 @@ import axios, { AxiosError } from 'axios';
 import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
-import { useAuth } from '@/ctx/AuthContext';
+import useAuth from '@/ctx/AuthContext';
 import { API_BASE_URL } from '@env';
 
+import { useDispatch } from 'react-redux';
+import { setEmail } from '../redux/authSlice'; // replace with the actual path
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -36,7 +38,11 @@ const SignupSchema = Yup.object().shape({
 
 
 export default function SignUp() {
+  const dispatch = useDispatch();
   const auth = useAuth();
+
+  // Add a state variable to track whether the state update has completed
+  const [isStateUpdateComplete, setStateUpdateComplete] = useState(false);
 
   const handleSignUp = async (values: any) => {
     console.log('Form values:', values);
@@ -47,8 +53,15 @@ export default function SignUp() {
       if (response.status === 200 || response.status === 201) {
         console.log('Signup successful', values);
         if (auth && auth.signIn) {
-          // auth.updateUser(response.data); 
-          auth.signIn(response.data);
+          console.log("This is the type of response: " + typeof response.data);
+          console.log("This is the email of the user: ", response.data.email, " and type: ", typeof response.data.email)
+          // Update the session state and wait for the update to complete
+          await new Promise<void>(resolve => {
+            dispatch(setEmail(response.data.email));
+            resolve();
+          });
+
+          auth.signIn();
         }
       } else {
         console.error('Signup failed', response.data);
@@ -73,6 +86,8 @@ export default function SignUp() {
         // Handle non-Axios errors
         console.error('Non-Axios error:', error);
       }
+      // Add this line to rethrow the error and see the full stack trace in the console
+      throw error; 
     }
   }
 
@@ -81,6 +96,11 @@ export default function SignUp() {
       <Link href='/Onboarding' style={styles.returnButton}>
         <Return size={36} color='white' />
       </Link>
+      <StatusBar
+        translucent
+        backgroundColor='rgba(000, 000, 000, 0.5)'  
+        barStyle='light-content'  
+      />
       <View style={styles.row} className='relative'>
         <Text
           style={styles.title}
