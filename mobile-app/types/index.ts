@@ -16,7 +16,7 @@ export interface AuthState {
 
 export interface CurrentItem {
   Img: any;
-  Name: String;
+  Name: string;
   People: Number;
   Time: Number;
 }
@@ -33,12 +33,12 @@ export interface OnboardingItem {
 
 export interface CategoryProps {
   Img: any,
-  Title: String,
+  Title: string,
 }
 
 export interface CurrentQueuesProps {
   Img: any,
-  Name: String,
+  Name: string,
   People: Number,
   Time: Number,
   isJoin?: boolean,
@@ -61,7 +61,7 @@ export interface ReturnButtonProps {
 
 export interface SearchItemProps {
   Img: any;
-  Title: String;
+  Title: string;
   isPopular?: boolean;
 }
 
