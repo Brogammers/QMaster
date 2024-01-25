@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 import { View } from 'react-native';
-import Category from '@/components/Category';
+import Category from '@/shared/components/Category';
 import { Recent } from '@/data';
 import { ScrollView } from 'react-native-gesture-handler';
 

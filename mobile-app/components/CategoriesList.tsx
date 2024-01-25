@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, TextInput } from 'react-native';
 import { View } from 'react-native';
-import Category from '@/components/Category';
+import Category from '@/shared/components/Category';
 import { Categories } from '@/data';
 
 export default function CategoriesList() {

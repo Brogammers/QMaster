@@ -7,7 +7,7 @@ import CategoriesList from '@/components/CategoriesList';
 import RecentQueues from '@/components/RecentQueues';
 import FrequentlyAsked from '@/components/FrequentlyAsked';
 import TextButton from '@/shared/components/TextButton';
-import CurrentQueues from '@/components/CurrentQueues';
+import CurrentQueues from '@/shared/components/CurrentQueues';
 import CurrentQueuesList from '@/components/CurrentQueuesList';
 import { useAuth } from '@/ctx/AuthContext';
 
