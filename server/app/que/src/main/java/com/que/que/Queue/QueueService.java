@@ -58,32 +58,28 @@ public class QueueService {
     try {
       // this currently has an error because the createQRCode method is not static
       qrCodeService.createQRCode(
-        queueHolderID,
-        queueHolderQueue.size(),
-        String.format(
-          "http://localhost:8080/api/v1/queue/user?queueHolderId=%d&queue=%d",
           queueHolderID,
-          queueHolderQueue.size()
-        )
-      );
+          queueHolderQueue.size(),
+          String.format(
+              "https://splandamedia.com/api/v1/queue/user?queueHolderId=%d&queue=%d",
+              queueHolderID,
+              queueHolderQueue.size()));
     } catch (Exception e) {
       throw new IllegalStateException("Error while creating queue.");
     }
     queueHolderQueue.add(new LinkedList<>());
     queueCreationRepository.save(
-      new QueueCreation(
-        appUserRepository
-          .findById(queueHolderID)
-          .orElseThrow(() -> new IllegalStateException("Could not find user"))
-      )
-    );
+        new QueueCreation(
+            appUserRepository
+                .findById(queueHolderID)
+                .orElseThrow(() -> new IllegalStateException("Could not find user"))));
     print();
   }
 
   public boolean isValidForNewQueue(@NonNull Long queueHolderID) {
     AppUser appUserFromDB = appUserRepository
-      .findById(queueHolderID)
-      .orElseThrow(() -> new IllegalStateException("Could not find user"));
+        .findById(queueHolderID)
+        .orElseThrow(() -> new IllegalStateException("Could not find user"));
     int queueId = appUserFromDB.getQueueId();
     byte subscriptionPlan = appUserFromDB.getSubscriptionPlan();
     int max = Integer.MAX_VALUE;
@@ -109,17 +105,16 @@ public class QueueService {
 
   public int getQueueSlot(@NonNull Long queueHolderID) {
     AppUser appUserFromDB = appUserRepository
-      .findById(queueHolderID)
-      .orElseThrow(() -> new IllegalStateException("Could not find user"));
+        .findById(queueHolderID)
+        .orElseThrow(() -> new IllegalStateException("Could not find user"));
     int queueId = appUserFromDB.getQueueId();
     return queueId;
   }
 
   public void enqueueUser(
-    @NonNull Long queueHolderId,
-    @NonNull Long appUser,
-    int specificQueueId
-  ) {
+      @NonNull Long queueHolderId,
+      @NonNull Long appUser,
+      int specificQueueId) {
     int queueSlot = getQueueSlot(queueHolderId);
     if (queueSlot == -1) {
       throw new IllegalStateException("User does not have a queue setup");
@@ -128,19 +123,17 @@ public class QueueService {
     try {
       Queue<Long> specificQueue = queueHolderQueues.get(specificQueueId);
       appUserRepository
-        .findById(appUser)
-        .orElseThrow(() -> new IllegalStateException("No user with such id"));
+          .findById(appUser)
+          .orElseThrow(() -> new IllegalStateException("No user with such id"));
       specificQueue.add(appUser);
     } catch (Exception e) {
       throw new IllegalStateException("Could not add user to queue");
     }
     queueEnqueueRepository.save(
-      new QueueEnqueue(
-        appUserRepository
-          .findById(queueHolderId)
-          .orElseThrow(() -> new IllegalStateException("Could not find user"))
-      )
-    );
+        new QueueEnqueue(
+            appUserRepository
+                .findById(queueHolderId)
+                .orElseThrow(() -> new IllegalStateException("Could not find user"))));
     print();
   }
 
@@ -157,8 +150,8 @@ public class QueueService {
       }
       print();
       AppUser nextUser = appUserRepository
-        .findById(specificQueue.poll())
-        .orElseThrow(() -> new IllegalStateException("Could not find user"));
+          .findById(specificQueue.poll())
+          .orElseThrow(() -> new IllegalStateException("Could not find user"));
       queueDequeueRepository.save(new QueueDequeue(nextUser));
       return nextUser;
     } catch (Exception e) {
@@ -183,12 +176,10 @@ public class QueueService {
       appUser.setQueueId(-1);
     }
     queueDeletionRepository.save(
-      new QueueDeletion(
-        appUserRepository
-          .findById(queueHolderId)
-          .orElseThrow(() -> new IllegalStateException("Could not find user"))
-      )
-    );
+        new QueueDeletion(
+            appUserRepository
+                .findById(queueHolderId)
+                .orElseThrow(() -> new IllegalStateException("Could not find user"))));
     print();
   }
 
