@@ -91,7 +91,7 @@ export default function Login() {
       <View style={styles.row}>
         <Text
           style={styles.title}
-          className='mt-14 mb-10 text-2xl text-white'
+          className='mb-10 text-2xl text-white mt-14'
         >
           Welcome Back!
         </Text>
@@ -139,7 +139,7 @@ export default function Login() {
                 <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.password}</Text>
               }
               <Text
-                className='text-baby-blue underline mt-2 text-sm'
+                className='mt-2 text-sm underline text-baby-blue'
               >
                 Forgot password?
               </Text>

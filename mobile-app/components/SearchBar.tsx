@@ -1,18 +1,27 @@
 import React from 'react';
-import { StyleSheet, TextInput } from 'react-native';
-import { View } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { useLinkTo } from '@react-navigation/native';
 
 export default function SearchBar() {
+  const linkTo = useLinkTo();
+
+  const handleSearchPress = () => {
+    linkTo('/Search'); // Navigate to the "search" page
+  };
+
   return (
-    <View style={styles.searchBar} className='flex-row items-center self-center w-full mt-6 mb-4'>
-      <FontAwesome name="search" size={24} color="black" />
-      <TextInput
-        placeholder="Search for the name of queue"
-        className='pl-2.5 w-full'
-      />
-    </View>
-  )
+    <TouchableOpacity
+      style={styles.searchBar}
+      onPress={handleSearchPress}
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <FontAwesome name="search" size={24} color="black" />
+        <Text style={{ marginLeft: 10 }}>Search for the name of the queue</Text>
+      </View>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -22,5 +31,8 @@ const styles = StyleSheet.create({
     borderColor: '#969696',
     borderRadius: 20,
     paddingLeft: 15,
+    justifyContent:'center',
+    marginTop: 28,
+    marginBottom: 16,
   },
 });

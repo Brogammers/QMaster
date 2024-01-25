@@ -19,7 +19,7 @@ const AuthContext = React.createContext<{
   isLoading: false,
 });
 
-export default function useAuth() {
+export function useAuth() {
   return useContext(AuthContext);
 }
 

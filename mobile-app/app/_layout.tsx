@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Slot } from 'expo-router';
 // import * as AuthContextHook from '@/ctx/AuthContext';
-import useAuth, { SessionProvider } from '@/ctx/AuthContext';
+import { SessionProvider, useAuth } from '@/ctx/AuthContext';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';

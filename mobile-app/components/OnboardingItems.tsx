@@ -3,7 +3,6 @@ import {
   StyleSheet, 
   Text, 
   View, 
-  useWindowDimensions
 } from "react-native";
 import Image from 'react-native-remote-svg';
 
