@@ -55,12 +55,36 @@ public class QueueController {
     }
 
     @PutMapping(path = "/holder")
-    public AppUser dequeue(@RequestParam("id") @NonNull Long id, @RequestParam("queue") int queue) {
-        return queueService.dequeueUser(id, queue);
+    public ResponseEntity<Object> dequeue(@RequestParam("id") @NonNull Long id, @RequestParam("queue") int queue) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+        AppUser user = null;
+        try {
+            user = queueService.dequeueUser(id, queue);
+            if (user != null) {
+                body.put("message", "User was dequeued!");
+                body.put("user", user);
+            } else {
+                body.put("message", "Queue is empty");
+                statusCode = HttpStatusCode.valueOf(500);
+            }
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+            statusCode = HttpStatusCode.valueOf(500);
+        }
+        return new ResponseEntity<Object>(body, statusCode);
     }
 
     @DeleteMapping
-    public void deleteQueue(@RequestParam("id") @NonNull Long id, @RequestParam("queue") int queue) {
-        queueService.deleteQueue(id, queue);
+    public ResponseEntity<Object> deleteQueue(@RequestParam("id") @NonNull Long id, @RequestParam("queue") int queue) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+        try {
+            queueService.deleteQueue(id, queue);
+            body.put("message", "Queue delete successful");
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+        }
+        return new ResponseEntity<Object>(body, statusCode);
     }
 }
