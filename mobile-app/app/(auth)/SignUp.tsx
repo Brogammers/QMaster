@@ -52,8 +52,13 @@ export default function SignUp() {
         if (auth && auth.signIn) {
           console.log("This is the type of response: " + typeof response.data);
           console.log("This is the email of the user: ", response.data.email, " and type: ", typeof response.data.email)
-          dispatch(setEmail(response.data.email));
-          auth.signIn(); 
+          // Update the session state and wait for the update to complete
+          await new Promise<void>(resolve => {
+            dispatch(setEmail(response.data.email));
+            resolve();
+          });
+
+          auth.signIn();
         }
       } else {
         console.error('Signup failed', response.data);
