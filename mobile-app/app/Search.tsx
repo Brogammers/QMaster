@@ -6,7 +6,7 @@ import RecentItemsSearch from '@/components/RecentItemsSearch';
 import PopularQueues from '@/components/PopularQueues';
 import { ScrollView } from 'react-native-gesture-handler';
 import SearchFilter from '@/components/SearchFilter';
-import { Recent } from '@/data';
+import { Recent } from '@/constants';
 
 export default function Search() {
   const [input, setInput] = useState("");

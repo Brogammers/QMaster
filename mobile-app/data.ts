@@ -2,7 +2,6 @@ import Onboarding1 from './assets/images/onboarding1.svg';
 import Onboarding2 from './assets/images/onboarding2.svg';
 import Onboarding3 from './assets/images/onboarding3.svg';
 import Onboarding4 from './assets/images/onboarding4.svg';
-import { ImageSourcePropType } from 'react-native';
 import Restaurant from './assets/images/Restaurant.svg';
 import Government from './assets/images/government.svg';
 import Clinic from './assets/images/clinic.svg';

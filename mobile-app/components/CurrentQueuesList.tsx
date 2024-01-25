@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, useWindowDimensions } from 'react-native';
 import { Carousel, Pagination } from 'react-native-snap-carousel';
-import { Current } from '@/data';
+import { Current } from '@/constants';
 import CurrentQueues from '@/shared/components/CurrentQueues';
 import { CurrentItem } from '@/types';
 

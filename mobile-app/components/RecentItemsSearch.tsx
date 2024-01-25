@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { Recent } from '@/data';
+import { Recent } from '@/constants';
 import SearchItem from '../shared/components/SearchItem';
 
 export default function RecentItemsSearch() {
