@@ -3,14 +3,7 @@ import { View, Text, useWindowDimensions } from 'react-native';
 import { Carousel, Pagination } from 'react-native-snap-carousel';
 import { Current } from '@/data';
 import CurrentQueues from '@/shared/components/CurrentQueues';
-
-// Assuming Current is an array of objects with specific types
-interface CurrentItem {
-  Img: any;
-  Name: String;
-  People: Number;
-  Time: Number;
-}
+import { CurrentItem } from '@/types';
 
 export default function CurrentQueuesList() {
   const windowWidth = useWindowDimensions().width;

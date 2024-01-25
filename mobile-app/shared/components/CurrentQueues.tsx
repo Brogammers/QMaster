@@ -5,17 +5,7 @@ import { View } from 'react-native';
 import gradient from '@/assets/images/Gradient.png';
 import { FontAwesome5 } from '@expo/vector-icons';
 import arrow from '@/assets/images/arrow-up.svg';
-
-interface CurrentQueuesProps {
-  Img: any,
-  Name: String,
-  People: Number,
-  Time: Number,
-  isJoin?: boolean,
-  isLeave?: boolean,
-  isCurrent?: boolean,
-  isPopular?: boolean,
-}
+import { CurrentQueuesProps } from '@/types';
 
 export default function CurrentQueues(props: CurrentQueuesProps) {
   const { Img, Name, People, Time, isLeave, isJoin, isCurrent, isPopular } = props;

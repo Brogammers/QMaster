@@ -14,13 +14,7 @@ import arabiata from '@/assets/images/arabiata.png' ;
 import elections from '@/assets/images/elections.jpg';
 import nationalBank from '@/assets/images/NationalBank.png';
 import alSalamHospital from '@/assets/images/alsalam.png';
-
-
-// Onboarding Screen
-export interface OnboardingItem {
-  image: ImageSourcePropType;
-  text: string;
-}
+import { OnboardingItem } from './types';
 
 export const OnboardingData: OnboardingItem[] = [
   {

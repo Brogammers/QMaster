@@ -3,12 +3,7 @@ import { Text, View } from 'react-native';
 import Image from 'react-native-remote-svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import arrow from '@/assets/images/blackArrowUp.svg';
-
-interface SearchItemProps {
-  Img: any;
-  Title: String;
-  isPopular?: boolean;
-}
+import { SearchItemProps } from '@/types';
 
 export default function SearchItem(props: SearchItemProps) {
   const { Img, Title, isPopular } = props;

@@ -3,14 +3,10 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import Image from 'react-native-remote-svg';
 import Ellipse from 'assets/images/Ellipse.svg';
 import { Dimensions } from 'react-native';
+import { CategoryProps } from "@/types";
 
 const { width } = Dimensions.get('window')
 const wide = width * 27 / 100
-
-interface CategoryProps {
-  Img: any,
-  Title: String,
-}
 
 export default function Category(props: CategoryProps) {
   const { Img, Title } = props;

@@ -1,9 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-
-export interface AuthState {
-  email: string | null
-}
+import { AuthState } from '@/types'
 
 const initialState: AuthState = {
   email: null,
