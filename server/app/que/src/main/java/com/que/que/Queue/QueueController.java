@@ -39,10 +39,19 @@ public class QueueController {
     }
 
     @PutMapping(path = "/user")
-    public void enqueue(@RequestParam("queueHolderId") @NonNull Long queueHolderId,
+    public ResponseEntity<Object> enqueue(@RequestParam("queueHolderId") @NonNull Long queueHolderId,
             @RequestParam("appuser") @NonNull Long appUser,
             @RequestParam("queue") int queue) {
-        queueService.enqueueUser(queueHolderId, appUser, queue);
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+        try {
+            queueService.enqueueUser(queueHolderId, appUser, queue);
+            body.put("message", "Added user!");
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+            statusCode = HttpStatusCode.valueOf(500);
+        }
+        return new ResponseEntity<Object>(body, statusCode);
     }
 
     @PutMapping(path = "/holder")
