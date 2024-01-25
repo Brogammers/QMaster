@@ -1,16 +1,12 @@
 import React from 'react';
 import { View, Text, useWindowDimensions } from 'react-native';
-import { Carousel, Pagination } from 'react-native-snap-carousel';
-import { Current } from '@/data';
-import CurrentQueues from '../shared/components/CurrentQueues';
-
-// Assuming Current is an array of objects with specific types
-interface CurrentItem {
-  Img: any;
-  Name: String;
-  People: Number;
-  Time: Number;
-}
+import { Pagination } from 'react-native-snap-carousel';
+import Carousel from 'react-native-snap-carousel';
+// import Carousel from 'react-native-snap-carousel';
+// import { Pagination } from 'react-native-snap-carousel';
+import { Current } from '@/constants';
+import CurrentQueues from '@/shared/components/CurrentQueues';
+import { CurrentItem } from '@/types';
 
 export default function CurrentQueuesList() {
   const windowWidth = useWindowDimensions().width;
@@ -18,20 +14,20 @@ export default function CurrentQueuesList() {
   const [activeSlide, setActiveSlide] = React.useState(0);
 
   const renderItem = ({ item, index }: { item: CurrentItem, index: number }) => (
-    <CurrentQueues Img={item.Img} Name={item.Name} People={item.People} Time={item.Time} key={index} isLeave isCurrent />
+    <CurrentQueues image={item.image} name={item.name} people={item.people} time={item.time} key={index} isLeave isCurrent />
   );
 
   return (
     <View>
       <Text style={{ marginVertical: 10, fontSize: 24, fontWeight: 'bold' }}>Current Queues</Text>
-      <Carousel
+      {/* <Carousel
         data={Current as CurrentItem[]}
         renderItem={renderItem}
         sliderWidth={carouselWidth}
         itemWidth={carouselWidth}
         onSnapToItem={(index: number) => setActiveSlide(index)} // Update active slide index
         layout="default"
-      />
+      /> */}
       <Pagination
         dotsLength={Current.length}
         activeDotIndex={activeSlide}

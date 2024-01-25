@@ -1,9 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-
-interface LeftArrowProps {
-  size: number;
-  color: string;
-}
+import { LeftArrowProps } from '@/types';
 
 export default function LeftArrow({size, color}: LeftArrowProps): React.JSX.Element {
   return (

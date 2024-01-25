@@ -2,21 +2,9 @@ import React from 'react';
 import { Text, StyleSheet, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FontAwesome } from '@expo/vector-icons';
-import { boolean } from 'yup';
-
+import { TextButtonProps } from '@/types';
 
 const window = Dimensions.get('window');
-
-
-interface TextButtonProps {
-  text: string;
-  buttonColor: string;
-  textColor: string;
-  icon?: any;
-  onPress?: () => void;
-  disabled?: boolean;
-}
-
 
 export default function TextButton(props: TextButtonProps) {
   const { text, buttonColor} = props;
