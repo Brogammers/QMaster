@@ -13,7 +13,7 @@ import arabiata from '@/assets/images/arabiata.png' ;
 import elections from '@/assets/images/elections.jpg';
 import nationalBank from '@/assets/images/NationalBank.png';
 import alSalamHospital from '@/assets/images/alsalam.png';
-import { CategoryProps, OnboardingItem } from '@/types';
+import { CategoryProps, CurrentQueuesProps, OnboardingItem } from '@/types';
 
 export const OnboardingData: OnboardingItem[] = [
   {
@@ -66,7 +66,7 @@ export const Categories: CategoryProps[] = [
 ]
 
 //Current Queues
-export const Current = [
+export const Current: CurrentQueuesProps[] = [
   {
     image: Carrefour,
     name: 'Carrefour',
@@ -85,28 +85,40 @@ export const Current = [
     people: 200,
     time: 120,
   },
-]
-
-//Recent Queues
-export const Recent = [
-  {
-    image: Carrefour,
-    text: 'Carrefour',
-  },
-  {
-    image: arabiata,
-    text: 'Arabiata',
-  },
-  {
-    image: elections,
-    text: 'Elections',
-  },
   {
     image: alSalamHospital,
-    text: 'Al-Salam Hospital ',
+    name: 'Al-Salam Hospital ',
+    people: 300,
+    time: 30,
   },
   {
     image: nationalBank,
-    text: 'National Bank of Egypt',
+    name: 'National Bank of Egypt',
+    people: 250,
+    time: 10,
   },
 ]
+
+//Recent Queues
+// export const Recent = [
+//   {
+//     image: Carrefour,
+//     text: 'Carrefour',
+//   },
+//   {
+//     image: arabiata,
+//     text: 'Arabiata',
+//   },
+//   {
+//     image: elections,
+//     text: 'Elections',
+//   },
+//   {
+//     image: alSalamHospital,
+//     text: 'Al-Salam Hospital ',
+//   },
+//   {
+//     image: nationalBank,
+//     text: 'National Bank of Egypt',
+//   },
+// ]
