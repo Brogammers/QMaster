@@ -86,6 +86,8 @@ export default function SignUp() {
         // Handle non-Axios errors
         console.error('Non-Axios error:', error);
       }
+      // Add this line to rethrow the error and see the full stack trace in the console
+      throw error;
     }
   }
 
