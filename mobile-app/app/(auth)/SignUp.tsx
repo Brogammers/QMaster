@@ -1,11 +1,11 @@
 import { StyleSheet, ImageBackground, Alert, StatusBar } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   TextInput,
 } from 'react-native';
-import { Link, useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios, { AxiosError } from 'axios';
@@ -41,6 +41,9 @@ export default function SignUp() {
   const dispatch = useDispatch();
   const auth = useAuth();
 
+  // Add a state variable to track whether the state update has completed
+  const [isStateUpdateComplete, setStateUpdateComplete] = useState(false);
+
   const handleSignUp = async (values: any) => {
     console.log('Form values:', values);
 
@@ -49,7 +52,7 @@ export default function SignUp() {
 
       if (response.status === 200 || response.status === 201) {
         console.log('Signup successful', values);
-        if (auth && auth.signIn) {
+        if (auth) {
           console.log("This is the type of response: " + typeof response.data);
           console.log("This is the email of the user: ", response.data.email, " and type: ", typeof response.data.email)
           // Update the session state and wait for the update to complete
@@ -58,7 +61,7 @@ export default function SignUp() {
             resolve();
           });
 
-          auth.signIn();
+          setStateUpdateComplete(true);
         }
       } else {
         console.error('Signup failed', response.data);
@@ -85,6 +88,13 @@ export default function SignUp() {
       }
     }
   }
+
+  // useEffect to handle navigation after the state update is complete
+  useEffect(() => {
+    if (isStateUpdateComplete && auth && auth.signIn) {
+      auth.signIn();
+    }
+  }, [isStateUpdateComplete, auth, auth.signIn]);
 
   return (
     <ImageBackground source={background} style={styles.container}>
