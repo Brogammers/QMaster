@@ -1,18 +1,19 @@
-import Onboarding1 from './assets/images/onboarding1.svg';
-import Onboarding2 from './assets/images/onboarding2.svg';
-import Onboarding3 from './assets/images/onboarding3.svg';
-import Onboarding4 from './assets/images/onboarding4.svg';
-import Restaurant from './assets/images/Restaurant.svg';
-import Government from './assets/images/government.svg';
-import Clinic from './assets/images/clinic.svg';
-import Grocery from './assets/images/grocery.svg';
-import Bank from './assets/images/bank.svg';
-import Other from './assets/images/other.svg';
+import Onboarding1 from '@/assets/images/onboarding1.svg';
+import Onboarding2 from '@/assets/images/onboarding2.svg';
+import Onboarding3 from '@/assets/images/onboarding3.svg';
+import Onboarding4 from '@/assets/images/onboarding4.svg';
+import Restaurant from '@/assets/images/Restaurant.svg';
+import Government from '@/assets/images/government.svg';
+import Clinic from '@/assets/images/clinic.svg';
+import Grocery from '@/assets/images/grocery.svg';
+import Bank from '@/assets/images/bank.svg';
+import Other from '@/assets/images/other.svg';
 import Carrefour from '@/assets/images/Carrefour.svg';
 import arabiata from '@/assets/images/arabiata.png' ;
 import elections from '@/assets/images/elections.jpg';
 import nationalBank from '@/assets/images/NationalBank.png';
 import alSalamHospital from '@/assets/images/alsalam.png';
+
 import { CategoryProps, CurrentQueuesProps, OnboardingItem } from '@/types';
 
 export const OnboardingData: OnboardingItem[] = [
