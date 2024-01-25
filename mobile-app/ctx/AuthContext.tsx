@@ -39,45 +39,60 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
   const router = useRouter();
   const [user, setUser] = useState<string | undefined | null>("");  
   const [[isLoading, session], setSession] = useStorageState('session');
-  const [isReady, setIsReady] = useState(false); // New state variable
+  const [isTimeoutComplete, setIsTimeoutComplete] = useState(false);
 
   const email = useSelector((state: RootState) => state.emailSetter.email);
 
   const handleNavigation = () => {
-    if (!session && rootSegment !== "(auth)") {
-      console.log('Navigating to Onboarding screen');
-      router.replace("/(auth)/Onboarding");
-    } else if (session && rootSegment !== "(app)") {
-      console.log('Navigating to root directory' + router);
-      router.replace("/");
-    }
+    setTimeout(() => {
+      if (!session && rootSegment !== "(auth)") {
+        console.log('Navigating to Onboarding screen');
+        router.replace("/(auth)/Onboarding");
+      } else if (session && rootSegment !== "(app)") {
+        console.log('Navigating to root directory: app');
+        router.replace("/");
+      }
+    }, 500)
   };
 
-  // const debouncedSetSession = _.debounce(setSession, 300);
+  const debouncedSetSession = _.debounce(setSession, 300);
 
   useEffect(() => {
     console.log('User:', user); // Log the value of 'user'
     console.log('Root Segment:', rootSegment); // Log the value of 'rootSegment'
+    const timer = setTimeout(() => {
+      setIsTimeoutComplete(true);
+    }, 500);
+  
+    return () => clearTimeout(timer);
+  }, []);
 
-    setTimeout(() => {
+  useEffect(() => {
+    if (isTimeoutComplete) {
       handleNavigation();
-      setIsReady(true); // Set isReady to true after timeout
-    }, 1000)
-  }, [isLoading, session, rootSegment, router]);
+    }
+  }, [isLoading, session, rootSegment, router, user, isTimeoutComplete]);
+
+  // useEffect(() => {
+  //   console.log('User:', user); // Log the value of 'user'
+  //   console.log('Root Segment:', rootSegment); // Log the value of 'rootSegment'
+
+  //   setTimeout(() => {
+  //     handleNavigation();
+  //   }, 500)
+  // }, [isLoading, session, rootSegment, router, user]);
 
   useEffect(() => {
     console.log("This is the session: ", session);
   }, [session]);  
-
-  if (!isReady) return <SplashScreen /> // Check isReady instead of isLoading
 
   return (
     <AuthContext.Provider
       value={{
         signIn: () => {
           setUser(email);
-          setSession(email);
-          // debouncedSetSession(email);
+          // setSession(email);
+          debouncedSetSession(email);
         },
         
         signOut: () => {

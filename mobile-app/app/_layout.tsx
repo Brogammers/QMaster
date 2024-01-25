@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Slot } from 'expo-router';
 // import * as AuthContextHook from '@/ctx/AuthContext';
-import { SessionProvider } from '@/ctx/AuthContext';
+import useAuth, { SessionProvider } from '@/ctx/AuthContext';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
@@ -16,19 +16,41 @@ export default function RootLayout() {
     IstokBold: require('../assets/fonts/static/IstokWeb-Bold.ttf'),
   });
 
+  const { session } = useAuth(); // Use useAuth to get the session
+
   const [showLoading, setShowLoading] = useState(true);
+
+  // useEffect(() => {
+  //   if (error) throw error;
+
+  //   const timer = setTimeout(() => {
+  //     setShowLoading(false);
+  //   }, 5000);
+
+  //   return () => clearTimeout(timer);
+  // }, [error]);
+
+  // useEffect(() => {
+  //   if (session !== null && session !== undefined) {
+  //     setShowLoading(false);
+  //   }
+  // }, [session]);
 
   useEffect(() => {
     if (error) throw error;
-
-    const timer = setTimeout(() => {
+  
+    if (session !== null && session !== undefined) {
       setShowLoading(false);
-    }, 5000);
+    } else {
+      const timer = setTimeout(() => {
+        setShowLoading(false);
+      }, 5000);
+  
+      return () => clearTimeout(timer);
+    }
+  }, [error, session]);  
 
-    return () => clearTimeout(timer);
-  }, [error]);
-
-  if (!loaded) {
+  if (showLoading || !loaded ) {
     return <SplashScreen />;
   }
 
