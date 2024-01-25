@@ -11,7 +11,7 @@ export default function CurrentQueuesList() {
   const [activeSlide, setActiveSlide] = React.useState(0);
 
   const renderItem = ({ item, index }: { item: CurrentItem, index: number }) => (
-    <CurrentQueues Img={item.Img} Name={item.Name} People={item.People} Time={item.Time} key={index} isLeave isCurrent />
+    <CurrentQueues image={item.image} name={item.name} people={item.people} time={item.time} key={index} isLeave isCurrent />
   );
 
   return (

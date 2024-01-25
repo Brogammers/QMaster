@@ -13,7 +13,7 @@ import arabiata from '@/assets/images/arabiata.png' ;
 import elections from '@/assets/images/elections.jpg';
 import nationalBank from '@/assets/images/NationalBank.png';
 import alSalamHospital from '@/assets/images/alsalam.png';
-import { OnboardingItem } from '@/types';
+import { CategoryProps, OnboardingItem } from '@/types';
 
 export const OnboardingData: OnboardingItem[] = [
   {
@@ -38,75 +38,75 @@ export const OnboardingData: OnboardingItem[] = [
 export const EmailVerificationText = "Sit tight while we search our database to see if your email has a reservation with us!";
 
 //Categories
-export const Categories = [
+export const Categories: CategoryProps[] = [
   {
-    Image: Restaurant,
-    Text: 'Restaurant',
+    image: Restaurant,
+    title: 'Restaurant',
   },
   {
-    Image: Government,
-    Text: 'Government',
+    image: Government,
+    title: 'Government',
   },
   {
-    Image: Clinic,
-    Text: 'Clinic',
+    image: Clinic,
+    title: 'Clinic',
   },
   {
-    Image: Grocery,
-    Text: 'Grocery',
+    image: Grocery,
+    title: 'Grocery',
   },
   {
-    Image: Bank,
-    Text: 'Bank',
+    image: Bank,
+    title: 'Bank',
   },
   {
-    Image: Other,
-    Text: 'Other',
+    image: Other,
+    title: 'Other',
   },
 ]
 
 //Current Queues
 export const Current = [
   {
-    Img: Carrefour,
-    Name: 'Carrefour',
-    People: 5,
-    Time: 15,
+    image: Carrefour,
+    name: 'Carrefour',
+    people: 5,
+    time: 15,
   },
   {
-    Img: arabiata,
-    Name: 'Arabiata',
-    People: 20,
-    Time: 30,
+    image: arabiata,
+    name: 'Arabiata',
+    people: 20,
+    time: 30,
   },
   {
-    Img: elections,
-    Name: 'Elections',
-    People: 200,
-    Time: 120,
+    image: elections,
+    name: 'Elections',
+    people: 200,
+    time: 120,
   },
 ]
 
 //Recent Queues
 export const Recent = [
   {
-    Image: Carrefour,
-    Text: 'Carrefour',
+    image: Carrefour,
+    text: 'Carrefour',
   },
   {
-    Image: arabiata,
-    Text: 'Arabiata',
+    image: arabiata,
+    text: 'Arabiata',
   },
   {
-    Image: elections,
-    Text: 'Elections',
+    image: elections,
+    text: 'Elections',
   },
   {
-    Image: alSalamHospital,
-    Text: 'Al-Salam Hospital ',
+    image: alSalamHospital,
+    text: 'Al-Salam Hospital ',
   },
   {
-    Image: nationalBank,
-    Text: 'National Bank of Egypt',
+    image: nationalBank,
+    text: 'National Bank of Egypt',
   },
 ]

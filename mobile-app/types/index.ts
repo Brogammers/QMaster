@@ -15,10 +15,10 @@ export interface AuthState {
 }
 
 export interface CurrentItem {
-  Img: any;
-  Name: string;
-  People: Number;
-  Time: Number;
+  image: ImageSourcePropType;
+  name: string;
+  people: Number;
+  time: Number;
 }
 
 export interface SearchFilterProps {
@@ -32,19 +32,19 @@ export interface OnboardingItem {
 }
 
 export interface CategoryProps {
-  Img: any,
-  Title: string,
+  image: ImageSourcePropType;
+  title: string;
 }
 
 export interface CurrentQueuesProps {
-  Img: any,
-  Name: string,
-  People: Number,
-  Time: Number,
-  isJoin?: boolean,
-  isLeave?: boolean,
-  isCurrent?: boolean,
-  isPopular?: boolean,
+  image: ImageSourcePropType;
+  name: string;
+  people: Number;
+  time: Number;
+  isJoin?: boolean;
+  isLeave?: boolean;
+  isCurrent?: boolean;
+  isPopular?: boolean;
 }
 
 export interface PaginatorProps {
@@ -60,8 +60,8 @@ export interface ReturnButtonProps {
 }
 
 export interface SearchItemProps {
-  Img: any;
-  Title: string;
+  image: any;
+  title: string;
   isPopular?: boolean;
 }
 
