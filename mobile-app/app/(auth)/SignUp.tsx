@@ -1,5 +1,5 @@
 import { StyleSheet, ImageBackground, Alert, StatusBar } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import axios, { AxiosError } from 'axios';
 import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
-import useAuth from '@/ctx/AuthContext';
+import { useAuth } from '@/ctx/AuthContext';
 import { API_BASE_URL } from '@env';
 
 import { useDispatch } from 'react-redux';
