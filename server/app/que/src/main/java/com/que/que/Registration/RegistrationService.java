@@ -23,38 +23,34 @@ public class RegistrationService {
   public String register(RegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
     if (!isValidEmail) {
-      throw new IllegalStateException("Not Functional");
+      throw new IllegalStateException("Email invalid");
     }
     if (!request.getPassword().equals(request.getConfirmPassword())) {
       throw new IllegalStateException("Password do not match");
     }
     String token = appUserService.signUpUser(
-      new AppUser(
-        AppUserRole.USER,
-        request.getFirstName(),
-        request.getLastName(),
-        request.getUsername(),
-        LocalDateTime.now(),
-        request.getDateOfBirth(),
-        request.getCountryOfOrigin(),
-        request.getPassword(),
-        request.getEmail(),
-        false,
-        false,
-        (byte) 0
-      )
-    );
-
+        new AppUser(
+            AppUserRole.USER,
+            request.getFirstName(),
+            request.getLastName(),
+            request.getUsername(),
+            LocalDateTime.now(),
+            request.getDateOfBirth(),
+            request.getCountryOfOrigin(),
+            request.getPassword(),
+            request.getEmail(),
+            false,
+            false,
+            (byte) 0));
 
     emailSender.send(request.getEmail(), "Hello!"); // TODO: Send email
     return token;
   }
 
   @Transactional
-  public String confirmToken(String token) {
+  public void confirmToken(String token) {
     ConfirmationToken confirmationToken = confirmationTokenService.getToken(
-      token
-    );
+        token);
 
     if (confirmationToken.getConfirmedAt() != null) {
       throw new IllegalStateException("Email already confirmed");
@@ -68,6 +64,5 @@ public class RegistrationService {
 
     confirmationTokenService.setConfirmedAt(token);
     appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
-    return "Confirmed!";
   }
 }
