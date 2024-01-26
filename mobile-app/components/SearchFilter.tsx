@@ -2,13 +2,13 @@ import React from "react";
 import SearchItem from "../shared/components/SearchItem";
 import { View, FlatList, Text } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
-import { SearchFilterProps } from "@/types";
+import { CurrentQueuesProps, SearchFilterProps } from "@/types";
 
 export default function SearchFilter(props: SearchFilterProps) {
     const { data, input } = props;
 
     // Filter the data based on the input
-    const filteredData = data.filter((item: { Text: string; }) => item.Text.toLowerCase().includes(input.toLowerCase()));
+    const filteredData = data.filter((item: CurrentQueuesProps) => item.name.toLowerCase().includes(input.toLowerCase()));
 
     return (
         <View>
@@ -21,7 +21,7 @@ export default function SearchFilter(props: SearchFilterProps) {
                 <FlatList
                     data={filteredData}
                     renderItem={({ item }) => (
-                        <SearchItem Img={item.Image} Title={item.Text} />
+                        <SearchItem image={item.image} title={item.name} />
                     )}
                 />
             )}

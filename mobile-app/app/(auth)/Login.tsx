@@ -37,7 +37,7 @@ export default function Login() {
     console.log("Logging in...", values);
   
     try {
-      const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
+      const response = await axios.post('http://localhost:8080/api/v1/login', values);
   
       if (response.status === 200 || response.status === 201) {
         console.log('Login successful', values);

@@ -48,8 +48,10 @@ export default function SignUp() {
     console.log('Form values:', values);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}`, values);
-
+      console.log('test 1')
+      const response = await axios.post('http://localhost:8080/api/v1/registration', values);
+      console.log('test 2')
+      
       if (response.status === 200 || response.status === 201) {
         console.log('Signup successful', values);
         if (auth && auth.signIn) {
@@ -108,7 +110,7 @@ export default function SignUp() {
         >
           Welcome!
         </Text>
-        <Text className='text-base text-white mb-16' style={styles.subTitle}>
+        <Text className='mb-16 text-base text-white' style={styles.subTitle}>
           Let's help you save more time.
         </Text>
         <Formik
@@ -124,7 +126,6 @@ export default function SignUp() {
           }}
           validationSchema={SignupSchema}
           onSubmit={handleSignUp}
-
         >
           {({ 
             handleChange, 
