@@ -15,7 +15,7 @@ import TextButton from '@/shared/components/TextButton';
 import background from '@/assets/images/background.png';
 import EmailVerifImg from '@/assets/images/email-verification.png';
 import Loading from '@/app/SplashScreen';
-import { EmailVerificationText } from '@/data';
+import { EmailVerificationText } from '@/constants';
 
 export default function EmailVerification() {
   const [loading, setLoading] = useState(false);

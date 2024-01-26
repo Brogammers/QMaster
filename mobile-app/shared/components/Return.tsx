@@ -1,13 +1,7 @@
-import { StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import LeftArrow from "@/shared/icons/LeftArrow";
-
-interface ReturnButtonProps {
-  size: number;
-  color: string;
-  backgroundColor?: string;
-  style?: StyleProp<ViewStyle>;
-}
+import { ReturnButtonProps } from "@/types";
 
 export default function Return({ 
   size, 

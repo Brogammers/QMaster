@@ -6,7 +6,7 @@ import RecentItemsSearch from '@/components/RecentItemsSearch';
 import PopularQueues from '@/components/PopularQueues';
 import { ScrollView } from 'react-native-gesture-handler';
 import SearchFilter from '@/components/SearchFilter';
-import { Recent } from '@/data';
+import { Current } from '@/constants';
 
 export default function Search() {
   const [input, setInput] = useState("");
@@ -31,7 +31,7 @@ export default function Search() {
             <PopularQueues />
           </ScrollView>
         ) : (
-          <SearchFilter data={Recent} input={input} />
+          <SearchFilter data={Current} input={input} />
         )}
       </View>
     </View>

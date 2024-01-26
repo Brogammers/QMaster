@@ -1,29 +1,23 @@
 import React from 'react';
 import { View, Text, useWindowDimensions } from 'react-native';
-import { Current } from '@/data';
+import  { Current }  from '@/constants'
 import CurrentQueues from '../shared/components/CurrentQueues';
 import Carousel from 'react-native-reanimated-carousel';
-
-interface CurrentItem {
-  Img: any;
-  Name: String;
-  People: Number;
-  Time: Number;
-}
+import { CurrentQueuesProps } from '@/types';
 
 export default function CurrentQueuesList() {
   const windowWidth = useWindowDimensions().width;
   const carouselWidth = windowWidth * 0.85; // 85% of the screen width
 
-  const renderItem = ({ item, index }: { item: CurrentItem, index: number }) => (
-    <CurrentQueues Img={item.Img} Name={item.Name} People={item.People} Time={item.Time} key={index} isLeave isCurrent />
+  const renderItem = ({ item, index }: { item: CurrentQueuesProps , index: number }) => (
+    <CurrentQueues image={item.image} name={item.name} people={item.people} time={item.time} key={index} isLeave isCurrent />
   );
 
   return (
     <View>
       <Text style={{ marginVertical: 10, fontSize: 24, fontWeight: 'bold' }}>Current Queues</Text>
       <Carousel
-        loop
+        loop = {false}
         width={carouselWidth}
         height={166}
         data={Current}
