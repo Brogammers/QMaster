@@ -9,7 +9,7 @@ import {
   Alert,
   StatusBar,
 } from 'react-native';
-import { Link, useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextButton from '@/shared/components/TextButton';
@@ -18,7 +18,7 @@ import background from '@/assets/images/background.png';
 import LoginImg from '@/assets/images/login.png';
 import axios, { AxiosError } from 'axios';
 import { useAuth } from '@/ctx/AuthContext';
-import { API_BASE_URL_LOGIN } from '@env';
+import { API_BASE_URL_LOGIN, API_BASE_URL_LOGIN_ANDROID } from '@env';
 
 import { useDispatch } from 'react-redux';
 import { setEmail } from '../redux/authSlice'; // replace with the actual path
@@ -37,7 +37,10 @@ export default function Login() {
     console.log("Logging in...", values);
   
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/login', values);
+      // IOS Simulator
+      const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
+      // Android Emulator
+      // const response = await axios.post(`${API_BASE_URL_LOGIN_ANDROID}`, values);
   
       if (response.status === 200 || response.status === 201) {
         console.log('Login successful', values);
