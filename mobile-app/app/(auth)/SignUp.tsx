@@ -49,7 +49,7 @@ export default function SignUp() {
 
     try {
       console.log('test 1')
-      const response = await axios.post(`${API_BASE_URL}`, values);
+      const response = await axios.post('http://10.0.2.2:8080/api/v1/registration', values);
       console.log('test 2')
       
       if (response.status === 200 || response.status === 201) {

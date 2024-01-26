@@ -17,7 +17,7 @@ import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import LoginImg from '@/assets/images/login.png';
 import axios, { AxiosError } from 'axios';
-import {useAuth} from '@/ctx/AuthContext';
+import { useAuth } from '@/ctx/AuthContext';
 import { API_BASE_URL_LOGIN } from '@env';
 
 import { useDispatch } from 'react-redux';
@@ -37,7 +37,7 @@ export default function Login() {
     console.log("Logging in...", values);
   
     try {
-      const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
+      const response = await axios.post('http://10.0.2.2:8080/api/v1/login', values);
   
       if (response.status === 200 || response.status === 201) {
         console.log('Login successful', values);

@@ -9,7 +9,7 @@
     "web": "expo start --web",
     "test": "jest --watchAll"
   },
-  "proxy": "http://192.168.56.1:8080",
+  "proxy": "http://localhost:8080",
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
