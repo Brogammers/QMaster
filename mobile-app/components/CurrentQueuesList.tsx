@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, useWindowDimensions } from 'react-native';
 import  { Current }  from '@/constants'
 import CurrentQueues from '../shared/components/CurrentQueues';
-import Carousel from 'react-native-reanimated-carousel';
+import { Carousel } from 'react-native-reanimated-carousel';
 import { CurrentQueuesProps } from '@/types';
 
 export default function CurrentQueuesList() {

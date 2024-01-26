@@ -13,7 +13,7 @@ import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import { useAuth } from '@/ctx/AuthContext';
-import { API_BASE_URL } from '@env';
+import { API_BASE_URL, API_BASE_URL_ANDROID } from '@env';
 
 import { useDispatch } from 'react-redux';
 import { setEmail } from '../redux/authSlice'; // replace with the actual path
@@ -48,9 +48,10 @@ export default function SignUp() {
     console.log('Form values:', values);
 
     try {
-      console.log('test 1')
-      const response = await axios.post('http://localhost:8080/api/v1/registration', values);
-      console.log('test 2')
+      // IOS Simulator
+      const response = await axios.post(`${API_BASE_URL}`, values);
+      // Android Emulator
+      // const response = await axios.post(`${API_BASE_URL_ANDROID}`, values);
       
       if (response.status === 200 || response.status === 201) {
         console.log('Signup successful', values);

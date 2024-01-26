@@ -1,4 +1,4 @@
-declare module 'react-native-snap-carousel' {
+declare module 'react-native-reanimated-carousel' {
   export const Carousel: any;
   export const Pagination: any; 
 }
