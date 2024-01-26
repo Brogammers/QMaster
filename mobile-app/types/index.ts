@@ -78,3 +78,7 @@ export interface LeftArrowProps {
   size: number;
   color: string;
 }
+
+// export interface QueueCarouselProps {
+//   loop: boolean;
+// }
