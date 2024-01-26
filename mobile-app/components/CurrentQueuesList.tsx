@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, useWindowDimensions } from 'react-native';
 import CurrentQueues from '@/shared/components/CurrentQueues';
-import { Carousel } from 'react-native-reanimated-carousel';
+import Carousel  from 'react-native-reanimated-carousel';
 import  { Current }  from '@/constants'
 import { CurrentQueuesProps } from '@/types';
 
@@ -17,9 +17,9 @@ export default function CurrentQueuesList() {
     <View>
       <Text style={{ marginVertical: 10, fontSize: 24, fontWeight: 'bold' }}>Current Queues</Text>
 
-      //Here is proof that the merge works 
+      {/* Here is proof that the merge works  */}
       <Carousel
-        loop = {false}
+        loop={false}
         width={carouselWidth}
         height={166}
         data={Current}
