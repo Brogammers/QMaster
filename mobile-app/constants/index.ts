@@ -1,13 +1,13 @@
-import Onboarding1 from '@/assets/images/onboarding1.svg';
-import Onboarding2 from '@/assets/images/onboarding2.svg';
-import Onboarding3 from '@/assets/images/onboarding3.svg';
-import Onboarding4 from '@/assets/images/onboarding4.svg';
-import Restaurant from '@/assets/images/Restaurant.svg';
-import Government from '@/assets/images/government.svg';
-import Clinic from '@/assets/images/clinic.svg';
-import Grocery from '@/assets/images/grocery.svg';
-import Bank from '@/assets/images/bank.svg';
-import Other from '@/assets/images/other.svg';
+import { ReactComponent as FirstOnboarding } from '@/assets/images/onboarding1.svg';
+import SecondOnboarding from '@/assets/images/onboarding2.svg';
+import ThirdOnboarding from '@/assets/images/onboarding3.svg';
+import FourthOnboarding from '@/assets/images/onboarding4.svg';
+import Restaurant from '@/assets/images/Restaurant.png';
+import Government from '@/assets/images/Government.png';
+import Clinic from '@/assets/images/Medical.png';
+import Grocery from '@/assets/images/Grocery.png';
+import Bank from '@/assets/images/Bank.png';
+import Other from '@/assets/images/Other.png';
 import carrefour from '@/assets/images/Carrefour.png';
 import arabiata from '@/assets/images/arabiata.png' ;
 import elections from '@/assets/images/elections.jpg';
@@ -22,19 +22,19 @@ import {
 
 export const OnboardingData: OnboardingItem[] = [
   {
-    image: Onboarding1,
+    image: <FirstOnboarding />,
     text: 'Say goodbye to waiting in queues to finish a single errand.',
   },
   {
-    image: Onboarding2,
+    image: SecondOnboarding,
     text: 'With Queue, you can finish your errands without wasting a second.',
   },
   {
-    image: Onboarding3,
+    image: ThirdOnboarding,
     text: 'Save your money using our exclusive deals and special coupons.',
   },
   {
-    image: Onboarding4,
+    image: FourthOnboarding,
     text: 'Spend your time on the important things in life.',
   }
 ];

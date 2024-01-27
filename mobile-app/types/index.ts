@@ -2,7 +2,7 @@ import { Animated, ImageSourcePropType, StyleProp, ViewStyle } from "react-nativ
 import { SvgProps } from "react-native-svg";
 
 export interface OnboardingItem {
-  image: React.FC<SvgProps>;
+  image: React.FC<SvgProps> | JSX.Element;
   text: string;
 }
 
@@ -25,11 +25,6 @@ export interface CurrentItem {
 export interface SearchFilterProps {
   data: any,
   input: string,
-}
-
-export interface OnboardingItem {
-  image: React.FC<SvgProps>;
-  text: string;
 }
 
 export interface CategoryProps {

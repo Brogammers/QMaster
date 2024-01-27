@@ -14,7 +14,7 @@ export default function Category(props: CategoryProps) {
     <TouchableOpacity className="flex items-center justify-center h-24 bg-white rounded-2xl mb-2.5 " style={{ width: wide }}>
       <View>
         <View className="absolute self-center">
-          <Image source={Ellipse} />
+          <Ellipse />
         </View>
         <Image 
           source={image} 
