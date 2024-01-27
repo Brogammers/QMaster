@@ -1,10 +1,8 @@
 package com.que.que.Queue;
 
-import com.fasterxml.jackson.core.sym.Name;
 import com.que.que.QRcode.QRCodeService;
 import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRepository;
-import com.que.que.Queue.Queues;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -58,6 +56,7 @@ public class QueueService {
         queueHolderQueue = queue.get(currentSlot);
       }
       appUser.setQueueId(currentSlot);
+      queueLocation = currentSlot;
     } else {
       queueHolderQueue = queue.get(queueLocation);
     }
@@ -75,10 +74,10 @@ public class QueueService {
     }
     queueHolderQueue.add(new LinkedList<>());
     Queues createdQueue = queueRepository.save(new Queues(
-        appUser,
         name,
+        appUser,
         queueLocation,
-        queueHolderQueue.size() - 1));
+        queueHolderQueue.size()));
     queueCreationRepository.save(new QueueCreation(createdQueue));
     print();
   }
@@ -119,7 +118,7 @@ public class QueueService {
   }
 
   public void enqueueUser(@NonNull Long appUser, @NonNull String name) {
-    Queues currentQueue = queueRepository.findById(name)
+    Queues currentQueue = queueRepository.findByName(name)
         .orElseThrow(() -> new IllegalStateException("Could not find queue with such name"));
     int queueSlot = currentQueue.getAppUser().getQueueId();
     if (queueSlot == -1) {
@@ -143,7 +142,7 @@ public class QueueService {
   }
 
   public AppUser dequeueUser(@NonNull String name) {
-    Queues currentQueue = queueRepository.findById(name)
+    Queues currentQueue = queueRepository.findByName(name)
         .orElseThrow(() -> new IllegalStateException("Could not find queue"));
     int queueSlot = currentQueue.getQueueSlot();
     if (queueSlot == -1) {
@@ -167,7 +166,7 @@ public class QueueService {
   }
 
   public void deleteQueue(@NonNull String name) {
-    Queues currentQueue = queueRepository.findById(name)
+    Queues currentQueue = queueRepository.findByName(name)
         .orElseThrow(() -> new IllegalStateException("Could not find queue"));
     int queueSlot = currentQueue.getQueueSlot();
     if (queueSlot == -1) {

@@ -27,7 +27,6 @@ public class QueueController {
 
     @PostMapping
     public ResponseEntity<Object> createNewQueue(@RequestBody QueueRequest request) {
-
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
         try {
