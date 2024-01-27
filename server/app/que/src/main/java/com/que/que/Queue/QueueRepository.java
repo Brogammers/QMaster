@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface QueueRepository extends JpaRepository<Queues, Long> {
     Optional<Queues> findByName(String name);
+    ArrayList<Queues> findByNameContaining(String name);
 }
