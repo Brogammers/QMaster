@@ -28,11 +28,11 @@ public class QueueEnqueue {
     private Long id;
     @ManyToOne
     @JoinColumn(nullable = false, name = "app_user_id")
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private final AppUser appUser;
     @ManyToOne
     @JoinColumn(nullable = false, name = "queue_id")
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private final Queues queue;
     @Column(nullable = false)
     private final LocalDateTime actionDate;
