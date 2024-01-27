@@ -7,7 +7,7 @@ import {
 import Image from 'react-native-remote-svg';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { CurrentQueuesProps } from '@/types';
-import gradient from '@/assets/images/Gradient.png';
+import PhotoGradientFilter from '@/assets/images/Gradient.png';
 import InclineArrow from '@/assets/images/arrow-up.svg';
 
 export default function CurrentQueues(props: CurrentQueuesProps) {
@@ -16,7 +16,7 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
     <View>
       <View className='w-full'>
         <View className='flex flex-row bg-[#17222D] rounded-2xl h-40 w-full' >
-          <View className='w-2/5 h-full'>
+          <View className='w-2/6 h-full'>
             <View className='absolute z-20 items-center justify-center w-full h-full'>
               {isCurrent ? (
                 <FontAwesome5 name="hourglass-start" size={50} color="#D9D9D9" />
@@ -25,7 +25,7 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
               ) : null}
             </View>
             <Image 
-              source={gradient} 
+              source={PhotoGradientFilter} 
               className='absolute z-10 self-center w-full h-full rounded-l-[18px]' 
             />
             <Image 
@@ -33,7 +33,7 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
               className='w-full h-full rounded-l-[18px]' 
             />
           </View>
-          <View className='justify-around w-3/5 pl-2'>
+          <View className='justify-around w-4/6 px-4 py-2'>
             <Text className='text-xl font-black text-white'>
               {name}
             </Text>
