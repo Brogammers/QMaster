@@ -1,11 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { 
+  StyleSheet, 
+  Text,
+  TouchableOpacity,
+  View, 
+  Dimensions 
+} from 'react-native';
 import Image from 'react-native-remote-svg';
-import ElipseBackground from '../assets/images/ElipseBackground.svg';
-import QRCode from '../assets/images/QrCode.svg';
-import { Dimensions } from 'react-native';
-import Logo from "../assets/images/Logo.svg";
 import { Ionicons } from '@expo/vector-icons';
+import ElipseBackground from '@/assets/images/ElipseBackground.svg';
+import QRCode from '@/assets/images/QrCode.svg';
+import Logo from "@/assets/images/Logo.svg";
 
 const { height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
@@ -26,8 +31,7 @@ export default function ScanQr() {
         </TouchableOpacity>
       </View>
       <TouchableOpacity>
-        {/* <Image source={QrCode} /> */}
-        <QRCode width={100} height={100}  />
+        <Image source={QRCode} />
         <Text className='text-3xl text-white mt-2.5 font-semibold'>Scan QR</Text>
       </TouchableOpacity>
     </View>
