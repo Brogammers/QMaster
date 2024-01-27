@@ -8,7 +8,7 @@ import Clinic from '@/assets/images/clinic.svg';
 import Grocery from '@/assets/images/grocery.svg';
 import Bank from '@/assets/images/bank.svg';
 import Other from '@/assets/images/other.svg';
-import Carrefour from '@/assets/images/Carrefour.svg';
+import carrefour from '@/assets/images/Carrefour.png';
 import arabiata from '@/assets/images/arabiata.png' ;
 import elections from '@/assets/images/elections.jpg';
 import nationalBank from '@/assets/images/NationalBank.png';
@@ -73,7 +73,7 @@ export const Categories: CategoryProps[] = [
 //Current Queues
 export const Current: CurrentQueuesProps[] = [
   {
-    image: Carrefour,
+    image: carrefour,
     name: 'Carrefour',
     people: 5,
     time: 15,
