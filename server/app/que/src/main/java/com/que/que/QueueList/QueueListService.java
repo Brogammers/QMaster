@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class QueueListService {
+public interface QueueListService extends JpaRepository<Queues, Long> {
+    public ArrayList<Queues> findByNameContaining(String name);
 
 }
