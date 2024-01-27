@@ -33,8 +33,9 @@ export interface OnboardingItem {
 }
 
 export interface CategoryProps {
-  image: React.FC<SvgProps>;
+  image: React.FC<SvgProps> | ImageSourcePropType;
   title: string;
+  spacing?: number;
 }
 
 export interface CurrentQueuesProps {

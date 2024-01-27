@@ -12,7 +12,11 @@ export default function CategoriesList() {
             </Text>
             <View className='flex flex-row flex-wrap self-center justify-between'>
                 {Categories.map((category, index) => (
-                    <Category image={category.image} title={category.title} key={index} />
+                    <Category 
+                        key={index} 
+                        title={category.title} 
+                        image={category.image} 
+                    />
                 ))}
             </View>
         </View>
