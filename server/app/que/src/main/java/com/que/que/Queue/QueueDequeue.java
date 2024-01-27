@@ -26,11 +26,15 @@ public class QueueDequeue {
     @ManyToOne
     @JoinColumn(nullable = false, name = "app_user_id")
     private final AppUser appUser;
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "queue_id")
+    private final Queues queue;
     @Column(nullable = false)
     private final LocalDateTime actionDate;
 
-    public QueueDequeue(AppUser appUser) {
+    public QueueDequeue(AppUser appUser, Queues queue) {
         this.appUser = appUser;
+        this.queue = queue;
         this.actionDate = LocalDateTime.now();
     }
 }

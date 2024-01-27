@@ -2,8 +2,6 @@ package com.que.que.Queue;
 
 import java.time.LocalDateTime;
 
-import com.que.que.User.AppUser;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,13 +22,13 @@ public class QueueCreation {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "queue_creation_sequence")
     private Long id;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "app_user_id")
-    private final AppUser appUser;
+    @JoinColumn(nullable = false, name = "queue_id")
+    private final Queues queue;
     @Column(nullable = false)
     private final LocalDateTime actionDate;
 
-    public QueueCreation(AppUser appUser) {
-        this.appUser = appUser;
+    public QueueCreation(Queues queue) {
+        this.queue = queue;
         this.actionDate = LocalDateTime.now();
     }
 }
