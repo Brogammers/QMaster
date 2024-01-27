@@ -2,7 +2,8 @@ package com.que.que.Queue;
 
 import java.time.LocalDateTime;
 
-import com.que.que.User.AppUser;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,13 +25,14 @@ public class QueueDeletion {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "queue_deletion_sequence")
     private Long id;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "app_user_id")
-    private final AppUser appUser;
+    @JoinColumn(nullable = false, name = "queue_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private final Queues queue;
     @Column(nullable = false)
     private final LocalDateTime actionDate;
 
-    public QueueDeletion(AppUser appUser) {
-        this.appUser = appUser;
+    public QueueDeletion(Queues queue) {
+        this.queue = queue;
         this.actionDate = LocalDateTime.now();
     }
 }

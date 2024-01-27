@@ -9,5 +9,4 @@ import com.que.que.User.AppUser;
 
 @Repository
 public interface QueueDequeueRepository extends JpaRepository<QueueDequeue, Long> {
-    Optional<QueueDequeue> findByAppUser(AppUser appUser);
 }
