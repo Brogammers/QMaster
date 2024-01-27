@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Image from 'react-native-remote-svg';
 import ElipseBackground from '../assets/images/ElipseBackground.svg';
-import QrCode from '../assets/images/QrCode.svg';
+import QRCode from '../assets/images/QrCode.svg';
 import { Dimensions } from 'react-native';
 import Logo from "../assets/images/Logo.svg";
 import { Ionicons } from '@expo/vector-icons';
@@ -26,7 +26,8 @@ export default function ScanQr() {
         </TouchableOpacity>
       </View>
       <TouchableOpacity>
-        <Image source={QrCode} />
+        {/* <Image source={QrCode} /> */}
+        <QRCode width={100} height={100}  />
         <Text className='text-3xl text-white mt-2.5 font-semibold'>Scan QR</Text>
       </TouchableOpacity>
     </View>

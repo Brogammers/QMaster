@@ -24,7 +24,8 @@
       "!**/jest.setup.js"
     ],
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>\\app\\$1"
+      "^@/(.*)$": "<rootDir>\\app\\$1",
+      "\\.svg": "<rootDir>/__mocks__/svgMock.js"
     }
   },
   "dependencies": {
