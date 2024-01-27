@@ -1,4 +1,6 @@
 const { getDefaultConfig } = require('expo/metro-config');
+const defaultSourceExts = require("metro-config/src/defaults/defaults").sourceExts;
+const defaultAssetExts = require("metro-config/src/defaults/defaults").assetExts;
 
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname, {

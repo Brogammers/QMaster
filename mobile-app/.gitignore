@@ -49,3 +49,10 @@ coverage/
 
 # Ignore file
 .gitignore
+
+# Android
+android/
+
+# IOS
+ios/
+
