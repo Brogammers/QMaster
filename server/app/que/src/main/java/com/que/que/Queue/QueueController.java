@@ -9,6 +9,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,11 +26,12 @@ public class QueueController {
     private final QueueService queueService;
 
     @PostMapping
-    public ResponseEntity<Object> createNewQueue(@RequestParam("id") @NonNull Long id) {
+    public ResponseEntity<Object> createNewQueue(@RequestBody QueueRequest request) {
+
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
         try {
-            queueService.createNewQueue(id);
+            queueService.createNewQueue(request.getId(), request.getName());
             body.put("message", "Queue was successful");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
@@ -39,13 +41,11 @@ public class QueueController {
     }
 
     @PutMapping(path = "/user")
-    public ResponseEntity<Object> enqueue(@RequestParam("queueHolderId") @NonNull Long queueHolderId,
-            @RequestParam("appuser") @NonNull Long appUser,
-            @RequestParam("queue") int queue) {
+    public ResponseEntity<Object> enqueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
-            queueService.enqueueUser(queueHolderId, appUser, queue);
+            queueService.enqueueUser(request.getId(), request.getName());
             body.put("message", "Added user!");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
@@ -55,12 +55,12 @@ public class QueueController {
     }
 
     @PutMapping(path = "/holder")
-    public ResponseEntity<Object> dequeue(@RequestParam("id") @NonNull Long id, @RequestParam("queue") int queue) {
+    public ResponseEntity<Object> dequeue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         AppUser user = null;
         try {
-            user = queueService.dequeueUser(id, queue);
+            user = queueService.dequeueUser(request.getName());
             if (user != null) {
                 body.put("message", "User was dequeued!");
                 body.put("user", user);
@@ -76,11 +76,11 @@ public class QueueController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Object> deleteQueue(@RequestParam("id") @NonNull Long id, @RequestParam("queue") int queue) {
+    public ResponseEntity<Object> deleteQueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
-            queueService.deleteQueue(id, queue);
+            queueService.deleteQueue(request.getName());
             body.put("message", "Queue delete successful");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
