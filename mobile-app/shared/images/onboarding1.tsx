@@ -5,7 +5,7 @@ import Image  from "react-native-remote-svg";
 
 const Onboarding1 = () => {
     return (     
-        <Image
+      <Image
         source={onboarding1}
       />
     )
