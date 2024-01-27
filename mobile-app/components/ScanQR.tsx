@@ -1,11 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Image from 'react-native-remote-svg';
-import ElipseBackground from '../assets/images/ElipseBackground.svg';
-import QrCode from '../assets/images/QrCode.svg';
-import { Dimensions } from 'react-native';
-import Logo from "../assets/images/Logo.svg";
+import { 
+  StyleSheet, 
+  Text, 
+  TouchableOpacity, 
+  View, 
+  Dimensions 
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Logo from '@/assets/images/Logo.svg';
+import QRCode from '@/assets/images/QrCode.svg';
+import ElipseBackground from '@/assets/images/ElipseBackground.svg';
 
 const { height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
@@ -14,11 +18,11 @@ export default function ScanQr() {
   return (
     <View className='items-center justify-around pb-9' style={{ height: twoFifth }}>
       <View style={styles.imageContainer}>
-        <Image source={ElipseBackground} style={styles.image} />
+        <ElipseBackground style={styles.image} />
       </View>
       <View className='flex-row items-center justify-between w-full px-5 h-max'>
         <View className='flex-row '>
-          <Image source={Logo}/>
+          <Logo />
           <Text className='ml-1 text-xl font-medium text-white'>QMaster</Text>
         </View>
         <TouchableOpacity >
@@ -26,7 +30,7 @@ export default function ScanQr() {
         </TouchableOpacity>
       </View>
       <TouchableOpacity>
-        <Image source={QrCode} />
+        <QRCode />
         <Text className='text-3xl text-white mt-2.5 font-semibold'>Scan QR</Text>
       </TouchableOpacity>
     </View>
@@ -41,10 +45,15 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
   image: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     width: '100%',
     height: '100%',
-  },
+  }
 });
