@@ -35,17 +35,15 @@ public class QueueService {
   }
 
   public void createNewQueue(@NonNull Long queueHolderID, String name) {
-    AppUser appUser = appUserRepository.findById(queueHolderID).orElse(null);
-    if (appUser == null) {
-      throw new IllegalStateException("Could not find user");
-    }
+    AppUser appUser = appUserRepository.findById(queueHolderID)
+        .orElseThrow(() -> new IllegalStateException("Could not find User"));
     if (queueSlots.size() == 0) {
       throw new IllegalStateException("Can't add new queue");
     }
     if (!isValidForNewQueue(queueHolderID)) {
       throw new IllegalStateException("Can not create queue for user");
     }
-    if (queueRepository.findByName(name).isPresent()) {
+    if (queueRepository.findByName(name).orElse(null) != null) {
       throw new IllegalStateException("Queue name already used");
     }
     int queueLocation = getQueueSlot(queueHolderID);
@@ -91,16 +89,16 @@ public class QueueService {
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
     int queueId = appUserFromDB.getQueueId();
     byte subscriptionPlan = appUserFromDB.getSubscriptionPlan();
-    int max = Integer.MAX_VALUE;
+    int max = 30;
     switch (subscriptionPlan) {
       case 0:
         max = 1;
         break;
       case 1:
-        max = 20;
+        max = 10;
         break;
       case 2:
-        max = 100;
+        max = 20;
         break;
     }
     int currsize = queueId == -1 ? 0 : queue.get(queueId).size();
@@ -127,7 +125,7 @@ public class QueueService {
         .orElseThrow(() -> new IllegalStateException("Could not find queue with such name"));
     int queueSlot = currentQueue.getAppUser().getQueueId();
     if (queueSlot == -1) {
-      throw new IllegalStateException("User does such queue");
+      throw new IllegalStateException("User does not have such queue");
     }
     ArrayList<Queue<Long>> queueHolderQueues = queue.get(queueSlot);
     try {
@@ -188,6 +186,7 @@ public class QueueService {
 
     queueDeletionRepository.save(
         new QueueDeletion(currentQueue));
+    queueRepository.deleteById(currentQueue.getId());
     print();
   }
 

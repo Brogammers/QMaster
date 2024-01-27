@@ -1,5 +1,8 @@
 package com.que.que.Queue;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.que.que.User.AppUser;
 
 import jakarta.persistence.Column;
@@ -19,20 +22,22 @@ import lombok.Setter;
 @Setter
 @Getter
 @EqualsAndHashCode
+@NoArgsConstructor
 public class Queues {
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     private Long id;
     @Column(nullable = false, unique = true)
-    private final String name;
+    private String name;
     @ManyToOne
     @JoinColumn(nullable = false, name = "app_user_id")
-    private final AppUser appUser;
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private AppUser appUser;
     @Column(nullable = false)
-    private final int queueSlot;
+    private int queueSlot;
     @Column(nullable = false)
-    private final int specificSlot;
+    private int specificSlot;
 
     public Queues(String name, AppUser appUser, int queueSlot, int specificSlot) {
         this.name = name;
