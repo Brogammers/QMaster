@@ -11,14 +11,19 @@ import Logo from '@/assets/images/Logo.svg';
 import QRCode from '@/assets/images/QrCode.svg';
 import ElipseBackground from '@/assets/images/ElipseBackground.svg';
 
-const { height } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
 
-export default function ScanQr() {
+export default function ScanQR() {
   return (
-    <View className='items-center justify-around pb-9' style={{ height: twoFifth }}>
+    <View 
+      className='items-center justify-around pb-9' 
+      style={{ height: twoFifth }}
+    >
       <View style={styles.imageContainer}>
-        <ElipseBackground style={styles.image} />
+        <ElipseBackground
+          width={width}
+        />
       </View>
       <View className='flex-row items-center justify-between w-full px-5 h-max'>
         <View className='flex-row '>
@@ -44,16 +49,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  image: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    width: '100%',
-    height: '100%',
-  }
 });
