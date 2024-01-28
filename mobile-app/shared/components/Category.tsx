@@ -9,16 +9,22 @@ const { width } = Dimensions.get('window')
 const wide = width * 27 / 100
 
 export default function Category(props: CategoryProps) {
-  const { image, title } = props;
+  const { image, title, spacing } = props;
   return (
     <TouchableOpacity className="flex items-center justify-center h-24 bg-white rounded-2xl mb-2.5 " style={{ width: wide }}>
       <View>
         <View className="absolute self-center">
-          <Image source={Ellipse} />
+          <Ellipse />
         </View>
-        <Image source={image} className = ' w-[48] h-[48] rounded-lg'/>
+        <Image 
+          source={image} 
+          className='w-[48] h-[48] rounded-lg'
+          style={{ marginBottom: spacing }}
+        />
       </View>
-      <Text className="px-2">{title}</Text>
+      <Text className="px-2 text-center">
+        {title}
+      </Text>
     </TouchableOpacity>
   )
 }

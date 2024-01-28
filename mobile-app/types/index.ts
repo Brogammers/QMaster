@@ -1,7 +1,8 @@
 import { Animated, ImageSourcePropType, StyleProp, ViewStyle } from "react-native";
+import { SvgProps } from "react-native-svg";
 
 export interface OnboardingItem {
-  image: ImageSourcePropType;
+  image: React.FC<SvgProps> | JSX.Element | React.ReactNode;
   text: string;
 }
 
@@ -26,14 +27,10 @@ export interface SearchFilterProps {
   input: string,
 }
 
-export interface OnboardingItem {
-  image: ImageSourcePropType;
-  text: string;
-}
-
 export interface CategoryProps {
-  image: ImageSourcePropType;
+  image: React.FC<SvgProps> | ImageSourcePropType;
   title: string;
+  spacing?: number;
 }
 
 export interface CurrentQueuesProps {

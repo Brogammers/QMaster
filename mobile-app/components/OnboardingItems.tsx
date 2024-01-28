@@ -3,13 +3,11 @@ import {
   StyleSheet, 
   Text, 
   View, 
+  Image
 } from "react-native";
-import Image from 'react-native-remote-svg';
-
 
 
 export default function OnboardingItem({ item }: any) {
-
   return (
     <View className="flex items-center justify-center w-screen mt-7">
       <Image source={item.image} />

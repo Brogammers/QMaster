@@ -10,7 +10,15 @@ export default function CurrentQueuesList() {
   const carouselWidth = windowWidth * 0.85; // 85% of the screen width
 
   const renderItem = ({ item, index }: { item: CurrentQueuesProps , index: number }) => (
-    <CurrentQueues image={item.image} name={item.name} people={item.people} time={item.time} key={index} isLeave isCurrent />
+    <CurrentQueues 
+      image={item.image} 
+      name={item.name} 
+      people={item.people} 
+      time={item.time} 
+      key={index} 
+      isLeave 
+      isCurrent 
+    />
   );
 
   return (
