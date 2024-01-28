@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import SplashScreen from './SplashScreen';
 
-
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     InterBold: require('../assets/fonts/static/Inter-Bold.ttf'),
