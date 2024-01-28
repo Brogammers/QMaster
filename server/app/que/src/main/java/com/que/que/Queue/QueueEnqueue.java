@@ -2,6 +2,9 @@ package com.que.que.Queue;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.que.que.User.AppUser;
 
 import jakarta.persistence.Column;
@@ -25,12 +28,18 @@ public class QueueEnqueue {
     private Long id;
     @ManyToOne
     @JoinColumn(nullable = false, name = "app_user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private final AppUser appUser;
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "queue_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private final Queues queue;
     @Column(nullable = false)
     private final LocalDateTime actionDate;
 
-    public QueueEnqueue(AppUser appUser) {
+    public QueueEnqueue(AppUser appUser, Queues queue) {
         this.appUser = appUser;
+        this.queue = queue;
         this.actionDate = LocalDateTime.now();
     }
 }

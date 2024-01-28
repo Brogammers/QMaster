@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class QueueService {
 
   private final AppUserRepository appUserRepository;
+  private final QueueRepository queueRepository;
   private final QueueCreationRepository queueCreationRepository;
   private final QueueDequeueRepository queueDequeueRepository;
   private final QueueEnqueueRepository queueEnqueueRepository;
@@ -33,12 +34,17 @@ public class QueueService {
     print();
   }
 
-  public void createNewQueue(@NonNull Long queueHolderID) {
+  public void createNewQueue(@NonNull Long queueHolderID, String name) {
+    AppUser appUser = appUserRepository.findById(queueHolderID)
+        .orElseThrow(() -> new IllegalStateException("Could not find User"));
     if (queueSlots.size() == 0) {
       throw new IllegalStateException("Can't add new queue");
     }
     if (!isValidForNewQueue(queueHolderID)) {
       throw new IllegalStateException("Can not create queue for user");
+    }
+    if (queueRepository.findByName(name).orElse(null) != null) {
+      throw new IllegalStateException("Queue name already used");
     }
     int queueLocation = getQueueSlot(queueHolderID);
     ArrayList<Queue<Long>> queueHolderQueue;
@@ -50,52 +56,49 @@ public class QueueService {
         queue.add(new ArrayList<Queue<Long>>());
         queueHolderQueue = queue.get(currentSlot);
       }
-      AppUser appUser = appUserRepository.findById(queueHolderID).orElse(null);
       appUser.setQueueId(currentSlot);
+      queueLocation = currentSlot;
     } else {
       queueHolderQueue = queue.get(queueLocation);
     }
     try {
       // this currently has an error because the createQRCode method is not static
       qrCodeService.createQRCode(
-        queueHolderID,
-        queueHolderQueue.size(),
-        String.format(
-          "http://192.168.56.1:8080/api/v1/queue/user?queueHolderId=%d&queue=%d",
           queueHolderID,
-          queueHolderQueue.size()
-        )
-      );
+          queueHolderQueue.size(),
+          String.format(
+              "http://192.168.56.1:8080/api/v1/queue/user?queueHolderId=%d&queue=%d",
+              queueHolderID,
+              queueHolderQueue.size()));
     } catch (Exception e) {
       throw new IllegalStateException("Error while creating queue.");
     }
+    Queues createdQueue = queueRepository.save(new Queues(
+        name,
+        appUser,
+        queueLocation,
+        queueHolderQueue.size()));
+    queueCreationRepository.save(new QueueCreation(createdQueue));
     queueHolderQueue.add(new LinkedList<>());
-    queueCreationRepository.save(
-      new QueueCreation(
-        appUserRepository
-          .findById(queueHolderID)
-          .orElseThrow(() -> new IllegalStateException("Could not find user"))
-      )
-    );
     print();
   }
 
   public boolean isValidForNewQueue(@NonNull Long queueHolderID) {
     AppUser appUserFromDB = appUserRepository
-      .findById(queueHolderID)
-      .orElseThrow(() -> new IllegalStateException("Could not find user"));
+        .findById(queueHolderID)
+        .orElseThrow(() -> new IllegalStateException("Could not find user"));
     int queueId = appUserFromDB.getQueueId();
     byte subscriptionPlan = appUserFromDB.getSubscriptionPlan();
-    int max = Integer.MAX_VALUE;
+    int max = 30;
     switch (subscriptionPlan) {
       case 0:
         max = 1;
         break;
       case 1:
-        max = 20;
+        max = 10;
         break;
       case 2:
-        max = 100;
+        max = 20;
         break;
     }
     int currsize = queueId == -1 ? 0 : queue.get(queueId).size();
@@ -109,57 +112,53 @@ public class QueueService {
 
   public int getQueueSlot(@NonNull Long queueHolderID) {
     AppUser appUserFromDB = appUserRepository
-      .findById(queueHolderID)
-      .orElseThrow(() -> new IllegalStateException("Could not find user"));
+        .findById(queueHolderID)
+        .orElseThrow(() -> new IllegalStateException("Could not find user"));
     int queueId = appUserFromDB.getQueueId();
     return queueId;
   }
 
-  public void enqueueUser(
-    @NonNull Long queueHolderId,
-    @NonNull Long appUser,
-    int specificQueueId
-  ) {
-    int queueSlot = getQueueSlot(queueHolderId);
+  public void enqueueUser(@NonNull Long appUser, @NonNull String name) {
+    AppUser user = appUserRepository.findById(appUser)
+        .orElseThrow(() -> new IllegalStateException("Could not find user"));
+    Queues currentQueue = queueRepository.findByName(name)
+        .orElseThrow(() -> new IllegalStateException("Could not find queue with such name"));
+    int queueSlot = currentQueue.getAppUser().getQueueId();
     if (queueSlot == -1) {
-      throw new IllegalStateException("User does not have a queue setup");
+      throw new IllegalStateException("User does not have such queue");
     }
     ArrayList<Queue<Long>> queueHolderQueues = queue.get(queueSlot);
     try {
-      Queue<Long> specificQueue = queueHolderQueues.get(specificQueueId);
-      appUserRepository
-        .findById(appUser)
-        .orElseThrow(() -> new IllegalStateException("No user with such id"));
+      Queue<Long> specificQueue = queueHolderQueues.get(currentQueue.getSpecificSlot());
       specificQueue.add(appUser);
     } catch (Exception e) {
       throw new IllegalStateException("Could not add user to queue");
     }
     queueEnqueueRepository.save(
-      new QueueEnqueue(
-        appUserRepository
-          .findById(queueHolderId)
-          .orElseThrow(() -> new IllegalStateException("Could not find user"))
-      )
-    );
+        new QueueEnqueue(
+            user,
+            currentQueue));
     print();
   }
 
-  public AppUser dequeueUser(@NonNull Long queueHolderId, int specificQueueId) {
-    int queueSlot = getQueueSlot(queueHolderId);
+  public AppUser dequeueUser(@NonNull String name) {
+    Queues currentQueue = queueRepository.findByName(name)
+        .orElseThrow(() -> new IllegalStateException("Could not find queue"));
+    int queueSlot = currentQueue.getQueueSlot();
     if (queueSlot == -1) {
       throw new IllegalStateException("User does not have a queue setup");
     }
     ArrayList<Queue<Long>> queueHolderQueues = queue.get(queueSlot);
     try {
-      Queue<Long> specificQueue = queueHolderQueues.get(specificQueueId);
+      Queue<Long> specificQueue = queueHolderQueues.get(currentQueue.getSpecificSlot());
       if (specificQueue.isEmpty()) {
         return null;
       }
       print();
-      AppUser nextUser = appUserRepository
-        .findById(specificQueue.poll())
-        .orElseThrow(() -> new IllegalStateException("Could not find user"));
-      queueDequeueRepository.save(new QueueDequeue(nextUser));
+      AppUser nextUser = appUserRepository.findById(
+          specificQueue.poll()).orElseThrow(() -> new IllegalStateException("Could not find user"));
+      queueDequeueRepository
+          .save(new QueueDequeue(nextUser, currentQueue));
       return nextUser;
     } catch (Exception e) {
       print();
@@ -167,28 +166,27 @@ public class QueueService {
     }
   }
 
-  public void deleteQueue(@NonNull Long queueHolderId, int specificQueueId) {
-    int queueSlot = getQueueSlot(queueHolderId);
+  public void deleteQueue(@NonNull String name) {
+    Queues currentQueue = queueRepository.findByName(name)
+        .orElseThrow(() -> new IllegalStateException("Could not find queue"));
+    int queueSlot = currentQueue.getQueueSlot();
     if (queueSlot == -1) {
       throw new IllegalStateException("User does not have a queue setup");
     }
     ArrayList<Queue<Long>> queueHolderQueues = queue.get(queueSlot);
     try {
-      queueHolderQueues.remove(specificQueueId);
+      queueHolderQueues.remove(currentQueue.getSpecificSlot());
     } catch (Exception e) {
       throw new IllegalStateException("User does not have specific queue");
     }
     if (queueHolderQueues.size() == 0) {
-      AppUser appUser = appUserRepository.findById(queueHolderId).orElse(null);
+      AppUser appUser = currentQueue.getAppUser();
       appUser.setQueueId(-1);
     }
+
     queueDeletionRepository.save(
-      new QueueDeletion(
-        appUserRepository
-          .findById(queueHolderId)
-          .orElseThrow(() -> new IllegalStateException("Could not find user"))
-      )
-    );
+        new QueueDeletion(currentQueue));
+    queueRepository.deleteById(currentQueue.getId());
     print();
   }
 

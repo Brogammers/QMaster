@@ -1,7 +1,5 @@
 package com.que.que.Queue;
 
-import java.time.LocalDateTime;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,31 +13,37 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Setter
 @Getter
-public class QueueDequeue {
+@EqualsAndHashCode
+@NoArgsConstructor
+public class Queues {
     @Id
-    @SequenceGenerator(name = "queue_dequeue_sequence", sequenceName = "queue_dequeue_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "queue_dequeue_sequence")
+    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     private Long id;
+    @Column(nullable = false, unique = true)
+    private String name;
     @ManyToOne
     @JoinColumn(nullable = false, name = "app_user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private final AppUser appUser;
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "queue_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private final Queues queue;
+    private AppUser appUser;
     @Column(nullable = false)
-    private final LocalDateTime actionDate;
+    private int queueSlot;
+    @Column(nullable = false)
+    private int specificSlot;
 
-    public QueueDequeue(AppUser appUser, Queues queue) {
+    public Queues(String name, AppUser appUser, int queueSlot, int specificSlot) {
+        this.name = name;
         this.appUser = appUser;
-        this.queue = queue;
-        this.actionDate = LocalDateTime.now();
+        this.queueSlot = queueSlot;
+        this.specificSlot = specificSlot;
     }
+
 }

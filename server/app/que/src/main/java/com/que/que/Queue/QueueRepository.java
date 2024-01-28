@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.que.que.User.AppUser;
-
 @Repository
-public interface QueueCreationRepository extends JpaRepository<QueueCreation, Long> {
+public interface QueueRepository extends JpaRepository<Queues, Long> {
+    Optional<Queues> findByName(String name);
+    ArrayList<Queues> findByNameContaining(String name);
 }
