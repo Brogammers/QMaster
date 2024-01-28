@@ -1,6 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, Dimensions } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { TextButtonProps } from '@/types';
 
@@ -27,7 +26,7 @@ export default function TextButton(props: TextButtonProps) {
       <TouchableOpacity
         disabled={props.disabled}
         onPress={props.onPress}
-        className='flex items-center justify-center mt-5 rounded-lg flex-row'
+        className='flex flex-row items-center justify-center mt-5 rounded-lg'
         style={[styles.buttonWidth, { backgroundColor: props.buttonColor }]}
       >
         <FontAwesome name={props.icon} size={24} color="#17222D"/>

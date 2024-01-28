@@ -4,11 +4,11 @@ import {
   StyleSheet, 
   SafeAreaView, 
   Platform, 
-  View 
+  View,
+  ScrollView 
 } from 'react-native';
 import ScanQr from '@/components/ScanQR';
 import SearchBar from '@/components/SearchBar';
-import { ScrollView } from 'react-native-gesture-handler';
 import CategoriesList from '@/components/CategoriesList';
 import RecentQueues from '@/components/RecentQueues';
 import FrequentlyAsked from '@/components/FrequentlyAsked';

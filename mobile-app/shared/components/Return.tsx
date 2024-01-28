@@ -1,5 +1,4 @@
-import { StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import LeftArrow from "@/shared/icons/LeftArrow";
 import { ReturnButtonProps } from "@/types";
 
