@@ -1,7 +1,7 @@
-import { ReactComponent as FirstOnboarding } from '@/assets/images/onboarding1.svg';
-import SecondOnboarding from '@/assets/images/onboarding2.svg';
-import ThirdOnboarding from '@/assets/images/onboarding3.svg';
-import FourthOnboarding from '@/assets/images/onboarding4.svg';
+import FirstOnboarding from '@/assets/images/onboarding1.png'
+import SecondOnboarding from '@/assets/images/onboarding2.png';
+import ThirdOnboarding from '@/assets/images/onboarding3.png';
+import FourthOnboarding from '@/assets/images/onboarding4.png';
 import Restaurant from '@/assets/images/Restaurant.png';
 import Government from '@/assets/images/Government.png';
 import Clinic from '@/assets/images/Medical.png';
@@ -22,7 +22,7 @@ import {
 
 export const OnboardingData: OnboardingItem[] = [
   {
-    image: <FirstOnboarding />,
+    image: FirstOnboarding,
     text: 'Say goodbye to waiting in queues to finish a single errand.',
   },
   {
