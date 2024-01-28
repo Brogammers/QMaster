@@ -57,7 +57,7 @@ public class AppUserService implements UserDetailsService {
 
     confirmationTokenService.saveConfirmationToken(confirmationToken);
     emailService.send(appUser.getEmail(), "Hello!"); // TODO: Send email
-    return "Registered!";
+    return confirmationToken.toString();
   }
 
   public void enableAppUser(String email) {

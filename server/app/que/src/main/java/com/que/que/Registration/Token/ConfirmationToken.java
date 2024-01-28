@@ -15,6 +15,7 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -44,5 +45,9 @@ public class ConfirmationToken {
     this.expiresAt = expiredAt;
     this.confirmedAt = confirmedAt;
     this.appUser = appUser;
+  }
+
+  public String toString() {
+    return this.token;
   }
 }
