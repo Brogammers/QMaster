@@ -2,9 +2,10 @@ import React from 'react';
 import { 
   Text, 
   TouchableOpacity, 
-  View 
+  View,
+  Image
 } from 'react-native';
-import Image from 'react-native-remote-svg';
+// import Image from 'react-native-remote-svg';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { CurrentQueuesProps } from '@/types';
 import PhotoGradientFilter from '@/assets/images/Gradient.png';

@@ -1,10 +1,9 @@
 import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
-import Image from 'react-native-remote-svg';
 import { Link } from 'expo-router';
 import Carousel from '@/shared/components/Carousel';
 import TextButton from '@/shared/components/TextButton';
-import logoImage from '@/assets/images/logoImage.svg';
+import QLogo from '@/assets/images/logoImage.svg';
 import Return from '@/shared/components/Return';
 
 export default function Onboarding() {
@@ -20,7 +19,7 @@ export default function Onboarding() {
       />
       <View style={styles.row} className='bg-transparent'>
         <View className='my-4' />    
-        <Image source={logoImage} />
+        <QLogo />
         <Carousel />
         <View className='mt-10'>
           <Link href='/Login'>
