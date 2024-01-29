@@ -1,11 +1,11 @@
 import React from 'react';
-import { 
-  StatusBar, 
-  StyleSheet, 
-  SafeAreaView, 
-  Platform, 
+import {
+  StatusBar,
+  StyleSheet,
+  SafeAreaView,
+  Platform,
   View,
-  ScrollView 
+  ScrollView
 } from 'react-native';
 import ScanQr from '@/components/ScanQR';
 import SearchBar from '@/components/SearchBar';
@@ -25,20 +25,20 @@ export default function Index() {
         barStyle='light-content'
       />
       <ScrollView className='w-screen' showsVerticalScrollIndicator={false}>
-      <ScanQr />
-      <View className='w-[85%] self-center'>
-        <SearchBar />
-        <CurrentQueuesList />
-        <CategoriesList />
-        <RecentQueues />
-        <FrequentlyAsked />
-        {/* <TextButton
+        <ScanQr />
+        <View className='w-[85%] self-center'>
+          <SearchBar />
+          <CurrentQueuesList />
+          <CategoriesList />
+          <RecentQueues />
+          <FrequentlyAsked />
+          {/* <TextButton
           text={'Logout'} 
           buttonColor={'#1DCDFE'} 
           textColor={'white'} 
           onPress={auth?.signOut}
         /> */}
-      </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
-import { 
-  StyleSheet, 
-  ImageBackground, 
+import {
+  StyleSheet,
+  ImageBackground,
   Image,
   View,
   Text,
@@ -35,15 +35,15 @@ export default function Login() {
 
   const handleLogin = async (values: any) => {
     console.log("Logging in...", values);
-  
+
     try {
       // IOS Simulator
       // const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
       // Android Emulator
       const response = await axios.post('http://10.0.2.2:8080/api/v1/login', values);
       console.log('test');
-      
-  
+
+
       if (response.status === 200 || response.status === 201) {
         console.log('Login successful', values);
         if (auth && auth.signIn) {
@@ -55,7 +55,7 @@ export default function Login() {
             resolve();
           });
 
-          auth.signIn(); 
+          auth.signIn();
         }
       } else {
         console.error('Login failed', response.data);
@@ -64,10 +64,10 @@ export default function Login() {
     } catch (error) {
       console.error('Login error:', error);
       Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
-  
+
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
-  
+
         if (axiosError.response) {
           console.error('Axios error status:', axiosError.response.status);
           console.error('Axios error data:', axiosError.response.data);
@@ -90,8 +90,8 @@ export default function Login() {
       </Link>
       <StatusBar
         translucent
-        backgroundColor='rgba(000, 000, 000, 0.5)'  
-        barStyle='light-content'  
+        backgroundColor='rgba(000, 000, 000, 0.5)'
+        barStyle='light-content'
       />
       <View style={styles.row}>
         <Text
@@ -109,14 +109,14 @@ export default function Login() {
           validationSchema={LoginSchema}
           onSubmit={handleLogin}
         >
-          {({ 
-            handleChange, 
-            handleBlur, 
-            handleSubmit, 
-            values, 
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
             touched,
-            errors, 
-            isValid 
+            errors,
+            isValid
           }) => (
             <View className='flex items-center justify-center w-full gap-4'>
               <TextInput
@@ -149,18 +149,18 @@ export default function Login() {
                 Forgot password?
               </Text>
               <View className='mt-8'>
-                <TextButton 
-                  text={'Log In'} 
-                  buttonColor={!isValid ? '#C5C5C5' : '#1DCDFE'} 
-                  textColor={'white'} 
+                <TextButton
+                  text={'Log In'}
+                  buttonColor={!isValid ? '#C5C5C5' : '#1DCDFE'}
+                  textColor={'white'}
                   disabled={!isValid}
                   onPress={handleSubmit}
                 />
-                <TextButton 
-                  text={'Continue with Google'} 
-                  icon={'google'} 
-                  buttonColor={'white'} 
-                  textColor={'#17222D'} 
+                <TextButton
+                  text={'Continue with Google'}
+                  icon={'google'}
+                  buttonColor={'white'}
+                  textColor={'#17222D'}
                 />
               </View>
             </View>
@@ -190,19 +190,19 @@ const styles = StyleSheet.create({
   },
   returnButton: {
     position: 'absolute',
-    top: 60, 
-    left:18, 
+    top: 60,
+    left: 18,
   },
   title: {
     fontFamily: 'InterBold',
-    fontSize: 28, 
-    color: '#FFF', 
-    marginBottom: 16, 
+    fontSize: 28,
+    color: '#FFF',
+    marginBottom: 16,
   },
   baseText: {
-    fontSize: 16, 
-    color: '#FFF', 
-    marginBottom: 40, 
+    fontSize: 16,
+    color: '#FFF',
+    marginBottom: 40,
   },
   input: {
     backgroundColor: '#DFDFDF',
@@ -222,8 +222,8 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     backgroundColor: '#1DCDFE',
-    marginTop: 10, 
-    paddingVertical: 16, 
+    marginTop: 10,
+    paddingVertical: 16,
     paddingHorizontal: 12,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -237,8 +237,8 @@ const styles = StyleSheet.create({
   googleButton: {
     backgroundColor: '#FFF',
     color: '#17222D',
-    marginTop: 10, 
-    paddingVertical: 16, 
+    marginTop: 10,
+    paddingVertical: 16,
     paddingHorizontal: 12,
     flexDirection: 'row',
     justifyContent: 'center',

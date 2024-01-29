@@ -10,11 +10,11 @@ export default function RecentQueues() {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} className=''>
         {Current.map((recent, index) => (
           <View className='mr-2.5' key={index}>
-            <Category 
+            <Category
               title={recent.name}
               image={recent.image}
               spacing={8}
-            /> 
+            />
           </View>
         ))}
       </ScrollView>

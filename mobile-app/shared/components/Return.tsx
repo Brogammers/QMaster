@@ -3,11 +3,11 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import LeftArrow from "@/shared/icons/LeftArrow";
 import { ReturnButtonProps } from "@/types";
 
-export default function Return({ 
-  size, 
-  color, 
+export default function Return({
+  size,
+  color,
   backgroundColor = 'transparent',
-  style, 
+  style,
 }: ReturnButtonProps) {
   return (
     <TouchableOpacity style={[styles.button, { backgroundColor, borderRadius: size / 2 }, style]}>

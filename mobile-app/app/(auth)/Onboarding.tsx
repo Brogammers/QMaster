@@ -14,11 +14,11 @@ export default function Onboarding() {
       </Link>
       <StatusBar
         translucent
-        backgroundColor='rgba(000, 000, 000, 0.5)'  
-        barStyle='light-content'  
+        backgroundColor='rgba(000, 000, 000, 0.5)'
+        barStyle='light-content'
       />
       <View style={styles.row} className='bg-transparent'>
-        <View className='my-4' />    
+        <View className='my-4' />
         <QLogo />
         <Carousel />
         <View className='mt-10'>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   returnButton: {
     position: 'absolute',
     zIndex: 10,
-    top: 60, 
-    left:18, 
+    top: 60,
+    left: 18,
   },
 });

@@ -1,9 +1,9 @@
 import React from 'react';
-import { 
-  StyleSheet, 
-  Text, 
-  View, 
-  Dimensions 
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,8 +16,8 @@ const twoFifth = height * 38 / 100
 
 export default function ScanQR() {
   return (
-    <View 
-      className='items-center justify-around pb-9' 
+    <View
+      className='items-center justify-around pb-9'
       style={{ height: twoFifth }}
     >
       <View style={styles.imageContainer}>

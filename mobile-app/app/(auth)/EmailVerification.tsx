@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  StyleSheet, 
-  ImageBackground, 
+import {
+  StyleSheet,
+  ImageBackground,
   Image,
   View,
   Text,
@@ -66,17 +66,17 @@ export default function EmailVerification() {
 
   return (
     <ImageBackground source={background} style={styles.container}>
-      { loading && (
-        <LoadingOverlay 
+      {loading && (
+        <LoadingOverlay
           backgroundColor="rgba(23, 34, 45, 0.925)"
         />
       )}
       <View style={styles.row}>
-      <StatusBar
-        translucent
-        backgroundColor='rgba(000, 000, 000, 0.5)'  
-        barStyle='light-content'  
-      />
+        <StatusBar
+          translucent
+          backgroundColor='rgba(000, 000, 000, 0.5)'
+          barStyle='light-content'
+        />
         <Text
           style={styles.title}
           className='mb-10 text-2xl text-white mt-14'
@@ -158,22 +158,22 @@ const styles = StyleSheet.create({
   },
   returnButton: {
     position: 'absolute',
-    top: 60, 
-    left:18, 
+    top: 60,
+    left: 18,
   },
   title: {
     fontFamily: 'InterBold',
-    fontSize: 28, 
-    color: '#FFF', 
-    marginBottom: 16, 
+    fontSize: 28,
+    color: '#FFF',
+    marginBottom: 16,
   },
   description: {
     fontFamily: 'JostReg',
   },
   baseText: {
-    fontSize: 16, 
-    color: '#FFF', 
-    marginBottom: 40, 
+    fontSize: 16,
+    color: '#FFF',
+    marginBottom: 40,
   },
   input: {
     backgroundColor: '#DFDFDF',
@@ -193,8 +193,8 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     backgroundColor: '#1DCDFE',
-    marginTop: 10, 
-    paddingVertical: 16, 
+    marginTop: 10,
+    paddingVertical: 16,
     paddingHorizontal: 12,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -208,8 +208,8 @@ const styles = StyleSheet.create({
   googleButton: {
     backgroundColor: '#FFF',
     color: '#17222D',
-    marginTop: 10, 
-    paddingVertical: 16, 
+    marginTop: 10,
+    paddingVertical: 16,
     paddingHorizontal: 12,
     flexDirection: 'row',
     justifyContent: 'center',
