@@ -25,20 +25,14 @@ export default function Index() {
         barStyle='light-content'
       />
       <ScrollView className='w-screen' showsVerticalScrollIndicator={false}>
-        <ScanQr />
-        <View className='w-[85%] self-center'>
-          <SearchBar />
-          <CurrentQueuesList />
-          <CategoriesList />
-          <RecentQueues />
-          <FrequentlyAsked />
-          {/* <TextButton
-          text={'Logout'} 
-          buttonColor={'#1DCDFE'} 
-          textColor={'white'} 
-          onPress={auth?.signOut}
-        /> */}
-        </View>
+      <ScanQr />
+      <View className='w-[85%] self-center'>
+        <SearchBar />
+        <CurrentQueuesList />
+        <CategoriesList />
+        <RecentQueues />
+        <FrequentlyAsked />
+      </View>
       </ScrollView>
     </SafeAreaView>
   );
