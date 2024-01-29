@@ -1,7 +1,8 @@
 package com.que.que.QueueList;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,11 +18,12 @@ public class QueueListController {
     private final QueueListService queueListService;
     private final QueueRepository queueRepository;
 
-    public ArrayList<Queues> filterSortQueue(int page, int perPage, String filterName, String order) {
+    @GetMapping(path = "/list")
+    public List<Queues> filterSortQueue(int page, int perPage, String filterName, String order) {
         if (filterName != null) {
             return queueRepository.findByNameContaining(filterName);
         } else {
-            return null;
+            return queueRepository.findAll();
         }
     }
 
