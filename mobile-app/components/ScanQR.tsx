@@ -2,10 +2,10 @@ import React from 'react';
 import { 
   StyleSheet, 
   Text, 
-  TouchableOpacity, 
   View, 
   Dimensions 
 } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import Logo from '@/assets/images/Logo.svg';
 import QRCode from '@/assets/images/QrCode.svg';

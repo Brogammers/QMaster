@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 
 export default function FrequentlyAsked(){

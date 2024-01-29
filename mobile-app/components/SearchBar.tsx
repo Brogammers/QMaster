@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View, Text } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useLinkTo } from '@react-navigation/native';

@@ -6,6 +6,7 @@ import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import SplashScreen from './SplashScreen';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -37,19 +38,19 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (error) throw error;
-  
+
     if (session !== null && session !== undefined) {
       setShowLoading(false);
     } else {
       const timer = setTimeout(() => {
         setShowLoading(false);
       }, 5000);
-  
+
       return () => clearTimeout(timer);
     }
-  }, [error, session]);  
+  }, [error, session]);
 
-  if (showLoading || !loaded ) {
+  if (showLoading || !loaded) {
     return <SplashScreen />;
   }
 
@@ -61,10 +62,12 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <Provider store={store}>
-      <SessionProvider>
-        <Slot />
-      </SessionProvider>
-    </Provider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <SessionProvider>
+          <Slot />
+        </SessionProvider>
+      </Provider>
+    </GestureHandlerRootView>
   );
 }

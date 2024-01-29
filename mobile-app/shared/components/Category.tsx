@@ -1,5 +1,6 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Image from 'react-native-remote-svg';
 import Ellipse from 'assets/images/Ellipse.svg';
 import { Dimensions } from 'react-native';
