@@ -10,8 +10,8 @@ export default function VerificationSent() {
       <View className="flex items-center h-[450]">
         <QLogo />
         <View>
-          <Text className="text-2xl font-medium text-white mb-3.5 mt-20">Verification Email Sent</Text>
-          <Text className="text-white">Check your email for a link to verify your email address</Text>
+          <Text className="text-2xl font-medium text-white mb-3.5 mt-20 text-center">Verification Email Sent</Text>
+          <Text className="text-center text-white">Check your email for a link to verify your email address</Text>
         </View>
         <Text className="absolute bottom-0 text-blue-300">Need help? Visit our <Text className="underline">help center.</Text></Text>
       </View>
