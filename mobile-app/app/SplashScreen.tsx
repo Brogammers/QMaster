@@ -11,7 +11,7 @@ export default function SplashScreen({ additionalText, backgroundColor = '#17222
     <View className='items-center justify-center h-screen bg-ocean-blue' style={[styles.container, { backgroundColor }]}>
 
       <LottieView
-        style={{ width: '50%', height: '100%' }}
+        style={styles.animatedLogo}
         source={Logo}
         autoPlay
         loop
@@ -40,6 +40,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  animatedLogo: {
+    width: '50%',
+    height: '50%',   
   },
   additionalText: {
     paddingHorizontal: 35,
