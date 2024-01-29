@@ -56,7 +56,8 @@ public class AppUserService implements UserDetailsService {
         appUser);
 
     confirmationTokenService.saveConfirmationToken(confirmationToken);
-    emailService.send(appUser.getEmail(), "Hello!"); // TODO: Send email
+    emailService.send(appUser.getEmail(),
+        "server/app/que/src/main/resources/templates/Hello.html", "Hello!", ""); // TODO: Send email
     return confirmationToken.toString();
   }
 

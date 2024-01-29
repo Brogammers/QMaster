@@ -43,7 +43,8 @@ public class RegistrationService {
             false,
             (byte) 0));
 
-    emailSender.send(request.getEmail(), "Hello!"); // TODO: Send email
+    emailSender.send(request.getEmail(), "server/app/que/src/main/resources/templates/email-activation.html",
+        "Confirm Email", token);
     return token;
   }
 
