@@ -1,10 +1,10 @@
 import React from 'react';
-import { 
-  Text, 
-  TouchableOpacity, 
+import {
+  Text,
   View,
   Image
 } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 // import Image from 'react-native-remote-svg';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { CurrentQueuesProps } from '@/types';
@@ -25,13 +25,13 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
                 <InclineArrow width={50} />
               ) : null}
             </View>
-            <Image 
-              source={PhotoGradientFilter} 
-              className='absolute z-10 self-center w-full h-full rounded-l-[18px]' 
+            <Image
+              source={PhotoGradientFilter}
+              className='absolute z-10 self-center w-full h-full rounded-l-[18px]'
             />
-            <Image 
-              source={image} 
-              className='w-full h-full rounded-l-[18px]' 
+            <Image
+              source={image}
+              className='w-full h-full rounded-l-[18px]'
             />
           </View>
           <View className='justify-around w-4/6 px-4 py-2'>
@@ -40,9 +40,9 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
             </Text>
             <View>
               <Text className='text-[#D9D9D9] text-sm font-medium'>
-                {String(people)} people remaining 
+                {String(people)} people remaining
               </Text>
-              <Text className='text-[#D9D9D9] text-xs'> 
+              <Text className='text-[#D9D9D9] text-xs'>
                 ~{String(time)} min
               </Text>
             </View>

@@ -1,14 +1,14 @@
 import React from 'react';
-import { 
-  StatusBar, 
-  StyleSheet, 
-  SafeAreaView, 
-  Platform, 
-  View 
+import {
+  StatusBar,
+  StyleSheet,
+  SafeAreaView,
+  Platform,
+  View,
+  ScrollView
 } from 'react-native';
 import ScanQr from '@/components/ScanQR';
 import SearchBar from '@/components/SearchBar';
-import { ScrollView } from 'react-native-gesture-handler';
 import CategoriesList from '@/components/CategoriesList';
 import RecentQueues from '@/components/RecentQueues';
 import FrequentlyAsked from '@/components/FrequentlyAsked';

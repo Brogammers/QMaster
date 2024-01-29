@@ -3,18 +3,20 @@ import { StyleSheet, Text, View } from 'react-native';
 import LottieView from 'lottie-react-native';
 import Logo from '@/assets/images/splash.json';
 import { SplashScreenProps } from '@/types';
+import Animated from 'react-native-reanimated';
 
 
 export default function SplashScreen({ additionalText, backgroundColor = '#17222D' }: SplashScreenProps) {
   return (
     <View className='items-center justify-center h-screen bg-ocean-blue' style={[styles.container, { backgroundColor }]}>
+
       <LottieView
-        style={{ width: '50%' }}
+        style={{ width: '50%', height: '100%' }}
         source={Logo}
         autoPlay
         loop
       />
-      { additionalText && (
+      {additionalText && (
         <Text style={styles.additionalText}>
           {additionalText}
         </Text>

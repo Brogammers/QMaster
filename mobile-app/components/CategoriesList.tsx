@@ -5,20 +5,20 @@ import Category from '@/shared/components/Category';
 import { Categories } from '@/constants';
 
 export default function CategoriesList() {
-    return (
-        <View>
-            <Text className='my-3 text-2xl font-bold'>
-                Categories
-            </Text>
-            <View className='flex flex-row flex-wrap self-center justify-between'>
-                {Categories.map((category, index) => (
-                    <Category 
-                        key={index} 
-                        title={category.title} 
-                        image={category.image} 
-                    />
-                ))}
-            </View>
-        </View>
-    )
+  return (
+    <View>
+      <Text className='my-3 text-2xl font-bold'>
+        Categories
+      </Text>
+      <View className='flex flex-row flex-wrap self-center justify-between'>
+        {Categories.map((category, index) => (
+          <Category
+            key={index}
+            title={category.title}
+            image={category.image}
+          />
+        ))}
+      </View>
+    </View>
+  )
 }

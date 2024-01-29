@@ -7,10 +7,7 @@ import History from './History';
 import Account from './Account';
 import Search from '@/app/Search';
 import { Entypo } from '@expo/vector-icons';
-import Return from '@/shared/components/Return';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from 'expo-router';
-import { Pressable } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 

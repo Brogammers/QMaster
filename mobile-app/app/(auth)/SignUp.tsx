@@ -49,10 +49,10 @@ export default function SignUp() {
 
     try {
       // IOS Simulator
-      const response = await axios.post(`${API_BASE_URL}`, values);
+      //const response = await axios.post(`${API_BASE_URL}`, values);
       // Android Emulator
-      // const response = await axios.post(`${API_BASE_URL_ANDROID}`, values);
-      
+      const response = await axios.post('http://10.0.2.2:8080/api/v1/registration', values);
+
       if (response.status === 200 || response.status === 201) {
         console.log('Signup successful', values);
         if (auth && auth.signIn) {
@@ -76,7 +76,7 @@ export default function SignUp() {
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
-  
+
         if (axiosError.response) {
           console.error('Axios error status:', axiosError.response.status);
           console.error('Axios error data:', axiosError.response.data);
@@ -90,7 +90,7 @@ export default function SignUp() {
         console.error('Non-Axios error:', error);
       }
       // Add this line to rethrow the error and see the full stack trace in the console
-      throw error; 
+      throw error;
     }
   }
 
@@ -101,8 +101,8 @@ export default function SignUp() {
       </Link>
       <StatusBar
         translucent
-        backgroundColor='rgba(000, 000, 000, 0.5)'  
-        barStyle='light-content'  
+        backgroundColor='rgba(000, 000, 000, 0.5)'
+        barStyle='light-content'
       />
       <View style={styles.row} className='relative'>
         <Text
@@ -128,14 +128,14 @@ export default function SignUp() {
           validationSchema={SignupSchema}
           onSubmit={handleSignUp}
         >
-          {({ 
-            handleChange, 
-            handleBlur, 
-            handleSubmit, 
-            values, 
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
             touched,
-            errors, 
-            isValid 
+            errors,
+            isValid
           }) => (
             <View className='flex items-center justify-center w-full gap-4'>
               <TextInput
@@ -187,17 +187,17 @@ export default function SignUp() {
               }
               <View className='my-4' />
               <View className='mt-16'>
-                <TextButton 
-                  text={'Sign Up'} 
-                  buttonColor={!isValid ? '#C5C5C5' : '#1DCDFE'} 
-                  textColor={'white'} 
-                  onPress={handleSubmit} 
-                  disabled={!isValid} 
+                <TextButton
+                  text={'Sign Up'}
+                  buttonColor={!isValid ? '#C5C5C5' : '#1DCDFE'}
+                  textColor={'white'}
+                  onPress={handleSubmit}
+                  disabled={!isValid}
                 />
-                <TextButton 
-                  text={'Continue with Google'} 
-                  icon={'google'} 
-                  buttonColor={'white'} 
+                <TextButton
+                  text={'Continue with Google'}
+                  icon={'google'}
+                  buttonColor={'white'}
                   textColor={'#17222D'} />
               </View>
             </View>

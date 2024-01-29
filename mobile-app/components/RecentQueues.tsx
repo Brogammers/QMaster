@@ -1,9 +1,7 @@
 import React from 'react';
-import { Text } from 'react-native';
-import { View } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import Category from '@/shared/components/Category';
 import { Current } from '@/constants';
-import { ScrollView } from 'react-native-gesture-handler';
 
 export default function RecentQueues() {
   return (
@@ -12,11 +10,11 @@ export default function RecentQueues() {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} className=''>
         {Current.map((recent, index) => (
           <View className='mr-2.5' key={index}>
-            <Category 
+            <Category
               title={recent.name}
               image={recent.image}
               spacing={8}
-            /> 
+            />
           </View>
         ))}
       </ScrollView>

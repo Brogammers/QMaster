@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View, Text } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useLinkTo } from '@react-navigation/native';
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
     borderColor: '#969696',
     borderRadius: 20,
     paddingLeft: 15,
-    justifyContent:'center',
+    justifyContent: 'center',
     marginTop: 28,
     marginBottom: 16,
   },

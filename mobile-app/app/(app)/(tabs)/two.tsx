@@ -1,11 +1,11 @@
 import { StyleSheet, useColorScheme } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import React, { FormEvent, useState } from 'react';
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
   GestureResponderEvent,
 } from 'react-native';
 import { Formik } from 'formik';
@@ -40,11 +40,11 @@ export default function TabTwoScreen() {
       <View style={styles.row}>
         <Text
           style={styles.title}
-          className='text-2xl text-white mb-4'
+          className='mb-4 text-2xl text-white'
         >
           Welcome!
         </Text>
-        <Text className='text-base text-white mb-10'>
+        <Text className='mb-10 text-base text-white'>
           Let's help you save more time.
         </Text>
 
@@ -55,7 +55,7 @@ export default function TabTwoScreen() {
             password: '',
             confirmPassword: '',
           }}
-          validationSchema={SignupSchema} 
+          validationSchema={SignupSchema}
           onSubmit={handleSignUp}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -82,7 +82,7 @@ export default function TabTwoScreen() {
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 secureTextEntry
-                value={values.password}   
+                value={values.password}
               />
               <TextInput
                 className='rounded-full bg-[#DFDFDF] text-[#515151] text-base w-full h12 mb-5 p-6 placeholder:text-[#515151]'
@@ -92,12 +92,12 @@ export default function TabTwoScreen() {
                 secureTextEntry
                 value={values.confirmPassword}
               />
-              <View className='w-full mt-8 flex gap-8 flex-col justify-center items-center'>
+              <View className='flex flex-col items-center justify-center w-full gap-8 mt-8'>
                 <TouchableOpacity
                   className='rounded-xl w-full bg-[#1DCDFE] mt-2.5 py-4 flex gap-4 flex-row justify-center items-center'
                   onPress={(e: GestureResponderEvent) => handleSubmit(e as unknown as FormEvent<HTMLFormElement>)}
                 >
-                  <Text className='text-base text-white text-center'>
+                  <Text className='text-base text-center text-white'>
                     Sign Up
                   </Text>
                 </TouchableOpacity>

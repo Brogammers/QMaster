@@ -5,26 +5,26 @@ import { AntDesign } from '@expo/vector-icons';
 import { CurrentQueuesProps, SearchFilterProps } from "@/types";
 
 export default function SearchFilter(props: SearchFilterProps) {
-    const { data, input } = props;
+  const { data, input } = props;
 
-    // Filter the data based on the input
-    const filteredData = data.filter((item: CurrentQueuesProps) => item.name.toLowerCase().includes(input.toLowerCase()));
+  // Filter the data based on the input
+  const filteredData = data.filter((item: CurrentQueuesProps) => item.name.toLowerCase().includes(input.toLowerCase()));
 
-    return (
-        <View>
-            {filteredData.length === 0 ? (
-                <View className="items-center w-full">
-                    <AntDesign name="search1" size={80} color="gray" />
-                    <Text className="mt-2 font-bold text-gray-500">We couldn't find any results</Text>
-                </View>
-            ) : (
-                <FlatList
-                    data={filteredData}
-                    renderItem={({ item }) => (
-                        <SearchItem image={item.image} title={item.name} />
-                    )}
-                />
-            )}
+  return (
+    <View>
+      {filteredData.length === 0 ? (
+        <View className="items-center w-full">
+          <AntDesign name="search1" size={80} color="gray" />
+          <Text className="mt-2 font-bold text-gray-500">We couldn't find any results</Text>
         </View>
-    );
+      ) : (
+        <FlatList
+          data={filteredData}
+          renderItem={({ item }) => (
+            <SearchItem image={item.image} title={item.name} />
+          )}
+        />
+      )}
+    </View>
+  );
 }

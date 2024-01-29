@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, TextInput, ScrollView } from 'react-native';
 import { View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import RecentItemsSearch from '@/components/RecentItemsSearch';
 import PopularQueues from '@/components/PopularQueues';
-import { ScrollView } from 'react-native-gesture-handler';
 import SearchFilter from '@/components/SearchFilter';
 import { Current } from '@/constants';
 
