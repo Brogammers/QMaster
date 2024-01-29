@@ -17,10 +17,11 @@ public class QueueListController {
     private final QueueListService queueListService;
     private final QueueRepository queueRepository;
 
-    public ArrayList<Queues> filterSortQueue(int page, int per-page, String filterName, String order) {
-
+    public ArrayList<Queues> filterSortQueue(int page, int perPage, String filterName, String order) {
         if (filterName != null) {
             return queueRepository.findByNameContaining(filterName);
+        } else {
+            return null;
         }
     }
 
