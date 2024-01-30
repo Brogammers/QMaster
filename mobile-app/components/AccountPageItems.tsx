@@ -1,0 +1,19 @@
+import { useAuth } from "@/ctx/AuthContext";
+import React from "react";
+import { View } from "react-native";
+import SearchItem from "@/shared/components/SearchItem";
+
+export default function AccountPageItems() {
+  const auth = useAuth();
+
+  return (
+    <View className="items-center justify-center w-screen">
+      <SearchItem title={'Language and Region'} icon={'globe'} isAccount onPress={() => console.log('Language and Region')} />
+      <SearchItem title={'Previous Queues'} icon={'history'} isAccount onPress={() => console.log('Previous Queues')} />
+      <SearchItem title={'Notifications'} icon={'bell'} isAccount onPress={() => console.log('Notifications')} />
+      <SearchItem title={'About'} icon={'info-circle'} isAccount onPress={() => console.log('About')} />
+      <SearchItem title={'Rate App'} icon={'star'} isAccount onPress={() => console.log('Rate App')} />
+      <SearchItem title={'Log Out'} icon={'sign-out'} isAccount onPress={auth?.signOut} />
+    </View>
+  )
+}

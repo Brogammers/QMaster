@@ -57,9 +57,12 @@ export interface ReturnButtonProps {
 }
 
 export interface SearchItemProps {
-  image: any;
+  image?: any;
   title: string;
   isPopular?: boolean;
+  isAccount?: boolean;
+  icon?: string;
+  onPress?: () => void;
 }
 
 export interface TextButtonProps {
@@ -76,6 +79,11 @@ export interface LeftArrowProps {
   color: string;
 }
 
+export interface AccountInfoProps {
+  image: ImageSourcePropType;
+  name: string;
+  number: string;
+}
 // export interface QueueCarouselProps {
 //   loop: boolean;
 // }
