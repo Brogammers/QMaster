@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { Text } from "react-native";
 import AccountPageItems from '@/components/AccountPageItems'
 import { SafeAreaView } from "react-native-safe-area-context";
 import AccountPageProfile from "@/components/AccountPageProfile";

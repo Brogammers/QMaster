@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Profile from '@/assets/images/Profile.png';
 import { Ionicons } from '@expo/vector-icons';
 import { AccountInfo } from "@/constants";
 
