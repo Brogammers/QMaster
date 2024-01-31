@@ -3,6 +3,7 @@ package com.que.que.QueueList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +27,19 @@ public class QueueListController {
             @RequestParam("filter") String filterBy, @RequestParam("order") String order) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+
+        // Filtering by name
         if (filterBy != null) {
             body.put("queues", queueRepository.findByNameContaining(filterBy));
         } else {
             body.put("queues", queueRepository.findAll());
         }
+
+        // Pagination
+        // We assume here that every request has a page number and per-page count
+        // We may want to add default values for these
+        body.put("queues", queueRepository.findAll(PageRequest.of(page, perPage)));
+
         return new ResponseEntity<Object>(body, statusCode);
     }
 
