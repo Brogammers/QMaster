@@ -11,6 +11,7 @@ import jakarta.mail.internet.MimeMessage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class EmailService implements EmailSender {
 
   @Override
   @Async
-  public void send(String to, String email, String subject, String[] text) {
+  public void send(String to, String email, String subject, Map<String, String> text) {
     try {
       MimeMessage mimeMessage = mailSender.createMimeMessage();
       MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
@@ -45,7 +46,8 @@ public class EmailService implements EmailSender {
         System.err.println("HTML File Read Error: " + e.getMessage());
       }
       htmlContent = contentBuilder.toString();
-      for (String t : text) {
+      for (String key : text.keySet()) {
+        htmlContent.replace("${" + key + "}", text.get(key));
       }
       mimeMessage.setContent(htmlContent, "text/html");
       mailSender.send(mimeMessage);
