@@ -25,14 +25,14 @@ export default function Index() {
         barStyle='light-content'
       />
       <ScrollView className='w-screen' showsVerticalScrollIndicator={false}>
-      <ScanQr />
-      <View className='w-[85%] self-center'>
-        <SearchBar />
-        <CurrentQueuesList />
-        <CategoriesList />
-        <RecentQueues />
-        <FrequentlyAsked />
-      </View>
+        <ScanQr />
+        <View className='w-[85%] self-center'>
+          <SearchBar />
+          <CurrentQueuesList />
+          <CategoriesList />
+          <RecentQueues />
+          <FrequentlyAsked />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

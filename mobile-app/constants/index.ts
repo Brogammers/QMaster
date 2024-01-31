@@ -13,8 +13,10 @@ import arabiata from '@/assets/images/arabiata.png' ;
 import elections from '@/assets/images/elections.jpg';
 import nationalBank from '@/assets/images/NationalBank.png';
 import alSalamHospital from '@/assets/images/alsalam.png';
+import profile from '@/assets/images/Profile.png'
 
 import { 
+  AccountInfoProps,
   CategoryProps, 
   CurrentQueuesProps, 
   OnboardingItem 
@@ -38,6 +40,7 @@ export const OnboardingData: OnboardingItem[] = [
     text: 'Spend your time on the important things in life.',
   }
 ];
+
 
 // Email Verification - SplashScreen 
 export const EmailVerificationText = "Sit tight while we search our database to see if your email has a reservation with us!";
@@ -102,6 +105,15 @@ export const Current: CurrentQueuesProps[] = [
     people: 250,
     time: 10,
   },
+]
+
+//Account Page Profile
+export const AccountInfo: AccountInfoProps[] = [
+  {
+    image: profile,
+    name: 'John Doe',
+    number: '+201206309531',
+  }
 ]
 
 //Recent Queues
