@@ -7,7 +7,7 @@ export default function AccountPageItems() {
   const auth = useAuth();
 
   return (
-    <View className="items-center justify-center w-screen">
+    <View className="items-center justify-center w-full">
       <SearchItem title={'Language and Region'} icon={'globe'} isAccount onPress={() => console.log('Language and Region')} />
       <SearchItem title={'Previous Queues'} icon={'history'} isAccount onPress={() => console.log('Previous Queues')} />
       <SearchItem title={'Notifications'} icon={'bell'} isAccount onPress={() => console.log('Notifications')} />
