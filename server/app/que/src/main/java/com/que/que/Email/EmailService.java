@@ -45,7 +45,8 @@ public class EmailService implements EmailSender {
         System.err.println("HTML File Read Error: " + e.getMessage());
       }
       htmlContent = contentBuilder.toString();
-
+      for (String t : text) {
+      }
       mimeMessage.setContent(htmlContent, "text/html");
       mailSender.send(mimeMessage);
     } catch (MessagingException e) {
