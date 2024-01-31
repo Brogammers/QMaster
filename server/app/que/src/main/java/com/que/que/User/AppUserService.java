@@ -3,6 +3,8 @@ package com.que.que.User;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -56,8 +58,10 @@ public class AppUserService implements UserDetailsService {
         appUser);
 
     confirmationTokenService.saveConfirmationToken(confirmationToken);
+    Map<String, String> context = new HashMap<>();
+    context.put("name", appUser.getFirstName());
     emailService.send(appUser.getEmail(),
-        "server/app/que/src/main/resources/templates/Hello.html", "Hello!", ""); // TODO: Send email
+        "server/app/que/src/main/resources/templates/Hello.html", "Welcome!", context); // TODO: Send email
     return confirmationToken.toString();
   }
 
