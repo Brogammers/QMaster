@@ -16,7 +16,7 @@ export default function Account() {
         <AccountPageProfile />
       <View className="w-[85%]">
         <ScrollView>
-          <Text className="w-full pb-6 text-3xl font-extrabold text-left border-b  text-ocean-blue-2 border-[#ADADAD]">
+          <Text className="w-full pb-6 text-3xl font-extrabold text-left border-b text-ocean-blue-2 border-[#ADADAD]">
             Hi John!
           </Text>
           <AccountPageItems />

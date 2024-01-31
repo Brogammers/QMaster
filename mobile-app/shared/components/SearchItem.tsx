@@ -19,7 +19,7 @@ export default function SearchItem(props: SearchItemProps) {
       >
         {isAccount ? (
           <View className="flex-row items-center">
-            <FontAwesome name={icon} size={30} color="black" className="rounded-sm w-7 h-7" />
+            <FontAwesome6 name={icon} size={30} color="black" className="rounded-sm w-7 h-7" />
             <Text className="ml-5 text-[#3E3E3E] text-base font-medium">{title}</Text>
           </View>
         ) : (
