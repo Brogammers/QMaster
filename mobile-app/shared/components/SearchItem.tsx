@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Image from 'react-native-remote-svg';
-import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
+import { FontAwesome6 } from '@expo/vector-icons';
 import { SearchItemProps } from '@/types';
 import { AntDesign } from '@expo/vector-icons';
 
