@@ -7,6 +7,9 @@ import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRole;
 import com.que.que.User.AppUserService;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,9 +45,11 @@ public class RegistrationService {
             false,
             false,
             (byte) 0));
-
-    emailSender.send(request.getEmail(), "server/app/que/src/main/resources/templates/email-activation.html",
-        "Confirm Email", token);
+    Map<String, String> context = new HashMap<>();
+    context.put("name", request.getFirstName());
+    context.put("token", token);
+    emailSender.send(request.getEmail(), "server/app/que/src/main/resources/templates/Activation.html",
+        "Confirm Email", context);
     return token;
   }
 

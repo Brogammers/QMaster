@@ -1,12 +1,17 @@
 import React from "react";
-import { ImageBackground, Text, View } from "react-native";
+import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import background from '@/assets/images/background.png';
 import QLogo from '@/assets/images/logoImage.svg';
+import { Link } from "expo-router";
+import Return from "@/shared/components/Return";
 
 
 export default function VerificationSent() {
   return (
     <ImageBackground source={background} className="justify-center flex-1 w-screen">
+      <Link href='/Onboarding' style={styles.returnButton}>
+        <Return size={36} color='white' />
+      </Link>
       <View className="flex items-center h-[450]">
         <QLogo />
         <View>
@@ -19,3 +24,11 @@ export default function VerificationSent() {
 
   )
 }
+
+const styles = StyleSheet.create({
+  returnButton: {
+    position: 'absolute',
+    top: 60, // Adjust the top value as needed
+    left: 18, // Adjust the left value as needed
+  }
+});
