@@ -9,11 +9,11 @@ export default function AccountPageItems() {
   return (
     <View className="items-center justify-center w-full">
       <SearchItem title={'Language and Region'} icon={'globe'} isAccount onPress={() => console.log('Language and Region')} />
-      <SearchItem title={'Previous Queues'} icon={'history'} isAccount onPress={() => console.log('Previous Queues')} />
+      <SearchItem title={'Previous Queues'} icon={'clock-rotate-left'} isAccount onPress={() => console.log('Previous Queues')} />
       <SearchItem title={'Notifications'} icon={'bell'} isAccount onPress={() => console.log('Notifications')} />
-      <SearchItem title={'About'} icon={'info-circle'} isAccount onPress={() => console.log('About')} />
+      <SearchItem title={'About'} icon={'circle-info'} isAccount onPress={() => console.log('About')} />
       <SearchItem title={'Rate App'} icon={'star'} isAccount onPress={() => console.log('Rate App')} />
-      <SearchItem title={'Log Out'} icon={'sign-out'} isAccount onPress={auth?.signOut} />
+      <SearchItem title={'Log Out'} icon={'arrow-right-from-bracket'} isAccount onPress={auth?.signOut} />
     </View>
   )
 }
