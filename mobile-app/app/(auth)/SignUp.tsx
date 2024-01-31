@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
 } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, router, useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios, { AxiosError } from 'axios';
@@ -40,6 +40,7 @@ const SignupSchema = Yup.object().shape({
 export default function SignUp() {
   const dispatch = useDispatch();
   const auth = useAuth();
+  const router = useRouter()
 
   // Add a state variable to track whether the state update has completed
   const [isStateUpdateComplete, setStateUpdateComplete] = useState(false);
@@ -64,6 +65,7 @@ export default function SignUp() {
             resolve();
           });
 
+          router.replace("/(auth)/VerificationSent");
           auth.signIn();
         }
       } else {
