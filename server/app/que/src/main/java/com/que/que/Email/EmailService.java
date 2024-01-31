@@ -47,7 +47,7 @@ public class EmailService implements EmailSender {
       }
       htmlContent = contentBuilder.toString();
       for (String key : text.keySet()) {
-        htmlContent.replace("${" + key + "}", text.get(key));
+        htmlContent = htmlContent.replace("$[" + key + "]", text.get(key));
       }
       mimeMessage.setContent(htmlContent, "text/html");
       mailSender.send(mimeMessage);

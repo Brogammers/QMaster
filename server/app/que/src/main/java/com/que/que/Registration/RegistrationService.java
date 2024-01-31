@@ -48,7 +48,7 @@ public class RegistrationService {
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);
-    emailSender.send(request.getEmail(), "server/app/que/src/main/resources/templates/email-activation.html",
+    emailSender.send(request.getEmail(), "server/app/que/src/main/resources/templates/Activation.html",
         "Confirm Email", context);
     return token;
   }
