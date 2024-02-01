@@ -18,12 +18,14 @@ import CurrentQueuesList from '@/components/CurrentQueuesList';
 
 export default function Index() {
   const [bgColor, setBgColor] = useState('#17222D');
+  const [scrollY, setScrollY] = useState(0);
   const scanQrRef = useRef<View>(null);
   const [scanQrHeight, setScanQrHeight] = useState(0);
 
   const handleScroll = (event: { nativeEvent: { contentOffset: { y: any; }; }; }) => {
-    const scrollY = event.nativeEvent.contentOffset.y;
-    if (scrollY > scanQrHeight) {
+    const currentScrollY = event.nativeEvent.contentOffset.y;
+    setScrollY(currentScrollY);
+    if (currentScrollY > scanQrHeight) {
       setBgColor('#D9D9D9');
     } else {
       setBgColor('#17222D');
@@ -39,7 +41,7 @@ export default function Index() {
       <StatusBar
         translucent
         backgroundColor='#17222D'
-        barStyle='light-content'
+        barStyle= {scrollY > scanQrHeight ? 'dark-content' : 'light-content'}
       />
       <ScrollView
         className='w-screen'
