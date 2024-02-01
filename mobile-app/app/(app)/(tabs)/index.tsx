@@ -19,15 +19,19 @@ import CurrentQueuesList from '@/components/CurrentQueuesList';
 export default function Index() {
   const [bgColor, setBgColor] = useState('#17222D');
   const scanQrRef = useRef<View>(null);
+  const [scanQrHeight, setScanQrHeight] = useState(0);
 
-  const handleScroll = () => {
-    scanQrRef.current?.measure((fx, fy, width, height, px, py) => {
-      if (py < 0) {
-        setBgColor('#D9D9D9');
-      } else {
-        setBgColor('#17222D');
-      }
-    });
+  const handleScroll = (event: { nativeEvent: { contentOffset: { y: any; }; }; }) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    if (scrollY > scanQrHeight) {
+      setBgColor('#D9D9D9');
+    } else {
+      setBgColor('#17222D');
+    }
+  };
+
+  const handleLayout = (event: { nativeEvent: { layout: { height: React.SetStateAction<number>; }; }; }) => {
+    setScanQrHeight(event.nativeEvent.layout.height);
   };
 
   return (
@@ -44,7 +48,7 @@ export default function Index() {
         onScroll={handleScroll}
       >
         <View className='bg-[#D9D9D9]'>
-          <View ref={scanQrRef}>
+          <View ref={scanQrRef} onLayout={handleLayout}>
             <ScanQr />
           </View>
           <View className='w-[85%] self-center'>
@@ -63,7 +67,6 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#17222D',
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight ? StatusBar.currentHeight - 1 : 0 : 0,
   },
 });
