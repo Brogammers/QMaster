@@ -22,7 +22,13 @@ export default function Index() {
   const scanQrRef = useRef<View>(null);
   const [scanQrHeight, setScanQrHeight] = useState(0);
 
-  const handleScroll = (event: { nativeEvent: { contentOffset: { y: any; }; }; }) => {
+  const handleScroll = (event: { 
+    nativeEvent: { 
+      contentOffset: { 
+        y: any; 
+      }; 
+    }; 
+  }) => {
     const currentScrollY = event.nativeEvent.contentOffset.y;
     setScrollY(currentScrollY);
     if (currentScrollY > scanQrHeight) {
