@@ -31,11 +31,6 @@ export default function Index() {
   }) => {
     const currentScrollY = event.nativeEvent.contentOffset.y;
     setScrollY(currentScrollY);
-    if (currentScrollY > scanQrHeight) {
-      setBgColor('#D9D9D9');
-    } else {
-      setBgColor('#17222D');
-    }
   };
 
   useEffect(() => {
