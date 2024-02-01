@@ -25,7 +25,7 @@ export default function Index() {
         barStyle='light-content'
       />
       <ScrollView className='w-screen' showsVerticalScrollIndicator={false}>
-        <View className='bg-[#D9D9D9] p-0 m-0'>
+        <View className='bg-[#D9D9D9]'>
           <ScanQr />
           <View className='w-[85%] self-center'>
             <SearchBar />
