@@ -25,13 +25,15 @@ export default function Index() {
         barStyle='light-content'
       />
       <ScrollView className='w-screen' showsVerticalScrollIndicator={false}>
-        <ScanQr />
-        <View className='w-[85%] self-center'>
-          <SearchBar />
-          <CurrentQueuesList />
-          <CategoriesList />
-          <RecentQueues />
-          <FrequentlyAsked />
+        <View className='bg-[#D9D9D9] p-0 m-0'>
+          <ScanQr />
+          <View className='w-[85%] self-center'>
+            <SearchBar />
+            <CurrentQueuesList />
+            <CategoriesList />
+            <RecentQueues />
+            <FrequentlyAsked />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -41,7 +43,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D9D9D9',
+    backgroundColor: '#17222D',
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight ? StatusBar.currentHeight - 1 : 0 : 0,
   },
 });
