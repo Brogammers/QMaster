@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -37,6 +37,22 @@ export default function Index() {
       setBgColor('#17222D');
     }
   };
+
+  useEffect(() => {
+    if (scrollY > scanQrHeight) {
+      setBgColor('#D9D9D9');
+      if (Platform.OS === 'android') {
+        StatusBar.setBackgroundColor('#D9D9D9', true);
+      }
+      StatusBar.setBarStyle('dark-content');
+    } else {
+      setBgColor('#17222D');
+      if (Platform.OS === 'android') {
+        StatusBar.setBackgroundColor('#17222D', true);
+      }
+      StatusBar.setBarStyle('light-content');
+    }
+  }, [scrollY, scanQrHeight]);  
 
   const handleLayout = (event: { nativeEvent: { layout: { height: React.SetStateAction<number>; }; }; }) => {
     setScanQrHeight(event.nativeEvent.layout.height);
