@@ -6,7 +6,6 @@ import {
   Platform,
   View,
   ScrollView,
-  Dimensions
 } from 'react-native';
 import ScanQr from '@/components/ScanQR';
 import SearchBar from '@/components/SearchBar';
