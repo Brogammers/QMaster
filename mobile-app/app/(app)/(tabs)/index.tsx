@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -6,7 +6,6 @@ import {
   Platform,
   View,
   ScrollView,
-  Dimensions
 } from 'react-native';
 import ScanQr from '@/components/ScanQR';
 import SearchBar from '@/components/SearchBar';
@@ -22,15 +21,32 @@ export default function Index() {
   const scanQrRef = useRef<View>(null);
   const [scanQrHeight, setScanQrHeight] = useState(0);
 
-  const handleScroll = (event: { nativeEvent: { contentOffset: { y: any; }; }; }) => {
+  const handleScroll = (event: { 
+    nativeEvent: { 
+      contentOffset: { 
+        y: any; 
+      }; 
+    }; 
+  }) => {
     const currentScrollY = event.nativeEvent.contentOffset.y;
     setScrollY(currentScrollY);
-    if (currentScrollY > scanQrHeight) {
+  };
+
+  useEffect(() => {
+    if (scrollY > scanQrHeight) {
       setBgColor('#D9D9D9');
+      if (Platform.OS === 'android') {
+        StatusBar.setBackgroundColor('#D9D9D9', true);
+      }
+      StatusBar.setBarStyle('dark-content');
     } else {
       setBgColor('#17222D');
+      if (Platform.OS === 'android') {
+        StatusBar.setBackgroundColor('#17222D', true);
+      }
+      StatusBar.setBarStyle('light-content');
     }
-  };
+  }, [scrollY, scanQrHeight]);  
 
   const handleLayout = (event: { nativeEvent: { layout: { height: React.SetStateAction<number>; }; }; }) => {
     setScanQrHeight(event.nativeEvent.layout.height);

@@ -1,19 +1,28 @@
-import React from "react";
-import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { Platform, StatusBar, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function History() {
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      if (Platform.OS === "android") {
+        StatusBar.setBackgroundColor('#D9D9D9', true)
+      }
+      StatusBar.setBarStyle('dark-content');
+      StatusBar.setTranslucent
+    }
+  }, [isFocused]);
+  
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar
-        translucent
-        backgroundColor='#17222D'
-        barStyle='dark-content'
-      />
     </SafeAreaView>
   );
 }
-  
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
