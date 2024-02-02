@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View, StatusBar, Platform, StyleSheet } from "react-native";
 import AccountPageItems from '@/components/AccountPageItems'
 import { SafeAreaView } from "react-native-safe-area-context";
 import AccountPageProfile from "@/components/AccountPageProfile";
 import { ScrollView } from "react-native-gesture-handler";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Account() {
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      if (Platform.OS === "android") {
+        StatusBar.setBackgroundColor('#D9D9D9');
+      }
+      StatusBar.setBarStyle('dark-content');
+      StatusBar.setTranslucent;
+    }
+  })
+
   return (
     <SafeAreaView className="items-center self-center flex-1">
-      <StatusBar
-        translucent
-        backgroundColor='#17222D'
-        barStyle='dark-content'
-      />
       <AccountPageProfile />
       <View className="w-[85%]">
         <ScrollView>
