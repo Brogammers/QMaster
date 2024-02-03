@@ -26,28 +26,28 @@ public interface QueueRepository extends JpaRepository<Queues, Long> {
   List<Queues> findAllOrderedByPeopleInQueueDesc();
 
   @Query(
-    "SELECT q FROM Queues q WHERE q.name LIKE '%targetName%' ORDER BY q.rating ASC"
+    "SELECT q FROM Queues q WHERE LOWER(q.name) LIKE LOWER(concat('%', :targetName, '%')) ORDER BY q.rating ASC"
   )
   List<Queues> findAllOrderedByRatingAscAndFilterName(
     @Param("targetName") String targetName
   );
 
   @Query(
-    "SELECT q FROM Queues q WHERE q.name LIKE '%targetName%' ORDER BY q.rating DESC"
+    "SELECT q FROM Queues q WHERE LOWER(q.name) LIKE LOWER(concat('%', :targetName, '%')) ORDER BY q.rating DESC"
   )
   List<Queues> findAllOrderedByRatingDescAndFilterName(
     @Param("targetName") String targetName
   );
 
   @Query(
-    "SELECT q FROM Queues q WHERE q.name LIKE '%targetName%' ORDER BY q.peopleInQueue ASC"
+    "SELECT q FROM Queues q WHERE LOWER(q.name) LIKE LOWER(concat('%', :targetName, '%')) ORDER BY q.peopleInQueue ASC"
   )
-  List<Queues> findAllOrderedByPeopleInQueueAscandFilterName(
+  List<Queues> findAllOrderedByPeopleInQueueAscAndFilterName(
     @Param("targetName") String targetName
   );
 
   @Query(
-    "SELECT q FROM Queues q WHERE q.name LIKE '%targetName%' ORDER BY q.peopleInQueue DESC"
+    "SELECT q FROM Queues q WHERE LOWER(q.name) LIKE LOWER(concat('%', :targetName, '%')) ORDER BY q.peopleInQueue DESC"
   )
   List<Queues> findAllOrderedByPeopleInQueueDescAndFilterName(
     @Param("targetName") String targetName
