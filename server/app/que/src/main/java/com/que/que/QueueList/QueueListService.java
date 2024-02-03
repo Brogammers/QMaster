@@ -51,7 +51,7 @@ public class QueueListService {
   public List<Queues> findAllOrderedByPeopleInQueueAscAndFilterName(
     String targetName
   ) {
-    return queueRepository.findAllOrderedByPeopleInQueueAscandFilterName(
+    return queueRepository.findAllOrderedByPeopleInQueueAscAndFilterName(
       targetName
     );
   }
