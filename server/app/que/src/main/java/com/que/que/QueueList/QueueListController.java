@@ -19,7 +19,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class QueueListController {
     private final QueueListService queueListService;
-    private final QueueRepository queueRepository;
 
     @GetMapping(path = "/list")
     public ResponseEntity<Object> filterSortQueue(@RequestParam("page") int page, @RequestParam("per-page") int perPage,
@@ -27,9 +26,9 @@ public class QueueListController {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         if (filterBy != null) {
-            body.put("queues", queueRepository.findByNameContaining(filterBy));
+            body.put("queues", queueListService.findByNameContaining(filterBy));
         } else {
-            body.put("queues", queueRepository.findAll());
+            body.put("queues", queueListService.findAll());
         }
         return new ResponseEntity<Object>(body, statusCode);
     }
