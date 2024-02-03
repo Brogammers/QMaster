@@ -48,7 +48,7 @@ public class Queues {
         this.queueSlot = queueSlot;
         this.specificSlot = specificSlot;
         this.peopleInQueue = 0;
-        this.rating = -1;
+        this.rating = -1; // -1 if there are no ratings yet
     }
 
 }
