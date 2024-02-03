@@ -29,7 +29,7 @@ public class QueueListController {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
     Pageable page = PageRequest.of(pageNumber, perPage);
-    if (filterBy != null) {
+    if (filterBy.length() > 1) {
       if (order.charAt(0) == '-') {
         if (order.substring(1).equals("rating")) {
           body.put(
@@ -38,37 +38,35 @@ public class QueueListController {
         } else if (order.substring(1).equals("peopleInQueue")) {
           body.put(
               "queues",
-              queueListService.findAllOrderedByPeopleInQueueDescAndFilterName(
-                  filterBy));
+              queueListService.findAllOrderedByPeopleInQueueDescAndFilterName(filterBy, page));
         }
       } else {
         if (order.equals("rating")) {
           body.put(
               "queues",
-              queueListService.findAllOrderedByRatingAscAndFilterName(filterBy));
+              queueListService.findAllOrderedByRatingAscAndFilterName(filterBy, page));
         } else if (order.equals("peopleInQueue")) {
           body.put(
               "queues",
-              queueListService.findAllOrderedByPeopleInQueueAscAndFilterName(
-                  filterBy));
+              queueListService.findAllOrderedByPeopleInQueueAscAndFilterName(filterBy, page));
         }
       }
     } else {
       if (order.charAt(0) == '-') {
         if (order.substring(1).equals("rating")) {
-          body.put("queues", queueListService.findAllOrderedByRatingDesc());
+          body.put("queues", queueListService.findAllOrderedByRatingDesc(page));
         } else if (order.substring(1).equals("peopleInQueue")) {
           body.put(
               "queues",
-              queueListService.findAllOrderedByPeopleInQueueDesc());
+              queueListService.findAllOrderedByPeopleInQueueDesc(page));
         }
       } else {
         if (order.equals("rating")) {
-          body.put("queues", queueListService.findAllOrderedByRatingAsc());
+          body.put("queues", queueListService.findAllOrderedByRatingAsc(page));
         } else if (order.equals("peopleInQueue")) {
           body.put(
               "queues",
-              queueListService.findAllOrderedByPeopleInQueueAsc());
+              queueListService.findAllOrderedByPeopleInQueueAsc(page));
         }
       }
     }
