@@ -28,7 +28,7 @@ public class QueueListController {
       @RequestParam("order") String order) {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
-    Pageable page = PageRequest.of(pageNumber, perPage);
+    Pageable page = PageRequest.of(pageNumber - 1, perPage);
     if (filterBy.length() > 1) {
       if (order.charAt(0) == '-') {
         if (order.substring(1).equals("rating")) {

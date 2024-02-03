@@ -131,6 +131,7 @@ public class QueueService {
     try {
       Queue<Long> specificQueue = queueHolderQueues.get(currentQueue.getSpecificSlot());
       specificQueue.add(appUser);
+      currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() + 1);
     } catch (Exception e) {
       throw new IllegalStateException("Could not add user to queue");
     }
@@ -157,6 +158,7 @@ public class QueueService {
       print();
       AppUser nextUser = appUserRepository.findById(
           specificQueue.poll()).orElseThrow(() -> new IllegalStateException("Could not find user"));
+      currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() - 1);
       queueDequeueRepository
           .save(new QueueDequeue(nextUser, currentQueue));
       return nextUser;
@@ -175,13 +177,14 @@ public class QueueService {
     }
     ArrayList<Queue<Long>> queueHolderQueues = queue.get(queueSlot);
     try {
-      queueHolderQueues.remove(currentQueue.getSpecificSlot());
+      queueHolderQueues.set(currentQueue.getSpecificSlot(), null);
     } catch (Exception e) {
       throw new IllegalStateException("User does not have specific queue");
     }
     if (queueHolderQueues.size() == 0) {
       AppUser appUser = currentQueue.getAppUser();
       appUser.setQueueId(-1);
+      queueSlots.push(queueSlot);
     }
 
     queueDeletionRepository.save(
