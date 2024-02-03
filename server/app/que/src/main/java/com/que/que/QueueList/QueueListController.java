@@ -3,6 +3,9 @@ package com.que.que.QueueList;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +22,13 @@ public class QueueListController {
 
   @GetMapping(path = "/list")
   public ResponseEntity<Object> filterSortQueue(
-      @RequestParam("page") int page,
+      @RequestParam("page") int pageNumber,
       @RequestParam("per-page") int perPage,
       @RequestParam("filter") String filterBy,
       @RequestParam("order") String order) {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+    Pageable page = PageRequest.of(pageNumber, perPage);
     if (filterBy != null) {
       if (order.charAt(0) == '-') {
         if (order.substring(1).equals("rating")) {
