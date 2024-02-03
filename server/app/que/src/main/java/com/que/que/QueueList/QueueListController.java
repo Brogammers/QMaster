@@ -1,6 +1,5 @@
 package com.que.que.QueueList;
 
-import com.que.que.Queue.QueueRepository;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
