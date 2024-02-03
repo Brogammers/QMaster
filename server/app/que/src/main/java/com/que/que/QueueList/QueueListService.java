@@ -24,40 +24,38 @@ public class QueueListService {
   }
 
   public Page<Queues> findAllOrderedByRatingAsc(Pageable page) {
-    return queueRepository.findAllOrderedByRatingAsc();
+    return queueRepository.findAllOrderedByRatingAsc(page);
   }
 
   public Page<Queues> findAllOrderedByRatingDesc(Pageable page) {
-    return queueRepository.findAllOrderedByRatingDesc();
+    return queueRepository.findAllOrderedByRatingDesc(page);
   }
 
   public Page<Queues> findAllOrderedByPeopleInQueueAsc(Pageable page) {
-    return queueRepository.findAllOrderedByPeopleInQueueAsc();
+    return queueRepository.findAllOrderedByPeopleInQueueAsc(page);
   }
 
   public Page<Queues> findAllOrderedByPeopleInQueueDesc(Pageable page) {
-    return queueRepository.findAllOrderedByPeopleInQueueDesc();
+    return queueRepository.findAllOrderedByPeopleInQueueDesc(page);
   }
 
   public Page<Queues> findAllOrderedByRatingAscAndFilterName(
       String targetName, Pageable page) {
-    return queueRepository.findAllOrderedByRatingAscAndFilterName(targetName);
+    return queueRepository.findAllOrderedByRatingAscAndFilterName(targetName, page);
   }
 
   public Page<Queues> findAllOrderedByRatingDescAndFilterName(
       String targetName, Pageable page) {
-    return queueRepository.findAllOrderedByRatingDescAndFilterName(targetName);
+    return queueRepository.findAllOrderedByRatingDescAndFilterName(targetName, page);
   }
 
   public Page<Queues> findAllOrderedByPeopleInQueueAscAndFilterName(
       String targetName, Pageable page) {
-    return queueRepository.findAllOrderedByPeopleInQueueAscAndFilterName(
-        targetName);
+    return queueRepository.findAllOrderedByPeopleInQueueAscAndFilterName(targetName, page);
   }
 
   public Page<Queues> findAllOrderedByPeopleInQueueDescAndFilterName(
       String targetName, Pageable page) {
-    return queueRepository.findAllOrderedByPeopleInQueueDescAndFilterName(
-        targetName);
+    return queueRepository.findAllOrderedByPeopleInQueueDescAndFilterName(targetName, page);
   }
 }
