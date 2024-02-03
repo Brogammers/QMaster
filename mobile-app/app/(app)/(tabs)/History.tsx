@@ -1,12 +1,32 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { Platform, StatusBar, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function History() {
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      if (Platform.OS === "android") {
+        StatusBar.setBackgroundColor('#D9D9D9', true)
+      }
+      StatusBar.setBarStyle('dark-content');
+      StatusBar.setTranslucent
+    }
+  }, [isFocused]);
+  
   return (
-    <View className="items-center justify-center h-screen">
-      <Text className="flex items-start justify-center">
-        History
-      </Text>
-    </View>
-  )
+    <SafeAreaView style={styles.container}>
+    </SafeAreaView>
+  );
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#D9D9D9',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight ? StatusBar.currentHeight - 1 : 0 : 0,
+  },
+});

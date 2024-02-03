@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StatusBar,
   StyleSheet,
   SafeAreaView,
   Platform,
   View,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import ScanQr from '@/components/ScanQR';
 import SearchBar from '@/components/SearchBar';
@@ -16,22 +16,66 @@ import CurrentQueuesList from '@/components/CurrentQueuesList';
 
 
 export default function Index() {
+  const [bgColor, setBgColor] = useState('#17222D');
+  const [scrollY, setScrollY] = useState(0);
+  const scanQrRef = useRef<View>(null);
+  const [scanQrHeight, setScanQrHeight] = useState(0);
+
+  const handleScroll = (event: { 
+    nativeEvent: { 
+      contentOffset: { 
+        y: any; 
+      }; 
+    }; 
+  }) => {
+    const currentScrollY = event.nativeEvent.contentOffset.y;
+    setScrollY(currentScrollY);
+  };
+
+  useEffect(() => {
+    if (scrollY > scanQrHeight) {
+      setBgColor('#D9D9D9');
+      if (Platform.OS === 'android') {
+        StatusBar.setBackgroundColor('#D9D9D9', true);
+      }
+      StatusBar.setBarStyle('dark-content');
+    } else {
+      setBgColor('#17222D');
+      if (Platform.OS === 'android') {
+        StatusBar.setBackgroundColor('#17222D', true);
+      }
+      StatusBar.setBarStyle('light-content');
+    }
+  }, [scrollY, scanQrHeight]);  
+
+  const handleLayout = (event: { nativeEvent: { layout: { height: React.SetStateAction<number>; }; }; }) => {
+    setScanQrHeight(event.nativeEvent.layout.height);
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: bgColor }]}>
       <StatusBar
         translucent
         backgroundColor='#17222D'
-        barStyle='light-content'
+        barStyle= {scrollY > scanQrHeight ? 'dark-content' : 'light-content'}
       />
-      <ScrollView className='w-screen' showsVerticalScrollIndicator={false}>
-        <ScanQr />
-        <View className='w-[85%] self-center'>
-          <SearchBar />
-          <CurrentQueuesList />
-          <CategoriesList />
-          <RecentQueues />
-          <FrequentlyAsked />
+      <ScrollView
+        className='w-screen'
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={handleScroll}
+      >
+        <View className='bg-[#D9D9D9]'>
+          <View ref={scanQrRef} onLayout={handleLayout}>
+            <ScanQr />
+          </View>
+          <View className='w-[85%] self-center'>
+            <SearchBar />
+            <CurrentQueuesList />
+            <CategoriesList />
+            <RecentQueues />
+            <FrequentlyAsked />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -41,7 +85,6 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D9D9D9',
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight ? StatusBar.currentHeight - 1 : 0 : 0,
   },
 });

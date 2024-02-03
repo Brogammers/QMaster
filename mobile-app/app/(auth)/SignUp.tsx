@@ -50,7 +50,7 @@ export default function SignUp() {
 
     try {
       // IOS Simulator
-       const response = await axios.post(`${API_BASE_URL}`, values);
+      const response = await axios.post(`${API_BASE_URL}`, values);
       // Android Emulator
       // const response = await axios.post('http://10.0.2.2:8080/api/v1/registration', values);
 
