@@ -1,9 +1,11 @@
 package com.que.que.QueueList;
 
-import com.que.que.Queue.QueueRepository;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,61 +22,51 @@ public class QueueListController {
 
   @GetMapping(path = "/list")
   public ResponseEntity<Object> filterSortQueue(
-    @RequestParam("page") int page,
-    @RequestParam("per-page") int perPage,
-    @RequestParam("filter") String filterBy,
-    @RequestParam("order") String order
-  ) {
+      @RequestParam("page") int pageNumber,
+      @RequestParam("per-page") int perPage,
+      @RequestParam("filter") String filterBy,
+      @RequestParam("order") String order) {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
-    if (filterBy != null) {
+    Pageable page = PageRequest.of(pageNumber - 1, perPage);
+    if (filterBy.length() > 1) {
       if (order.charAt(0) == '-') {
         if (order.substring(1).equals("rating")) {
           body.put(
-            "queues",
-            queueListService.findAllOrderedByRatingDescAndFilterName(filterBy)
-          );
+              "queues",
+              queueListService.findAllOrderedByRatingDescAndFilterName(filterBy, page));
         } else if (order.substring(1).equals("peopleInQueue")) {
           body.put(
-            "queues",
-            queueListService.findAllOrderedByPeopleInQueueDescAndFilterName(
-              filterBy
-            )
-          );
+              "queues",
+              queueListService.findAllOrderedByPeopleInQueueDescAndFilterName(filterBy, page));
         }
       } else {
         if (order.equals("rating")) {
           body.put(
-            "queues",
-            queueListService.findAllOrderedByRatingAscAndFilterName(filterBy)
-          );
+              "queues",
+              queueListService.findAllOrderedByRatingAscAndFilterName(filterBy, page));
         } else if (order.equals("peopleInQueue")) {
           body.put(
-            "queues",
-            queueListService.findAllOrderedByPeopleInQueueAscAndFilterName(
-              filterBy
-            )
-          );
+              "queues",
+              queueListService.findAllOrderedByPeopleInQueueAscAndFilterName(filterBy, page));
         }
       }
     } else {
       if (order.charAt(0) == '-') {
         if (order.substring(1).equals("rating")) {
-          body.put("queues", queueListService.findAllOrderedByRatingDesc());
+          body.put("queues", queueListService.findAllOrderedByRatingDesc(page));
         } else if (order.substring(1).equals("peopleInQueue")) {
           body.put(
-            "queues",
-            queueListService.findAllOrderedByPeopleInQueueDesc()
-          );
+              "queues",
+              queueListService.findAllOrderedByPeopleInQueueDesc(page));
         }
       } else {
         if (order.equals("rating")) {
-          body.put("queues", queueListService.findAllOrderedByRatingAsc());
+          body.put("queues", queueListService.findAllOrderedByRatingAsc(page));
         } else if (order.equals("peopleInQueue")) {
           body.put(
-            "queues",
-            queueListService.findAllOrderedByPeopleInQueueAsc()
-          );
+              "queues",
+              queueListService.findAllOrderedByPeopleInQueueAsc(page));
         }
       }
     }

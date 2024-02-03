@@ -4,6 +4,9 @@ import com.que.que.Queue.QueueRepository;
 import com.que.que.Queue.Queues;
 import java.util.List;
 import lombok.AllArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,55 +15,47 @@ public class QueueListService {
 
   private final QueueRepository queueRepository;
 
-  public List<Queues> findByNameContaining(String filter) {
-    return queueRepository.findByNameContaining(filter);
+  public Page<Queues> findByNameContaining(String filter, Pageable page) {
+    return queueRepository.findByNameContaining(filter, page);
   }
 
-  public List<Queues> findAll() {
-    return queueRepository.findAll();
+  public Page<Queues> findAll(Pageable page) {
+    return queueRepository.findAll(page);
   }
 
-  public List<Queues> findAllOrderedByRatingAsc() {
-    return queueRepository.findAllOrderedByRatingAsc();
+  public Page<Queues> findAllOrderedByRatingAsc(Pageable page) {
+    return queueRepository.findAllOrderedByRatingAsc(page);
   }
 
-  public List<Queues> findAllOrderedByRatingDesc() {
-    return queueRepository.findAllOrderedByRatingDesc();
+  public Page<Queues> findAllOrderedByRatingDesc(Pageable page) {
+    return queueRepository.findAllOrderedByRatingDesc(page);
   }
 
-  public List<Queues> findAllOrderedByPeopleInQueueAsc() {
-    return queueRepository.findAllOrderedByPeopleInQueueAsc();
+  public Page<Queues> findAllOrderedByPeopleInQueueAsc(Pageable page) {
+    return queueRepository.findAllOrderedByPeopleInQueueAsc(page);
   }
 
-  public List<Queues> findAllOrderedByPeopleInQueueDesc() {
-    return queueRepository.findAllOrderedByPeopleInQueueDesc();
+  public Page<Queues> findAllOrderedByPeopleInQueueDesc(Pageable page) {
+    return queueRepository.findAllOrderedByPeopleInQueueDesc(page);
   }
 
-  public List<Queues> findAllOrderedByRatingAscAndFilterName(
-    String targetName
-  ) {
-    return queueRepository.findAllOrderedByRatingAscAndFilterName(targetName);
+  public Page<Queues> findAllOrderedByRatingAscAndFilterName(
+      String targetName, Pageable page) {
+    return queueRepository.findAllOrderedByRatingAscAndFilterName(targetName, page);
   }
 
-  public List<Queues> findAllOrderedByRatingDescAndFilterName(
-    String targetName
-  ) {
-    return queueRepository.findAllOrderedByRatingDescAndFilterName(targetName);
+  public Page<Queues> findAllOrderedByRatingDescAndFilterName(
+      String targetName, Pageable page) {
+    return queueRepository.findAllOrderedByRatingDescAndFilterName(targetName, page);
   }
 
-  public List<Queues> findAllOrderedByPeopleInQueueAscAndFilterName(
-    String targetName
-  ) {
-    return queueRepository.findAllOrderedByPeopleInQueueAscAndFilterName(
-      targetName
-    );
+  public Page<Queues> findAllOrderedByPeopleInQueueAscAndFilterName(
+      String targetName, Pageable page) {
+    return queueRepository.findAllOrderedByPeopleInQueueAscAndFilterName(targetName, page);
   }
 
-  public List<Queues> findAllOrderedByPeopleInQueueDescAndFilterName(
-    String targetName
-  ) {
-    return queueRepository.findAllOrderedByPeopleInQueueDescAndFilterName(
-      targetName
-    );
+  public Page<Queues> findAllOrderedByPeopleInQueueDescAndFilterName(
+      String targetName, Pageable page) {
+    return queueRepository.findAllOrderedByPeopleInQueueDescAndFilterName(targetName, page);
   }
 }
