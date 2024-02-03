@@ -34,7 +34,7 @@ public class QueueListController {
         if (order.substring(1).equals("rating")) {
           body.put(
               "queues",
-              queueListService.findAllOrderedByRatingDescAndFilterName(filterBy));
+              queueListService.findAllOrderedByRatingDescAndFilterName(filterBy, page));
         } else if (order.substring(1).equals("peopleInQueue")) {
           body.put(
               "queues",
