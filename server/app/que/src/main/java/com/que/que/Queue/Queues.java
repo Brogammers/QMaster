@@ -40,6 +40,7 @@ public class Queues {
     private int specificSlot;
     @Column(nullable = false)
     private int peopleInQueue;
+    private int rating;
 
     public Queues(String name, AppUser appUser, int queueSlot, int specificSlot) {
         this.name = name;
@@ -47,6 +48,7 @@ public class Queues {
         this.queueSlot = queueSlot;
         this.specificSlot = specificSlot;
         this.peopleInQueue = 0;
+        this.rating = -1;
     }
 
 }
