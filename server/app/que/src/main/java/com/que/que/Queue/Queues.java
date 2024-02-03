@@ -38,12 +38,15 @@ public class Queues {
     private int queueSlot;
     @Column(nullable = false)
     private int specificSlot;
+    @Column(nullable = false)
+    private int peopleInQueue;
 
     public Queues(String name, AppUser appUser, int queueSlot, int specificSlot) {
         this.name = name;
         this.appUser = appUser;
         this.queueSlot = queueSlot;
         this.specificSlot = specificSlot;
+        this.peopleInQueue = 0;
     }
 
 }
