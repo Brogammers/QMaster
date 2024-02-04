@@ -20,7 +20,7 @@ export default function Account() {
   })
 
   return (
-    <SafeAreaView className="items-center self-center flex-1">
+    <SafeAreaView className="items-center self-center flex-1 w-screen bg-[#D9D9D9]">
       <AccountPageProfile />
       <View className="w-[85%]">
         <ScrollView>
