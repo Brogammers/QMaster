@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import LottieView from 'lottie-react-native';
 import Logo from '@/assets/images/splash.json';
 import { SplashScreenProps } from '@/types';
@@ -7,7 +7,11 @@ import { SplashScreenProps } from '@/types';
 export default function SplashScreen({ additionalText, backgroundColor = '#17222D' }: SplashScreenProps) {
   return (
     <View className='items-center justify-center h-screen bg-ocean-blue' style={[styles.container, { backgroundColor }]}>
-
+      <StatusBar
+        translucent
+        backgroundColor='rgba(000, 000, 000, 0.5)'
+        barStyle='light-content'
+      />
       <LottieView
         style={styles.animatedLogo}
         source={Logo}
