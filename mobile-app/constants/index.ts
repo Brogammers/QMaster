@@ -139,3 +139,15 @@ export const AccountInfo: AccountInfoProps[] = [
 //     text: 'National Bank of Egypt',
 //   },
 // ]
+
+// Locations
+export const locations = [
+  { label: 'Madinaty', value: '1' },
+  { label: 'Maadi', value: '2' },
+  { label: 'Elshorouk', value: '3' },
+  { label: 'Al-rehab road', value: '4' },
+  { label: 'Tagamoa', value: '5' },
+  { label: 'Almaza', value: '6' },
+  { label: 'October', value: '7' },
+  { label: 'Arabella', value: '8' },
+]

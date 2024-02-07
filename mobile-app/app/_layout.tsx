@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import SplashScreen from './SplashScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import QueuePage from './QueuePage';
+import Search from './Search';
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -68,6 +70,7 @@ function RootLayoutNav() {
           <Slot />
         </SessionProvider>
       </Provider>
+      {/* <QueuePage /> */}
     </GestureHandlerRootView>
   );
 }
