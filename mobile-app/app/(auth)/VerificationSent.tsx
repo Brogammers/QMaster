@@ -1,5 +1,5 @@
 import React from "react";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { ImageBackground, StatusBar, StyleSheet, Text, View } from "react-native";
 import background from '@/assets/images/background.png';
 import QLogo from '@/assets/images/logoImage.svg';
 import { Link } from "expo-router";
@@ -12,6 +12,11 @@ export default function VerificationSent() {
       <Link href='/Onboarding' style={styles.returnButton}>
         <Return size={36} color='white' />
       </Link>
+      <StatusBar
+        translucent
+        backgroundColor='rgba(000, 000, 000, 0.5)'
+        barStyle='light-content'
+      />
       <View className="flex items-center h-[450]">
         <QLogo />
         <View>
