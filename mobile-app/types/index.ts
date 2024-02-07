@@ -84,6 +84,10 @@ export interface AccountInfoProps {
   name: string;
   number: string;
 }
+
+export interface QueueDetailsProps {
+  branch: number;
+}
 // export interface QueueCarouselProps {
 //   loop: boolean;
 // }

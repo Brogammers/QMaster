@@ -65,12 +65,12 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      {/* <Provider store={store}>
+      <Provider store={store}>
         <SessionProvider>
           <Slot />
         </SessionProvider>
-      </Provider> */}
-      <QueuePage />
+      </Provider>
+      {/* <QueuePage /> */}
     </GestureHandlerRootView>
   );
 }
