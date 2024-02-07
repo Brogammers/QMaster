@@ -9,12 +9,11 @@ const width = Dimensions.get('window').width * 0.85;
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  console.log(value)
   const [items, setItems] = useState([
     { label: 'Apple', value: 'apple' },
     { label: 'Banana', value: 'banana' }
   ]);
-  console.log(items)
+  
   return (
     <View className="items-center w-full">
       <DropDownPicker
