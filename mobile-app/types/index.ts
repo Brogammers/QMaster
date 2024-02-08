@@ -85,9 +85,9 @@ export interface AccountInfoProps {
   number: string;
 }
 
-// export interface QueueCarouselProps {
-//   loop: boolean;
-// }
+export interface QueueDetailsProps {
+  branch: number;
+}
 
 export interface ServerError {
   message: string;

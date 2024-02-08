@@ -11,7 +11,7 @@ export default function Search() {
   const [input, setInput] = useState("");
   return (
 
-    <View>
+    <View className='bg-[#D9D9D9] flex-1'>
       <View className='w-[87%] self-center'>
         <View style={styles.searchBar} className='flex-row items-center self-center w-full mt-6 mb-2.5'>
           <FontAwesome name="search" size={24} color="black" />

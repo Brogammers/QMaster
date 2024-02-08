@@ -6,7 +6,7 @@ import { AccountInfo } from "@/constants";
 
 export default function AccountPageProfile() {
   return (
-    <View className="flex-row items-center justify-between w-11/12 my-6 bg-ocean-blue rounded-3xl p-3.5 self-center">
+    <View className="flex-row items-center justify-between w-11/12 my-6 bg-ocean-blue rounded-3xl p-3.5 pr-6 self-center">
       <TouchableOpacity className="flex-row items-center">
       <Image source={AccountInfo[0].image} className="mr-1"/>
         <View>
@@ -19,7 +19,7 @@ export default function AccountPageProfile() {
         </View>
       </TouchableOpacity>
       <TouchableOpacity>
-        <Ionicons name="settings-sharp" size={35} color="white" />
+        <Ionicons name="settings-sharp" size={35} color="white"/>
       </TouchableOpacity>
     </View>
   )
