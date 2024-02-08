@@ -14,6 +14,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import TextButton from "@/shared/components/TextButton";
 import Return from "@/shared/components/Return";
+import { MyFormValues, ServerError } from "@/types";
 import background from "@/assets/images/background.png";
 import LoginImg from "@/assets/images/login.png";
 import axios, { AxiosError } from "axios";
@@ -34,7 +35,10 @@ export default function Login() {
   const auth = useAuth();
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = async (values: any, formikHelpers: { setSubmitting: (isSubmitting: boolean) => void, setErrors: (errors: { [field: string]: string }) => void }) => {
+  const handleLogin = async (
+    values: any,
+    { setErrors }: { setErrors: Function }
+  ) => {
     console.log("Logging in...", values);
 
     try {
@@ -53,6 +57,7 @@ export default function Login() {
             " and type: ",
             typeof response.data.email
           );
+          // Update the session state and wait for the update to complete
           await new Promise<void>((resolve) => {
             dispatch(setEmail(response.data.email));
             resolve();
@@ -65,25 +70,29 @@ export default function Login() {
         Alert.alert("Signup Failed", "Please check your input and try again.");
       }
     } catch (error) {
+      console.error("Login error:", error);
+      Alert.alert(
+        "Error",
+        "An unexpected error occurred. Please try again later."
+      );
+
       if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
+        const axiosError = error as AxiosError<ServerError>;
 
         if (axiosError.response) {
-          if (typeof axiosError.response.data === "string") {
-            setErrorMessage(axiosError.response.data);
-          } 
-          // else if (typeof axiosError.response.data === "object") {
-          //   setErrors(axiosError.response.data);
-          // }
+          console.error("Axios error status:", axiosError.response.status);
+          console.error("Axios error data:", axiosError.response.data);
+          setErrors({ server: axiosError.response.data.message });
         } else if (axiosError.request) {
-          setErrorMessage(axiosError.request);
+          console.error("Axios error request:", axiosError.request);
         } else {
-          setErrorMessage(axiosError.message);
+          console.error("Axios error message:", axiosError.message);
         }
       } else if (error instanceof Error) {
         setErrorMessage(error.message);
       } else {
-        setErrorMessage("An error occurred");
+        // Handle non-Axios errors
+        console.error("Non-Axios error:", error);
       }
     }
   };
@@ -109,10 +118,11 @@ export default function Login() {
           Welcome Back!
         </Text>
         <Image source={LoginImg} className="mt-6 mb-12" />
-        <Formik
+        <Formik<MyFormValues>
           initialValues={{
             email: "",
             password: "",
+            server: "",
           }}
           validationSchema={LoginSchema}
           onSubmit={(values, formikHelpers) =>
@@ -161,11 +171,11 @@ export default function Login() {
                   {errors.password}
                 </Text>
               )}
-              {errorMessage !== "" && (
+              {errors.server && (
                 <Text
                   style={{ fontSize: 12, color: "red", textAlign: "center" }}
                 >
-                  {errorMessage.toString()}
+                  {errors.server}
                 </Text>
               )}
               <Text className="mt-2 text-sm underline text-baby-blue">

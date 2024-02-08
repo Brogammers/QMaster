@@ -84,6 +84,17 @@ export interface AccountInfoProps {
   name: string;
   number: string;
 }
+
 // export interface QueueCarouselProps {
 //   loop: boolean;
 // }
+
+export interface ServerError {
+  message: string;
+}
+
+export interface MyFormValues {
+  email: string;
+  password: string;
+  server?: string;  // Add this line
+}
