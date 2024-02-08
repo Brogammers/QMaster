@@ -88,6 +88,13 @@ export interface AccountInfoProps {
 export interface QueueDetailsProps {
   branch: number;
 }
-// export interface QueueCarouselProps {
-//   loop: boolean;
-// }
+
+export interface ServerError {
+  message: string;
+}
+
+export interface MyFormValues {
+  email: string;
+  password: string;
+  server?: string;  // Add this line
+}
