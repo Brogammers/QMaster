@@ -3,11 +3,13 @@ import { Text, View, Image, Dimensions } from 'react-native';
 import QueueBackground from '@/assets/images/QueueBackground.png';
 import Carrefour from '@/assets/images/CarrefourLogo.png';
 import AccessTime from '@/assets/images/accessTime.svg'
-
+import { HistoryComponentProps } from "@/types";
 const { height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
+import { QueueInfoCardProps } from "@/types";
 
-export default function QueueInfoCard() {
+export default function QueueInfoCard(props: QueueInfoCardProps) {
+  const {name, image} = props;
   return (
     <View className="justify-end w-screen"
       style={{ height: twoFifth }}
@@ -16,7 +18,7 @@ export default function QueueInfoCard() {
       <View className="bg-ocean-blue w-[80%] self-center h-1/2 rounded-[18px] flex flex-row justify-center items-center">
         <View className="justify-center h-full">
           <Image
-            source={Carrefour}
+            source={image}
             style={{
               height: '60%',  // Adjust as needed
               aspectRatio: 1, // Maintain a 1:1 aspect ratio
@@ -28,7 +30,7 @@ export default function QueueInfoCard() {
         <View className="justify-between h-[60%]">
           <View>
             <Text className="text-2xl font-black text-white">
-              Carrefour
+              {name}
             </Text>
             <Text className="text-[#C3C3C3] text-base">
               Grocery

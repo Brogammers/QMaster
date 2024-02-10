@@ -12,9 +12,9 @@ export default function Account() {
   useEffect(() => {
     if (isFocused) {
       if (Platform.OS === "android") {
-        StatusBar.setBackgroundColor('#D9D9D9', true);
+        StatusBar.setBackgroundColor('#17222D', true);
       }
-      StatusBar.setBarStyle('dark-content');
+      StatusBar.setBarStyle('light-content');
       StatusBar.setTranslucent;
     }
   })
