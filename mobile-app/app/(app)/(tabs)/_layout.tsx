@@ -48,6 +48,13 @@ export default function AppEntry() {
             tabBarIcon: ({ focused }) => (
               <FontAwesome name="history" size={24} color={focused ? '#00FFFF' : '#FAFAFA'} />
             ),
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: '#17222D',
+            },
+            headerTitle: 'Past Queues',
+            headerTintColor: 'white',
+            headerTitleAlign: 'center',
           }}
         />
         <Tab.Screen

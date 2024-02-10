@@ -5,7 +5,8 @@ import SearchItem from "@/shared/components/SearchItem";
 
 export default function AccountPageItems() {
   const auth = useAuth();
-
+  
+  //Redirect user to Google Play/App store
   const handleRateApp = () => {
     const storeUrl = Platform.select({
       ios: 'https://apps.apple.com/us/app/your-app-id',

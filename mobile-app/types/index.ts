@@ -98,3 +98,18 @@ export interface MyFormValues {
   password: string;
   server?: string;  // Add this line
 }
+
+export interface HistoryComponentProps {
+  image: ImageSourcePropType;
+  name: String;
+  location?: String;
+  date?: String;
+  time?: String
+  id?: String;
+  status?: String;
+  queues?: number;
+  notification?: String;
+  isHistory?: boolean;
+  isCategory?: boolean;
+  isNotification?: boolean;
+}
