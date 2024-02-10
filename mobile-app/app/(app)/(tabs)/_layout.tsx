@@ -8,12 +8,12 @@ import Account from './Account';
 import Search from '@/app/Search';
 import Notifications from '@/app/Notifications';
 import { Entypo } from '@expo/vector-icons';
-import { useNavigation } from 'expo-router';
+import BrandsList from '@/app/BrandsList';
+import QueuePage from '@/app/QueuePage';
 
 const Tab = createBottomTabNavigator();
 
 export default function AppEntry() {
-  const navigation = useNavigation();
 
   return (
     <NavigationContainer independent>
@@ -91,6 +91,33 @@ export default function AppEntry() {
               backgroundColor: '#17222D',
             },
             headerTitle: 'Notifications',
+            headerTintColor: 'white',
+            headerTitleAlign: 'center',
+          }}
+        />
+        <Tab.Screen
+          name="Brands"
+          component={BrandsList}
+          options={{
+            tabBarButton: () => null,
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: '#17222D',
+            },
+            headerTitle: 'Brands',
+            headerTintColor: 'white',
+            headerTitleAlign: 'center',
+          }}
+        />
+        <Tab.Screen
+          name="QueuePage"
+          component={QueuePage}
+          options={{
+            tabBarButton: () => null,
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: '#17222D',
+            },
             headerTintColor: 'white',
             headerTitleAlign: 'center',
           }}

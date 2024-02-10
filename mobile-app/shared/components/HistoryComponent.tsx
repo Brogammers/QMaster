@@ -1,13 +1,22 @@
 import React from 'react';
-import { Text, View, Image } from 'react-native';
-import Carrefour from '@/assets/images/CarrefourLogo.png';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { HistoryComponentProps } from '@/types';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 export default function HistoryComponent(props: HistoryComponentProps) {
   const { image, name, location, date, time, id, status, queues, notification, isHistory, isCategory, isNotification } = props;
+  const navigation = useNavigation() as NavigationProp<any>;
+
   return (
-    <View className='w-[85%] bg-white self-center h-[85] mt-4 rounded-xl items-center px-5 flex-row'>
+    <TouchableOpacity className='w-[85%] bg-white self-center h-[85] mt-4 rounded-xl items-center px-5 flex-row'
+      onPress={() =>
+        navigation.navigate('QueuePage',
+          {
+            brandName: name,
+            image: image,
+          })}
+    >
       {isHistory && (
         <>
           <Image source={image} className='w-16 h-16 rounded-lg' />
@@ -58,6 +67,6 @@ export default function HistoryComponent(props: HistoryComponentProps) {
           </View>
         </>
       )}
-    </View>
+    </TouchableOpacity>
   )
 }

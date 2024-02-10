@@ -166,6 +166,7 @@ export const HistoryList: HistoryComponentProps[] = [
     queues: 75,
     time: '10:09',
     notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Grocery'
   },
   {
     image: arabiata,
@@ -177,6 +178,7 @@ export const HistoryList: HistoryComponentProps[] = [
     queues: 1,
     time: '10:09',
     notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Restaurant'
   },
   {
     image: elections,
@@ -188,6 +190,7 @@ export const HistoryList: HistoryComponentProps[] = [
     queues: 100,
     time: '10:09',
     notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Government'
   },
   {
     image: nationalBank,
@@ -199,6 +202,7 @@ export const HistoryList: HistoryComponentProps[] = [
     queues: 5,
     time: '10:09',
     notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Bank'
   },
   {
     image: alSalamHospital,
@@ -210,6 +214,7 @@ export const HistoryList: HistoryComponentProps[] = [
     queues: 1,
     time: '10:09',
     notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Clinic'
   },
   {
     image: CarrefourLogo,
@@ -221,6 +226,7 @@ export const HistoryList: HistoryComponentProps[] = [
     queues: 75,
     time: '10:09',
     notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Grocery'
   },
   {
     image: CarrefourLogo,
@@ -232,6 +238,7 @@ export const HistoryList: HistoryComponentProps[] = [
     queues: 75,
     time: '10:09',
     notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Other'
   },
   {
     image: CarrefourLogo,
@@ -243,6 +250,7 @@ export const HistoryList: HistoryComponentProps[] = [
     queues: 75,
     time: '10:09',
     notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Other'
   },
   {
     image: CarrefourLogo,
@@ -254,6 +262,7 @@ export const HistoryList: HistoryComponentProps[] = [
     queues: 75,
     time: '10:09',
     notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Other'
   },
   {
     image: CarrefourLogo,
@@ -265,5 +274,6 @@ export const HistoryList: HistoryComponentProps[] = [
     queues: 75,
     time: '10:09',
     notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Other'
   }
 ]
