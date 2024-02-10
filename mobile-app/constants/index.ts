@@ -165,6 +165,7 @@ export const HistoryList: HistoryComponentProps[] = [
     status: 'Queued',
     queues: 75,
     time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
   },
   {
     image: arabiata,
@@ -175,6 +176,7 @@ export const HistoryList: HistoryComponentProps[] = [
     status: 'Cancelled',
     queues: 1,
     time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
   },
   {
     image: elections,
@@ -185,6 +187,7 @@ export const HistoryList: HistoryComponentProps[] = [
     status: 'Queued',
     queues: 100,
     time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
   },
   {
     image: nationalBank,
@@ -195,6 +198,7 @@ export const HistoryList: HistoryComponentProps[] = [
     status: 'Cancelled',
     queues: 5,
     time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
   },
   {
     image: alSalamHospital,
@@ -205,6 +209,7 @@ export const HistoryList: HistoryComponentProps[] = [
     status: 'Queued',
     queues: 1,
     time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
   },
   {
     image: CarrefourLogo,
@@ -215,6 +220,7 @@ export const HistoryList: HistoryComponentProps[] = [
     status: 'Queued',
     queues: 75,
     time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
   },
   {
     image: CarrefourLogo,
@@ -225,6 +231,7 @@ export const HistoryList: HistoryComponentProps[] = [
     status: 'Queued',
     queues: 75,
     time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
   },
   {
     image: CarrefourLogo,
@@ -235,6 +242,7 @@ export const HistoryList: HistoryComponentProps[] = [
     status: 'Cancelled',
     queues: 75,
     time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
   },
   {
     image: CarrefourLogo,
@@ -245,6 +253,7 @@ export const HistoryList: HistoryComponentProps[] = [
     status: 'Queued',
     queues: 75,
     time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
   },
   {
     image: CarrefourLogo,
@@ -255,5 +264,6 @@ export const HistoryList: HistoryComponentProps[] = [
     status: 'Cancelled',
     queues: 75,
     time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
   }
 ]

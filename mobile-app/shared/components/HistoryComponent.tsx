@@ -31,13 +31,13 @@ export default function HistoryComponent(props: HistoryComponentProps) {
       )}
       {isCategory && (
         <>
-          <Image source={Carrefour} className='w-16 h-16 rounded-lg' />
+          <Image source={image} className='w-16 h-16 rounded-lg' />
           <View className='w-[70%] ml-4 h-full justify-center py-2'>
             <View>
-              <Text className='text-xl font-semibold'>Carrefour</Text>
+              <Text className='text-xl font-semibold'>{name}</Text>
               <View className='flex-row items-center'>
                 <Entypo name="location-pin" size={20} color="#E50404" />
-                <Text className='text-base'>75 Queues</Text>
+                <Text className='text-base'>{queues} Queues</Text>
               </View>
             </View>
           </View>
@@ -45,14 +45,14 @@ export default function HistoryComponent(props: HistoryComponentProps) {
       )}
       {isNotification && (
         <>
-          <Image source={Carrefour} className='w-16 h-16 rounded-lg' />
+          <Image source={image} className='w-16 h-16 rounded-lg' />
           <View className='w-[70%] ml-4 h-full justify-between py-2'>
-            <Text className='text-sm font-semibold'>Carrefour</Text>
-            <Text className='text-xs font-light'>5 people remaining in your queue, make sure you don't lose your turn!</Text>
+            <Text className='text-sm font-semibold'>{name}</Text>
+            <Text className='text-xs font-light'>{notification}</Text>
             <View className='flex-row justify-between'>
               <View className='flex-row'>
-                <Text className='text-[8px]'>18 January 2024</Text>
-                <Text className='text-[8px] ml-3'> 10:09 PM</Text>
+                <Text className='text-[8px]'>{date}</Text>
+                <Text className='text-[8px] ml-3'>{time}</Text>
               </View>
             </View>
           </View>

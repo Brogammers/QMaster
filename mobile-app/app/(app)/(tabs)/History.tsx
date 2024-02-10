@@ -25,7 +25,14 @@ export default function History() {
     >
       {
         HistoryList.map((item, index) => (
-          <HistoryComponent image={item.image} name={item.name} location={item.location} date={item.date} id={item.id} status={item.status} isHistory key={index}/>
+          <HistoryComponent 
+          image={item.image} 
+          name={item.name} 
+          location={item.location} 
+          date={item.date} id={item.id} 
+          status={item.status} 
+          isHistory 
+          key={index} />
         ))
       }
     </ScrollView>
