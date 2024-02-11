@@ -27,7 +27,7 @@ export default function VerificationSent() {
         backgroundColor="rgba(000, 000, 000, 0.5)"
         barStyle="light-content"
       />
-      <View className="flex items-center h-[450]">
+      <View className="flex items-center h-450">
         <QLogo />
         <LottieView
           style={styles.animatedLogo}

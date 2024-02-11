@@ -13,7 +13,7 @@ export default function AccountPageProfile() {
           <Text className="text-base text-white">
             {AccountInfo[0].name}
           </Text>
-          <Text className="text-[#7D7D7D] text-xs">
+          <Text className="text-slate-grey text-xs">
             {AccountInfo[0].number}
           </Text>
         </View>

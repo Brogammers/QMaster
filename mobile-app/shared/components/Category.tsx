@@ -19,7 +19,7 @@ export default function Category(props: CategoryProps) {
         </View>
         <Image
           source={image}
-          className='w-[48] h-[48] rounded-lg'
+          className='w-12 h-12 rounded-lg'
           style={{ marginBottom: spacing }}
         />
       </View>

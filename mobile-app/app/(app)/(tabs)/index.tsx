@@ -65,11 +65,11 @@ export default function Index() {
         scrollEventThrottle={16}
         onScroll={handleScroll}
       >
-        <View className='bg-[#D9D9D9]'>
+        <View className='bg-off-white'>
           <View ref={scanQrRef} onLayout={handleLayout}>
             <ScanQr />
           </View>
-          <View className='w-[85%] self-center'>
+          <View className='w-10/12 self-center'>
             <SearchBar />
             <CurrentQueuesList />
             <CategoriesList />

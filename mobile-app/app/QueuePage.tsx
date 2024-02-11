@@ -6,7 +6,7 @@ import JoinQueue from '@/components/JoinQueue';
 
 export default function QueuePage() {
   return (
-    <View className="bg-[#D9D9D9] flex-1 items-center"
+    <View className="bg-off-white flex-1 items-center"
     >
       <QueueInfoCard />
       <JoinQueue />     
