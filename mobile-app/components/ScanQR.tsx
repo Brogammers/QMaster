@@ -10,11 +10,18 @@ import { Ionicons } from '@expo/vector-icons';
 import Logo from '@/assets/images/Logo.svg';
 import QRCode from '@/assets/images/QrCode.svg';
 import ElipseBackground from '@/assets/images/ElipseBackground.svg';
+import { useLinkTo } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
 
 export default function ScanQR() {
+  const linkTo = useLinkTo();
+  
+  const handleNotificationsPress = () => {
+    linkTo('/Notifications'); // Navigate to the "Notifications" page
+  };
+  
   return (
     <View
       className='items-center justify-around pb-9'
@@ -30,7 +37,7 @@ export default function ScanQR() {
           <Logo />
           <Text className='ml-1 text-xl font-medium text-white'>QMaster</Text>
         </View>
-        <TouchableOpacity >
+        <TouchableOpacity onPress={handleNotificationsPress} >
           <Ionicons name="notifications" size={25} color="white" />
         </TouchableOpacity>
       </View>

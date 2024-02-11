@@ -30,6 +30,7 @@ export interface SearchFilterProps {
 export interface CategoryProps {
   image: React.FC<SvgProps> | ImageSourcePropType;
   title: string;
+  onPress?: any;
   spacing?: number;
 }
 
@@ -97,4 +98,25 @@ export interface MyFormValues {
   email: string;
   password: string;
   server?: string;  // Add this line
+}
+
+export interface HistoryComponentProps {
+  image: any;
+  name: String;
+  location?: String;
+  date?: String;
+  time?: String
+  id?: String;
+  status?: String;
+  queues?: number;
+  notification?: String;
+  category?: String;
+  isHistory?: boolean;
+  isCategory?: boolean;
+  isNotification?: boolean;
+}
+
+export interface QueueInfoCardProps {
+  image: any,
+  name: String,
 }

@@ -13,12 +13,14 @@ import arabiata from '@/assets/images/arabiata.png' ;
 import elections from '@/assets/images/elections.jpg';
 import nationalBank from '@/assets/images/NationalBank.png';
 import alSalamHospital from '@/assets/images/alsalam.png';
-import profile from '@/assets/images/Profile.png'
+import profile from '@/assets/images/Profile.png';
+import CarrefourLogo from '@/assets/images/CarrefourLogo.png';
 
 import { 
   AccountInfoProps,
   CategoryProps, 
   CurrentQueuesProps, 
+  HistoryComponentProps, 
   OnboardingItem 
 } from '@/types';
 
@@ -150,4 +152,128 @@ export const locations = [
   { label: 'Almaza', value: '6' },
   { label: 'October', value: '7' },
   { label: 'Arabella', value: '8' },
+]
+
+//History
+export const HistoryList: HistoryComponentProps[] = [
+  {
+    image: CarrefourLogo,
+    name: 'carrefour',
+    location: 'New administrative Capital',
+    date: '18 January 2024',
+    id : '1234XXXXXXXXX',
+    status: 'Queued',
+    queues: 75,
+    time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Grocery'
+  },
+  {
+    image: arabiata,
+    name: 'Arabiata',
+    location: 'German University in Cairo',
+    date: '18 January 2024',
+    id : '1234XXXXXXXXX',
+    status: 'Cancelled',
+    queues: 1,
+    time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Restaurant'
+  },
+  {
+    image: elections,
+    name: 'Elections',
+    location: '5th settlement',
+    date: '18 January 2024',
+    id : '1234XXXXXXXXX',
+    status: 'Queued',
+    queues: 100,
+    time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Government'
+  },
+  {
+    image: nationalBank,
+    name: 'National Bank',
+    location: 'New administrative Capital',
+    date: '18 January 2024',
+    id : '1234XXXXXXXXX',
+    status: 'Cancelled',
+    queues: 5,
+    time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Bank'
+  },
+  {
+    image: alSalamHospital,
+    name: 'Al-Salam Hospital',
+    location: 'Al-Salam',
+    date: '18 January 2024',
+    id : '1234XXXXXXXXX',
+    status: 'Queued',
+    queues: 1,
+    time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Clinic'
+  },
+  {
+    image: CarrefourLogo,
+    name: 'carrefour',
+    location: 'New administrative Capital',
+    date: '18 January 2024',
+    id : '1234XXXXXXXXX',
+    status: 'Queued',
+    queues: 75,
+    time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Grocery'
+  },
+  {
+    image: CarrefourLogo,
+    name: 'carrefour',
+    location: 'New administrative Capital',
+    date: '18 January 2024',
+    id : '1234XXXXXXXXX',
+    status: 'Queued',
+    queues: 75,
+    time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Other'
+  },
+  {
+    image: CarrefourLogo,
+    name: 'carrefour',
+    location: 'New administrative Capital',
+    date: '18 January 2024',
+    id : '1234XXXXXXXXX',
+    status: 'Cancelled',
+    queues: 75,
+    time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Other'
+  },
+  {
+    image: CarrefourLogo,
+    name: 'carrefour',
+    location: 'New administrative Capital',
+    date: '18 January 2024',
+    id : '1234XXXXXXXXX',
+    status: 'Queued',
+    queues: 75,
+    time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Other'
+  },
+  {
+    image: CarrefourLogo,
+    name: 'carrefour',
+    location: 'New administrative Capital',
+    date: '18 January 2024',
+    id : '1234XXXXXXXXX',
+    status: 'Cancelled',
+    queues: 75,
+    time: '10:09',
+    notification: '5 people remaining in your queue, make sure you don\'t lose your turn!',
+    category: 'Other'
+  }
 ]

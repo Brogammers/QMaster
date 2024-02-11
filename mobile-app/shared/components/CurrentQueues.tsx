@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 // import Image from 'react-native-remote-svg';
@@ -12,6 +13,24 @@ import PhotoGradientFilter from '@/assets/images/Gradient.png';
 import InclineArrow from '@/assets/images/arrow-up.svg';
 
 export default function CurrentQueues(props: CurrentQueuesProps) {
+  const [leave, setLeave] = useState(false);
+  const handleLeaveQueue = () => {
+    Alert.alert(
+      "Leave Queue?",
+      "Once you leave, your position in the queue wil be lost.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Leave",
+          onPress: () => setLeave(false)
+        }
+      ]
+    );
+  };
+
   const { image, name, people, time, isLeave, isJoin, isCurrent, isPopular } = props;
   return (
     <View>
@@ -47,7 +66,9 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
               </Text>
             </View>
             {isLeave ? (
-              <TouchableOpacity className='items-center self-center justify-center w-9/12 mr-2 bg-red-700 rounded-lg h-7'>
+              <TouchableOpacity className='items-center self-center justify-center w-9/12 mr-2 bg-red-700 rounded-lg h-7'
+                onPress={handleLeaveQueue}
+              >
                 <Text className='text-base font-bold text-white'>Leave Queue</Text>
               </TouchableOpacity>
             ) : isJoin ? (
