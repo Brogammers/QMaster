@@ -11,7 +11,7 @@ export default function SearchItem(props: SearchItemProps) {
 
   return (
     <TouchableOpacity
-      className={`py-${isAccount ? '4' : '2'} border-b-2 border-[#ADADAD] w-full`}
+      className={`py-${isAccount ? '4' : '2'} border-b-2 border-lite-grey w-full`}
       onPress={(props.onPress)}
     >
       <View
@@ -20,12 +20,12 @@ export default function SearchItem(props: SearchItemProps) {
         {isAccount ? (
           <View className="flex-row items-center">
             <FontAwesome6 name={icon} size={30} color="black" className="rounded-sm w-7 h-7" />
-            <Text className="ml-5 text-[#3E3E3E] text-base font-medium">{title}</Text>
+            <Text className="ml-5 text-ignite-black text-base font-medium">{title}</Text>
           </View>
         ) : (
           <View className="flex-row items-center">
             <Image source={image} className="rounded-sm w-7 h-7" />
-            <Text className={`ml-5 text-${isAccount ? '[#3E3E3E]' : '[#13404D]'} text-${isAccount ? 'base font-medium' : 'sm'}`}>{title}</Text>
+            <Text className={`ml-5 text-${isAccount ? 'ignite-black' : 'concrete-turquoise'} text-${isAccount ? 'base font-medium' : 'sm'}`}>{title}</Text>
           </View>
         )}
         {isAccount ? (

@@ -15,7 +15,7 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
       style={{ height: twoFifth }}
     >
       <Image source={QueueBackground} className="absolute top-0 w-screen h-5/6" />
-      <View className="bg-ocean-blue w-[80%] self-center h-1/2 rounded-[18px] flex flex-row justify-center items-center">
+      <View className="bg-ocean-blue w-4/5 self-center h-1/2 rounded-sxl flex flex-row justify-center items-center">
         <View className="justify-center h-full">
           <Image
             source={image}
@@ -27,12 +27,12 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
             }}
           />
         </View>
-        <View className="justify-between h-[60%]">
+        <View className="justify-between h-3/5">
           <View>
             <Text className="text-2xl font-black text-white">
               {name}
             </Text>
-            <Text className="text-[#C3C3C3] text-base">
+            <Text className="text-slight-slate-grey text-base">
               Grocery
             </Text>
           </View>
@@ -41,7 +41,7 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
             <Text className="text-white">
               Fast
             </Text>
-            <Text className="text-[#C3C3C3]">
+            <Text className="text-slight-slate-grey">
               (224 ratings)
             </Text>
           </View>

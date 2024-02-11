@@ -35,7 +35,7 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
   return (
     <View>
       <View className='w-full'>
-        <View className='flex flex-row bg-[#17222D] rounded-2xl h-40 w-full' >
+        <View className='flex flex-row bg-ocean-blue rounded-2xl h-40 w-full' >
           <View className='w-2/6 h-full'>
             <View className='absolute z-20 items-center justify-center w-full h-full'>
               {isCurrent ? (
@@ -46,11 +46,11 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
             </View>
             <Image
               source={PhotoGradientFilter}
-              className='absolute z-10 self-center w-full h-full rounded-l-[18px]'
+              className='absolute z-10 self-center w-full h-full rounded-l-sxl'
             />
             <Image
               source={image}
-              className='w-full h-full rounded-l-[18px]'
+              className='w-full h-full rounded-l-sxl'
             />
           </View>
           <View className='justify-around w-4/6 px-4 py-2'>
@@ -58,10 +58,10 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
               {name}
             </Text>
             <View>
-              <Text className='text-[#D9D9D9] text-sm font-medium'>
+              <Text className='text-off-white text-sm font-medium'>
                 {String(people)} people remaining
               </Text>
-              <Text className='text-[#D9D9D9] text-xs'>
+              <Text className='text-off-white text-xs'>
                 ~{String(time)} min
               </Text>
             </View>
@@ -72,7 +72,7 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
                 <Text className='text-base font-bold text-white'>Leave Queue</Text>
               </TouchableOpacity>
             ) : isJoin ? (
-              <TouchableOpacity className='items-center self-center justify-center w-9/12 mr-2 bg-[#1DCDFE] rounded-lg h-7'>
+              <TouchableOpacity className='items-center self-center justify-center w-9/12 mr-2 bg-baby-blue rounded-lg h-7'>
                 <Text className='text-base font-bold text-white'>Join Queue</Text>
               </TouchableOpacity>
             ) : null}
