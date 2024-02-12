@@ -1,4 +1,4 @@
-import FirstOnboarding from '@/assets/images/onboarding1.png'
+import FirstOnboarding from '@/assets/images/onboarding1.png';
 import SecondOnboarding from '@/assets/images/onboarding2.png';
 import ThirdOnboarding from '@/assets/images/onboarding3.png';
 import FourthOnboarding from '@/assets/images/onboarding4.png';
@@ -9,19 +9,19 @@ import Grocery from '@/assets/images/Grocery.png';
 import Bank from '@/assets/images/Bank.png';
 import Other from '@/assets/images/Other.png';
 import carrefour from '@/assets/images/Carrefour.png';
-import arabiata from '@/assets/images/arabiata.png' ;
+import arabiata from '@/assets/images/arabiata.png';
 import elections from '@/assets/images/elections.jpg';
 import nationalBank from '@/assets/images/NationalBank.png';
 import alSalamHospital from '@/assets/images/alsalam.png';
 import profile from '@/assets/images/Profile.png';
 import CarrefourLogo from '@/assets/images/CarrefourLogo.png';
 
-import { 
+import {
   AccountInfoProps,
-  CategoryProps, 
-  CurrentQueuesProps, 
-  HistoryComponentProps, 
-  OnboardingItem 
+  CategoryProps,
+  CurrentQueuesProps,
+  HistoryComponentProps,
+  OnboardingItem
 } from '@/types';
 
 export const OnboardingData: OnboardingItem[] = [

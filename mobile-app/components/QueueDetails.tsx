@@ -3,8 +3,7 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Alert,
-  ActivityIndicator,
+  Alert
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Wandering from "@/assets/images/wandering.svg";

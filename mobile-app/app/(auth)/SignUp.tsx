@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
 } from 'react-native';
-import { Link, router, useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios, { AxiosError } from 'axios';
@@ -13,7 +13,7 @@ import TextButton from '@/shared/components/TextButton';
 import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import { useAuth } from '@/ctx/AuthContext';
-import { API_BASE_URL, API_BASE_URL_ANDROID } from '@env';
+import { API_BASE_URL } from '@env';
 
 import { useDispatch } from 'react-redux';
 import { setEmail } from '../redux/authSlice'; // replace with the actual path

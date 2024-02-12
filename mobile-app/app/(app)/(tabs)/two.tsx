@@ -1,6 +1,6 @@
-import { StyleSheet, useColorScheme } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent } from 'react';
 import {
   View,
   Text,

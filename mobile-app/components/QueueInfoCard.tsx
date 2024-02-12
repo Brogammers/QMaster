@@ -1,12 +1,10 @@
 import React from "react";
 import { Text, View, Image, Dimensions } from 'react-native';
 import QueueBackground from '@/assets/images/QueueBackground.png';
-import Carrefour from '@/assets/images/CarrefourLogo.png';
-import AccessTime from '@/assets/images/accessTime.svg'
-import { HistoryComponentProps } from "@/types";
+import AccessTime from '@/assets/images/accessTime.svg';
+import { QueueInfoCardProps } from "@/types";
 const { height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
-import { QueueInfoCardProps } from "@/types";
 
 export default function QueueInfoCard(props: QueueInfoCardProps) {
   const {name, image} = props;

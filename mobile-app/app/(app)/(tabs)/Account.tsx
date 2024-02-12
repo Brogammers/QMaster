@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Text, View, StatusBar, Platform, StyleSheet } from "react-native";
-import AccountPageItems from '@/components/AccountPageItems'
+import AccountPageItems from '@/components/AccountPageItems';
 import { SafeAreaView } from "react-native-safe-area-context";
 import AccountPageProfile from "@/components/AccountPageProfile";
 import { ScrollView } from "react-native-gesture-handler";

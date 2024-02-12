@@ -5,7 +5,6 @@ import _ from 'lodash';
 
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/app/redux/store';
-import SplashScreen from '@/app/SplashScreen';
 
 const AuthContext = React.createContext<{
   signIn: () => void;

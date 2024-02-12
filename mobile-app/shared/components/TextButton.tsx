@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet, Dimensions } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FontAwesome } from '@expo/vector-icons';
 import { TextButtonProps } from '@/types';
 
