@@ -1,40 +1,65 @@
-import { Link, Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import React from "react";
+import {
+  ImageBackground,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import background from "@/assets/images/background.png";
+import QLogo from "@/assets/images/logoImage.svg";
+import { Link } from "expo-router";
+import Return from "@/shared/components/Return";
+import LottieView from "lottie-react-native";
+import MailBoxAnimation from "@/assets/images/mailbox_animation.json";
 
-import { Text, View } from '../components/Themed';
-
-export default function NotFoundScreen() {
+export default function VerificationSent() {
   return (
-    <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
-      <View style={styles.container}>
-        <Text style={styles.title}>This screen doesn't exist.</Text>
-
-        <Link href="/" style={styles.link}>
-          <Text style={styles.linkText}>Go to home screen!</Text>
-        </Link>
+    <ImageBackground
+      source={background}
+      className="justify-center flex-1 w-screen"
+    >
+      <Link href="/Onboarding" style={styles.returnButton}>
+        <Return size={36} color="white" />
+      </Link>
+      <StatusBar
+        translucent
+        backgroundColor="rgba(000, 000, 000, 0.5)"
+        barStyle="light-content"
+      />
+      <View className="flex items-center h-3/5">
+        <QLogo />
+        <LottieView
+          style={styles.animatedLogo}
+          source={MailBoxAnimation}
+          autoPlay
+          loop
+        />
+        <View>
+          <Text className="text-2xl font-medium text-white mb-3.5 text-center">
+            Verification Email Sent
+          </Text>
+          <Text className="text-center text-white mb-24 px-14">
+            Check your email for a link to verify your email address
+          </Text>
+        </View>
+        <Text className=" text-blue-300">
+          Need help? Visit our <Text className="underline">help center.</Text>
+        </Text>
       </View>
-    </>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
+  returnButton: {
+    position: "absolute",
+    top: 60, // Adjust the top value as needed
+    left: 18, // Adjust the left value as needed
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-  linkText: {
-    fontSize: 14,
-    color: '#2e78b7',
+  animatedLogo: {
+    marginVertical: 40,
+    width: "50%",
+    height: "50%",
   },
 });
