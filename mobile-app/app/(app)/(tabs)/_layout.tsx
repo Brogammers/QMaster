@@ -25,11 +25,11 @@ export default function AppEntry() {
           headerShown: false,
           tabBarStyle: {
             backgroundColor: '#17222D',
-            height: 60,
+            height: 65,
             display: 'flex',
             justifyContent: 'space-around',
-            paddingBottom: 10,
-            paddingTop: 10,
+            paddingBottom: 18,
+            paddingTop: 12,
           },
         }}
       >

@@ -16,6 +16,7 @@ import RecentQueues from '@/components/RecentQueues';
 import FrequentlyAsked from '@/components/FrequentlyAsked';
 import CurrentQueuesList from '@/components/CurrentQueuesList';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Link } from 'expo-router';
 
 
 export default function Index() {
@@ -79,9 +80,11 @@ export default function Index() {
             <RecentQueues />
             <FrequentlyAsked />
             <TouchableOpacity className='bg-baby-blue flex items-center justify-center py-4 rounded-sxl'>
-              <Text className='text-white font-bold text-lg'>
-                Missing
-              </Text>
+              <Link href="/Missing">
+                <Text className='text-white font-bold text-lg'>
+                  Missing
+                </Text>
+              </Link>
             </TouchableOpacity>
           </View>
         </View>
