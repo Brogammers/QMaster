@@ -6,6 +6,8 @@ import {
   Platform,
   View,
   ScrollView,
+  Pressable,
+  Text,
 } from 'react-native';
 import ScanQr from '@/components/ScanQR';
 import SearchBar from '@/components/SearchBar';
@@ -13,6 +15,7 @@ import CategoriesList from '@/components/CategoriesList';
 import RecentQueues from '@/components/RecentQueues';
 import FrequentlyAsked from '@/components/FrequentlyAsked';
 import CurrentQueuesList from '@/components/CurrentQueuesList';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default function Index() {
@@ -75,6 +78,11 @@ export default function Index() {
             <CategoriesList />
             <RecentQueues />
             <FrequentlyAsked />
+            <TouchableOpacity className='bg-baby-blue flex items-center justify-center py-4 rounded-sxl'>
+              <Text className='text-white font-bold text-lg'>
+                Missing
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
