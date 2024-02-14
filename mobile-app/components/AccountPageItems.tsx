@@ -6,7 +6,6 @@ import { useLinkTo } from '@react-navigation/native';
 
 export default function AccountPageItems() {
   const linkTo = useLinkTo();
-  
   const auth = useAuth();
   
   //Redirect user to Google Play/App store

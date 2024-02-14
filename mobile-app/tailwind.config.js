@@ -18,9 +18,6 @@ module.exports = {
         "lava-black": "444444",
         "lava-red": "#B41818",
       },
-      height: {
-        '450': '28.125rem',
-      },
       borderRadius: {
         "sxl": "18px",
       },

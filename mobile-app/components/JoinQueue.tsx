@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, Dimensions } from "react-native";
+import { View, Dimensions } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import { locations } from '@/constants/index';
 import QueueDetails from "./QueueDetails";
