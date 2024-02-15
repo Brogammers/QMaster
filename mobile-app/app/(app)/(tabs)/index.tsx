@@ -23,12 +23,12 @@ export default function Index() {
   const [scrollY, setScrollY] = useState(0);
   const scanQrRef = useRef<View>(null);
   const [scanQrHeight, setScanQrHeight] = useState(0);
+  // For testing purposes
   const router = useRouter();
-  const linkTo = useLinkTo();
 
-  const handleMissing = () => {
-    router.replace('/Missing')
-  };
+  // const handleMissing = () => {
+  //   router.replace('/Missing')
+  // };
 
   const handleScroll = (event: {
     nativeEvent: {
@@ -86,12 +86,12 @@ export default function Index() {
             <CategoriesList />
             <RecentQueues />
             <FrequentlyAsked />
-            <TouchableOpacity
+            {/* <TouchableOpacity
               className="bg-baby-blue flex items-center justify-center py-4 rounded-sxl"
               onPress={handleMissing}
             >
               <Text className="text-white font-bold text-lg">Missing</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </ScrollView>
