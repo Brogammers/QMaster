@@ -16,29 +16,12 @@ import { Entypo } from "@expo/vector-icons";
 import BrandsList from "@/app/BrandsList";
 import QueuePage from "@/app/QueuePage";
 import Missing from "@/app/Missing";
-import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
 
 export default function AppEntry() {
-  const navigationRef = useRef<NavigationContainerRef<ParamListBase>>(null);
-  const [routeName, setRouteName] = useState('Home'); // Default value
-
-  useEffect(() => {
-    const unsubscribe = navigationRef.current?.addListener('state', () => {
-      if (navigationRef.current?.getRootState()) {
-        const currentRouteName = getFocusedRouteNameFromRoute(navigationRef.current.getRootState()) ?? 'Home';
-        setRouteName(currentRouteName);
-      }
-    });
-
-    return unsubscribe;
-  }, []);
-
   return (
-    <NavigationContainer independent ref={navigationRef}>
-      {routeName !== 'Missing' ? (
+    <NavigationContainer independent>
         <Tab.Navigator
           initialRouteName="Home"
           screenOptions={{
@@ -156,7 +139,7 @@ export default function AppEntry() {
               headerTitleAlign: "center",
             }}
           />
-          <Tab.Screen
+          {/* <Tab.Screen
             name="Missing"
             component={Missing}
             options={{
@@ -168,29 +151,8 @@ export default function AppEntry() {
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}
-          />
+          /> */}
         </Tab.Navigator>
-      ) : (
-        // <Tab.Screen
-        //   name="Missing"
-        //   component={Missing}
-        //   options={{
-        //     tabBarButton: () => null,
-        //     headerShown: false,
-        //     headerStyle: {
-        //       backgroundColor: "#17222D",
-        //     },
-        //     headerTintColor: "white",
-        //     headerTitleAlign: "center",
-        //   }}
-        // />
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name="Missing"
-            component={Missing}
-          />
-        </Stack.Navigator>
-      )}
     </NavigationContainer>
   );
 }

@@ -11,22 +11,19 @@ export default function Missing() {
       resizeMode="cover"
       className="justify-center flex-1 w-screen"
     >
-      {/* <Link href="/Onboarding" style={styles.returnButton}>
-        <Return size={36} color="white" />
-      </Link> */}
       <StatusBar
         translucent
         backgroundColor="rgba(000, 000, 000, 0.5)"
         barStyle="light-content"
       />
-      <View className="flex items-center py-10">
+      <View className="flex items-center py-14">
         <QLogo />
         <NotFound width={300} />
-        <View className="mb-8">
-          <Text className="text-xl font-medium text-white text-center">
+        <View className="mb-8 py-4 bg-red-950 rounded-sxl flex flex-col items center justify-center">
+          <Text className="text-xl font-medium text-red-500 text-center">
             An error has occurred
           </Text>
-          <Text className="text-center text-white px-14">
+          <Text className="text-center text-red-500 px-14">
             Please try refreshing the application.
           </Text>
         </View>

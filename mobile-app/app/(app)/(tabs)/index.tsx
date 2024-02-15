@@ -27,7 +27,7 @@ export default function Index() {
   const linkTo = useLinkTo();
 
   const handleMissing = () => {
-    linkTo('/Missing');
+    router.replace('/Missing')
   };
 
   const handleScroll = (event: {
