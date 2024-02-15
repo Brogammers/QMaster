@@ -14,6 +14,9 @@ import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import { useAuth } from '@/ctx/AuthContext';
 import { API_BASE_URL } from '@env';
+import PhoneNumberFormat from 'react-phone-number-input';
+import CountryDropdown from 'react-phone-number-input';
+
 
 import { useDispatch } from 'react-redux';
 import { setEmail } from '../redux/authSlice'; // replace with the actual path
@@ -123,6 +126,7 @@ export default function SignUp() {
             dateOfBirth: '',
             counrtyOfOrigin: null,
             email: '',
+            phoneNumber: '',
             password: '',
             username: null,
             confirmPassword: '',
@@ -174,6 +178,18 @@ export default function SignUp() {
               {(errors.email && touched.email) &&
                 <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.email}</Text>
               }
+              {/* <TextInput
+                style={styles.input}
+                placeholder='Enter your phone number'
+                placeholderTextColor={'#515151'}
+                onChangeText={handleChange('phoneNumber')}
+                keyboardType='phone-pad'
+                value={values.phoneNumber}
+                autoCapitalize='none'
+              />
+              {(errors.phoneNumber && touched.phoneNumber) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.phoneNumber}</Text>
+              } */}
               <TextInput
                 style={styles.input}
                 placeholder='Enter new password'
