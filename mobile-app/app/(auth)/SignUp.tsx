@@ -1,4 +1,4 @@
-import { StyleSheet, ImageBackground, Alert, StatusBar } from 'react-native';
+import { StyleSheet, ImageBackground, Alert, StatusBar, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import {
   View,
@@ -14,6 +14,9 @@ import Return from '@/shared/components/Return';
 import background from '@/assets/images/background.png';
 import { useAuth } from '@/ctx/AuthContext';
 import { API_BASE_URL } from '@env';
+import PhoneNumberFormat from 'react-phone-number-input';
+import CountryDropdown from 'react-phone-number-input';
+
 
 import { useDispatch } from 'react-redux';
 import { setEmail } from '../redux/authSlice'; // replace with the actual path
@@ -119,10 +122,11 @@ export default function SignUp() {
         <Formik
           initialValues={{
             firstName: '',
-            lastName: null,
-            dateOfBirth: null,
+            lastName: '',
+            dateOfBirth: '',
             counrtyOfOrigin: null,
             email: '',
+            phoneNumber: '',
             password: '',
             username: null,
             confirmPassword: '',
@@ -142,10 +146,21 @@ export default function SignUp() {
             <View className='flex items-center justify-center w-full gap-4'>
               <TextInput
                 style={styles.input}
-                placeholder='Enter your full name'
+                placeholder='Enter your first name'
                 placeholderTextColor={'#515151'}
                 onChangeText={handleChange('firstName')}
                 value={values.firstName}
+                autoCapitalize='words'
+              />
+              {(errors.firstName && touched.firstName) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.firstName}</Text>
+              }
+              <TextInput
+                style={styles.input}
+                placeholder='Enter your last name'
+                placeholderTextColor={'#515151'}
+                onChangeText={handleChange('lastName')}
+                value={values.lastName}
                 autoCapitalize='words'
               />
               {(errors.firstName && touched.firstName) &&
@@ -163,6 +178,18 @@ export default function SignUp() {
               {(errors.email && touched.email) &&
                 <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.email}</Text>
               }
+              {/* <TextInput
+                style={styles.input}
+                placeholder='Enter your phone number'
+                placeholderTextColor={'#515151'}
+                onChangeText={handleChange('phoneNumber')}
+                keyboardType='phone-pad'
+                value={values.phoneNumber}
+                autoCapitalize='none'
+              />
+              {(errors.phoneNumber && touched.phoneNumber) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.phoneNumber}</Text>
+              } */}
               <TextInput
                 style={styles.input}
                 placeholder='Enter new password'

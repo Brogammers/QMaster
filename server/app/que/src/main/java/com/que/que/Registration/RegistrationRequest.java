@@ -20,4 +20,6 @@ public class RegistrationRequest {
     private final String email;
     private final String username;
     private final String confirmPassword;
+    private final String phoneCode;
+    private final String phoneNumber;
 }

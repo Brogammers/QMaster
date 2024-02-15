@@ -61,7 +61,7 @@ public class AppUserService implements UserDetailsService {
     Map<String, String> context = new HashMap<>();
     context.put("name", appUser.getFirstName());
     emailService.send(appUser.getEmail(),
-        "server/app/que/src/main/resources/templates/Hello.html", "Welcome!", context); // TODO: Send email
+        "src/main/resources/templates/Hello.html", "Welcome!", context); // TODO: Send email
     return confirmationToken.toString();
   }
 
