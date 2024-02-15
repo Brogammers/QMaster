@@ -16,6 +16,7 @@ import FrequentlyAsked from "@/components/FrequentlyAsked";
 import CurrentQueuesList from "@/components/CurrentQueuesList";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
+import { useLinkTo } from '@react-navigation/native';
 
 export default function Index() {
   const [bgColor, setBgColor] = useState("#17222D");
@@ -23,9 +24,10 @@ export default function Index() {
   const scanQrRef = useRef<View>(null);
   const [scanQrHeight, setScanQrHeight] = useState(0);
   const router = useRouter();
+  const linkTo = useLinkTo();
 
   const handleMissing = () => {
-    router.replace("/Missing");
+    linkTo('/Missing');
   };
 
   const handleScroll = (event: {
