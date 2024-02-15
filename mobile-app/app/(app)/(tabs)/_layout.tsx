@@ -16,8 +16,10 @@ import { Entypo } from "@expo/vector-icons";
 import BrandsList from "@/app/BrandsList";
 import QueuePage from "@/app/QueuePage";
 import Missing from "@/app/Missing";
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default function AppEntry() {
   const navigationRef = useRef<NavigationContainerRef<ParamListBase>>(null);
@@ -169,19 +171,25 @@ export default function AppEntry() {
           />
         </Tab.Navigator>
       ) : (
-        <Tab.Screen
-          name="Missing"
-          component={Missing}
-          options={{
-            tabBarButton: () => null,
-            headerShown: false,
-            headerStyle: {
-              backgroundColor: "#17222D",
-            },
-            headerTintColor: "white",
-            headerTitleAlign: "center",
-          }}
-        />
+        // <Tab.Screen
+        //   name="Missing"
+        //   component={Missing}
+        //   options={{
+        //     tabBarButton: () => null,
+        //     headerShown: false,
+        //     headerStyle: {
+        //       backgroundColor: "#17222D",
+        //     },
+        //     headerTintColor: "white",
+        //     headerTitleAlign: "center",
+        //   }}
+        // />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen
+            name="Missing"
+            component={Missing}
+          />
+        </Stack.Navigator>
       )}
     </NavigationContainer>
   );
