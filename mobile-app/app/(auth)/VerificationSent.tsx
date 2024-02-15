@@ -32,6 +32,7 @@ export default function VerificationSent() {
         <LottieView
           style={styles.animatedLogo}
           source={MailBoxAnimation}
+          speed={0.5}
           autoPlay
           loop
         />
