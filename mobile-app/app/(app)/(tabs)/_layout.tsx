@@ -15,7 +15,7 @@ import Notifications from "@/app/Notifications";
 import { Entypo } from "@expo/vector-icons";
 import BrandsList from "@/app/BrandsList";
 import QueuePage from "@/app/QueuePage";
-import Missing from "@/app/Missing";
+import Missing from "@/app/[...missing]";
 
 const Tab = createBottomTabNavigator();
 
