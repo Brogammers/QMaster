@@ -28,15 +28,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class AppUser implements UserDetails {
 
   @Id
-  @SequenceGenerator(
-    name = "user_sequence",
-    sequenceName = "user_sequence",
-    allocationSize = 1
-  )
-  @GeneratedValue(
-    strategy = GenerationType.SEQUENCE,
-    generator = "user_sequence"
-  )
+  @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
   private Long id;
 
   @Enumerated(EnumType.STRING)
@@ -47,6 +40,12 @@ public class AppUser implements UserDetails {
 
   private String lastName;
   private String userName;
+
+  @Column(nullable = false)
+  private String phoneCode;
+  @Column(nullable = false)
+  private String phoneNumber;
+
   private LocalDateTime dateOfRegistration;
   private LocalDate dateOfBirth;
   private String countryOfOrigin;
@@ -70,19 +69,18 @@ public class AppUser implements UserDetails {
   private byte subscriptionPlan;
 
   public AppUser(
-    AppUserRole appUserRole,
-    String firstName,
-    String lastName,
-    String username,
-    LocalDateTime dateOfRegistration,
-    LocalDate dateOfBirth,
-    String countryOfOrigin,
-    String password,
-    String email,
-    boolean locked,
-    boolean enabled,
-    byte subscriptionPlan
-  ) {
+      AppUserRole appUserRole,
+      String firstName,
+      String lastName,
+      String username,
+      LocalDateTime dateOfRegistration,
+      LocalDate dateOfBirth,
+      String countryOfOrigin,
+      String password,
+      String email,
+      boolean locked,
+      boolean enabled,
+      byte subscriptionPlan) {
     this.appUserRole = appUserRole;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -101,8 +99,7 @@ public class AppUser implements UserDetails {
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
-      appUserRole.name()
-    );
+        appUserRole.name());
     return Collections.singletonList(authority);
   }
 
