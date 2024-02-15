@@ -7,9 +7,8 @@ import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRole;
 import com.que.que.User.AppUserService;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +23,7 @@ public class RegistrationService {
   private final EmailValidator emailValidator;
   private final ConfirmationTokenService confirmationTokenService;
   private final EmailSender emailSender;
-  private final List<String> phoneCodes;
+  private final HashSet<String> phoneCodes;
   private boolean countryCodesRendered;
 
   public String register(RegistrationRequest request) {
@@ -86,8 +85,6 @@ public class RegistrationService {
   }
 
   public void renderCountryCodes() {
-    List<String> phoneCodes = new ArrayList<>();
-
     // Add country phone number codes to the list
     phoneCodes.add("+93"); // Afghanistan
     phoneCodes.add("+355"); // Albania
