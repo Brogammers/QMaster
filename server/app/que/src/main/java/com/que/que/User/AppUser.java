@@ -80,7 +80,9 @@ public class AppUser implements UserDetails {
       String email,
       boolean locked,
       boolean enabled,
-      byte subscriptionPlan) {
+      byte subscriptionPlan,
+      String phoneCode,
+      String phoneNumber) {
     this.appUserRole = appUserRole;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -94,6 +96,8 @@ public class AppUser implements UserDetails {
     this.enabled = enabled;
     this.queueId = -1;
     this.subscriptionPlan = subscriptionPlan;
+    this.phoneCode = phoneCode;
+    this.phoneNumber = phoneNumber;
   }
 
   @Override

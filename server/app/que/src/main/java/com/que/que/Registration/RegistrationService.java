@@ -55,7 +55,9 @@ public class RegistrationService {
             request.getEmail(),
             false,
             false,
-            (byte) 0));
+            (byte) 0,
+            request.getPhoneCode(),
+            request.getPhoneNumber()));
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);
