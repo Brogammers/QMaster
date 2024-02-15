@@ -2,7 +2,6 @@ package com.que.que.QueueList;
 
 import com.que.que.Queue.QueueRepository;
 import com.que.que.Queue.Queues;
-import java.util.List;
 import lombok.AllArgsConstructor;
 
 import org.springframework.data.domain.Page;
