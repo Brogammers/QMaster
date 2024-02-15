@@ -1,4 +1,4 @@
-import { StyleSheet, ImageBackground, Alert, StatusBar } from 'react-native';
+import { StyleSheet, ImageBackground, Alert, StatusBar, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import {
   View,
@@ -119,8 +119,8 @@ export default function SignUp() {
         <Formik
           initialValues={{
             firstName: '',
-            lastName: null,
-            dateOfBirth: null,
+            lastName: '',
+            dateOfBirth: '',
             counrtyOfOrigin: null,
             email: '',
             password: '',
@@ -142,10 +142,21 @@ export default function SignUp() {
             <View className='flex items-center justify-center w-full gap-4'>
               <TextInput
                 style={styles.input}
-                placeholder='Enter your full name'
+                placeholder='Enter your first name'
                 placeholderTextColor={'#515151'}
                 onChangeText={handleChange('firstName')}
                 value={values.firstName}
+                autoCapitalize='words'
+              />
+              {(errors.firstName && touched.firstName) &&
+                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.firstName}</Text>
+              }
+              <TextInput
+                style={styles.input}
+                placeholder='Enter your last name'
+                placeholderTextColor={'#515151'}
+                onChangeText={handleChange('lastName')}
+                value={values.lastName}
                 autoCapitalize='words'
               />
               {(errors.firstName && touched.firstName) &&
