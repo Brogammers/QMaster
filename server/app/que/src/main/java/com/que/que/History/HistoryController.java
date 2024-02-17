@@ -25,7 +25,7 @@ public class HistoryController {
     public ResponseEntity<Object> userHistory(@RequestParam("id") Long id) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
-        List<QueueEnqueue> history = null;
+        Map<String, Object> history = null;
         try {
             history = historyService.getUserHistory(id);
         } catch (IllegalStateException e) {

@@ -42,4 +42,8 @@ public class QueueDequeue {
         this.queue = queue;
         this.actionDate = LocalDateTime.now();
     }
+
+    public QueueDequeue() {
+        this(null, null);
+    }
 }

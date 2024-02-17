@@ -24,13 +24,11 @@ public class RegistrationService {
   private final ConfirmationTokenService confirmationTokenService;
   private final EmailSender emailSender;
   private final HashSet<String> phoneCodes;
-  private boolean countryCodesRendered;
 
   public String register(RegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
-    if (!countryCodesRendered) {
+    if (phoneCodes.isEmpty()) {
       renderCountryCodes();
-      countryCodesRendered = true;
     }
     if (!isValidEmail) {
       throw new IllegalStateException("Email invalid");
@@ -38,9 +36,9 @@ public class RegistrationService {
     if (!request.getPassword().equals(request.getConfirmPassword())) {
       throw new IllegalStateException("Password do not match");
     }
-    if (!phoneCodes.contains(request.getPhoneCode())) {
+    /*if (!phoneCodes.contains(request.getPhoneCode())) {
       throw new IllegalStateException("Phone code not found");
-    }
+    }*/
     String token = appUserService.signUpUser(
         new AppUser(
             AppUserRole.USER,
@@ -55,8 +53,8 @@ public class RegistrationService {
             false,
             false,
             (byte) 0,
-            request.getPhoneCode(),
-            request.getPhoneNumber()));
+            "+20",
+            "1202250070"));//request.getPhoneNumber(),  request.getPhoneCode(),
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);
