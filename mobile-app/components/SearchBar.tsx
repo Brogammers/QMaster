@@ -9,7 +9,7 @@ export default function SearchBar() {
   const linkTo = useLinkTo();
 
   const handleSearchPress = () => {
-    linkTo('/Search'); // Navigate to the "search" page
+    linkTo('/Search'); 
   };
 
   return (
