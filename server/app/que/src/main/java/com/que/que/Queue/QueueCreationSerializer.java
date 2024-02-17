@@ -7,26 +7,26 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-public class QueueDequeueSerializer extends StdSerializer<QueueDequeue> {
+public class QueueCreationSerializer extends StdSerializer<QueueCreation> {
 
-  public QueueDequeueSerializer() {
+  public QueueCreationSerializer() {
     this(null);
   }
 
-  public QueueDequeueSerializer(Class<QueueDequeue> t) {
+  public QueueCreationSerializer(Class<QueueCreation> t) {
     super(t);
   }
 
   @Override
   public void serialize(
-      QueueDequeue value, JsonGenerator jgen, SerializerProvider provider)
+      QueueCreation value, JsonGenerator jgen, SerializerProvider provider)
       throws IOException, JsonProcessingException {
 
     jgen.writeStartObject();
     jgen.writeNumberField("id", value.getId());
     jgen.writeStringField("name", value.getQueue().getName());
     jgen.writeObjectField("time", value.getActionDate());
-    jgen.writeStringField("notification", "You were dequeued successfully!");
+    jgen.writeStringField("notification", "You created a queue successfully!");
     jgen.writeEndObject();
   }
 }
