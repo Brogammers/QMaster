@@ -1,7 +1,9 @@
 package com.que.que.History;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -21,14 +23,14 @@ public class HistoryService {
     private final QueueDequeueRepository queueDequeueRepository;
     private final AppUserRepository appUserRepository;
 
-    public List<Object> getUserHistory(Long id) {
+    public Map<String, Object> getUserHistory(Long id) {
         AppUser appUser = appUserRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Could not find user with such id"));
-        List<Object> result = new ArrayList<>();
         List<QueueEnqueue> historyQueue = queueEnqueueRepository.findByAppUser(appUser);
         List<QueueDequeue> historyDequeue = queueDequeueRepository.findByAppUser(appUser);
-        result.addAll(historyDequeue);
-        result.addAll(historyQueue);
-        return result;
+        Map<String, Object> map = new HashMap<>();
+        map.put("enqueuings", historyQueue);
+        map.put("dequeuings", historyDequeue);
+        return map;
     }
 }
