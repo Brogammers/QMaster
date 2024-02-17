@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.User.AppUser;
 
 import jakarta.persistence.Column;
@@ -21,6 +22,7 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
+@JsonSerialize(using = QueueEnqueueSerializer.class)
 public class QueueEnqueue {
     @Id
     @SequenceGenerator(name = "queue_enequeue_sequence", sequenceName = "queue_enequeue_sequence", allocationSize = 1)
