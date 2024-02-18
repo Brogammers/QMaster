@@ -120,3 +120,8 @@ export interface QueueInfoCardProps {
   image: any,
   name: String,
 }
+
+export interface UserState {
+  firstName: string | null;
+  lastName: string | null;
+}

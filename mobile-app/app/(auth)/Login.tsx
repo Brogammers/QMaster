@@ -67,7 +67,7 @@ export default function Login() {
 					// Update the session state and wait for the update to complete
 					await new Promise<void>((resolve) => {
 						dispatch(setEmail(response.data.email));
-						dispatch(setUsername(response.data.first));
+						dispatch(setUsername(response.data.firstName + " " + response.data.lastName));
 						console.log(typeof response.data.email);
 						resolve();
 					});

@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 
 export default function Account() {
-  const username = useSelector((state: RootState) => state.username.username);
+  const firstName = useSelector((state: RootState) => state.username.username)?.split(' ')[0];
 
   return (
     <SafeAreaView className="items-center self-center flex-1 w-screen bg-off-white">
@@ -17,8 +17,8 @@ export default function Account() {
       <View className="w-10/12">
         <ScrollView>
           <Text className="w-full pb-6 text-3xl font-extrabold text-left border-b text-ocean-blue-2 border-lite-grey">
-            Hi {username ? 
-              username : "Anonymous"
+            Hi {firstName ? 
+              firstName : "Anonymous"
             }!
           </Text>
           <AccountPageItems />

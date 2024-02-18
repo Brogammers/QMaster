@@ -28,13 +28,10 @@ export default function History() {
 			StatusBar.setTranslucent;
 		}
 
-		// IOS Simulator
-		// const response = await axios.get(`${API_BASE_URL_HISTORY}`);
-		// Android Emulator
 		const fetchData = async () => {
 			try {
 				const response = await axios.get(
-					`${API_BASE_URL_HISTORY_ANDROID}?id=1` // TODO: Use user id from session
+					`${API_BASE_URL_HISTORY}?id=1`
 				);
 				const data = response.data.history;
 
