@@ -3,14 +3,8 @@ import { Text, View, Image, TouchableOpacity } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { HistoryComponentProps } from "@/types";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import axios from "axios";
-import { API_BASE_URL_HISTORY_ANDROID } from "@env";
 
 export default function HistoryComponent(props: HistoryComponentProps) {
-	// IOS Simulator
-	// const response = await axios.get(`${API_BASE_URL_HISTORY}`);
-	// Android Emulator
-	const history = axios.get("${API_BASE_URL_HISTORY_ANDROID}" + "?id=1"); // TODO: add user id to session and use it from session to get history
 	const {
 		image,
 		name,
