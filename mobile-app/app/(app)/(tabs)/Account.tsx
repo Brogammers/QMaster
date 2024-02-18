@@ -17,7 +17,9 @@ export default function Account() {
       <View className="w-10/12">
         <ScrollView>
           <Text className="w-full pb-6 text-3xl font-extrabold text-left border-b text-ocean-blue-2 border-lite-grey">
-            Hi {username}!
+            Hi {username ? 
+              username : "Anonymoous"
+            }!
           </Text>
           <AccountPageItems />
         </ScrollView>
