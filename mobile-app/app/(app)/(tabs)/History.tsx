@@ -3,13 +3,17 @@ import { Platform, StatusBar, StyleSheet, ScrollView } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import HistoryComponent from "@/shared/components/HistoryComponent";
 import axios from "axios";
-import { API_BASE_URL_HISTORY_ANDROID } from "@env";
+import { 
+	API_BASE_URL_HISTORY_ANDROID,
+	API_BASE_URL_HISTORY
+} from "@env";
 import { HistoryComponentProps } from "@/types";
 import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 
 export default function History() {
 	const isFocused = useIsFocused();
-	const HistoryList: HistoryComponentProps[] = [];
+	// const HistoryList: HistoryComponentProps[] = [];
+	const [historyList, setHistoryList] = useState<HistoryComponentProps[]>([]);
 	const [historyEnqueue, setHistoryEnqueue] = useState<
 		HistoryComponentProps[]
 	>([]);
@@ -31,7 +35,7 @@ export default function History() {
 		const fetchData = async () => {
 			try {
 				const response = await axios.get(
-					`${API_BASE_URL_HISTORY_ANDROID}?id=1` // TODO: Use user id from session
+					`${API_BASE_URL_HISTORY}?id=1` // TODO: Use user id from session
 				);
 				const data = response.data.history;
 
@@ -48,8 +52,10 @@ export default function History() {
 					item.status = "Enqueued";
 					item.date = "Today";
 				});
-				HistoryList.push(...historyEnqueue);
-				HistoryList.push(...historyDequeue);
+				// HistoryList.push(...historyEnqueue);
+				// HistoryList.push(...historyDequeue);
+				setHistoryList([...historyEnqueue, ...historyDequeue]);
+
 			} catch (error) {
 				console.error(error);
 			}
@@ -63,7 +69,7 @@ export default function History() {
 			style={styles.container}
 			showsVerticalScrollIndicator={false}
 		>
-			{HistoryList.map((item, index) => (
+			{historyList.map((item, index) => (
 				<HistoryComponent
 					image={CarrefourLogo}
 					name={item.name}
