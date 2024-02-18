@@ -3,17 +3,16 @@ import { Platform, StatusBar, StyleSheet, ScrollView } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import HistoryComponent from "@/shared/components/HistoryComponent";
 import axios from "axios";
-import { 
-	API_BASE_URL_HISTORY_ANDROID,
-	API_BASE_URL_HISTORY
-} from "@env";
+import { API_BASE_URL_HISTORY_ANDROID, API_BASE_URL_HISTORY } from "@env";
 import { HistoryComponentProps } from "@/types";
 import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 
 export default function History() {
 	const isFocused = useIsFocused();
 	// const HistoryList: HistoryComponentProps[] = [];
-	const [historyList, setHistoryList] = useState<HistoryComponentProps[]>([]);
+	const [historyList, setHistoryList] = useState<HistoryComponentProps[]>(
+		[]
+	);
 	const [historyEnqueue, setHistoryEnqueue] = useState<
 		HistoryComponentProps[]
 	>([]);
@@ -29,19 +28,16 @@ export default function History() {
 			StatusBar.setTranslucent;
 		}
 
-		// IOS Simulator
-		// const response = await axios.get(`${API_BASE_URL_HISTORY}`);
-		// Android Emulator
 		const fetchData = async () => {
 			try {
 				const response = await axios.get(
-					`${API_BASE_URL_HISTORY}?id=1` // TODO: Use user id from session
+					`${API_BASE_URL_HISTORY}?id=1`
 				);
 				const data = response.data.history;
 
 				// Setting enqueue and dequeue history
-				setHistoryEnqueue(data.enqueuings);
-				setHistoryDequeue(data.dequeuings);
+				setHistoryEnqueue(data.enqueuings.content);
+				setHistoryDequeue(data.dequeuings.content);
 				historyDequeue.forEach((item) => {
 					item.isHistory = true;
 					item.status = "Dequeued";
@@ -55,7 +51,6 @@ export default function History() {
 				// HistoryList.push(...historyEnqueue);
 				// HistoryList.push(...historyDequeue);
 				setHistoryList([...historyEnqueue, ...historyDequeue]);
-
 			} catch (error) {
 				console.error(error);
 			}

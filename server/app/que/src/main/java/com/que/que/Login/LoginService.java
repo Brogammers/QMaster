@@ -46,6 +46,8 @@ public class LoginService {
       object.put("email", email);
       object.put("username", user.getUsername());
       object.put("userID", user.getId());
+      object.put("firstName", user.getFirstName());
+      object.put("lastName", user.getLastName());
       return object;
     } else {
       throw new IllegalStateException("User not found");

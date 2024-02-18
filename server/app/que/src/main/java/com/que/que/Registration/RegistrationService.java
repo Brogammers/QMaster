@@ -3,6 +3,7 @@ package com.que.que.Registration;
 import com.que.que.Email.EmailSender;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
+import com.que.que.Security.PasswordValidator;
 import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRole;
 import com.que.que.User.AppUserService;
@@ -22,13 +23,18 @@ public class RegistrationService {
   private final AppUserService appUserService;
   private final EmailValidator emailValidator;
   private final ConfirmationTokenService confirmationTokenService;
+  private final PasswordValidator passwordValidator;
   private final EmailSender emailSender;
   private final HashSet<String> phoneCodes;
 
   public String register(RegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
+    boolean isValidPassword = passwordValidator.test(request.getPassword());
     if (phoneCodes.isEmpty()) {
       renderCountryCodes();
+    }
+    if (!isValidPassword) {
+      throw new IllegalStateException("Password does not meet requirements");
     }
     if (!isValidEmail) {
       throw new IllegalStateException("Email invalid");
@@ -36,9 +42,11 @@ public class RegistrationService {
     if (!request.getPassword().equals(request.getConfirmPassword())) {
       throw new IllegalStateException("Password do not match");
     }
-    /*if (!phoneCodes.contains(request.getPhoneCode())) {
-      throw new IllegalStateException("Phone code not found");
-    }*/
+    /*
+     * if (!phoneCodes.contains(request.getPhoneCode())) {
+     * throw new IllegalStateException("Phone code not found");
+     * }
+     */
     String token = appUserService.signUpUser(
         new AppUser(
             AppUserRole.USER,
@@ -54,7 +62,7 @@ public class RegistrationService {
             false,
             (byte) 0,
             "+20",
-            "1202250070"));//request.getPhoneNumber(),  request.getPhoneCode(),
+            "1202250070"));// request.getPhoneNumber(), request.getPhoneCode(),
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);
