@@ -2,16 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Platform, StatusBar, StyleSheet, ScrollView } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import HistoryComponent from "@/shared/components/HistoryComponent";
-import { HistoryList } from "@/constants";
 import axios from "axios";
 import { API_BASE_URL_HISTORY_ANDROID } from "@env";
 import { HistoryComponentProps } from "@/types";
+import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 
 export default function History() {
 	const isFocused = useIsFocused();
-
-	const [history, setHistory] = useState<HistoryComponentProps[]>([]);
-
+	const HistoryList: HistoryComponentProps[] = [];
+	const [historyEnqueue, setHistoryEnqueue] = useState<
+		HistoryComponentProps[]
+	>([]);
+	const [historyDequeue, setHistoryDequeue] = useState<
+		HistoryComponentProps[]
+	>([]);
 	useEffect(() => {
 		if (isFocused) {
 			if (Platform.OS === "android") {
@@ -29,8 +33,23 @@ export default function History() {
 				const response = await axios.get(
 					`${API_BASE_URL_HISTORY_ANDROID}?id=1` // TODO: Use user id from session
 				);
-				const data =
-					response.data.enqueues + response.data.dequeues; // Access the queues array in the response
+				const data = response.data.history;
+
+				// Setting enqueue and dequeue history
+				setHistoryEnqueue(data.enqueuings);
+				setHistoryDequeue(data.dequeuings);
+				historyDequeue.forEach((item) => {
+					item.isHistory = true;
+					item.status = "Dequeued";
+					item.date = "Today";
+				});
+				historyEnqueue.forEach((item) => {
+					item.isHistory = true;
+					item.status = "Enqueued";
+					item.date = "Today";
+				});
+				HistoryList.push(...historyEnqueue);
+				HistoryList.push(...historyDequeue);
 			} catch (error) {
 				console.error(error);
 			}
@@ -46,13 +65,13 @@ export default function History() {
 		>
 			{HistoryList.map((item, index) => (
 				<HistoryComponent
-					image={item.image}
+					image={CarrefourLogo}
 					name={item.name}
-					location={item.location}
+					location={"Anything for now"}
 					date={item.date}
 					id={item.id}
 					status={item.status}
-					isHistory
+					isHistory={item.isHistory}
 					key={index}
 				/>
 			))}
