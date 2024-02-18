@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 
 export default function Account() {
-  const username = useSelector((state: RootState) => state.username);
+  const username = useSelector((state: RootState) => state.username.username);
 
   return (
     <SafeAreaView className="items-center self-center flex-1 w-screen bg-off-white">
