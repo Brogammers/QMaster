@@ -27,7 +27,7 @@ public class HistoryController {
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         Map<String, Object> history = null;
         try {
-            history = historyService.getUserHistory(id);
+            history = historyService.getUserHistory(id, 0, 5);
         } catch (IllegalStateException e) {
             statusCode = HttpStatusCode.valueOf(500);
             body.put("message", e.getMessage());

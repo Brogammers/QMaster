@@ -44,12 +44,12 @@ export default function Login() {
 
 		try {
 			// IOS Simulator
-			const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
+			//const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
 			// Android Emulator
-			// const response = await axios.post(
-			// 	"http://10.0.2.2:8080/api/v1/login",
-			// 	values
-			// );
+			const response = await axios.post(
+				"http://10.0.2.2:8080/api/v1/login",
+				values
+			);
 
 			if (response.status === 200 || response.status === 201) {
 				console.log("Login successful", values);
@@ -68,7 +68,7 @@ export default function Login() {
 					await new Promise<void>((resolve) => {
 						dispatch(setEmail(response.data.email));
 						dispatch(setUsername(response.data.email));
-						console.log(typeof response.data.email)
+						console.log(typeof response.data.email);
 						resolve();
 					});
 
