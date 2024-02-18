@@ -18,7 +18,7 @@ export default function Account() {
         <ScrollView>
           <Text className="w-full pb-6 text-3xl font-extrabold text-left border-b text-ocean-blue-2 border-lite-grey">
             Hi {firstName ? 
-              firstName : "Anonymous"
+              firstName.charAt(0).toUpperCase() + firstName.slice(1) : "Anonymous"
             }!
           </Text>
           <AccountPageItems />

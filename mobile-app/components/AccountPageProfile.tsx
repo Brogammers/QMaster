@@ -15,7 +15,7 @@ export default function AccountPageProfile() {
       <Image source={AccountInfo[0].image} className="mr-1"/>
         <View>
           <Text className="text-base text-white">
-            {username ? username : 'Anonymous'}
+            {username ? username.charAt(0).toUpperCase() + username.slice(1) : 'Anonymous'}
           </Text>
           <Text className="text-slate-grey text-xs">
             {AccountInfo[0].number}
