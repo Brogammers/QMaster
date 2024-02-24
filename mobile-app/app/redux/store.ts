@@ -5,6 +5,7 @@ import userSlice from './userSlice';
 export const store = configureStore({
   reducer: {
     emailSetter: authSlice,
+    tokenSetter: authSlice,
     username: userSlice
   },
 })
