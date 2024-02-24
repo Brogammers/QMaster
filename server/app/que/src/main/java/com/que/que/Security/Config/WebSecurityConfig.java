@@ -15,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.que.que.Security.JwtFilter;
 
 import lombok.AllArgsConstructor;
 
@@ -26,6 +29,7 @@ import lombok.AllArgsConstructor;
 public class WebSecurityConfig {
 
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	private final JwtFilter jwtFilter;
 
 	@Bean
 	public InMemoryUserDetailsManager userDetailsService() {
@@ -52,7 +56,8 @@ public class WebSecurityConfig {
 				.httpBasic(Customizer.withDefaults())
 				.cors((cors) -> cors.disable())
 				.sessionManagement(
-						(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+						(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
