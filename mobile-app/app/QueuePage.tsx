@@ -9,8 +9,7 @@ export default function QueuePage() {
   const { brandName, image }: any = route.params;
 
   return (
-    <View className="bg-off-white flex-1 items-center"
-    >
+    <View className="bg-off-white flex-1 items-center">
       <QueueInfoCard image={image} name={brandName} />
       <JoinQueue />     
     </View>
