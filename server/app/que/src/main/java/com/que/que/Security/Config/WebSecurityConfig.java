@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,42 +25,48 @@ import lombok.AllArgsConstructor;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails admin = User.withUsername("root")
-                .password(bCryptPasswordEncoder.encode("123456789"))
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(admin);
-    }
+	@Bean
+	public InMemoryUserDetailsManager userDetailsService() {
+		UserDetails admin = User.withUsername("root")
+				.password(bCryptPasswordEncoder.encode("123456789"))
+				.roles("ADMIN")
+				.build();
+		return new InMemoryUserDetailsManager(admin);
+	}
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // csrfTokenRepository(CookieCsrfTokenRepository
-        // .withHttpOnlyFalse())
+	@Bean
+	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+		// csrfTokenRepository(CookieCsrfTokenRepository
+		// .withHttpOnlyFalse())
 
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().permitAll())
-                .httpBasic(Customizer.withDefaults())
-                .formLogin((form) -> form
-                        .loginPage("/api/v1/user-login"));
-        return http.build();
-    }
+		http
+				.csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests((authorize) -> authorize
+						.requestMatchers(
+								"api/v1/token", "api/v1/login", "api/v1/registration",
+								"api/v1/registration/confirm")
+						.permitAll()
+						.anyRequest().authenticated())
+				.httpBasic(Customizer.withDefaults())
+				.cors((cors) -> cors.disable())
+				.sessionManagement(
+						(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            UserDetailsService userDetailsService) {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
-        authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
+		return http.build();
+	}
 
-        ProviderManager providerManager = new ProviderManager(authenticationProvider);
-        providerManager.setEraseCredentialsAfterAuthentication(false);
+	@Bean
+	public AuthenticationManager authenticationManager(
+			UserDetailsService userDetailsService) {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService);
+		authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
 
-        return providerManager;
-    }
+		ProviderManager providerManager = new ProviderManager(authenticationProvider);
+		providerManager.setEraseCredentialsAfterAuthentication(false);
+
+		return providerManager;
+	}
 }
