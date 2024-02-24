@@ -22,7 +22,7 @@ import { useAuth } from "@/ctx/AuthContext";
 import { API_BASE_URL_LOGIN } from "@env";
 
 import { useDispatch } from "react-redux";
-import { setEmail } from "../redux/authSlice";
+import { setEmail, setToken } from "../redux/authSlice";
 import { isEmpty } from "lodash";
 import { setUsername } from "../redux/userSlice";
 
@@ -67,7 +67,9 @@ export default function Login() {
 					// Update the session state and wait for the update to complete
 					await new Promise<void>((resolve) => {
 						dispatch(setEmail(response.data.email));
+						dispatch(setToken(response.data.token));
 						dispatch(setUsername(response.data.firstName + " " + response.data.lastName));
+						console.log(response.data);
 						console.log(typeof response.data.email);
 						resolve();
 					});
