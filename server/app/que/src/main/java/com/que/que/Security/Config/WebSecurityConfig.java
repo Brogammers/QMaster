@@ -54,7 +54,6 @@ public class WebSecurityConfig {
 						.permitAll()
 						.anyRequest().authenticated())
 				.httpBasic(Customizer.withDefaults())
-				.cors((cors) -> cors.disable())
 				.sessionManagement(
 						(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
