@@ -51,7 +51,7 @@ public class JwtUtil {
   }
 
   public String getUsername(String token) {
-    return getClaimFromToken(token, Claims::getSubject);
+    return getClaimFromToken(token, Claims::getId);
   }
 
   public Date getIssuedDate(String token) {

@@ -32,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     // Get authorization header and validate
     String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (!header.startsWith("Bearer ") || !StringUtils.hasText(header)) {
+    if (!StringUtils.hasText(header) || !header.startsWith("Bearer ")) {
       filterChain.doFilter(request, response);
       return;
     }
