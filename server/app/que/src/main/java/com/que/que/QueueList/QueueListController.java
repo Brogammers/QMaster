@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,7 @@ public class QueueListController {
   private final QueueListService queueListService;
 
   @GetMapping(path = "/list")
+  @Secured("USER")
   public ResponseEntity<Object> filterSortQueue(
       @RequestParam("page") int pageNumber,
       @RequestParam("per-page") int perPage,

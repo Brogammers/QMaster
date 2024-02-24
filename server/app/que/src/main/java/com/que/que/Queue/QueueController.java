@@ -40,6 +40,7 @@ public class QueueController {
     }
 
     @PutMapping(path = "/user")
+    @Secured("USER")
     public ResponseEntity<Object> enqueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
@@ -54,6 +55,7 @@ public class QueueController {
     }
 
     @PutMapping(path = "/holder")
+    @Secured("USER")
     public ResponseEntity<Object> dequeue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
@@ -75,6 +77,7 @@ public class QueueController {
     }
 
     @DeleteMapping
+    @Secured("USER")
     public ResponseEntity<Object> deleteQueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
