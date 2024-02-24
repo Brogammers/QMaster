@@ -44,6 +44,7 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
   const navigation = useNavigation();
 
   const email = useSelector((state: RootState) => state.emailSetter.email);
+  const token = useSelector((state: RootState) => state.tokenSetter.token);
 
   const handleNavigation = () => {
     setTimeout(() => {
@@ -92,9 +93,9 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
     <AuthContext.Provider
       value={{
         signIn: () => {
-          setUser(email);
+          setUser(token);
           // setSession(email);
-          debouncedSetSession(email);
+          debouncedSetSession(token);
         },
         
         signOut: () => {
