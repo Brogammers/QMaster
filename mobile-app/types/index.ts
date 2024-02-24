@@ -16,6 +16,10 @@ export interface AuthState {
   token: string | null ;
 }
 
+export interface AxiosInstance {
+  axiosInstance: AxiosInstance;
+}
+
 export interface CurrentItem {
   image: ImageSourcePropType;
   name: string;
