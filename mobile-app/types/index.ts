@@ -13,6 +13,7 @@ export interface SplashScreenProps {
 
 export interface AuthState {
   email: string | null;
+  token: string | null ;
 }
 
 export interface CurrentItem {

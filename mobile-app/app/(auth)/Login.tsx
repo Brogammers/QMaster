@@ -22,7 +22,7 @@ import { useAuth } from "@/ctx/AuthContext";
 import { API_BASE_URL_LOGIN } from "@env";
 
 import { useDispatch } from "react-redux";
-import { setEmail } from "../redux/authSlice";
+import { setEmail, setToken } from "../redux/authSlice";
 import { isEmpty } from "lodash";
 import { setUsername } from "../redux/userSlice";
 import SplashScreen from "../SplashScreen";
@@ -53,40 +53,44 @@ export default function Login() {
       // 	values
       // );
 
-      if (response.status === 200 || response.status === 201) {
-        console.log("Login successful", values);
-        if (auth && auth.signIn) {
-          console.log("This is the type of response: " + typeof response.data);
-          console.log(
-            "This is the email of the user: ",
-            response.data.email,
-            " and type: ",
-            typeof response.data.email
-          );
-          // Update the session state and wait for the update to complete
-          await new Promise<void>((resolve) => {
-            dispatch(setEmail(response.data.email));
-            dispatch(
-              setUsername(
-                response.data.firstName + " " + response.data.lastName
-              )
-            );
-            console.log(typeof response.data.email);
-            resolve();
-          });
+			if (response.status === 200 || response.status === 201) {
+				console.log("Login successful", values);
+				if (auth && auth.signIn) {
+					console.log(
+						"This is the type of response: " +
+							typeof response.data
+					);
+					console.log(
+						"This is the email of the user: ",
+						response.data.email,
+						" and type: ",
+						typeof response.data.email
+					);
+					// Update the session state and wait for the update to complete
+					await new Promise<void>((resolve) => {
+						dispatch(setEmail(response.data.email));
+						dispatch(setToken(response.data.token));
+						dispatch(setUsername(response.data.firstName + " " + response.data.lastName));
+						console.log(response.data);
+						console.log(typeof response.data.email);
+						resolve();
+					});
 
-          auth.signIn();
-        }
-      } else {
-        console.error("Login failed", response.data);
-        Alert.alert("Signup Failed", "Please check your input and try again.");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      Alert.alert(
-        "Error",
-        "An unexpected error occurred. Please try again later."
-      );
+					auth.signIn();
+				}
+			} else {
+				console.error("Login failed", response.data);
+				Alert.alert(
+					"Signup Failed",
+					"Please check your input and try again."
+				);
+			}
+		} catch (error) {
+			console.error("Login error:", error);
+			Alert.alert(
+				"Error",
+				"An unexpected error occurred. Please try again later."
+			);
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ServerError>;
