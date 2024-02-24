@@ -4,20 +4,23 @@
     <title>Account Activation</title>
     <style>
       body {
-        font-family: 'Inter', Arial, sans-serif;
-        color: #FFF;
-        background-color: #D9D9D9;
+        font-family: "Inter", Arial, sans-serif;
+        color: #fff;
+        background-color: #d9d9d9;
+      }
+      p {
+        color: #fff;
       }
       .email-container {
-        background-color: #17222D;
+        background-color: #17222d;
         padding: 20px;
         margin: 0 auto;
         width: 80%;
         max-width: 600px;
       }
       .button {
-        background-color: #1DCDFE;
-        color: #FFF;
+        background-color: #1dcdfe;
+        color: #fff;
         padding: 15px 25px;
         text-align: center;
         text-decoration: none;
@@ -25,11 +28,11 @@
         font-size: 16px;
         margin: 10px 2px;
         cursor: pointer;
-        font-family: 'Istok Web', Arial, sans-serif;
+        font-family: "Istok Web", Arial, sans-serif;
       }
       .footer {
-        border-top: 1px solid #D9D9D9;
-        color: #D9D9D9;
+        border-top: 1px solid #d9d9d9;
+        color: #d9d9d9;
         font-size: 12px;
         text-align: center;
         margin-top: 32px;
@@ -38,17 +41,34 @@
   </head>
   <body>
     <div class="email-container">
-      <h1 style="color: #34F5C5;">Activate Your Account</h1>
+      <h1 style="color: #34f5c5">Activate Your Account</h1>
       <p>Hello $[name],</p>
-      <p>Thank you for creating an account with us. Please click the button below to activate your account.</p>
-      <a href="http://localhost:8080/api/v1/registration/confirm?token=$[token]" class="button">Activate Account</a>
-      <p>If you have any questions or need further assistance, please contact our support team.</p>
+      <p>
+        Thank you for creating an account with us. Please click the button below
+        to activate your account.
+      </p>
+      <a
+        href="http://localhost:8080/api/v1/registration/confirm?token=$[token]"
+        class="button"
+        >Activate Account</a
+      >
+      <p>
+        If you have any questions or need further assistance, please contact our
+        support team.
+      </p>
       <p>Thanks,</p>
       <p>The QMaster Team</p>
       <div class="footer">
-        <p>Please do not reply to this email. You are receiving this email because you created a QMaster account at www.qmaster.com or from our mobile app. If you no longer wish to receive emails please update your QMaster email settings or unsubscribe.</p>
+        <p>
+          Please do not reply to this email. You are receiving this email
+          because you created a QMaster account at www.qmaster.com or from our
+          mobile app. If you no longer wish to receive emails please update your
+          QMaster email settings or unsubscribe.
+        </p>
         <p>Follow us on: $[Social Media Links]</p>
-        <p>© 2024 QMaster. 208 Obelisk St, New Adminstrative Capital, Egypt 94103</p>
+        <p>
+          © 2024 QMaster. 208 Obelisk St, New Adminstrative Capital, Egypt 94103
+        </p>
       </div>
     </div>
   </body>
