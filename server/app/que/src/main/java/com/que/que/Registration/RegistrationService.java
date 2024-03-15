@@ -66,8 +66,11 @@ public class RegistrationService {
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);
+    // TODO: Activate later
+    /* 
     emailSender.send(request.getEmail(), "src/main/resources/templates/Activation.html",
         "Confirm Email", context);
+    */
     return token;
   }
 
