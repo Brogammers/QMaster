@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 import lombok.AllArgsConstructor;
+import oracle.net.aso.l;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -191,6 +193,23 @@ public class QueueService {
         new QueueDeletion(currentQueue));
     queueRepository.deleteById(currentQueue.getId());
     print();
+  }
+
+  public ArrayList<Queues> currentQueues(long appUserId){
+    ArrayList<Queues> currentQueues = new ArrayList<>();
+    for(int queueSlot = 0; queueSlot < queue.size(); queueSlot++){
+      ArrayList<Queue<Long>> list = queue.get(queueSlot);
+      if(list.equals(null))
+        continue;
+      for(int specificSlot = 0; specificSlot < list.size(); specificSlot++){
+        Queue<Long> tempQueue = list.get(specificSlot);
+        if(tempQueue.contains(appUserId)){
+          ArrayList<Queues> queueToBeAdded = queueRepository.findByQueueSlotAndSpecificSlot(queueSlot, specificSlot);
+          currentQueues.add(queueToBeAdded.get(0));
+        }
+      }
+    }
+    return currentQueues;
   }
 
   public void print() {
