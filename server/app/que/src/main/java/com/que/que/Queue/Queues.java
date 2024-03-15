@@ -33,7 +33,7 @@ public class Queues {
     @ManyToOne
     @JoinColumn(nullable = false, name = "app_user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private AppUser appUser;
+    private AppUser creator;
     @Column(nullable = false)
     private int queueSlot;
     @Column(nullable = false)
@@ -42,9 +42,9 @@ public class Queues {
     private int peopleInQueue;
     private int rating;
 
-    public Queues(String name, AppUser appUser, int queueSlot, int specificSlot) {
+    public Queues(String name, AppUser creator, int queueSlot, int specificSlot) {
         this.name = name;
-        this.appUser = appUser;
+        this.creator = creator;
         this.queueSlot = queueSlot;
         this.specificSlot = specificSlot;
         this.peopleInQueue = 0;

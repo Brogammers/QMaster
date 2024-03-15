@@ -133,7 +133,7 @@ public class QueueService {
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
     Queues currentQueue = queueRepository.findByName(name)
         .orElseThrow(() -> new IllegalStateException("Could not find queue with such name"));
-    int queueSlot = currentQueue.getAppUser().getQueueId();
+    int queueSlot = currentQueue.getCreator().getQueueId();
 
     // Checking if user has slot in memory
     if (queueSlot == -1) {
@@ -198,7 +198,7 @@ public class QueueService {
       throw new IllegalStateException("User does not have specific queue");
     }
     if (queueHolderQueues.size() == 0) {
-      AppUser appUser = currentQueue.getAppUser();
+      AppUser appUser = currentQueue.getCreator();
       appUser.setQueueId(-1);
       queueSlots.push(queueSlot);
     }
