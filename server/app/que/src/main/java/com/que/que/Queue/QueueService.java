@@ -29,6 +29,7 @@ public class QueueService {
   private final ArrayList<ArrayList<Queue<Long>>> queue = queue();
   private final Stack<Integer> queueSlots = stack();
 
+  // Function called once upon server startup
   public void initializeQueueSlots(Stack<Integer> temp) {
     for (int i = 1000000; i >= 0; i--) {
       temp.push(i);
@@ -39,6 +40,8 @@ public class QueueService {
   public void createNewQueue(@NonNull Long queueHolderID, String name) {
     AppUser appUser = appUserRepository.findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find User"));
+
+    // Checking if current memory size for queues is full
     if (queueSlots.size() == 0) {
       throw new IllegalStateException("Can't add new queue");
     }
@@ -48,6 +51,8 @@ public class QueueService {
     if (queueRepository.findByName(name).orElse(null) != null) {
       throw new IllegalStateException("Queue name already used");
     }
+
+    // Checking if user already has a slot in memory if not assign one
     int queueLocation = getQueueSlot(queueHolderID);
     ArrayList<Queue<Long>> queueHolderQueue;
     if (queueLocation == -1) {
@@ -64,7 +69,7 @@ public class QueueService {
       queueHolderQueue = queue.get(queueLocation);
     }
     try {
-      // this currently has an error because the createQRCode method is not static
+      // This currently has an error because the createQRCode method is not static
       qrCodeService.createQRCode(
           queueHolderID,
           queueHolderQueue.size(),
@@ -75,6 +80,7 @@ public class QueueService {
     } catch (Exception e) {
       throw new IllegalStateException("Error while creating queue.");
     }
+
     Queues createdQueue = queueRepository.save(new Queues(
         name,
         appUser,
@@ -92,6 +98,8 @@ public class QueueService {
     int queueId = appUserFromDB.getQueueId();
     byte subscriptionPlan = appUserFromDB.getSubscriptionPlan();
     int max = 30;
+
+    // Current as placeholder 
     switch (subscriptionPlan) {
       case 0:
         max = 1;
@@ -126,6 +134,8 @@ public class QueueService {
     Queues currentQueue = queueRepository.findByName(name)
         .orElseThrow(() -> new IllegalStateException("Could not find queue with such name"));
     int queueSlot = currentQueue.getAppUser().getQueueId();
+
+    // Checking if user has slot in memory
     if (queueSlot == -1) {
       throw new IllegalStateException("User does not have such queue");
     }
@@ -148,11 +158,15 @@ public class QueueService {
     Queues currentQueue = queueRepository.findByName(name)
         .orElseThrow(() -> new IllegalStateException("Could not find queue"));
     int queueSlot = currentQueue.getQueueSlot();
+
+    // Checking if user has slot in memory
     if (queueSlot == -1) {
       throw new IllegalStateException("User does not have a queue setup");
     }
     ArrayList<Queue<Long>> queueHolderQueues = queue.get(queueSlot);
     try {
+
+      // Attempting to find queue requested and fetching user from it
       Queue<Long> specificQueue = queueHolderQueues.get(currentQueue.getSpecificSlot());
       if (specificQueue.isEmpty()) {
         return null;
@@ -195,10 +209,12 @@ public class QueueService {
     print();
   }
 
-  public ArrayList<Queues> currentQueues(long appUserId){
+  public ArrayList<Queues> currentQueuesOfUser(long appUserId){
     ArrayList<Queues> currentQueues = new ArrayList<>();
     for(int queueSlot = 0; queueSlot < queue.size(); queueSlot++){
       ArrayList<Queue<Long>> list = queue.get(queueSlot);
+
+      // If slot is empty in memory
       if(list.equals(null))
         continue;
       for(int specificSlot = 0; specificSlot < list.size(); specificSlot++){
