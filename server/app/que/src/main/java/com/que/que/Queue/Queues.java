@@ -3,6 +3,7 @@ package com.que.que.Queue;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.User.AppUser;
 
 import jakarta.persistence.Column;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor
+@JsonSerialize(using = QueuesSerialier.class)
 public class Queues {
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
