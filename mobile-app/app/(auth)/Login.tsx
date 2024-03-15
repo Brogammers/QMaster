@@ -109,7 +109,9 @@ export default function Login() {
         console.error("Non-Axios error:", error);
       }
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false); 
+      }, 1000);
     }
   };
 

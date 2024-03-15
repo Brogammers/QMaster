@@ -125,3 +125,7 @@ export interface UserState {
   firstName: string | null;
   lastName: string | null;
 }
+
+export interface NavigationState {
+  navigationSetter: boolean;
+}
