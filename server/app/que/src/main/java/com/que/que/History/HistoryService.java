@@ -42,7 +42,7 @@ public class HistoryService {
 
     public Map<String, Object> getUserCurrentQueues(Long id){
         ArrayList<Queues> currentQueues = queueService.currentQueuesOfUser(id);
-        Map<String, Object> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>();
         map.put("currentQueues",currentQueues);
         return map;
     }
