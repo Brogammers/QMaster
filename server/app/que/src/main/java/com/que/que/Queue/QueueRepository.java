@@ -9,9 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+
+
 @Repository
 public interface QueueRepository extends JpaRepository<Queues, Long> {
   Optional<Queues> findByName(String name);
+
+  ArrayList<Queues> findByQueueSlotAndSpecificSlot(int queueSlot, int specificSlot);
 
   Page<Queues> findAll(Pageable page);
 
