@@ -32,7 +32,7 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required("Password required"),
 });
 
-export default async function Login() {
+export default function Login() {
   const dispatch = useDispatch();
   const auth = useAuth();
   const [errorMessage, setErrorMessage] = useState("");
@@ -120,11 +120,11 @@ export default async function Login() {
   }, [errorMessage]);
 
   return (
-    <ImageBackground source={background} style={styles.container}>
+    <>
 			{isLoading ? (
 				<SplashScreen />
 			) : (
-				<>
+				<ImageBackground source={background} style={styles.container}>
 					<Link href="/Onboarding" style={styles.returnButton}>
 						<Return size={36} color="white" />
 					</Link>
@@ -232,9 +232,9 @@ export default async function Login() {
 							)}
 						</Formik>
 					</View>
-				</>
+				</ImageBackground>
 			)}
-    </ImageBackground>
+    </>
   );
 }
 
