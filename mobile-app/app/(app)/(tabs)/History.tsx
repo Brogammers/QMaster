@@ -6,6 +6,7 @@ import axios from "axios";
 import { API_BASE_URL_HISTORY_ANDROID, API_BASE_URL_HISTORY } from "@env";
 import { HistoryComponentProps } from "@/types";
 import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function History() {
 	const isFocused = useIsFocused();
@@ -20,37 +21,38 @@ export default function History() {
 		HistoryComponentProps[]
 	>([]);
 	useEffect(() => {
-		if (isFocused) {
-			if (Platform.OS === "android") {
-				StatusBar.setBackgroundColor("#17222D", true);
-			}
-			StatusBar.setBarStyle("light-content");
-			StatusBar.setTranslucent;
-		}
-
 		const fetchData = async () => {
 			try {
-				const response = await axios.get(
-					`${API_BASE_URL_HISTORY}?id=1`
-				);
-				const data = response.data.history;
+				let historyData = await AsyncStorage.getItem('historyData');
+				if (historyData) {
+					// If history data exists in AsyncStorage, parse and set it
+					setHistoryList(JSON.parse(historyData));
+				} else {
+					// Fetch history data from API if not found in AsyncStorage
+					const response = await axios.get(`${API_BASE_URL_HISTORY}?id=1`);
+					const data = response.data.history;
+					let historyEnqueue = data.enqueuings.content;
+					let historyDequeue = data.dequeuings.content;
 
-				// Setting enqueue and dequeue history
-				setHistoryEnqueue(data.enqueuings.content);
-				setHistoryDequeue(data.dequeuings.content);
-				historyDequeue.forEach((item) => {
-					item.isHistory = true;
-					item.status = "Dequeued";
-					item.date = "Today";
-				});
-				historyEnqueue.forEach((item) => {
-					item.isHistory = true;
-					item.status = "Enqueued";
-					item.date = "Today";
-				});
-				// HistoryList.push(...historyEnqueue);
-				// HistoryList.push(...historyDequeue);
-				setHistoryList([...historyEnqueue, ...historyDequeue]);
+					// Modify history items
+					historyDequeue.forEach((item: { isHistory: boolean; status: string; date: string; }) => {
+							item.isHistory = true;
+							item.status = "Dequeued";
+							item.date = "Today";
+					});
+					historyEnqueue.forEach((item: { isHistory: boolean; status: string; date: string; }) => {
+							item.isHistory = true;
+							item.status = "Enqueued";
+							item.date = "Today";
+					});
+
+					// Combine and set history list
+					let combinedHistory = [...historyEnqueue, ...historyDequeue];
+					setHistoryList(combinedHistory);
+
+					// Store fetched data in AsyncStorage for caching
+					await AsyncStorage.setItem('historyData', JSON.stringify(combinedHistory));
+				}
 			} catch (error) {
 				console.error(error);
 			}
