@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useStorageState } from '../hooks/useStorageState';
 import { useRouter, useSegments } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
 
 import { useSelector } from 'react-redux';
@@ -39,6 +40,8 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
   const [user, setUser] = useState<string | undefined | null>("");  
   const [[isLoading, session], setSession] = useStorageState('session');
   const [isTimeoutComplete, setIsTimeoutComplete] = useState(false);
+  const [isNavigated, setIsNavigated] = useState(false);
+  const navigation = useNavigation();
 
   const email = useSelector((state: RootState) => state.emailSetter.email);
 
