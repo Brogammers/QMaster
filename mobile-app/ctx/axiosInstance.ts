@@ -11,7 +11,7 @@ async function getToken() {
   return token?.toString();
 }
 
-const token = String(getToken());
+const token = await getToken();
 
 const axiosInstance = axios.create({
   // baseURL: BASE_URL,
