@@ -12,14 +12,14 @@ async function getToken() {
 
 const axiosInstance = axios.create({
   // baseURL: BASE_URL,
-  timeout: 5000,
+  timeout: 6000,
   headers: {
     Authorization: "Bearer " + String(getToken()),
     "Content-Type": "application/json",
   },
 });
 
-console.log("Bearer " + String(getToken()));
+console.log(axiosInstance.toString());
 // const axiosInstance = axios.create();
 
 // axiosInstance.interceptors.request.use(
