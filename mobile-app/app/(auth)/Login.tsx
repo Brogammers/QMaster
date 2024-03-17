@@ -78,7 +78,7 @@ export default function Login() {
 
             await AsyncStorage.setItem("token", response.data.token);
             const tokenCheck = await AsyncStorage.getItem("token");
-						console.log("JWT token stored? ", tokenCheck);
+            console.log("JWT token stored? ", tokenCheck);
             // creating an Axios instance
             // iOS Simulator
             const axiosInstance = axios.create({
@@ -95,6 +95,7 @@ export default function Login() {
             axiosInstance.defaults.headers.post["Content-Type"] =
               "application/json";
 
+            console.log(axiosInstance.defaults.headers);
             resolve();
           });
 

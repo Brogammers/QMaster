@@ -6,9 +6,11 @@ const BASE_URL = "http://localhost:8080/api/v1";
 
 // const token = await AsyncStorage.getItem("token");
 
-console.log("Before axios call. Headers: ", axios.defaults.headers);
+const axiosInstance = axios.create();
 
-axios.interceptors.request.use(
+console.log("Before axios call. Headers: ", axiosInstance.defaults.headers);
+
+axiosInstance.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem("token");
     if (token) {
@@ -21,7 +23,7 @@ axios.interceptors.request.use(
   }
 );
 
-axios.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     // Handle 401 Unauthorized errors here
@@ -33,4 +35,7 @@ axios.interceptors.response.use(
   }
 );
 
-console.log("After axios interceptors. Headers: ", axios.defaults.headers);
+console.log(
+  "After axios interceptors. Headers: ",
+  axiosInstance.defaults.headers
+);
