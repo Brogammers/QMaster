@@ -19,7 +19,7 @@ const axiosInstance = axios.create({
   },
 });
 
-console.log(`Bearer ${getToken()}`);
+console.log("Bearer " + getToken());
 // const axiosInstance = axios.create();
 
 // axiosInstance.interceptors.request.use(
