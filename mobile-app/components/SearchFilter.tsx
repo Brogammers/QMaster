@@ -3,8 +3,8 @@ import SearchItem from "../shared/components/SearchItem";
 import { View, FlatList, Text } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { CurrentQueuesProps, SearchFilterProps } from "@/types";
-import axios from "axios";
 import { API_BASE_URL_SEARCH } from "@env";
+import axiosInstance from "@/ctx/axiosInstance";
 
 export default function SearchFilter(props: SearchFilterProps) {
   const { input } = props;
@@ -15,7 +15,7 @@ export default function SearchFilter(props: SearchFilterProps) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL_SEARCH}?filter=${input}&page=1&per-page=1&order=order`);
+        const response = await axiosInstance.get(`${API_BASE_URL_SEARCH}?filter=${input}&page=1&per-page=1&order=order`);
         const data = response.data.queues; // Access the queues array in the response
         const filtered = data.filter((item: CurrentQueuesProps) => item.name.toLowerCase().includes(input.toLowerCase()));
         setFilteredData(filtered);
