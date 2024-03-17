@@ -15,6 +15,8 @@ const axiosInstance = axios.create({
   },
 });
 
+console.log("Headers: ", axiosInstance.defaults.headers);
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -26,7 +28,5 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-console.log("Headers: ", axiosInstance.defaults.headers);
 
 export default axiosInstance;
