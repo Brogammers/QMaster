@@ -10,7 +10,7 @@ import {
 import { HistoryComponentProps } from "@/types";
 import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axiosInstance from "@/ctx/axiosInstance";
+import axios from "axios";
 
 export default function History() {
   const isFocused = useIsFocused();
@@ -31,10 +31,8 @@ export default function History() {
           setHistoryList(JSON.parse(historyData));
         } else {
           // Fetch history data from API if not found in AsyncStorage
-          console.log("History Response ", axiosInstance.head);
-          const response = await axiosInstance.get(
-            `${API_BASE_URL_HISTORY}?id=1`
-          );
+          console.log("History Response ", axios.head);
+          const response = await axios.get(`${API_BASE_URL_HISTORY}?id=1`);
           const data = response.data.history;
           let historyEnqueue = data.enqueuings.content;
           let historyDequeue = data.dequeuings.content;

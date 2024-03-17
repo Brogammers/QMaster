@@ -81,21 +81,17 @@ export default function Login() {
             console.log("JWT token stored? ", tokenCheck);
             // creating an Axios instance
             // iOS Simulator
-            const axiosInstance = axios.create({
-              baseURL: "http://localhost:8080/api/v1",
-            });
 
             // Android Simulator
             // http://10.0.2.2:8080/api/v1
-
             // Setting the default headers
-            axiosInstance.defaults.headers.common[
+            axios.defaults.headers.common[
               "Authorization"
             ] = `Bearer ${response.data.token}`;
-            axiosInstance.defaults.headers.post["Content-Type"] =
-              "application/json";
+            axios.defaults.headers.post["Content-Type"] = "application/json";
 
-            console.log(axiosInstance.defaults.headers);
+            console.log(axios.defaults.headers);
+
             resolve();
           });
 
