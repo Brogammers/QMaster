@@ -31,7 +31,7 @@ export default function History() {
           setHistoryList(JSON.parse(historyData));
         } else {
           // Fetch history data from API if not found in AsyncStorage
-          console.log("History Response ", axios.head);
+          console.log("History Response ", axios.defaults.headers);
           const response = await axios.get(`${API_BASE_URL_HISTORY}?id=1`);
           const data = response.data.history;
           let historyEnqueue = data.enqueuings.content;
