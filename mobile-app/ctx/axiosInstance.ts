@@ -1,14 +1,23 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
 
-const axiosInstance = axios.create();
+
+// Define your base URL (adjust this to your actual backend URL)
+const BASE_URL = 'http://localhost:8080/asdasd';
+
+const axiosInstance = axios.create({
+  baseURL: BASE_URL, // Set the base URL for all requests
+});
 
 axiosInstance.interceptors.request.use(
   async config => {
     const token = await AsyncStorage.getItem('token');
-    console.log(token);
+    console.log("JWT in Axios", token);
+    Alert.alert("Token", token?.toString())
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log("Authorized JWT", config.headers.Authorization.toString());
     }
     return config;
   },

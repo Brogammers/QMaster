@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Platform, StatusBar, StyleSheet, ScrollView } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import HistoryComponent from "@/shared/components/HistoryComponent";
-import { API_BASE_URL_HISTORY_ANDROID, API_BASE_URL_HISTORY } from "@env";
+import { API_BASE_URL_HISTORY_ANDROID, API_BASE_URL_HISTORY, BASE_URL } from "@env";
 import { HistoryComponentProps } from "@/types";
 import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -29,7 +29,8 @@ export default function History() {
 					setHistoryList(JSON.parse(historyData));
 				} else {
 					// Fetch history data from API if not found in AsyncStorage
-					const response = await axiosInstance.get(`${API_BASE_URL_HISTORY}?id=1`);
+					const response = await axiosInstance.get(`${BASE_URL}/history?id=1`);
+					console.log("History Response ", response);
 					const data = response.data.history;
 					let historyEnqueue = data.enqueuings.content;
 					let historyDequeue = data.dequeuings.content;
