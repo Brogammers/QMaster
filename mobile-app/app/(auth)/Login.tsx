@@ -85,10 +85,10 @@ export default function Login() {
             // Android Simulator
             // http://10.0.2.2:8080/api/v1
             // Setting the default headers
-            axios.defaults.headers.common[
+            axios.defaults.headers[
               "Authorization"
             ] = `Bearer ${response.data.token}`;
-            axios.defaults.headers.post["Content-Type"] = "application/json";
+            axios.defaults.headers["Content-Type"] = "application/json";
 
             console.log(axios.defaults.headers);
 
