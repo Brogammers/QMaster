@@ -1,4 +1,9 @@
-import { Animated, ImageSourcePropType, StyleProp, ViewStyle } from "react-native";
+import {
+  Animated,
+  ImageSourcePropType,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
 import { SvgProps } from "react-native-svg";
 
 export interface OnboardingItem {
@@ -13,6 +18,11 @@ export interface SplashScreenProps {
 
 export interface AuthState {
   email: string | null;
+  token: string | null;
+}
+
+export interface AxiosInstance {
+  axiosInstance: AxiosInstance;
 }
 
 export interface CurrentItem {
@@ -23,8 +33,8 @@ export interface CurrentItem {
 }
 
 export interface SearchFilterProps {
-  data: any,
-  input: string,
+  data: any;
+  input: string;
 }
 
 export interface CategoryProps {
@@ -97,7 +107,7 @@ export interface ServerError {
 export interface MyFormValues {
   email: string;
   password: string;
-  server?: string;  // Add this line
+  server?: string; // Add this line
 }
 
 export interface HistoryComponentProps {
@@ -105,7 +115,7 @@ export interface HistoryComponentProps {
   name: String;
   location?: String;
   date?: String;
-  time?: String
+  time?: String;
   id?: String;
   status?: String;
   queues?: number;
@@ -117,8 +127,8 @@ export interface HistoryComponentProps {
 }
 
 export interface QueueInfoCardProps {
-  image: any,
-  name: String,
+  image: any;
+  name: String;
 }
 
 export interface UserState {

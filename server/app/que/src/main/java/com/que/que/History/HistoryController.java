@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ public class HistoryController {
     private final HistoryService historyService;
 
     @GetMapping("/all")
+    @Secured("USER")
     public ResponseEntity<Object> userHistory(@RequestParam("id") Long id) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);

@@ -7,6 +7,7 @@ import {
   View,
   ScrollView,
   Text,
+  useWindowDimensions,
 } from "react-native";
 import ScanQr from "@/components/ScanQR";
 import SearchBar from "@/components/SearchBar";
@@ -14,6 +15,7 @@ import CategoriesList from "@/components/CategoriesList";
 import RecentQueues from "@/components/RecentQueues";
 import FrequentlyAsked from "@/components/FrequentlyAsked";
 import CurrentQueuesList from "@/components/CurrentQueuesList";
+import PromoCard from "@/assets/images/promo-card.svg";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import { useLinkTo } from '@react-navigation/native';
@@ -29,6 +31,8 @@ export default function Index() {
   // const handleMissing = () => {
   //   router.replace('/Missing')
   // };
+
+  let currentQueues = 0;
 
   const handleScroll = (event: {
     nativeEvent: {
@@ -82,7 +86,13 @@ export default function Index() {
           </View>
           <View className="w-10/12 self-center">
             <SearchBar />
-            <CurrentQueuesList />
+            {currentQueues ? 
+              <CurrentQueuesList />
+            :
+              <PromoCard
+                width={"100%"}
+              />
+            }
             <CategoriesList />
             <RecentQueues />
             <FrequentlyAsked />

@@ -22,10 +22,11 @@ import { useAuth } from "@/ctx/AuthContext";
 import { API_BASE_URL_LOGIN } from "@env";
 
 import { useDispatch } from "react-redux";
-import { setEmail } from "../redux/authSlice";
+import { setEmail, setToken } from "../redux/authSlice";
 import { isEmpty } from "lodash";
 import { setUsername } from "../redux/userSlice";
 import SplashScreen from "../SplashScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email required"),
@@ -43,7 +44,7 @@ export default function Login() {
     { setErrors }: { setErrors: Function }
   ) => {
     console.log("Logging in...", values);
-    setIsLoading(true);
+
     try {
       // IOS Simulator
       const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
@@ -64,14 +65,45 @@ export default function Login() {
             typeof response.data.email
           );
           // Update the session state and wait for the update to complete
-          await new Promise<void>((resolve) => {
+          await new Promise<void>(async (resolve) => {
             dispatch(setEmail(response.data.email));
+            dispatch(setToken(response.data.token));
             dispatch(
               setUsername(
                 response.data.firstName + " " + response.data.lastName
               )
             );
+            console.log(response.data);
             console.log(typeof response.data.email);
+
+            await AsyncStorage.setItem("token", response.data.token);
+            const tokenCheck = await AsyncStorage.getItem("token");
+            console.log("JWT token stored? ", tokenCheck);
+            // creating an Axios instance
+            // iOS Simulator
+
+            // Android Simulator
+            // http://10.0.2.2:8080/api/v1
+            // Setting the default headers
+            axios.defaults.headers.common[
+              "Authorization"
+            ] = `Bearer ${response.data.token}`;
+            axios.defaults.headers.common["Content-Type"] = "application/json";
+
+            axios.interceptors.request.use(
+              (config) => {
+                config.headers[
+                  "Authorization"
+                ] = `Bearer ${response.data.token}`;
+                return config;
+              },
+              (error) => {
+                return Promise.reject(error);
+              }
+            );
+
+            console.log(axios.defaults.headers);
+
             resolve();
           });
 
@@ -110,7 +142,7 @@ export default function Login() {
       }
     } finally {
       setTimeout(() => {
-        setIsLoading(false); 
+        setIsLoading(false);
       }, 1000);
     }
   };
@@ -123,119 +155,122 @@ export default function Login() {
 
   return (
     <>
-			{isLoading ? (
-				<SplashScreen />
-			) : (
-				<ImageBackground source={background} style={styles.container}>
-					<Link href="/Onboarding" style={styles.returnButton}>
-						<Return size={36} color="white" />
-					</Link>
-					<StatusBar
-						translucent
-						backgroundColor="rgba(000, 000, 000, 0.5)"
-						barStyle="light-content"
-					/>
-					<View style={styles.row}>
-						<Text style={styles.title} className="mb-10 text-2xl text-white mt-14">
-							Welcome Back!
-						</Text>
-						<Image source={LoginImg} className="mt-6 mb-12" />
-						<Formik<MyFormValues>
-							initialValues={{
-								email: "",
-								password: "",
-								server: "",
-							}}
-							validationSchema={LoginSchema}
-							onSubmit={(values, formikHelpers) =>
-								handleLogin(values, formikHelpers)
-							}
-						>
-							{({
-								handleChange,
-								handleBlur,
-								handleSubmit,
-								values,
-								touched,
-								errors,
-								isValid,
-							}) => (
-								<View className="flex items-center justify-center w-full gap-4">
-									<TextInput
-										style={styles.input}
-										placeholder="Enter your email"
-										placeholderTextColor={"#515151"}
-										onChangeText={handleChange("email")}
-										keyboardType="email-address"
-										value={values.email}
-										autoCapitalize="none"
-									/>
-									{errors.email && touched.email && (
-										<Text
-											style={{
-												fontSize: 12,
-												color: "red",
-												textAlign: "center",
-											}}
-										>
-											{errors.email}
-										</Text>
-									)}
-									<TextInput
-										style={styles.input}
-										placeholder="Enter your password"
-										placeholderTextColor={"#515151"}
-										onChangeText={handleChange("password")}
-										onBlur={handleBlur("password")}
-										secureTextEntry
-										value={values.password}
-									/>
-									{errors.password && touched.password && (
-										<Text
-											style={{
-												fontSize: 12,
-												color: "red",
-												textAlign: "center",
-											}}
-										>
-											{errors.password}
-										</Text>
-									)}
-									{errors.server && (
-										<Text
-											style={{
-												fontSize: 12,
-												color: "red",
-												textAlign: "center",
-											}}
-										>
-											{errors.server}
-										</Text>
-									)}
-									<Text className="mt-2 text-sm underline text-baby-blue">
-										Forgot password?
-									</Text>
-									<View className="mt-8">
-										<TextButton
-											text={"Log In"}
-											buttonColor={!isValid ? "#C5C5C5" : "#1DCDFE"}
-											textColor={"white"}
-											disabled={!isValid}
-											onPress={handleSubmit}
-										/>
-										<TextButton
-											text={"Continue with Google"}
-											icon={"google"}
-											buttonColor={"white"}
-											textColor={"#17222D"}
-										/>
-									</View>
-								</View>
-							)}
-						</Formik>
-					</View>
-				</ImageBackground>
-			)}
+      {isLoading ? (
+        <SplashScreen />
+      ) : (
+        <ImageBackground source={background} style={styles.container}>
+          <Link href="/Onboarding" style={styles.returnButton}>
+            <Return size={36} color="white" />
+          </Link>
+          <StatusBar
+            translucent
+            backgroundColor="rgba(000, 000, 000, 0.5)"
+            barStyle="light-content"
+          />
+          <View style={styles.row}>
+            <Text
+              style={styles.title}
+              className="mb-10 text-2xl text-white mt-14"
+            >
+              Welcome Back!
+            </Text>
+            <Image source={LoginImg} className="mt-6 mb-12" />
+            <Formik<MyFormValues>
+              initialValues={{
+                email: "",
+                password: "",
+                server: "",
+              }}
+              validationSchema={LoginSchema}
+              onSubmit={(values, formikHelpers) =>
+                handleLogin(values, formikHelpers)
+              }
+            >
+              {({
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                values,
+                touched,
+                errors,
+                isValid,
+              }) => (
+                <View className="flex items-center justify-center w-full gap-4">
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter your email"
+                    placeholderTextColor={"#515151"}
+                    onChangeText={handleChange("email")}
+                    keyboardType="email-address"
+                    value={values.email}
+                    autoCapitalize="none"
+                  />
+                  {errors.email && touched.email && (
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "red",
+                        textAlign: "center",
+                      }}
+                    >
+                      {errors.email}
+                    </Text>
+                  )}
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter your password"
+                    placeholderTextColor={"#515151"}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                    secureTextEntry
+                    value={values.password}
+                  />
+                  {errors.password && touched.password && (
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "red",
+                        textAlign: "center",
+                      }}
+                    >
+                      {errors.password}
+                    </Text>
+                  )}
+                  {errors.server && (
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "red",
+                        textAlign: "center",
+                      }}
+                    >
+                      {errors.server}
+                    </Text>
+                  )}
+                  <Text className="mt-2 text-sm underline text-baby-blue">
+                    Forgot password?
+                  </Text>
+                  <View className="mt-8">
+                    <TextButton
+                      text={"Log In"}
+                      buttonColor={!isValid ? "#C5C5C5" : "#1DCDFE"}
+                      textColor={"white"}
+                      disabled={!isValid}
+                      onPress={handleSubmit}
+                    />
+                    <TextButton
+                      text={"Continue with Google"}
+                      icon={"google"}
+                      buttonColor={"white"}
+                      textColor={"#17222D"}
+                    />
+                  </View>
+                </View>
+              )}
+            </Formik>
+          </View>
+        </ImageBackground>
+      )}
     </>
   );
 }

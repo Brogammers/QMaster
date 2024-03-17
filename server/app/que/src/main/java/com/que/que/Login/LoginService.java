@@ -1,6 +1,7 @@
 package com.que.que.Login;
 
 import com.que.que.Registration.EmailValidator;
+import com.que.que.Security.JwtUtil;
 import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRepository;
 import lombok.AllArgsConstructor;
@@ -48,6 +49,7 @@ public class LoginService {
       object.put("userID", user.getId());
       object.put("firstName", user.getFirstName());
       object.put("lastName", user.getLastName());
+      object.put("token", JwtUtil.generateToken(user.getEmail()));
       return object;
     } else {
       throw new IllegalStateException("User not found");

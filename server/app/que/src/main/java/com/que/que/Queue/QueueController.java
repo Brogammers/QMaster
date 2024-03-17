@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,6 +25,7 @@ public class QueueController {
     private final QueueService queueService;
 
     @PostMapping
+    @Secured("USER")
     public ResponseEntity<Object> createNewQueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
@@ -38,6 +40,7 @@ public class QueueController {
     }
 
     @PutMapping(path = "/user")
+    @Secured("USER")
     public ResponseEntity<Object> enqueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
@@ -52,6 +55,7 @@ public class QueueController {
     }
 
     @PutMapping(path = "/holder")
+    @Secured("USER")
     public ResponseEntity<Object> dequeue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
@@ -73,6 +77,7 @@ public class QueueController {
     }
 
     @DeleteMapping
+    @Secured("USER")
     public ResponseEntity<Object> deleteQueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);

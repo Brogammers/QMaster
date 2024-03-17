@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import SearchItem from "../shared/components/SearchItem";
 import { View, FlatList, Text } from "react-native";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 import { CurrentQueuesProps, SearchFilterProps } from "@/types";
-import axios from "axios";
 import { API_BASE_URL_SEARCH } from "@env";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SearchFilter(props: SearchFilterProps) {
   const { input } = props;
@@ -15,9 +16,17 @@ export default function SearchFilter(props: SearchFilterProps) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL_SEARCH}?filter=${input}&page=1&per-page=1&order=order`);
+        const token = await AsyncStorage.getItem("token");
+        const response = await axios.get(
+          `${API_BASE_URL_SEARCH}?filter=${input}&page=1&per-page=1&order=order`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
         const data = response.data.queues; // Access the queues array in the response
-        const filtered = data.filter((item: CurrentQueuesProps) => item.name.toLowerCase().includes(input.toLowerCase()));
+        const filtered = data.filter((item: CurrentQueuesProps) =>
+          item.name.toLowerCase().includes(input.toLowerCase())
+        );
         setFilteredData(filtered);
       } catch (error) {
         console.error(error);
@@ -35,7 +44,9 @@ export default function SearchFilter(props: SearchFilterProps) {
       {filteredData.length === 0 ? (
         <View className="items-center w-full">
           <AntDesign name="search1" size={80} color="gray" />
-          <Text className="mt-2 font-bold text-gray-500">We couldn't find any results</Text>
+          <Text className="mt-2 font-bold text-gray-500">
+            We couldn't find any results
+          </Text>
         </View>
       ) : (
         <FlatList
