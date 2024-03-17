@@ -32,7 +32,12 @@ export default function History() {
         } else {
           // Fetch history data from API if not found in AsyncStorage
           console.log("History Response ", axios.defaults.headers);
-          const response = await axios.get(`${API_BASE_URL_HISTORY}?id=1`);
+          const token = await AsyncStorage.getItem("token");
+          const response = await axios.get(`${API_BASE_URL_HISTORY}?id=1`, {
+            headers: {
+              Authorization: `Bearer ${token}`;
+            }
+          });
           const data = response.data.history;
           let historyEnqueue = data.enqueuings.content;
           let historyDequeue = data.dequeuings.content;
