@@ -15,14 +15,13 @@ const axiosInstance = axios.create({
   },
 });
 
-
 console.log("Before axios call. Headers: ", axiosInstance.defaults.headers);
 
 axiosInstance.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem("token");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = "Bearer " + token;
     }
     return config;
   },
@@ -43,6 +42,9 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-console.log("After axios interceptors. Headers: ", axiosInstance.defaults.headers);
+console.log(
+  "After axios interceptors. Headers: ",
+  axiosInstance.defaults.headers
+);
 
 export default axiosInstance;
