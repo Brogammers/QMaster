@@ -10,11 +10,13 @@ async function getToken() {
   return token?.toString();
 }
 
+const token = String(getToken());
+
 const axiosInstance = axios.create({
   // baseURL: BASE_URL,
   timeout: 6000,
   headers: {
-    Authorization: "Bearer " + String(getToken()),
+    Authorization: "Bearer " + token,
     "Content-Type": "application/json",
   },
 });
