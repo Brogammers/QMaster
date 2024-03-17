@@ -6,18 +6,9 @@ const BASE_URL = "http://localhost:8080/api/v1";
 
 // const token = await AsyncStorage.getItem("token");
 
-const axiosInstance = axios.create({
-  baseURL: BASE_URL,
-  timeout: 6000,
-  headers: {
-    // Authorization: "Bearer " + token,
-    "Content-Type": "application/json",
-  },
-});
+console.log("Before axios call. Headers: ", axios.defaults.headers);
 
-console.log("Before axios call. Headers: ", axiosInstance.defaults.headers);
-
-axiosInstance.interceptors.request.use(
+axios.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem("token");
     if (token) {
@@ -30,7 +21,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-axiosInstance.interceptors.response.use(
+axios.interceptors.response.use(
   (response) => response,
   (error) => {
     // Handle 401 Unauthorized errors here
@@ -42,9 +33,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-console.log(
-  "After axios interceptors. Headers: ",
-  axiosInstance.defaults.headers
-);
-
-export default axiosInstance;
+console.log("After axios interceptors. Headers: ", axios.defaults.headers);
