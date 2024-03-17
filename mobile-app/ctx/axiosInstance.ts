@@ -39,3 +39,5 @@ console.log(
   "After axios interceptors. Headers: ",
   axiosInstance.defaults.headers
 );
+
+export default axiosInstance;
