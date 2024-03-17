@@ -7,19 +7,19 @@ const BASE_URL = "http://localhost:8080/api/v1";
 
 async function getToken() {
   const token = await AsyncStorage.getItem("token");
-  return token;
+  return token?.toString();
 }
 
 const axiosInstance = axios.create({
   // baseURL: BASE_URL,
   timeout: 5000,
   headers: {
-    Authorization: "Bearer " + getToken(),
+    Authorization: "Bearer " + String(getToken()),
     "Content-Type": "application/json",
   },
 });
 
-console.log("Bearer " + getToken());
+console.log("Bearer " + String(getToken()));
 // const axiosInstance = axios.create();
 
 // axiosInstance.interceptors.request.use(
