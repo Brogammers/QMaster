@@ -7,6 +7,7 @@ const BASE_URL = "http://localhost:8080/api/v1";
 
 async function getToken() {
   const token = await AsyncStorage.getItem("token");
+  console.log("Type of token: ", typeof token);
   return token?.toString();
 }
 
