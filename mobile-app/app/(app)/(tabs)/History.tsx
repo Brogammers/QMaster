@@ -35,8 +35,8 @@ export default function History() {
           const token = await AsyncStorage.getItem("token");
           const response = await axios.get(`${API_BASE_URL_HISTORY}?id=1`, {
             headers: {
-              Authorization: `Bearer ${token}`;
-            }
+              Authorization: `Bearer ${token}`,
+            },
           });
           const data = response.data.history;
           let historyEnqueue = data.enqueuings.content;
