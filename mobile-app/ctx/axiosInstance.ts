@@ -4,27 +4,39 @@ import { Alert } from 'react-native';
 
 
 // Define your base URL (adjust this to your actual backend URL)
-const BASE_URL = 'http://localhost:8080/asdasd';
+const BASE_URL = 'http://localhost:8080/api/v1';
+
+async function getToken() {
+  const token = await AsyncStorage.getItem('token');
+  return token;
+}
 
 const axiosInstance = axios.create({
-  baseURL: BASE_URL, // Set the base URL for all requests
+  // baseURL: BASE_URL, 
+  timeout: 5000,
+  headers: {
+    Authorization: `Bearer ${getToken()}`,
+    'Content-Type': 'application/json'
+  }
 });
 
-axiosInstance.interceptors.request.use(
-  async config => {
-    const token = await AsyncStorage.getItem('token');
-    console.log("JWT in Axios", token);
-    Alert.alert("Token", token?.toString())
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-      console.log("Authorized JWT", config.headers.Authorization.toString());
-    }
-    return config;
-  },
-  error => {
-    return Promise.reject(error);
-  }
-);
+// const axiosInstance = axios.create();
+
+// axiosInstance.interceptors.request.use(
+//   async config => {
+//     const token = await AsyncStorage.getItem('token');
+//     console.log("JWT in Axios", token);
+//     Alert.alert("Token", token?.toString())
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//       console.log("Authorized JWT", config.headers.Authorization.toString());
+//     }
+//     return config;
+//   },
+//   error => {
+//     return Promise.reject(error);
+//   }
+// );
 
 axiosInstance.interceptors.response.use(
   response => response,
