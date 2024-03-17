@@ -19,7 +19,7 @@ const axiosInstance = axios.create({
   },
 });
 
-console.log(axiosInstance.toString());
+console.log(axiosInstance.defaults.headers);
 // const axiosInstance = axios.create();
 
 // axiosInstance.interceptors.request.use(
