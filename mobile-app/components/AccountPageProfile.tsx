@@ -13,7 +13,7 @@ export default function AccountPageProfile() {
   const colorMode: "light" | "dark" = "light";
 
   useEffect(() => {
-    if (typeof username === "string" && AccountInfo !== null) {
+    if (typeof username === "string") {
       setIsLoading(false);
     }
   }, [username]);

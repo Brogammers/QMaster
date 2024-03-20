@@ -11,41 +11,36 @@ import { Skeleton } from "moti/skeleton";
 export default function Account() {
   const [isLoading, setIsLoading] = useState(true);
   const colorMode: 'light' | 'dark' = 'light';
-  const windowWidth = useWindowDimensions().width;
 
   const firstName = useSelector((state: RootState) => state.username.username)?.split(' ')[0];
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
+    if (typeof firstName === "string") {
       setIsLoading(false);
-    }, 2000);
-
-    if (firstName) {
-      setIsLoading(false);
-      clearTimeout(timeoutId); 
     }
-
-    return () => clearTimeout(timeoutId);
-  }, [firstName]);
+  }, [firstName])
 
   return (
     <SafeAreaView className="items-center self-center flex-1 w-screen bg-off-white">
       <StatusBar translucent barStyle="dark-content" />
-      {/* <Skeleton
-        colorMode={colorMode}
-        width={windowWidth * (11/12)}
-        height={100}
-      >
-        {isLoading ? null : <AccountPageProfile />}
-      </Skeleton> */}
       <AccountPageProfile />
       <View className="w-10/12">
         <ScrollView>
-          <Text className="w-full pb-6 text-3xl font-extrabold text-left border-b text-ocean-blue-2 border-lite-grey">
-            Hi {firstName ? 
-              firstName.charAt(0).toUpperCase() + firstName.slice(1) : "Anonymous"
-            }!
-          </Text>
+          <Skeleton
+            colorMode={colorMode}
+            width={250}
+            height={35}
+          >
+            {isLoading ? (
+              null
+            ) : (
+              <Text className="w-full pb-6 text-3xl font-extrabold text-left border-b text-ocean-blue-2 border-lite-grey">
+                Hi {firstName &&
+                  firstName.charAt(0).toUpperCase() + firstName.slice(1)
+                }!
+              </Text>
+            )}
+          </Skeleton>
           <AccountPageItems />
         </ScrollView>
       </View>
