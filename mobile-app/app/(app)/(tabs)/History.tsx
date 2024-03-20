@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   useWindowDimensions,
-  Alert,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import HistoryComponent from "@/shared/components/HistoryComponent";
@@ -17,9 +16,9 @@ import {
 import { HistoryComponentProps } from "@/types";
 import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios, { AxiosResponse } from "axios"; // Import AxiosResponse
+import axios, { AxiosResponse } from "axios";
 import { Skeleton } from "moti/skeleton";
-import { View } from "@/components/Themed";
+import { View, Text } from "@/components/Themed";
 
 export default function History() {
   const isFocused = useIsFocused();
@@ -37,25 +36,25 @@ export default function History() {
         } else {
           console.log("History Response ", axios.defaults.headers);
           const token = await AsyncStorage.getItem("token");
-  
+
           const timeoutPromise = new Promise((resolve, reject) => {
-            setTimeout(() => reject("Timeout"), 10000); 
+            setTimeout(() => reject("Timeout"), 5000); // Reject if the timeout is reached
           });
-  
-          const [response, _] = await Promise.all([
+
+          const [response, _] = (await Promise.all([
             axios.get(`${API_BASE_URL_HISTORY}?id=1`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             }),
             timeoutPromise,
-          ]) as [AxiosResponse, unknown]; 
-  
+          ])) as [AxiosResponse, unknown]; // Adjust 'YourResponseType' to match your API response structure
+
           if (response.status === 200) {
             const data = response.data.history;
             let historyEnqueue = data.enqueuings.content;
             let historyDequeue = data.dequeuings.content;
-  
+
             historyDequeue.forEach(
               (item: { isHistory: boolean; status: string; date: string }) => {
                 item.isHistory = true;
@@ -70,35 +69,32 @@ export default function History() {
                 item.date = "Today";
               }
             );
-  
+
             let combinedHistory = [...historyEnqueue, ...historyDequeue];
             setHistoryList(combinedHistory);
             setIsLoading(false);
-  
+
             await AsyncStorage.setItem(
               "historyData",
               JSON.stringify(combinedHistory)
             );
           } else {
             setIsLoading(false);
-            Alert.alert("ERRR", "No data to be displayed now at the moment");
           }
         }
       } catch (error) {
         console.error(error);
       }
     };
-  
+
     const fetchDataTimeout = setTimeout(() => {
       setIsLoading(false);
-      Alert.alert("ERRR", "No data to be displayed now at the moment");
     }, 5000);
-  
+
     fetchData();
-  
+
     return () => clearTimeout(fetchDataTimeout);
   }, [isFocused]);
-  
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -117,6 +113,18 @@ export default function History() {
               </React.Fragment>
             ))}
           <View className="mb-5" />
+        </View>
+      ) : historyList.length === 0 ? (
+        <View
+          className="bg-off-white h-screen pb-40 flex flex-col justify-center items-center"
+          // style={styles.noDataContainer}
+        >
+          <Text className="text-coal-black text-lg font-bold">
+            No Data Found
+          </Text>
+          <Text className="text-coal-black text-md">
+            There is no data to display at the moment.
+          </Text>
         </View>
       ) : (
         historyList.map((item, index) => (
