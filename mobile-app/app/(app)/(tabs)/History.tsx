@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   useWindowDimensions,
+  Alert,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import HistoryComponent from "@/shared/components/HistoryComponent";
@@ -16,7 +17,7 @@ import {
 import { HistoryComponentProps } from "@/types";
 import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios"; // Import AxiosResponse
 import { Skeleton } from "moti/skeleton";
 import { View } from "@/components/Themed";
 
@@ -36,78 +37,91 @@ export default function History() {
         } else {
           console.log("History Response ", axios.defaults.headers);
           const token = await AsyncStorage.getItem("token");
-          const response = await axios.get(`${API_BASE_URL_HISTORY}?id=1`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+  
+          const timeoutPromise = new Promise((resolve, reject) => {
+            setTimeout(() => reject("Timeout"), 10000); 
           });
-          const data = response.data.history;
-          let historyEnqueue = data.enqueuings.content;
-          let historyDequeue = data.dequeuings.content;
-
-          historyDequeue.forEach(
-            (item: { isHistory: boolean; status: string; date: string }) => {
-              item.isHistory = true;
-              item.status = "Dequeued";
-              item.date = "Today";
-            }
-          );
-          historyEnqueue.forEach(
-            (item: { isHistory: boolean; status: string; date: string }) => {
-              item.isHistory = true;
-              item.status = "Enqueued";
-              item.date = "Today";
-            }
-          );
-
-          let combinedHistory = [...historyEnqueue, ...historyDequeue];
-          setHistoryList(combinedHistory);
-          setIsLoading(false);
-
-          await AsyncStorage.setItem(
-            "historyData",
-            JSON.stringify(combinedHistory)
-          );
+  
+          const [response, _] = await Promise.all([
+            axios.get(`${API_BASE_URL_HISTORY}?id=1`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
+            timeoutPromise,
+          ]) as [AxiosResponse, unknown]; 
+  
+          if (response.status === 200) {
+            const data = response.data.history;
+            let historyEnqueue = data.enqueuings.content;
+            let historyDequeue = data.dequeuings.content;
+  
+            historyDequeue.forEach(
+              (item: { isHistory: boolean; status: string; date: string }) => {
+                item.isHistory = true;
+                item.status = "Dequeued";
+                item.date = "Today";
+              }
+            );
+            historyEnqueue.forEach(
+              (item: { isHistory: boolean; status: string; date: string }) => {
+                item.isHistory = true;
+                item.status = "Enqueued";
+                item.date = "Today";
+              }
+            );
+  
+            let combinedHistory = [...historyEnqueue, ...historyDequeue];
+            setHistoryList(combinedHistory);
+            setIsLoading(false);
+  
+            await AsyncStorage.setItem(
+              "historyData",
+              JSON.stringify(combinedHistory)
+            );
+          } else {
+            setIsLoading(false);
+            Alert.alert("ERRR", "No data to be displayed now at the moment");
+          }
         }
       } catch (error) {
         console.error(error);
       }
     };
-
+  
+    const fetchDataTimeout = setTimeout(() => {
+      setIsLoading(false);
+      Alert.alert("ERRR", "No data to be displayed now at the moment");
+    }, 5000);
+  
     fetchData();
+  
+    return () => clearTimeout(fetchDataTimeout);
   }, [isFocused]);
+  
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* {historyList.map((item, index) => (
-        <HistoryComponent
-          image={CarrefourLogo}
-          name={item.name}
-          location={"Anything for now"}
-          date={item.date}
-          id={item.id}
-          status={item.status}
-          isHistory={item.isHistory}
-          key={index}
-        />
-      ))} */}
       {isLoading ? (
         <View className="bg-off-white flex flex-col items-center justify-center">
-          {Array(8).fill(0).map(( _, index) => (
-            <>
-              <View className="mb-4" />
-              <Skeleton
-                colorMode={colorMode}
-                width={windowWidth * 11 / 12}
-                height={100}
-              />
-            </>
-          ))}
+          {Array(8)
+            .fill(0)
+            .map((_, index) => (
+              <React.Fragment key={index}>
+                <View className="mb-4" />
+                <Skeleton
+                  colorMode={colorMode}
+                  width={(windowWidth * 11) / 12}
+                  height={100}
+                />
+              </React.Fragment>
+            ))}
           <View className="mb-5" />
         </View>
       ) : (
         historyList.map((item, index) => (
           <HistoryComponent
+            key={index}
             image={CarrefourLogo}
             name={item.name}
             location={"Anything for now"}
@@ -115,7 +129,6 @@ export default function History() {
             id={item.id}
             status={item.status}
             isHistory={item.isHistory}
-            key={index}
           />
         ))
       )}
