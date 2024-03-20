@@ -71,6 +71,8 @@ public class AppUser implements UserDetails {
   @Column(nullable = false)
   private byte subscriptionPlan;
 
+  private String location;
+
   public AppUser(
       AppUserRole appUserRole,
       String firstName,
@@ -85,7 +87,8 @@ public class AppUser implements UserDetails {
       boolean enabled,
       byte subscriptionPlan,
       String phoneCode,
-      String phoneNumber) {
+      String phoneNumber,
+      String location) {
     this.appUserRole = appUserRole;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -101,6 +104,7 @@ public class AppUser implements UserDetails {
     this.subscriptionPlan = subscriptionPlan;
     this.phoneCode = phoneCode;
     this.phoneNumber = phoneNumber;
+    this.location = location;
   }
 
   @Override
