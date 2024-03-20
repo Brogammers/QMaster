@@ -21,7 +21,7 @@ export default function AccountPageProfile() {
   return (
     <View className="flex-row items-center justify-between w-11/12 my-6 bg-ocean-blue rounded-3xl p-3.5 pr-6 self-center">
       <TouchableOpacity className="flex-row items-center">
-        <Image source={AccountInfo[0].image} className="mr-1" />
+        {isLoading ? <Image source={AccountInfo[0].image} className="mr-1" /> :  <Image source={AccountInfo[0].image} className="mr-1" />}
         <View>
           <Skeleton
             colorMode={colorMode}
@@ -36,10 +36,11 @@ export default function AccountPageProfile() {
               </Text>
             )}
           </Skeleton>
+          <View className="my-1" />
           <Skeleton
             colorMode={colorMode} 
-            width={150} 
-            height={20}
+            width={100} 
+            height={10}
           >
             {isLoading ? null : (
               <Text className="text-slate-grey text-xs">
