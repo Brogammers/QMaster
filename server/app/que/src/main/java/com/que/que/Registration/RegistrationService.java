@@ -62,15 +62,17 @@ public class RegistrationService {
             false,
             (byte) 0,
             "+20",
-            "1202250070"));// request.getPhoneNumber(), request.getPhoneCode(),
+            "1202250070",
+            "Egypt"));// request.getPhoneNumber(), request.getPhoneCode(),
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);
     // TODO: Activate later
-    /* 
-    emailSender.send(request.getEmail(), "src/main/resources/templates/Activation.html",
-        "Confirm Email", context);
-    */
+    /*
+     * emailSender.send(request.getEmail(),
+     * "src/main/resources/templates/Activation.html",
+     * "Confirm Email", context);
+     */
     return token;
   }
 
