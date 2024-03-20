@@ -3,8 +3,12 @@ package com.que.que.Maps;
 import com.google.maps.GeoApiContext;
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.DistanceMatrixElementStatus;
+
+import org.springframework.stereotype.Service;
+
 import com.google.maps.DistanceMatrixApi;
 
+@Service
 public class MapsService {
     private final GeoApiContext context = new GeoApiContext.Builder().apiKey("key").build(); // Insert key here
 
