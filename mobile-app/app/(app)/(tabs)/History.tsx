@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Platform, StatusBar, StyleSheet, ScrollView } from "react-native";
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  ScrollView,
+  useWindowDimensions,
+} from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import HistoryComponent from "@/shared/components/HistoryComponent";
 import {
@@ -11,26 +17,23 @@ import { HistoryComponentProps } from "@/types";
 import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { Skeleton } from "moti/skeleton";
+import { View } from "@/components/Themed";
 
 export default function History() {
   const isFocused = useIsFocused();
-  // const HistoryList: HistoryComponentProps[] = [];
   const [historyList, setHistoryList] = useState<HistoryComponentProps[]>([]);
-  const [historyEnqueue, setHistoryEnqueue] = useState<HistoryComponentProps[]>(
-    []
-  );
-  const [historyDequeue, setHistoryDequeue] = useState<HistoryComponentProps[]>(
-    []
-  );
+  const [isLoading, setIsLoading] = useState(true);
+  const colorMode: "light" | "dark" = "light";
+  const windowWidth = useWindowDimensions().width;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         let historyData = await AsyncStorage.getItem("historyData");
         if (historyData) {
-          // If history data exists in AsyncStorage, parse and set it
           setHistoryList(JSON.parse(historyData));
         } else {
-          // Fetch history data from API if not found in AsyncStorage
           console.log("History Response ", axios.defaults.headers);
           const token = await AsyncStorage.getItem("token");
           const response = await axios.get(`${API_BASE_URL_HISTORY}?id=1`, {
@@ -42,7 +45,6 @@ export default function History() {
           let historyEnqueue = data.enqueuings.content;
           let historyDequeue = data.dequeuings.content;
 
-          // Modify history items
           historyDequeue.forEach(
             (item: { isHistory: boolean; status: string; date: string }) => {
               item.isHistory = true;
@@ -58,11 +60,10 @@ export default function History() {
             }
           );
 
-          // Combine and set history list
           let combinedHistory = [...historyEnqueue, ...historyDequeue];
           setHistoryList(combinedHistory);
+          setIsLoading(false);
 
-          // Store fetched data in AsyncStorage for caching
           await AsyncStorage.setItem(
             "historyData",
             JSON.stringify(combinedHistory)
@@ -78,7 +79,7 @@ export default function History() {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {historyList.map((item, index) => (
+      {/* {historyList.map((item, index) => (
         <HistoryComponent
           image={CarrefourLogo}
           name={item.name}
@@ -89,7 +90,35 @@ export default function History() {
           isHistory={item.isHistory}
           key={index}
         />
-      ))}
+      ))} */}
+      {isLoading ? (
+        <View className="bg-off-white flex flex-col items-center justify-center">
+          {Array(8).fill(0).map(( _, index) => (
+            <>
+              <View className="mb-4" />
+              <Skeleton
+                colorMode={colorMode}
+                width={windowWidth * 11 / 12}
+                height={100}
+              />
+            </>
+          ))}
+          <View className="mb-5" />
+        </View>
+      ) : (
+        historyList.map((item, index) => (
+          <HistoryComponent
+            image={CarrefourLogo}
+            name={item.name}
+            location={"Anything for now"}
+            date={item.date}
+            id={item.id}
+            status={item.status}
+            isHistory={item.isHistory}
+            key={index}
+          />
+        ))
+      )}
     </ScrollView>
   );
 }
