@@ -12,13 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-/**
- * A class that provides static methods for creating and configuring mock objects.
- * This class is part of the Mockito framework, which is a popular Java mocking framework used for unit testing.
- * It allows developers to create mock objects that simulate the behavior of real objects, making it easier to test code in isolation.
- * The static methods in this class can be used to create mock objects, define their behavior, and verify interactions with them.
- * For more information on how to use Mockito, refer to the official documentation.
- */
+
 import static org.mockito.Mockito.*;
 
 public class LoginControllerTest {
@@ -31,7 +25,7 @@ public class LoginControllerTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
