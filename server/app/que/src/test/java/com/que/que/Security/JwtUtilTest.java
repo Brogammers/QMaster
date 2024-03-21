@@ -61,6 +61,13 @@ public class JwtUtilTest {
         assertEquals(username, extractedUsername);
     }
 
+    /**
+     * Test case to verify the functionality of the getIssuedDate method in JwtUtil
+     * class.
+     * It generates a token for a test user, and then retrieves the issued date from
+     * the token.
+     * The test ensures that the issued date is not null.
+     */
     @Test
     public void testGetIssuedDate() {
         String username = "testUser";

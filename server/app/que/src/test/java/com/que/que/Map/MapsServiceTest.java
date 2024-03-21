@@ -8,6 +8,12 @@ import static org.junit.Assert.*;
 
 public class MapsServiceTest {
 
+    /**
+     * Test case for the getDistanceBetweenTwoLocations method in the MapsService
+     * class.
+     * This method tests the functionality of calculating the distance between two
+     * locations.
+     */
     @Test
     public void testGetDistanceBetweenTwoLocations() {
         MapsService mapsService = new MapsService();

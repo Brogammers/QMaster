@@ -17,6 +17,9 @@ import java.time.LocalDate;
 @RunWith(MockitoJUnitRunner.class)
 public class AppUserTest {
 
+    /**
+     * Test case for testing the getters and setters of the AppUser class.
+     */
     @Test
     public void testGettersAndSetters() {
         // Create a sample AppUser object
@@ -61,6 +64,9 @@ public class AppUserTest {
         assertEquals("New York, USA", appUser.getLocation());
     }
 
+    /**
+     * Test case for testing the getAuthorities() method of the AppUser class.
+     */
     @Test
     public void testGetAuthorities() {
         // Create a sample AppUser object
@@ -75,6 +81,9 @@ public class AppUserTest {
         assertTrue(authorities.contains(new SimpleGrantedAuthority(AppUserRole.USER.name())));
     }
 
+    /**
+     * Test case for testing the isAccountNonLocked() method of the AppUser class.
+     */
     @Test
     public void testAccountNonLocked() {
         // Create a locked AppUser
@@ -90,6 +99,9 @@ public class AppUserTest {
         assertTrue(nonLockedUser.isAccountNonLocked());
     }
 
+    /**
+     * Test case for testing the isEnabled() method of the AppUser class.
+     */
     @Test
     public void testIsEnabled() {
         // Create an enabled AppUser

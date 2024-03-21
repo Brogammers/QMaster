@@ -39,6 +39,9 @@ public class LoginServiceTest {
         loginService = new LoginService(appUserRepository, emailValidator, loginRepository, bCryptPasswordEncoder);
     }
 
+    /**
+     * Test case to verify the login functionality with valid credentials.
+     */
     @Test
     public void testLoginUser_ValidCredentials() {
         // Arrange
