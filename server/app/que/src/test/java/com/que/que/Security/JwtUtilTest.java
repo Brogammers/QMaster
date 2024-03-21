@@ -1,6 +1,5 @@
 package com.que.que.Security;
 
-import com.que.que.Security.JwtUtil;
 import com.que.que.User.AppUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
