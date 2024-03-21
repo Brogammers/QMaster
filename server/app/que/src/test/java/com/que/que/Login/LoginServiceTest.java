@@ -53,10 +53,11 @@ public class LoginServiceTest {
         user.setEmail(email);
         user.setPassword(bCryptPasswordEncoder.encode(password));
         user.setEnabled(true);
+
         when(emailValidator.test(email)).thenReturn(true);
         when(appUserRepository.findByEmail(email)).thenReturn(Optional.of(user));
         when(bCryptPasswordEncoder.matches(password, user.getPassword())).thenReturn(true);
-        when(JwtUtil.generateToken(user.getEmail())).thenReturn("testToken");
+        String token = JwtUtil.generateToken(user.getEmail());
 
         // Act
         Map<String, Object> result = loginService.loginUser(email, password);
@@ -68,7 +69,7 @@ public class LoginServiceTest {
         assertEquals(user.getId(), result.get("userID"));
         assertEquals(user.getFirstName(), result.get("firstName"));
         assertEquals(user.getLastName(), result.get("lastName"));
-        assertEquals("testToken", result.get("token"));
+        assertEquals(token, result.get("token"));
         verify(loginRepository, times(1)).save(any(LoginEntry.class));
     }
 
