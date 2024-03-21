@@ -21,13 +21,13 @@ public class JwtUtilTest {
     @Before
     public void setUp() {
         jwtUtil = new JwtUtil();
-        secretKey = jwtUtil.generateKey();
+        secretKey = JwtUtil.generateKey();
     }
 
     @Test
     public void testGenerateToken() {
         String username = "testUser";
-        String token = jwtUtil.generateToken(username);
+        String token = JwtUtil.generateToken(username);
 
         assertNotNull(token);
         assertTrue(token.length() > 0);
@@ -36,9 +36,9 @@ public class JwtUtilTest {
     @Test
     public void testExtractBody_ValidToken() {
         String username = "testUser";
-        String token = jwtUtil.generateToken(username);
+        String token = JwtUtil.generateToken(username);
 
-        Object body = jwtUtil.extractBody(token);
+        Object body = JwtUtil.extractBody(token);
 
         assertNotNull(body);
         assertTrue(body instanceof Claims);
@@ -48,13 +48,13 @@ public class JwtUtilTest {
     public void testExtractBody_InvalidToken() {
         String invalidToken = "invalidToken";
 
-        jwtUtil.extractBody(invalidToken);
+        JwtUtil.extractBody(invalidToken);
     }
 
     @Test
     public void testGetUsername() {
         String username = "testUser";
-        String token = jwtUtil.generateToken(username);
+        String token = JwtUtil.generateToken(username);
 
         String extractedUsername = jwtUtil.getUsername(token);
 
@@ -64,7 +64,7 @@ public class JwtUtilTest {
     @Test
     public void testGetIssuedDate() {
         String username = "testUser";
-        String token = jwtUtil.generateToken(username);
+        String token = JwtUtil.generateToken(username);
         Date issuedDate = jwtUtil.getIssuedDate(token);
 
         assertNotNull(issuedDate);
@@ -73,7 +73,7 @@ public class JwtUtilTest {
     @Test
     public void testGetExpirationDate() {
         String username = "testUser";
-        String token = jwtUtil.generateToken(username);
+        String token = JwtUtil.generateToken(username);
         Date expirationDate = jwtUtil.getExpirationDate(token);
 
         assertNotNull(expirationDate);
@@ -82,7 +82,7 @@ public class JwtUtilTest {
     @Test
     public void testIsTokenExpired_NotExpired() {
         String username = "testUser";
-        String token = jwtUtil.generateToken(username);
+        String token = JwtUtil.generateToken(username);
 
         boolean isExpired = jwtUtil.isTokenExpired(token);
 
@@ -93,8 +93,8 @@ public class JwtUtilTest {
     public void testIsTokenExpired_Expired() {
         String username = "testUser";
         String expiredToken = Jwts.builder()
-                .setId(username)
-                .setExpiration(new Date(System.currentTimeMillis() - 1000))
+                .id(username)
+                .expiration(new Date(System.currentTimeMillis() - 1000))
                 .signWith(secretKey)
                 .compact();
 
@@ -106,7 +106,7 @@ public class JwtUtilTest {
     @Test
     public void testGetClaimFromToken() {
         String username = "testUser";
-        String token = jwtUtil.generateToken(username);
+        String token = JwtUtil.generateToken(username);
 
         String extractedUsername = jwtUtil.getClaimFromToken(token, Claims::getId);
 
@@ -116,7 +116,7 @@ public class JwtUtilTest {
     @Test
     public void testValidateToken_ValidToken() {
         String username = "testUser";
-        String token = jwtUtil.generateToken(username);
+        String token = JwtUtil.generateToken(username);
 
         AppUser userDetails = mock(AppUser.class);
         when(userDetails.getEmail()).thenReturn(username);
@@ -130,8 +130,8 @@ public class JwtUtilTest {
     public void testValidateToken_ExpiredToken() {
         String username = "testUser";
         String expiredToken = Jwts.builder()
-                .setId(username)
-                .setExpiration(new Date(System.currentTimeMillis() - 1000))
+                .id(username)
+                .expiration(new Date(System.currentTimeMillis() - 1000))
                 .signWith(secretKey)
                 .compact();
 
@@ -146,7 +146,7 @@ public class JwtUtilTest {
     @Test
     public void testValidateToken_InvalidUser() {
         String username = "testUser";
-        String token = jwtUtil.generateToken(username);
+        String token = JwtUtil.generateToken(username);
 
         AppUser userDetails = mock(AppUser.class);
         when(userDetails.getEmail()).thenReturn("anotherUser");
