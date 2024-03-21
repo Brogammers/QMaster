@@ -116,7 +116,7 @@ export default function History() {
         </View>
       ) : historyList.length === 0 ? (
         <View
-          className="bg-off-white h-screen pb-40 flex flex-col justify-center items-center"
+          className="h-screen bg-off-white flex flex-col justify-center items-center"
           // style={styles.noDataContainer}
         >
           <Text className="text-coal-black text-lg font-bold">
