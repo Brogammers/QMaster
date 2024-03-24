@@ -8,7 +8,6 @@ export default function AccountPageItems() {
   const linkTo = useLinkTo();
   const auth = useAuth();
   
-  //Redirect user to Google Play/App store
   const handleRateApp = () => {
     const storeUrl = Platform.select({
       ios: 'https://apps.apple.com/us/app/your-app-id',
@@ -21,7 +20,7 @@ export default function AccountPageItems() {
   };
   
   const handleNotificationsPress = () => {
-    linkTo('/Notifications'); // Navigate to the "Notifications" page
+    linkTo('/Notifications'); 
   };
   
   const handleLogout = () => {
@@ -35,7 +34,7 @@ export default function AccountPageItems() {
         },
         {
           text: 'OK',
-          onPress: () => auth.signOut(), // Call the signOut function from the authentication context
+          onPress: () => auth.signOut(), 
         },
       ],
       { cancelable: false }
@@ -44,12 +43,36 @@ export default function AccountPageItems() {
 
   return (
     <View className="items-center justify-center w-full">
-      <SearchItem title={'Language'} icon={'globe'} isAccount onPress={() => console.log('Language and Region')} />
-      {/* <SearchItem title={'Previous Queues'} icon={'clock-rotate-left'} isAccount onPress={() => console.log('Previous Queues')} /> */}
-      <SearchItem title={'Notifications'} icon={'bell'} isAccount onPress={handleNotificationsPress} />
-      <SearchItem title={'About'} icon={'circle-info'} isAccount onPress={() => console.log('About')} />
-      <SearchItem title={'Rate App'} icon={'star'} isAccount onPress={handleRateApp} />
-      <SearchItem title={'Log Out'} icon={'arrow-right-from-bracket'} isAccount onPress={()=> handleLogout()} />
+      <SearchItem
+        title={'Language'}
+        icon={'globe'}
+        isAccount 
+        onPress={() => console.log('Language and Region')} 
+      />
+      <SearchItem 
+        title={'Notifications'} 
+        icon={'bell'} 
+        isAccount 
+        onPress={handleNotificationsPress}
+      />
+      <SearchItem 
+        title={'About'} 
+        icon={'circle-info'} 
+        isAccount 
+        onPress={() => console.log('About')} 
+      />
+      <SearchItem 
+        title={'Rate App'}
+        icon={'star'} 
+        isAccount 
+        onPress={handleRateApp} 
+      />
+      <SearchItem 
+        title={'Log Out'}
+        icon={'arrow-right-from-bracket'}
+        isAccount
+        onPress={()=> handleLogout()}
+      />
     </View>
   )
 }
