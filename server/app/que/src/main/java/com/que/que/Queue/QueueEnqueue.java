@@ -24,6 +24,12 @@ import lombok.Setter;
 @Getter
 @JsonSerialize(using = QueueEnqueueSerializer.class)
 public class QueueEnqueue {
+
+    public enum QueueEnqueueStatus
+    {
+        ENQUEUED, BEING_SERVED;
+    }
+
     @Id
     @SequenceGenerator(name = "queue_enequeue_sequence", sequenceName = "queue_enequeue_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "queue_enequeue_sequence")
@@ -38,14 +44,26 @@ public class QueueEnqueue {
     private final Queues queue;
     @Column(nullable = false)
     private final LocalDateTime actionDate;
+    private final QueueEnqueueStatus queueEnqueueStatus;
+    private final String comment;
 
-    public QueueEnqueue(AppUser appUser, Queues queue) {
+    public QueueEnqueue(AppUser appUser, Queues queue, QueueEnqueueStatus queueEnqueueStatus, String comment) {
         this.appUser = appUser;
         this.queue = queue;
         this.actionDate = LocalDateTime.now();
+        this.queueEnqueueStatus = queueEnqueueStatus;
+        this.comment = comment;
+    }
+
+    public QueueEnqueue(AppUser appUser, Queues queue, QueueEnqueueStatus queueEnqueueStatus) {
+        this.appUser = appUser;
+        this.queue = queue;
+        this.actionDate = LocalDateTime.now();
+        this.queueEnqueueStatus = queueEnqueueStatus;
+        this.comment = "";
     }
 
     public QueueEnqueue() {
-        this(null, null);
+        this(null, null, null);
     }
 }
