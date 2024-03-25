@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useStorageState } from "../hooks/useStorageState";
 import { useRouter, useSegments } from "expo-router";
 import _ from "lodash";
@@ -45,6 +45,7 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
   const router = useRouter();
   const [[isLoading, session], setSession] = useStorageState("session");
   const dispatch = useDispatch();
+  const hasNavigated = useRef(false);
 
   const token = useSelector((state: RootState) => state.tokenSetter.token);
 
@@ -57,21 +58,26 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
     fetchToken();
   }, []);
 
-  useEffect(() => {
-    if (tokenState) {
-      handleNavigation();
-    }
-  }, [tokenState]);
-
   const handleNavigation = async () => {
+    const token = await AsyncStorage.getItem("TOKEN_KEY");
     if (!token || (!session && rootSegment !== "(auth)")) {
       console.log("Navigating to Onboarding screen");
-      router.replace("/(auth)/Onboarding");
+      if (!hasNavigated.current) {
+        router.replace("/(auth)/Onboarding");
+        hasNavigated.current = true;
+      }
     } else if (token || (session && rootSegment !== "(app)")) {
       console.log("Navigating to root directory: app");
-      router.replace("/");
+      if (!hasNavigated.current) {
+        router.replace("/");
+        hasNavigated.current = true;
+      }
     }
   };
+
+  useEffect(() => {
+    hasNavigated.current = false;
+  }, [session, token]);
 
   const debouncedSetSession = _.debounce(setSession, 300);
 
@@ -86,10 +92,10 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
   }, []);
 
   useEffect(() => {
-    if (isTimeoutComplete) {
+    if (isTimeoutComplete && tokenState) {
       handleNavigation();
     }
-  }, [isLoading, session, rootSegment, router, user, isTimeoutComplete]);
+  }, [isLoading, session, rootSegment, router, user, isTimeoutComplete, tokenState]);
 
   useEffect(() => {
     console.log("This is the session: ", session);
