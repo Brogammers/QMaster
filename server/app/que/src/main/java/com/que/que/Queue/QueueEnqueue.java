@@ -25,11 +25,6 @@ import lombok.Setter;
 @JsonSerialize(using = QueueEnqueueSerializer.class)
 public class QueueEnqueue {
 
-    public enum QueueEnqueueStatus
-    {
-        ENQUEUED, BEING_SERVED;
-    }
-
     @Id
     @SequenceGenerator(name = "queue_enequeue_sequence", sequenceName = "queue_enequeue_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "queue_enequeue_sequence")
