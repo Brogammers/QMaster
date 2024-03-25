@@ -35,27 +35,42 @@ export function useSession() {
 }
 
 export function SessionProvider({ children }: React.PropsWithChildren) {
+  const [user, setUser] = useState<string | undefined | null>("");
+  const [tokenState, setTokenState] = useState<string | null>(null);
+  const [isTimeoutComplete, setIsTimeoutComplete] = useState(false);
+  const [isLoggedOut, setIsLoggedOut] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  
   const rootSegment = useSegments()[0];
   const router = useRouter();
-  const [user, setUser] = useState<string | undefined | null>("");
   const [[isLoading, session], setSession] = useStorageState("session");
-  const [isTimeoutComplete, setIsTimeoutComplete] = useState(false);
-
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const dispatch = useDispatch();
 
   const token = useSelector((state: RootState) => state.tokenSetter.token);
 
-  const handleNavigation = () => {
-    setTimeout(() => {
-      if (!session && rootSegment !== "(auth)") {
-        console.log("Navigating to Onboarding screen");
-        router.replace("/(auth)/Onboarding");
-      } else if (session && rootSegment !== "(app)") {
-        console.log("Navigating to root directory: app");
-        router.replace("/");
-      }
-    }, 500);
+  useEffect(() => {
+    const fetchToken = async () => {
+      const token = await AsyncStorage.getItem("TOKEN_KEY");
+      setTokenState(token);
+    };
+
+    fetchToken();
+  }, []);
+
+  useEffect(() => {
+    if (tokenState) {
+      handleNavigation();
+    }
+  }, [tokenState]);
+
+  const handleNavigation = async () => {
+    if (!token || (!session && rootSegment !== "(auth)")) {
+      console.log("Navigating to Onboarding screen");
+      router.replace("/(auth)/Onboarding");
+    } else if (token || (session && rootSegment !== "(app)")) {
+      console.log("Navigating to root directory: app");
+      router.replace("/");
+    }
   };
 
   const debouncedSetSession = _.debounce(setSession, 300);
@@ -85,6 +100,7 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
       if (token) {
         setUser(token);
         debouncedSetSession(token);
+        setIsLoggedOut(false);
 
         try {
           await AsyncStorage.setItem("TOKEN_KEY", token);
@@ -99,28 +115,22 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
 
   const handleSignOut = async () => {
     console.log("Logging out...");
-    setIsLoggingOut(true); 
-    setUser(""); 
+    setIsLoggingOut(true);
+    setUser("");
     setSession(null);
-    dispatch(setToken("")); 
-    await AsyncStorage.removeItem("TOKEN_KEY"); 
+    dispatch(setToken(""));
+    await AsyncStorage.removeItem("TOKEN_KEY");
     console.log("Logged out successfully");
-  
-    setIsLoggingOut(false);
-  };
 
-  useEffect(() => {
-    if (!isLoggingOut && !session) {
-      console.log("Session is null. Navigating to Onboarding screen");
-      router.replace("/(auth)/Onboarding");
-    }
-  }, [isLoggingOut, session]);
+    setIsLoggingOut(false);
+    setIsLoggedOut(true);
+  };
 
   return (
     <AuthContext.Provider
       value={{
         signIn: () => {},
-        signOut: handleSignOut, 
+        signOut: handleSignOut,
         session,
         isLoading,
       }}
