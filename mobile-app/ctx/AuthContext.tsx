@@ -60,13 +60,14 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
 
   const handleNavigation = async () => {
     const token = await AsyncStorage.getItem("TOKEN_KEY");
-    if (!token || (!session && rootSegment !== "(auth)")) {
+
+    if (!token || isLoggedOut || (!session && rootSegment !== "(auth)")) {
       console.log("Navigating to Onboarding screen");
       if (!hasNavigated.current) {
         router.replace("/(auth)/Onboarding");
         hasNavigated.current = true;
       }
-    } else if (token || (session && rootSegment !== "(app)")) {
+    } else if (token && !isLoggedOut || (session && rootSegment !== "(app)")) {
       console.log("Navigating to root directory: app");
       if (!hasNavigated.current) {
         router.replace("/");
@@ -77,7 +78,7 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
 
   useEffect(() => {
     hasNavigated.current = false;
-  }, [session, token]);
+  }, [session]);
 
   const debouncedSetSession = _.debounce(setSession, 300);
 
@@ -125,11 +126,18 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
     setUser("");
     setSession(null);
     dispatch(setToken(""));
-    await AsyncStorage.removeItem("TOKEN_KEY");
-    console.log("Logged out successfully");
 
-    setIsLoggingOut(false);
-    setIsLoggedOut(true);
+    try {
+      await AsyncStorage.removeItem("TOKEN_KEY");
+    } catch (e) {
+      console.error("Error removing token: ", e);
+    } finally {
+      console.log("Logged out successfully");
+
+      setIsLoggingOut(false);
+      setIsLoggedOut(true);
+      setSession(null);
+    }
   };
 
   return (
