@@ -98,7 +98,7 @@ public class QueueService {
     byte subscriptionPlan = appUserFromDB.getSubscriptionPlan();
     int max = 30;
 
-    // Current as placeholder 
+    // Current as placeholder
     switch (subscriptionPlan) {
       case 0:
         max = 1;
@@ -149,7 +149,8 @@ public class QueueService {
     queueEnqueueRepository.save(
         new QueueEnqueue(
             user,
-            currentQueue));
+            currentQueue,
+            QueueEnqueueStatus.ENQUEUED));
     print();
   }
 
@@ -208,17 +209,17 @@ public class QueueService {
     print();
   }
 
-  public ArrayList<Queues> currentQueuesOfUser(long appUserId){
+  public ArrayList<Queues> currentQueuesOfUser(long appUserId) {
     ArrayList<Queues> currentQueues = new ArrayList<>();
-    for(int queueSlot = 0; queueSlot < queue.size(); queueSlot++){
+    for (int queueSlot = 0; queueSlot < queue.size(); queueSlot++) {
       ArrayList<Queue<Long>> list = queue.get(queueSlot);
 
       // If slot is empty in memory
-      if(list.equals(null))
+      if (list.equals(null))
         continue;
-      for(int specificSlot = 0; specificSlot < list.size(); specificSlot++){
+      for (int specificSlot = 0; specificSlot < list.size(); specificSlot++) {
         Queue<Long> tempQueue = list.get(specificSlot);
-        if(tempQueue.contains(appUserId)){
+        if (tempQueue.contains(appUserId)) {
           ArrayList<Queues> queueToBeAdded = queueRepository.findByQueueSlotAndSpecificSlot(queueSlot, specificSlot);
           currentQueues.add(queueToBeAdded.get(0));
         }
