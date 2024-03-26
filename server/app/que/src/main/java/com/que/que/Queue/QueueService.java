@@ -175,6 +175,16 @@ public class QueueService {
       AppUser nextUser = appUserRepository.findById(
           specificQueue.poll()).orElseThrow(() -> new IllegalStateException("Could not find user"));
       currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() - 1);
+
+      // Adjusting QueueEnqueue status
+      QueueEnqueue queueEnqueue = queueEnqueueRepository
+          .findByAppUserAndQueue(nextUser, currentQueue)
+          .orElseThrow(() -> new IllegalStateException("Could not find user in queue"));
+
+      queueEnqueue.setQueueEnqueueStatus(QueueEnqueueStatus.BEING_SERVED);
+
+      queueEnqueueRepository.save(queueEnqueue);
+
       queueDequeueRepository
           .save(new QueueDequeue(nextUser, currentQueue));
       return nextUser;

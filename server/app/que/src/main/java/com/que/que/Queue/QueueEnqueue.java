@@ -39,8 +39,8 @@ public class QueueEnqueue {
     private final Queues queue;
     @Column(nullable = false)
     private final LocalDateTime actionDate;
-    private final QueueEnqueueStatus queueEnqueueStatus;
-    private final String comment;
+    private QueueEnqueueStatus queueEnqueueStatus;
+    private String comment;
 
     public QueueEnqueue(AppUser appUser, Queues queue, QueueEnqueueStatus queueEnqueueStatus, String comment) {
         this.appUser = appUser;
