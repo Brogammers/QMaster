@@ -37,7 +37,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const auth = useAuth();
   const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // New state variable
+  const [isLoading, setIsLoading] = useState(false); 
 
   const handleLogin = async (
     values: any,
@@ -46,6 +46,7 @@ export default function Login() {
     console.log("Logging in...", values);
 
     try {
+      setIsLoading(true);
       // IOS Simulator
       const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
       // Android Emulator
@@ -255,7 +256,7 @@ export default function Login() {
                       text={"Log In"}
                       buttonColor={!isValid ? "#C5C5C5" : "#1DCDFE"}
                       textColor={"white"}
-                      disabled={!isValid}
+                      disabled={!isValid || isLoading}
                       onPress={handleSubmit}
                     />
                     <TextButton
