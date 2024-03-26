@@ -181,7 +181,7 @@ public class QueueService {
 
       // Adjusting QueueEnqueue status
       QueueEnqueue queueEnqueue = queueEnqueueRepository
-          .findByAppUserAndQueue(nextUser, currentQueue)
+          .findByAppUserAndQueueAndQueueEnqueueStatus(nextUser, currentQueue, QueueEnqueueStatus.ENQUEUED)
           .orElseThrow(() -> new IllegalStateException("Could not find user in queue"));
 
       queueEnqueue.setQueueEnqueueStatus(QueueEnqueueStatus.BEING_SERVED);

@@ -13,5 +13,6 @@ import com.que.que.User.AppUser;
 public interface QueueEnqueueRepository extends JpaRepository<QueueEnqueue, Long> {
     Page<QueueEnqueue> findByAppUser(AppUser appUser, Pageable page);
 
-    Optional<QueueEnqueue> findByAppUserAndQueue(AppUser appUser, Queues queue);
+    Optional<QueueEnqueue> findByAppUserAndQueueAndQueueEnqueueStatus(AppUser appUser, Queues queue,
+            QueueEnqueueStatus queueEnqueueStatus);
 }
