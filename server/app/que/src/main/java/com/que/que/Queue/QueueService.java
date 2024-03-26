@@ -98,7 +98,7 @@ public class QueueService {
     byte subscriptionPlan = appUserFromDB.getSubscriptionPlan();
     int max = 30;
 
-    // Current as placeholder 
+    // Current as placeholder
     switch (subscriptionPlan) {
       case 0:
         max = 1;
@@ -141,15 +141,19 @@ public class QueueService {
     ArrayList<Queue<Long>> queueHolderQueues = queue.get(queueSlot);
     try {
       Queue<Long> specificQueue = queueHolderQueues.get(currentQueue.getSpecificSlot());
+      if (presentInQueue(appUser, specificQueue)) {
+        throw new IllegalStateException("User already in queue");
+      }
       specificQueue.add(appUser);
       currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() + 1);
     } catch (Exception e) {
-      throw new IllegalStateException("Could not add user to queue");
+      throw new IllegalStateException("Could not add user to queue: " + e.getMessage());
     }
     queueEnqueueRepository.save(
         new QueueEnqueue(
             user,
-            currentQueue));
+            currentQueue,
+            QueueEnqueueStatus.ENQUEUED));
     print();
   }
 
@@ -174,6 +178,15 @@ public class QueueService {
       AppUser nextUser = appUserRepository.findById(
           specificQueue.poll()).orElseThrow(() -> new IllegalStateException("Could not find user"));
       currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() - 1);
+
+      // Adjusting QueueEnqueue status
+      QueueEnqueue queueEnqueue = queueEnqueueRepository
+          .findByAppUserAndQueueAndQueueEnqueueStatus(nextUser, currentQueue, QueueEnqueueStatus.ENQUEUED)
+          .orElseThrow(() -> new IllegalStateException("Could not find user in queue"));
+
+      queueEnqueue.setQueueEnqueueStatus(QueueEnqueueStatus.BEING_SERVED);
+      queueEnqueueRepository.save(queueEnqueue);
+
       queueDequeueRepository
           .save(new QueueDequeue(nextUser, currentQueue));
       return nextUser;
@@ -208,17 +221,17 @@ public class QueueService {
     print();
   }
 
-  public ArrayList<Queues> currentQueuesOfUser(long appUserId){
+  public ArrayList<Queues> currentQueuesOfUser(long appUserId) {
     ArrayList<Queues> currentQueues = new ArrayList<>();
-    for(int queueSlot = 0; queueSlot < queue.size(); queueSlot++){
+    for (int queueSlot = 0; queueSlot < queue.size(); queueSlot++) {
       ArrayList<Queue<Long>> list = queue.get(queueSlot);
 
       // If slot is empty in memory
-      if(list.equals(null))
+      if (list.equals(null))
         continue;
-      for(int specificSlot = 0; specificSlot < list.size(); specificSlot++){
+      for (int specificSlot = 0; specificSlot < list.size(); specificSlot++) {
         Queue<Long> tempQueue = list.get(specificSlot);
-        if(tempQueue.contains(appUserId)){
+        if (tempQueue.contains(appUserId)) {
           ArrayList<Queues> queueToBeAdded = queueRepository.findByQueueSlotAndSpecificSlot(queueSlot, specificSlot);
           currentQueues.add(queueToBeAdded.get(0));
         }
@@ -244,5 +257,9 @@ public class QueueService {
     Stack<Integer> temp = new Stack<>();
     initializeQueueSlots(temp);
     return temp;
+  }
+
+  public boolean presentInQueue(Long appUser, Queue<Long> queue) {
+    return queue.contains(appUser);
   }
 }
