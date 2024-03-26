@@ -182,7 +182,6 @@ public class QueueService {
           .orElseThrow(() -> new IllegalStateException("Could not find user in queue"));
 
       queueEnqueue.setQueueEnqueueStatus(QueueEnqueueStatus.BEING_SERVED);
-
       queueEnqueueRepository.save(queueEnqueue);
 
       queueDequeueRepository
