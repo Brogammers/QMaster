@@ -141,10 +141,13 @@ public class QueueService {
     ArrayList<Queue<Long>> queueHolderQueues = queue.get(queueSlot);
     try {
       Queue<Long> specificQueue = queueHolderQueues.get(currentQueue.getSpecificSlot());
+      if (presentInQueue(appUser, specificQueue)) {
+        throw new IllegalStateException("User already in queue");
+      }
       specificQueue.add(appUser);
       currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() + 1);
     } catch (Exception e) {
-      throw new IllegalStateException("Could not add user to queue");
+      throw new IllegalStateException("Could not add user to queue: " + e.getMessage());
     }
     queueEnqueueRepository.save(
         new QueueEnqueue(
@@ -254,5 +257,9 @@ public class QueueService {
     Stack<Integer> temp = new Stack<>();
     initializeQueueSlots(temp);
     return temp;
+  }
+
+  public boolean presentInQueue(Long appUser, Queue<Long> queue) {
+    return queue.contains(appUser);
   }
 }
