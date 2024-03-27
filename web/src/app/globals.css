@@ -48,15 +48,6 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgb(23, 34, 45);
-  background-image: radial-gradient(
-      at 2% 24%,
-      rgb(199, 210, 254) 0,
-      transparent 81%
-    ),
-    radial-gradient(at 10% 62%, rgb(23, 34, 45) 0, transparent 47%),
-    radial-gradient(at 37% 32%, rgb(23, 34, 45) 0, transparent 98%),
-    /* radial-gradient(at 69% 51%, rgb(33, 208, 178) 0, transparent 73%), */
-      radial-gradient(at 47% 90%, rgb(84, 83, 83) 0, transparent 58%),
-    radial-gradient(at 94% 74%, rgb(29, 205, 254) 0, transparent 95%);
+  background-image: url('../../public/login-bg.svg');
+  background-repeat: no-repeat;
 }
