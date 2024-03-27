@@ -79,7 +79,7 @@ export default function LoginForm() {
               className="w-full rounded-full mb-2 px-8 py-4 bg-blue-100 text-gray-700 font-normal text-lg outline-none border-none"
             />
             {errors.email && touched.email && (
-              <span className="text-red-600 font-normal text-lg mb-2">
+              <span className="text-red-500 font-normal text-lg mb-2">
                 {errors.email}
               </span>
             )}
@@ -93,7 +93,7 @@ export default function LoginForm() {
               className="w-full rounded-full mb-4 px-8 py-4 bg-blue-100 text-gray-700 font-normal text-lg outline-none border-none"
             />
             {errors.password && touched.password && (
-              <span className="text-red-600 font-normal text-lg mb-2">
+              <span className="text-red-500 font-normal text-lg mb-2">
                 {errors.password}
               </span>
             )}
@@ -110,7 +110,7 @@ export default function LoginForm() {
               Submit
             </button>
             {errorMessage && (
-              <span className="text-red-600 font-normal text-md mt-4 text-center">
+              <span className="text-red-500 font-normal text-md mt-4 text-center">
                 {errorMessage}
               </span>
             )}
