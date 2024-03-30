@@ -234,18 +234,6 @@ export default function SignUp() {
 									{errors.email}
 								</Text>
 							)}
-							{/* <TextInput
-                style={styles.input}
-                placeholder='Enter your phone number'
-                placeholderTextColor={'#515151'}
-                onChangeText={handleChange('phoneNumber')}
-                keyboardType='phone-pad'
-                value={values.phoneNumber}
-                autoCapitalize='none'
-              />
-              {(errors.phoneNumber && touched.phoneNumber) &&
-                <Text style={{ fontSize: 12, color: 'red', textAlign: 'center' }}>{errors.phoneNumber}</Text>
-              } */}
 							<TextInput
 								style={styles.input}
 								placeholder="Enter new password"
