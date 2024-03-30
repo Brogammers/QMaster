@@ -16,11 +16,14 @@ import Return from "@/shared/components/Return";
 import background from "@/assets/images/background.png";
 import { useAuth } from "@/ctx/AuthContext";
 import { API_BASE_URL } from "@env";
-import PhoneNumberFormat from "react-phone-number-input";
-import CountryDropdown from "react-phone-number-input";
+
+import ReactSelect from 'react-select'; // import react-select
+import DatePicker from 'react-datepicker'; // import date picker
+import 'react-datepicker/dist/react-datepicker.css'; // import date picker css
 
 import { useDispatch } from "react-redux";
 import { setEmail } from "../redux/authSlice"; // replace with the actual path
+import { countries } from "@/constants";
 
 const SignupSchema = Yup.object().shape({
 	firstName: Yup.string()
@@ -128,6 +131,10 @@ export default function SignUp() {
 		}
 	};
 
+	function setFieldValue(arg0: string, date: Date | null): void {
+		throw new Error("Function not implemented.");
+	}
+
 	return (
 		<ImageBackground source={background} style={styles.container}>
 			<Link href="/Onboarding" style={styles.returnButton}>
@@ -151,122 +158,41 @@ export default function SignUp() {
 				>
 					Let's help you save more time.
 				</Text>
-				<Formik
-					initialValues={{
-						firstName: "",
-						lastName: "",
-						dateOfBirth: "",
-						counrtyOfOrigin: null,
-						email: "",
-						phoneNumber: "",
-						password: "",
-						username: null,
-						confirmPassword: "",
-					}}
-					validationSchema={SignupSchema}
-					onSubmit={handleSignUp}
-				>
-					{({
-						handleChange,
-						handleBlur,
-						handleSubmit,
-						values,
-						touched,
-						errors,
-						isValid,
-					}) => (
-						<View className="flex items-center justify-center w-full gap-4">
-							<TextInput
-								style={styles.input}
-								placeholder="Enter your first name"
-								placeholderTextColor={"#515151"}
-								onChangeText={handleChange("firstName")}
-								value={values.firstName}
-								autoCapitalize="words"
-							/>
-							{errors.firstName && touched.firstName && (
-								<Text
-									style={{
-										fontSize: 12,
-										color: "red",
-										textAlign: "center",
-									}}
-								>
-									{errors.firstName}
-								</Text>
-							)}
-							<TextInput
-								style={styles.input}
-								placeholder="Enter your last name"
-								placeholderTextColor={"#515151"}
-								onChangeText={handleChange("lastName")}
-								value={values.lastName}
-								autoCapitalize="words"
-							/>
-							{errors.firstName && touched.firstName && (
-								<Text
-									style={{
-										fontSize: 12,
-										color: "red",
-										textAlign: "center",
-									}}
-								>
-									{errors.firstName}
-								</Text>
-							)}
-							<TextInput
-								style={styles.input}
-								placeholder="Enter your email"
-								placeholderTextColor={"#515151"}
-								onChangeText={handleChange("email")}
-								keyboardType="email-address"
-								value={values.email}
-								autoCapitalize="none"
-							/>
-							{errors.email && touched.email && (
-								<Text
-									style={{
-										fontSize: 12,
-										color: "red",
-										textAlign: "center",
-									}}
-								>
-									{errors.email}
-								</Text>
-							)}
-							<TextInput
-								style={styles.input}
-								placeholder="Enter new password"
-								placeholderTextColor={"#515151"}
-								onChangeText={handleChange("password")}
-								onBlur={handleBlur("password")}
-								secureTextEntry
-								value={values.password}
-							/>
-							{errors.password && touched.password && (
-								<Text
-									style={{
-										fontSize: 12,
-										color: "red",
-										textAlign: "center",
-									}}
-								>
-									{errors.password}
-								</Text>
-							)}
-							<TextInput
-								style={styles.input}
-								placeholder="Confirm new password"
-								placeholderTextColor={"#515151"}
-								onChangeText={handleChange(
-									"confirmPassword"
-								)}
-								onBlur={handleBlur("confirmPassword")}
-								secureTextEntry
-								value={values.confirmPassword}
-							/>
-							{errors.confirmPassword &&
-								touched.confirmPassword && (
+				<ScrollView contentContainerStyle={styles.form}>
+					<Formik
+						initialValues={{
+							firstName: "",
+							lastName: "",
+							dateOfBirth: new Date(),
+							counrtyOfOrigin: "",
+							email: "",
+							phoneNumber: "",
+							password: "",
+							username: null,
+							confirmPassword: "",
+						}}
+						validationSchema={SignupSchema}
+						onSubmit={handleSignUp}
+					>
+						{({
+							handleChange,
+							handleBlur,
+							handleSubmit,
+							values,
+							touched,
+							errors,
+							isValid,
+						}) => (
+							<View className="flex items-center justify-center w-full gap-4">
+								<TextInput
+									style={styles.input}
+									placeholder="Enter your first name"
+									placeholderTextColor={"#515151"}
+									onChangeText={handleChange("firstName")}
+									value={values.firstName}
+									autoCapitalize="words"
+								/>
+								{errors.firstName && touched.firstName && (
 									<Text
 										style={{
 											fontSize: 12,
@@ -274,32 +200,217 @@ export default function SignUp() {
 											textAlign: "center",
 										}}
 									>
-										{errors.confirmPassword}
+										{errors.firstName}
 									</Text>
 								)}
-							<View className="my-4" />
-							<View className="mt-16">
-								<TextButton
-									text={"Sign Up"}
-									buttonColor={
-										!isValid
-											? "#C5C5C5"
-											: "#1DCDFE"
-									}
-									textColor={"white"}
-									onPress={handleSubmit}
-									disabled={!isValid}
+								<TextInput
+									style={styles.input}
+									placeholder="Enter your last name"
+									placeholderTextColor={"#515151"}
+									onChangeText={handleChange("lastName")}
+									value={values.lastName}
+									autoCapitalize="words"
 								/>
-								<TextButton
-									text={"Continue with Google"}
-									icon={"google"}
-									buttonColor={"white"}
-									textColor={"#17222D"}
+								{errors.firstName && touched.firstName && (
+									<Text
+										style={{
+											fontSize: 12,
+											color: "red",
+											textAlign: "center",
+										}}
+									>
+										{errors.firstName}
+									</Text>
+								)}
+								<TextInput
+									style={styles.input}
+									placeholder="Enter your email"
+									placeholderTextColor={"#515151"}
+									onChangeText={handleChange("email")}
+									keyboardType="email-address"
+									value={values.email}
+									autoCapitalize="none"
 								/>
+								{errors.email && touched.email && (
+									<Text
+										style={{
+											fontSize: 12,
+											color: "red",
+											textAlign: "center",
+										}}
+									>
+										{errors.email}
+									</Text>
+								)}
+								{/* <DatePicker
+									selected={values.dateOfBirth}
+									onChange={(date) => setFieldValue('dateOfBirth', date)}
+									dateFormat="MM/dd/yyyy"
+									maxDate={new Date()}
+									showYearDropdown
+									dropdownMode="select"
+								/>
+								{errors.dateOfBirth && touched.dateOfBirth && (
+										<Text
+												style={{
+														fontSize: 12,
+														color: "red",
+														textAlign: "center",
+												}}
+										>
+												{errors.dateOfBirth ? errors.dateOfBirth.toString() : ''}
+										</Text>
+								)} */}
+								{/* <ReactSelect
+									options={countries}
+									onChange={(option) => setFieldValue('country', option.value)}
+									onBlur={handleBlur('country')}
+									value={countries.find((country) => country.value === values.counrtyOfOrigin)}
+								/>
+								{errors.counrtyOfOrigin && touched.counrtyOfOrigin && (
+										<Text
+												style={{
+														fontSize: 12,
+														color: "red",
+														textAlign: "center",
+												}}
+										>
+												{errors.counrtyOfOrigin}
+										</Text>
+								)} */}
+								<TextInput
+									style={styles.input}
+									placeholder="Enter new password"
+									placeholderTextColor={"#515151"}
+									onChangeText={handleChange("password")}
+									onBlur={handleBlur("password")}
+									secureTextEntry
+									value={values.password}
+								/>
+								{errors.password && touched.password && (
+									<Text
+										style={{
+											fontSize: 12,
+											color: "red",
+											textAlign: "center",
+										}}
+									>
+										{errors.password}
+									</Text>
+								)}
+								<TextInput
+									style={styles.input}
+									placeholder="Confirm new password"
+									placeholderTextColor={"#515151"}
+									onChangeText={handleChange(
+										"confirmPassword"
+									)}
+									onBlur={handleBlur("confirmPassword")}
+									secureTextEntry
+									value={values.confirmPassword}
+								/>
+								<TextInput
+									style={styles.input}
+									placeholder="Confirm new password"
+									placeholderTextColor={"#515151"}
+									onChangeText={handleChange(
+										"confirmPassword"
+									)}
+									onBlur={handleBlur("confirmPassword")}
+									secureTextEntry
+									value={values.confirmPassword}
+								/>
+								<TextInput
+									style={styles.input}
+									placeholder="Confirm new password"
+									placeholderTextColor={"#515151"}
+									onChangeText={handleChange(
+										"confirmPassword"
+									)}
+									onBlur={handleBlur("confirmPassword")}
+									secureTextEntry
+									value={values.confirmPassword}
+								/>
+								<TextInput
+									style={styles.input}
+									placeholder="Confirm new password"
+									placeholderTextColor={"#515151"}
+									onChangeText={handleChange(
+										"confirmPassword"
+									)}
+									onBlur={handleBlur("confirmPassword")}
+									secureTextEntry
+									value={values.confirmPassword}
+								/>
+								<TextInput
+									style={styles.input}
+									placeholder="Confirm new password"
+									placeholderTextColor={"#515151"}
+									onChangeText={handleChange(
+										"confirmPassword"
+									)}
+									onBlur={handleBlur("confirmPassword")}
+									secureTextEntry
+									value={values.confirmPassword}
+								/>
+								<TextInput
+									style={styles.input}
+									placeholder="Confirm new password"
+									placeholderTextColor={"#515151"}
+									onChangeText={handleChange(
+										"confirmPassword"
+									)}
+									onBlur={handleBlur("confirmPassword")}
+									secureTextEntry
+									value={values.confirmPassword}
+								/>
+								<TextInput
+									style={styles.input}
+									placeholder="Confirm new password"
+									placeholderTextColor={"#515151"}
+									onChangeText={handleChange(
+										"confirmPassword"
+									)}
+									onBlur={handleBlur("confirmPassword")}
+									secureTextEntry
+									value={values.confirmPassword}
+								/>
+								{errors.confirmPassword &&
+									touched.confirmPassword && (
+										<Text
+											style={{
+												fontSize: 12,
+												color: "red",
+												textAlign: "center",
+											}}
+										>
+											{errors.confirmPassword}
+										</Text>
+									)}
+								<View className="my-4" />
+								<View className="my-16">
+									<TextButton
+										text={"Sign Up"}
+										buttonColor={
+											!isValid
+												? "#C5C5C5"
+												: "#1DCDFE"
+										}
+										textColor={"white"}
+										onPress={handleSubmit}
+										disabled={!isValid}
+									/>
+									<TextButton
+										text={"Continue with Google"}
+										icon={"google"}
+										buttonColor={"white"}
+										textColor={"#17222D"}
+									/>
+								</View>
 							</View>
-						</View>
-					)}
-				</Formik>
+						)}
+					</Formik>
+				</ScrollView>
 			</View>
 		</ImageBackground>
 	);
@@ -330,6 +441,7 @@ const styles = StyleSheet.create({
 		fontFamily: "InterBold",
 		fontSize: 28, // Corresponds to text-2xl in Tailwind
 		color: "#FFF", // Text color
+		marginTop: 104,
 		marginBottom: 16, // Corresponds to mb-4 in Tailwind
 	},
 	subTitle: {
@@ -339,6 +451,9 @@ const styles = StyleSheet.create({
 		fontSize: 16, // Corresponds to text-base in Tailwind
 		color: "#FFF", // Text color
 		marginBottom: 40, // Corresponds to mb-10 in Tailwind
+	},
+	form: {
+		alignItems: "center",
 	},
 	input: {
 		backgroundColor: "#DFDFDF",
