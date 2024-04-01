@@ -24,7 +24,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useDispatch } from "react-redux";
 import { setEmail } from "../redux/authSlice"; // replace with the actual path
 import { countries } from "@/constants";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -338,6 +338,7 @@ export default function SignUp() {
                 {showPicker && Platform.OS === "ios" && (
                   <View
                     style={{
+											width: "100%",
                       flexDirection: "row",
                       justifyContent: "space-around",
                     }}
@@ -346,12 +347,16 @@ export default function SignUp() {
                       text={"Cancel"}
 											buttonColor={"white"}
 											textColor={"#17222D"}
+											textSize="text-md"
+											width={120}
                       onPress={toggleDatePicker}
                     />
                     <TextButton
                       text={"Confirm"}
 											buttonColor={"#1DCDFE"}
 											textColor={"white"}
+											textSize="text-md"
+											width={120}
                       onPress={confirmDateIOS}
                     />
                   </View>
