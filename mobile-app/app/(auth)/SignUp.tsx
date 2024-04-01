@@ -32,7 +32,11 @@ const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
     .nullable()
     .matches(/^[a-zA-Z]+$/, "Full name must contain only letters")
-    .required("Name required"),
+    .required("First name required"),
+	lastName: Yup.string()
+    .nullable()
+    .matches(/^[a-zA-Z]+$/, "Full name must contain only letters")
+    .required("Last name required"),
   email: Yup.string().email("Invalid email").required("Email required"),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
@@ -132,6 +136,7 @@ export default function SignUp() {
   const confirmDateIOS = () => {
     setDateOfBirth(formatDate(date));
     toggleDatePicker();
+		console.log(dateOfBirth);
   };
 
   const formatDate = (rawData: Date | undefined) => {
@@ -140,20 +145,18 @@ export default function SignUp() {
     let date = new Date(rawData);
 
     let year = date.getFullYear();
-    let month: number | string = date.getMonth();
-    let day = date.getDay();
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
 
-		month = month < 10 ? `0${month}` : month;	
-
-		return `${day}-${month}-${year}`;
+		return `${day}/${month}/${year}`;
   };
 
   const onDateChange = (
     { type }: any,
-    selectedDate: Date | undefined
+    dateOfBirth: Date | undefined
   ) => {
-    if (type === "set" && selectedDate) {
-      const currentDate: Date = selectedDate;
+    if (type === "set" && dateOfBirth) {
+      const currentDate: Date = dateOfBirth;
       setDate(currentDate);
 
       if (Platform.OS === "android") {
@@ -241,7 +244,7 @@ export default function SignUp() {
                   value={values.lastName}
                   autoCapitalize="words"
                 />
-                {errors.firstName && touched.firstName && (
+                {errors.lastName && touched.lastName && (
                   <Text
                     style={{
                       fontSize: 12,
@@ -249,7 +252,7 @@ export default function SignUp() {
                       textAlign: "center",
                     }}
                   >
-                    {errors.firstName}
+                    {errors.lastName}
                   </Text>
                 )}
                 <TextInput
@@ -312,24 +315,6 @@ export default function SignUp() {
                     {errors.confirmPassword}
                   </Text>
                 )}
-                <TextInput
-                  style={styles.input}
-                  placeholder="Country"
-                  placeholderTextColor={"#515151"}
-                  onChangeText={handleChange("confirmPassword")}
-                  onBlur={handleBlur("confirmPassword")}
-                  secureTextEntry
-                  value={values.confirmPassword}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Phone Number"
-                  placeholderTextColor={"#515151"}
-                  onChangeText={handleChange("confirmPassword")}
-                  onBlur={handleBlur("confirmPassword")}
-                  secureTextEntry
-                  value={values.confirmPassword}
-                />
                 {showPicker && (
 									<View style={{ width: "110%" }}>
 										<DateTimePicker
@@ -379,11 +364,22 @@ export default function SignUp() {
                       placeholder="Date of birth           03/10/2023"
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("dateOfBirth")}
-											value={values.dateOfBirth ? formatDate(values.dateOfBirth) : ''}
+											value={dateOfBirth}
                       editable={false}
                       onPressIn={toggleDatePicker}
                     />
                   </Pressable>
+                )}
+								{errors.dateOfBirth && dateOfBirth && (
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: "red",
+                      textAlign: "center",
+                    }}
+                  >
+                    {errors.dateOfBirth}
+                  </Text>
                 )}
                 <View className="my-4" />
                 <View className="my-16">
