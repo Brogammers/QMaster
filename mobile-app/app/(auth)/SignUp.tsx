@@ -4,6 +4,8 @@ import {
   Alert,
   StatusBar,
   ScrollView,
+  Pressable,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
@@ -17,13 +19,12 @@ import background from "@/assets/images/background.png";
 import { useAuth } from "@/ctx/AuthContext";
 import { API_BASE_URL } from "@env";
 
-import ReactSelect from "react-select"; // import react-select
-import DatePicker from "react-datepicker"; // import date picker
-import "react-datepicker/dist/react-datepicker.css"; // import date picker css
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { useDispatch } from "react-redux";
 import { setEmail } from "../redux/authSlice"; // replace with the actual path
 import { countries } from "@/constants";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -50,6 +51,10 @@ export default function SignUp() {
 
   // Add a state variable to track whether the state update has completed
   const [isStateUpdateComplete, setStateUpdateComplete] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState();
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
 
   const handleSignUp = async (values: any) => {
     console.log("Form values:", values);
@@ -117,6 +122,44 @@ export default function SignUp() {
     throw new Error("Function not implemented.");
   }
 
+  const toggleDatePicker = () => {
+    setShowPicker(!showPicker);
+  };
+
+  const confirmDateIOS = () => {
+    setDateOfBirth(formatDate(date));
+    toggleDatePicker();
+  };
+
+  const formatDate = (rawData: Date) => {
+    let date = new Date(rawData);
+
+    let year = date.getFullYear();
+    let month: number | string = date.getMonth();
+    let day = date.getDay();
+
+		month = month < 10 ? `0${month}` : month;	
+
+		return `${day}-${month}-${year}`;
+  };
+
+  const onDateChange = (
+    { type }: any,
+    selectedDate: Date | undefined
+  ) => {
+    if (type === "set" && selectedDate) {
+      const currentDate: Date = selectedDate;
+      setDate(currentDate);
+
+      if (Platform.OS === "android") {
+        toggleDatePicker();
+        setDateOfBirth(formatDate(currentDate));
+      }
+    } else {
+      toggleDatePicker();
+    }
+  };
+
   return (
     <ImageBackground source={background} style={styles.container}>
       <Link href="/Onboarding" style={styles.returnButton}>
@@ -138,13 +181,13 @@ export default function SignUp() {
           contentContainerStyle={styles.form}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="never"
-					showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
         >
           <Formik
             initialValues={{
               firstName: "",
               lastName: "",
-              dateOfBirth: new Date(),
+              doB: new Date(),
               counrtyOfOrigin: "",
               email: "",
               phoneNumber: "",
@@ -223,42 +266,6 @@ export default function SignUp() {
                     {errors.email}
                   </Text>
                 )}
-                {/* <DatePicker
-									selected={values.dateOfBirth}
-									onChange={(date) => setFieldValue('dateOfBirth', date)}
-									dateFormat="MM/dd/yyyy"
-									maxDate={new Date()}
-									showYearDropdown
-									dropdownMode="select"
-								/>
-								{errors.dateOfBirth && touched.dateOfBirth && (
-										<Text
-												style={{
-														fontSize: 12,
-														color: "red",
-														textAlign: "center",
-												}}
-										>
-												{errors.dateOfBirth ? errors.dateOfBirth.toString() : ''}
-										</Text>
-								)} */}
-                {/* <ReactSelect
-									options={countries}
-									onChange={(option) => setFieldValue('country', option.value)}
-									onBlur={handleBlur('country')}
-									value={countries.find((country) => country.value === values.counrtyOfOrigin)}
-								/>
-								{errors.counrtyOfOrigin && touched.counrtyOfOrigin && (
-										<Text
-												style={{
-														fontSize: 12,
-														color: "red",
-														textAlign: "center",
-												}}
-										>
-												{errors.counrtyOfOrigin}
-										</Text>
-								)} */}
                 <TextInput
                   style={styles.input}
                   placeholder="Enter new password"
@@ -288,6 +295,17 @@ export default function SignUp() {
                   secureTextEntry
                   value={values.confirmPassword}
                 />
+                {errors.confirmPassword && touched.confirmPassword && (
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: "red",
+                      textAlign: "center",
+                    }}
+                  >
+                    {errors.confirmPassword}
+                  </Text>
+                )}
                 <TextInput
                   style={styles.input}
                   placeholder="Country"
@@ -306,25 +324,50 @@ export default function SignUp() {
                   secureTextEntry
                   value={values.confirmPassword}
                 />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Date of Birth"
-                  placeholderTextColor={"#515151"}
-                  onChangeText={handleChange("confirmPassword")}
-                  onBlur={handleBlur("confirmPassword")}
-                  secureTextEntry
-                  value={values.confirmPassword}
-                />
-                {errors.confirmPassword && touched.confirmPassword && (
-                  <Text
+                {showPicker && (
+                  <DateTimePicker
+                    mode="date"
+                    display="spinner"
+                    value={date}
+                    onChange={onDateChange}
+                    style={styles.datePicker}
+                    maximumDate={new Date()}
+                    minimumDate={new Date(1900, 1, 1)}
+                  />
+                )}
+                {showPicker && Platform.OS === "ios" && (
+                  <View
                     style={{
-                      fontSize: 12,
-                      color: "red",
-                      textAlign: "center",
+                      flexDirection: "row",
+                      justifyContent: "space-around",
                     }}
                   >
-                    {errors.confirmPassword}
-                  </Text>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={toggleDatePicker}
+                    >
+                      <Text>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={confirmDateIOS}
+                    >
+                      <Text>Confirm</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+                {!showPicker && (
+                  <Pressable onPress={toggleDatePicker}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Date of Birth"
+                      placeholderTextColor={"#515151"}
+                      // onChangeText={handleChange("confirmPassword")}
+                      value={values.doB.toISOString().split('T')[0]}
+                      editable={false}
+                      onPressIn={toggleDatePicker}
+                    />
+                  </Pressable>
                 )}
                 <View className="my-4" />
                 <View className="my-16">
@@ -401,6 +444,10 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 24,
     width: "100%",
+  },
+  datePicker: {
+    height: 120,
+    marginTop: -10,
   },
   button: {
     borderRadius: 10,
