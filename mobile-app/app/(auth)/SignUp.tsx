@@ -196,7 +196,7 @@ export default function SignUp() {
             initialValues={{
               firstName: "",
               lastName: "",
-              dateOfBirth: null,
+              dateOfBirth: "",
               counrtyOfOrigin: "",
               email: "",
               phoneNumber: "",
@@ -364,13 +364,13 @@ export default function SignUp() {
                       placeholder="Date of birth           03/10/2023"
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("dateOfBirth")}
-											value={dateOfBirth}
+											value={values.dateOfBirth}
                       editable={false}
                       onPressIn={toggleDatePicker}
                     />
                   </Pressable>
                 )}
-								{errors.dateOfBirth && dateOfBirth && (
+								{errors.dateOfBirth && touched.dateOfBirth && (
                   <Text
                     style={{
                       fontSize: 12,
