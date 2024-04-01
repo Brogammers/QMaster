@@ -8,6 +8,7 @@ const window = Dimensions.get('window');
 
 export default function TextButton(props: TextButtonProps) {
   const buttonWidth = props.width ? props.width : window.width * 0.8;
+  const buttonPadding = props.padding ? props.padding : 14;
 
   if (props.icon == null) {
     return (
@@ -15,7 +16,7 @@ export default function TextButton(props: TextButtonProps) {
         disabled={props.disabled}
         onPress={(props.onPress)}
         className='flex items-center justify-center mt-5 rounded-lg'
-        style={[styles.button, { backgroundColor: props.buttonColor, width: buttonWidth }]}
+        style={[{ padding: buttonPadding , backgroundColor: props.buttonColor, width: buttonWidth }]}
       >
         <Text 
           className={props.textSize ? props.textSize : "text-xl"}
@@ -32,7 +33,7 @@ export default function TextButton(props: TextButtonProps) {
         disabled={props.disabled}
         onPress={(props.onPress)}
         className='flex flex-row items-center justify-center mt-5 rounded-lg'
-        style={[styles.button, { backgroundColor: props.buttonColor, width: buttonWidth }]}
+        style={[{ padding: buttonPadding , backgroundColor: props.buttonColor, width: buttonWidth }]}
       >
         <FontAwesome 
           name={props.icon}
@@ -52,9 +53,6 @@ export default function TextButton(props: TextButtonProps) {
 
 
 const styles = StyleSheet.create({
-  button: {
-    padding: 14,
-  },
   font: {
     fontFamily: 'IstokBold',
   }

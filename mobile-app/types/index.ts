@@ -82,6 +82,7 @@ export interface TextButtonProps {
   textColor: string;
   textSize?: string;
   width?: number;
+  padding?: number;
   icon?: any;
   onPress?: () => void;
   disabled?: boolean;

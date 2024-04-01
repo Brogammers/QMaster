@@ -6,6 +6,7 @@ import {
   ScrollView,
   Pressable,
   Platform,
+	Dimensions,
 } from "react-native";
 import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
@@ -25,6 +26,7 @@ import { useDispatch } from "react-redux";
 import { setEmail } from "../redux/authSlice"; // replace with the actual path
 import { countries } from "@/constants";
 
+const window = Dimensions.get('window');
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -48,6 +50,7 @@ export default function SignUp() {
   const dispatch = useDispatch();
   const auth = useAuth();
   const router = useRouter();
+	const windowWidth = window.width * 0.7
 
   // Add a state variable to track whether the state update has completed
   const [isStateUpdateComplete, setStateUpdateComplete] = useState(false);
@@ -178,6 +181,7 @@ export default function SignUp() {
           Let's help you save more time.
         </Text>
         <ScrollView
+					horizontal={false}
           contentContainerStyle={styles.form}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="never"
@@ -207,7 +211,7 @@ export default function SignUp() {
               errors,
               isValid,
             }) => (
-              <View className="flex items-center justify-center w-full gap-4">
+              <View className="flex items-center justify-center w-3/4 gap-4">
                 <TextInput
                   style={styles.input}
                   placeholder="Enter your first name"
@@ -325,15 +329,18 @@ export default function SignUp() {
                   value={values.confirmPassword}
                 />
                 {showPicker && (
-                  <DateTimePicker
-                    mode="date"
-                    display="spinner"
-                    value={date}
-                    onChange={onDateChange}
-                    style={styles.datePicker}
-                    maximumDate={new Date()}
-                    minimumDate={new Date(1900, 1, 1)}
-                  />
+									<View style={{ width: "110%" }}>
+										<DateTimePicker
+											textColor="white"
+											mode="date"
+											display="spinner"
+											value={date}
+											onChange={onDateChange}
+											style={styles.datePicker}
+											maximumDate={new Date()}
+											minimumDate={new Date(1900, 1, 1)}
+										/>
+									</View>
                 )}
                 {showPicker && Platform.OS === "ios" && (
                   <View
@@ -348,7 +355,8 @@ export default function SignUp() {
 											buttonColor={"white"}
 											textColor={"#17222D"}
 											textSize="text-md"
-											width={120}
+											padding={8}
+											width={100}
                       onPress={toggleDatePicker}
                     />
                     <TextButton
@@ -356,7 +364,8 @@ export default function SignUp() {
 											buttonColor={"#1DCDFE"}
 											textColor={"white"}
 											textSize="text-md"
-											width={120}
+											padding={8}
+											width={100}
                       onPress={confirmDateIOS}
                     />
                   </View>
@@ -382,12 +391,14 @@ export default function SignUp() {
                     textColor={"white"}
                     onPress={handleSubmit}
                     disabled={!isValid}
+										width={windowWidth}
                   />
                   <TextButton
                     text={"Continue with Google"}
                     icon={"google"}
                     buttonColor={"white"}
                     textColor={"#17222D"}
+										width={windowWidth}
                   />
                 </View>
               </View>
@@ -448,7 +459,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     paddingVertical: 4,
     paddingHorizontal: 24,
-    width: "100%",
+		width: window.width * .75,
   },
   datePicker: {
     height: 120,
