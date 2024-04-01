@@ -290,7 +290,7 @@ export default function SignUp() {
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder="Confirm new password"
+                  placeholder="Country"
                   placeholderTextColor={"#515151"}
                   onChangeText={handleChange("confirmPassword")}
                   onBlur={handleBlur("confirmPassword")}
@@ -299,7 +299,7 @@ export default function SignUp() {
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder="Confirm new password"
+                  placeholder="Phone Number"
                   placeholderTextColor={"#515151"}
                   onChangeText={handleChange("confirmPassword")}
                   onBlur={handleBlur("confirmPassword")}
@@ -308,34 +308,7 @@ export default function SignUp() {
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder="Confirm new password"
-                  placeholderTextColor={"#515151"}
-                  onChangeText={handleChange("confirmPassword")}
-                  onBlur={handleBlur("confirmPassword")}
-                  secureTextEntry
-                  value={values.confirmPassword}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Confirm new password"
-                  placeholderTextColor={"#515151"}
-                  onChangeText={handleChange("confirmPassword")}
-                  onBlur={handleBlur("confirmPassword")}
-                  secureTextEntry
-                  value={values.confirmPassword}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Confirm new password"
-                  placeholderTextColor={"#515151"}
-                  onChangeText={handleChange("confirmPassword")}
-                  onBlur={handleBlur("confirmPassword")}
-                  secureTextEntry
-                  value={values.confirmPassword}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Confirm new password"
+                  placeholder="Date of Birth"
                   placeholderTextColor={"#515151"}
                   onChangeText={handleChange("confirmPassword")}
                   onBlur={handleBlur("confirmPassword")}
