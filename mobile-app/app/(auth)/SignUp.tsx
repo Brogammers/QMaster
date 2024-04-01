@@ -23,7 +23,7 @@ import { API_BASE_URL } from "@env";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { useDispatch } from "react-redux";
-import { setEmail } from "../redux/authSlice"; // replace with the actual path
+import { setEmail } from "../redux/authSlice"; 
 import { countries } from "@/constants";
 
 const window = Dimensions.get('window');
@@ -44,6 +44,10 @@ const SignupSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Password confirmation required"),
+	dateOfBirth: Yup.date()
+    .nullable()
+    .max(new Date(), "Date of birth cannot be in the future")
+    .required("Date of birth is required"),
 });
 
 export default function SignUp() {
@@ -52,7 +56,6 @@ export default function SignUp() {
   const router = useRouter();
 	const windowWidth = window.width * 0.7
 
-  // Add a state variable to track whether the state update has completed
   const [isStateUpdateComplete, setStateUpdateComplete] = useState(false);
   const [date, setDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState();
@@ -81,7 +84,6 @@ export default function SignUp() {
             " and type: ",
             typeof response.data.email
           );
-          // Update the session state and wait for the update to complete
           await new Promise<void>((resolve) => {
             dispatch(setEmail(response.data.email));
             resolve();
@@ -113,10 +115,8 @@ export default function SignUp() {
           console.error("Axios error message:", axiosError.message);
         }
       } else {
-        // Handle non-Axios errors
         console.error("Non-Axios error:", error);
       }
-      // Add this line to rethrow the error and see the full stack trace in the console
       throw error;
     }
   };
@@ -134,7 +134,9 @@ export default function SignUp() {
     toggleDatePicker();
   };
 
-  const formatDate = (rawData: Date) => {
+  const formatDate = (rawData: Date | undefined) => {
+		if (!rawData) return '';
+
     let date = new Date(rawData);
 
     let year = date.getFullYear();
@@ -191,7 +193,7 @@ export default function SignUp() {
             initialValues={{
               firstName: "",
               lastName: "",
-              doB: new Date(),
+              dateOfBirth: null,
               counrtyOfOrigin: "",
               email: "",
               phoneNumber: "",
@@ -374,10 +376,10 @@ export default function SignUp() {
                   <Pressable onPress={toggleDatePicker}>
                     <TextInput
                       style={styles.input}
-                      placeholder="Date of Birth"
+                      placeholder="Date of birth           03/10/2023"
                       placeholderTextColor={"#515151"}
-                      // onChangeText={handleChange("confirmPassword")}
-                      value={values.doB.toISOString().split('T')[0]}
+                      onChangeText={handleChange("dateOfBirth")}
+											value={values.dateOfBirth ? formatDate(values.dateOfBirth) : ''}
                       editable={false}
                       onPressIn={toggleDatePicker}
                     />
@@ -428,23 +430,23 @@ const styles = StyleSheet.create({
   },
   returnButton: {
     position: "absolute",
-    top: 60, // Adjust the top value as needed
-    left: 18, // Adjust the left value as needed
+    top: 60, 
+    left: 18, 
   },
   title: {
     fontFamily: "InterBold",
-    fontSize: 28, // Corresponds to text-2xl in Tailwind
-    color: "#FFF", // Text color
+    fontSize: 28, 
+    color: "#FFF", 
     marginTop: 104,
-    marginBottom: 16, // Corresponds to mb-4 in Tailwind
+    marginBottom: 16, 
   },
   subTitle: {
     fontFamily: "JostReg",
   },
   baseText: {
-    fontSize: 16, // Corresponds to text-base in Tailwind
-    color: "#FFF", // Text color
-    marginBottom: 40, // Corresponds to mb-10 in Tailwind
+    fontSize: 16, 
+    color: "#FFF", 
+    marginBottom: 40, 
   },
   form: {
     alignItems: "center",
@@ -452,7 +454,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: "#DFDFDF",
     color: "#515151",
-    fontSize: 16, // Corresponds to text-base in Tailwind
+    fontSize: 16,
     fontFamily: "JostBold",
     borderRadius: 42,
     height: 56,
@@ -471,8 +473,8 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     backgroundColor: "#1DCDFE",
-    marginTop: 10, // Corresponds to mt-2.5 in Tailwind
-    paddingVertical: 16, // Corresponds to py-4 in Tailwind
+    marginTop: 10, 
+    paddingVertical: 16, 
     paddingHorizontal: 12,
     flexDirection: "row",
     justifyContent: "center",
@@ -486,8 +488,8 @@ const styles = StyleSheet.create({
   googleButton: {
     backgroundColor: "#FFF",
     color: "#17222D",
-    marginTop: 10, // Corresponds to mt-2.5 in Tailwind
-    paddingVertical: 16, // Corresponds to py-4 in Tailwind
+    marginTop: 10, 
+    paddingVertical: 16, 
     paddingHorizontal: 12,
     flexDirection: "row",
     justifyContent: "center",
