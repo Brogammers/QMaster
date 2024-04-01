@@ -342,18 +342,18 @@ export default function SignUp() {
                       justifyContent: "space-around",
                     }}
                   >
-                    <TouchableOpacity
-                      style={styles.button}
+                    <TextButton
+                      text={"Cancel"}
+											buttonColor={"white"}
+											textColor={"#17222D"}
                       onPress={toggleDatePicker}
-                    >
-                      <Text>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.button}
+                    />
+                    <TextButton
+                      text={"Confirm"}
+											buttonColor={"#1DCDFE"}
+											textColor={"white"}
                       onPress={confirmDateIOS}
-                    >
-                      <Text>Confirm</Text>
-                    </TouchableOpacity>
+                    />
                   </View>
                 )}
                 {!showPicker && (
