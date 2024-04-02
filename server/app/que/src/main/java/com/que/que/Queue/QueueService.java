@@ -240,20 +240,17 @@ public class QueueService {
     return currentQueues;
   }
 
-  public ArrayList<AppUser> getBeingServed (long appUserId)
-  {
+  public ArrayList<AppUser> getBeingServed(long appUserId) {
     ArrayList<AppUser> appUsers = new ArrayList<>();
     int slot = getQueueSlot(appUserId);
-    if (slot == -1)
-    {
+    if (slot == -1) {
       return appUsers;
     }
     ArrayList<Queues> queues = queueRepository.findByQueueSlot(slot);
-    for (Queues queue: queues)
-    {
-      ArrayList<QueueEnqueue> queueEnqueues = queueEnqueueRepository.findByQueueAndQueueEnqueueStatus(queue, QueueEnqueueStatus.BEING_SERVED);
-      for (QueueEnqueue queueEnqueue: queueEnqueues)
-      {
+    for (Queues queue : queues) {
+      ArrayList<QueueEnqueue> queueEnqueues = queueEnqueueRepository.findByQueueAndQueueEnqueueStatus(queue,
+          QueueEnqueueStatus.BEING_SERVED);
+      for (QueueEnqueue queueEnqueue : queueEnqueues) {
         appUsers.add(queueEnqueue.getAppUser());
       }
     }
