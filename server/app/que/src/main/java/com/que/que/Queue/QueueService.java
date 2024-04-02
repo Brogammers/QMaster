@@ -244,6 +244,10 @@ public class QueueService {
   {
     ArrayList<AppUser> appUsers = new ArrayList<>();
     int slot = getQueueSlot(appUserId);
+    if (slot == -1)
+    {
+      return appUsers;
+    }
     ArrayList<Queues> queues = queueRepository.findByQueueSlot(slot);
     for (Queues queue: queues)
     {
