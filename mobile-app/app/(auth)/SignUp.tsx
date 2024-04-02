@@ -11,7 +11,7 @@ import {
 import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
 import { Link, useRouter } from "expo-router";
-import { Formik } from "formik";
+import { Formik, FormikErrors } from "formik";
 import * as Yup from "yup";
 import axios, { AxiosError } from "axios";
 import TextButton from "@/shared/components/TextButton";
@@ -48,9 +48,9 @@ const SignupSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Password confirmation required"),
-	dateOfBirth: Yup.date()
+	dateOfBirth: Yup.string()
     .nullable()
-    .max(new Date(), "Date of birth cannot be in the future")
+    // .max(new Date(), "Date of birth cannot be in the future")
     .required("Date of birth is required"),
 });
 
@@ -125,18 +125,16 @@ export default function SignUp() {
     }
   };
 
-  function setFieldValue(arg0: string, date: Date | null): void {
-    throw new Error("Function not implemented.");
-  }
-
   const toggleDatePicker = () => {
     setShowPicker(!showPicker);
   };
 
-  const confirmDateIOS = () => {
-    setDateOfBirth(formatDate(date));
+  const confirmDateIOS = (setFieldValue: { (field: string, value: any, shouldValidate?: boolean | undefined): Promise<void | FormikErrors<{ firstName: string; lastName: string; dateOfBirth: string; counrtyOfOrigin: string; email: string; phoneNumber: string; password: string; username: null; confirmPassword: string; }>>; (arg0: string, arg1: string): void; }) => () => {
+    const formattedDate = formatDate(date);
+    setDateOfBirth(formattedDate);
+    setFieldValue('dateOfBirth', formattedDate); // Add this line
     toggleDatePicker();
-		console.log(dateOfBirth);
+    console.log(dateOfBirth);
   };
 
   const formatDate = (rawData: Date | undefined) => {
@@ -151,17 +149,17 @@ export default function SignUp() {
 		return `${day}/${month}/${year}`;
   };
 
-  const onDateChange = (
-    { type }: any,
-    dateOfBirth: Date | undefined
-  ) => {
+  const onDateChange = (setFieldValue: { (field: string, value: any, shouldValidate?: boolean | undefined): Promise<void | FormikErrors<{ firstName: string; lastName: string; dateOfBirth: string; counrtyOfOrigin: string; email: string; phoneNumber: string; password: string; username: null; confirmPassword: string; }>>; (arg0: string, arg1: string): void; }) => ({ type }: any, dateOfBirth: Date | undefined) => {
     if (type === "set" && dateOfBirth) {
       const currentDate: Date = dateOfBirth;
       setDate(currentDate);
-
+  
+      const formattedDate = formatDate(currentDate);
+      setDateOfBirth(formattedDate);
+      setFieldValue('dateOfBirth', formattedDate); // Add this line
+  
       if (Platform.OS === "android") {
         toggleDatePicker();
-        setDateOfBirth(formatDate(currentDate));
       }
     } else {
       toggleDatePicker();
@@ -211,6 +209,7 @@ export default function SignUp() {
               handleChange,
               handleBlur,
               handleSubmit,
+              setFieldValue,
               values,
               touched,
               errors,
@@ -322,7 +321,7 @@ export default function SignUp() {
 											mode="date"
 											display="spinner"
 											value={date}
-											onChange={onDateChange}
+											onChange={onDateChange(setFieldValue)}
 											style={styles.datePicker}
 											maximumDate={new Date()}
 											minimumDate={new Date(1900, 1, 1)}
@@ -353,7 +352,7 @@ export default function SignUp() {
 											textSize="text-md"
 											padding={8}
 											width={100}
-                      onPress={confirmDateIOS}
+                      onPress={confirmDateIOS(setFieldValue)}
                     />
                   </View>
                 )}
