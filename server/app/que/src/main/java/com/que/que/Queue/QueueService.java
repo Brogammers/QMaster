@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 
 import org.springframework.context.annotation.Configuration;
@@ -261,5 +262,10 @@ public class QueueService {
 
   public boolean presentInQueue(Long appUser, Queue<Long> queue) {
     return queue.contains(appUser);
+  }
+
+  public int getWalkIns(Long appUserId, LocalDateTime from, LocalDateTime to) {
+    ArrayList<QueueEnqueue> walkIns = queueRepository.findByActionDateBetweenAndAppUserId(from, to, appUserId);
+    return walkIns.size();
   }
 }
