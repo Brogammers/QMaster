@@ -3,6 +3,8 @@ package com.que.que.Queue;
 import com.que.que.QRcode.QRCodeService;
 import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRepository;
+import com.que.que.User.SubscriptionPlans;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -96,18 +98,18 @@ public class QueueService {
         .findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
     int queueId = appUserFromDB.getQueueId();
-    byte subscriptionPlan = appUserFromDB.getSubscriptionPlan();
+    SubscriptionPlans subscriptionPlan = appUserFromDB.getSubscriptionPlan();
     int max = 30;
 
     // Current as placeholder
     switch (subscriptionPlan) {
-      case 0:
+      case SubscriptionPlans.BASIC:
         max = 1;
         break;
-      case 1:
+      case SubscriptionPlans.PREMIUM:
         max = 10;
         break;
-      case 2:
+      case SubscriptionPlans.ENTERPRISE:
         max = 20;
         break;
     }
