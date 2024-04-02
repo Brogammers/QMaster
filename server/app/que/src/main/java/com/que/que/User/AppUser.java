@@ -69,7 +69,7 @@ public class AppUser implements UserDetails {
   private int queueId; // If queue id is -1 then there is no queue
 
   @Column(nullable = false)
-  private byte subscriptionPlan;
+  private SubscriptionPlans subscriptionPlan;
 
   private String location;
 
@@ -101,7 +101,7 @@ public class AppUser implements UserDetails {
     this.locked = locked;
     this.enabled = enabled;
     this.queueId = -1;
-    this.subscriptionPlan = subscriptionPlan;
+    this.subscriptionPlan = SubscriptionPlans.BASIC;
     this.phoneCode = phoneCode;
     this.phoneNumber = phoneNumber;
     this.location = location;
