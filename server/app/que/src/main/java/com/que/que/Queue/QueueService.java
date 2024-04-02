@@ -240,6 +240,22 @@ public class QueueService {
     return currentQueues;
   }
 
+  public ArrayList<AppUser> getBeingServed (long appUserId)
+  {
+    ArrayList<AppUser> appUsers = new ArrayList<>();
+    int slot = getQueueSlot(appUserId);
+    ArrayList<Queues> queues = queueRepository.findByQueueSlot(slot);
+    for (Queues queue: queues)
+    {
+      ArrayList<QueueEnqueue> queueEnqueues = queueEnqueueRepository.findByQueueAndQueueEnqueueStatus(queue, QueueEnqueueStatus.BEING_SERVED);
+      for (QueueEnqueue queueEnqueue: queueEnqueues)
+      {
+        appUsers.add(queueEnqueue.getAppUser());
+      }
+    }
+    return appUsers;
+  }
+
   public void print() {
     for (int i = 0; i < queue.size(); i++) {
       ArrayList<Queue<Long>> current = queue.get(i);

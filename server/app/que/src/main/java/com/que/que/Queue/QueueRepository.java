@@ -22,6 +22,8 @@ public interface QueueRepository extends JpaRepository<Queues, Long> {
 
   Page<Queues> findByNameContaining(String name, Pageable page);
 
+  ArrayList<Queues> findByQueueSlot(int queueSlot);
+
   @Query("SELECT q FROM Queues q ORDER BY q.rating ASC")
   Page<Queues> findAllOrderedByRatingAsc(Pageable page);
 
