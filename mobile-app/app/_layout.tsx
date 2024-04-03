@@ -68,7 +68,6 @@ function RootLayoutNav() {
           <Slot />
         </SessionProvider>
       </Provider>
-      {/* <QueuePage /> */}
     </GestureHandlerRootView>
   );
 }
