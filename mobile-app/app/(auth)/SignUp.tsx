@@ -450,7 +450,7 @@ export default function SignUp() {
                         style={[styles.dropDownPicker, { zIndex: 1000, height: 56}]}
                         dropDownDirection="TOP"
                         dropDownContainerStyle={[styles.dropDownPicker]}
-                        placeholder="Choose Your Country"
+                        placeholder="Choose your country"
                         textStyle={{ color: "#515151", fontSize: 16, fontFamily: "JostBold" }}
                       />
                       {errors.countryOfOrigin && touched.countryOfOrigin && (
