@@ -6,7 +6,7 @@ import {
   ScrollView,
   Pressable,
   Platform,
-	Dimensions,
+  Dimensions,
 } from "react-native";
 import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
@@ -23,17 +23,17 @@ import { API_BASE_URL } from "@env";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { useDispatch } from "react-redux";
-import { setEmail } from "../redux/authSlice"; 
+import { setEmail } from "../redux/authSlice";
 import { countries } from "@/constants";
 
-const window = Dimensions.get('window');
+const window = Dimensions.get("window");
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
     .nullable()
     .matches(/^[a-zA-Z]+$/, "Full name must contain only letters")
     .required("First name required"),
-	lastName: Yup.string()
+  lastName: Yup.string()
     .nullable()
     .matches(/^[a-zA-Z]+$/, "Full name must contain only letters")
     .required("Last name required"),
@@ -48,7 +48,7 @@ const SignupSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Password confirmation required"),
-	dateOfBirth: Yup.string()
+  dateOfBirth: Yup.date()
     .nullable()
     // .max(new Date(), "Date of birth cannot be in the future")
     .required("Date of birth is required"),
@@ -58,13 +58,14 @@ export default function SignUp() {
   const dispatch = useDispatch();
   const auth = useAuth();
   const router = useRouter();
-	const windowWidth = window.width * 0.7
+  const windowWidth = window.width * 0.7;
 
   const [isStateUpdateComplete, setStateUpdateComplete] = useState(false);
   const [date, setDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState();
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [showPicker, setShowPicker] = useState(false);
+  const [displayDate, setDisplayDate] = useState("");
 
   const handleSignUp = async (values: any) => {
     console.log("Form values:", values);
@@ -129,34 +130,52 @@ export default function SignUp() {
     setShowPicker(!showPicker);
   };
 
-  const confirmDateIOS = (setFieldValue: { (field: string, value: any, shouldValidate?: boolean | undefined): Promise<void | FormikErrors<{ firstName: string; lastName: string; dateOfBirth: string; counrtyOfOrigin: string; email: string; phoneNumber: string; password: string; username: null; confirmPassword: string; }>>; (arg0: string, arg1: string): void; }) => () => {
-    const formattedDate = formatDate(date);
-    setDateOfBirth(formattedDate);
-    setFieldValue('dateOfBirth', formattedDate); // Add this line
-    toggleDatePicker();
-    console.log(dateOfBirth);
-  };
+  const confirmDateIOS =
+    (setFieldValue: {
+      (
+        field: string,
+        value: any,
+        shouldValidate?: boolean | undefined
+      ): Promise<void | FormikErrors<{
+        firstName: string;
+        lastName: string;
+        dateOfBirth: string;
+        counrtyOfOrigin: string;
+        email: string;
+        phoneNumber: string;
+        password: string;
+        username: null;
+        confirmPassword: string;
+      }>>;
+      (arg0: string, arg1: Date): void;
+    }) =>
+    () => {
+      const formattedDate = formatDate(date);
+      setDisplayDate(formattedDate); // Set the display date
+      setFieldValue("dateOfBirth", date); // Use the Date object for Formik
+      toggleDatePicker();
+    };
 
   const formatDate = (rawData: Date | undefined) => {
-		if (!rawData) return '';
+    if (!rawData) return "";
 
     let date = new Date(rawData);
 
     let year = date.getFullYear();
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
 
-		return `${day}/${month}/${year}`;
+    return `${day}/${month}/${year}`;
   };
 
-  const onDateChange = (setFieldValue: { (field: string, value: any, shouldValidate?: boolean | undefined): Promise<void | FormikErrors<{ firstName: string; lastName: string; dateOfBirth: string; counrtyOfOrigin: string; email: string; phoneNumber: string; password: string; username: null; confirmPassword: string; }>>; (arg0: string, arg1: string): void; }) => ({ type }: any, dateOfBirth: Date | undefined) => {
+  const onDateChange = (setFieldValue: { (field: string, value: any, shouldValidate?: boolean | undefined): Promise<void | FormikErrors<{ firstName: string; lastName: string; dateOfBirth: string; counrtyOfOrigin: string; email: string; phoneNumber: string; password: string; username: null; confirmPassword: string; }>>; (arg0: string, arg1: Date): void; }) => ({ type }: any, dateOfBirth: Date | undefined) => {
     if (type === "set" && dateOfBirth) {
       const currentDate: Date = dateOfBirth;
       setDate(currentDate);
   
       const formattedDate = formatDate(currentDate);
-      setDateOfBirth(formattedDate);
-      setFieldValue('dateOfBirth', formattedDate); // Add this line
+      setDisplayDate(formattedDate); // Set the display date
+      setFieldValue('dateOfBirth', currentDate); // Use the Date object for Formik
   
       if (Platform.OS === "android") {
         toggleDatePicker();
@@ -165,6 +184,7 @@ export default function SignUp() {
       toggleDatePicker();
     }
   };
+  
 
   return (
     <ImageBackground source={background} style={styles.container}>
@@ -184,7 +204,7 @@ export default function SignUp() {
           Let's help you save more time.
         </Text>
         <ScrollView
-					horizontal={false}
+          horizontal={false}
           contentContainerStyle={styles.form}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="never"
@@ -315,43 +335,43 @@ export default function SignUp() {
                   </Text>
                 )}
                 {showPicker && (
-									<View style={{ width: "110%" }}>
-										<DateTimePicker
-											textColor="white"
-											mode="date"
-											display="spinner"
-											value={date}
-											onChange={onDateChange(setFieldValue)}
-											style={styles.datePicker}
-											maximumDate={new Date()}
-											minimumDate={new Date(1900, 1, 1)}
-										/>
-									</View>
+                  <View style={{ width: "110%" }}>
+                    <DateTimePicker
+                      textColor="white"
+                      mode="date"
+                      display="spinner"
+                      value={date}
+                      onChange={onDateChange(setFieldValue)}
+                      style={styles.datePicker}
+                      maximumDate={new Date()}
+                      minimumDate={new Date(1900, 1, 1)}
+                    />
+                  </View>
                 )}
                 {showPicker && Platform.OS === "ios" && (
                   <View
                     style={{
-											width: "100%",
+                      width: "100%",
                       flexDirection: "row",
                       justifyContent: "space-around",
                     }}
                   >
                     <TextButton
                       text={"Cancel"}
-											buttonColor={"white"}
-											textColor={"#17222D"}
-											textSize="text-md"
-											padding={8}
-											width={100}
+                      buttonColor={"white"}
+                      textColor={"#17222D"}
+                      textSize="text-md"
+                      padding={8}
+                      width={100}
                       onPress={toggleDatePicker}
                     />
                     <TextButton
                       text={"Confirm"}
-											buttonColor={"#1DCDFE"}
-											textColor={"white"}
-											textSize="text-md"
-											padding={8}
-											width={100}
+                      buttonColor={"#1DCDFE"}
+                      textColor={"white"}
+                      textSize="text-md"
+                      padding={8}
+                      width={100}
                       onPress={confirmDateIOS(setFieldValue)}
                     />
                   </View>
@@ -363,13 +383,13 @@ export default function SignUp() {
                       placeholder="Date of birth           03/10/2023"
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("dateOfBirth")}
-											value={values.dateOfBirth}
+                      value={displayDate}
                       editable={false}
                       onPressIn={toggleDatePicker}
                     />
                   </Pressable>
                 )}
-								{errors.dateOfBirth && touched.dateOfBirth && (
+                {errors.dateOfBirth && touched.dateOfBirth && (
                   <Text
                     style={{
                       fontSize: 12,
@@ -388,14 +408,14 @@ export default function SignUp() {
                     textColor={"white"}
                     onPress={handleSubmit}
                     disabled={!isValid}
-										width={windowWidth}
+                    width={windowWidth}
                   />
                   <TextButton
                     text={"Continue with Google"}
                     icon={"google"}
                     buttonColor={"white"}
                     textColor={"#17222D"}
-										width={windowWidth}
+                    width={windowWidth}
                   />
                 </View>
               </View>
@@ -425,23 +445,23 @@ const styles = StyleSheet.create({
   },
   returnButton: {
     position: "absolute",
-    top: 60, 
-    left: 18, 
+    top: 60,
+    left: 18,
   },
   title: {
     fontFamily: "InterBold",
-    fontSize: 28, 
-    color: "#FFF", 
+    fontSize: 28,
+    color: "#FFF",
     marginTop: 104,
-    marginBottom: 16, 
+    marginBottom: 16,
   },
   subTitle: {
     fontFamily: "JostReg",
   },
   baseText: {
-    fontSize: 16, 
-    color: "#FFF", 
-    marginBottom: 40, 
+    fontSize: 16,
+    color: "#FFF",
+    marginBottom: 40,
   },
   form: {
     alignItems: "center",
@@ -456,7 +476,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     paddingVertical: 4,
     paddingHorizontal: 24,
-		width: window.width * .75,
+    width: window.width * 0.75,
   },
   datePicker: {
     height: 120,
@@ -468,8 +488,8 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     backgroundColor: "#1DCDFE",
-    marginTop: 10, 
-    paddingVertical: 16, 
+    marginTop: 10,
+    paddingVertical: 16,
     paddingHorizontal: 12,
     flexDirection: "row",
     justifyContent: "center",
@@ -483,8 +503,8 @@ const styles = StyleSheet.create({
   googleButton: {
     backgroundColor: "#FFF",
     color: "#17222D",
-    marginTop: 10, 
-    paddingVertical: 16, 
+    marginTop: 10,
+    paddingVertical: 16,
     paddingHorizontal: 12,
     flexDirection: "row",
     justifyContent: "center",
