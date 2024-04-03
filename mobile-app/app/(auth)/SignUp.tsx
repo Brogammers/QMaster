@@ -19,13 +19,13 @@ import Return from "@/shared/components/Return";
 import background from "@/assets/images/background.png";
 import { useAuth } from "@/ctx/AuthContext";
 import SplashScreen from "../SplashScreen";
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownPicker from "react-native-dropdown-picker";
 import { API_BASE_URL } from "@env";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useDispatch } from "react-redux";
 import { setEmail } from "../redux/authSlice";
 import { countries } from "@/constants";
-import PhoneInput from 'react-native-phone-input'
+import PhoneInput from "react-native-phone-input";
 
 const window = Dimensions.get("window");
 
@@ -52,7 +52,11 @@ const SignupSchema = Yup.object().shape({
   dateOfBirth: Yup.date()
     .nullable()
     // .max(new Date(), "Date of birth cannot be in the future")
-    .required("Date of birth is required"),
+  .required("Date of birth is required"),
+    phoneNumber: Yup.string()
+    .required("Phone number required"),
+  countryOfOrigin: Yup.string()
+    .required("Country of origin required"),
 });
 
 export default function SignUp() {
@@ -157,12 +161,12 @@ export default function SignUp() {
       }>>;
       (arg0: string, arg1: Date): void;
     }) =>
-      () => {
-        const formattedDate = formatDate(date);
-        setDisplayDate(formattedDate); // Set the display date
-        setFieldValue("dateOfBirth", date); // Use the Date object for Formik
-        toggleDatePicker();
-      };
+    () => {
+      const formattedDate = formatDate(date);
+      setDisplayDate(formattedDate); // Set the display date
+      setFieldValue("dateOfBirth", date); // Use the Date object for Formik
+      toggleDatePicker();
+    };
 
   const formatDate = (rawData: Date | undefined) => {
     if (!rawData) return "";
@@ -195,22 +199,22 @@ export default function SignUp() {
       }>>;
       (arg0: string, arg1: Date): void;
     }) =>
-      ({ type }: any, dateOfBirth: Date | undefined) => {
-        if (type === "set" && dateOfBirth) {
-          const currentDate: Date = dateOfBirth;
-          setDate(currentDate);
+    ({ type }: any, dateOfBirth: Date | undefined) => {
+      if (type === "set" && dateOfBirth) {
+        const currentDate: Date = dateOfBirth;
+        setDate(currentDate);
 
-          const formattedDate = formatDate(currentDate);
-          setDisplayDate(formattedDate); // Set the display date
-          setFieldValue("dateOfBirth", currentDate); // Use the Date object for Formik
+        const formattedDate = formatDate(currentDate);
+        setDisplayDate(formattedDate); // Set the display date
+        setFieldValue("dateOfBirth", currentDate); // Use the Date object for Formik
 
-          if (Platform.OS === "android") {
-            toggleDatePicker();
-          }
-        } else {
+        if (Platform.OS === "android") {
           toggleDatePicker();
         }
-      };
+      } else {
+        toggleDatePicker();
+      }
+    };
 
   return (
     <>
@@ -227,10 +231,16 @@ export default function SignUp() {
             barStyle="light-content"
           />
           <View style={styles.row} className="relative">
-            <Text style={styles.title} className="mt-10 mb-4 text-2xl text-white">
+            <Text
+              style={styles.title}
+              className="mt-10 mb-4 text-2xl text-white"
+            >
               Welcome!
             </Text>
-            <Text className="mb-16 text-base text-white" style={styles.subTitle}>
+            <Text
+              className="mb-16 text-base text-white"
+              style={styles.subTitle}
+            >
               Let's help you save more time.
             </Text>
             <ScrollView
@@ -241,7 +251,7 @@ export default function SignUp() {
               showsVerticalScrollIndicator={false}
               scrollEnabled={isScrollEnabled}
               nestedScrollEnabled={true}
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
             >
               <Formik
                 initialValues={{
@@ -447,11 +457,18 @@ export default function SignUp() {
                           setIsScrollEnabled(!isOpen);
                         }}
                         setValue={setValue}
-                        style={[styles.dropDownPicker, { zIndex: 1000, height: 56}]}
+                        style={[
+                          styles.dropDownPicker,
+                          { zIndex: 1000, height: 56 },
+                        ]}
                         dropDownDirection="TOP"
                         dropDownContainerStyle={[styles.dropDownPicker]}
                         placeholder="Choose your country"
-                        textStyle={{ color: "#515151", fontSize: 16, fontFamily: "JostBold" }}
+                        textStyle={{
+                          color: "#515151",
+                          fontSize: 16,
+                          fontFamily: "JostBold",
+                        }}
                       />
                       {errors.countryOfOrigin && touched.countryOfOrigin && (
                         <Text
@@ -464,25 +481,28 @@ export default function SignUp() {
                           {errors.countryOfOrigin}
                         </Text>
                       )}
-                    </View> 
-                    
-                    <PhoneInput 
+                    </View>
+
+                    <PhoneInput
                       style={styles.input}
-                      onChangePhoneNumber={handleChange("phoneNumber")}
+                      onChangePhoneNumber={(value) => {
+                        handleChange("phoneNumber")(value || "");
+                        setFieldValue("phoneNumber", value || ""); // Update Formik state
+                      }}
                       initialValue={values.phoneNumber}
                     />
                     {errors.phoneNumber && touched.phoneNumber && (
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: "red",
-                            textAlign: "center",
-                          }}
-                        >
-                          {errors.phoneNumber}
-                        </Text>
-                      )}
-                    
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "red",
+                          textAlign: "center",
+                        }}
+                      >
+                        {errors.phoneNumber}
+                      </Text>
+                    )}
+
                     <View className="my-4" />
                     <View className="my-16">
                       <TextButton
@@ -611,5 +631,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     alignSelf: "center",
     width: window.width * 0.75,
-  }
+  },
 });
