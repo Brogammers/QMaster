@@ -19,13 +19,13 @@ import Return from "@/shared/components/Return";
 import background from "@/assets/images/background.png";
 import { useAuth } from "@/ctx/AuthContext";
 import SplashScreen from "../SplashScreen";
+import DropDownPicker from 'react-native-dropdown-picker';
 import { API_BASE_URL } from "@env";
-
 import DateTimePicker from "@react-native-community/datetimepicker";
-
 import { useDispatch } from "react-redux";
 import { setEmail } from "../redux/authSlice";
 import { countries } from "@/constants";
+import PhoneInput from 'react-native-phone-input'
 
 const window = Dimensions.get("window");
 
@@ -68,6 +68,9 @@ export default function SignUp() {
   const [showPicker, setShowPicker] = useState(false);
   const [displayDate, setDisplayDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [isScrollEnabled, setIsScrollEnabled] = useState(true);
 
   const handleSignUp = async (values: any) => {
     console.log("Form values:", values);
@@ -78,8 +81,8 @@ export default function SignUp() {
       const response = await axios.post(`${API_BASE_URL}`, values);
       // Android Emulator
       // const response = await axios.post(
-      // 	"http://10.0.2.2:8080/api/v1/registration",
-      // 	values
+      //   "http://10.0.2.2:8080/api/v1/registration",
+      //   values
       // );
 
       if (response.status === 200 || response.status === 201) {
@@ -154,12 +157,12 @@ export default function SignUp() {
       }>>;
       (arg0: string, arg1: Date): void;
     }) =>
-    () => {
-      const formattedDate = formatDate(date);
-      setDisplayDate(formattedDate); // Set the display date
-      setFieldValue("dateOfBirth", date); // Use the Date object for Formik
-      toggleDatePicker();
-    };
+      () => {
+        const formattedDate = formatDate(date);
+        setDisplayDate(formattedDate); // Set the display date
+        setFieldValue("dateOfBirth", date); // Use the Date object for Formik
+        toggleDatePicker();
+      };
 
   const formatDate = (rawData: Date | undefined) => {
     if (!rawData) return "";
@@ -192,22 +195,22 @@ export default function SignUp() {
       }>>;
       (arg0: string, arg1: Date): void;
     }) =>
-    ({ type }: any, dateOfBirth: Date | undefined) => {
-      if (type === "set" && dateOfBirth) {
-        const currentDate: Date = dateOfBirth;
-        setDate(currentDate);
+      ({ type }: any, dateOfBirth: Date | undefined) => {
+        if (type === "set" && dateOfBirth) {
+          const currentDate: Date = dateOfBirth;
+          setDate(currentDate);
 
-        const formattedDate = formatDate(currentDate);
-        setDisplayDate(formattedDate); // Set the display date
-        setFieldValue("dateOfBirth", currentDate); // Use the Date object for Formik
+          const formattedDate = formatDate(currentDate);
+          setDisplayDate(formattedDate); // Set the display date
+          setFieldValue("dateOfBirth", currentDate); // Use the Date object for Formik
 
-        if (Platform.OS === "android") {
+          if (Platform.OS === "android") {
+            toggleDatePicker();
+          }
+        } else {
           toggleDatePicker();
         }
-      } else {
-        toggleDatePicker();
-      }
-    };
+      };
 
   return (
     <>
@@ -236,13 +239,16 @@ export default function SignUp() {
               keyboardDismissMode="on-drag"
               keyboardShouldPersistTaps="never"
               showsVerticalScrollIndicator={false}
+              scrollEnabled={isScrollEnabled}
+              nestedScrollEnabled={true}
+              style={{ width: '100%' }}
             >
               <Formik
                 initialValues={{
                   firstName: "",
                   lastName: "",
                   dateOfBirth: "",
-                  counrtyOfOrigin: "",
+                  countryOfOrigin: "",
                   email: "",
                   phoneNumber: "",
                   password: "",
@@ -427,6 +433,57 @@ export default function SignUp() {
                         {errors.dateOfBirth}
                       </Text>
                     )}
+                    
+                     <View>
+                      <DropDownPicker
+                        open={open}
+                        onChangeValue={(value) => {
+                          handleChange("countryOfOrigin")(value || "");
+                          setFieldValue("countryOfOrigin", value || ""); // Update Formik state
+                        }}
+                        value={value}
+                        items={countries}
+                        setOpen={(isOpen) => {
+                          setOpen(isOpen);
+                          setIsScrollEnabled(!isOpen);
+                        }}
+                        setValue={setValue}
+                        style={[styles.dropDownPicker, { zIndex: 1000, height: 56}]}
+                        dropDownDirection="TOP"
+                        dropDownContainerStyle={[styles.dropDownPicker]}
+                        placeholder="Choose Your Country"
+                        textStyle={{ color: "#515151", fontSize: 16, fontFamily: "JostBold" }}
+                      />
+                      {errors.countryOfOrigin && touched.countryOfOrigin && (
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: "red",
+                            textAlign: "center",
+                          }}
+                        >
+                          {errors.countryOfOrigin}
+                        </Text>
+                      )}
+                    </View> 
+                    
+                    <PhoneInput 
+                      style={styles.input}
+                      onChangePhoneNumber={handleChange("phoneNumber")}
+                      initialValue={values.phoneNumber}
+                    />
+                    {errors.phoneNumber && touched.phoneNumber && (
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: "red",
+                            textAlign: "center",
+                          }}
+                        >
+                          {errors.phoneNumber}
+                        </Text>
+                      )}
+                    
                     <View className="my-4" />
                     <View className="my-16">
                       <TextButton
@@ -463,9 +520,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    width: window.width,
   },
   row: {
-    width: "80%",
+    width: window.width,
     display: "flex",
     flex: 1,
     flexDirection: "column",
@@ -544,4 +602,15 @@ const styles = StyleSheet.create({
     color: "#17222D",
     textAlign: "center",
   },
+  dropDownPicker: {
+    backgroundColor: "#DFDFDF",
+    color: "#515151",
+    fontFamily: "JostBold",
+    borderRadius: 42,
+    marginBottom: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 24,
+    alignSelf: "center",
+    width: window.width * 0.75,
+  }
 });
