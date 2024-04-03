@@ -433,8 +433,7 @@ export default function SignUp() {
                         {errors.dateOfBirth}
                       </Text>
                     )}
-                    
-                     <View>
+                    <View>
                       <DropDownPicker
                         open={open}
                         onChangeValue={(value) => {

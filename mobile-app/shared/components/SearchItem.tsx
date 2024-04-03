@@ -11,7 +11,7 @@ export default function SearchItem(props: SearchItemProps) {
 
   return (
     <TouchableOpacity
-      className={`py-2 border-b-2 border-lite-grey w-full`}
+      className={`py-4 border-b-2 border-lite-grey w-full`}
       onPress={(props.onPress)}
     >
       <View
