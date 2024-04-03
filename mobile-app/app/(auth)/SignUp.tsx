@@ -26,6 +26,8 @@ import { useDispatch } from "react-redux";
 import { setEmail } from "../redux/authSlice";
 import { countries } from "@/constants";
 import PhoneInput from "react-native-phone-input";
+import { isValidPhoneNumber } from 'libphonenumber-js'
+
 
 const window = Dimensions.get("window");
 
@@ -52,8 +54,11 @@ const SignupSchema = Yup.object().shape({
   dateOfBirth: Yup.date()
     .nullable()
     // .max(new Date(), "Date of birth cannot be in the future")
-  .required("Date of birth is required"),
-    phoneNumber: Yup.string()
+    .required("Date of birth is required"),
+  phoneNumber: Yup.string()
+    .test('is-valid-phone-number', 'Invalid phone number', (value) => {
+      return isValidPhoneNumber(value || '')
+    })
     .required("Phone number required"),
   countryOfOrigin: Yup.string()
     .required("Country of origin required"),
@@ -482,7 +487,6 @@ export default function SignUp() {
                         </Text>
                       )}
                     </View>
-
                     <PhoneInput
                       style={styles.input}
                       onChangePhoneNumber={(value) => {
@@ -502,7 +506,6 @@ export default function SignUp() {
                         {errors.phoneNumber}
                       </Text>
                     )}
-
                     <View className="my-4" />
                     <View className="my-16">
                       <TextButton
