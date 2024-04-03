@@ -25,6 +25,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useDispatch } from "react-redux";
 import { setEmail } from "../redux/authSlice";
 import { countries } from "@/constants";
+import PhoneInput from 'react-native-phone-input'
 
 const window = Dimensions.get("window");
 
@@ -461,10 +462,27 @@ export default function SignUp() {
                             textAlign: "center",
                           }}
                         >
-                          {errors.confirmPassword}
+                          {errors.countryOfOrigin}
                         </Text>
                       )}
                     </View>
+                    
+                    <PhoneInput 
+                      style={styles.input}
+                      onChangePhoneNumber={handleChange("phoneNumber")}
+                      initialValue={values.phoneNumber}
+                    />
+                    {errors.phoneNumber && touched.phoneNumber && (
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: "red",
+                            textAlign: "center",
+                          }}
+                        >
+                          {errors.phoneNumber}
+                        </Text>
+                      )}
                     
                     <View className="my-4" />
                     <View className="my-16">
