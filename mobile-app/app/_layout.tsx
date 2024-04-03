@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import SplashScreen from './SplashScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import SignUp from './(auth)/SignUp';
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -64,9 +65,10 @@ function RootLayoutNav() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
-        <SessionProvider>
+        {/* <SessionProvider>
           <Slot />
-        </SessionProvider>
+        </SessionProvider> */}
+        <SignUp />
       </Provider>
     </GestureHandlerRootView>
   );
