@@ -78,12 +78,12 @@ export default function SignUp() {
     try {
       setIsLoading(true);
       // IOS Simulator
-      // const response = await axios.post(`${API_BASE_URL}`, values);
+      const response = await axios.post(`${API_BASE_URL}`, values);
       // Android Emulator
-      const response = await axios.post(
-        "http://10.0.2.2:8080/api/v1/registration",
-        values
-      );
+      // const response = await axios.post(
+      //   "http://10.0.2.2:8080/api/v1/registration",
+      //   values
+      // );
 
       if (response.status === 200 || response.status === 201) {
         console.log("Signup successful", values);
@@ -434,7 +434,7 @@ export default function SignUp() {
                       </Text>
                     )}
                     
-                    <View>
+                     <View>
                       <DropDownPicker
                         open={open}
                         onChangeValue={(value) => {
@@ -465,7 +465,7 @@ export default function SignUp() {
                           {errors.countryOfOrigin}
                         </Text>
                       )}
-                    </View>
+                    </View> 
                     
                     <PhoneInput 
                       style={styles.input}
