@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import com.que.que.User.AppUser;
+import java.util.ArrayList;
 
 @Repository
 public interface QueueEnqueueRepository extends JpaRepository<QueueEnqueue, Long> {
@@ -15,4 +16,6 @@ public interface QueueEnqueueRepository extends JpaRepository<QueueEnqueue, Long
 
     Optional<QueueEnqueue> findByAppUserAndQueueAndQueueEnqueueStatus(AppUser appUser, Queues queue,
             QueueEnqueueStatus queueEnqueueStatus);
+
+    ArrayList<QueueEnqueue> findByQueueAndQueueEnqueueStatus(Queues queue, QueueEnqueueStatus queueEnqueueStatus);
 }
