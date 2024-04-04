@@ -58,6 +58,6 @@ public class QueueDequeue {
     }
 
     public QueueDequeue() {
-        this(null, null);
+        this(null, null, null);
     }
 }

@@ -191,7 +191,7 @@ public class QueueService {
       queueEnqueueRepository.save(queueEnqueue);
 
       queueDequeueRepository
-          .save(new QueueDequeue(nextUser, currentQueue));
+          .save(new QueueDequeue(nextUser, currentQueue, QueueDequeueStatus.SERVED));
       return nextUser;
     } catch (Exception e) {
       print();
@@ -284,7 +284,7 @@ public class QueueService {
   }
 
   public int getWalkIns(Long appUserId, LocalDateTime from, LocalDateTime to) {
-    ArrayList<QueueEnqueue> walkIns = queueRepository.findByActionDateBetweenAndAppUserId(from, to, appUserId);
+    ArrayList<QueueEnqueue> walkIns = queueEnqueueRepository.findByActionDateBetweenAndAppUserId(from, to, appUserId);
     return walkIns.size();
   }
 }

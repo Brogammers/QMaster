@@ -57,4 +57,5 @@ public class QueueListService {
       String targetName, Pageable page) {
     return queueRepository.findAllOrderedByPeopleInQueueDescAndFilterName(targetName, page);
   }
+
 }
