@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import com.que.que.User.AppUser;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Repository
@@ -18,4 +20,6 @@ public interface QueueEnqueueRepository extends JpaRepository<QueueEnqueue, Long
             QueueEnqueueStatus queueEnqueueStatus);
 
     ArrayList<QueueEnqueue> findByQueueAndQueueEnqueueStatus(Queues queue, QueueEnqueueStatus queueEnqueueStatus);
+
+    ArrayList<QueueEnqueue> findByActionDateBetweenAndAppUserId(LocalDateTime from, LocalDateTime to, Long appUserId);
 }
