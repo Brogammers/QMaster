@@ -38,10 +38,22 @@ public class QueueDequeue {
     private final Queues queue;
     @Column(nullable = false)
     private final LocalDateTime actionDate;
+    private final QueueDequeueStatus queueDequeueStatus;
+    private final String comment;
 
-    public QueueDequeue(AppUser appUser, Queues queue) {
+    public QueueDequeue(AppUser appUser, Queues queue, QueueDequeueStatus queueDequeueStatus) {
         this.appUser = appUser;
         this.queue = queue;
+        this.queueDequeueStatus = queueDequeueStatus;
+        this.comment = "";
+        this.actionDate = LocalDateTime.now();
+    }
+
+    public QueueDequeue(AppUser appUser, Queues queue, QueueDequeueStatus queueDequeueStatus, String comment) {
+        this.appUser = appUser;
+        this.queue = queue;
+        this.queueDequeueStatus = queueDequeueStatus;
+        this.comment = comment;
         this.actionDate = LocalDateTime.now();
     }
 
