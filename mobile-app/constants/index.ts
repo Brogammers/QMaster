@@ -118,30 +118,6 @@ export const AccountInfo: AccountInfoProps[] = [
   }
 ]
 
-//Recent Queues
-// export const Recent = [
-//   {
-//     image: Carrefour,
-//     text: 'Carrefour',
-//   },
-//   {
-//     image: arabiata,
-//     text: 'Arabiata',
-//   },
-//   {
-//     image: elections,
-//     text: 'Elections',
-//   },
-//   {
-//     image: alSalamHospital,
-//     text: 'Al-Salam Hospital ',
-//   },
-//   {
-//     image: nationalBank,
-//     text: 'National Bank of Egypt',
-//   },
-// ]
-
 // Locations
 export const locations = [
   { label: 'Madinaty', value: '1' },
