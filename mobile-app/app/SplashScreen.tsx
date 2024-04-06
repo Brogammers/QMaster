@@ -1,8 +1,13 @@
 import React from 'react';
-import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { 
+  View,
+  Text, 
+  StatusBar, 
+  StyleSheet, 
+} from 'react-native';
+import { SplashScreenProps } from '@/types';
 import LottieView from 'lottie-react-native';
 import Logo from '@/assets/images/splash.json';
-import { SplashScreenProps } from '@/types';
 
 export default function SplashScreen({ additionalText, backgroundColor = '#17222D' }: SplashScreenProps) {
   return (

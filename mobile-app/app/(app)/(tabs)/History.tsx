@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import {
-  Platform,
-  StatusBar,
+  View,
+  Text,
   StyleSheet,
   ScrollView,
   useWindowDimensions,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { Skeleton } from "moti/skeleton";
 import HistoryComponent from "@/shared/components/HistoryComponent";
+import { HistoryComponentProps } from "@/types";
+import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
+
+import axios, { AxiosResponse } from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   API_BASE_URL_HISTORY_ANDROID,
   API_BASE_URL_HISTORY,
   BASE_URL,
 } from "@env";
-import { HistoryComponentProps } from "@/types";
-import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios, { AxiosResponse } from "axios";
-import { Skeleton } from "moti/skeleton";
-import { View, Text } from "@/components/Themed";
 
 export default function History() {
   const isFocused = useIsFocused();
