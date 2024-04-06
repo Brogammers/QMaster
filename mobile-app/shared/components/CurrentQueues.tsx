@@ -6,7 +6,6 @@ import {
   Alert
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-// import Image from 'react-native-remote-svg';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { CurrentQueuesProps } from '@/types';
 import PhotoGradientFilter from '@/assets/images/Gradient.png';
