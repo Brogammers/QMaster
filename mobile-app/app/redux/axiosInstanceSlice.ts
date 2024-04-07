@@ -18,6 +18,3 @@ export const userSlice = createSlice({
   },
 });
 
-// export const { setAxiosInstance } = axiosInstanceSlice.actions;
-
-// export default axiosInstanceSlice.reducer;

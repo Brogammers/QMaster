@@ -5,9 +5,7 @@ import {
   SafeAreaView,
   Platform,
   View,
-  ScrollView,
-  Text,
-  useWindowDimensions,
+  ScrollView, useWindowDimensions
 } from "react-native";
 import ScanQr from "@/components/ScanQR";
 import SearchBar from "@/components/SearchBar";

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 
 import org.springframework.context.annotation.Configuration;
@@ -190,7 +191,7 @@ public class QueueService {
       queueEnqueueRepository.save(queueEnqueue);
 
       queueDequeueRepository
-          .save(new QueueDequeue(nextUser, currentQueue));
+          .save(new QueueDequeue(nextUser, currentQueue, QueueDequeueStatus.SERVED));
       return nextUser;
     } catch (Exception e) {
       print();
@@ -242,6 +243,63 @@ public class QueueService {
     return currentQueues;
   }
 
+  public ArrayList<AppUser> getBeingServed(long appUserId) {
+    ArrayList<AppUser> appUsers = new ArrayList<>();
+    int slot = getQueueSlot(appUserId);
+    if (slot == -1) {
+      return appUsers;
+    }
+    ArrayList<Queues> queues = queueRepository.findByQueueSlot(slot);
+    for (Queues queue : queues) {
+      ArrayList<QueueEnqueue> queueEnqueues = queueEnqueueRepository.findByQueueAndQueueEnqueueStatus(queue,
+          QueueEnqueueStatus.BEING_SERVED);
+      for (QueueEnqueue queueEnqueue : queueEnqueues) {
+        appUsers.add(queueEnqueue.getAppUser());
+      }
+    }
+    return appUsers;
+  }
+
+  public ArrayList<QueueDequeue> getServedUsers(long appUserId, LocalDateTime to, LocalDateTime from)
+  {
+    ArrayList<QueueDequeue> queueDequeues = new ArrayList();
+    int slot = getQueueSlot(appUserId);
+    if (slot == -1)
+    {
+      return queueDequeues;
+    }
+    ArrayList<Queues> queues = queueRepository.findByQueueSlot(slot);
+    for (Queues queue : queues) 
+    {
+      ArrayList<QueueDequeue> queueDequeuesTemp = queueDequeueRepository.findByActionDateBetweenAndQueueAndQueueDequeueStatus(from, to, queue, QueueDequeueStatus.SERVED);
+      for (QueueDequeue queueDequeue: queueDequeuesTemp)
+      {
+        queueDequeues.add(queueDequeue);
+      }
+    }
+    return queueDequeues;
+  }
+
+  public ArrayList<QueueDequeue> getCancelledUsers(long appUserId, LocalDateTime to, LocalDateTime from)
+  {
+    ArrayList<QueueDequeue> queueDequeues = new ArrayList();
+    int slot = getQueueSlot(appUserId);
+    if (slot == -1)
+    {
+      return queueDequeues;
+    }
+    ArrayList<Queues> queues = queueRepository.findByQueueSlot(slot);
+    for (Queues queue : queues) 
+    {
+      ArrayList<QueueDequeue> queueDequeuesTemp = queueDequeueRepository.findByActionDateBetweenAndQueueAndQueueDequeueStatus(from, to, queue, QueueDequeueStatus.CANCELLED);
+      for (QueueDequeue queueDequeue: queueDequeuesTemp)
+      {
+        queueDequeues.add(queueDequeue);
+      }
+    }
+    return queueDequeues;
+  }
+
   public void print() {
     for (int i = 0; i < queue.size(); i++) {
       ArrayList<Queue<Long>> current = queue.get(i);
@@ -263,5 +321,10 @@ public class QueueService {
 
   public boolean presentInQueue(Long appUser, Queue<Long> queue) {
     return queue.contains(appUser);
+  }
+
+  public int getWalkIns(Long appUserId, LocalDateTime from, LocalDateTime to) {
+    ArrayList<QueueEnqueue> walkIns = queueEnqueueRepository.findByActionDateBetweenAndAppUserId(from, to, appUserId);
+    return walkIns.size();
   }
 }

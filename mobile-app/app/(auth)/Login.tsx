@@ -104,7 +104,6 @@ export default function Login() {
             );
 
             console.log(axios.defaults.headers);
-
             resolve();
           });
 

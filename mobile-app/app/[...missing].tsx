@@ -1,5 +1,10 @@
 import React from "react";
-import { ImageBackground, StatusBar, Text, View } from "react-native";
+import { 
+  ImageBackground, 
+  View, 
+  Text, 
+  StatusBar,
+} from "react-native";
 import background from "@/assets/images/background.png";
 import QLogo from "@/assets/images/logoImage.svg";
 import NotFound from "@/assets/images/undraw_page_not_found_re_e9o6(2).svg";
