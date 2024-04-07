@@ -39,22 +39,6 @@
         max-height: 200px;
         object-fit: cover;
       }
-      .footer {
-        border-top: 1px solid #D9D9D9;
-        color: #D9D9D9;
-        font-size: 12px;
-        text-align: center;
-        margin-top: 32px;
-      }
-      .store-badge {
-        height: 40px;
-        margin: 0 5px;
-      }
-      .badge-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
     </style>
     </head>
     <body>
