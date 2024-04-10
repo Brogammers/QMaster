@@ -43,6 +43,7 @@ public class Queues {
     @Column(nullable = false)
     private int peopleInQueue;
     private int rating;
+    private int maxQueueSize = 100;
 
     public Queues(String name, AppUser creator, int queueSlot, int specificSlot) {
         this.name = name;
@@ -52,5 +53,14 @@ public class Queues {
         this.peopleInQueue = 0;
         this.rating = -1; // -1 if there are no ratings yet
     }
-
+    
+    public Queues(String name, AppUser creator, int queueSlot, int specificSlot, int maxQueueSize) {
+        this.name = name;
+        this.creator = creator;
+        this.queueSlot = queueSlot;
+        this.specificSlot = specificSlot;
+        this.peopleInQueue = 0;
+        this.rating = -1; // -1 if there are no ratings yet
+        this.maxQueueSize = maxQueueSize;
+    }
 }
