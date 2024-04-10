@@ -20,7 +20,6 @@ import QMasterLogo from "../../../public/qmaster.svg";
 
 
 export default function Sidebar() {
-  const [role, setRole] = useState('');
   const { entity } = useParams();
 
   useEffect(() => {
