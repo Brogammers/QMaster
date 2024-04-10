@@ -1,5 +1,9 @@
+import Entity from "../page";
+
 export default function Counter() {
   return (
-    <h1>This is the Counter page</h1>
+    <Entity>
+      <h1>This is the counter page</h1>
+    </Entity>
   )
 };
