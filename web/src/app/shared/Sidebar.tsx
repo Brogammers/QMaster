@@ -44,6 +44,7 @@ export default function Sidebar() {
 
   const handleLogout = () => {
     console.log("Logging out...");
+    router.replace('/login')
   }
 
   useEffect(() => {
@@ -60,7 +61,7 @@ export default function Sidebar() {
       onCollapse={toggleCollapsed}
       className="flex flex-col justify-between"
     >
-      <div className="px-2 py-4 flex items-center justify-center border-b-2 border-coal-black">
+      <div className="px-2 py-4 flex items-center justify-center border-b-2 border-ignite-black">
         <Image
           src={QMasterLogo}
           alt="QMaster"
