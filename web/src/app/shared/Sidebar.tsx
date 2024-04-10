@@ -24,7 +24,7 @@ export default function Sidebar() {
   useEffect(() => {
     // Fetch the user's role from a server when they log in
     // and store it in the `role` state.
-    
+
     // fetchUserRole().then(setRole);
   }, []);
 
@@ -49,33 +49,33 @@ export default function Sidebar() {
             </>
           }
         >
-          <CNavItem href="#">
+          <CNavItem href="/admin/details">
             <span className="nav-icon">
               <span className="nav-icon-bullet" />
             </span>
             Details
           </CNavItem>
-          <CNavItem href="#">
+          <CNavItem href="/admin/queues">
             <span className="nav-icon">
               <span className="nav-icon-bullet" />
             </span>
             Queues
           </CNavItem>
-          <CNavItem href="#">
+          <CNavItem href="/admin/customer-feedback">
             <span className="nav-icon">
               <span className="nav-icon-bullet" />
             </span>
             Customer Feedback
           </CNavItem>
         </CNavGroup>
-        <CNavItem href="#">
+        <CNavItem href="/counter">
           <CIcon 
             customClassName="nav-icon" 
             icon={cilPeople} 
           />
             Counter
         </CNavItem>
-        <CNavItem href="#">
+        <CNavItem href="/display">
           <CIcon 
             customClassName="nav-icon" 
             icon={cilScreenDesktop}
