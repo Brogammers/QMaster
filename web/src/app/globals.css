@@ -43,7 +43,12 @@ body {
   padding: 0 12px;
 }
 
-/* LOGIN MESH */
+
+/* 
+
+LOGIN MESH
+
+*/
 .bg-animation {
   position: absolute;
   width: 100%;
@@ -52,6 +57,12 @@ body {
   background-repeat: no-repeat;
 }
 
+
+/* 
+
+SIDEBAR
+
+*/
 .text__branding {
   display: none;
 }

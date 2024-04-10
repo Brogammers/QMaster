@@ -12,7 +12,7 @@ import {
 } from '@coreui/react';
 import { RiAdminLine } from "react-icons/ri";
 import CIcon from '@coreui/icons-react';
-import { cilPuzzle, cilSpeedometer, cilCloudDownload, cilLayers } from '@coreui/icons';
+import { cilSettings, cilScreenDesktop, cilPeople } from '@coreui/icons';
 import '@coreui/coreui/dist/css/coreui.min.css';
 import Image from 'next/image';
 import QMasterLogo from "../../../public/qmaster.svg"
@@ -34,20 +34,47 @@ export default function Sidebar() {
       </CSidebarHeader>
       <CSidebarNav>
         <CNavTitle>Welcome back, Hatem</CNavTitle>
-        <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} /> Nav item</CNavItem>
-        <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} /> With badge <CBadge color="primary ms-auto">NEW</CBadge></CNavItem>
         <CNavGroup
           toggler={
             <>
-              <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Nav dropdown
+              <CIcon customClassName="nav-icon" icon={cilSettings} /> Admin
             </>
           }
         >
-          <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span> Nav dropdown item</CNavItem>
-          <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span> Nav dropdown item</CNavItem>
+          <CNavItem href="#">
+            <span className="nav-icon">
+              <span className="nav-icon-bullet" />
+            </span>
+            Details
+          </CNavItem>
+          <CNavItem href="#">
+            <span className="nav-icon">
+              <span className="nav-icon-bullet" />
+            </span>
+            Queues
+          </CNavItem>
+          <CNavItem href="#">
+            <span className="nav-icon">
+              <span className="nav-icon-bullet" />
+            </span>
+            Customer Feedback
+          </CNavItem>
         </CNavGroup>
-        <CNavItem href="https://coreui.io"><CIcon customClassName="nav-icon" icon={cilCloudDownload} /> Download CoreUI</CNavItem>
-        <CNavItem href="https://coreui.io/pro/"><CIcon customClassName="nav-icon" icon={cilLayers} /> Try CoreUI PRO</CNavItem>
+        <CNavItem href="#">
+          <CIcon 
+            customClassName="nav-icon" 
+            icon={cilPeople} 
+          />
+            Counter
+        </CNavItem>
+        <CNavItem href="#">
+          <CIcon 
+            customClassName="nav-icon" 
+            icon={cilScreenDesktop}
+          />
+            Display
+            <CBadge color="primary ms-auto">NEW</CBadge>
+        </CNavItem>
       </CSidebarNav>
       <CSidebarHeader className="border-top">
         <CSidebarToggler />
