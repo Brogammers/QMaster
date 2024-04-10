@@ -14,12 +14,14 @@ import {
 import '@coreui/coreui/dist/css/coreui.min.css';
 import CIcon from '@coreui/icons-react';
 import { cilSettings, cilScreenDesktop, cilPeople } from '@coreui/icons';
+import { useParams } from "next/navigation";
 import Image from 'next/image';
 import QMasterLogo from "../../../public/qmaster.svg";
 
 
 export default function Sidebar() {
   const [role, setRole] = useState('');
+  const { entity } = useParams();
 
   useEffect(() => {
     // Fetch the user's role from a server when they log in
@@ -49,33 +51,33 @@ export default function Sidebar() {
             </>
           }
         >
-          <CNavItem href="/admin/details">
+          <CNavItem href={`/${entity}/admin/details`}>
             <span className="nav-icon">
               <span className="nav-icon-bullet" />
             </span>
             Details
           </CNavItem>
-          <CNavItem href="/admin/queues">
+          <CNavItem href={`/${entity}/admin/queues`}>
             <span className="nav-icon">
               <span className="nav-icon-bullet" />
             </span>
             Queues
           </CNavItem>
-          <CNavItem href="/admin/customer-feedback">
+          <CNavItem href={`/${entity}/admin/customer-feedback`}>
             <span className="nav-icon">
               <span className="nav-icon-bullet" />
             </span>
             Customer Feedback
           </CNavItem>
         </CNavGroup>
-        <CNavItem href="/counter">
+        <CNavItem href={`/${entity}/counter`}>
           <CIcon 
             customClassName="nav-icon" 
             icon={cilPeople} 
           />
             Counter
         </CNavItem>
-        <CNavItem href="/display">
+        <CNavItem href={`/${entity}/display`}>
           <CIcon 
             customClassName="nav-icon" 
             icon={cilScreenDesktop}
