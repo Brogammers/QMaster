@@ -51,3 +51,11 @@ body {
   background-image: url('../../public/login-bg.svg');
   background-repeat: no-repeat;
 }
+
+.text__branding {
+  display: none;
+}
+
+.sidebar:hover .text__branding {
+  display: inline;
+}

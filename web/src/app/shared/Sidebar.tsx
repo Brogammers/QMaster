@@ -14,16 +14,26 @@ import { RiAdminLine } from "react-icons/ri";
 import CIcon from '@coreui/icons-react';
 import { cilPuzzle, cilSpeedometer, cilCloudDownload, cilLayers } from '@coreui/icons';
 import '@coreui/coreui/dist/css/coreui.min.css';
+import Image from 'next/image';
+import QMasterLogo from "../../../public/qmaster.svg"
+import { useState } from 'react';
 
 
 export default function Sidebar() {
   return (
-    <CSidebar className="border-end h-screen" unfoldable>
+    <CSidebar className="sidebar border-end h-screen" colorScheme="dark" unfoldable>
       <CSidebarHeader className="border-bottom">
-        <CSidebarBrand>CoreUI</CSidebarBrand>
+        <CSidebarBrand className='font-bold no-underline flex items-center'>
+          <Image
+            src={QMasterLogo} 
+            alt='QMaster' 
+            width={40}
+          />
+          <span className='text__branding text-2xl ml-4'>QMaster</span>
+        </CSidebarBrand>
       </CSidebarHeader>
       <CSidebarNav>
-        <CNavTitle>Nav Title</CNavTitle>
+        <CNavTitle>Welcome back, Hatem</CNavTitle>
         <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} /> Nav item</CNavItem>
         <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} /> With badge <CBadge color="primary ms-auto">NEW</CBadge></CNavItem>
         <CNavGroup
@@ -45,3 +55,5 @@ export default function Sidebar() {
     </CSidebar>
   )
 }
+
+
