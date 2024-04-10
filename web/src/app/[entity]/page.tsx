@@ -11,7 +11,7 @@ export default function Entity({ children }: EntityProps) {
   return (
     <>
       <Sidebar />
-      {/* <main>{children}</main> */}
+      <main>{children}</main>
     </>
   )
 }
