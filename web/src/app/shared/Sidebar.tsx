@@ -20,14 +20,17 @@ import { cilSettings, cilScreenDesktop, cilPeople } from '@coreui/icons';
 import QMasterLogo from "../../../public/qmaster.svg";
 import { ChildrenProps } from "../../../types";
 import { Menu, Layout } from "antd";
-import { SettingOutlined, DesktopOutlined, UserOutlined } from '@ant-design/icons'; // Import required icons
+import { SettingOutlined, DesktopOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons'; // Import required icons
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 
 export default function Sidebar() {
-  const { entity } = useParams();
+  let { entity } = useParams();
+  if (Array.isArray(entity)) {
+    entity = entity[0];
+  }
   const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -35,9 +38,13 @@ export default function Sidebar() {
     setIsCollapsed(!isCollapsed);
   };
 
-  const handleClick = (route: string) => {
-    router.push(route);
+  const handleRouting = (route: string) => {
+    router.push(`/${entity}/${route}`);
   };
+
+  const handleLogout = () => {
+    console.log("Logging out...");
+  }
 
   useEffect(() => {
     // Fetch the user's role from a server when they log in
@@ -51,6 +58,7 @@ export default function Sidebar() {
       collapsible 
       collapsed={isCollapsed} 
       onCollapse={toggleCollapsed}
+      className="flex flex-col justify-between"
     >
       <div className="px-2 py-4 flex items-center justify-center border-b-2 border-coal-black">
         <Image
@@ -70,25 +78,25 @@ export default function Sidebar() {
         >
           <Menu.Item 
             key="3" 
-            onClick={() => handleClick('/sharing-info')}
+            onClick={() => handleRouting(`sharing-info`)}
           >
             Sharing Info
           </Menu.Item>
           <Menu.Item 
             key="4" 
-            onClick={() => handleClick('/queues')}
+            onClick={() => handleRouting(`queues`)}
           >
             Queues
           </Menu.Item>
           <Menu.Item 
             key="5" 
-            onClick={() => handleClick('/details')}
+            onClick={() => handleRouting(`details`)}
           >
             Details
           </Menu.Item>
           <Menu.Item 
             key="6" 
-            onClick={() => handleClick('/customer-feedback')}
+            onClick={() => handleRouting(`customer-feedback`)}
           >
             Customer Feedback
           </Menu.Item>
@@ -96,16 +104,26 @@ export default function Sidebar() {
         <Menu.Item 
           key="2" 
           icon={<UserOutlined />} 
-          onClick={() => handleClick('/counter')}
+          onClick={() => handleRouting(`counter`)}
         >
           <span>Counter</span>
         </Menu.Item>
         <Menu.Item 
           key="3" 
           icon={<DesktopOutlined />} 
-          onClick={() => handleClick('/display')}
+          onClick={() => handleRouting(`display`)}
         >
           <span>Display</span>
+        </Menu.Item>
+      </Menu>
+      <Menu>
+        <Menu.Item
+          key="7"
+          danger
+          icon={<LogoutOutlined />}
+          onClick={() => handleLogout()}
+        >
+          <span>Logout</span>
         </Menu.Item>
       </Menu>
     </Sider>
