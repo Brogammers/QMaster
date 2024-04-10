@@ -1,3 +1,4 @@
+import { useState, useEffect} from "react";
 import { 
   CAlert, 
   CBadge,
@@ -10,16 +11,23 @@ import {
   CSidebarNav, 
   CSidebarToggler 
 } from '@coreui/react';
-import { RiAdminLine } from "react-icons/ri";
+import '@coreui/coreui/dist/css/coreui.min.css';
 import CIcon from '@coreui/icons-react';
 import { cilSettings, cilScreenDesktop, cilPeople } from '@coreui/icons';
-import '@coreui/coreui/dist/css/coreui.min.css';
 import Image from 'next/image';
-import QMasterLogo from "../../../public/qmaster.svg"
-import { useState } from 'react';
+import QMasterLogo from "../../../public/qmaster.svg";
 
 
 export default function Sidebar() {
+  const [role, setRole] = useState('');
+
+  useEffect(() => {
+    // Fetch the user's role from a server when they log in
+    // and store it in the `role` state.
+    
+    // fetchUserRole().then(setRole);
+  }, []);
+
   return (
     <CSidebar className="sidebar border-end h-screen" colorScheme="dark" unfoldable>
       <CSidebarHeader className="border-bottom">
