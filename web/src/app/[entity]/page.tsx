@@ -18,23 +18,13 @@ export default function Entity({ children }: ChildrenProps) {
   const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(true);
 
-  const toggleCollapsed = () => {
-    setIsCollapsed(!isCollapsed);
-  };
-
-  const handleClick = (route: string) => {
-    router.push(route);
-  };
-
   return (
     <Layout className="min-h-screen">
       <Sidebar />
-      {/* Main Content */}
-      <Layout className="site-layout bg-coal-black text-white">
-        <Content className="text-white mx-4">
-          <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+      <Layout className="site-layout bg-coal-black">
+        <Content className="container text-white mx-4">
+          <div className="row site-layout-background">
             <h2 className="text-xl">{entity}&apos;s Coworking Space</h2>
-            {/* Main content */}
             {children}
           </div>
         </Content>
