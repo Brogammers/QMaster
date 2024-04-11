@@ -16,9 +16,7 @@ export default function Details() {
         <div className="max-w-5xl bg-[#17222D] p-4">
           <h2 className="text-white">Place details</h2>
           <AdminDetailsNavBar onItemSelected={handleItemSelected} />
-          <div className="p-4">
-            <h3 className="text-white">{selectedItem}</h3>
-          </div>
+          {/* Create a component for each item and render them using an if statement */}
         </div>
       </div>
     </Entity>
