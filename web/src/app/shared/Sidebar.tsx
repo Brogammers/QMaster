@@ -18,7 +18,7 @@ import CIcon from '@coreui/icons-react';
 import { cilSettings, cilScreenDesktop, cilPeople } from '@coreui/icons';
 
 import QMasterLogo from "../../../public/qmaster.svg";
-import { ChildrenProps } from "../../../types";
+import { QueueModalProps } from "../../../types";
 import { Menu, Layout } from "antd";
 import { SettingOutlined, DesktopOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons'; // Import required icons
 

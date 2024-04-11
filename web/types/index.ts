@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 
-export interface ChildrenProps {
+export interface QueueModalProps {
+  title?: string;
   children: ReactNode;
 }
