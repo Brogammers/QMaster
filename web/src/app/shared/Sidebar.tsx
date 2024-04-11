@@ -107,14 +107,14 @@ export default function Sidebar() {
           icon={<UserOutlined />} 
           onClick={() => handleRouting(`counter`)}
         >
-          <span>Counter</span>
+          Counter
         </Menu.Item>
         <Menu.Item 
           key="3" 
           icon={<DesktopOutlined />} 
           onClick={() => handleRouting(`display`)}
         >
-          <span>Display</span>
+          Display
         </Menu.Item>
       </Menu>
       <Menu>
@@ -124,7 +124,7 @@ export default function Sidebar() {
           icon={<LogoutOutlined />}
           onClick={() => handleLogout()}
         >
-          <span>Logout</span>
+          Logout
         </Menu.Item>
       </Menu>
     </Sider>
