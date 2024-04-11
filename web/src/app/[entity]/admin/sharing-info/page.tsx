@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { Formik, Field, Form } from "formik";
 import QueueModal from "@/app/shared/QueueModal";
 import Entity from "../../page";
-import { Button } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import Image from "next/image";
 
@@ -33,7 +32,10 @@ export default function SharingInfo() {
 
   return (
     <Entity>
-      <QueueModal title="Sharing Info">
+      <QueueModal 
+        title="Sharing Info"
+        description="This QR-code is automatically generated for this Place"
+      >
         <Formik
           initialValues={{ url: url }}
           onSubmit={async (values) => {
