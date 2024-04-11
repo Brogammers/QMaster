@@ -78,10 +78,16 @@ export default function Sidebar() {
           icon={<SettingOutlined />}
         >
           <Menu.Item 
-            key="3" 
-            onClick={() => handleRouting(`admin/sharing-info`)}
+            key="2" 
+            onClick={() => handleRouting(`admin/customer-feedback`)}
           >
-            Sharing Info
+            Customer Feedback
+          </Menu.Item>
+          <Menu.Item 
+            key="3" 
+            onClick={() => handleRouting(`admin/details`)}
+          >
+            Details
           </Menu.Item>
           <Menu.Item 
             key="4" 
@@ -91,26 +97,20 @@ export default function Sidebar() {
           </Menu.Item>
           <Menu.Item 
             key="5" 
-            onClick={() => handleRouting(`admin/details`)}
+            onClick={() => handleRouting(`admin/sharing-info`)}
           >
-            Details
-          </Menu.Item>
-          <Menu.Item 
-            key="6" 
-            onClick={() => handleRouting(`admin/customer-feedback`)}
-          >
-            Customer Feedback
+            Sharing Info
           </Menu.Item>
         </SubMenu>
         <Menu.Item 
-          key="2" 
+          key="6" 
           icon={<UserOutlined />} 
           onClick={() => handleRouting(`counter`)}
         >
           Counter
         </Menu.Item>
         <Menu.Item 
-          key="3" 
+          key="7" 
           icon={<DesktopOutlined />} 
           onClick={() => handleRouting(`display`)}
         >
@@ -119,7 +119,7 @@ export default function Sidebar() {
       </Menu>
       <Menu>
         <Menu.Item
-          key="7"
+          key="8"
           danger
           icon={<LogoutOutlined />}
           onClick={() => handleLogout()}
