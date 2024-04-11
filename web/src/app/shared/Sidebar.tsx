@@ -79,25 +79,25 @@ export default function Sidebar() {
         >
           <Menu.Item 
             key="3" 
-            onClick={() => handleRouting(`sharing-info`)}
+            onClick={() => handleRouting(`admin/sharing-info`)}
           >
             Sharing Info
           </Menu.Item>
           <Menu.Item 
             key="4" 
-            onClick={() => handleRouting(`queues`)}
+            onClick={() => handleRouting(`admin/queues`)}
           >
             Queues
           </Menu.Item>
           <Menu.Item 
             key="5" 
-            onClick={() => handleRouting(`details`)}
+            onClick={() => handleRouting(`admin/details`)}
           >
             Details
           </Menu.Item>
           <Menu.Item 
             key="6" 
-            onClick={() => handleRouting(`customer-feedback`)}
+            onClick={() => handleRouting(`admin/customer-feedback`)}
           >
             Customer Feedback
           </Menu.Item>

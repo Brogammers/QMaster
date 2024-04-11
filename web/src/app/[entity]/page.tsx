@@ -2,8 +2,7 @@
 
 import { ChildrenProps } from "../../../types";
 import { Layout } from "antd";
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Sidebar from "../shared/Sidebar";
 
 const { Content } = Layout;
@@ -15,8 +14,6 @@ export default function Entity({ children }: ChildrenProps) {
     entity = entity[0];
   }
   entity = entity.charAt(0).toUpperCase() + entity.slice(1);
-  const router = useRouter();
-  const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
     <Layout className="min-h-screen">
