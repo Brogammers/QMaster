@@ -13,6 +13,7 @@
     "@coreui/icons": "^3.0.1",
     "@coreui/icons-react": "^2.2.1",
     "@coreui/react": "^5.0.0",
+    "antd": "^5.16.1",
     "formik": "^2.4.5",
     "next": "14.1.4",
     "react": "^18.2.0",
