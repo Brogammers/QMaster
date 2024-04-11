@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import { useState } from 'react';
 import { CNav, CNavItem, CNavLink } from '@coreui/react'
 import { onSelectedProps } from '../../../types';

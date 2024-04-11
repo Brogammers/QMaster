@@ -1,13 +1,11 @@
 'use client'
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Entity from "../../page";
 import AdminDetailsNavBar from '../../../components/AdminDetailsNavBar';
 
 export default function Details() {
-  // Step 1: State to hold the selected item
   const [selectedItem, setSelectedItem] = useState('Details');
 
-  // Step 2: Handler function to update the selected item
   const handleItemSelected = (item: string): void => {
     setSelectedItem(item);
   }
