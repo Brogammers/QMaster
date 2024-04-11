@@ -61,14 +61,14 @@ export default function Sidebar() {
       onCollapse={toggleCollapsed}
       className="flex flex-col justify-between"
     >
-      <div className="px-2 py-4 flex items-center justify-center border-b-2 border-ignite-black">
+      <div className="px-2 py-3 flex items-center justify-center border-b-2 border-ignite-black">
         <Image
           src={QMasterLogo}
           alt="QMaster"
-          width={40}
+          width={36}
         />
         {!isCollapsed && 
-          <span className="font-bold text-white text-2xl ml-4">QMaster</span>
+          <span className="font-bold text-white text-xl ml-4">QMaster</span>
         }
       </div>
       <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">

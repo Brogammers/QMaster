@@ -16,12 +16,14 @@ export default function Entity({ children }: ChildrenProps) {
   entity = entity.charAt(0).toUpperCase() + entity.slice(1);
 
   return (
-    <Layout className="min-h-screen">
+    <Layout className="w-full min-h-screen">
       <Sidebar />
-      <Layout className="site-layout bg-coal-black">
-        <Content className="container text-white mx-4">
+      <Layout className="bg-coal-black">
+        <Content className="container w-full text-white mx-4">
           <div className="row site-layout-background">
-            <h2 className="text-xl">{entity}&apos;s Coworking Space</h2>
+            <h2 className="text-xl border-b-2 border-b-slight-slate-grey py-3">
+              {entity}&apos;s Coworking Space
+            </h2>
             {children}
           </div>
         </Content>
