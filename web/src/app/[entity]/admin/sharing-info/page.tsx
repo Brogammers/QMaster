@@ -59,7 +59,7 @@ export default function SharingInfo() {
               <button
                 type="button"
                 onClick={() => navigator.clipboard.writeText(url)}
-                className="bg-baby-blue px-4 py-2 rounded-lg text-white font-bold"
+                className="bg-baby-blue px-4 py-2 rounded-lg text-white text-md font-bold"
               >
                 Copy URL
               </button>
@@ -80,13 +80,13 @@ export default function SharingInfo() {
         <div className="my-4 flex space-x-4">
           <button
             onClick={handlePreview}
-            className="bg-ignite-black px-4 py-2 rounded-lg text-white font-bold"
+            className="bg-ignite-black px-4 py-2 rounded-lg text-white text-md font-bold"
           >
             Preview
           </button>
           <button
             onClick={handleDownload}
-            className="bg-baby-blue px-4 py-2 rounded-lg text-white font-bold"
+            className="bg-baby-blue px-4 py-2 rounded-lg text-white text-md font-bold"
           >
             Download QR Code
           </button>
