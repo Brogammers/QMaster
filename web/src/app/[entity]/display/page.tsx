@@ -51,10 +51,12 @@ export default function Display() {
     setFullscreen(!fullscreen);
   }
 
+  const maxTicketsToShow = Math.floor(height / 164);
+
   return (
     <>
       {fullscreen ? (
-        <div className="w-full flex justify-between">
+        <div className="h-screen w-full flex justify-between">
           <Image
             src={TeamImg}
             alt="QMaster"
@@ -63,11 +65,11 @@ export default function Display() {
           />
           <div className="w-1/4 bg-ocean-blue">
             {/* Map through the queued persons array and render the tickets */}
-            {queuedPersons.map((person, index) => (
+            {queuedPersons.slice(0, maxTicketsToShow).map((person, index) => (
               <TicketNumber
                 key={person.id}
-                bgColor={"transparent"}
-                textColor="white"
+                bgColor={index % 2 === 0 ? `white` : `transparent`}
+                textColor={index % 2 === 0 ? `black` : `white`}
                 fontSize="3xl"
                 borderRadius="none"
                 width="full"
