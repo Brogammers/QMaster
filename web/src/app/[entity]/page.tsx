@@ -4,6 +4,7 @@ import { QueueModalProps } from "../../../types";
 import { Layout } from "antd";
 import { useParams, usePathname } from "next/navigation";
 import Sidebar from "../shared/Sidebar";
+import { calc } from "antd/es/theme/internal";
 
 const { Content } = Layout;
 
