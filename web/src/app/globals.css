@@ -33,6 +33,7 @@ body {
 }
 
 .container {
+  width: 100% !important;
   padding: 16px 0;
 }
 
