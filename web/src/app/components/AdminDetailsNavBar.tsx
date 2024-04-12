@@ -16,7 +16,7 @@ export default function AdminDetailsNavBar({ onItemSelected }: onSelectedProps) 
       <CNavItem>
         <CNavLink
           href="#"
-          style={{ color: activeLink === 'Details' ? 'white' : 'grey' }}
+          style={{ color: activeLink === 'Details' ? 'black' : 'grey' }}
           onClick={() => handleClick('Details')}
         >
           Details
@@ -25,7 +25,7 @@ export default function AdminDetailsNavBar({ onItemSelected }: onSelectedProps) 
       <CNavItem>
         <CNavLink
           href="#"
-          style={{ color: activeLink === 'Opening Hours' ? 'white' : 'grey' }}
+          style={{ color: activeLink === 'Opening Hours' ? 'black' : 'grey' }}
           onClick={() => handleClick('Opening Hours')}
         >
           Opening Hours
@@ -34,7 +34,7 @@ export default function AdminDetailsNavBar({ onItemSelected }: onSelectedProps) 
       <CNavItem>
         <CNavLink
           href="#"
-          style={{ color: activeLink === 'Settings' ? 'white' : 'grey' }}
+          style={{ color: activeLink === 'Settings' ? 'black' : 'grey' }}
           onClick={() => handleClick('Settings')}
         >
           Settings
@@ -43,16 +43,16 @@ export default function AdminDetailsNavBar({ onItemSelected }: onSelectedProps) 
       <CNavItem>
         <CNavLink
           href="#"
-          style={{ color: activeLink === 'Visitor data' ? 'white' : 'grey' }}
-          onClick={() => handleClick('Visitor data')}
+          style={{ color: activeLink === 'Visitor Data' ? 'black' : 'grey' }}
+          onClick={() => handleClick('Visitor Data')}
         >
-          Visitor data
+          Visitor Data
         </CNavLink>
       </CNavItem>
       <CNavItem>
         <CNavLink
           href="#"
-          style={{ color: activeLink === 'Socials' ? 'white' : 'grey' }}
+          style={{ color: activeLink === 'Socials' ? 'black' : 'grey' }}
           onClick={() => handleClick('Socials')}
         >
           Socials

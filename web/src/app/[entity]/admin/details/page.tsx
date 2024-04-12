@@ -2,6 +2,12 @@
 import { useState } from 'react';
 import Entity from "../../page";
 import AdminDetailsNavBar from '../../../components/AdminDetailsNavBar';
+import DetailsComponent from '@/app/components/DetailsComponent';
+import OpeningHours from '@/app/components/OpeningHours';
+import DetailsSettings from '@/app/components/DetailsSettings';
+import DetailsSocials from '@/app/components/DetailsSocials';
+import VisitorData from '@/app/components/VisitorData';
+import QueueModal from '@/app/shared/QueueModal';
 
 export default function Details() {
   const [selectedItem, setSelectedItem] = useState('Details');
@@ -12,13 +18,15 @@ export default function Details() {
 
   return (
     <Entity>
-      <div className="h-screen pl-24 pt-4 bg-[#34F5C5]">
-        <div className="max-w-5xl bg-[#17222D] p-4">
-          <h2 className="text-white">Place details</h2>
-          <AdminDetailsNavBar onItemSelected={handleItemSelected} />
-          {/* Create a component for each item and render them using an if statement */}
-        </div>
-      </div>
+      
+      <QueueModal title='Place Details'>
+      <AdminDetailsNavBar onItemSelected={handleItemSelected} />
+          {selectedItem === 'Details' && <DetailsComponent />}
+          {selectedItem === 'Opening Hours' && <OpeningHours />}
+          {selectedItem === 'Settings' && <DetailsSettings />}
+          {selectedItem === 'Socials' && <DetailsSocials />}
+          {selectedItem === 'Visitor Data' && <VisitorData />}
+      </QueueModal>
     </Entity>
   )
 }
