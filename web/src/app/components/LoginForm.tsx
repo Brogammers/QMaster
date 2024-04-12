@@ -48,7 +48,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-1/2 max-w-md my-8">
+    <div className="w-1/2 my-8 flex justify-center items-center">
       <Formik
         initialValues={{
           email: "",
@@ -66,7 +66,7 @@ export default function LoginForm() {
           errors,
         }) => (
           <form
-            className="flex flex-col items-center justify-center w-full gap-4"
+            className="flex flex-col items-center justify-center w-full max-w-lg gap-4"
             onSubmit={handleSubmit}
           >
             <input
