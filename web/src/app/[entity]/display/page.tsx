@@ -7,14 +7,19 @@ import DisplayImg from "../../../../public/display.svg";
 import TeamImg from "../../../../public/team.jpg";
 import { useEffect, useState } from "react";
 import useWindowSize from "../../../../hooks/useWindowSize";
+import TicketNumber from "@/app/shared/TicketNumber";
 
 // Sample queued persons data
 const queuedPersonsData = [
   { id: 1, ticketNumber: 'C-123' },
   { id: 2, ticketNumber: 'C-124' },
   { id: 3, ticketNumber: 'C-125' },
-  { id: 4, ticketNumber: 'C-126' },
+  { id: 4, ticketNumber: 'C-016' },
   { id: 5, ticketNumber: 'C-127' },
+  { id: 5, ticketNumber: 'P-127' },
+  { id: 5, ticketNumber: 'A-007' },
+  { id: 5, ticketNumber: 'B-037' },
+  { id: 5, ticketNumber: 'O-127' },
 ];
 
 export default function Display() {
@@ -49,27 +54,26 @@ export default function Display() {
   return (
     <>
       {fullscreen ? (
-        <div className="w-full flex">
+        <div className="w-full flex justify-between">
           <Image
             src={TeamImg}
             alt="QMaster"
             width={width}
             height={height}
           />
-          <div className="w-1/4">
-            <div className="container">
-              <div className="row">
-                {/* Map through the queued persons array and render the tickets */}
-                {queuedPersons.map((person, index) => (
-                  <div
-                    key={person.id}
-                    className={`py-2 ${index % 2 === 0 ? 'bg-light-gray' : 'bg-dark-gray'} rounded-lg mb-2`}
-                  >
-                    {person.ticketNumber}
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="w-1/4 bg-ocean-blue">
+            {/* Map through the queued persons array and render the tickets */}
+            {queuedPersons.map((person, index) => (
+              <TicketNumber
+                key={person.id}
+                bgColor={"transparent"}
+                textColor="white"
+                fontSize="3xl"
+                borderRadius="none"
+                width="full"
+                ticketNum={person.ticketNumber}
+              />
+            ))}
           </div>
         </div>
       ) : (

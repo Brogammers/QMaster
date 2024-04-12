@@ -18,3 +18,12 @@ export interface TextButtonProps {
   onPress?: () => void;
   disabled?: boolean;
 }
+
+export interface TicketNumberProps {
+  bgColor: string;
+  textColor: string;
+  fontSize: string;
+  borderRadius: string;
+  width: string;
+  ticketNum: string;
+}
