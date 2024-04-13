@@ -32,7 +32,7 @@ export default function DetailsForm() {
           Phone: '',
           Address: '',
           Language: '',
-          Timezone: {} as ITimezone,
+          Timezone: selectedTimezone,
         }}
         onSubmit={values => {
           alert(JSON.stringify(values, null, 2));
