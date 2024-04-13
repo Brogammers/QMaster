@@ -84,7 +84,7 @@ export default function Counter() {
               </Box>
 
               {/* Tab panels for first row */}
-              <TabPanel value="0">
+              <TabPanel value={activeTab1}>
                 {/* Scrollable container for first row */}
                 <div className="w-full overflow-x-scroll flex">
                   {/* Render list of ticket/cards for the selected service */}
@@ -115,8 +115,6 @@ export default function Counter() {
                   )}
                 </div>
               </TabPanel>
-
-              {/* Add more TabPanels as needed for additional services */}
             </TabContext>
           </Box>
         </div>
@@ -135,7 +133,7 @@ export default function Counter() {
               </Box>
 
               {/* Tab panels for second row */}
-              <TabPanel value="0">
+              <TabPanel value={activeTab2}>
                 {/* Scrollable container for second row */}
                 <div className="w-full overflow-x-scroll flex">
                   {/* Render list of ticket/cards for the selected service */}
@@ -166,8 +164,6 @@ export default function Counter() {
                   )}
                 </div>
               </TabPanel>
-
-              {/* Add more TabPanels as needed for additional services */}
             </TabContext>
           </Box>
         </div>
