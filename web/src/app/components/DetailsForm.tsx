@@ -6,7 +6,7 @@ import Image from 'next/image';
 import EmptyProfile from '../../../public/EmptyProfile.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
-import DetailsLogo from './DetailsLogo';
+import TimezoneSelect, { type ITimezone } from 'react-timezone-select';
 
 export default function DetailsForm() {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -17,7 +17,10 @@ export default function DetailsForm() {
       setFile(URL.createObjectURL(e.target.files[0]));
     }
   }
-  
+  const [selectedTimezone, setSelectedTimezone] = useState<ITimezone>(
+    Intl.DateTimeFormat().resolvedOptions().timeZone
+  )
+
   return (
     <div className='w-full'>
       <Formik
@@ -29,72 +32,74 @@ export default function DetailsForm() {
           Phone: '',
           Address: '',
           Language: '',
-          Timezone: '',
+          Timezone: {} as ITimezone,
         }}
         onSubmit={values => {
           alert(JSON.stringify(values, null, 2));
         }}
       >
         {props => (
-          <Form onSubmit={props.handleSubmit}>
+          <Form onSubmit={props.handleSubmit} className='flex flex-col'>
             <div className='flex justify-between'>
               <div>
-              <div className='flex flex-col items-center justify-center w-36 h-36'>
-      <Image src={file || EmptyProfile}
-        alt='Image Preview'
-        width={144}
-        height={144}
-        className='absolute rounded-full'
-      />
-      <div className='absolute z-10 bg-gray-500 bg-opacity-50 rounded-full w-36 h-36' />
-      <div className='z-30 flex justify-around w-2/4 gap-4 '>
-        <div className='relative z-40'>
-          <button type = 'button' className='absolute z-40'>
-            <FontAwesomeIcon icon={faPencilAlt} color='white' className='w-4 h-4'/>
-          </button>
-          <input
-            type='file'
-            name='Logo'
-            placeholder='Logo'
-            className='absolute z-50 w-4 h-4 opacity-0 cursor-pointer text-[0px]'
-            onChange={(event) => {
-              handleImageChange(event);
-              if (event.target.files && event.target.files.length > 0) {
-                props.values.Logo = URL.createObjectURL(event.target.files[0]) ?? null;
-              }
-            }}
-            accept='image/*'  
-          />
-        </div>
-        <button
-          type='button'
-          onClick={() => setFile(undefined)}>
-          <FontAwesomeIcon icon={faTrash} color='white' className='w-4 h-4'/>
-        </button>
-      </div>
-    </div>
+                <div className='flex flex-col items-center justify-center w-36 h-36'>
+                  <Image src={file || EmptyProfile}
+                    alt='Image Preview'
+                    width={144}
+                    height={144}
+                    className='absolute rounded-full'
+                  />
+                  <div className='absolute z-10 bg-gray-500 bg-opacity-50 rounded-full w-36 h-36' />
+                  <div className='z-30 flex justify-around w-2/4 gap-4 '>
+                    <div className='relative z-40'>
+                      <button type='button' className='absolute z-40'>
+                        <FontAwesomeIcon icon={faPencilAlt} color='white' className='w-4 h-4' />
+                      </button>
+                      <input
+                        type='file'
+                        name='Logo'
+                        placeholder='Logo'
+                        className='absolute z-50 w-4 h-4 opacity-0 cursor-pointer text-[0px]'
+                        onChange={(event) => {
+                          handleImageChange(event);
+                          if (event.target.files && event.target.files.length > 0) {
+                            props.values.Logo = URL.createObjectURL(event.target.files[0]) ?? null;
+                          }
+                        }}
+                        accept='image/*'
+                      />
+                    </div>
+                    <button
+                      type='button'
+                      onClick={() => setFile(undefined)}>
+                      <FontAwesomeIcon icon={faTrash} color='white' className='w-4 h-4' />
+                    </button>
+                  </div>
+                </div>
               </div>
 
               <div className='w-9/12'>
-                <label htmlFor='Name' className='mb-1'>Name</label>
+                <label htmlFor='Name' className='block mb-2 text-sm font-medium text-gray-700'>
+                  Name
+                </label>
                 <div>
                   <Field
                     type='text'
                     name='Name'
                     placeholder='Enter the name of your business'
-                    className='w-full mb-4 border-b-2 border-gray-400 outline-none focus:border-black'
+                    className="w-full p-2 mb-4 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
                   />
                 </div>
-                <label htmlFor='Description' className='mb-1'>Description</label>
+                <label htmlFor='Description' className='block mb-2 text-sm font-medium text-gray-700'>Description</label>
                 <div>
                   <Field
                     as='textarea'
                     name='Description'
                     placeholder='Describe your services'
-                    className='w-full mb-4 border-b-2 border-gray-400 outline-none focus:border-black'
+                    className="w-full p-2 mb-4 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
                   />
                 </div>
-                <label htmlFor='ContactEmail' className='mb-1'>
+                <label htmlFor='ContactEmail' className='block mb-2 text-sm font-medium text-gray-700'>
                   Contact Email
                 </label>
                 <div>
@@ -102,15 +107,15 @@ export default function DetailsForm() {
                     type='email'
                     name='ContactEmail'
                     placeholder='Enter an email for customers to contact you'
-                    className='w-full mb-4 border-b-2 border-gray-400 outline-none focus:border-black'
+                    className="w-full p-2 mb-4 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
                   />
                 </div>
-                <label htmlFor='Phone' className='mb-1'>Phone</label>
+                <label htmlFor='Phone' className='block mb-2 text-sm font-medium text-gray-700'>Phone</label>
                 <div>
                   <PhoneInput
                     name='Phone'
                     placeholder='Enter your business phone number'
-                    className='w-full mb-4 border-b-2 border-gray-400 outline-none focus:border-black'
+                    className="w-full p-2 mb-4 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
                     onChange={(value) => {
                       setPhoneNumber(value || ''); // Fix: Handle undefined value and provide default value of an empty string
                       props.values.Phone = value?.toString() ?? '';
@@ -119,38 +124,46 @@ export default function DetailsForm() {
                   />
                 </div>
 
-                <label htmlFor='Address' className='mb-1'>Address</label>
+                <label htmlFor='Timezone' className='block mb-2 text-sm font-medium text-gray-700'>Timezone</label>
+                <div className='pb-4'>
+                  <TimezoneSelect
+                    value={selectedTimezone}
+                    onChange={(value) => {
+                      setSelectedTimezone(value)
+                      props.values.Timezone = value ?? ''
+                    }}
+                  />
+                </div>
+                <label htmlFor='Address' className='block mb-2 text-sm font-medium text-gray-700'>Address (optional)</label>
                 <div>
                   <Field
                     type='text'
                     name='Address'
                     placeholder='Enter your business address'
-                    className='w-full mb-4 border-b-2 border-gray-400 outline-none focus:border-black'
+                    className="w-full p-2 mb-4 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
                   />
                 </div>
 
-                <label htmlFor='Language' className='mb-1'>Language</label>
+                <label htmlFor='Language' className='block mb-2 text-sm font-medium text-gray-700'>Language</label>
                 <div>
                   <Field
                     type='text'
                     name='Language'
                     placeholder='Language'
-                    className='w-full mb-4 border-b-2 border-gray-400 outline-none focus:border-black'
+                    className="w-full p-2 mb-6 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
                   />
                 </div>
 
-                <label htmlFor='Timezone' className='mb-1'>Timezone</label>
-                <div>
-                  <Field
-                    type='text'
-                    name='Timezone'
-                    placeholder='Timezone'
-                    className='w-full mb-4 border-b-2 border-gray-400 outline-none focus:border-black'
-                  />
-                </div>
               </div>
             </div>
-            <button type='submit'>Submit</button>
+            <div className='flex self-end gap-3'>
+              <button type='reset' className='w-24 py-2 font-bold text-white bg-red-500 rounded self hover:bg-red-700'>
+                Cancel
+              </button>
+              <button type='submit' className='w-24 py-2 font-bold text-white bg-blue-500 rounded self hover:bg-blue-700'>
+                Submit
+              </button>
+            </div>
           </Form>
         )}
       </Formik>

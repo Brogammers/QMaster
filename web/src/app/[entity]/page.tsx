@@ -34,9 +34,9 @@ export default function Entity({ children }: QueueModalProps) {
     <Layout className="w-full min-h-screen">
       <Sidebar />
       <Layout className="bg-coal-black">
-        <Content className="container w-full text-white mx-4">
+        <Content className="container w-full mx-4 text-white">
           <div className="row site-layout-background">
-            <h2 className="text-xl border-b-2 border-b-slight-slate-grey mb-4 py-3">
+            <h2 className="py-3 mb-4 text-xl border-b-2 border-b-slight-slate-grey">
               {entity}&apos;s Coworking Space &gt; {page}
             </h2>
             {children}

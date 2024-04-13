@@ -10,7 +10,7 @@ export default function DetailsComponent() {
       <div className='w-9/12'>
         <DetailsForm />
       </div>
-      <div>
+      <div className='self-center'>
         <DetailsPhone />
       </div>
     </div>
