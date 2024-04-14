@@ -35,7 +35,7 @@ public class RegistrationServiceTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         registrationService = new RegistrationService(
                 appUserService,
                 emailValidator,
