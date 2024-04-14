@@ -58,21 +58,36 @@ export default function Counter() {
     calculateVisibleTickets(tickets2, setVisibleTickets2);
   }, [tickets1, tickets2]);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleServingChange = (event: React.SyntheticEvent, newValue: string) => {
     setActiveTab1(newValue);
+  };
+
+  const handleWaitingChange = (event: React.SyntheticEvent, newValue: string) => {
     setActiveTab2(newValue);
   };
 
   const filterTickets = (tickets: any[], tabValue: string) => {
-    if (tabValue === '0') {
-      return tickets; // return all tickets
-    } else if (tabValue === '1') {
-      return tickets.filter(ticket => ticket.service === 'Customer Service');
-    } else if (tabValue === '2') {
-      return tickets.filter(ticket => ticket.service === 'New Customer');
+    // Extract unique service names from the tickets data
+    const services = Array.from(new Set(tickets.map(ticket => ticket.service)));
+  
+    // Create filter conditions dynamically based on the unique service names
+    const filterConditions: { [key: string]: (ticket: any) => boolean } = {};
+    services.forEach((service, index) => {
+      filterConditions[index.toString()] = (ticket) => ticket.service === service;
+    });
+  
+    // Add a catch-all condition to return all tickets for tab value '0'
+    filterConditions['0'] = () => true;
+  
+    // Apply the appropriate filter condition based on the tab value
+    const filterCondition = filterConditions[tabValue];
+    if (filterCondition) {
+      return tickets.filter(filterCondition);
+    } else {
+      return [];
     }
-    return [];
   };
+  
 
   return (
     <Entity>
@@ -82,7 +97,7 @@ export default function Counter() {
           <Box sx={{ width: '100%', typography: 'body1' }}>
             <TabContext value={activeTab1}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <TabList onChange={handleChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
+                <TabList onChange={handleServingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
                   <Tab label="All servings" value="0" />
                   <Tab label="Customer Service" value="1" />
                   <Tab label="New Customer" value="2" />
@@ -133,7 +148,7 @@ export default function Counter() {
           <Box sx={{ width: '100%', typography: 'body1' }}>
             <TabContext value={activeTab2}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <TabList onChange={handleChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
+                <TabList onChange={handleWaitingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
                   <Tab label="All queues" value="0" />
                   <Tab label="Customer Service" value="1" />
                   <Tab label="New Customer" value="2" />
