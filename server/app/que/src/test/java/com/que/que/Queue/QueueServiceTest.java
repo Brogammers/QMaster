@@ -37,6 +37,9 @@ public class QueueServiceTest {
     @Mock
     private QRCodeService qrCodeService;
 
+    @Mock
+    private QueueEnqueueRepository queueEnqueueRepository;
+
     @InjectMocks
     private QueueService queueService;
 
@@ -205,6 +208,95 @@ public class QueueServiceTest {
         // Act
         for (int i = 0; i < queueService.MAX_ENTERPRISE_QUEUES + 1; i++)
             queueService.createNewQueue(queueHolderID, "test" + i);
+
+        // Assert
+        // Expects IllegalStateException to be thrown
+    }
+
+    /*
+     * @Test(timeout = 5000)(timeout = 5000)
+     * public void testEnqueueUser_Success() {
+     * // Arrange
+     * Long appUserId = 1L;
+     * String queueName = "TestQueue";
+     * AppUser appUser = new AppUser();
+     * appUser.setId(appUserId);
+     * appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
+     * appUser.setQueueId(-1);
+     * when(appUserRepository.findById(appUserId)).thenReturn(Optional.of(appUser));
+     * 
+     * queueService.createNewQueue(appUserId, queueName);
+     * 
+     * // Act
+     * queueService.enqueueUser(appUserId, queueName);
+     * 
+     * // Assert
+     * verify(appUserRepository, times(1)).findById(appUserId);
+     * verify(queueRepository, times(1)).findByName(queueName);
+     * verify(queueEnqueueRepository, times(1)).save(any(QueueEnqueue.class));
+     * // Add additional assertions as needed
+     * }
+     */
+    @Test(expected = IllegalStateException.class, timeout = 5000)
+    public void testEnqueueUser_UserNotFound() {
+        // Arrange
+        Long appUserId = 1L;
+        String queueName = "TestQueue";
+        when(appUserRepository.findById(appUserId)).thenReturn(Optional.empty());
+
+        // Act
+        queueService.enqueueUser(appUserId, queueName);
+
+        // Assert
+        // Expects IllegalStateException to be thrown
+    }
+
+    @Test(expected = IllegalStateException.class, timeout = 5000)
+    public void testEnqueueUser_QueueNotFound() {
+        // Arrange
+        Long appUserId = 1L;
+        String queueName = "TestQueue";
+        AppUser appUser = new AppUser();
+        appUser.setId(appUserId);
+        when(appUserRepository.findById(appUserId)).thenReturn(Optional.of(appUser));
+        when(queueRepository.findByName(queueName)).thenReturn(Optional.empty());
+
+        // Act
+        queueService.enqueueUser(appUserId, queueName);
+
+        // Assert
+        // Expects IllegalStateException to be thrown
+    }
+
+    @Test(expected = IllegalStateException.class, timeout = 5000)
+    public void testEnqueueUser_UserAlreadyInQueue() {
+        // Arrange
+        Long appUserId = 1L;
+        String queueName = "TestQueue";
+        AppUser appUser = new AppUser();
+        appUser.setId(appUserId);
+        queueService.createNewQueue(appUserId, queueName);
+        when(appUserRepository.findById(appUserId)).thenReturn(Optional.of(appUser));
+
+        queueService.enqueueUser(appUserId, queueName);
+        queueService.enqueueUser(appUserId, queueName);
+
+        // Assert
+        // Expects IllegalStateException to be thrown
+    }
+
+    @Test(expected = IllegalStateException.class, timeout = 5000)
+    public void testEnqueueUser_CouldNotAddUserToQueue() {
+        // Arrange
+        Long appUserId = 1L;
+        String queueName = "TestQueue";
+        AppUser appUser = new AppUser();
+        appUser.setId(appUserId);
+
+        when(appUserRepository.findById(appUserId)).thenReturn(Optional.of(appUser));
+
+        // Act
+        queueService.enqueueUser(appUserId, queueName);
 
         // Assert
         // Expects IllegalStateException to be thrown

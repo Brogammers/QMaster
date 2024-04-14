@@ -28,7 +28,7 @@ public class LoginControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testLogin_Success() {
         // Arrange
         LoginRequest request = new LoginRequest("test@example.com", "password");
@@ -46,7 +46,7 @@ public class LoginControllerTest {
         verify(loginService, times(1)).loginUser(request.getEmail(), request.getPassword());
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testLogin_Exception() {
         // Arrange
         LoginRequest request = new LoginRequest("test@example.com", "password");

@@ -21,7 +21,7 @@ public class AppUserTest {
     /**
      * Test case for testing the getters and setters of the AppUser class.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testGettersAndSetters() {
         // Create a sample AppUser object
         AppUser appUser = new AppUser();
@@ -68,7 +68,7 @@ public class AppUserTest {
     /**
      * Test case for testing the getAuthorities() method of the AppUser class.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testGetAuthorities() {
         // Create a sample AppUser object
         AppUser appUser = new AppUser();
@@ -85,7 +85,7 @@ public class AppUserTest {
     /**
      * Test case for testing the isAccountNonLocked() method of the AppUser class.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testAccountNonLocked() {
         // Create a locked AppUser
         AppUser lockedUser = new AppUser();
@@ -103,7 +103,7 @@ public class AppUserTest {
     /**
      * Test case for testing the isEnabled() method of the AppUser class.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testIsEnabled() {
         // Create an enabled AppUser
         AppUser enabledUser = new AppUser();

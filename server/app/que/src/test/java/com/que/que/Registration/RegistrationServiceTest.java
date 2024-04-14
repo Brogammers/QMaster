@@ -45,7 +45,7 @@ public class RegistrationServiceTest {
                 new HashSet<>());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class, timeout = 5000)
     public void testRegister_InvalidPassword_ThrowsIllegalStateException() {
         // Arrange
         String email = "test@example.com";
@@ -64,7 +64,7 @@ public class RegistrationServiceTest {
         // Expects IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class, timeout = 5000)
     public void testRegister_InvalidEmail1_ThrowsIllegalStateException() {
         // Arrange
         String email = "xample.com";
@@ -82,7 +82,7 @@ public class RegistrationServiceTest {
         // Expects IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class, timeout = 5000)
     public void testRegister_InvalidEmail2_ThrowsIllegalStateException() {
         // Arrange
         String email = "email@.com";
@@ -100,7 +100,7 @@ public class RegistrationServiceTest {
         // Expects IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class, timeout = 5000)
     public void testRegister_InvalidEmail3_ThrowsIllegalStateException() {
         // Arrange
         String email = "@meial.com";
@@ -118,7 +118,7 @@ public class RegistrationServiceTest {
         // Expects IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class, timeout = 5000)
     public void testRegister_PasswordsDoNotMatch_ThrowsIllegalStateException() {
         // Arrange
         String email = "test@example.com";

@@ -42,7 +42,7 @@ public class LoginServiceTest {
     /**
      * Test case to verify the login functionality with valid credentials.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testLoginUser_ValidCredentials() {
         // Arrange
         String email = "test@example.com";
@@ -73,7 +73,7 @@ public class LoginServiceTest {
         verify(loginRepository, times(1)).save(any(LoginEntry.class));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class, timeout = 5000)
     public void testLoginUser_InvalidEmail() {
         // Arrange
         String email = "invalid_email";
@@ -87,7 +87,7 @@ public class LoginServiceTest {
         // Expecting IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class, timeout = 5000)
     public void testLoginUser_UserNotFound() {
         // Arrange
         String email = "test@example.com";
@@ -102,7 +102,7 @@ public class LoginServiceTest {
         // Expecting IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class, timeout = 5000)
     public void testLoginUser_InvalidPassword() {
         // Arrange
         String email = "test@example.com";

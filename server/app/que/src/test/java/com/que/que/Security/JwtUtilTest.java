@@ -20,7 +20,7 @@ public class JwtUtilTest {
         jwtUtil = new JwtUtil();
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testGenerateToken() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -29,7 +29,7 @@ public class JwtUtilTest {
         assertTrue(token.length() > 0);
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testExtractBody_ValidToken() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -40,14 +40,14 @@ public class JwtUtilTest {
         assertTrue(body instanceof Claims);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class, timeout = 5000)
     public void testExtractBody_InvalidToken() {
         String invalidToken = "invalidToken";
 
         JwtUtil.extractBody(invalidToken);
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testGetUsername() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -65,7 +65,7 @@ public class JwtUtilTest {
      * The test ensures that the issued date is not null.
      */
 
-    @Test
+    @Test(timeout = 5000)
     public void testGetExpirationDate() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -74,7 +74,7 @@ public class JwtUtilTest {
         assertNotNull(expirationDate);
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testIsTokenExpired_NotExpired() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -84,7 +84,7 @@ public class JwtUtilTest {
         assertFalse(isExpired);
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testGetClaimFromToken() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -94,7 +94,7 @@ public class JwtUtilTest {
         assertEquals(username, extractedUsername);
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testValidateToken_ValidToken() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -107,7 +107,7 @@ public class JwtUtilTest {
         assertTrue(isValid);
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testValidateToken_InvalidUser() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);

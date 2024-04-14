@@ -14,7 +14,7 @@ public class MapsServiceTest {
      * This method tests the functionality of calculating the distance between two
      * locations.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testGetDistanceBetweenTwoLocations() {
         MapsService mapsService = new MapsService();
 
