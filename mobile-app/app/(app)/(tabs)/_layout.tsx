@@ -1,10 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { 
-  NavigationContainer, 
-  NavigationContainerRef, 
-  ParamListBase, 
-  getFocusedRouteNameFromRoute
-} from "@react-navigation/native";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import Home from "./index";
@@ -15,7 +10,6 @@ import Notifications from "@/app/Notifications";
 import { Entypo } from "@expo/vector-icons";
 import BrandsList from "@/app/BrandsList";
 import QueuePage from "@/app/QueuePage";
-import Missing from "@/app/[...missing]";
 
 const Tab = createBottomTabNavigator();
 
@@ -139,19 +133,6 @@ export default function AppEntry() {
               headerTitleAlign: "center",
             }}
           />
-          {/* <Tab.Screen
-            name="Missing"
-            component={Missing}
-            options={{
-              tabBarButton: () => null,
-              headerShown: false,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          /> */}
         </Tab.Navigator>
     </NavigationContainer>
   );

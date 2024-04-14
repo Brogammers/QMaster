@@ -16,25 +16,8 @@ export default function RootLayout() {
     IstokBold: require('../assets/fonts/static/IstokWeb-Bold.ttf'),
   });
 
-  const { session } = useAuth(); // Use useAuth to get the session
-
+  const { session } = useAuth(); 
   const [showLoading, setShowLoading] = useState(true);
-
-  // useEffect(() => {
-  //   if (error) throw error;
-
-  //   const timer = setTimeout(() => {
-  //     setShowLoading(false);
-  //   }, 5000);
-
-  //   return () => clearTimeout(timer);
-  // }, [error]);
-
-  // useEffect(() => {
-  //   if (session !== null && session !== undefined) {
-  //     setShowLoading(false);
-  //   }
-  // }, [session]);
 
   useEffect(() => {
     if (error) throw error;
@@ -68,7 +51,6 @@ function RootLayoutNav() {
           <Slot />
         </SessionProvider>
       </Provider>
-      {/* <QueuePage /> */}
     </GestureHandlerRootView>
   );
 }

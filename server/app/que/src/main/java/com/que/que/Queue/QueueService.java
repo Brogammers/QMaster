@@ -3,10 +3,13 @@ package com.que.que.Queue;
 import com.que.que.QRcode.QRCodeService;
 import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRepository;
+import com.que.que.User.SubscriptionPlans;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 
 import org.springframework.context.annotation.Configuration;
@@ -95,18 +98,18 @@ public class QueueService {
         .findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
     int queueId = appUserFromDB.getQueueId();
-    byte subscriptionPlan = appUserFromDB.getSubscriptionPlan();
+    SubscriptionPlans subscriptionPlan = appUserFromDB.getSubscriptionPlan();
     int max = 30;
 
-    // Current as placeholder 
+    // Current as placeholder
     switch (subscriptionPlan) {
-      case 0:
+      case SubscriptionPlans.BASIC:
         max = 1;
         break;
-      case 1:
+      case SubscriptionPlans.PREMIUM:
         max = 10;
         break;
-      case 2:
+      case SubscriptionPlans.ENTERPRISE:
         max = 20;
         break;
     }
@@ -141,15 +144,19 @@ public class QueueService {
     ArrayList<Queue<Long>> queueHolderQueues = queue.get(queueSlot);
     try {
       Queue<Long> specificQueue = queueHolderQueues.get(currentQueue.getSpecificSlot());
+      if (presentInQueue(appUser, specificQueue)) {
+        throw new IllegalStateException("User already in queue");
+      }
       specificQueue.add(appUser);
       currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() + 1);
     } catch (Exception e) {
-      throw new IllegalStateException("Could not add user to queue");
+      throw new IllegalStateException("Could not add user to queue: " + e.getMessage());
     }
     queueEnqueueRepository.save(
         new QueueEnqueue(
             user,
-            currentQueue));
+            currentQueue,
+            QueueEnqueueStatus.ENQUEUED));
     print();
   }
 
@@ -174,8 +181,17 @@ public class QueueService {
       AppUser nextUser = appUserRepository.findById(
           specificQueue.poll()).orElseThrow(() -> new IllegalStateException("Could not find user"));
       currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() - 1);
+
+      // Adjusting QueueEnqueue status
+      QueueEnqueue queueEnqueue = queueEnqueueRepository
+          .findByAppUserAndQueueAndQueueEnqueueStatus(nextUser, currentQueue, QueueEnqueueStatus.ENQUEUED)
+          .orElseThrow(() -> new IllegalStateException("Could not find user in queue"));
+
+      queueEnqueue.setQueueEnqueueStatus(QueueEnqueueStatus.BEING_SERVED);
+      queueEnqueueRepository.save(queueEnqueue);
+
       queueDequeueRepository
-          .save(new QueueDequeue(nextUser, currentQueue));
+          .save(new QueueDequeue(nextUser, currentQueue, QueueDequeueStatus.SERVED));
       return nextUser;
     } catch (Exception e) {
       print();
@@ -208,23 +224,80 @@ public class QueueService {
     print();
   }
 
-  public ArrayList<Queues> currentQueuesOfUser(long appUserId){
+  public ArrayList<Queues> currentQueuesOfUser(long appUserId) {
     ArrayList<Queues> currentQueues = new ArrayList<>();
-    for(int queueSlot = 0; queueSlot < queue.size(); queueSlot++){
+    for (int queueSlot = 0; queueSlot < queue.size(); queueSlot++) {
       ArrayList<Queue<Long>> list = queue.get(queueSlot);
 
       // If slot is empty in memory
-      if(list.equals(null))
+      if (list.equals(null))
         continue;
-      for(int specificSlot = 0; specificSlot < list.size(); specificSlot++){
+      for (int specificSlot = 0; specificSlot < list.size(); specificSlot++) {
         Queue<Long> tempQueue = list.get(specificSlot);
-        if(tempQueue.contains(appUserId)){
+        if (tempQueue.contains(appUserId)) {
           ArrayList<Queues> queueToBeAdded = queueRepository.findByQueueSlotAndSpecificSlot(queueSlot, specificSlot);
           currentQueues.add(queueToBeAdded.get(0));
         }
       }
     }
     return currentQueues;
+  }
+
+  public ArrayList<AppUser> getBeingServed(long appUserId) {
+    ArrayList<AppUser> appUsers = new ArrayList<>();
+    int slot = getQueueSlot(appUserId);
+    if (slot == -1) {
+      return appUsers;
+    }
+    ArrayList<Queues> queues = queueRepository.findByQueueSlot(slot);
+    for (Queues queue : queues) {
+      ArrayList<QueueEnqueue> queueEnqueues = queueEnqueueRepository.findByQueueAndQueueEnqueueStatus(queue,
+          QueueEnqueueStatus.BEING_SERVED);
+      for (QueueEnqueue queueEnqueue : queueEnqueues) {
+        appUsers.add(queueEnqueue.getAppUser());
+      }
+    }
+    return appUsers;
+  }
+
+  public ArrayList<QueueDequeue> getServedUsers(long appUserId, LocalDateTime to, LocalDateTime from)
+  {
+    ArrayList<QueueDequeue> queueDequeues = new ArrayList();
+    int slot = getQueueSlot(appUserId);
+    if (slot == -1)
+    {
+      return queueDequeues;
+    }
+    ArrayList<Queues> queues = queueRepository.findByQueueSlot(slot);
+    for (Queues queue : queues) 
+    {
+      ArrayList<QueueDequeue> queueDequeuesTemp = queueDequeueRepository.findByActionDateBetweenAndQueueAndQueueDequeueStatus(from, to, queue, QueueDequeueStatus.SERVED);
+      for (QueueDequeue queueDequeue: queueDequeuesTemp)
+      {
+        queueDequeues.add(queueDequeue);
+      }
+    }
+    return queueDequeues;
+  }
+
+  public ArrayList<QueueDequeue> getCancelledUsers(long appUserId, LocalDateTime to, LocalDateTime from)
+  {
+    ArrayList<QueueDequeue> queueDequeues = new ArrayList();
+    int slot = getQueueSlot(appUserId);
+    if (slot == -1)
+    {
+      return queueDequeues;
+    }
+    ArrayList<Queues> queues = queueRepository.findByQueueSlot(slot);
+    for (Queues queue : queues) 
+    {
+      ArrayList<QueueDequeue> queueDequeuesTemp = queueDequeueRepository.findByActionDateBetweenAndQueueAndQueueDequeueStatus(from, to, queue, QueueDequeueStatus.CANCELLED);
+      for (QueueDequeue queueDequeue: queueDequeuesTemp)
+      {
+        queueDequeues.add(queueDequeue);
+      }
+    }
+    return queueDequeues;
   }
 
   public void print() {
@@ -244,5 +317,14 @@ public class QueueService {
     Stack<Integer> temp = new Stack<>();
     initializeQueueSlots(temp);
     return temp;
+  }
+
+  public boolean presentInQueue(Long appUser, Queue<Long> queue) {
+    return queue.contains(appUser);
+  }
+
+  public int getWalkIns(Long appUserId, LocalDateTime from, LocalDateTime to) {
+    ArrayList<QueueEnqueue> walkIns = queueEnqueueRepository.findByActionDateBetweenAndAppUserId(from, to, appUserId);
+    return walkIns.size();
   }
 }

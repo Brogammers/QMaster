@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
+  View,
+  Text,
   StyleSheet,
   ScrollView,
   useWindowDimensions,
@@ -16,7 +18,6 @@ import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { AxiosResponse } from "axios";
 import { Skeleton } from "moti/skeleton";
-import { View, Text } from "@/components/Themed";
 import { HistoryList } from "@/constants";
 
 export default function History() {

@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import {
-  Platform,
-  StatusBar,
+  View,
+  Text,
   StyleSheet,
   ScrollView,
   useWindowDimensions,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { Skeleton } from "moti/skeleton";
 import HistoryComponent from "@/shared/components/HistoryComponent";
+import { HistoryComponentProps } from "@/types";
+import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
+
+import axios, { AxiosResponse } from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   API_BASE_URL_HISTORY_ANDROID,
   API_BASE_URL_HISTORY,
   BASE_URL,
 } from "@env";
-import { HistoryComponentProps } from "@/types";
-import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios, { AxiosResponse } from "axios";
-import { Skeleton } from "moti/skeleton";
-import { View, Text } from "@/components/Themed";
 
 export default function History() {
   const isFocused = useIsFocused();
@@ -99,7 +99,7 @@ export default function History() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {isLoading ? (
-        <View className="bg-off-white flex flex-col items-center justify-center">
+        <View className="flex flex-col items-center justify-center bg-off-white">
           {Array(8)
             .fill(0)
             .map((_, index) => (
@@ -116,10 +116,10 @@ export default function History() {
         </View>
       ) : historyList.length === 0 ? (
         <View
-          className="h-screen bg-off-white flex flex-col justify-center items-center"
+          className="flex flex-col items-center justify-center h-screen bg-off-white"
           // style={styles.noDataContainer}
         >
-          <Text className="text-coal-black text-lg font-bold">
+          <Text className="text-lg font-bold text-coal-black">
             No Data Found
           </Text>
           <Text className="text-coal-black text-md">

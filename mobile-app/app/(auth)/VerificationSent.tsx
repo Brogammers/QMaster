@@ -55,8 +55,8 @@ export default function VerificationSent() {
 const styles = StyleSheet.create({
   returnButton: {
     position: "absolute",
-    top: 60, // Adjust the top value as needed
-    left: 18, // Adjust the left value as needed
+    top: 60,
+    left: 18,
   },
   animatedLogo: {
     marginVertical: 40,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StatusBar, useWindowDimensions } from "react-native";
+import { Text, View, StatusBar } from "react-native";
 import AccountPageItems from "@/components/AccountPageItems";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AccountPageProfile from "@/components/AccountPageProfile";
