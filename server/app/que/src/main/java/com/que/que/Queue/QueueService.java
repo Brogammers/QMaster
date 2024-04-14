@@ -260,40 +260,34 @@ public class QueueService {
     return appUsers;
   }
 
-  public ArrayList<QueueDequeue> getServedUsers(long appUserId, LocalDateTime to, LocalDateTime from)
-  {
-    ArrayList<QueueDequeue> queueDequeues = new ArrayList();
+  public ArrayList<QueueDequeue> getServedUsers(long appUserId, LocalDateTime to, LocalDateTime from) {
+    ArrayList<QueueDequeue> queueDequeues = new ArrayList<>();
     int slot = getQueueSlot(appUserId);
-    if (slot == -1)
-    {
+    if (slot == -1) {
       return queueDequeues;
     }
     ArrayList<Queues> queues = queueRepository.findByQueueSlot(slot);
-    for (Queues queue : queues) 
-    {
-      ArrayList<QueueDequeue> queueDequeuesTemp = queueDequeueRepository.findByActionDateBetweenAndQueueAndQueueDequeueStatus(from, to, queue, QueueDequeueStatus.SERVED);
-      for (QueueDequeue queueDequeue: queueDequeuesTemp)
-      {
+    for (Queues queue : queues) {
+      ArrayList<QueueDequeue> queueDequeuesTemp = queueDequeueRepository
+          .findByActionDateBetweenAndQueueAndQueueDequeueStatus(from, to, queue, QueueDequeueStatus.SERVED);
+      for (QueueDequeue queueDequeue : queueDequeuesTemp) {
         queueDequeues.add(queueDequeue);
       }
     }
     return queueDequeues;
   }
 
-  public ArrayList<QueueDequeue> getCancelledUsers(long appUserId, LocalDateTime to, LocalDateTime from)
-  {
-    ArrayList<QueueDequeue> queueDequeues = new ArrayList();
+  public ArrayList<QueueDequeue> getCancelledUsers(long appUserId, LocalDateTime to, LocalDateTime from) {
+    ArrayList<QueueDequeue> queueDequeues = new ArrayList<>();
     int slot = getQueueSlot(appUserId);
-    if (slot == -1)
-    {
+    if (slot == -1) {
       return queueDequeues;
     }
     ArrayList<Queues> queues = queueRepository.findByQueueSlot(slot);
-    for (Queues queue : queues) 
-    {
-      ArrayList<QueueDequeue> queueDequeuesTemp = queueDequeueRepository.findByActionDateBetweenAndQueueAndQueueDequeueStatus(from, to, queue, QueueDequeueStatus.CANCELLED);
-      for (QueueDequeue queueDequeue: queueDequeuesTemp)
-      {
+    for (Queues queue : queues) {
+      ArrayList<QueueDequeue> queueDequeuesTemp = queueDequeueRepository
+          .findByActionDateBetweenAndQueueAndQueueDequeueStatus(from, to, queue, QueueDequeueStatus.CANCELLED);
+      for (QueueDequeue queueDequeue : queueDequeuesTemp) {
         queueDequeues.add(queueDequeue);
       }
     }
