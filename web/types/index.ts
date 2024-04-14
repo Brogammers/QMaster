@@ -6,6 +6,9 @@ export interface QueueModalProps {
   width?: string;
   children: ReactNode;
 }
+export interface onSelectedProps {
+  onItemSelected: any
+}
 
 export interface TextButtonProps {
   text: string;
@@ -26,4 +29,10 @@ export interface TicketNumberProps {
   borderRadius: string;
   width: string;
   ticketNum: string;
+}
+
+export interface DayFormProps { 
+  day: string, 
+  values: any, 
+  setFieldValue: any 
 }
