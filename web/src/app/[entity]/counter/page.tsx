@@ -86,7 +86,7 @@ export default function Counter() {
               {/* Tab panels for first row */}
               <TabPanel value={activeTab1}>
                 {/* Scrollable container for first row */}
-                <div className="w-full overflow-x-scroll flex">
+                <div className="w-full overflow-x-scroll flex gap-4">
                   {/* Render list of ticket/cards for the selected service */}
                   {filterTickets(tickets1, activeTab1).map((ticket, index) => (
                     <TicketNumber 
@@ -135,7 +135,7 @@ export default function Counter() {
               {/* Tab panels for second row */}
               <TabPanel value={activeTab2}>
                 {/* Scrollable container for second row */}
-                <div className="w-full overflow-x-scroll flex">
+                <div className="w-full overflow-x-scroll flex gap-4">
                   {/* Render list of ticket/cards for the selected service */}
                   {filterTickets(tickets2, activeTab2).map((ticket, index) => (
                     <TicketNumber 
