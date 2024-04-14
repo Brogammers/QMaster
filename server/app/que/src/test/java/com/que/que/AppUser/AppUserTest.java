@@ -6,6 +6,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRole;
+import com.que.que.User.SubscriptionPlans;
 
 import static org.junit.Assert.*;
 import java.util.Collection;
@@ -41,7 +42,7 @@ public class AppUserTest {
         appUser.setLocked(false);
         appUser.setEnabled(true);
         appUser.setQueueId(-1);
-        appUser.setSubscriptionPlan((byte) 1);
+        appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
         appUser.setLocation("New York, USA");
 
         // Verify values using getters
