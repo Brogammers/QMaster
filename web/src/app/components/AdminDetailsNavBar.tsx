@@ -32,16 +32,7 @@ export default function AdminDetailsNavBar({ onItemSelected }: onSelectedProps) 
             Opening Hours
           </CNavLink>
         </CNavItem>
-        <CNavItem>
-          <CNavLink
-            href="#"
-            style={{ color: activeLink === 'Settings' ? 'black' : 'grey' }}
-            onClick={() => handleClick('Settings')}
-          >
-            Settings
-          </CNavLink>
-        </CNavItem>
-        <CNavItem>
+        {/* <CNavItem>
           <CNavLink
             href="#"
             style={{ color: activeLink === 'Visitor Data' ? 'black' : 'grey' }}
@@ -49,7 +40,7 @@ export default function AdminDetailsNavBar({ onItemSelected }: onSelectedProps) 
           >
             Visitor Data
           </CNavLink>
-        </CNavItem>
+        </CNavItem> */}
         <CNavItem>
           <CNavLink
             href="#"
