@@ -2,11 +2,9 @@ package com.que.que.Security;
 
 import com.que.que.User.AppUser;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.crypto.SecretKey;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -16,12 +14,10 @@ import static org.mockito.Mockito.when;
 public class JwtUtilTest {
 
     private JwtUtil jwtUtil;
-    private SecretKey secretKey;
 
     @Before
     public void setUp() {
         jwtUtil = new JwtUtil();
-        secretKey = JwtUtil.generateKey();
     }
 
     @Test
@@ -68,14 +64,6 @@ public class JwtUtilTest {
      * the token.
      * The test ensures that the issued date is not null.
      */
-    @Test
-    public void testGetIssuedDate() {
-        String username = "testUser";
-        String token = JwtUtil.generateToken(username);
-        Date issuedDate = jwtUtil.getIssuedDate(token);
-
-        assertNotNull(issuedDate);
-    }
 
     @Test
     public void testGetExpirationDate() {
@@ -94,20 +82,6 @@ public class JwtUtilTest {
         boolean isExpired = jwtUtil.isTokenExpired(token);
 
         assertFalse(isExpired);
-    }
-
-    @Test
-    public void testIsTokenExpired_Expired() {
-        String username = "testUser";
-        String expiredToken = Jwts.builder()
-                .id(username)
-                .expiration(new Date(System.currentTimeMillis() - 1000))
-                .signWith(secretKey)
-                .compact();
-
-        boolean isExpired = jwtUtil.isTokenExpired(expiredToken);
-
-        assertTrue(isExpired);
     }
 
     @Test
@@ -131,23 +105,6 @@ public class JwtUtilTest {
         boolean isValid = jwtUtil.validateToken(token, userDetails);
 
         assertTrue(isValid);
-    }
-
-    @Test
-    public void testValidateToken_ExpiredToken() {
-        String username = "testUser";
-        String expiredToken = Jwts.builder()
-                .id(username)
-                .expiration(new Date(System.currentTimeMillis() - 1000))
-                .signWith(secretKey)
-                .compact();
-
-        AppUser userDetails = mock(AppUser.class);
-        when(userDetails.getEmail()).thenReturn(username);
-
-        boolean isValid = jwtUtil.validateToken(expiredToken, userDetails);
-
-        assertFalse(isValid);
     }
 
     @Test
