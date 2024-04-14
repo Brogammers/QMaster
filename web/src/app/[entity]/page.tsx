@@ -31,10 +31,10 @@ export default function Entity({ children }: QueueModalProps) {
   }
 
   return (
-    <Layout className="w-full min-h-screen">
+    <Layout className="custom w-full min-h-screen">
       <Sidebar />
-      <Layout className="bg-coal-black">
-        <Content className="container w-full text-white mx-4">
+      <Layout className="custom bg-coal-black">
+        <Content className="container custom w-full text-white mx-0">
           <div className="row site-layout-background">
             <h2 className="text-xl border-b-2 border-b-slight-slate-grey mb-4 py-3">
               {entity}&apos;s Coworking Space &gt; {page}

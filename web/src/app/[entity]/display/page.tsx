@@ -73,6 +73,7 @@ export default function Display() {
                 fontSize="3xl"
                 borderRadius="none"
                 width="full"
+                maxWidth="16"
                 ticketNum={person.ticketNumber}
               />
             ))}

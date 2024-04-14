@@ -24,7 +24,14 @@ export default function Counter() {
   const tickets2 = useMemo(() => [
     { id: 1, ticketNumber: 'C-126', service: 'Customer Service' },
     { id: 2, ticketNumber: 'C-127', service: 'Customer Service' },
-    { id: 3, ticketNumber: 'C-125', service: 'New Customer' }
+    { id: 3, ticketNumber: 'C-125', service: 'New Customer' },
+    { id: 4, ticketNumber: 'C-435', service: 'New Customer' },
+    { id: 5, ticketNumber: 'C-450', service: 'New Customer' },
+    { id: 6, ticketNumber: 'C-455', service: 'Customer Service' },
+    { id: 7, ticketNumber: 'C-460', service: 'Customer Service' },
+    { id: 8, ticketNumber: 'C-670', service: 'New Customer' },
+    { id: 9, ticketNumber: 'C-677', service: 'New Customer' },
+    { id: 10, ticketNumber: 'C-790', service: 'New Customer' },
     // Add more ticket data as needed
   ], []);
 
@@ -86,7 +93,7 @@ export default function Counter() {
               {/* Tab panels for first row */}
               <TabPanel value={activeTab1}>
                 {/* Scrollable container for first row */}
-                <div className="w-full overflow-x-scroll flex gap-4">
+                <div className="counter__scrollbar w-full overflow-x-scroll flex gap-4">
                   {/* Render list of ticket/cards for the selected service */}
                   {filterTickets(tickets1, activeTab1).map((ticket, index) => (
                     <TicketNumber 
@@ -97,6 +104,7 @@ export default function Counter() {
                       fontSize="3xl"
                       borderRadius="md"
                       width="6"
+                      maxWidth="16"
                       queue={ticket.service}
                       ticketNum={ticket.ticketNumber}
                     />
@@ -111,6 +119,7 @@ export default function Counter() {
                       fontSize="lg"
                       borderRadius="md"
                       width="6"
+                      maxWidth="16"
                     />
                   )}
                 </div>
@@ -135,7 +144,7 @@ export default function Counter() {
               {/* Tab panels for second row */}
               <TabPanel value={activeTab2}>
                 {/* Scrollable container for second row */}
-                <div className="w-full overflow-x-scroll flex gap-4">
+                <div className="counter__scrollbar w-full overflow-x-scroll flex gap-4">
                   {/* Render list of ticket/cards for the selected service */}
                   {filterTickets(tickets2, activeTab2).map((ticket, index) => (
                     <TicketNumber 
@@ -146,6 +155,7 @@ export default function Counter() {
                       fontSize="3xl"
                       borderRadius="md"
                       width="6"
+                      maxWidth="16"
                       queue={ticket.service}
                       ticketNum={ticket.ticketNumber}
                     />
@@ -160,6 +170,7 @@ export default function Counter() {
                       fontSize="lg"
                       borderRadius="md"
                       width="6"
+                      maxWidth="16"
                     />
                   )}
                 </div>

@@ -1,12 +1,13 @@
 import { TicketNumberProps } from "../../../types";
 
-export default function TicketNumber({ bgColor, textColor, fontSize, borderRadius, width, ticketNum, queue, height, active }: TicketNumberProps) {
+export default function TicketNumber({ bgColor, textColor, fontSize, borderRadius, width, ticketNum, queue, maxWidth }: TicketNumberProps) {
   return (
-    <div className={`bg-${bgColor} text-${textColor} rounded-${borderRadius} text-center font-bold w-${width}} py-16 ${height && `h-${height}`} flex flex-col justify-center items-center gap-4`}>
-      <span className={`text-${fontSize}`}>
+    <div className={`bg-${bgColor} text-${textColor} rounded-${borderRadius} text-center font-bold ${width && `w-${width}`} ${maxWidth && `max-w-${maxWidth}`} h-6} px-0 py-16 flex flex-col justify-center items-center gap-4`}>
+      <span className={`text-${fontSize} mx-24 hyphens-none`}>
         { ticketNum }
       </span>
-      {queue && <span className="text-sm bg-baby-blue text-white rounded-md p-1">{ queue } </span>}
+      {queue && <span className="text-sm bg-baby-blue text-white rounded-md px-2 py-1">{ queue }</span>}
     </div>
   );
 };
+

@@ -26,6 +26,7 @@ export interface TicketNumberProps {
   borderRadius: string;
   width: string;
   ticketNum: string;
+  maxWidth: string;
   queue?: string;
   height?: string;
   active?: boolean;
