@@ -62,12 +62,20 @@ export default function Counter() {
     calculateVisibleTickets(tickets2, setVisibleTickets2, setRemainingCount2);
   }, [tickets1, tickets2]);
 
+  const calculateRemainingCount = (filteredTickets: any[], maxTickets: number) => {
+    return Math.max(filteredTickets.length - maxTickets, 0);
+  };
+
   const handleServingChange = (event: React.SyntheticEvent, newValue: string) => {
     setActiveTab1(newValue);
+    const filteredTickets = filterTickets(tickets1, newValue);
+    setRemainingCount1(calculateRemainingCount(filteredTickets, MAX_TICKETS));
   };
 
   const handleWaitingChange = (event: React.SyntheticEvent, newValue: string) => {
     setActiveTab2(newValue);
+    const filteredTickets = filterTickets(tickets2, newValue);
+    setRemainingCount2(calculateRemainingCount(filteredTickets, MAX_TICKETS));
   };
 
   const filterTickets = (tickets: any[], tabValue: string) => {
@@ -131,7 +139,7 @@ export default function Counter() {
                   {tickets1.length > MAX_TICKETS && (
                     <TicketNumber
                       key="overflow"
-                      ticketNum={`${tickets1.length - MAX_TICKETS}+`}
+                      ticketNum={`${remainingCount1}+`}
                       queue="others being served"
                       bgColor="white"
                       textColor="black"
@@ -183,9 +191,9 @@ export default function Counter() {
                   {tickets2.length > MAX_TICKETS && (
                     <TicketNumber
                       key="overflow"
-                      ticketNum={`${tickets2.length - MAX_TICKETS}+`}
+                      ticketNum={`${remainingCount2}+`}
                       queue="others waiting in queue"
-                      bgColor="white"
+                      bgColor="baby-blue"
                       textColor="black"
                       fontSize="3xl"
                       borderRadius="md"
