@@ -12,8 +12,10 @@ export default function Counter() {
   const [activeTab2, setActiveTab2] = useState<string>('0');
   const [visibleTickets1, setVisibleTickets1] = useState<any[]>([]);
   const [visibleTickets2, setVisibleTickets2] = useState<any[]>([]);
+  const [remainingCount1, setRemainingCount1] = useState<number>(0);
+  const [remainingCount2, setRemainingCount2] = useState<number>(0);
 
-  const MAX_TICKETS = 5;
+  const MAX_TICKETS = 3;
 
   const tickets1 = useMemo(() => [
     { id: 1, ticketNumber: 'C-123', service: 'Customer Service' },
@@ -32,11 +34,12 @@ export default function Counter() {
     { id: 8, ticketNumber: 'C-670', service: 'New Customer' },
     { id: 9, ticketNumber: 'C-677', service: 'New Customer' },
     { id: 10, ticketNumber: 'C-790', service: 'New Customer' },
+    { id: 11, ticketNumber: 'C-799', service: 'New Customer' },
     // Add more ticket data as needed
   ], []);
 
   useEffect(() => {
-    const calculateVisibleTickets = (tickets: any[], setTickets: Function) => {
+    const calculateVisibleTickets = (tickets: any[], setTickets: Function, setRemainingCount: Function) => {
       let totalWidth = 0;
       let visibleTickets: any[] = [];
 
@@ -47,6 +50,7 @@ export default function Counter() {
         } else {
           const overflowCount = tickets.length - visibleTickets.length;
           visibleTickets.push({ id: 'overflow', ticketNumber: `${overflowCount}+` });
+          setRemainingCount(overflowCount);
           break;
         }
       }
@@ -54,8 +58,8 @@ export default function Counter() {
       setTickets(visibleTickets);
     };
 
-    calculateVisibleTickets(tickets1, setVisibleTickets1);
-    calculateVisibleTickets(tickets2, setVisibleTickets2);
+    calculateVisibleTickets(tickets1, setVisibleTickets1, setRemainingCount1);
+    calculateVisibleTickets(tickets2, setVisibleTickets2, setRemainingCount2);
   }, [tickets1, tickets2]);
 
   const handleServingChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -106,7 +110,7 @@ export default function Counter() {
               </Box>
 
               {/* Tab panels for first row */}
-              <TabPanel value={activeTab1}>
+              <TabPanel className="px-0" value={activeTab1}>
                 {/* Scrollable container for first row */}
                 <div className="counter__scrollbar w-full overflow-x-scroll flex gap-4">
                   {/* Render list of ticket/cards for the selected service */}
@@ -124,14 +128,24 @@ export default function Counter() {
                       ticketNum={ticket.ticketNumber}
                     />
                   ))}
+                  <TicketNumber
+                    bgColor="transparent"
+                    textColor="white"
+                    fontSize="3xl"
+                    borderRadius='md'
+                    width="6"
+                    maxWidth="16"
+                    ticketNum="+"
+                  />
                   {/* Display overflow ticket if needed */}
                   {tickets1.length > MAX_TICKETS && (
                     <TicketNumber
                       key="overflow"
                       ticketNum={`${tickets1.length - MAX_TICKETS}+`}
+                      queue="others being served"
                       bgColor="white"
                       textColor="black"
-                      fontSize="lg"
+                      fontSize="3xl"
                       borderRadius="md"
                       width="6"
                       maxWidth="16"
@@ -157,11 +171,11 @@ export default function Counter() {
               </Box>
 
               {/* Tab panels for second row */}
-              <TabPanel value={activeTab2}>
+              <TabPanel className="px-0" value={activeTab2}>
                 {/* Scrollable container for second row */}
                 <div className="counter__scrollbar w-full overflow-x-scroll flex gap-4">
                   {/* Render list of ticket/cards for the selected service */}
-                  {filterTickets(tickets2, activeTab2).map((ticket, index) => (
+                  {filterTickets(tickets2, activeTab2).slice(0, 3).map((ticket, index) => (
                     <TicketNumber 
                       key={ticket.id} 
                       active={index === parseInt(activeTab2)}
@@ -180,9 +194,10 @@ export default function Counter() {
                     <TicketNumber
                       key="overflow"
                       ticketNum={`${tickets2.length - MAX_TICKETS}+`}
+                      queue="others waiting in queue"
                       bgColor="white"
                       textColor="black"
-                      fontSize="lg"
+                      fontSize="3xl"
                       borderRadius="md"
                       width="6"
                       maxWidth="16"
