@@ -30,6 +30,9 @@ public class QueueService {
   private final QRCodeService qrCodeService;
   private final ArrayList<ArrayList<Queue<Long>>> queue = queue();
   private final Stack<Integer> queueSlots = stack();
+  public final int MAX_BASIC_QUEUES = 1;
+  public final int MAX_PREMIUM_QUEUES = 10;
+  public final int MAX_ENTERPRISE_QUEUES = 20;
 
   // Function called once upon server startup
   public void initializeQueueSlots(Stack<Integer> temp) {
@@ -99,18 +102,18 @@ public class QueueService {
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
     int queueId = appUserFromDB.getQueueId();
     SubscriptionPlans subscriptionPlan = appUserFromDB.getSubscriptionPlan();
-    int max = 30;
+    int max = 1;
 
     // Current as placeholder
     switch (subscriptionPlan) {
       case SubscriptionPlans.BASIC:
-        max = 1;
+        max = MAX_BASIC_QUEUES;
         break;
       case SubscriptionPlans.PREMIUM:
-        max = 10;
+        max = MAX_PREMIUM_QUEUES;
         break;
       case SubscriptionPlans.ENTERPRISE:
-        max = 20;
+        max = MAX_ENTERPRISE_QUEUES;
         break;
     }
     int currsize = queueId == -1 ? 0 : queue.get(queueId).size();
