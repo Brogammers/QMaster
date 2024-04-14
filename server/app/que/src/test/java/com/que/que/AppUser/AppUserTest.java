@@ -61,7 +61,7 @@ public class AppUserTest {
         assertFalse(appUser.isLocked());
         assertTrue(appUser.isEnabled());
         assertEquals(-1, appUser.getQueueId());
-        assertEquals((byte) 1, appUser.getSubscriptionPlan());
+        assertEquals(SubscriptionPlans.BASIC, appUser.getSubscriptionPlan());
         assertEquals("New York, USA", appUser.getLocation());
     }
 
