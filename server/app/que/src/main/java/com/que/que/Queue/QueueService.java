@@ -33,6 +33,7 @@ public class QueueService {
   public final int MAX_BASIC_QUEUES = 1;
   public final int MAX_PREMIUM_QUEUES = 10;
   public final int MAX_ENTERPRISE_QUEUES = 20;
+  public final int MAX_QUEUE_SIZE = 100;
 
   // Function called once upon server startup
   public void initializeQueueSlots(Stack<Integer> temp) {

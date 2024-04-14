@@ -301,4 +301,26 @@ public class QueueServiceTest {
         // Assert
         // Expects IllegalStateException to be thrown
     }
+
+    @Test(expected = IllegalStateException.class, timeout = 5000)
+    public void testMaxQueueSize() {
+        // Arrange
+        AppUser[] appUsers = new AppUser[queueService.MAX_QUEUE_SIZE];
+        Long appUserId = 1L;
+        String queueName = "TestQueue";
+        AppUser appUser = new AppUser();
+        appUser.setId(appUserId);
+        appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
+        appUser.setQueueId(-1);
+        when(appUserRepository.findById(appUserId)).thenReturn(Optional.of(appUser));
+
+        queueService.createNewQueue(appUserId, queueName);
+
+        // Act
+        for (int i = 0; i < queueService.MAX_QUEUE_SIZE; i++)
+            queueService.enqueueUser(appUserId, queueName);
+
+        // Assert
+        // Expects IllegalStateException to be thrown
+    }
 }
