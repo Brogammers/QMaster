@@ -71,26 +71,16 @@ export default function Counter() {
   };
 
   const filterTickets = (tickets: any[], tabValue: string) => {
-    // Extract unique service names from the tickets data
-    const services = Array.from(new Set(tickets.map(ticket => ticket.service)));
-  
-    // Create filter conditions dynamically based on the unique service names
-    const filterConditions: { [key: string]: (ticket: any) => boolean } = {};
-    services.forEach((service, index) => {
-      filterConditions[index.toString()] = (ticket) => ticket.service === service;
-    });
-  
-    // Add a catch-all condition to return all tickets for tab value '0'
-    filterConditions['0'] = () => true;
-  
     // Apply the appropriate filter condition based on the tab value
-    const filterCondition = filterConditions[tabValue];
-    if (filterCondition) {
-      return tickets.filter(filterCondition);
+    if (tabValue === '0') {
+        // Return all tickets for tab value '0'
+        return tickets;
     } else {
-      return [];
+        // Filter tickets based on the selected service category
+        return tickets.filter(ticket => ticket.service === tabValue);
     }
-  };
+};
+
   
 
   return (
@@ -103,8 +93,8 @@ export default function Counter() {
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList onChange={handleServingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
                   <Tab label="All servings" value="0" />
-                  <Tab label="Customer Service" value="1" />
-                  <Tab label="New Customer" value="2" />
+                  <Tab label="New Customer" value="New Customer" />
+                  <Tab label="Customer Service" value="Customer Service" />
                   {/* Add more tabs as needed */}
                 </TabList>
               </Box>
@@ -164,8 +154,8 @@ export default function Counter() {
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList onChange={handleWaitingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
                   <Tab label="All queues" value="0" />
-                  <Tab label="Customer Service" value="1" />
-                  <Tab label="New Customer" value="2" />
+                  <Tab label="New Customer" value="New Customer" />
+                  <Tab label="Customer Service" value="Customer Service" />
                   {/* Add more tabs as needed */}
                 </TabList>
               </Box>
