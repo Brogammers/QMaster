@@ -303,22 +303,66 @@ public class QueueServiceTest {
     }
 
     @Test(expected = IllegalStateException.class, timeout = 5000)
-    public void testMaxQueueSize() {
+    public void testMaxQueueSize_Fail() {
+        // Arrange
+        AppUser[] appUsers = new AppUser[queueService.MAX_QUEUE_SIZE + 1];
+        String queueName = "TestQueue";
+        for (int i = 1; i < queueService.MAX_QUEUE_SIZE + 2; i++) {
+            AppUser appUser = new AppUser();
+            Long appUserId = (long) i;
+            appUser.setId(appUserId);
+            appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
+            appUser.setQueueId(-1);
+            appUsers[i - 1] = appUser;
+        }
+
+        for (int i = 0; i < queueService.MAX_QUEUE_SIZE + 1; i++) {
+            when(appUserRepository.findById((long) i + 1)).thenReturn(Optional.of(appUsers[i]));
+        }
+
+        queueService.createNewQueue(1L, queueName);
+
+        Queues queues = new Queues();
+        queues.setCreator(appUsers[0]);
+        queues.setName(queueName);
+        when(queueRepository.findByName(queueName)).thenReturn(Optional.of(queues));
+        // Act
+        for (int i = 0; i < queueService.MAX_QUEUE_SIZE + 1; i++) {
+            queueService.enqueueUser((long) (i + 1), queueName);
+        }
+
+        // Assert
+        // Expects IllegalStateException to be thrown
+    }
+
+    @Test(timeout = 5000)
+    public void testMaxQueueSize_Succeed() {
         // Arrange
         AppUser[] appUsers = new AppUser[queueService.MAX_QUEUE_SIZE];
-        Long appUserId = 1L;
         String queueName = "TestQueue";
-        AppUser appUser = new AppUser();
-        appUser.setId(appUserId);
-        appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
-        appUser.setQueueId(-1);
-        when(appUserRepository.findById(appUserId)).thenReturn(Optional.of(appUser));
+        for (int i = 1; i < queueService.MAX_QUEUE_SIZE + 1; i++) {
+            AppUser appUser = new AppUser();
+            Long appUserId = (long) i;
+            appUser.setId(appUserId);
+            appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
+            appUser.setQueueId(-1);
+            appUsers[i - 1] = appUser;
+        }
 
-        queueService.createNewQueue(appUserId, queueName);
+        for (int i = 0; i < queueService.MAX_QUEUE_SIZE; i++) {
+            when(appUserRepository.findById((long) i + 1)).thenReturn(Optional.of(appUsers[i]));
+        }
 
+        queueService.createNewQueue(1L, queueName);
+
+        Queues queues = new Queues();
+        queues.setCreator(appUsers[0]);
+        queues.setName(queueName);
+        when(queueRepository.findByName(queueName)).thenReturn(Optional.of(queues));
         // Act
-        for (int i = 0; i < queueService.MAX_QUEUE_SIZE; i++)
-            queueService.enqueueUser(appUserId, queueName);
+        for (int i = 0; i < queueService.MAX_QUEUE_SIZE; i++) {
+            queueService.enqueueUser((long) (i + 1), queueName);
+        }
 
         // Assert
         // Expects IllegalStateException to be thrown
