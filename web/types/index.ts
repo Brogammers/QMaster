@@ -30,3 +30,9 @@ export interface TicketNumberProps {
   width: string;
   ticketNum: string;
 }
+
+export interface DayFormProps { 
+  day: string, 
+  values: any, 
+  setFieldValue: any 
+}
