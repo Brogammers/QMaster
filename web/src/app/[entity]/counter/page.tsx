@@ -162,8 +162,8 @@ export default function Counter() {
                       key="overflow"
                       ticketNum={`${overflowCount1}+`}
                       queue="others being served"
-                      bgColor="white"
-                      textColor="black"
+                      bgColor="baby-blue"
+                      textColor="white"
                       fontSize="3xl"
                       borderRadius="md"
                       width="6"
@@ -209,8 +209,8 @@ export default function Counter() {
                       key="overflow"
                       ticketNum={`${overflowCount2}+`}
                       queue="others waiting in queue"
-                      bgColor="white"
-                      textColor="black"
+                      bgColor="baby-blue"
+                      textColor="white"
                       fontSize="3xl"
                       borderRadius="md"
                       width="6"
