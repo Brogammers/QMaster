@@ -105,7 +105,7 @@ export default function Counter() {
     // Set initial overflow count
     setOverflowCount1(initialOverflowCount1);
     setOverflowCount2(initialOverflowCount2);
-  }, [tickets1, tickets2]);
+  }, [tickets1, tickets2, MAX_TICKETS]);
 
   // Update overflow count whenever filtering logic changes
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function Counter() {
     // Update overflow count state
     setOverflowCount1(overflowCount1);
     setOverflowCount2(overflowCount2);
-  }, [tickets1, tickets2, activeTab1, activeTab2]);
+  }, [tickets1, tickets2, activeTab1, activeTab2, MAX_TICKETS]);
 
   return (
     <Entity>
