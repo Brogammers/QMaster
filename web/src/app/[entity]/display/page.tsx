@@ -81,7 +81,7 @@ export default function Display() {
         </div>
       ) : (
       <Entity>
-        <QueueModal width="w-1/2">
+        <QueueModal width="w-full">
           <div className="px-56 text-center flex flex-col justify-center items-center gap-8">
             <Image
               src={DisplayImg}

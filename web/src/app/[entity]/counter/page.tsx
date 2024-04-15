@@ -6,6 +6,8 @@ import { Tab } from '@mui/material';
 import { TabPanel, TabList, TabContext } from '@mui/lab';
 import TicketNumber from '@/app/shared/TicketNumber';
 import Entity from '../page';
+import useWindowSize from '../../../../hooks/useWindowSize';
+
 
 export default function Counter() {
   const [activeTab1, setActiveTab1] = useState<string>('0');
@@ -14,7 +16,9 @@ export default function Counter() {
   const [visibleTickets2, setVisibleTickets2] = useState<any[]>([]);
   const [remainingCount1, setRemainingCount1] = useState<number>(0);
   const [remainingCount2, setRemainingCount2] = useState<number>(0);
-  const MAX_TICKETS = 3;
+  
+  const width = useWindowSize().width;
+  const MAX_TICKETS = width > 1500 ? 4 : 3;
 
   const tickets1 = useMemo(() => [
     { id: 1, ticketNumber: 'C-123', service: 'Customer Service' },
@@ -191,7 +195,7 @@ export default function Counter() {
 
               <TabPanel className="px-0" value={activeTab2}>
                 <div className="counter__scrollbar w-full overflow-x-scroll flex gap-4">
-                  {filterTickets(tickets2, activeTab2).slice(0, 3).map((ticket, index) => (
+                  {filterTickets(tickets2, activeTab2).slice(0, MAX_TICKETS).map((ticket, index) => (
                     <TicketNumber 
                       key={ticket.id} 
                       active={index === parseInt(activeTab2)}
