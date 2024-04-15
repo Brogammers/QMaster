@@ -122,9 +122,9 @@ export default function Counter() {
       <div className="flex flex-col justify-start gap-16">
         <div>
           <h3>Serving</h3>
-          <Box sx={{ width: '100%', typography: 'body1' }}>
+          <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
             <TabContext value={activeTab1}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList onChange={handleServingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
                   <Tab label="All servings" value="0" />
                   <Tab label="Customer Service" value="Customer Service" />
@@ -138,10 +138,10 @@ export default function Counter() {
                     <TicketNumber 
                       key={ticket.id} 
                       active={index === parseInt(activeTab1)}
-                      bgColor="white"
-                      textColor="black"
+                      bgColor="ocean-blue"
+                      textColor="white"
                       fontSize="3xl"
-                      borderRadius="md"
+                      borderRadius="xl"
                       width="6"
                       maxWidth="16"
                       queue={ticket.service}
@@ -149,23 +149,24 @@ export default function Counter() {
                     />
                   ))}
                   <TicketNumber
-                    bgColor="transparent"
-                    textColor="white"
+                    bgColor="coal-black"
+                    textColor="ocean-blue"
                     fontSize="3xl"
-                    borderRadius='md'
+                    borderRadius='xl'
                     width="6"
                     maxWidth="16"
                     ticketNum="+"
+                    labelPadding="10"
                   />
                   {tickets1.length > MAX_TICKETS && (
                     <TicketNumber
                       key="overflow"
                       ticketNum={`${overflowCount1}+`}
                       queue="others being served"
-                      bgColor="baby-blue"
-                      textColor="white"
+                      bgColor="coal-black"
+                      textColor="ocean-blue"
                       fontSize="3xl"
-                      borderRadius="md"
+                      borderRadius="xl"
                       width="6"
                       maxWidth="16"
                     />
@@ -178,7 +179,7 @@ export default function Counter() {
 
         <div>
           <h3>In waiting line</h3>
-          <Box sx={{ width: '100%', typography: 'body1' }}>
+          <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
             <TabContext value={activeTab2}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList onChange={handleWaitingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
@@ -194,10 +195,10 @@ export default function Counter() {
                     <TicketNumber 
                       key={ticket.id} 
                       active={index === parseInt(activeTab2)}
-                      bgColor="white"
-                      textColor="black"
+                      bgColor="ocean-blue"
+                      textColor="white"
                       fontSize="3xl"
-                      borderRadius="md"
+                      borderRadius="xl"
                       width="6"
                       maxWidth="16"
                       queue={ticket.service}
@@ -212,9 +213,10 @@ export default function Counter() {
                       bgColor="baby-blue"
                       textColor="white"
                       fontSize="3xl"
-                      borderRadius="md"
+                      borderRadius="xl"
                       width="6"
                       maxWidth="16"
+                      labelPadding="4"
                     />
                   )}
                 </div>

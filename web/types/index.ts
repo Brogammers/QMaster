@@ -30,4 +30,5 @@ export interface TicketNumberProps {
   queue?: string;
   height?: string;
   active?: boolean;
+  labelPadding?: string;
 }
