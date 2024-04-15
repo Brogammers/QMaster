@@ -125,7 +125,7 @@ export default function Counter() {
     <Entity>
       <div className="flex flex-col justify-start gap-16">
         <div>
-          <h3>Serving</h3>
+          <h2>Serving</h2>
           <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
             <TabContext value={activeTab1}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -182,7 +182,7 @@ export default function Counter() {
         </div>
 
         <div>
-          <h3>In waiting line</h3>
+          <h2>In waiting line</h2>
           <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
             <TabContext value={activeTab2}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
