@@ -7,6 +7,7 @@ import { TabPanel, TabList, TabContext } from '@mui/lab';
 import TicketNumber from '@/app/shared/TicketNumber';
 import Entity from '../page';
 import useWindowSize from '../../../../hooks/useWindowSize';
+import TextButton from '@/app/shared/TextButton';
 
 
 export default function Counter() {
@@ -120,6 +121,15 @@ export default function Counter() {
     setOverflowCount1(overflowCount1);
     setOverflowCount2(overflowCount2);
   }, [tickets1, tickets2, activeTab1, activeTab2, MAX_TICKETS]);
+
+  const handleTicketButtonClick = (ticketNumber: string) => {
+    // Handle ticket button click based on the queue type
+    if (activeTab1 === "Customer Service") {
+      // Logic for "serving" row
+    } else if (activeTab2 === "others waiting in queue") {
+      // Logic for "waiting in line" row
+    }
+  };
 
   return (
     <Entity>
