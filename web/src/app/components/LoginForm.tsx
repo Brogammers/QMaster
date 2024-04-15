@@ -27,7 +27,8 @@ export default function LoginForm() {
     return username;
   }
 
-  const handleLogin = async (values: { email: string; password: string }) => {
+  // const handleLogin = (values: { email: string; password: string }) => {
+  const handleLogin = () => {
     // try {
     //   const response = await signInWithEmailAndPassword(
     //     auth,
@@ -45,6 +46,7 @@ export default function LoginForm() {
     //   );
     // }
     console.log("Logging in...");
+    router.push("/qmaster/counter")
   };
 
   return (
@@ -106,6 +108,7 @@ export default function LoginForm() {
             <button
               type="submit"
               className="rounded-xl bg-[#1DCDFE] text-white text-xl font-semibold w-full px-8 py-4 mt-2"
+              onClick={handleLogin}
             >
               Submit
             </button>
