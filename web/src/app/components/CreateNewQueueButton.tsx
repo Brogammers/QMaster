@@ -30,11 +30,12 @@ export default function CreateNewQueueButton() {
     <div>
       <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={showModal}>Create New Queue</button>
       <Modal
-        title="Title"
+        title="Cteate New Queue"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
+        footer={null}
       >
         <NewQueueForm />
       </Modal>
