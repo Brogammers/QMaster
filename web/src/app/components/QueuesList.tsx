@@ -6,9 +6,8 @@ import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical, faUsers } from '@fortawesome/free-solid-svg-icons';
 
-export default function QueuesList() {
+export default function QueuesList({ queues, setQueues }: { queues: any[], setQueues: React.Dispatch<React.SetStateAction<any[]>> }) {
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
-  const [queues, setQueues] = useState(QueuesData);
   
   
   const toggleMenu = (index: any) => {
