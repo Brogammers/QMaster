@@ -7,6 +7,7 @@ import QueuesList from "@/app/components/QueuesList";
 import { useState } from "react";
 
 
+
 export default function Queues() {
   const initialQueueData = [
     ...QueuesData

@@ -5,6 +5,7 @@ import QueueBuilderIllustration from '../../../public/QueueBuilder.svg'
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical, faUsers } from '@fortawesome/free-solid-svg-icons';
+import CreateNewQueueButton from './CreateNewQueueButton';
 
 export default function QueuesList({ queues, setQueues }: { queues: any[], setQueues: React.Dispatch<React.SetStateAction<any[]>> }) {
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
@@ -26,7 +27,7 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
 
   return (
     <div className='w-full'>
-      <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Create New Queue</button>
+      <CreateNewQueueButton />
       <div className=' w-full grid grid-cols-2 gap-4 mt-4 '>
         {queues.map((queue, index) => (
           <div key={index} className='w-[415px] h-[305px] bg- flex-shrink-0 rounded-xl p-4 bg-gray-700'>
