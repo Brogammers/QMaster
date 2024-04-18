@@ -17,17 +17,12 @@ export default function Counter() {
   const [visibleTickets2, setVisibleTickets2] = useState<any[]>([]);
   const [remainingCount1, setRemainingCount1] = useState<number>(0);
   const [remainingCount2, setRemainingCount2] = useState<number>(0);
-  
-  const width = useWindowSize().width;
-  const MAX_TICKETS = width > 1400 ? 4 : 3;
-
-  const tickets1 = useMemo(() => [
+  const [tickets1, setTickets1] = useState<any[]>([
     { id: 1, ticketNumber: 'C-123', service: 'Customer Service' },
     { id: 2, ticketNumber: 'C-124', service: 'New Customer' },
     // Add more ticket data as needed
-  ], []);
-
-  const tickets2 = useMemo(() => [
+  ]);
+  const [tickets2, setTickets2] = useState<any[]>([
     { id: 1, ticketNumber: 'C-126', service: 'Customer Service' },
     { id: 2, ticketNumber: 'C-127', service: 'Customer Service' },
     { id: 3, ticketNumber: 'C-125', service: 'New Customer' },
@@ -40,7 +35,10 @@ export default function Counter() {
     { id: 10, ticketNumber: 'C-790', service: 'New Customer' },
     { id: 11, ticketNumber: 'C-799', service: 'New Customer' },
     // Add more ticket data as needed
-  ], []);
+  ]);
+  
+  const width = useWindowSize().width;
+  const MAX_TICKETS = width > 1400 ? 4 : 3;
 
   useEffect(() => {
     const calculateVisibleTickets = (tickets: any[], setTickets: Function, setRemainingCount: Function) => {
@@ -131,6 +129,25 @@ export default function Counter() {
     }
   };
 
+  const handleAddTicket = () => {
+    // Check if there are tickets in the waiting line (tickets2)
+    if (tickets2.length > 0) {
+      // Get the first ticket from tickets2
+      const ticketToAdd = tickets2[0];
+  
+      // Remove the first ticket from tickets2
+      const updatedTickets2 = tickets2.slice(1);
+  
+      // Add the ticket to the beginning of tickets1
+      const updatedTickets1 = [...tickets1, ticketToAdd];
+  
+      // Update the state with the modified ticket arrays
+      setTickets1(updatedTickets1);
+      setTickets2(updatedTickets2);
+    }
+  };
+  
+
   return (
     <Entity>
       <div className="flex flex-col justify-start gap-16">
@@ -162,7 +179,7 @@ export default function Counter() {
                       ticketNum={ticket.ticketNumber}
                     />
                   ))}
-                  <TicketNumber
+                  {/* <TicketNumber
                     bgColor="coal-black"
                     textColor="ocean-blue"
                     fontSize="3xl"
@@ -171,6 +188,16 @@ export default function Counter() {
                     maxWidth="16"
                     ticketNum="+"
                     labelPadding="10"
+                  /> */}
+                  <TextButton
+                    text="+"
+                    textSize="3xl"
+                    textColor="white"
+                    buttonColor="coal-black"
+                    width="24"
+                    paddingX="24"
+                    paddingY="8"
+                    onPress={() => handleAddTicket()}
                   />
                   {tickets1.length > MAX_TICKETS && (
                     <TicketNumber
