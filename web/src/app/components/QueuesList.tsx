@@ -6,9 +6,32 @@ import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical, faUsers } from '@fortawesome/free-solid-svg-icons';
 import CreateNewQueueButton from './CreateNewQueueButton';
+import { Button, Modal } from "antd";
+import NewQueueForm from './NewQueueForm';
 
 export default function QueuesList({ queues, setQueues }: { queues: any[], setQueues: React.Dispatch<React.SetStateAction<any[]>> }) {
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState('Content of the modal');
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleOk = () => {
+    setModalText('The modal will be closed after two seconds');
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    console.log('Clicked cancel button');
+    setOpen(false);
+  };
   
   
   const toggleMenu = (index: any) => {
@@ -28,6 +51,18 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
   return (
     <div className='w-full'>
       <CreateNewQueueButton />
+
+      <Modal
+        title="Edit Queue"
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <NewQueueForm closeModal = {handleCancel}/>
+      </Modal>
+      
       <div className=' w-full grid grid-cols-2 gap-4 mt-4 '>
         {queues.map((queue, index) => (
           <div key={index} className='w-[415px] h-[305px] bg- flex-shrink-0 rounded-xl p-4 bg-gray-700'>
@@ -47,7 +82,7 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
                     <ul className='p-0 m-0'>
                       <li
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => console.log('Edit')}
+                        onClick={() => showModal()}
                       >
                         Edit
                       </li>

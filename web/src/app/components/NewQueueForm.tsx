@@ -2,9 +2,9 @@ import { Formik, Form, Field } from 'formik';
 import React from 'react';
 import DetailsFormsButtons from './DetailsFormsButtons';
 
-const QueueForm = () => {
+const QueueForm = ({ closeModal } : any) => {
     // Initial values for the form fields
-    const initialValues = {
+    let initialValues = {
         queueName: '',
         enabledOnlyInOpeningHours: 'Yes',
         limitQueueLength: 'No',
@@ -21,12 +21,25 @@ const QueueForm = () => {
     // Submit handler
     const handleSubmit = (values: any) => {
       alert(JSON.stringify(values, null, 2));
-        console.log('Form data', values);
+      closeModal();
+      console.log('Form data', values);
+    };
+
+    // Cancel handler
+    const handleCancel = (actions: any) => {
+      initialValues = {
+        queueName: '',
+        enabledOnlyInOpeningHours: 'Yes',
+        limitQueueLength: 'No',
+        estimatedWaitingTimeMode: 'Auto',
+        visitorsToNotify: '3'
+    };
+    closeModal();
     };
 
     return (
         <div className="flex flex-col items-center justify-center p-4">
-            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+            <Formik initialValues={initialValues} onSubmit={handleSubmit} onReset = {handleCancel}>
                 {formik => (
                     <Form className='w-full'>
                         <div className="mb-4">
