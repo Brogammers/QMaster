@@ -19,7 +19,7 @@ export default function Counter() {
   const [remainingCount2, setRemainingCount2] = useState<number>(0);
   
   const width = useWindowSize().width;
-  const MAX_TICKETS = width > 1500 ? 4 : 3;
+  const MAX_TICKETS = width > 1400 ? 4 : 3;
 
   const tickets1 = useMemo(() => [
     { id: 1, ticketNumber: 'C-123', service: 'Customer Service' },
