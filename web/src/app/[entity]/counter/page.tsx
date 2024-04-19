@@ -22,21 +22,21 @@ export default function Counter() {
   const [remainingCount2, setRemainingCount2] = useState<number>(0);
   const [tickets1, setTickets1] = useState<any[]>([
     { id: 1, ticketNumber: 'C-123', service: 'Customer Service' },
-    { id: 2, ticketNumber: 'C-124', service: 'New Customer' },
+    { id: 2, ticketNumber: 'A-124', service: 'New Customer' },
     // Add more ticket data as needed
   ]);
   const [tickets2, setTickets2] = useState<any[]>([
     { id: 1, ticketNumber: 'C-126', service: 'Customer Service' },
     { id: 2, ticketNumber: 'C-127', service: 'Customer Service' },
-    { id: 3, ticketNumber: 'C-125', service: 'New Customer' },
-    { id: 4, ticketNumber: 'C-435', service: 'New Customer' },
-    { id: 5, ticketNumber: 'C-450', service: 'New Customer' },
+    { id: 3, ticketNumber: 'A-125', service: 'New Customer' },
+    { id: 4, ticketNumber: 'A-435', service: 'New Customer' },
+    { id: 5, ticketNumber: 'A-450', service: 'New Customer' },
     { id: 6, ticketNumber: 'C-455', service: 'Customer Service' },
     { id: 7, ticketNumber: 'C-460', service: 'Customer Service' },
-    { id: 8, ticketNumber: 'C-670', service: 'New Customer' },
-    { id: 9, ticketNumber: 'C-677', service: 'New Customer' },
-    { id: 10, ticketNumber: 'C-790', service: 'New Customer' },
-    { id: 11, ticketNumber: 'C-799', service: 'New Customer' },
+    { id: 8, ticketNumber: 'A-670', service: 'New Customer' },
+    { id: 9, ticketNumber: 'A-677', service: 'New Customer' },
+    { id: 10, ticketNumber: 'A-790', service: 'New Customer' },
+    { id: 11, ticketNumber: 'A-799', service: 'New Customer' },
     // Add more ticket data as needed
   ]);
   
