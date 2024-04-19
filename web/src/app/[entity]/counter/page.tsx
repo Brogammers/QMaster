@@ -10,6 +10,7 @@ import useWindowSize from '../../../../hooks/useWindowSize';
 import TextButton from '@/app/shared/TextButton';
 import Image from 'next/image';
 import MissionAccomplished from "../../../../public/mission-accomplished.svg";
+import ExceptionMessage from '@/app/shared/ExceptionMessage';
 
 
 export default function Counter() {
@@ -168,14 +169,13 @@ export default function Counter() {
               <TabPanel className="px-0" value={activeTab1}>
                 <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets1.length <= 0 && ` justify-center items-center`}`}>
                   {tickets1.length <= 0 ? (
-                    <div className="my-2 flex justify-center items-center gap-24">
-                      <Image
-                        src={MissionAccomplished}
-                        alt="Mission Completed"
-                        width="256"
-                      />
-                      <span className="text-ocean-blue text-2xl text-center font-bold">Let&apos;s go! Everyone has been served!</span>
-                    </div>
+                    <ExceptionMessage
+                      image={MissionAccomplished}
+                      imageTitle="Mission Accomplished"
+                      orientation="row"
+                      width={256}
+                      message="Hooray! All served, no waiting!"
+                    />
                   ) : (
                     <>
                       {filterTickets(tickets1, activeTab1).slice(0, MAX_TICKETS - 1).map((ticket, index) => (
@@ -240,14 +240,13 @@ export default function Counter() {
               <TabPanel className="px-0" value={activeTab2}>
                 <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets2.length <= 0 && ` justify-center items-center`}`}>
                   {tickets2.length <= 0 ? (
-                    <div className="my-2 flex justify-center items-center gap-24">
-                      <Image
-                        src={MissionAccomplished}
-                        alt="Mission Completed"
-                        width="256"
-                      />
-                      <span className="text-ocean-blue text-2xl text-center font-bold">Yay! No one&apos;s in the waiting line</span>
-                    </div>
+                    <ExceptionMessage
+                      image={MissionAccomplished}
+                      imageTitle="Mission Accomplished"
+                      orientation="row"
+                      width={256}
+                      message="Celebrate! No waiting line!"
+                    />
                   ) : (
                     <>
                       {filterTickets(tickets2, activeTab2).slice(0, MAX_TICKETS).map((ticket, index) => (
