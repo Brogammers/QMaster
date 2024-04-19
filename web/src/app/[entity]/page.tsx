@@ -31,7 +31,7 @@ export default function Entity({ children }: QueueModalProps) {
   }
 
   return (
-    <Layout className="custom w-full min-h-screen">
+    <Layout className="custom w-full min-h-screen overflow-x-hidden">
       <Sidebar />
       <div className="custom bg-coal-black">
         <div className="container custom w-full text-white mx-4">
