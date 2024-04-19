@@ -8,6 +8,8 @@ import TicketNumber from '@/app/shared/TicketNumber';
 import Entity from '../page';
 import useWindowSize from '../../../../hooks/useWindowSize';
 import TextButton from '@/app/shared/TextButton';
+import Image from 'next/image';
+import MissionAccomplished from "../../../../public/mission-accomplished.svg";
 
 
 export default function Counter() {
@@ -164,56 +166,59 @@ export default function Counter() {
               </Box>
 
               <TabPanel className="px-0" value={activeTab1}>
-                <div className="counter__scrollbar w-full overflow-x-scroll flex gap-4">
-                  {filterTickets(tickets1, activeTab1).slice(0, MAX_TICKETS - 1).map((ticket, index) => (
-                    <TicketNumber 
-                      key={ticket.id} 
-                      active={index === parseInt(activeTab1)}
-                      bgColor="ocean-blue"
-                      textColor="white"
-                      fontSize="3xl"
-                      borderRadius="xl"
-                      width="6"
-                      maxWidth="16"
-                      queue={ticket.service}
-                      ticketNum={ticket.ticketNumber}
-                    />
-                  ))}
-                  {/* <TicketNumber
-                    bgColor="coal-black"
-                    textColor="ocean-blue"
-                    fontSize="3xl"
-                    borderRadius='xl'
-                    width="6"
-                    maxWidth="16"
-                    ticketNum="+"
-                    labelPadding="10"
-                  /> */}
-                  {tickets1.length > MAX_TICKETS && (
-                    <TicketNumber
-                      key="overflow"
-                      ticketNum={`${overflowCount1}+`}
-                      queue="others are being served"
-                      bgColor="baby-blue"
-                      textColor="white"
-                      fontSize="3xl"
-                      borderRadius="xl"
-                      width="6"
-                      maxWidth="16"
-                      labelPadding="4"
-                    />
+                <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets1.length <= 0 && ` justify-center items-center`}`}>
+                  {tickets1.length <= 0 ? (
+                    <>
+                      <Image
+                        src={MissionAccomplished}
+                        alt="Mission Completed"
+                        width="32"
+                      />
+                      <span>Everyone has been served</span>
+                    </>
+                  ) : (
+                    <>
+                      {filterTickets(tickets1, activeTab1).slice(0, MAX_TICKETS - 1).map((ticket, index) => (
+                        <TicketNumber 
+                          key={ticket.id} 
+                          active={index === parseInt(activeTab1)}
+                          bgColor="ocean-blue"
+                          textColor="white"
+                          fontSize="3xl"
+                          borderRadius="xl"
+                          width="6"
+                          maxWidth="16"
+                          queue={ticket.service}
+                          ticketNum={ticket.ticketNumber}
+                        />
+                      ))}
+                      {tickets1.length > MAX_TICKETS - 1 && (
+                        <TicketNumber
+                          key="overflow"
+                          ticketNum={`${overflowCount1 + 1}+`}
+                          queue="others are being served"
+                          bgColor="baby-blue"
+                          textColor="white"
+                          fontSize="3xl"
+                          borderRadius="xl"
+                          width="6"
+                          maxWidth="16"
+                          labelPadding="4"
+                        />
+                      )}
+                      <TextButton
+                        text="+"
+                        textSize="3xl"
+                        textColor="white"
+                        buttonColor="coal-black"
+                        borderRadius="xl"
+                        width="24"
+                        paddingX="24"
+                        paddingY="8"
+                        onPress={() => handleAddTicket()}
+                      />
+                    </>
                   )}
-                  <TextButton
-                    text="+"
-                    textSize="3xl"
-                    textColor="white"
-                    buttonColor="coal-black"
-                    borderRadius="xl"
-                    width="24"
-                    paddingX="24"
-                    paddingY="8"
-                    onPress={() => handleAddTicket()}
-                  />
                 </div>
               </TabPanel>
             </TabContext>
@@ -233,34 +238,47 @@ export default function Counter() {
               </Box>
 
               <TabPanel className="px-0" value={activeTab2}>
-                <div className="counter__scrollbar w-full overflow-x-scroll flex gap-4">
-                  {filterTickets(tickets2, activeTab2).slice(0, MAX_TICKETS).map((ticket, index) => (
-                    <TicketNumber 
-                      key={ticket.id} 
-                      active={index === parseInt(activeTab2)}
-                      bgColor="ocean-blue"
-                      textColor="white"
-                      fontSize="3xl"
-                      borderRadius="xl"
-                      width="6"
-                      maxWidth="16"
-                      queue={ticket.service}
-                      ticketNum={ticket.ticketNumber}
-                    />
-                  ))}
-                  {tickets2.length > MAX_TICKETS && (
-                    <TicketNumber
-                      key="overflow"
-                      ticketNum={`${overflowCount2}+`}
-                      queue="others waiting in queue"
-                      bgColor="baby-blue"
-                      textColor="white"
-                      fontSize="3xl"
-                      borderRadius="xl"
-                      width="6"
-                      maxWidth="16"
-                      labelPadding="4"
-                    />
+                <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets2.length <= 0 && ` justify-center items-center`}`}>
+                  {tickets2.length <= 0 ? (
+                    <div className="my-2 flex justify-center items-center gap-24">
+                      <Image
+                        src={MissionAccomplished}
+                        alt="Mission Completed"
+                        width="256"
+                      />
+                      <span className="text-ocean-blue text-xl text-center font-bold">Yay! No one's in the waiting line</span>
+                    </div>
+                  ) : (
+                    <>
+                      {filterTickets(tickets2, activeTab2).slice(0, MAX_TICKETS).map((ticket, index) => (
+                        <TicketNumber 
+                          key={ticket.id} 
+                          active={index === parseInt(activeTab2)}
+                          bgColor="ocean-blue"
+                          textColor="white"
+                          fontSize="3xl"
+                          borderRadius="xl"
+                          width="6"
+                          maxWidth="16"
+                          queue={ticket.service}
+                          ticketNum={ticket.ticketNumber}
+                        />
+                      ))}
+                      {tickets2.length > MAX_TICKETS && (
+                        <TicketNumber
+                          key="overflow"
+                          ticketNum={`${overflowCount2}+`}
+                          queue="others waiting in queue"
+                          bgColor="baby-blue"
+                          textColor="white"
+                          fontSize="3xl"
+                          borderRadius="xl"
+                          width="6"
+                          maxWidth="16"
+                          labelPadding="4"
+                        />
+                      )}
+                    </>
                   )}
                 </div>
               </TabPanel>
