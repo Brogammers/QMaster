@@ -168,14 +168,14 @@ export default function Counter() {
               <TabPanel className="px-0" value={activeTab1}>
                 <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets1.length <= 0 && ` justify-center items-center`}`}>
                   {tickets1.length <= 0 ? (
-                    <>
+                    <div className="my-2 flex justify-center items-center gap-24">
                       <Image
                         src={MissionAccomplished}
                         alt="Mission Completed"
-                        width="32"
+                        width="256"
                       />
-                      <span>Everyone has been served</span>
-                    </>
+                      <span className="text-ocean-blue text-xl text-center font-bold">Let&apos;s go! Everyone has been served!</span>
+                    </div>
                   ) : (
                     <>
                       {filterTickets(tickets1, activeTab1).slice(0, MAX_TICKETS - 1).map((ticket, index) => (
