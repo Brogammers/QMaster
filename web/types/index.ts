@@ -35,3 +35,12 @@ export interface TicketNumberProps {
   labelPadding?: string;
   onClick?: () => void;
 }
+
+export interface ExceptionMessageProps {
+  title?: string;
+  image: string;
+  message: string;
+  orientation: string;
+  imageTitle: string;
+  width: number;
+}
