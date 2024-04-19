@@ -12,6 +12,7 @@ export interface TextButtonProps {
   buttonColor: string;
   textColor: string;
   textSize?: string;
+  borderRadius: string;
   width?: string;
   paddingX: string;
   paddingY: string;

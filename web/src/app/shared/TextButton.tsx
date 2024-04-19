@@ -6,6 +6,7 @@ export default function TextButton({
   buttonColor,
   textColor,
   textSize,
+  borderRadius,
   width,
   paddingX,
   paddingY,
@@ -19,7 +20,7 @@ export default function TextButton({
       disabled={disabled}
       className={`bg-${buttonColor} text-${textColor} text-${textSize} ${
         width && `w-${width}`
-      } px-${paddingX} py-${paddingY} rounded-md`}
+      } px-${paddingX} py-${paddingY} rounded-${borderRadius} min-w-52`}
     >
       {icon && <span className="mr-2">{icon}</span>}
       {text}

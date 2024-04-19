@@ -165,7 +165,7 @@ export default function Counter() {
 
               <TabPanel className="px-0" value={activeTab1}>
                 <div className="counter__scrollbar w-full overflow-x-scroll flex gap-4">
-                  {filterTickets(tickets1, activeTab1).map((ticket, index) => (
+                  {filterTickets(tickets1, activeTab1).slice(0, MAX_TICKETS - 1).map((ticket, index) => (
                     <TicketNumber 
                       key={ticket.id} 
                       active={index === parseInt(activeTab1)}
@@ -189,29 +189,31 @@ export default function Counter() {
                     ticketNum="+"
                     labelPadding="10"
                   /> */}
+                  {tickets1.length > MAX_TICKETS && (
+                    <TicketNumber
+                      key="overflow"
+                      ticketNum={`${overflowCount1}+`}
+                      queue="others are being served"
+                      bgColor="baby-blue"
+                      textColor="white"
+                      fontSize="3xl"
+                      borderRadius="xl"
+                      width="6"
+                      maxWidth="16"
+                      labelPadding="4"
+                    />
+                  )}
                   <TextButton
                     text="+"
                     textSize="3xl"
                     textColor="white"
                     buttonColor="coal-black"
+                    borderRadius="xl"
                     width="24"
                     paddingX="24"
                     paddingY="8"
                     onPress={() => handleAddTicket()}
                   />
-                  {tickets1.length > MAX_TICKETS && (
-                    <TicketNumber
-                      key="overflow"
-                      ticketNum={`${overflowCount1}+`}
-                      queue="others being served"
-                      bgColor="coal-black"
-                      textColor="ocean-blue"
-                      fontSize="3xl"
-                      borderRadius="xl"
-                      width="6"
-                      maxWidth="16"
-                    />
-                  )}
                 </div>
               </TabPanel>
             </TabContext>
