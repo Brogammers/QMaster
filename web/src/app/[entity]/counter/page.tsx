@@ -169,15 +169,16 @@ export default function Counter() {
               <TabPanel className="px-0" value={activeTab1}>
                 <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets1.length <= 0 && ` justify-center items-center`}`}>
                   {tickets1.length <= 0 ? (
-                    <>
+                    <div className="flex items-center gap-56">
                       <TextButton
                         text="Add to Queue"
-                        textSize="xl"
+                        textSize="md"
                         textColor="white"
                         buttonColor="baby-blue"
                         borderRadius="xl"
                         width="16"
-                        paddingX="16"
+                        minWidth="40"
+                        paddingX="32"
                         paddingY="8"
                         onPress={() => handleAddTicket()}
                       />
@@ -188,7 +189,7 @@ export default function Counter() {
                         width={185}
                         message="Hooray! All served, no waiting!"
                       />
-                    </>
+                    </div>
                   ) : (
                     <>
                       {filterTickets(tickets1, activeTab1).slice(0, MAX_TICKETS - 1).map((ticket, index) => (
@@ -226,6 +227,7 @@ export default function Counter() {
                         buttonColor="coal-black"
                         borderRadius="xl"
                         width="24"
+                        minWidth="52"
                         paddingX="24"
                         paddingY="8"
                         onPress={() => handleAddTicket()}

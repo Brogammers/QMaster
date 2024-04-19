@@ -14,6 +14,7 @@ export interface TextButtonProps {
   textSize?: string;
   borderRadius: string;
   width?: string;
+  minWidth: string;
   paddingX: string;
   paddingY: string;
   icon?: any;
