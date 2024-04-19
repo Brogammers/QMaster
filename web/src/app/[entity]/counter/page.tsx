@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { Tab } from '@mui/material';
 import { TabPanel, TabList, TabContext } from '@mui/lab';
@@ -8,7 +8,6 @@ import TicketNumber from '@/app/shared/TicketNumber';
 import Entity from '../page';
 import useWindowSize from '../../../../hooks/useWindowSize';
 import TextButton from '@/app/shared/TextButton';
-import Image from 'next/image';
 import MissionAccomplished from "../../../../public/mission-accomplished.svg";
 import ExceptionMessage from '@/app/shared/ExceptionMessage';
 
