@@ -174,7 +174,7 @@ export default function Counter() {
                         alt="Mission Completed"
                         width="256"
                       />
-                      <span className="text-ocean-blue text-xl text-center font-bold">Let&apos;s go! Everyone has been served!</span>
+                      <span className="text-ocean-blue text-2xl text-center font-bold">Let&apos;s go! Everyone has been served!</span>
                     </div>
                   ) : (
                     <>
@@ -246,7 +246,7 @@ export default function Counter() {
                         alt="Mission Completed"
                         width="256"
                       />
-                      <span className="text-ocean-blue text-xl text-center font-bold">Yay! No one's in the waiting line</span>
+                      <span className="text-ocean-blue text-2xl text-center font-bold">Yay! No one&apos;s in the waiting line</span>
                     </div>
                   ) : (
                     <>
