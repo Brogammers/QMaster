@@ -180,28 +180,31 @@ export default function Counter() {
   return (
     <Entity>
       {counterSetup ? (
-        <QueueModal>
-          <h2>Setup Counter Space</h2>
+        <QueueModal
+          title="Setup Counter Space"
+        >
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             {({ values }) => (
               <Form>
-                <FieldArray name="services">
-                  {({ push, remove }) => (
-                    <div>
-                      {values.services.map((_, index) => (
-                        <div key={index} style={{ marginBottom: '16px' }}>
-                          <div className="flex justify-center items-center">
-                            <Field name={`services.${index}.name`} placeholder="Service" as={Input} />
-                            <Field name={`services.${index}.count`} placeholder="Number of Counters" type="number" as={Input} />
+                <div className="flex flex-col gap-4">
+                  <FieldArray name="services">
+                    {({ push, remove }) => (
+                      <div>
+                        {values.services.map((_, index) => (
+                          <div key={index} className="mb-4 flex flex-col justify-center items-start gap-2">
+                            <div className="flex justify-center items-center gap-2">
+                              <Field name={`services.${index}.name`} placeholder="Service" as={Input} />
+                              <Field name={`services.${index}.count`} placeholder="Number of Counters" type="number" as={Input} />
+                            </div>
+                            <Button onClick={() => remove(index)}>Remove</Button>
                           </div>
-                          <Button onClick={() => remove(index)}>Remove</Button>
-                        </div>
-                      ))}
-                      <Button type="primary" onClick={() => push({ name: '', count: 0 })}>Add Service</Button>
-                    </div>
-                  )}
-                </FieldArray>
-                <Button type="primary" htmlType="submit">Create</Button>
+                        ))}
+                        <Button type="primary" onClick={() => push({ name: '', count: 0 })}>Add Service</Button>
+                      </div>
+                    )}
+                  </FieldArray>
+                  <Button type="primary" htmlType="submit">Create</Button>
+                </div>
               </Form>
             )}
           </Formik>
