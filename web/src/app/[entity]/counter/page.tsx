@@ -10,7 +10,13 @@ import useWindowSize from '../../../../hooks/useWindowSize';
 import TextButton from '@/app/shared/TextButton';
 import MissionAccomplished from "../../../../public/mission-accomplished.svg";
 import ExceptionMessage from '@/app/shared/ExceptionMessage';
+import { Formik, FieldArray, Form, Field } from 'formik';
+import { Button, Input } from 'antd';
+import QueueModal from '@/app/shared/QueueModal';
 
+const initialValues = {
+  services: [{ name: '', count: 0 }],
+};
 
 export default function Counter() {
   const [activeTab1, setActiveTab1] = useState<string>('0');
@@ -19,6 +25,9 @@ export default function Counter() {
   const [visibleTickets2, setVisibleTickets2] = useState<any[]>([]);
   const [remainingCount1, setRemainingCount1] = useState<number>(0);
   const [remainingCount2, setRemainingCount2] = useState<number>(0);
+  const [counterSetup, setCounterSetup] = useState(true);
+  const [counters, setCounters] = useState<any[]>([]);
+  const [formValues, setFormValues] = useState<any>(null);
   const [tickets1, setTickets1] = useState<any[]>([
     // Add more ticket data as needed
   ]);
@@ -41,14 +50,14 @@ export default function Counter() {
   
   const width = useWindowSize().width;
   const MAX_TICKETS = width > 1400 ? 4 : 3;
-  const counters = [
-    {id: 1, service: 'New Customer'},
-    {id: 2, service: 'Customer Service'},
-    {id: 3, service: 'New Customer'},
-    {id: 4, service: 'Customer Service'},
-    {id: 5, service: 'Customer Service'},
-    {id: 6, service: 'Customer Service'},
-  ]
+  // const counters = [
+  //   {id: 1, service: 'New Customer'},
+  //   {id: 2, service: 'Customer Service'},
+  //   {id: 3, service: 'New Customer'},
+  //   {id: 4, service: 'Customer Service'},
+  //   {id: 5, service: 'Customer Service'},
+  //   {id: 6, service: 'Customer Service'},
+  // ]
 
 
   useEffect(() => {
@@ -129,7 +138,7 @@ export default function Counter() {
     if (tickets2.length > 0) {
       const counterSelection = prompt("Please select the counter to add the ticket to:");
       if (counterSelection) {
-        const selectedCounter = counters.find(counter => counter.id === parseInt(counterSelection));
+        const selectedCounter = counters.find(counter => parseInt(counter.id) === parseInt(counterSelection));
         if (selectedCounter) {
           const ticketToAdd = tickets2.find(ticket => ticket.service === selectedCounter.service);
           if (ticketToAdd) {
@@ -148,144 +157,197 @@ export default function Counter() {
     } else alert("Celebrate! No waiting line!")
   };
   
-  
+  const handleSubmit = (values: any) => {
+    // Handle form submission logic here
+    console.log('Form values:', values);
+    setCounterSetup(!counterSetup);
+    setFormValues(values);
+
+    let counterId = 1; // Initialize counter ID
+
+    const updatedCounters = values.services.flatMap((service: any) => {
+        const { name, count } = service;
+        const countersForService = Array.from({ length: count }, (_, index) => ({
+            id: counterId++, // Increment counter ID for each new counter
+            service: name,
+        }));
+        return countersForService;
+    });
+
+    setCounters(updatedCounters);
+};
 
   return (
     <Entity>
-      <div className="flex flex-col justify-start gap-16">
-        <div>
-          <h2>Serving</h2>
-          <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
-            <TabContext value={activeTab1}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <TabList onChange={handleServingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
-                  <Tab label="All servings" value="0" />
-                  <Tab label="Customer Service" value="Customer Service" />
-                  <Tab label="New Customer" value="New Customer" />
-                </TabList>
-              </Box>
+      {counterSetup ? (
+        <QueueModal>
+          <h2>Setup Counter Space</h2>
+          <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+            {({ values }) => (
+              <Form>
+                <FieldArray name="services">
+                  {({ push, remove }) => (
+                    <div>
+                      {values.services.map((_, index) => (
+                        <div key={index} style={{ marginBottom: '16px' }}>
+                          <div className="flex justify-center items-center">
+                            <Field name={`services.${index}.name`} placeholder="Service" as={Input} />
+                            <Field name={`services.${index}.count`} placeholder="Number of Counters" type="number" as={Input} />
+                          </div>
+                          <Button onClick={() => remove(index)}>Remove</Button>
+                        </div>
+                      ))}
+                      <Button type="primary" onClick={() => push({ name: '', count: 0 })}>Add Service</Button>
+                    </div>
+                  )}
+                </FieldArray>
+                <Button type="primary" htmlType="submit">Create</Button>
+              </Form>
+            )}
+          </Formik>
+        </QueueModal>
+      ) : (
+        <div className="flex flex-col justify-start gap-16">
+          <div>
+            <h2>Serving</h2>
+            <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
+              <TabContext value={activeTab1}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                  <TabList onChange={handleServingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
+                    <Tab label="All servings" value="0" />
+                    {/* <Tab label="Customer Service" value="Customer Service" />
+                    <Tab label="New Customer" value="New Customer" /> */}
+                    {formValues && formValues.services && formValues.services.map((service: any) => (
+                      <Tab key={service.name} label={service.name} value={service.name} />
+                    ))}
+                  </TabList>
+                </Box>
 
-              <TabPanel className="px-0" value={activeTab1}>
-                <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets1.length <= 0 && ` justify-center items-center`}`}>
-                  {tickets1.length <= 0 ? (
-                    <div className="flex items-center gap-56">
-                      <TextButton
-                        text="Add to Queue"
-                        textSize="sm"
-                        textColor="white"
-                        buttonColor="baby-blue"
-                        borderRadius="xl"
-                        width="16"
-                        minWidth="56"
-                        paddingX="4"
-                        paddingY="4"
-                        onPress={() => handleAddTicket()}
-                      />
+                <TabPanel className="px-0" value={activeTab1}>
+                  <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets1.length <= 0 && ` justify-center items-center`}`}>
+                    {tickets1.length <= 0 ? (
+                      <div className="flex items-center gap-56">
+                        <TextButton
+                          text="Add to Queue"
+                          textSize="sm"
+                          textColor="white"
+                          buttonColor="baby-blue"
+                          borderRadius="xl"
+                          width="16"
+                          minWidth="56"
+                          paddingX="4"
+                          paddingY="4"
+                          onPress={() => handleAddTicket()}
+                        />
+                        <ExceptionMessage
+                          image={MissionAccomplished}
+                          imageTitle="Mission Accomplished"
+                          orientation="row"
+                          width={185}
+                          message="Hooray! All served, no waiting!"
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        {filterTickets(tickets1, activeTab1).map((ticket, index) => (
+                          <TicketNumber 
+                            key={ticket.id} 
+                            active={index === parseInt(activeTab1)}
+                            bgColor="ocean-blue"
+                            textColor="white"
+                            fontSize="3xl"
+                            borderRadius="xl"
+                            width="6"
+                            maxWidth="16"
+                            queue={ticket.service}
+                            counterNum={ticket.counterNum}
+                            ticketNum={ticket.ticketNumber}
+                          />
+                        ))}
+                        <TextButton
+                          text="+"
+                          textSize="3xl"
+                          textColor="white"
+                          buttonColor="coal-black"
+                          borderRadius="xl"
+                          width="32"
+                          minWidth="8"
+                          paddingX="8"
+                          paddingY="4"
+                          onPress={() => handleAddTicket()}
+                        />
+                      </>
+                    )}
+                  </div>
+                </TabPanel>
+              </TabContext>
+            </Box>
+          </div>
+
+          <div>
+            <h2>In waiting line</h2>
+            <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
+              <TabContext value={activeTab2}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                  <TabList onChange={handleWaitingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
+                    <Tab label="All queues" value="0" />
+                    {/* <Tab label="Customer Service" value="Customer Service" />
+                    <Tab label="New Customer" value="New Customer" /> */}
+                    {formValues && formValues.services && formValues.services.map((service: any) => (
+                      <Tab key={service.name} label={service.name} value={service.name} />
+                    ))}
+                  </TabList>
+                </Box>
+
+                <TabPanel className="px-0" value={activeTab2}>
+                  <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets2.length <= 0 && ` justify-center items-center`}`}>
+                    {tickets2.length <= 0 ? (
                       <ExceptionMessage
                         image={MissionAccomplished}
                         imageTitle="Mission Accomplished"
                         orientation="row"
                         width={185}
-                        message="Hooray! All served, no waiting!"
+                        message="Celebrate! No waiting line!"
                       />
-                    </div>
-                  ) : (
-                    <>
-                      {filterTickets(tickets1, activeTab1).map((ticket, index) => (
-                        <TicketNumber 
-                          key={ticket.id} 
-                          active={index === parseInt(activeTab1)}
-                          bgColor="ocean-blue"
-                          textColor="white"
-                          fontSize="3xl"
-                          borderRadius="xl"
-                          width="6"
-                          maxWidth="16"
-                          queue={ticket.service}
-                          counterNum={ticket.counterNum}
-                          ticketNum={ticket.ticketNumber}
-                        />
-                      ))}
-                      <TextButton
-                        text="+"
-                        textSize="3xl"
-                        textColor="white"
-                        buttonColor="coal-black"
-                        borderRadius="xl"
-                        width="32"
-                        minWidth="8"
-                        paddingX="8"
-                        paddingY="4"
-                        onPress={() => handleAddTicket()}
-                      />
-                    </>
-                  )}
-                </div>
-              </TabPanel>
-            </TabContext>
-          </Box>
+                    ) : (
+                      <>
+                        {filterTickets(tickets2, activeTab2).slice(0, MAX_TICKETS).map((ticket, index) => (
+                          <TicketNumber 
+                            key={ticket.id} 
+                            active={index === parseInt(activeTab2)}
+                            bgColor="ocean-blue"
+                            textColor="white"
+                            fontSize="3xl"
+                            borderRadius="xl"
+                            width="6"
+                            maxWidth="16"
+                            queue={ticket.service}
+                            ticketNum={ticket.ticketNumber}
+                          />
+                        ))}
+                        {tickets2.length > MAX_TICKETS && (
+                          <TicketNumber
+                            key="overflow"
+                            ticketNum={`${overflowCount2}+`}
+                            queue="others waiting in queue"
+                            bgColor="baby-blue"
+                            textColor="white"
+                            fontSize="3xl"
+                            borderRadius="xl"
+                            width="6"
+                            maxWidth="16"
+                            labelPadding="4"
+                          />
+                        )}
+                      </>
+                    )}
+                  </div>
+                </TabPanel>
+              </TabContext>
+            </Box>
+          </div>
         </div>
-
-        <div>
-          <h2>In waiting line</h2>
-          <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
-            <TabContext value={activeTab2}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <TabList onChange={handleWaitingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
-                  <Tab label="All queues" value="0" />
-                  <Tab label="Customer Service" value="Customer Service" />
-                  <Tab label="New Customer" value="New Customer" />
-                </TabList>
-              </Box>
-
-              <TabPanel className="px-0" value={activeTab2}>
-                <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets2.length <= 0 && ` justify-center items-center`}`}>
-                  {tickets2.length <= 0 ? (
-                    <ExceptionMessage
-                      image={MissionAccomplished}
-                      imageTitle="Mission Accomplished"
-                      orientation="row"
-                      width={185}
-                      message="Celebrate! No waiting line!"
-                    />
-                  ) : (
-                    <>
-                      {filterTickets(tickets2, activeTab2).slice(0, MAX_TICKETS).map((ticket, index) => (
-                        <TicketNumber 
-                          key={ticket.id} 
-                          active={index === parseInt(activeTab2)}
-                          bgColor="ocean-blue"
-                          textColor="white"
-                          fontSize="3xl"
-                          borderRadius="xl"
-                          width="6"
-                          maxWidth="16"
-                          queue={ticket.service}
-                          ticketNum={ticket.ticketNumber}
-                        />
-                      ))}
-                      {tickets2.length > MAX_TICKETS && (
-                        <TicketNumber
-                          key="overflow"
-                          ticketNum={`${overflowCount2}+`}
-                          queue="others waiting in queue"
-                          bgColor="baby-blue"
-                          textColor="white"
-                          fontSize="3xl"
-                          borderRadius="xl"
-                          width="6"
-                          maxWidth="16"
-                          labelPadding="4"
-                        />
-                      )}
-                    </>
-                  )}
-                </div>
-              </TabPanel>
-            </TabContext>
-          </Box>
-        </div>
-      </div>
+      )}
     </Entity>
   );
 };
