@@ -45,3 +45,9 @@ export interface ExceptionMessageProps {
   imageTitle: string;
   width: number;
 }
+
+export interface TagProps {
+  text: string;
+  bgColor: string;
+  fontSize: string;
+}
