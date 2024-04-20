@@ -196,7 +196,7 @@ export default function Counter() {
                     </div>
                   ) : (
                     <>
-                      {filterTickets(tickets1, activeTab1).slice(0, MAX_TICKETS - 1).map((ticket, index) => (
+                      {filterTickets(tickets1, activeTab1).map((ticket, index) => (
                         <TicketNumber 
                           key={ticket.id} 
                           active={index === parseInt(activeTab1)}
@@ -211,20 +211,6 @@ export default function Counter() {
                           ticketNum={ticket.ticketNumber}
                         />
                       ))}
-                      {tickets1.length > MAX_TICKETS - 1 && (
-                        <TicketNumber
-                          key="overflow"
-                          ticketNum={`${overflowCount1 + 1}+`}
-                          queue="others are being served"
-                          bgColor="baby-blue"
-                          textColor="white"
-                          fontSize="3xl"
-                          borderRadius="xl"
-                          width="6"
-                          maxWidth="16"
-                          labelPadding="4"
-                        />
-                      )}
                       <TextButton
                         text="+"
                         textSize="3xl"

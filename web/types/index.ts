@@ -35,7 +35,6 @@ export interface TicketNumberProps {
   active?: boolean;
   labelPadding?: string;
   counterNum?: string;
-  onClick?: () => void;
 }
 
 export interface ExceptionMessageProps {
