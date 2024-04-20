@@ -45,6 +45,7 @@ export default function Counter() {
     { id: 11, ticketNumber: 'A-677', service: 'New Customer' },
     { id: 12, ticketNumber: 'A-790', service: 'New Customer' },
     { id: 13, ticketNumber: 'A-799', service: 'New Customer' },
+    { id: 14, ticketNumber: 'P-799', service: 'Payments' },
     // Add more ticket data as needed
   ]);
   
