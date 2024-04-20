@@ -47,6 +47,7 @@ export default function Counter() {
     {id: 3, service: 'New Customer'},
     {id: 4, service: 'Customer Service'},
     {id: 5, service: 'Customer Service'},
+    {id: 6, service: 'Customer Service'},
   ]
 
 
