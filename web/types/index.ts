@@ -34,6 +34,7 @@ export interface TicketNumberProps {
   height?: string;
   active?: boolean;
   labelPadding?: string;
+  counterNum?: string;
   onClick?: () => void;
 }
 

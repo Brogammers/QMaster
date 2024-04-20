@@ -23,19 +23,19 @@ export default function Counter() {
     // Add more ticket data as needed
   ]);
   const [tickets2, setTickets2] = useState<any[]>([
-    { id: 1, ticketNumber: 'C-123', service: 'Customer Service' },
-    { id: 2, ticketNumber: 'A-124', service: 'New Customer' },
-    { id: 3, ticketNumber: 'C-126', service: 'Customer Service' },
-    { id: 4, ticketNumber: 'C-127', service: 'Customer Service' },
-    { id: 5, ticketNumber: 'A-125', service: 'New Customer' },
-    { id: 6, ticketNumber: 'A-435', service: 'New Customer' },
-    { id: 7, ticketNumber: 'A-450', service: 'New Customer' },
-    { id: 8, ticketNumber: 'C-455', service: 'Customer Service' },
-    { id: 9, ticketNumber: 'C-460', service: 'Customer Service' },
-    { id: 10, ticketNumber: 'A-670', service: 'New Customer' },
-    { id: 11, ticketNumber: 'A-677', service: 'New Customer' },
-    { id: 12, ticketNumber: 'A-790', service: 'New Customer' },
-    { id: 13, ticketNumber: 'A-799', service: 'New Customer' },
+    { id: 1, ticketNumber: 'C-123', service: 'Customer Service', counterNum: 2 },
+    { id: 2, ticketNumber: 'A-124', service: 'New Customer', counterNum: 1 },
+    { id: 3, ticketNumber: 'C-126', service: 'Customer Service', counterNum: 2 },
+    { id: 4, ticketNumber: 'C-127', service: 'Customer Service', counterNum: 2 },
+    { id: 5, ticketNumber: 'A-125', service: 'New Customer', counterNum: 1 },
+    { id: 6, ticketNumber: 'A-435', service: 'New Customer', counterNum: 1 },
+    { id: 7, ticketNumber: 'A-450', service: 'New Customer', counterNum: 1 },
+    { id: 8, ticketNumber: 'C-455', service: 'Customer Service', counterNum: 2 },
+    { id: 9, ticketNumber: 'C-460', service: 'Customer Service', counterNum: 2 },
+    { id: 10, ticketNumber: 'A-670', service: 'New Customer', counterNum: 1 },
+    { id: 11, ticketNumber: 'A-677', service: 'New Customer', counterNum: 1 },
+    { id: 12, ticketNumber: 'A-790', service: 'New Customer', counterNum: 1 },
+    { id: 13, ticketNumber: 'A-799', service: 'New Customer', counterNum: 1 },
     // Add more ticket data as needed
   ]);
   
@@ -132,18 +132,17 @@ export default function Counter() {
   };
 
   const handleAddTicket = () => {
-    // Check if there are tickets in the waiting line (tickets2)
     if (tickets2.length > 0) {
-      // Get the first ticket from tickets2
       const ticketToAdd = tickets2[0];
-  
-      // Remove the first ticket from tickets2
       const updatedTickets2 = tickets2.slice(1);
+      let ticketToRemove;
+      for (let i = 0; i < tickets1.length; i++) {
+        if (tickets1[i] === ticketToAdd) {
+          ticketToRemove = tickets1[i]
+        }
+      }
+      let updatedTickets1 = [...tickets1, ticketToAdd]; // remove ticketToRemove
   
-      // Add the ticket to the beginning of tickets1
-      const updatedTickets1 = [...tickets1, ticketToAdd];
-  
-      // Update the state with the modified ticket arrays
       setTickets1(updatedTickets1);
       setTickets2(updatedTickets2);
     }
@@ -202,6 +201,7 @@ export default function Counter() {
                           width="6"
                           maxWidth="16"
                           queue={ticket.service}
+                          counterNum={ticket.counterNum}
                           ticketNum={ticket.ticketNumber}
                         />
                       ))}
