@@ -15,11 +15,14 @@ export default function CustimerFeedback() {
             width={1024}
           />
         </figure>
-        <Tag
-          text="this page is under construction"
-          bgColor="red-500"
-          fontSize="xl"
-        />
+        <div className="construction-bg">
+          <Tag
+            text="this page is under construction"
+            bgColor="transparent"
+            fontSize="xl"
+          />
+        </div>
+        <div className="construction-bg"></div>
       </div>
     </Entity>
   )
