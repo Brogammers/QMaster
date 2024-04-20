@@ -16,6 +16,7 @@ const config: Config = {
       colors: {
         "ocean-blue": "#17222D",
         "concrete-turqouise": "#13404D",
+        "crystal-blue": "#34F5C5",
         "baby-blue": "#1DCDFE",
         "off-white": "#D9D9D9",
         "lite-grey": "#ADADAD",
