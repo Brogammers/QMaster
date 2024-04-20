@@ -4,9 +4,6 @@ import { QueueModalProps } from "../../../types";
 import { Layout } from "antd";
 import { useParams, usePathname } from "next/navigation";
 import Sidebar from "../shared/Sidebar";
-import { calc } from "antd/es/theme/internal";
-
-const { Content } = Layout;
 
 
 export default function Entity({ children }: QueueModalProps) {
@@ -14,7 +11,15 @@ export default function Entity({ children }: QueueModalProps) {
   let { entity } = useParams();
   let page: string | undefined = '';
 
-  const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+  const formatPageName = (name: string) => {
+    const formattedName = name.replace(/[^\w\s]/gi, ' ');
+  
+    const capitalizeWord = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+    const capitalizedWords = formattedName.split(' ').map(capitalizeWord);
+  
+    return capitalizedWords.join(' ');
+  };
+  
 
   if (typeof entity === 'string') {
     const segments = entity.split('/');
@@ -23,11 +28,11 @@ export default function Entity({ children }: QueueModalProps) {
 
   if (page) {
     const segments = pathname.split('/'); 
-    page = capitalize(segments[segments.length - 1]); 
+    page = formatPageName(segments[segments.length - 1]); 
   }
 
   if (typeof entity === 'string') {
-    entity = capitalize(entity);
+    entity = formatPageName(entity);
   }
 
   return (
