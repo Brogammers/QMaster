@@ -22,7 +22,6 @@ export default function CustimerFeedback() {
             fontSize="xl"
           />
         </div>
-        <div className="construction-bg"></div>
       </div>
     </Entity>
   )
