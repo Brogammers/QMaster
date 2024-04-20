@@ -171,14 +171,14 @@ export default function Counter() {
                     <div className="flex items-center gap-56">
                       <TextButton
                         text="Add to Queue"
-                        textSize="md"
+                        textSize="sm"
                         textColor="white"
                         buttonColor="baby-blue"
                         borderRadius="xl"
                         width="16"
-                        minWidth="40"
-                        paddingX="32"
-                        paddingY="8"
+                        minWidth="56"
+                        paddingX="4"
+                        paddingY="4"
                         onPress={() => handleAddTicket()}
                       />
                       <ExceptionMessage
@@ -225,10 +225,10 @@ export default function Counter() {
                         textColor="white"
                         buttonColor="coal-black"
                         borderRadius="xl"
-                        width="24"
-                        minWidth="52"
-                        paddingX="24"
-                        paddingY="8"
+                        width="32"
+                        minWidth="8"
+                        paddingX="8"
+                        paddingY="4"
                         onPress={() => handleAddTicket()}
                       />
                     </>
