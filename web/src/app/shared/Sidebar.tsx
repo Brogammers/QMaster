@@ -21,6 +21,7 @@ import QMasterLogo from "../../../public/qmaster.svg";
 import { QueueModalProps } from "../../../types";
 import { Menu, Layout } from "antd";
 import { SettingOutlined, DesktopOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons'; // Import required icons
+import Tag from "./Tag";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -81,7 +82,14 @@ export default function Sidebar() {
             key="2" 
             onClick={() => handleRouting(`admin/customer-feedback`)}
           >
-            Customer Feedback
+            <div className="flex justify-center items-center gap-4">
+              <span>Customer Feedback</span>
+              <Tag 
+                text="Coming Soon" 
+                bgColor="red-500" 
+                fontSize="xs" 
+              />
+            </div>
           </Menu.Item>
           <Menu.Item 
             key="3" 
