@@ -95,11 +95,9 @@ export default function Counter() {
 };
 
   // Initialize overflow count based on total tickets
-  const initialOverflowCount1 = Math.max(tickets1.length - MAX_TICKETS, 0);
   const initialOverflowCount2 = Math.max(tickets2.length - MAX_TICKETS, 0);
 
   // State for overflow count
-  const [overflowCount1, setOverflowCount1] = useState<number>(initialOverflowCount1);
   const [overflowCount2, setOverflowCount2] = useState<number>(initialOverflowCount2);
 
   // Calculate overflow count dynamically
@@ -109,11 +107,9 @@ export default function Counter() {
 
   useEffect(() => {
     // Calculate overflow count for initial state
-    const initialOverflowCount1 = calculateOverflowCount(tickets1, MAX_TICKETS);
     const initialOverflowCount2 = calculateOverflowCount(tickets2, MAX_TICKETS);
 
     // Set initial overflow count
-    setOverflowCount1(initialOverflowCount1);
     setOverflowCount2(initialOverflowCount2);
   }, [tickets1, tickets2, MAX_TICKETS]);
 
@@ -123,11 +119,9 @@ export default function Counter() {
     const filteredTickets2 = filterTickets(tickets2, activeTab2);
 
     // Calculate overflow count based on filtered tickets
-    const overflowCount1 = calculateOverflowCount(filteredTickets1, MAX_TICKETS);
     const overflowCount2 = calculateOverflowCount(filteredTickets2, MAX_TICKETS);
 
     // Update overflow count state
-    setOverflowCount1(overflowCount1);
     setOverflowCount2(overflowCount2);
   }, [tickets1, tickets2, activeTab1, activeTab2, MAX_TICKETS]);
 
@@ -151,7 +145,7 @@ export default function Counter() {
           }
         } else alert("Select a valid counter");
       }
-    }
+    } else alert("Celebrate! No waiting line!")
   };
   
   
