@@ -85,11 +85,11 @@ export default function Counter() {
   const filterTickets = (tickets: any[], tabValue: string) => {
     // Apply the appropriate filter condition based on the tab value
     if (tabValue === '0') {
-        // Return all tickets for tab value '0'
-        return tickets;
+      // Return all tickets for tab value '0'
+      return tickets;
     } else {
-        // Filter tickets based on the selected service category
-        return tickets.filter(ticket => ticket.service === tabValue);
+      // Filter tickets based on the selected service category
+      return tickets.filter(ticket => ticket.service === tabValue);
     }
 };
 
@@ -129,15 +129,6 @@ export default function Counter() {
     setOverflowCount1(overflowCount1);
     setOverflowCount2(overflowCount2);
   }, [tickets1, tickets2, activeTab1, activeTab2, MAX_TICKETS]);
-
-  const handleTicketButtonClick = (ticketNumber: string) => {
-    // Handle ticket button click based on the queue type
-    if (activeTab1 === "Customer Service") {
-      // Logic for "serving" row
-    } else if (activeTab2 === "others waiting in queue") {
-      // Logic for "waiting in line" row
-    }
-  };
 
   const handleAddTicket = () => {
     if (tickets2.length > 0) {
