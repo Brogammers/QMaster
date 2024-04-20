@@ -41,6 +41,14 @@ export default function Counter() {
   
   const width = useWindowSize().width;
   const MAX_TICKETS = width > 1400 ? 4 : 3;
+  const counters = [
+    {id: 1, service: 'New Customer'},
+    {id: 2, service: 'Customer Service'},
+    {id: 3, service: 'New Customer'},
+    {id: 4, service: 'Customer Service'},
+    {id: 5, service: 'Customer Service'},
+  ]
+
 
   useEffect(() => {
     const calculateVisibleTickets = (tickets: any[], setTickets: Function, setRemainingCount: Function) => {
@@ -133,20 +141,25 @@ export default function Counter() {
 
   const handleAddTicket = () => {
     if (tickets2.length > 0) {
-      const ticketToAdd = tickets2[0];
-      const updatedTickets2 = tickets2.slice(1);
-      let ticketToRemove;
-      for (let i = 0; i < tickets1.length; i++) {
-        if (tickets1[i] === ticketToAdd) {
-          ticketToRemove = tickets1[i]
+      const counterSelection = prompt("Please select the counter to add the ticket to:");
+      if (counterSelection) {
+        const selectedCounter = counters.find(counter => counter.id === parseInt(counterSelection));
+        if (selectedCounter) {
+          const ticketToAdd = tickets2.find(ticket => ticket.service === selectedCounter.service);
+          if (ticketToAdd) {
+            const updatedTickets2 = tickets2.filter(ticket => ticket !== ticketToAdd);
+            const updatedTickets1 = tickets1.filter(ticket => ticket.counterNum !== selectedCounter.id);
+            updatedTickets1.push(ticketToAdd);
+            setTickets1(updatedTickets1);
+            setTickets2(updatedTickets2);
+          }
+        } else {
+          alert("Select a valid counter");
         }
       }
-      let updatedTickets1 = [...tickets1, ticketToAdd]; // remove ticketToRemove
-  
-      setTickets1(updatedTickets1);
-      setTickets2(updatedTickets2);
     }
   };
+  
   
 
   return (
