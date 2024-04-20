@@ -23,19 +23,19 @@ export default function Counter() {
     // Add more ticket data as needed
   ]);
   const [tickets2, setTickets2] = useState<any[]>([
-    { id: 1, ticketNumber: 'C-123', service: 'Customer Service', counterNum: 2 },
-    { id: 2, ticketNumber: 'A-124', service: 'New Customer', counterNum: 1 },
-    { id: 3, ticketNumber: 'C-126', service: 'Customer Service', counterNum: 2 },
-    { id: 4, ticketNumber: 'C-127', service: 'Customer Service', counterNum: 2 },
-    { id: 5, ticketNumber: 'A-125', service: 'New Customer', counterNum: 1 },
-    { id: 6, ticketNumber: 'A-435', service: 'New Customer', counterNum: 1 },
-    { id: 7, ticketNumber: 'A-450', service: 'New Customer', counterNum: 1 },
-    { id: 8, ticketNumber: 'C-455', service: 'Customer Service', counterNum: 2 },
-    { id: 9, ticketNumber: 'C-460', service: 'Customer Service', counterNum: 2 },
-    { id: 10, ticketNumber: 'A-670', service: 'New Customer', counterNum: 1 },
-    { id: 11, ticketNumber: 'A-677', service: 'New Customer', counterNum: 1 },
-    { id: 12, ticketNumber: 'A-790', service: 'New Customer', counterNum: 1 },
-    { id: 13, ticketNumber: 'A-799', service: 'New Customer', counterNum: 1 },
+    { id: 1, ticketNumber: 'C-123', service: 'Customer Service' },
+    { id: 2, ticketNumber: 'A-124', service: 'New Customer' },
+    { id: 3, ticketNumber: 'C-126', service: 'Customer Service' },
+    { id: 4, ticketNumber: 'C-127', service: 'Customer Service' },
+    { id: 5, ticketNumber: 'A-125', service: 'New Customer' },
+    { id: 6, ticketNumber: 'A-435', service: 'New Customer' },
+    { id: 7, ticketNumber: 'A-450', service: 'New Customer' },
+    { id: 8, ticketNumber: 'C-455', service: 'Customer Service' },
+    { id: 9, ticketNumber: 'C-460', service: 'Customer Service' },
+    { id: 10, ticketNumber: 'A-670', service: 'New Customer' },
+    { id: 11, ticketNumber: 'A-677', service: 'New Customer' },
+    { id: 12, ticketNumber: 'A-790', service: 'New Customer' },
+    { id: 13, ticketNumber: 'A-799', service: 'New Customer' },
     // Add more ticket data as needed
   ]);
   
@@ -149,13 +149,15 @@ export default function Counter() {
           if (ticketToAdd) {
             const updatedTickets2 = tickets2.filter(ticket => ticket !== ticketToAdd);
             const updatedTickets1 = tickets1.filter(ticket => ticket.counterNum !== selectedCounter.id);
-            updatedTickets1.push(ticketToAdd);
+
+            const ticketWithCounter = { ...ticketToAdd, counterNum: selectedCounter.id };
+            
+            updatedTickets1.push(ticketWithCounter);
             setTickets1(updatedTickets1);
             setTickets2(updatedTickets2);
+
           }
-        } else {
-          alert("Select a valid counter");
-        }
+        } else alert("Select a valid counter");
       }
     }
   };
