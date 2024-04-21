@@ -13,6 +13,7 @@ import ExceptionMessage from '@/app/shared/ExceptionMessage';
 import { Formik, FieldArray, Form, Field } from 'formik';
 import { Button, Input } from 'antd';
 import QueueModal from '@/app/shared/QueueModal';
+import StyledFieldArray from '@/app/shared/StyledFieldArray';
 
 const initialValues = {
   services: [{ name: '', count: 0 }],
@@ -188,23 +189,39 @@ export default function Counter() {
             {({ values }) => (
               <Form>
                 <div className="flex flex-col gap-4">
-                  <FieldArray name="services">
-                    {({ push, remove }) => (
-                      <div>
-                        {values.services.map((_, index) => (
-                          <div key={index} className="mb-4 flex flex-col justify-center items-start gap-2">
-                            <div className="flex justify-center items-center gap-2">
-                              <Field name={`services.${index}.name`} placeholder="Service" as={Input} />
-                              <Field name={`services.${index}.count`} placeholder="Number of Counters" type="number" as={Input} />
-                            </div>
-                            <Button onClick={() => remove(index)}>Remove</Button>
+                  <StyledFieldArray name="services" render={({ push, remove }) => (
+                    <div>
+                      {values.services.map((_, index) => (
+                        <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
+                          <div className="flex justify-center items-center gap-2">
+                            <Field name={`services.${index}.name`} placeholder="Service" as={Input} />
+                            <Field name={`services.${index}.count`} placeholder="Number of Counters" type="number" as={Input} />
                           </div>
-                        ))}
-                        <Button type="primary" onClick={() => push({ name: '', count: 0 })}>Add Service</Button>
-                      </div>
-                    )}
-                  </FieldArray>
-                  <Button type="primary" htmlType="submit">Create</Button>
+                          <Button 
+                            className="bg-red-500 text-white"
+                            type="text"
+                            onClick={() => remove(index)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ))}
+                      <Button 
+                        className="bg-ocean-blue font-bold"
+                        type="primary" 
+                        onClick={() => push({ name: '', count: 0 })}
+                      >
+                        Add Service
+                      </Button>
+                    </div>
+                  )} />
+                  <Button 
+                    className=" bg-baby-blue font-bold"
+                    type="primary" 
+                    htmlType="submit"
+                  >
+                    Create
+                  </Button>
                 </div>
               </Form>
             )}

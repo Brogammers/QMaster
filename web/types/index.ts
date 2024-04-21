@@ -1,3 +1,4 @@
+import { FieldArrayRenderProps } from "formik";
 import { ReactNode } from "react";
 
 export interface QueueModalProps {
@@ -50,4 +51,9 @@ export interface TagProps {
   text: string;
   bgColor: string;
   fontSize: string;
+}
+
+export interface StyledFieldArrayProps {
+  name: string;
+  render: (arrayHelpers: FieldArrayRenderProps) => React.ReactNode;
 }
