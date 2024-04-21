@@ -8,16 +8,43 @@ import { faEllipsisVertical, faUsers } from '@fortawesome/free-solid-svg-icons';
 import CreateNewQueueButton from './CreateNewQueueButton';
 import { Button, Modal } from "antd";
 import NewQueueForm from './NewQueueForm';
+import { init } from 'next/dist/compiled/webpack/webpack';
 
 export default function QueuesList({ queues, setQueues }: { queues: any[], setQueues: React.Dispatch<React.SetStateAction<any[]>> }) {
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Content of the modal');
+  // const menuRef = useRef(null);
+  const [initialValues, setInitialValues] = useState({});
 
-  const showModal = () => {
+
+  const showModal = (index: number) => {
+    //console.log(queues[index]);
+    const initialValues = {
+      queueName: queues[index][0],
+      enabledOnlyInOpeningHours: queues[index][4],
+      limitQueueLength: queues[index][1],
+      estimatedWaitingTimeMode: queues[index][3],
+      visitorsToNotify: queues[index][2]
+    };
+    //console.log(initialValues);
+    setInitialValues(initialValues);
     setOpen(true);
   };
+
+  // useEffect(() => {
+  //   function handleClickOutside(event: any) {
+  //     if (menuRef.current && (menuRef.current as HTMLElement).contains(event.target)) {
+  //       setOpenMenuIndex(null);
+  //     }
+  //   }
+
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, []);
 
   const handleOk = () => {
     setModalText('The modal will be closed after two seconds');
@@ -31,9 +58,10 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
   const handleCancel = () => {
     console.log('Clicked cancel button');
     setOpen(false);
+    setOpenMenuIndex(null);
   };
-  
-  
+
+
   const toggleMenu = (index: any) => {
     if (openMenuIndex === index) {
       setOpenMenuIndex(null); // Close the menu if it's already open
@@ -48,9 +76,24 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
     setOpenMenuIndex(null); // Close the menu after deleting the item
   };
 
+  const handleAddQueue = (newQueue: any) => {
+    setQueues([...queues, newQueue]);
+  };
+
+  const handleEditQueue = (newQueue: any) => {
+    if (openMenuIndex !== null) {
+      const newQueues = [...queues];
+      newQueues[openMenuIndex] = newQueue;
+      setQueues(newQueues);
+      setOpen(false);
+      setOpenMenuIndex(null);
+    }
+  };
+
+
   return (
     <div className='w-full'>
-      <CreateNewQueueButton />
+      <CreateNewQueueButton onAddQueue={handleAddQueue} />
 
       <Modal
         title="Edit Queue"
@@ -60,9 +103,9 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
         onCancel={handleCancel}
         footer={null}
       >
-        <NewQueueForm closeModal = {handleCancel}/>
+        <NewQueueForm closeModal={handleCancel} onAddQueue={handleEditQueue} initialValues={initialValues} source={'QueuesList'} />
       </Modal>
-      
+
       <div className=' w-full grid grid-cols-2 gap-4 mt-4 '>
         {queues.map((queue, index) => (
           <div key={index} className='w-[415px] h-[305px] bg- flex-shrink-0 rounded-xl p-4 bg-gray-700'>
@@ -82,16 +125,19 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
                     <ul className='p-0 m-0'>
                       <li
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => showModal()}
+                        onClick={() => {
+                          showModal(index)
+                        }
+                        }
                       >
                         Edit
                       </li>
                       <li
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={() =>{ 
-                          deleteQueue(index); 
+                        onClick={() => {
+                          deleteQueue(index);
                           setOpenMenuIndex(null);
-                          }}
+                        }}
                       >
                         Delete
                       </li>
@@ -102,20 +148,20 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
             </div>
             <ul>
               <div className='flex text-white font-bold'>
-                <p className='w-4/6'>Max Length</p>
-                <li>{queue[1]}</li>
+                <p className='w-4/6'>Enabled only in opening hours</p>
+                <li>{queue[4]}</li>
               </div>
               <div className='flex text-white font-bold'>
-                <p className='w-4/6'>Number of visitors to notify</p>
-                <li>{queue[2]}</li>
+                <p className='w-4/6'>Limit Queue Length</p>
+                <li>{queue[1]}</li>
               </div>
               <div className='flex text-white font-bold'>
                 <p className='w-4/6'>Estimated waiting time mode</p>
                 <li>{queue[3]}</li>
               </div>
               <div className='flex text-white font-bold'>
-                <p className='w-4/6'>Enabled only in opening hours</p>
-                <li>{queue[4]}</li>
+                <p className='w-4/6'>Number of visitors to notify</p>
+                <li>{queue[2]}</li>
               </div>
             </ul>
           </div>
