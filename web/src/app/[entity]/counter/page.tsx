@@ -14,6 +14,7 @@ import { Formik, FieldArray, Form, Field } from 'formik';
 import { Button, Input } from 'antd';
 import QueueModal from '@/app/shared/QueueModal';
 import StyledFieldArray from '@/app/shared/StyledFieldArray';
+import StyledField from '@/app/shared/StyledField';
 
 const initialValues = {
   services: [{ name: '', count: 0 }],
@@ -194,8 +195,8 @@ export default function Counter() {
                       {values.services.map((_, index) => (
                         <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
                           <div className="flex justify-center items-center gap-2">
-                            <Field name={`services.${index}.name`} placeholder="Service" as={Input} />
-                            <Field name={`services.${index}.count`} placeholder="Number of Counters" type="number" as={Input} />
+                            <StyledField name={`services.${index}.name`} placeholder="Service" />
+                            <StyledField name={`services.${index}.count`} placeholder="Number of Counters" type="number" />
                           </div>
                           <Button 
                             className="bg-red-500 text-white"

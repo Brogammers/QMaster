@@ -57,3 +57,9 @@ export interface StyledFieldArrayProps {
   name: string;
   render: (arrayHelpers: FieldArrayRenderProps) => React.ReactNode;
 }
+
+export interface StyledFieldProps {
+  name: string;
+  placeholder: string;
+  type?: string;
+}
