@@ -1,10 +1,28 @@
+import Image from "next/image";
 import Entity from "../../page";
+import UnderConstruction from "../../../../../public/under-construction.svg";
+import Tag from "@/app/shared/Tag";
 
 
 export default function CustimerFeedback() {
   return (
     <Entity>
-      <h1>This is the customer feedback page</h1>
+      <div className="my-32 flex flex-col justify-center items-center gap-8">
+        <figure className=" w-1/2 rounded-3xl">
+          <Image
+            src={UnderConstruction}
+            alt="Under Construction"
+            width={1024}
+          />
+        </figure>
+        <div className="construction-bg">
+          <Tag
+            text="this page is under construction"
+            bgColor="transparent"
+            fontSize="xl"
+          />
+        </div>
+      </div>
     </Entity>
   )
 }
