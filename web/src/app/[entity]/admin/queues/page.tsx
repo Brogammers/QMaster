@@ -1,10 +1,24 @@
+'use client';
+import QueueModal from "@/app/shared/QueueModal";
 import Entity from "../../page";
+import QueueBuilder from "@/app/components/QueueBuilder";
+import { QueuesData } from "../../../../../data";
+import QueuesList from "@/app/components/QueuesList";
+import { useState } from "react";
+
 
 
 export default function Queues() {
+  const initialQueueData = [
+    ...QueuesData
+  ];
+
+  const [queues, setQueues] = useState(initialQueueData);
   return (
     <Entity>
-      <h1>This is the queues page</h1>
+      <QueueModal>
+        {queues.length === 0 ? <QueueBuilder /> : <QueuesList queues={queues} setQueues={setQueues} />}
+      </QueueModal>
     </Entity>
   )
 }
