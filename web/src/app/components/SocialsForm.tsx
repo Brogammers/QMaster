@@ -30,14 +30,14 @@ export default function SocialsForm() {
                 </label> */}
                 <div className='flex justify-start items-center mb-4 gap-4'>
                   {/* <p className='my-2'>{platform.url}</p> */}
-                  <figure className="rounded-full m-0 p-4 bg-off-white flex justify-center items-center">
-                    <FontAwesomeIcon icon={platform.icon} />
+                  <figure className="rounded-full m-0 p-4 bg-ocean-blue flex justify-center items-center">
+                    <FontAwesomeIcon className="text-crystal-blue" icon={platform.icon} />
                   </figure>
                   <Field
                     type='link'
                     name={platform.name}
                     placeholder={`Enter your ${platform.name} link`}
-                    className="w-full h-8 px-2 py-3 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
+                    className="w-full h-8 px-2 py-3 border-2 border-gray-300 rounded-lg outline-none focus:border-baby-blue"
                   />
                 </div>
               </>
