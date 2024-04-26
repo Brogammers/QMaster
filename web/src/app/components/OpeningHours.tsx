@@ -8,7 +8,7 @@ export default function OpeningHours() {
     <div>
       <div className='flex'>
         <div className='w-9/12 '>
-            <OpeningHoursForm />
+          <OpeningHoursForm />
         </div>
         <div className='self-center'>
           <DetailsPhone />
