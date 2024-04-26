@@ -13,7 +13,7 @@ export default function AdminDetailsNavBar({ onItemSelected }: onSelectedProps) 
 
   return (
     <div className='mb-6'>
-      <CNav variant="underline">
+      <CNav variant="underline" style={{ borderBottom: "1px solid #D9D9D9" }}>
         <CNavItem>
           <CNavLink
             href="#"

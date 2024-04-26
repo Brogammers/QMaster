@@ -49,7 +49,7 @@ export default function DetailsForm() {
                     height={144}
                     className='absolute rounded-full'
                   />
-                  <div className='absolute z-10 bg-gray-500 bg-opacity-50 rounded-full w-36 h-36' />
+                  <div className='absolute z-10 bg-ocean-blue bg-opacity-50 rounded-full w-36 h-36' />
                   <div className='z-30 flex justify-around w-2/4 gap-4 '>
                     <div className='relative z-40'>
                       <button type='button' className='absolute z-40'>
@@ -79,7 +79,7 @@ export default function DetailsForm() {
               </div>
 
               <div className='w-9/12'>
-                <label htmlFor='Name' className='block mb-2 text-sm font-medium text-gray-700'>
+                <label htmlFor='Name' className='block mb-2 text-sm font-medium text-ocean-blue'>
                   Name
                 </label>
                 <div>
@@ -87,19 +87,19 @@ export default function DetailsForm() {
                     type='text'
                     name='Name'
                     placeholder='Enter the name of your business'
-                    className="w-full p-2 mb-4 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
+                    className="w-full p-2 mb-4 border-2 border-off-white rounded-lg outline-none focus:border-baby-blue"
                   />
                 </div>
-                <label htmlFor='Description' className='block mb-2 text-sm font-medium text-gray-700'>Description</label>
+                <label htmlFor='Description' className='block mb-2 text-sm font-medium text-ocean-blue'>Description</label>
                 <div>
                   <Field
                     as='textarea'
                     name='Description'
                     placeholder='Describe your services'
-                    className="w-full p-2 mb-4 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
+                    className="w-full p-2 mb-4 border-2 border-off-white rounded-lg outline-none focus:border-baby-blue"
                   />
                 </div>
-                <label htmlFor='ContactEmail' className='block mb-2 text-sm font-medium text-gray-700'>
+                <label htmlFor='ContactEmail' className='block mb-2 text-sm font-medium text-ocean-blue'>
                   Contact Email
                 </label>
                 <div>
@@ -107,15 +107,15 @@ export default function DetailsForm() {
                     type='email'
                     name='ContactEmail'
                     placeholder='Enter an email for customers to contact you'
-                    className="w-full p-2 mb-4 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
+                    className="w-full p-2 mb-4 border-2 border-off-white rounded-lg outline-none focus:border-baby-blue"
                   />
                 </div>
-                <label htmlFor='Phone' className='block mb-2 text-sm font-medium text-gray-700'>Phone</label>
+                <label htmlFor='Phone' className='block mb-2 text-sm font-medium text-ocean-blue'>Phone</label>
                 <div>
                   <PhoneInput
                     name='Phone'
                     placeholder='Enter your business phone number'
-                    className="w-full p-2 mb-4 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
+                    className="w-full p-2 mb-4 border-2 border-off-white rounded-lg outline-none focus:outline-none focus:border-baby-blue"
                     onChange={(value) => {
                       setPhoneNumber(value || ''); // Fix: Handle undefined value and provide default value of an empty string
                       props.values.Phone = value?.toString() ?? '';
@@ -124,7 +124,7 @@ export default function DetailsForm() {
                   />
                 </div>
 
-                <label htmlFor='Timezone' className='block mb-2 text-sm font-medium text-gray-700'>Timezone</label>
+                <label htmlFor='Timezone' className='block mb-2 text-sm font-medium text-ocean-blue'>Timezone</label>
                 <div className='pb-4'>
                   <TimezoneSelect
                     value={selectedTimezone}
@@ -134,23 +134,23 @@ export default function DetailsForm() {
                     }}
                   />
                 </div>
-                <label htmlFor='Address' className='block mb-2 text-sm font-medium text-gray-700'>Address (optional)</label>
+                <label htmlFor='Address' className='block mb-2 text-sm font-medium text-ocean-blue'>Address (optional)</label>
                 <div>
                   <Field
                     type='text'
                     name='Address'
                     placeholder='Enter your business address'
-                    className="w-full p-2 mb-4 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
+                    className="w-full p-2 mb-4 border-2 border-off-white rounded-lg outline-none focus:border-baby-blue"
                   />
                 </div>
 
-                <label htmlFor='Language' className='block mb-2 text-sm font-medium text-gray-700'>Language</label>
+                <label htmlFor='Language' className='block mb-2 text-sm font-medium text-ocean-blue'>Language</label>
                 <div>
                   <Field
                     type='text'
                     name='Language'
                     placeholder='Language'
-                    className="w-full p-2 mb-6 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500"
+                    className="w-full p-2 mb-6 border-2 border-off-white rounded-lg outline-none focus:border-baby-blue"
                   />
                 </div>
 

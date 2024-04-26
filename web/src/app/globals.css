@@ -222,3 +222,8 @@ border-radius: 8px;
     background-position: 20px 0; /* Adjust the distance the stripes move */
   }
 }
+
+.PhoneInput--focus {
+  border-color: #1DCDFE;
+  outline: none;
+}
