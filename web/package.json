@@ -31,12 +31,9 @@
     "react-phone-number-input": "^3.3.12",
     "react-pro-sidebar": "^1.1.0",
     "react-sidebar": "^3.0.2",
-<<<<<<< HEAD
     "react-tabs": "^6.0.2",
     "styled-components": "^6.1.8",
-=======
     "react-timezone-select": "^3.2.3",
->>>>>>> main
     "yup": "^1.4.0"
   },
   "devDependencies": {
