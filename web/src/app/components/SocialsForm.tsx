@@ -36,7 +36,8 @@ export default function SocialsForm() {
                   <Field
                     type='link'
                     name={platform.name}
-                    placeholder={`Enter your ${platform.name} link`}
+                    // placeholder={`Enter your ${platform.name} link`}
+                    placeholder={platform.url}
                     className="w-full h-8 px-2 py-3 border-2 border-off-white rounded-lg outline-none focus:border-baby-blue"
                   />
                 </div>
