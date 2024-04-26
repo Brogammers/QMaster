@@ -19,7 +19,7 @@ export default function OpeningHoursForm() {
       >
         {props => (
           <Form onSubmit={props.handleSubmit} className='flex flex-col'>
-            <div className='w-64 '>
+            <div className="w-64">
               {days.map(day => 
                 <DayForm 
                   key={day} 
