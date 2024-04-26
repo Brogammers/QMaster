@@ -7,11 +7,11 @@ import SocialsForm from './SocialsForm';
 export default function DetailsSocials() {
   return (
     <div >
-      <div className='flex'>
+      <div className='flex justify-center items-center gap-24'>
         <div className='w-3/4'>
           <SocialsForm />
         </div>
-        <div className='self-center'>
+        <div className='self-start'>
           <DetailsPhone />
         </div>
       </div>
