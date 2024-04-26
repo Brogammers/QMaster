@@ -13,7 +13,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-
 // Sample queued persons data
 const queuedPersonsData = [
   { id: 1, ticketNumber: 'C-123', counter: 'counter 1' },
@@ -21,18 +20,15 @@ const queuedPersonsData = [
   { id: 3, ticketNumber: 'C-125', counter: 'counter 3' },
   { id: 4, ticketNumber: 'C-016', counter: 'counter 4' },
   { id: 5, ticketNumber: 'C-127', counter: 'counter 13' },
-  { id: 5, ticketNumber: 'P-127', counter: 'counter 16' },
-  { id: 5, ticketNumber: 'A-007', counter: 'counter 9' },
-  { id: 5, ticketNumber: 'B-037', counter: 'counter 2' },
-  { id: 5, ticketNumber: 'O-127', counter: 'counter 5' },
+  { id: 6, ticketNumber: 'P-127', counter: 'counter 16' },
+  { id: 7, ticketNumber: 'A-007', counter: 'counter 9' },
+  { id: 8, ticketNumber: 'B-037', counter: 'counter 2' },
+  { id: 9, ticketNumber: 'O-127', counter: 'counter 5' },
 ];
 
 export default function Display() {
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [queuedPersons, setQueuedPersons] = useState(queuedPersonsData);
-  const [scrollIndex, setScrollIndex] = useState(0);
-  const [isScrolling, setIsScrolling] = useState(false);
-
   const { width, height } = useWindowSize();
 
   useEffect(() => {
@@ -57,29 +53,21 @@ export default function Display() {
     setFullscreen(!fullscreen);
   };
 
-  const maxTicketsToShow = Math.floor(height / 164);
-
   useEffect(() => {
-    setIsScrolling(true);
-  }, []);  
-
-  useEffect(() => {
-    gsap.to(".scrollItem", {
-      y: "-100%",
-      ease: "linear",
-      repeat: -1,
-      duration: 1,
-      scrollTrigger: {
-        trigger: ".scrollContainer",
-        start: "top top",
-        end: "+=100%",
-        scrub: true,
-        pin: true,
-        anticipatePin: 1
-      }
-    });
-  }, []);  
-
+    if (fullscreen) {
+      gsap.to(".scrollContainer", {
+        y: -(queuedPersonsData.length * 164), // Adjust according to your ticket height
+        duration: queuedPersonsData.length * 5, // Adjust the duration based on total tickets
+        repeat: -1, // Infinite repeat
+        ease: "linear",
+        onComplete: () => {
+          setTimeout(() => {
+            gsap.set(".scrollContainer", { y: 0 }); // Reset to start position
+          }, 2000); // Wait for 2 seconds before restarting
+        }
+      });
+    }
+  }, [fullscreen]);
 
   return (
     <>
@@ -91,25 +79,21 @@ export default function Display() {
             width={width * 0.75}
             height={height}
           />
-          {queuedPersonsData.length > maxTicketsToShow && isScrolling && (
-            <div className="scrollContainer w-1/4 bg-ocean-blue flex flex-col">
-              {queuedPersons.slice(scrollIndex, scrollIndex + maxTicketsToShow).map((person, index) => (
-                <div className="scrollItem" key={person.id}>
-                  <TicketNumber
-                    key={person.id}
-                    bgColor={index % 2 === 0 ? `white` : `transparent`}
-                    textColor={index % 2 === 0 ? `black` : `white`}
-                    fontSize="3xl"
-                    borderRadius="none"
-                    width="full"
-                    maxWidth="16"
-                    ticketNum={person.ticketNumber}
-                    queue={person.counter}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="scrollContainer w-1/4 bg-ocean-blue flex flex-col">
+            {queuedPersons.map((person) => (
+              <TicketNumber
+                key={person.id}
+                bgColor="transparent"
+                textColor="white"
+                fontSize="3xl"
+                borderRadius="none"
+                width="full"
+                maxWidth="16"
+                ticketNum={person.ticketNumber}
+                queue={person.counter}
+              />
+            ))}
+          </div>
         </div>
       ) : (
         <Entity>
@@ -137,4 +121,5 @@ export default function Display() {
     </>
   )
 };
+
 
