@@ -15,6 +15,8 @@
     "@coreui/react": "^5.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@mui/lab": "^5.0.0-alpha.170",
@@ -32,8 +34,8 @@
     "react-pro-sidebar": "^1.1.0",
     "react-sidebar": "^3.0.2",
     "react-tabs": "^6.0.2",
-    "styled-components": "^6.1.8",
     "react-timezone-select": "^3.2.3",
+    "styled-components": "^6.1.8",
     "yup": "^1.4.0"
   },
   "devDependencies": {

@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { QueuesData } from '../../../data';
-import QueueBuilderIllustration from '../../../public/QueueBuilder.svg'
-import Image from 'next/image';
-import QueueModal from '../shared/QueueModal';
+import React, { useState } from "react";
+import { QueuesData } from "../../../constants";
+import QueueBuilderIllustration from "../../../public/QueueBuilder.svg";
+import Image from "next/image";
+import QueueModal from "../shared/QueueModal";
 import { Button, Modal } from "antd";
-import CreateNewQueueButton from './CreateNewQueueButton';
+import CreateNewQueueButton from "./CreateNewQueueButton";
 
 export default function QueueBuilder() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
+  const [modalText, setModalText] = useState("Content of the modal");
 
   const showModal = () => {
     setOpen(true);
   };
 
   const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
+    setModalText("The modal will be closed after two seconds");
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -25,20 +25,26 @@ export default function QueueBuilder() {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
+    console.log("Clicked cancel button");
     setOpen(false);
   };
 
   return (
     <div>
-      <div className='w-full flex justify-center'>
-        <div className='w-2/4 h-96 justify-around flex flex-col items-center'>
-          <Image src={QueueBuilderIllustration} alt="Queue Builder Illustration" />
+      <div className="w-full flex justify-center">
+        <div className="w-2/4 h-96 justify-around flex flex-col items-center">
+          <Image
+            src={QueueBuilderIllustration}
+            alt="Queue Builder Illustration"
+          />
           <h2>Queue Builder</h2>
-          <p className='text-center'>Welcome to the Queue builder! To create your first Queue, please click on the &apos;Create New Queue&apos; button</p>
+          <p className="text-center">
+            Welcome to the Queue builder! To create your first Queue, please
+            click on the &apos;Create New Queue&apos; button
+          </p>
           <CreateNewQueueButton />
         </div>
       </div>
     </div>
-  )
+  );
 }

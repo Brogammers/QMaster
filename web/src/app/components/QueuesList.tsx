@@ -1,23 +1,28 @@
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import { QueuesData } from '../../../data';
-import QueueBuilderIllustration from '../../../public/QueueBuilder.svg'
-import Image from 'next/image';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical, faUsers } from '@fortawesome/free-solid-svg-icons';
-import CreateNewQueueButton from './CreateNewQueueButton';
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import { QueuesData } from "../../../constants";
+import QueueBuilderIllustration from "../../../public/QueueBuilder.svg";
+import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisVertical, faUsers } from "@fortawesome/free-solid-svg-icons";
+import CreateNewQueueButton from "./CreateNewQueueButton";
 import { Button, Modal } from "antd";
-import NewQueueForm from './NewQueueForm';
-import { init } from 'next/dist/compiled/webpack/webpack';
+import NewQueueForm from "./NewQueueForm";
+import { init } from "next/dist/compiled/webpack/webpack";
 
-export default function QueuesList({ queues, setQueues }: { queues: any[], setQueues: React.Dispatch<React.SetStateAction<any[]>> }) {
+export default function QueuesList({
+  queues,
+  setQueues,
+}: {
+  queues: any[];
+  setQueues: React.Dispatch<React.SetStateAction<any[]>>;
+}) {
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
+  const [modalText, setModalText] = useState("Content of the modal");
   // const menuRef = useRef(null);
   const [initialValues, setInitialValues] = useState({});
-
 
   const showModal = (index: number) => {
     //console.log(queues[index]);
@@ -26,7 +31,7 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
       enabledOnlyInOpeningHours: queues[index][4],
       limitQueueLength: queues[index][1],
       estimatedWaitingTimeMode: queues[index][3],
-      visitorsToNotify: queues[index][2]
+      visitorsToNotify: queues[index][2],
     };
     //console.log(initialValues);
     setInitialValues(initialValues);
@@ -47,7 +52,7 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
   // }, []);
 
   const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
+    setModalText("The modal will be closed after two seconds");
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -56,11 +61,10 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
+    console.log("Clicked cancel button");
     setOpen(false);
     setOpenMenuIndex(null);
   };
-
 
   const toggleMenu = (index: any) => {
     if (openMenuIndex === index) {
@@ -90,9 +94,8 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
     }
   };
 
-
   return (
-    <div className='w-full'>
+    <div className="w-full">
       <CreateNewQueueButton onAddQueue={handleAddQueue} />
 
       <Modal
@@ -103,32 +106,43 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
         onCancel={handleCancel}
         footer={null}
       >
-        <NewQueueForm closeModal={handleCancel} onAddQueue={handleEditQueue} initialValues={initialValues} source={'QueuesList'} />
+        <NewQueueForm
+          closeModal={handleCancel}
+          onAddQueue={handleEditQueue}
+          initialValues={initialValues}
+          source={"QueuesList"}
+        />
       </Modal>
 
-      <div className=' w-full grid grid-cols-2 gap-4 mt-4 '>
+      <div className=" w-full grid grid-cols-2 gap-4 mt-4 ">
         {queues.map((queue, index) => (
-          <div key={index} className='w-[415px] h-[305px] bg- flex-shrink-0 rounded-xl p-4 bg-gray-700'>
-            <div className='flex  justify-between'>
-              <div className='flex items-center gap-2 mb-4 text-white'>
-                <FontAwesomeIcon icon={faUsers} className='w-6 h-6 ' />
-                <h2 className=''>
-                  {queue[0]}
-                </h2>
+          <div
+            key={index}
+            className="w-[415px] h-[305px] bg- flex-shrink-0 rounded-xl p-4 bg-gray-700"
+          >
+            <div className="flex  justify-between">
+              <div className="flex items-center gap-2 mb-4 text-white">
+                <FontAwesomeIcon icon={faUsers} className="w-6 h-6 " />
+                <h2 className="">{queue[0]}</h2>
               </div>
-              <div className='relative w-8 h-8'>
-                <button className='w-8 h-8 text-white hover:bg-gray-500 rounded-full p-1' onClick={() => toggleMenu(index)}>
-                  <FontAwesomeIcon icon={faEllipsisVertical} className='w-6 h-6' />
+              <div className="relative w-8 h-8">
+                <button
+                  className="w-8 h-8 text-white hover:bg-gray-500 rounded-full p-1"
+                  onClick={() => toggleMenu(index)}
+                >
+                  <FontAwesomeIcon
+                    icon={faEllipsisVertical}
+                    className="w-6 h-6"
+                  />
                 </button>
                 {openMenuIndex === index && (
                   <div className="absolute top-full right-0 bg-white border border-gray-300 rounded-md z-50">
-                    <ul className='p-0 m-0'>
+                    <ul className="p-0 m-0">
                       <li
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                         onClick={() => {
-                          showModal(index)
-                        }
-                        }
+                          showModal(index);
+                        }}
                       >
                         Edit
                       </li>
@@ -147,20 +161,20 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
               </div>
             </div>
             <ul>
-              <div className='flex text-white font-bold'>
-                <p className='w-4/6'>Enabled only in opening hours</p>
+              <div className="flex text-white font-bold">
+                <p className="w-4/6">Enabled only in opening hours</p>
                 <li>{queue[4]}</li>
               </div>
-              <div className='flex text-white font-bold'>
-                <p className='w-4/6'>Limit Queue Length</p>
+              <div className="flex text-white font-bold">
+                <p className="w-4/6">Limit Queue Length</p>
                 <li>{queue[1]}</li>
               </div>
-              <div className='flex text-white font-bold'>
-                <p className='w-4/6'>Estimated waiting time mode</p>
+              <div className="flex text-white font-bold">
+                <p className="w-4/6">Estimated waiting time mode</p>
                 <li>{queue[3]}</li>
               </div>
-              <div className='flex text-white font-bold'>
-                <p className='w-4/6'>Number of visitors to notify</p>
+              <div className="flex text-white font-bold">
+                <p className="w-4/6">Number of visitors to notify</p>
                 <li>{queue[2]}</li>
               </div>
             </ul>
@@ -168,5 +182,5 @@ export default function QueuesList({ queues, setQueues }: { queues: any[], setQu
         ))}
       </div>
     </div>
-  )
+  );
 }
