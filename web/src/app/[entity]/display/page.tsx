@@ -11,15 +11,15 @@ import TicketNumber from "@/app/shared/TicketNumber";
 
 // Sample queued persons data
 const queuedPersonsData = [
-  { id: 1, ticketNumber: 'C-123' },
-  { id: 2, ticketNumber: 'C-124' },
-  { id: 3, ticketNumber: 'C-125' },
-  { id: 4, ticketNumber: 'C-016' },
-  { id: 5, ticketNumber: 'C-127' },
-  { id: 5, ticketNumber: 'P-127' },
-  { id: 5, ticketNumber: 'A-007' },
-  { id: 5, ticketNumber: 'B-037' },
-  { id: 5, ticketNumber: 'O-127' },
+  { id: 1, ticketNumber: 'C-123', counter: 'counter 1' },
+  { id: 2, ticketNumber: 'C-124', counter: 'counter 6' },
+  { id: 3, ticketNumber: 'C-125', counter: 'counter 3' },
+  { id: 4, ticketNumber: 'C-016', counter: 'counter 4' },
+  { id: 5, ticketNumber: 'C-127', counter: 'counter 13' },
+  { id: 5, ticketNumber: 'P-127', counter: 'counter 16' },
+  { id: 5, ticketNumber: 'A-007', counter: 'counter 9' },
+  { id: 5, ticketNumber: 'B-037', counter: 'counter 2' },
+  { id: 5, ticketNumber: 'O-127', counter: 'counter 5' },
 ];
 
 export default function Display() {
@@ -64,7 +64,6 @@ export default function Display() {
             height={height}
           />
           <div className="w-1/4 bg-ocean-blue">
-            {/* Map through the queued persons array and render the tickets */}
             {queuedPersons.slice(0, maxTicketsToShow).map((person, index) => (
               <TicketNumber
                 key={person.id}
@@ -75,6 +74,7 @@ export default function Display() {
                 width="full"
                 maxWidth="16"
                 ticketNum={person.ticketNumber}
+                queue={person.counter}
               />
             ))}
           </div>
