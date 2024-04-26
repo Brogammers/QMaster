@@ -293,7 +293,7 @@ export default function Counter() {
                           buttonColor="coal-black"
                           borderRadius="xl"
                           width="32"
-                          minWidth="8"
+                          minWidth="56"
                           paddingX="8"
                           paddingY="4"
                           onPress={() => handleAddTicket()}
