@@ -21,6 +21,14 @@ export default function DetailsForm() {
     Intl.DateTimeFormat().resolvedOptions().timeZone
   )
 
+  const customStyles = {
+    control: (base: any, state: { isFocused: any; }) => ({
+      ...base,
+      border: state.isFocused ? '2px solid #1DCDFE' : '2px solid #D9D9D9',
+      borderRadius: '8px',
+    }),
+  };
+
   return (
     <div className='w-full'>
       <Formik
@@ -125,8 +133,9 @@ export default function DetailsForm() {
                 </div>
 
                 <label htmlFor='Timezone' className='block mb-2 text-sm font-medium text-ocean-blue'>Timezone</label>
-                <div className='pb-4'>
+                <div className='pb-4 focus:border-baby-blue'>
                   <TimezoneSelect
+                    styles={customStyles}
                     value={selectedTimezone}
                     onChange={(value) => {
                       setSelectedTimezone(value)
