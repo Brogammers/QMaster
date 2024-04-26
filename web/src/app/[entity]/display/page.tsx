@@ -72,7 +72,7 @@ export default function Display() {
   return (
     <>
       {fullscreen ? (
-        <div className="h-screen w-full flex justify-between overflow-hidden">
+        <div className="bg-gradient-to-r from-baby-blue to-ocean-blue h-screen w-full flex justify-between overflow-hidden">
           <Image
             src={TeamImg}
             alt="QMaster"
@@ -83,7 +83,7 @@ export default function Display() {
             {queuedPersons.map((person) => (
               <TicketNumber
                 key={person.id}
-                bgColor="transparent"
+                bgColor="ocean-blue"
                 textColor="white"
                 fontSize="3xl"
                 borderRadius="none"
