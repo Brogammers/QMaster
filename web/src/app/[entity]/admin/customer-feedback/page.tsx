@@ -19,7 +19,7 @@ export default function CustimerFeedback() {
           <Tag
             text="this page is under construction"
             bgColor="transparent"
-            fontSize="xl"
+            fontSize="3xl"
           />
         </div>
       </div>

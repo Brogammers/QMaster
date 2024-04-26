@@ -205,13 +205,13 @@ border-radius: 8px;
 .construction-bg {
   background: repeating-linear-gradient(
     45deg, 
-    #ffb300, 
-    #ffb300 10px, 
+    rgba(255, 179, 0, 0.75),
+    rgba(255, 179, 0, 0.75) 10px, 
     black 10px, 
     black 20px
   );
   border-radius: 16px;
-  animation: loadingAnimation 2s linear infinite; /* Adjust animation duration as needed */
+  animation: loadingAnimation 8s linear infinite alternate-reverse; /* Adjust animation duration as needed */
 }
 
 @keyframes loadingAnimation {
@@ -219,7 +219,7 @@ border-radius: 8px;
     background-position: 0 0;
   }
   100% {
-    background-position: 20px 0; /* Adjust the distance the stripes move */
+    background-position: 200px 0; /* Adjust the distance the stripes move */
   }
 }
 
