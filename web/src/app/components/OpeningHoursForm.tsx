@@ -1,9 +1,5 @@
-import { Field, Form, Formik } from 'formik';
-import React from 'react';
+import { Form, Formik } from 'formik';
 import DetailsFormsButtons from './DetailsFormsButtons';
-import { TimePicker, Switch } from "antd";
-import { checkCustomRoutes } from 'next/dist/lib/load-custom-routes';
-import { DayFormProps } from '../../../types';
 import DayForm from './DayForm';
 
 export default function OpeningHoursForm() {
@@ -18,7 +14,7 @@ export default function OpeningHoursForm() {
         }}
       >
         {props => (
-          <Form onSubmit={props.handleSubmit} className='flex flex-col'>
+          <Form onSubmit={props.handleSubmit} className='flex flex-col justify-center items-start gap-8'>
             <div className="w-64">
               {days.map(day => 
                 <DayForm 
