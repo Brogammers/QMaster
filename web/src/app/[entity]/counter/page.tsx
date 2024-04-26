@@ -234,7 +234,7 @@ export default function Counter() {
             <h2>Serving</h2>
             <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
               <TabContext value={activeTab1}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <TabList onChange={handleServingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
                     <Tab label="All servings" value="0" />
                     {/* <Tab label="Customer Service" value="Customer Service" />
