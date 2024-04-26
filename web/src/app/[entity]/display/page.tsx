@@ -8,6 +8,11 @@ import TeamImg from "../../../../public/team.jpg";
 import DisplayImg from "../../../../public/display.svg";
 import QueueModal from "@/app/shared/QueueModal";
 import Entity from "../page";
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
 
 // Sample queued persons data
 const queuedPersonsData = [
@@ -55,15 +60,26 @@ export default function Display() {
   const maxTicketsToShow = Math.floor(height / 164);
 
   useEffect(() => {
-    if (queuedPersonsData.length > maxTicketsToShow) {
-      const scrollInterval = setInterval(() => {
-        setIsScrolling(true);
-        setScrollIndex((prevIndex) => (prevIndex + 1) % (queuedPersonsData.length - maxTicketsToShow + 1));
-      }, 3000); // Adjust scroll speed as needed
+    setIsScrolling(true);
+  }, []);  
 
-      return () => clearInterval(scrollInterval);
-    }
-  }, [maxTicketsToShow]);
+  useEffect(() => {
+    gsap.to(".scrollItem", {
+      y: "-100%",
+      ease: "linear",
+      repeat: -1,
+      duration: 1,
+      scrollTrigger: {
+        trigger: ".scrollContainer",
+        start: "top top",
+        end: "+=100%",
+        scrub: true,
+        pin: true,
+        anticipatePin: 1
+      }
+    });
+  }, []);  
+
 
   return (
     <>
@@ -76,19 +92,21 @@ export default function Display() {
             height={height}
           />
           {queuedPersonsData.length > maxTicketsToShow && isScrolling && (
-            <div className="w-1/4 bg-ocean-blue flex flex-col">
+            <div className="scrollContainer w-1/4 bg-ocean-blue flex flex-col">
               {queuedPersons.slice(scrollIndex, scrollIndex + maxTicketsToShow).map((person, index) => (
-                <TicketNumber
-                  key={person.id}
-                  bgColor={index % 2 === 0 ? `white` : `transparent`}
-                  textColor={index % 2 === 0 ? `black` : `white`}
-                  fontSize="3xl"
-                  borderRadius="none"
-                  width="full"
-                  maxWidth="16"
-                  ticketNum={person.ticketNumber}
-                  queue={person.counter}
-                />
+                <div className="scrollItem" key={person.id}>
+                  <TicketNumber
+                    key={person.id}
+                    bgColor={index % 2 === 0 ? `white` : `transparent`}
+                    textColor={index % 2 === 0 ? `black` : `white`}
+                    fontSize="3xl"
+                    borderRadius="none"
+                    width="full"
+                    maxWidth="16"
+                    ticketNum={person.ticketNumber}
+                    queue={person.counter}
+                  />
+                </div>
               ))}
             </div>
           )}
