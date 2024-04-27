@@ -19,11 +19,10 @@ export default function Details() {
     <Entity>
       
       <QueueModal title='Place Details'>
-      <AdminDetailsNavBar onItemSelected={handleItemSelected} />
-          {selectedItem === 'Details' && <DetailsComponent />}
-          {selectedItem === 'Opening Hours' && <OpeningHours />}
-          {selectedItem === 'Socials' && <DetailsSocials />}
-          {/* {selectedItem === 'Visitor Data' && <VisitorData />} */}
+        <AdminDetailsNavBar onItemSelected={handleItemSelected} />
+        {selectedItem === 'Details' && <DetailsComponent />}
+        {selectedItem === 'Opening Hours' && <OpeningHours />}
+        {selectedItem === 'Socials' && <DetailsSocials />}
       </QueueModal>
     </Entity>
   )

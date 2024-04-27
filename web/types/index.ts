@@ -34,6 +34,7 @@ export interface TicketNumberProps {
   width: string;
   ticketNum: string;
   maxWidth: string;
+  minWidth?: string;
   queue?: string;
   height?: string;
   active?: boolean;
