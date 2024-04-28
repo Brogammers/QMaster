@@ -74,3 +74,11 @@ export interface DayFormProps {
   values: any, 
   setFieldValue: any 
 }
+
+export interface DuplicateServiceModalProps {
+  isOpen: boolean; 
+  onClose: () => void; 
+  onMergeDuplicates: () => void; 
+  onFixDuplicates: () => void; 
+  hasDuplicate: boolean; 
+}

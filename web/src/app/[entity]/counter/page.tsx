@@ -16,6 +16,8 @@ import { Button, Input } from 'antd';
 import QueueModal from '@/app/shared/QueueModal';
 import StyledFieldArray from '@/app/shared/StyledFieldArray';
 import StyledField from '@/app/shared/StyledField';
+import DuplicateServiceModal from '@/app/components/DuplicateServiceModal';
+import { DuplicateServiceModalProps } from '../../../../types';
 
 // Define validation schema
 const validationSchema = Yup.object().shape({
@@ -33,7 +35,7 @@ const initialValues = {
   services: [{ name: '', count: 0 }],
 };
 
-export default function Counter() {
+export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDuplicates, hasDuplicate }: DuplicateServiceModalProps) {
   const [activeTab1, setActiveTab1] = useState<string>('0');
   const [activeTab2, setActiveTab2] = useState<string>('0');
   const [visibleTickets1, setVisibleTickets1] = useState<any[]>([]);
@@ -44,6 +46,7 @@ export default function Counter() {
   const [counters, setCounters] = useState<any[]>([]);
   const [formValues, setFormValues] = useState<any>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
+  const [isModalOpened, setIsModalOpened] = useState(false);
   const [tickets1, setTickets1] = useState<any[]>([
     // Add more ticket data as needed
   ]);
@@ -173,6 +176,16 @@ export default function Counter() {
       }
     } else alert("Celebrate! No waiting line!")
   };
+
+  const handleMergeDuplicates = () => {
+    // Logic to merge duplicates and update services
+    setIsModalOpened(false);
+  };
+  
+  const handleFixDuplicates = () => {
+    // Logic to cancel submission and navigate back to counter setup
+    setIsModalOpened(false);
+  };
   
   const handleSubmit = (values: any, { setSubmitting }: any) => {
     const serviceNames = new Set();
@@ -181,14 +194,16 @@ export default function Counter() {
     values.services.forEach((service: { name: unknown }) => {
       if (serviceNames.has(service.name)) {
         setIsDuplicate(true);
+        setIsModalOpened(true);
         return; 
       } else {
         serviceNames.add(service.name);
       }
     });
 
-    if (isDuplicate) {
+    if (isDuplicate && isModalOpened) {
       alert("Duplicate service names are not allowed. Please fix before submitting.");
+      
       setSubmitting(false); 
       return;
     }
@@ -211,7 +226,8 @@ export default function Counter() {
 
     // If duplicate service found, prompt the user
     if (duplicateService) {
-      alert(`You filled in the same service '${duplicateService}' more than once.`);
+      // alert(`You filled in the same service '${duplicateService}' more than once.`);
+      setIsModalOpened(true);
       return;
     }
 
@@ -232,60 +248,66 @@ export default function Counter() {
   return (
     <Entity>
       {counterSetup ? (
-        <QueueModal title="Setup Counter Space">
-        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-          {({ values, errors, isValid, setFieldValue }) => (
-            <Form>
-              <div className="flex flex-col gap-4">
-                <StyledFieldArray name="services" render={({ push, remove }) => (
-                  <div>
-                    {values.services.map((_, index) => (
-                      <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
-                        <div className="flex justify-center items-center gap-2">
-                          <StyledField
-                            name={`services.${index}.name`}
-                            placeholder="Service"
-                          />
-                          <ErrorMessage name={`services.${index}.name`} />
-                          <StyledField name={`services.${index}.count`} placeholder="Number of Counters" type="number" />
-                          <ErrorMessage name={`services.${index}.count`} />
+        <>
+          {isModalOpened ? (
+            <DuplicateServiceModal isOpen={isOpen} onClose={onClose} onMergeDuplicates={onMergeDuplicates} onFixDuplicates={onFixDuplicates} hasDuplicate={hasDuplicate} />
+          ) : (
+            <QueueModal title="Setup Counter Space">
+              <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+                {({ values, errors, isValid, setFieldValue }) => (
+                  <Form>
+                    <div className="flex flex-col gap-4">
+                      <StyledFieldArray name="services" render={({ push, remove }) => (
+                        <div>
+                          {values.services.map((_, index) => (
+                            <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
+                              <div className="flex justify-center items-center gap-2">
+                                <StyledField
+                                  name={`services.${index}.name`}
+                                  placeholder="Service"
+                                />
+                                <ErrorMessage name={`services.${index}.name`} />
+                                <StyledField name={`services.${index}.count`} placeholder="Number of Counters" type="number" />
+                                <ErrorMessage name={`services.${index}.count`} />
+                              </div>
+                              <Button
+                                className="bg-red-500 text-white"
+                                type="text"
+                                onClick={() => remove(index)}
+                                disabled={isDuplicate} // Disable remove button if duplicates exist
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          ))}
+                          <Button
+                            className="bg-ocean-blue font-bold"
+                            type="primary"
+                            onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
+                            disabled={isDuplicate} // Disable add service button if duplicates exist
+                          >
+                            Add Service
+                          </Button>
                         </div>
-                        <Button
-                          className="bg-red-500 text-white"
-                          type="text"
-                          onClick={() => remove(index)}
-                          disabled={isDuplicate} // Disable remove button if duplicates exist
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                    ))}
-                    <Button
-                      className="bg-ocean-blue font-bold"
-                      type="primary"
-                      onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
-                      disabled={isDuplicate} // Disable add service button if duplicates exist
-                    >
-                      Add Service
-                    </Button>
-                  </div>
-                )} />
-                {isDuplicate && ( // Display error message only if duplicates exist
-                  <div className="text-red-500">Duplicate service names found. Please fix before submitting.</div>
+                      )} />
+                      {isDuplicate && ( // Display error message only if duplicates exist
+                        <div className="text-red-500">Duplicate service names found. Please fix before submitting.</div>
+                      )}
+                      <Button
+                        className="bg-baby-blue font-bold"
+                        type="primary"
+                        htmlType="submit"
+                        disabled={!isValid || isDuplicate} // Disable submit button if form is invalid or duplicates exist
+                      >
+                        Create
+                      </Button>
+                    </div>
+                  </Form>
                 )}
-                <Button
-                  className="bg-baby-blue font-bold"
-                  type="primary"
-                  htmlType="submit"
-                  disabled={!isValid || isDuplicate} // Disable submit button if form is invalid or duplicates exist
-                >
-                  Create
-                </Button>
-              </div>
-            </Form>
+              </Formik>
+            </QueueModal>
           )}
-        </Formik>
-      </QueueModal>
+        </>
       ) : (
         <div className="flex flex-col justify-start gap-16">
           <div>
