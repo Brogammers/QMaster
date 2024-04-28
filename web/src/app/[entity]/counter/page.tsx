@@ -226,7 +226,7 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
 
     // If duplicate service found, prompt the user
     if (duplicateService) {
-      // alert(`You filled in the same service '${duplicateService}' more than once.`);
+      alert(`You filled in the same service '${duplicateService}' more than once.`);
       setIsModalOpened(true);
       return;
     }
