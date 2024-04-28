@@ -43,6 +43,7 @@ export default function Counter() {
   const [counterSetup, setCounterSetup] = useState(true);
   const [counters, setCounters] = useState<any[]>([]);
   const [formValues, setFormValues] = useState<any>(null);
+  const [isDuplicate, setIsDuplicate] = useState(false);
   const [tickets1, setTickets1] = useState<any[]>([
     // Add more ticket data as needed
   ]);
@@ -175,17 +176,18 @@ export default function Counter() {
   
   const handleSubmit = (values: any, { setSubmitting }: any) => {
     const serviceNames = new Set();
-    let hasDuplicate = false;
+    setIsDuplicate(false);
 
-    values.services.forEach((service: { name: unknown; }) => {
+    values.services.forEach((service: { name: unknown }) => {
       if (serviceNames.has(service.name)) {
-        hasDuplicate = true;
+        setIsDuplicate(true);
+        return; 
       } else {
         serviceNames.add(service.name);
       }
     });
-  
-    if (hasDuplicate) {
+
+    if (isDuplicate) {
       alert("Duplicate service names are not allowed. Please fix before submitting.");
       setSubmitting(false); 
       return;
@@ -230,63 +232,60 @@ export default function Counter() {
   return (
     <Entity>
       {counterSetup ? (
-        <QueueModal
-          title="Setup Counter Space"
-        >
+        <QueueModal title="Setup Counter Space">
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
           {({ values, errors, isValid, setFieldValue }) => (
-              <Form>
-                <div className="flex flex-col gap-4">
-                  <StyledFieldArray name="services" render={({ push, remove }) => (
-                    <div>
-                      {values.services.map((_, index) => (
-                        <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
-                          <div className="flex justify-center items-center gap-2">
-                            <StyledField name={`services.${index}.name`} placeholder="Service" />
-                            <ErrorMessage name={`services.${index}.name`} />
-                            <StyledField name={`services.${index}.count`} placeholder="Number of Counters" type="number" />
-                            <ErrorMessage name={`services.${index}.count`} />
-                          </div>
-                          <Button 
-                            className="bg-red-500 text-white"
-                            type="text"
-                            onClick={() => remove(index)}
-                          >
-                            Remove
-                          </Button>
+            <Form>
+              <div className="flex flex-col gap-4">
+                <StyledFieldArray name="services" render={({ push, remove }) => (
+                  <div>
+                    {values.services.map((_, index) => (
+                      <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
+                        <div className="flex justify-center items-center gap-2">
+                          <StyledField
+                            name={`services.${index}.name`}
+                            placeholder="Service"
+                          />
+                          <ErrorMessage name={`services.${index}.name`} />
+                          <StyledField name={`services.${index}.count`} placeholder="Number of Counters" type="number" />
+                          <ErrorMessage name={`services.${index}.count`} />
                         </div>
-                      ))}
-                      <Button 
-                        className="bg-ocean-blue font-bold"
-                        type="primary" 
-                        onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
-                      >
-                        Add Service
-                      </Button>
-                    </div>
-                  )} />
-                  {typeof errors.services === 'string' ? (
-                    <div>{errors.services}</div>
-                  ) : (
-                    errors.services?.map((error, index) => (
-                      <div key={index}>
-                        {typeof error === 'string' ? error : error.name || error.count}
+                        <Button
+                          className="bg-red-500 text-white"
+                          type="text"
+                          onClick={() => remove(index)}
+                          disabled={isDuplicate} // Disable remove button if duplicates exist
+                        >
+                          Remove
+                        </Button>
                       </div>
-                    ))
-                  )}
-                  <Button 
-                    className=" bg-baby-blue font-bold"
-                    type="primary" 
-                    htmlType="submit"
-                    disabled={!isValid}
-                  >
-                    Create
-                  </Button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </QueueModal>
+                    ))}
+                    <Button
+                      className="bg-ocean-blue font-bold"
+                      type="primary"
+                      onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
+                      disabled={isDuplicate} // Disable add service button if duplicates exist
+                    >
+                      Add Service
+                    </Button>
+                  </div>
+                )} />
+                {isDuplicate && ( // Display error message only if duplicates exist
+                  <div className="text-red-500">Duplicate service names found. Please fix before submitting.</div>
+                )}
+                <Button
+                  className="bg-baby-blue font-bold"
+                  type="primary"
+                  htmlType="submit"
+                  disabled={!isValid || isDuplicate} // Disable submit button if form is invalid or duplicates exist
+                >
+                  Create
+                </Button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </QueueModal>
       ) : (
         <div className="flex flex-col justify-start gap-16">
           <div>
