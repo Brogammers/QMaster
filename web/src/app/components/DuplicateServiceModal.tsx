@@ -1,6 +1,7 @@
 export default function DuplicateServiceModal({ isOpen, onClose, onMergeDuplicates, onFixDuplicates, hasDuplicate }: any) {
+  console.log("Modal opened: " + isOpen)
   return (
-    <div className={`modal ${isOpen ? 'active' : ''}`}>
+    <div className={`z-50 modal ${isOpen ? 'active' : ''}`}>
       <div className="modal-content">
         <p>Duplicate service names are not allowed. Please choose an action:</p>
         <div className="modal-buttons">

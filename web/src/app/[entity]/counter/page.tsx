@@ -19,7 +19,6 @@ import StyledField from '@/app/shared/StyledField';
 import DuplicateServiceModal from '@/app/components/DuplicateServiceModal';
 import { DuplicateServiceModalProps } from '../../../../types';
 
-// Define validation schema
 const validationSchema = Yup.object().shape({
   services: Yup.array()
     .of(
@@ -28,6 +27,21 @@ const validationSchema = Yup.object().shape({
         count: Yup.number().required('Required'),
       })
     )
+    .test('is-duplicate', 'Duplicate service names found', function (value) {
+      const serviceNames = new Set();
+      let hasDuplicate = false;
+
+      value?.forEach(service => {
+        if (serviceNames.has(service.name)) {
+          hasDuplicate = true;
+          return;
+        }
+        serviceNames.add(service.name);
+      });
+
+      return !hasDuplicate;
+    })
+    .min(1, 'At least one service must be entered'),
 });
 
 
@@ -100,14 +114,15 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
 
     if (duplicateService) {
       alert(`You filled in the same service '${duplicateService}' more than once.`);
-      return Promise.resolve(); // Return a promise to satisfy Formik's onSubmit type requirement
+      console.log(isOpen)
+      return Promise.resolve();
     }
 
-    let counterId = 1; // Initialize counter ID
+    let counterId = 1; 
     const updatedCounters = values.services.flatMap((service: any) => {
       const { name, count } = service;
       const countersForService = Array.from({ length: count }, (_, index) => ({
-        id: counterId++, // Increment counter ID for each new counter
+        id: counterId++, 
         service: name,
       }));
       return countersForService;
@@ -115,7 +130,7 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
 
     setCounters(updatedCounters);
 
-    return Promise.resolve(); // Return a promise to satisfy Formik's onSubmit type requirement
+    return Promise.resolve(); 
   };
   
   const width = useWindowSize().width;
@@ -232,39 +247,45 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
                     <StyledFieldArray name="services" render={({ push, remove }) => (
                       <div>
                         {values.services.map((_, index) => (
-                          <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
-                            <div className="flex justify-center items-center gap-2">
-                              <div className="flex flex-col">
-                                <StyledField
-                                  name={`services.${index}.name`}
-                                  placeholder="Service"
-                                />
-                                <ErrorMessage className="text-red-500" name={`services.${index}.name`} />
+                          <>
+                            <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
+                              <div className="flex justify-center items-center gap-2">
+                                <div className="flex flex-col">
+                                  <StyledField
+                                    name={`services.${index}.name`}
+                                    placeholder="Service"
+                                  />
+                                  <ErrorMessage className="text-red-500" name={`services.${index}.name`} />
+                                </div>
+                                <div className="flex flex-col">
+                                  <StyledField 
+                                    name={`services.${index}.count`} 
+                                    placeholder="Number of Counters" 
+                                    type="number" 
+                                  />
+                                  <ErrorMessage className="text-red-500" name={`services.${index}.count`} />
+                                </div>
                               </div>
-                              <div className="flex flex-col">
-                                <StyledField 
-                                  name={`services.${index}.count`} 
-                                  placeholder="Number of Counters" 
-                                  type="number" 
-                                />
-                                <ErrorMessage className="text-red-500" name={`services.${index}.count`} />
-                              </div>
+                              <Button
+                                className="bg-red-500 text-white"
+                                type="text"
+                                onClick={() => remove(index)}
+                                disabled={isDuplicate} 
+                              >
+                                Remove
+                              </Button>
                             </div>
-                            <Button
-                              className="bg-red-500 text-white"
-                              type="text"
-                              onClick={() => remove(index)}
-                              disabled={isDuplicate} // Disable remove button if duplicates exist
-                            >
-                              Remove
-                            </Button>
-                          </div>
+                            {/* <div> 
+                              <ErrorMessage className="text-red-500" name={`services.${index}.name`} />
+                              <ErrorMessage className="text-red-500" name={`services.${index}.count`} />
+                            </div> */}
+                          </>
                         ))}
                         <Button
                           className="bg-ocean-blue font-bold"
                           type="primary"
                           onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
-                          disabled={isDuplicate} // Disable add service button if duplicates exist
+                          disabled={isDuplicate} 
                         >
                           Add Service
                         </Button>
@@ -281,6 +302,7 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
                     >
                       Create
                     </Button>
+                    {/* <ErrorMessage className="text-red-500" name="services" component="div" /> */}
                   </div>
                 </Form>
               )}
@@ -297,8 +319,6 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <TabList onChange={handleServingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
                     <Tab label="All servings" value="0" />
-                    {/* <Tab label="Customer Service" value="Customer Service" />
-                    <Tab label="New Customer" value="New Customer" /> */}
                     {formValues && formValues.services && formValues.services.map((service: any) => (
                       <Tab key={service.name} label={service.name} value={service.name} />
                     ))}
