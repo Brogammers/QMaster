@@ -65,20 +65,61 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
     { id: 12, ticketNumber: 'A-790', service: 'New Customer' },
     { id: 13, ticketNumber: 'A-799', service: 'New Customer' },
     { id: 14, ticketNumber: 'P-799', service: 'Payments' },
-    // Add more ticket data as needed
   ]);
+
+  const handleSubmit = (values: { services: { name: string; count: number; }[] }, { setSubmitting }: any) => {
+    const serviceNames = new Set<string>();
+    let duplicateService: string | null = null;
+
+    values.services.forEach((service: { name: string }) => {
+      if (serviceNames.has(service.name)) {
+        duplicateService = service.name;
+        return;
+      } else {
+        serviceNames.add(service.name);
+      }
+    });
+
+    if (duplicateService) {
+      return Promise.resolve(); // Return a promise to satisfy Formik's onSubmit type requirement
+    }
+
+    console.log('Form values:', values);
+    setCounterSetup(!counterSetup);
+    setFormValues(values);
+
+    const serviceCounts: { [key: string]: number } = {};
+    values.services.forEach((service: any) => {
+      const { name } = service;
+      if (serviceCounts[name]) {
+        duplicateService = name;
+        return;
+      }
+      serviceCounts[name] = (serviceCounts[name] || 0) + 1;
+    });
+
+    if (duplicateService) {
+      alert(`You filled in the same service '${duplicateService}' more than once.`);
+      return Promise.resolve(); // Return a promise to satisfy Formik's onSubmit type requirement
+    }
+
+    let counterId = 1; // Initialize counter ID
+    const updatedCounters = values.services.flatMap((service: any) => {
+      const { name, count } = service;
+      const countersForService = Array.from({ length: count }, (_, index) => ({
+        id: counterId++, // Increment counter ID for each new counter
+        service: name,
+      }));
+      return countersForService;
+    });
+
+    setCounters(updatedCounters);
+
+    return Promise.resolve(); // Return a promise to satisfy Formik's onSubmit type requirement
+  };
   
   const width = useWindowSize().width;
   const MAX_TICKETS = width > 1400 ? 4 : 3;
-  // const counters = [
-  //   {id: 1, service: 'New Customer'},
-  //   {id: 2, service: 'Customer Service'},
-  //   {id: 3, service: 'New Customer'},
-  //   {id: 4, service: 'Customer Service'},
-  //   {id: 5, service: 'Customer Service'},
-  //   {id: 6, service: 'Customer Service'},
-  // ]
-
 
   useEffect(() => {
     const calculateVisibleTickets = (tickets: any[], setTickets: Function, setRemainingCount: Function) => {
@@ -113,44 +154,33 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
   };
 
   const filterTickets = (tickets: any[], tabValue: string) => {
-    // Apply the appropriate filter condition based on the tab value
     if (tabValue === '0') {
-      // Return all tickets for tab value '0'
       return tickets;
     } else {
-      // Filter tickets based on the selected service category
       return tickets.filter(ticket => ticket.service === tabValue);
     }
-};
+  };
 
-  // Initialize overflow count based on total tickets
   const initialOverflowCount2 = Math.max(tickets2.length - MAX_TICKETS, 0);
 
-  // State for overflow count
   const [overflowCount2, setOverflowCount2] = useState<number>(initialOverflowCount2);
 
-  // Calculate overflow count dynamically
   const calculateOverflowCount = (filteredTickets: any[], maxTickets: number) => {
     return Math.max(filteredTickets.length - maxTickets, 0);
   };
 
   useEffect(() => {
-    // Calculate overflow count for initial state
     const initialOverflowCount2 = calculateOverflowCount(tickets2, MAX_TICKETS);
 
-    // Set initial overflow count
     setOverflowCount2(initialOverflowCount2);
   }, [tickets1, tickets2, MAX_TICKETS]);
 
-  // Update overflow count whenever filtering logic changes
   useEffect(() => {
     const filteredTickets1 = filterTickets(tickets1, activeTab1);
     const filteredTickets2 = filterTickets(tickets2, activeTab2);
 
-    // Calculate overflow count based on filtered tickets
     const overflowCount2 = calculateOverflowCount(filteredTickets2, MAX_TICKETS);
 
-    // Update overflow count state
     setOverflowCount2(overflowCount2);
   }, [tickets1, tickets2, activeTab1, activeTab2, MAX_TICKETS]);
 
@@ -177,137 +207,87 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
     } else alert("Celebrate! No waiting line!")
   };
 
-  const handleMergeDuplicates = () => {
-    // Logic to merge duplicates and update services
-    setIsModalOpened(false);
-  };
-  
-  const handleFixDuplicates = () => {
-    // Logic to cancel submission and navigate back to counter setup
-    setIsModalOpened(false);
-  };
-  
-  const handleSubmit = (values: any, { setSubmitting }: any) => {
-    const serviceNames = new Set();
-    setIsDuplicate(false);
-
-    values.services.forEach((service: { name: unknown }) => {
-      if (serviceNames.has(service.name)) {
-        setIsDuplicate(true);
-        setIsModalOpened(true);
-        return; 
-      } else {
-        serviceNames.add(service.name);
-      }
-    });
-
-    if (isDuplicate && isModalOpened) {
-      alert("Duplicate service names are not allowed. Please fix before submitting.");
-      
-      setSubmitting(false); 
-      return;
-    }
-
-    console.log('Form values:', values);
-    setCounterSetup(!counterSetup);
-    setFormValues(values);
-
-    const serviceCounts: { [key: string]: number } = {};
-    let duplicateService: string | null = null;
-
-    values.services.forEach((service: any) => {
-      const { name } = service;
-      if (serviceCounts[name]) {
-        duplicateService = name;
-        return;
-      }
-      serviceCounts[name] = (serviceCounts[name] || 0) + 1;
-    });
-
-    // If duplicate service found, prompt the user
-    if (duplicateService) {
-      alert(`You filled in the same service '${duplicateService}' more than once.`);
-      setIsModalOpened(true);
-      return;
-    }
-
-    let counterId = 1; // Initialize counter ID
-
-    const updatedCounters = values.services.flatMap((service: any) => {
-      const { name, count } = service;
-      const countersForService = Array.from({ length: count }, (_, index) => ({
-        id: counterId++, // Increment counter ID for each new counter
-        service: name,
-      }));
-      return countersForService;
-    });
-
-    setCounters(updatedCounters);
-  };
-
   return (
     <Entity>
       {counterSetup ? (
         <>
-          {isModalOpened ? (
-            <DuplicateServiceModal isOpen={isOpen} onClose={onClose} onMergeDuplicates={onMergeDuplicates} onFixDuplicates={onFixDuplicates} hasDuplicate={hasDuplicate} />
-          ) : (
-            <QueueModal title="Setup Counter Space">
-              <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-                {({ values, errors, isValid, setFieldValue }) => (
-                  <Form>
-                    <div className="flex flex-col gap-4">
-                      <StyledFieldArray name="services" render={({ push, remove }) => (
-                        <div>
-                          {values.services.map((_, index) => (
-                            <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
-                              <div className="flex justify-center items-center gap-2">
+        {isModalOpened ? (
+          <DuplicateServiceModal 
+            isOpen={isOpen} 
+            onClose={onClose} 
+            onMergeDuplicates={onMergeDuplicates} 
+            onFixDuplicates={onFixDuplicates} 
+            hasDuplicate={hasDuplicate} 
+          />
+        ) : (
+          <QueueModal title="Setup Counter Space">
+            <Formik 
+              initialValues={initialValues} 
+              onSubmit={handleSubmit} 
+              validationSchema={validationSchema}
+            >
+              {({ values, errors, isValid, setFieldValue }) => (
+                <Form>
+                  <div className="flex flex-col gap-4">
+                    <StyledFieldArray name="services" render={({ push, remove }) => (
+                      <div>
+                        {values.services.map((_, index) => (
+                          <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
+                            <div className="flex justify-center items-center gap-2">
+                              <div className="flex flex-col">
                                 <StyledField
                                   name={`services.${index}.name`}
                                   placeholder="Service"
                                 />
-                                <ErrorMessage name={`services.${index}.name`} />
-                                <StyledField name={`services.${index}.count`} placeholder="Number of Counters" type="number" />
-                                <ErrorMessage name={`services.${index}.count`} />
+                                <ErrorMessage className="text-red-500" name={`services.${index}.name`} />
                               </div>
-                              <Button
-                                className="bg-red-500 text-white"
-                                type="text"
-                                onClick={() => remove(index)}
-                                disabled={isDuplicate} // Disable remove button if duplicates exist
-                              >
-                                Remove
-                              </Button>
+                              <div className="flex flex-col">
+                                <StyledField 
+                                  name={`services.${index}.count`} 
+                                  placeholder="Number of Counters" 
+                                  type="number" 
+                                />
+                                <ErrorMessage className="text-red-500" name={`services.${index}.count`} />
+                              </div>
                             </div>
-                          ))}
-                          <Button
-                            className="bg-ocean-blue font-bold"
-                            type="primary"
-                            onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
-                            disabled={isDuplicate} // Disable add service button if duplicates exist
-                          >
-                            Add Service
-                          </Button>
-                        </div>
-                      )} />
-                      {isDuplicate && ( // Display error message only if duplicates exist
-                        <div className="text-red-500">Duplicate service names found. Please fix before submitting.</div>
-                      )}
-                      <Button
-                        className="bg-baby-blue font-bold"
-                        type="primary"
-                        htmlType="submit"
-                        disabled={!isValid || isDuplicate} // Disable submit button if form is invalid or duplicates exist
-                      >
-                        Create
-                      </Button>
-                    </div>
-                  </Form>
-                )}
-              </Formik>
-            </QueueModal>
-          )}
-        </>
+                            <Button
+                              className="bg-red-500 text-white"
+                              type="text"
+                              onClick={() => remove(index)}
+                              disabled={isDuplicate} // Disable remove button if duplicates exist
+                            >
+                              Remove
+                            </Button>
+                          </div>
+                        ))}
+                        <Button
+                          className="bg-ocean-blue font-bold"
+                          type="primary"
+                          onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
+                          disabled={isDuplicate} // Disable add service button if duplicates exist
+                        >
+                          Add Service
+                        </Button>
+                      </div>
+                    )} />
+                    {isDuplicate && (
+                      <div className="text-red-500">Duplicate service names found. Please fix before submitting.</div>
+                    )}
+                    <Button
+                      className="bg-baby-blue font-bold"
+                      type="primary"
+                      htmlType="submit"
+                      disabled={!isValid || isDuplicate} // Disable submit button if form is invalid or duplicates exist
+                    >
+                      Create
+                    </Button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </QueueModal>
+        )}
+      </>
       ) : (
         <div className="flex flex-col justify-start gap-16">
           <div>
