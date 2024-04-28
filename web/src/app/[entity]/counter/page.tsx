@@ -255,7 +255,7 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
                                     name={`services.${index}.name`}
                                     placeholder="Service"
                                   />
-                                  <ErrorMessage className="text-red-500" name={`services.${index}.name`} />
+                                  <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.name`} />
                                 </div>
                                 <div className="flex flex-col">
                                   <StyledField 
@@ -263,7 +263,7 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
                                     placeholder="Number of Counters" 
                                     type="number" 
                                   />
-                                  <ErrorMessage className="text-red-500" name={`services.${index}.count`} />
+                                  <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.count`} />
                                 </div>
                               </div>
                               <Button
@@ -275,10 +275,6 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
                                 Remove
                               </Button>
                             </div>
-                            {/* <div> 
-                              <ErrorMessage className="text-red-500" name={`services.${index}.name`} />
-                              <ErrorMessage className="text-red-500" name={`services.${index}.count`} />
-                            </div> */}
                           </>
                         ))}
                         <Button
@@ -291,9 +287,11 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
                         </Button>
                       </div>
                     )} />
-                    {isDuplicate && (
-                      <div className="text-red-500">Duplicate service names found. Please fix before submitting.</div>
-                    )}
+                    {errors.services && typeof errors.services === 'string' && 
+                      <span className="text-red-500 font-bold text-center">
+                        {errors.services}
+                      </span>
+                    }
                     <Button
                       className="bg-baby-blue font-bold"
                       type="primary"
@@ -302,7 +300,7 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
                     >
                       Create
                     </Button>
-                    {/* <ErrorMessage className="text-red-500" name="services" component="div" /> */}
+                    {/* <ErrorMessage className="text-red-500 font-bold text-center" name="services" component="span" /> */}
                   </div>
                 </Form>
               )}
