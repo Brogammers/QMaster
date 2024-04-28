@@ -16,8 +16,6 @@ import { Button, Input } from 'antd';
 import QueueModal from '@/app/shared/QueueModal';
 import StyledFieldArray from '@/app/shared/StyledFieldArray';
 import StyledField from '@/app/shared/StyledField';
-import DuplicateServiceModal from '@/app/components/DuplicateServiceModal';
-import { DuplicateServiceModalProps } from '../../../../types';
 
 const validationSchema = Yup.object().shape({
   services: Yup.array()
@@ -49,7 +47,7 @@ const initialValues = {
   services: [{ name: '', count: 0 }],
 };
 
-export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDuplicates, hasDuplicate }: DuplicateServiceModalProps) {
+export default function Counter() {
   const [activeTab1, setActiveTab1] = useState<string>('0');
   const [activeTab2, setActiveTab2] = useState<string>('0');
   const [visibleTickets1, setVisibleTickets1] = useState<any[]>([]);
@@ -60,7 +58,6 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
   const [counters, setCounters] = useState<any[]>([]);
   const [formValues, setFormValues] = useState<any>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
-  const [isModalOpened, setIsModalOpened] = useState(false);
   const [tickets1, setTickets1] = useState<any[]>([
     // Add more ticket data as needed
   ]);
@@ -95,7 +92,7 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
     });
 
     if (duplicateService) {
-      return Promise.resolve(); // Return a promise to satisfy Formik's onSubmit type requirement
+      return Promise.resolve();
     }
 
     console.log('Form values:', values);
@@ -114,7 +111,6 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
 
     if (duplicateService) {
       alert(`You filled in the same service '${duplicateService}' more than once.`);
-      console.log(isOpen)
       return Promise.resolve();
     }
 
@@ -225,89 +221,77 @@ export default function Counter({ isOpen, onClose, onMergeDuplicates, onFixDupli
   return (
     <Entity>
       {counterSetup ? (
-        <>
-        {isModalOpened ? (
-          <DuplicateServiceModal 
-            isOpen={isOpen} 
-            onClose={onClose} 
-            onMergeDuplicates={onMergeDuplicates} 
-            onFixDuplicates={onFixDuplicates} 
-            hasDuplicate={hasDuplicate} 
-          />
-        ) : (
-          <QueueModal title="Setup Counter Space">
-            <Formik 
-              initialValues={initialValues} 
-              onSubmit={handleSubmit} 
-              validationSchema={validationSchema}
-            >
-              {({ values, errors, isValid, setFieldValue }) => (
-                <Form>
-                  <div className="flex flex-col gap-4">
-                    <StyledFieldArray name="services" render={({ push, remove }) => (
-                      <div>
-                        {values.services.map((_, index) => (
-                          <>
-                            <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
-                              <div className="flex justify-center items-center gap-2">
-                                <div className="flex flex-col">
-                                  <StyledField
-                                    name={`services.${index}.name`}
-                                    placeholder="Service"
-                                  />
-                                  <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.name`} />
-                                </div>
-                                <div className="flex flex-col">
-                                  <StyledField 
-                                    name={`services.${index}.count`} 
-                                    placeholder="Number of Counters" 
-                                    type="number" 
-                                  />
-                                  <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.count`} />
-                                </div>
+        <QueueModal title="Setup Counter Space">
+          <Formik 
+            initialValues={initialValues} 
+            onSubmit={handleSubmit} 
+            validationSchema={validationSchema}
+          >
+            {({ values, errors, isValid, setFieldValue }) => (
+              <Form>
+                <div className="flex flex-col gap-4">
+                  <StyledFieldArray name="services" render={({ push, remove }) => (
+                    <div>
+                      {values.services.map((_, index) => (
+                        <>
+                          <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
+                            <div className="flex justify-center items-center gap-2">
+                              <div className="flex flex-col">
+                                <StyledField
+                                  name={`services.${index}.name`}
+                                  placeholder="Service"
+                                />
+                                <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.name`} />
                               </div>
-                              <Button
-                                className="bg-red-500 text-white"
-                                type="text"
-                                onClick={() => remove(index)}
-                                disabled={isDuplicate} 
-                              >
-                                Remove
-                              </Button>
+                              <div className="flex flex-col">
+                                <StyledField 
+                                  name={`services.${index}.count`} 
+                                  placeholder="Number of Counters" 
+                                  type="number" 
+                                />
+                                <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.count`} />
+                              </div>
                             </div>
-                          </>
-                        ))}
-                        <Button
-                          className="bg-ocean-blue font-bold"
-                          type="primary"
-                          onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
-                          disabled={isDuplicate} 
-                        >
-                          Add Service
-                        </Button>
-                      </div>
-                    )} />
-                    {errors.services && typeof errors.services === 'string' && 
-                      <span className="text-red-500 font-bold text-center">
-                        {errors.services}
-                      </span>
-                    }
-                    <Button
-                      className="bg-baby-blue font-bold"
-                      type="primary"
-                      htmlType="submit"
-                      disabled={!isValid || isDuplicate} // Disable submit button if form is invalid or duplicates exist
-                    >
-                      Create
-                    </Button>
-                    {/* <ErrorMessage className="text-red-500 font-bold text-center" name="services" component="span" /> */}
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </QueueModal>
-        )}
-      </>
+                            <Button
+                              className="bg-red-500 text-white"
+                              type="text"
+                              onClick={() => remove(index)}
+                              disabled={isDuplicate} 
+                            >
+                              Remove
+                            </Button>
+                          </div>
+                        </>
+                      ))}
+                      <Button
+                        className="bg-ocean-blue font-bold"
+                        type="primary"
+                        onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
+                        disabled={isDuplicate} 
+                      >
+                        Add Service
+                      </Button>
+                    </div>
+                  )} />
+                  {errors.services && typeof errors.services === 'string' && 
+                    <span className="text-red-500 font-bold text-center">
+                      {errors.services}
+                    </span>
+                  }
+                  <Button
+                    className="bg-baby-blue font-bold"
+                    type="primary"
+                    htmlType="submit"
+                    disabled={!isValid || isDuplicate} // Disable submit button if form is invalid or duplicates exist
+                  >
+                    Create
+                  </Button>
+                  {/* <ErrorMessage className="text-red-500 font-bold text-center" name="services" component="span" /> */}
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </QueueModal>
       ) : (
         <div className="flex flex-col justify-start gap-16">
           <div>
