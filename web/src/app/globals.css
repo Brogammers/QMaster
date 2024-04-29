@@ -227,3 +227,27 @@ border-radius: 8px;
   border-color: #1DCDFE;
   outline: none;
 }
+
+
+/* 
+
+RESPONSIVENESS
+
+*/
+@media(max-width: 576px) {
+  .login__form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login__form--title {
+    font-size: 48px;
+    margin-bottom: 40px;
+  }
+}
+
+@media(max-height: 426px) {
+  .login__form--title {
+    margin-bottom: 16px;
+  }
+}
