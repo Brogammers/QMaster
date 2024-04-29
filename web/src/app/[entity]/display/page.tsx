@@ -57,7 +57,7 @@ export default function Display() {
     if (fullscreen) {
       gsap.to(".scrollContainer", {
         y: -(queuedPersonsData.length * 164), // Adjust according to your ticket height
-        duration: queuedPersonsData.length * 5, // Adjust the duration based on total tickets
+        duration: queuedPersonsData.length * 8, // Adjust the duration based on total tickets
         repeat: -1, // Infinite repeat
         ease: "linear",
         onComplete: () => {
