@@ -78,7 +78,7 @@ export default function LoginForm() {
               onBlur={handleBlur}
               value={values.email}
               placeholder="Enter your email"
-              className="w-full rounded-full mb-2 px-8 py-4 bg-white text-gray-700 font-normal text-lg outline-none border-none"
+              className="w-full rounded-full mb-2 px-4 py-3 sm:px-8 sm:py-4 bg-white text-gray-700 font-normal text-sm sm:text-lg outline-none border-none"
             />
             {errors.email && touched.email && (
               <span className="text-red-600 font-normal text-lg mb-2">
@@ -92,7 +92,7 @@ export default function LoginForm() {
               onBlur={handleBlur}
               value={values.password}
               placeholder="Enter your password"
-              className="w-full rounded-full mb-4 px-8 py-4 bg-white text-gray-700 font-normal text-lg outline-none border-none"
+              className="w-full rounded-full mb-4 px-4 py-3 sm:px-8 sm:py-4 bg-white text-gray-700 font-normal text-sm sm:text-lg outline-none border-none"
             />
             {errors.password && touched.password && (
               <span className="text-red-600 font-normal text-lg mb-2">
@@ -101,13 +101,13 @@ export default function LoginForm() {
             )}
             <Link
               href="mailto:hatemthedev@gmail.com"
-              className="text-[#1DCDFE] underline mb-4"
+              className="text-xs sm:text-md text-baby-blue underline mb-4"
             >
               Forgot Password
             </Link>
             <button
               type="submit"
-              className="rounded-xl bg-[#1DCDFE] text-white text-xl font-semibold w-full px-8 py-4 mt-2"
+              className="rounded-xl bg-baby-blue text-white text-md sm:text-xl font-semibold w-full px-4 py-3 sm:px-8 sm:py-4 mt-2"
               onClick={handleLogin}
             >
               Submit

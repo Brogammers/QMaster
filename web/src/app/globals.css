@@ -235,7 +235,19 @@ RESPONSIVENESS
 
 */
 @media(max-width: 576px) {
-  .bg-animation {
-    
+  .login__form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login__form--title {
+    font-size: 48px;
+    margin-bottom: 40px;
+  }
+}
+
+@media(max-height: 426px) {
+  .login__form--title {
+    margin-bottom: 16px;
   }
 }
