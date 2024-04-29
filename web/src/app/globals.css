@@ -227,3 +227,15 @@ border-radius: 8px;
   border-color: #1DCDFE;
   outline: none;
 }
+
+
+/* 
+
+RESPONSIVENESS
+
+*/
+@media(max-width: 576px) {
+  .bg-animation {
+    
+  }
+}
