@@ -10,11 +10,38 @@ import useWindowSize from '../../../../hooks/useWindowSize';
 import TextButton from '@/app/shared/TextButton';
 import MissionAccomplished from "../../../../public/mission-accomplished.svg";
 import ExceptionMessage from '@/app/shared/ExceptionMessage';
-import { Formik, FieldArray, Form, Field } from 'formik';
-import { Button, Input } from 'antd';
+import { Formik, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { Button } from 'antd';
 import QueueModal from '@/app/shared/QueueModal';
 import StyledFieldArray from '@/app/shared/StyledFieldArray';
 import StyledField from '@/app/shared/StyledField';
+
+const validationSchema = Yup.object().shape({
+  services: Yup.array()
+    .of(
+      Yup.object().shape({
+        name: Yup.string().required('Required'),
+        count: Yup.number().required('Required'),
+      })
+    )
+    .test('is-duplicate', 'Duplicate service names found', function (value) {
+      const serviceNames = new Set();
+      let hasDuplicate = false;
+
+      value?.forEach(service => {
+        if (serviceNames.has(service.name)) {
+          hasDuplicate = true;
+          return;
+        }
+        serviceNames.add(service.name);
+      });
+
+      return !hasDuplicate;
+    })
+    .min(1, 'At least one service must be entered'),
+});
+
 
 const initialValues = {
   services: [{ name: '', count: 0 }],
@@ -30,6 +57,7 @@ export default function Counter() {
   const [counterSetup, setCounterSetup] = useState(true);
   const [counters, setCounters] = useState<any[]>([]);
   const [formValues, setFormValues] = useState<any>(null);
+  const [isDuplicate, setIsDuplicate] = useState(false);
   const [tickets1, setTickets1] = useState<any[]>([
     // Add more ticket data as needed
   ]);
@@ -48,20 +76,61 @@ export default function Counter() {
     { id: 12, ticketNumber: 'A-790', service: 'New Customer' },
     { id: 13, ticketNumber: 'A-799', service: 'New Customer' },
     { id: 14, ticketNumber: 'P-799', service: 'Payments' },
-    // Add more ticket data as needed
   ]);
+
+  const handleSubmit = (values: { services: { name: string; count: number; }[] }, { setSubmitting }: any) => {
+    const serviceNames = new Set<string>();
+    let duplicateService: string | null = null;
+
+    values.services.forEach((service: { name: string }) => {
+      if (serviceNames.has(service.name)) {
+        duplicateService = service.name;
+        return;
+      } else {
+        serviceNames.add(service.name);
+      }
+    });
+
+    if (duplicateService) {
+      return Promise.resolve();
+    }
+
+    console.log('Form values:', values);
+    setCounterSetup(!counterSetup);
+    setFormValues(values);
+
+    const serviceCounts: { [key: string]: number } = {};
+    values.services.forEach((service: any) => {
+      const { name } = service;
+      if (serviceCounts[name]) {
+        duplicateService = name;
+        return;
+      }
+      serviceCounts[name] = (serviceCounts[name] || 0) + 1;
+    });
+
+    if (duplicateService) {
+      alert(`You filled in the same service '${duplicateService}' more than once.`);
+      return Promise.resolve();
+    }
+
+    let counterId = 1; 
+    const updatedCounters = values.services.flatMap((service: any) => {
+      const { name, count } = service;
+      const countersForService = Array.from({ length: count }, (_, index) => ({
+        id: counterId++, 
+        service: name,
+      }));
+      return countersForService;
+    });
+
+    setCounters(updatedCounters);
+
+    return Promise.resolve(); 
+  };
   
   const width = useWindowSize().width;
   const MAX_TICKETS = width > 1400 ? 4 : 3;
-  // const counters = [
-  //   {id: 1, service: 'New Customer'},
-  //   {id: 2, service: 'Customer Service'},
-  //   {id: 3, service: 'New Customer'},
-  //   {id: 4, service: 'Customer Service'},
-  //   {id: 5, service: 'Customer Service'},
-  //   {id: 6, service: 'Customer Service'},
-  // ]
-
 
   useEffect(() => {
     const calculateVisibleTickets = (tickets: any[], setTickets: Function, setRemainingCount: Function) => {
@@ -96,44 +165,33 @@ export default function Counter() {
   };
 
   const filterTickets = (tickets: any[], tabValue: string) => {
-    // Apply the appropriate filter condition based on the tab value
     if (tabValue === '0') {
-      // Return all tickets for tab value '0'
       return tickets;
     } else {
-      // Filter tickets based on the selected service category
       return tickets.filter(ticket => ticket.service === tabValue);
     }
-};
+  };
 
-  // Initialize overflow count based on total tickets
   const initialOverflowCount2 = Math.max(tickets2.length - MAX_TICKETS, 0);
 
-  // State for overflow count
   const [overflowCount2, setOverflowCount2] = useState<number>(initialOverflowCount2);
 
-  // Calculate overflow count dynamically
   const calculateOverflowCount = (filteredTickets: any[], maxTickets: number) => {
     return Math.max(filteredTickets.length - maxTickets, 0);
   };
 
   useEffect(() => {
-    // Calculate overflow count for initial state
     const initialOverflowCount2 = calculateOverflowCount(tickets2, MAX_TICKETS);
 
-    // Set initial overflow count
     setOverflowCount2(initialOverflowCount2);
   }, [tickets1, tickets2, MAX_TICKETS]);
 
-  // Update overflow count whenever filtering logic changes
   useEffect(() => {
     const filteredTickets1 = filterTickets(tickets1, activeTab1);
     const filteredTickets2 = filterTickets(tickets2, activeTab2);
 
-    // Calculate overflow count based on filtered tickets
     const overflowCount2 = calculateOverflowCount(filteredTickets2, MAX_TICKETS);
 
-    // Update overflow count state
     setOverflowCount2(overflowCount2);
   }, [tickets1, tickets2, activeTab1, activeTab2, MAX_TICKETS]);
 
@@ -159,70 +217,76 @@ export default function Counter() {
       }
     } else alert("Celebrate! No waiting line!")
   };
-  
-  const handleSubmit = (values: any) => {
-    // Handle form submission logic here
-    console.log('Form values:', values);
-    setCounterSetup(!counterSetup);
-    setFormValues(values);
-
-    let counterId = 1; // Initialize counter ID
-
-    const updatedCounters = values.services.flatMap((service: any) => {
-        const { name, count } = service;
-        const countersForService = Array.from({ length: count }, (_, index) => ({
-            id: counterId++, // Increment counter ID for each new counter
-            service: name,
-        }));
-        return countersForService;
-    });
-
-    setCounters(updatedCounters);
-};
 
   return (
     <Entity>
       {counterSetup ? (
-        <QueueModal
-          title="Setup Counter Space"
-        >
-          <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-            {({ values }) => (
+        <QueueModal title="Setup Counter Space">
+          <Formik 
+            initialValues={initialValues} 
+            onSubmit={handleSubmit} 
+            validationSchema={validationSchema}
+          >
+            {({ values, errors, isValid, setFieldValue }) => (
               <Form>
                 <div className="flex flex-col gap-4">
                   <StyledFieldArray name="services" render={({ push, remove }) => (
                     <div>
                       {values.services.map((_, index) => (
-                        <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
-                          <div className="flex justify-center items-center gap-2">
-                            <StyledField name={`services.${index}.name`} placeholder="Service" />
-                            <StyledField name={`services.${index}.count`} placeholder="Number of Counters" type="number" />
+                        <>
+                          <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
+                            <div className="flex justify-center items-center gap-2">
+                              <div className="flex flex-col">
+                                <StyledField
+                                  name={`services.${index}.name`}
+                                  placeholder="Service"
+                                />
+                                <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.name`} />
+                              </div>
+                              <div className="flex flex-col">
+                                <StyledField 
+                                  name={`services.${index}.count`} 
+                                  placeholder="Number of Counters" 
+                                  type="number" 
+                                />
+                                <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.count`} />
+                              </div>
+                            </div>
+                            <Button
+                              className="bg-red-500 text-white"
+                              type="text"
+                              onClick={() => remove(index)}
+                              disabled={isDuplicate} 
+                            >
+                              Remove
+                            </Button>
                           </div>
-                          <Button 
-                            className="bg-red-500 text-white"
-                            type="text"
-                            onClick={() => remove(index)}
-                          >
-                            Remove
-                          </Button>
-                        </div>
+                        </>
                       ))}
-                      <Button 
+                      <Button
                         className="bg-ocean-blue font-bold"
-                        type="primary" 
-                        onClick={() => push({ name: '', count: 0 })}
+                        type="primary"
+                        onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
+                        disabled={isDuplicate} 
                       >
                         Add Service
                       </Button>
                     </div>
                   )} />
-                  <Button 
-                    className=" bg-baby-blue font-bold"
-                    type="primary" 
+                  {errors.services && typeof errors.services === 'string' && 
+                    <span className="text-red-500 font-bold text-center">
+                      {errors.services}
+                    </span>
+                  }
+                  <Button
+                    className="bg-baby-blue font-bold"
+                    type="primary"
                     htmlType="submit"
+                    disabled={!isValid || isDuplicate} // Disable submit button if form is invalid or duplicates exist
                   >
                     Create
                   </Button>
+                  {/* <ErrorMessage className="text-red-500 font-bold text-center" name="services" component="span" /> */}
                 </div>
               </Form>
             )}
@@ -237,8 +301,6 @@ export default function Counter() {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <TabList onChange={handleServingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
                     <Tab label="All servings" value="0" />
-                    {/* <Tab label="Customer Service" value="Customer Service" />
-                    <Tab label="New Customer" value="New Customer" /> */}
                     {formValues && formValues.services && formValues.services.map((service: any) => (
                       <Tab key={service.name} label={service.name} value={service.name} />
                     ))}
