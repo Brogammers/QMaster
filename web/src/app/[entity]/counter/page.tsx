@@ -30,11 +30,12 @@ const validationSchema = Yup.object().shape({
       let hasDuplicate = false;
 
       value?.forEach(service => {
-        if (serviceNames.has(service.name)) {
+        const serviceName = (service.name || '').replace(/\s+/g, '').trim().toLowerCase();
+        if (serviceNames.has(serviceName)) {
           hasDuplicate = true;
           return;
         }
-        serviceNames.add(service.name);
+        serviceNames.add(serviceName);
       });
 
       return !hasDuplicate;
