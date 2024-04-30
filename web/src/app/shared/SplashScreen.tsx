@@ -3,7 +3,7 @@ import Lottie from "lottie-react";
 
 export default function SplashScreen() {
   return (
-    <div id="splash-screen" className="flex items-center justify-center w-full min-h-screen bg-ocean-blue">
+    <div className="flex items-center justify-center w-full min-h-screen bg-ocean-blue">
       <Lottie 
         animationData={animatedLogo} 
         width={100}
