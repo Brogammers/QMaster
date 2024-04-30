@@ -51,7 +51,7 @@ export default function LoginForm({ setIsLoading }: any) {
       await router.push("/qmaster/counter");
       console.log("Logging in...");
       setIsLoading(false);
-    }, 5000);
+    }, 2000);
   };
 
   return (
