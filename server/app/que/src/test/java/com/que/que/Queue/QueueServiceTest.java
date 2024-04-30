@@ -327,7 +327,7 @@ public class QueueServiceTest {
         queues.setName(queueName);
         when(queueRepository.findByName(queueName)).thenReturn(Optional.of(queues));
         // Act
-        for (int i = 0; i < queueService.MAX_QUEUE_SIZE + 1; i++) {
+        for (int i = 0; i < queueService.MAX_QUEUE_SIZE + 3; i++) {
             queueService.enqueueUser((long) (i + 1), queueName);
         }
 
