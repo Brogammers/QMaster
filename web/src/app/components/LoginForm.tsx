@@ -6,6 +6,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import SplashScreen from "../shared/SplashScreen";
 // import { useDispatch } from "react-redux";
 // import { login, setUser } from "../redux/authSlice";
 
@@ -15,7 +16,7 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required("Password required"),
 });
 
-export default function LoginForm() {
+export default function LoginForm({ setIsLoading }: any) {
   const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function LoginForm() {
   }
 
   // const handleLogin = (values: { email: string; password: string }) => {
-  const handleLogin = () => {
+  const handleLogin = async (values: any) => {
     // try {
     //   const response = await signInWithEmailAndPassword(
     //     auth,
@@ -45,8 +46,12 @@ export default function LoginForm() {
     //     "An error has occurred, please try again. If the error persists, please contact us at hatemthedev@gmail.com"
     //   );
     // }
-    console.log("Logging in...");
-    router.push("/qmaster/counter")
+    setIsLoading(true);
+    setTimeout(async () => {
+      await router.push("/qmaster/counter");
+      console.log("Logging in...");
+      setIsLoading(false);
+    }, 2000);
   };
 
   return (
@@ -108,7 +113,7 @@ export default function LoginForm() {
             <button
               type="submit"
               className="rounded-xl bg-baby-blue text-white text-md sm:text-xl font-semibold w-full px-4 py-3 sm:px-8 sm:py-4 mt-2"
-              onClick={handleLogin}
+              // onClick={() => handleLogin()}
             >
               Submit
             </button>
