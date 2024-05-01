@@ -2,7 +2,7 @@ package com.que.que.Registration.Token;
 
 import java.time.LocalDateTime;
 
-import com.que.que.User.AppUser;
+import com.que.que.User.AppUser.AppUser;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

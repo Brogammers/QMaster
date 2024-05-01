@@ -9,10 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.google.zxing.WriterException;
 import com.que.que.QRcode.QRCodeService;
-import com.que.que.User.AppUser;
-import com.que.que.User.AppUserRepository;
-import com.que.que.User.AppUserRole;
 import com.que.que.User.SubscriptionPlans;
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.AppUser.AppUserRepository;
+import com.que.que.User.AppUser.AppUserRole;
 
 import java.io.IOException;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package com.que.que.User;
+package com.que.que.User.AppUser;
 
 import java.util.Optional;
 

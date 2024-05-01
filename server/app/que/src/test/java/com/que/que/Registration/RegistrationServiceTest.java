@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 import com.que.que.Email.EmailSender;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.Security.PasswordValidator;
-import com.que.que.User.AppUserService;
+import com.que.que.User.AppUser.AppUserService;
 
 import java.util.HashSet;
 

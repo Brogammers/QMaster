@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.que.que.User.AppUser;
+import com.que.que.User.AppUser.AppUser;
 
 import lombok.AllArgsConstructor;
 

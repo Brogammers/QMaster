@@ -1,4 +1,4 @@
-package com.que.que.User;
+package com.que.que.User.AppUser;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +21,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.que.que.User.SubscriptionPlans;
 
 @Entity
 @Getter

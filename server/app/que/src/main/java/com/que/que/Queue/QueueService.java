@@ -1,9 +1,9 @@
 package com.que.que.Queue;
 
 import com.que.que.QRcode.QRCodeService;
-import com.que.que.User.AppUser;
-import com.que.que.User.AppUserRepository;
 import com.que.que.User.SubscriptionPlans;
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.AppUser.AppUserRepository;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
