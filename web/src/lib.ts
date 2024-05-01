@@ -1,13 +1,14 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { ENCRYPTION_ALGORITHM } from '@env';
 
 const secretKey = "secret";
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: any) {
   return await new SignJWT(payload)
-    .setProtectedHeader({ alg: "HS256" })
+    .setProtectedHeader({ alg: ENCRYPTION_ALGORITHM })
     .setIssuedAt()
     .setExpirationTime("10 sec from now")
     .sign(key);
@@ -15,7 +16,7 @@ export async function encrypt(payload: any) {
 
 export async function decrypt(input: string): Promise<any> {
   const { payload } = await jwtVerify(input, key, {
-    algorithms: ["HS256"],
+    algorithms: [ENCRYPTION_ALGORITHM],
   });
   return payload;
 }
