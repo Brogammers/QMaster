@@ -43,29 +43,19 @@ public class QueueEnqueue {
     private String comment;
 
     public QueueEnqueue(AppUser appUser, Queues queue, QueueEnqueueStatus queueEnqueueStatus, String comment) {
-        if (queue.getPeopleInQueue() < queue.getMaxQueueSize()) {
-            this.appUser = appUser;
-            this.queue = queue;
-            this.actionDate = LocalDateTime.now();
-            this.queueEnqueueStatus = queueEnqueueStatus;
-            this.comment = comment;
-        } 
-        else {
-            throw new IllegalStateException("This queue is full and isn’t accepting more requests.");
-        }
+        this.appUser = appUser;
+        this.queue = queue;
+        this.actionDate = LocalDateTime.now();
+        this.queueEnqueueStatus = queueEnqueueStatus;
+        this.comment = comment;
     }
 
     public QueueEnqueue(AppUser appUser, Queues queue, QueueEnqueueStatus queueEnqueueStatus) {
-        if (queue.getPeopleInQueue() < queue.getMaxQueueSize()) {
-            this.appUser = appUser;
-            this.queue = queue;
-            this.actionDate = LocalDateTime.now();
-            this.queueEnqueueStatus = queueEnqueueStatus;
-            this.comment = "";
-        } 
-        else {
-            throw new IllegalStateException("This queue is full and isn’t accepting more requests.");
-        }
+        this.appUser = appUser;
+        this.queue = queue;
+        this.actionDate = LocalDateTime.now();
+        this.queueEnqueueStatus = queueEnqueueStatus;
+        this.comment = "";
     }
 
     public QueueEnqueue() {
