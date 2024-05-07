@@ -151,6 +151,10 @@ public class QueueService {
       if (presentInQueue(appUser, specificQueue)) {
         throw new IllegalStateException("User already in queue");
       }
+      if (specificQueue.size() == currentQueue.getMaxQueueSize()) {
+        throw new IllegalStateException(
+            "Queue is full at the moment and is not accepting more people. Try again later");
+      }
       specificQueue.add(appUser);
       currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() + 1);
     } catch (Exception e) {
