@@ -148,10 +148,12 @@ public class QueueService {
     ArrayList<Queue<Long>> queueHolderQueues = queue.get(queueSlot);
     try {
       Queue<Long> specificQueue = queueHolderQueues.get(currentQueue.getSpecificSlot());
+
+      // Checking if person is present in queue or if queue is full
       if (presentInQueue(appUser, specificQueue)) {
         throw new IllegalStateException("User already in queue");
       }
-      if (specificQueue.size() == currentQueue.getMaxQueueSize()) {
+      if (specificQueue.size() >= currentQueue.getMaxQueueSize()) {
         throw new IllegalStateException(
             "Queue is full at the moment and is not accepting more people. Try again later");
       }
