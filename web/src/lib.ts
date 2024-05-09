@@ -1,8 +1,8 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { ENCRYPTION_ALGORITHM } from '@env';
-
+// import { ENCRYPTION_ALGORITHM } from '@env';
+const ENCRYPTION_ALGORITHM = process.env.ENCRYPTION_ALGORITHM;
 const secretKey = "secret";
 const key = new TextEncoder().encode(secretKey);
 
