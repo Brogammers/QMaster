@@ -20,12 +20,25 @@ public class LoginController {
 
     private LoginService loginService;
 
-    @PostMapping
-    public ResponseEntity<Object> login(@RequestBody LoginRequest request) {
+    @PostMapping(path = "/user")
+    public ResponseEntity<Object> loginUser(@RequestBody LoginRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
             body = loginService.loginUser(request.getEmail(), request.getPassword());
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+            statusCode = HttpStatusCode.valueOf(500);
+        }
+        return new ResponseEntity<Object>(body, statusCode);
+    }
+
+    @PostMapping(path = "/business")
+    public ResponseEntity<Object> loginBusiness(@RequestBody LoginRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+        try {
+            body = loginService.loginBusinessUser(request.getEmail(), request.getPassword());
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
             statusCode = HttpStatusCode.valueOf(500);
