@@ -4,6 +4,7 @@ import com.que.que.Registration.EmailValidator;
 import com.que.que.Security.JwtUtil;
 import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.AppUser.AppUserRepository;
+import com.que.que.User.BusinessUser.BusinessUserRepository;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +26,9 @@ public class LoginServiceTest {
     private AppUserRepository appUserRepository;
 
     @Mock
+    private BusinessUserRepository businessUserRepository;
+
+    @Mock
     private EmailValidator emailValidator;
 
     @Mock
@@ -36,7 +40,8 @@ public class LoginServiceTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        loginService = new LoginService(appUserRepository, emailValidator, loginRepository, bCryptPasswordEncoder);
+        loginService = new LoginService(appUserRepository, businessUserRepository, emailValidator, loginRepository,
+                bCryptPasswordEncoder);
     }
 
     /**
