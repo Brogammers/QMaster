@@ -10,6 +10,6 @@ import com.que.que.User.AppUser.AppUser;
 
 @Transactional(readOnly = true)
 @Repository
-public interface BusinessUserRepository extends JpaRepository<AppUser, Long> {
+public interface BusinessUserRepository extends JpaRepository<BusinessUser, Long> {
     Optional<AppUser> findByEmail(String email);
 }
