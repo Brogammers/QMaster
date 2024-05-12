@@ -44,4 +44,11 @@ public class LoginEntry {
       this.appUser = (AppUser) appUser;
     this.loginDate = LocalDateTime.now();
   }
+
+  public User getAppUser() {
+    if (this.appUser != null)
+      return this.appUser;
+    else
+      return this.businessUser;
+  }
 }
