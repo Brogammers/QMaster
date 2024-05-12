@@ -60,7 +60,6 @@ public class RegistrationService {
             request.getEmail(),
             false,
             false,
-            (byte) 0,
             "+20",
             "1202250070",
             "Egypt"));// request.getPhoneNumber(), request.getPhoneCode(),

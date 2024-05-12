@@ -6,7 +6,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRole;
-import com.que.que.User.SubscriptionPlans;
 
 import static org.junit.Assert.*;
 import java.util.Collection;
@@ -41,8 +40,6 @@ public class AppUserTest {
         appUser.setEmail("johndoe@example.com");
         appUser.setLocked(false);
         appUser.setEnabled(true);
-        appUser.setQueueId(-1);
-        appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
         appUser.setLocation("New York, USA");
 
         // Verify values using getters
@@ -60,8 +57,6 @@ public class AppUserTest {
         assertEquals("johndoe@example.com", appUser.getEmail());
         assertFalse(appUser.isLocked());
         assertTrue(appUser.isEnabled());
-        assertEquals(-1, appUser.getQueueId());
-        assertEquals(SubscriptionPlans.BASIC, appUser.getSubscriptionPlan());
         assertEquals("New York, USA", appUser.getLocation());
     }
 
