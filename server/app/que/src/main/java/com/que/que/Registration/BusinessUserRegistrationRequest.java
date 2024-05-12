@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class RegistrationRequest {
+public class BusinessUserRegistrationRequest {
 
     private final String firstName;
     private final String lastName;
@@ -22,4 +22,6 @@ public class RegistrationRequest {
     private final String confirmPassword;
     private final String phoneCode;
     private final String phoneNumber;
+
+    // TODO: ADD MORE FEATUERS
 }

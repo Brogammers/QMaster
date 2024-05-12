@@ -10,8 +10,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.que.que.User.AppUser;
-import com.que.que.User.AppUserRepository;
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.AppUser.AppUserRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

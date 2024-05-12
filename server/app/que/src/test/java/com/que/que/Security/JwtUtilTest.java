@@ -1,9 +1,10 @@
 package com.que.que.Security;
 
-import com.que.que.User.AppUser;
 import io.jsonwebtoken.Claims;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.que.que.User.AppUser.AppUser;
 
 import java.util.Date;
 

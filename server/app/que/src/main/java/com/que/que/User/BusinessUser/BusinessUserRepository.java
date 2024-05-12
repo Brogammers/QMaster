@@ -1,4 +1,4 @@
-package com.que.que.User;
+package com.que.que.User.BusinessUser;
 
 import java.util.Optional;
 
@@ -8,6 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 @Repository
-public interface AppUserRepository extends JpaRepository<AppUser, Long> {
-  Optional<AppUser> findByEmail(String email);
+public interface BusinessUserRepository extends JpaRepository<BusinessUser, Long> {
+    Optional<BusinessUser> findByEmail(String email);
 }

@@ -1,9 +1,11 @@
 package com.que.que.Queue;
 
 import com.que.que.QRcode.QRCodeService;
-import com.que.que.User.AppUser;
-import com.que.que.User.AppUserRepository;
 import com.que.que.User.SubscriptionPlans;
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.AppUser.AppUserRepository;
+import com.que.que.User.BusinessUser.BusinessUser;
+import com.que.que.User.BusinessUser.BusinessUserRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 public class QueueService {
 
   private final AppUserRepository appUserRepository;
+  private final BusinessUserRepository businessUserRepository;
   private final QueueRepository queueRepository;
   private final QueueCreationRepository queueCreationRepository;
   private final QueueDequeueRepository queueDequeueRepository;
@@ -46,7 +49,7 @@ public class QueueService {
   }
 
   public void createNewQueue(@NonNull Long queueHolderID, String name) {
-    AppUser appUser = appUserRepository.findById(queueHolderID)
+    BusinessUser appUser = businessUserRepository.findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find User"));
 
     // Checking if current memory size for queues is full
@@ -100,7 +103,7 @@ public class QueueService {
   }
 
   public boolean isValidForNewQueue(@NonNull Long queueHolderID) {
-    AppUser appUserFromDB = appUserRepository
+    BusinessUser appUserFromDB = businessUserRepository
         .findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
     int queueId = appUserFromDB.getQueueId();
@@ -129,7 +132,7 @@ public class QueueService {
   }
 
   public int getQueueSlot(@NonNull Long queueHolderID) {
-    AppUser appUserFromDB = appUserRepository
+    BusinessUser appUserFromDB = businessUserRepository
         .findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
     int queueId = appUserFromDB.getQueueId();
@@ -225,7 +228,7 @@ public class QueueService {
       throw new IllegalStateException("User does not have specific queue");
     }
     if (queueHolderQueues.size() == 0) {
-      AppUser appUser = currentQueue.getCreator();
+      BusinessUser appUser = currentQueue.getCreator();
       appUser.setQueueId(-1);
       queueSlots.push(queueSlot);
     }
@@ -339,7 +342,7 @@ public class QueueService {
     ArrayList<Map<String, ArrayList<AppUser>>> waitingInSpecificQueues = new ArrayList<>();
 
     // Get app user and queue slot
-    AppUser user = appUserRepository.findById(appUserId)
+    BusinessUser user = businessUserRepository.findById(appUserId)
         .orElseThrow(() -> new IllegalStateException("Could not find user with such id"));
     int queueSlot = user.getQueueId();
     ArrayList<Queue<Long>> queuesToQuery = queueSet.get(queueSlot);

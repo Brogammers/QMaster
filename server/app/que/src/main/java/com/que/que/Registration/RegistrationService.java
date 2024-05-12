@@ -4,9 +4,13 @@ import com.que.que.Email.EmailSender;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.Security.PasswordValidator;
-import com.que.que.User.AppUser;
-import com.que.que.User.AppUserRole;
-import com.que.que.User.AppUserService;
+import com.que.que.User.SubscriptionPlans;
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.AppUser.AppUserRole;
+import com.que.que.User.AppUser.AppUserService;
+import com.que.que.User.BusinessUser.BusinessUser;
+import com.que.que.User.BusinessUser.BusinessUserService;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,13 +25,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegistrationService {
 
   private final AppUserService appUserService;
+  private final BusinessUserService businessUserService;
   private final EmailValidator emailValidator;
   private final ConfirmationTokenService confirmationTokenService;
   private final PasswordValidator passwordValidator;
   private final EmailSender emailSender;
   private final HashSet<String> phoneCodes;
 
-  public String register(RegistrationRequest request) {
+  public String register(AppUserRegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
     boolean isValidPassword = passwordValidator.test(request.getPassword());
     if (phoneCodes.isEmpty()) {
@@ -60,10 +65,57 @@ public class RegistrationService {
             request.getEmail(),
             false,
             false,
-            (byte) 0,
             "+20",
             "1202250070",
             "Egypt"));// request.getPhoneNumber(), request.getPhoneCode(),
+    Map<String, String> context = new HashMap<>();
+    context.put("name", request.getFirstName());
+    context.put("token", token);
+    // TODO: Activate later
+    /*
+     * emailSender.send(request.getEmail(),
+     * "src/main/resources/templates/Activation.html",
+     * "Confirm Email", context);
+     */
+    return token;
+  }
+
+  public String register(BusinessUserRegistrationRequest request) {
+    boolean isValidEmail = emailValidator.test(request.getEmail());
+    boolean isValidPassword = passwordValidator.test(request.getPassword());
+    if (phoneCodes.isEmpty()) {
+      renderCountryCodes();
+    }
+    if (!isValidPassword) {
+      throw new IllegalStateException("Password does not meet requirements");
+    }
+    if (!isValidEmail) {
+      throw new IllegalStateException("Email invalid");
+    }
+    if (!request.getPassword().equals(request.getConfirmPassword())) {
+      throw new IllegalStateException("Password do not match");
+    }
+    /*
+     * if (!phoneCodes.contains(request.getPhoneCode())) {
+     * throw new IllegalStateException("Phone code not found");
+     * }
+     */
+    String token = businessUserService.signUpUser(
+        new BusinessUser(
+            AppUserRole.USER,
+            request.getFirstName(),
+            request.getLastName(),
+            request.getUsername(),
+            LocalDateTime.now(),
+            request.getDateOfBirth(),
+            request.getCountryOfOrigin(),
+            request.getPassword(),
+            request.getEmail(),
+            false,
+            false,
+            "+20",
+            "1202250070",
+            "Egypt", SubscriptionPlans.BASIC));// request.getPhoneNumber(), request.getPhoneCode(),
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);

@@ -15,8 +15,8 @@ import com.que.que.Queue.QueueEnqueue;
 import com.que.que.Queue.QueueEnqueueRepository;
 import com.que.que.Queue.QueueService;
 import com.que.que.Queue.Queues;
-import com.que.que.User.AppUser;
-import com.que.que.User.AppUserRepository;
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.AppUser.AppUserRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -40,10 +40,10 @@ public class HistoryService {
         return map;
     }
 
-    public Map<String, Object> getUserCurrentQueues(Long id){
+    public Map<String, Object> getUserCurrentQueues(Long id) {
         ArrayList<Queues> currentQueues = queueService.currentQueuesOfUser(id);
-        Map<String,Object> map = new HashMap<>();
-        map.put("currentQueues",currentQueues);
+        Map<String, Object> map = new HashMap<>();
+        map.put("currentQueues", currentQueues);
         return map;
     }
 }

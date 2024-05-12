@@ -4,7 +4,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.que.que.User.AppUser;
+import com.que.que.User.BusinessUser.BusinessUser;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,7 +35,7 @@ public class Queues {
     @ManyToOne
     @JoinColumn(nullable = false, name = "app_user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private AppUser creator;
+    private BusinessUser creator;
     @Column(nullable = false)
     private int queueSlot;
     @Column(nullable = false)
@@ -45,7 +45,7 @@ public class Queues {
     private int rating;
     private int maxQueueSize = 100;
 
-    public Queues(String name, AppUser creator, int queueSlot, int specificSlot) {
+    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot) {
         this.name = name;
         this.creator = creator;
         this.queueSlot = queueSlot;
@@ -53,8 +53,8 @@ public class Queues {
         this.peopleInQueue = 0;
         this.rating = -1; // -1 if there are no ratings yet
     }
-    
-    public Queues(String name, AppUser creator, int queueSlot, int specificSlot, int maxQueueSize) {
+
+    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, int maxQueueSize) {
         this.name = name;
         this.creator = creator;
         this.queueSlot = queueSlot;

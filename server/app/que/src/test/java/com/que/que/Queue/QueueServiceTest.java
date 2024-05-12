@@ -9,10 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.google.zxing.WriterException;
 import com.que.que.QRcode.QRCodeService;
-import com.que.que.User.AppUser;
-import com.que.que.User.AppUserRepository;
-import com.que.que.User.AppUserRole;
 import com.que.que.User.SubscriptionPlans;
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.AppUser.AppUserRepository;
+import com.que.que.User.AppUser.AppUserRole;
+import com.que.que.User.BusinessUser.BusinessUser;
+import com.que.que.User.BusinessUser.BusinessUserRepository;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -27,6 +29,9 @@ public class QueueServiceTest {
 
     @Mock
     private AppUserRepository appUserRepository;
+
+    @Mock
+    private BusinessUserRepository businessUserRepository;
 
     @Mock
     private QueueRepository queueRepository;
@@ -53,7 +58,7 @@ public class QueueServiceTest {
         // Arrange
         Long queueHolderID = 1L;
         String name = "TestQueue";
-        AppUser appUser = new AppUser();
+        BusinessUser appUser = new BusinessUser();
 
         // Set values using setters
         appUser.setId(1L);
@@ -73,14 +78,14 @@ public class QueueServiceTest {
         appUser.setQueueId(-1);
         appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
         appUser.setLocation("New York, USA");
-        when(appUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
+        when(businessUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
         when(queueRepository.findByName(name)).thenReturn(Optional.empty());
 
         // Act
         queueService.createNewQueue(queueHolderID, name);
 
         // Assert
-        verify(appUserRepository, times(3)).findById(queueHolderID);
+        verify(businessUserRepository, times(3)).findById(queueHolderID);
         verify(queueRepository, times(1)).findByName(name);
         try {
             verify(qrCodeService, times(1)).createQRCode(eq(queueHolderID), anyInt(), anyString());
@@ -96,17 +101,17 @@ public class QueueServiceTest {
     public void testIsValidForNewQueue_Basic() {
         // Arrange
         Long queueHolderID = 1L;
-        AppUser appUser = new AppUser();
+        BusinessUser appUser = new BusinessUser();
         appUser.setQueueId(-1);
         appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
-        when(appUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
+        when(businessUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
 
         // Act
         boolean isValidBeforeQueue = queueService.isValidForNewQueue(queueHolderID);
 
         // Assert
         assertTrue(isValidBeforeQueue);
-        verify(appUserRepository, times(1)).findById(queueHolderID);
+        verify(businessUserRepository, times(1)).findById(queueHolderID);
 
         queueService.createNewQueue(queueHolderID, "test");
 
@@ -119,17 +124,17 @@ public class QueueServiceTest {
     public void testIsValidForNewQueue_Enterprise() {
         // Arrange
         Long queueHolderID = 1L;
-        AppUser appUser = new AppUser();
+        BusinessUser appUser = new BusinessUser();
         appUser.setQueueId(-1);
         appUser.setSubscriptionPlan(SubscriptionPlans.ENTERPRISE);
-        when(appUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
+        when(businessUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
 
         // Act
         boolean isValidBeforeQueue = queueService.isValidForNewQueue(queueHolderID);
 
         // Assert
         assertTrue(isValidBeforeQueue);
-        verify(appUserRepository, times(1)).findById(queueHolderID);
+        verify(businessUserRepository, times(1)).findById(queueHolderID);
 
         for (int i = 0; i < queueService.MAX_ENTERPRISE_QUEUES; i++)
             queueService.createNewQueue(queueHolderID, "test" + i);
@@ -143,10 +148,10 @@ public class QueueServiceTest {
     public void testIsValidForNewQueue_Premium() {
         // Arrange
         Long queueHolderID = 1L;
-        AppUser appUser = new AppUser();
+        BusinessUser appUser = new BusinessUser();
         appUser.setQueueId(-1);
         appUser.setSubscriptionPlan(SubscriptionPlans.PREMIUM);
-        when(appUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
+        when(businessUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
 
         // Act
         boolean isValidBeforeQueue = queueService.isValidForNewQueue(queueHolderID);
@@ -166,10 +171,10 @@ public class QueueServiceTest {
     public void testCreatingMoreQueuesThanMaxAllowed_Basic() {
         // Arrange
         Long queueHolderID = 1L;
-        AppUser appUser = new AppUser();
+        BusinessUser appUser = new BusinessUser();
         appUser.setQueueId(-1);
         appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
-        when(appUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
+        when(businessUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
 
         // Act
         for (int i = 0; i < queueService.MAX_BASIC_QUEUES + 1; i++)
@@ -183,10 +188,10 @@ public class QueueServiceTest {
     public void testCreatingMoreQueuesThanMaxAllowed_Premium() {
         // Arrange
         Long queueHolderID = 1L;
-        AppUser appUser = new AppUser();
+        BusinessUser appUser = new BusinessUser();
         appUser.setQueueId(-1);
         appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
-        when(appUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
+        when(businessUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
 
         // Act
         for (int i = 0; i < queueService.MAX_PREMIUM_QUEUES + 1; i++)
@@ -200,10 +205,10 @@ public class QueueServiceTest {
     public void testCreatingMoreQueuesThanMaxAllowed_Enterprise() {
         // Arrange
         Long queueHolderID = 1L;
-        AppUser appUser = new AppUser();
+        BusinessUser appUser = new BusinessUser();
         appUser.setQueueId(-1);
         appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
-        when(appUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
+        when(businessUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
 
         // Act
         for (int i = 0; i < queueService.MAX_ENTERPRISE_QUEUES + 1; i++)
@@ -311,8 +316,6 @@ public class QueueServiceTest {
             AppUser appUser = new AppUser();
             Long appUserId = (long) i;
             appUser.setId(appUserId);
-            appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
-            appUser.setQueueId(-1);
             appUsers[i - 1] = appUser;
         }
 
@@ -320,10 +323,19 @@ public class QueueServiceTest {
             when(appUserRepository.findById((long) i + 1)).thenReturn(Optional.of(appUsers[i]));
         }
 
+        BusinessUser creator = new BusinessUser();
+        creator.setId(1L);
+        creator.setSubscriptionPlan(SubscriptionPlans.BASIC);
+        creator.setQueueId(-1);
+
+        Optional<BusinessUser> optionalBusinessUser = Optional.of(creator);
+
+        when(businessUserRepository.findById(anyLong())).thenReturn(optionalBusinessUser);
+
         queueService.createNewQueue(1L, queueName);
 
         Queues queues = new Queues();
-        queues.setCreator(appUsers[0]);
+        queues.setCreator(creator);
         queues.setName(queueName);
         when(queueRepository.findByName(queueName)).thenReturn(Optional.of(queues));
         // Act
@@ -344,8 +356,6 @@ public class QueueServiceTest {
             AppUser appUser = new AppUser();
             Long appUserId = (long) i;
             appUser.setId(appUserId);
-            appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
-            appUser.setQueueId(-1);
             appUsers[i - 1] = appUser;
         }
 
@@ -353,10 +363,20 @@ public class QueueServiceTest {
             when(appUserRepository.findById((long) i + 1)).thenReturn(Optional.of(appUsers[i]));
         }
 
+        BusinessUser creator = new BusinessUser();
+        creator.setId(1L);
+        creator.setSubscriptionPlan(SubscriptionPlans.BASIC);
+        creator.setQueueId(-1);
+
+        Optional<BusinessUser> optionalBusinessUser = Optional.of(creator);
+
+        when(businessUserRepository.findById(anyLong())).thenReturn(optionalBusinessUser);
+
         queueService.createNewQueue(1L, queueName);
 
         Queues queues = new Queues();
-        queues.setCreator(appUsers[0]);
+
+        queues.setCreator(creator);
         queues.setName(queueName);
         when(queueRepository.findByName(queueName)).thenReturn(Optional.of(queues));
         // Act

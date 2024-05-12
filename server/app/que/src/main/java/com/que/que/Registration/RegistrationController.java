@@ -24,8 +24,23 @@ public class RegistrationController {
 
   private RegistrationService registrationService;
 
-  @PostMapping
-  public ResponseEntity<Object> register(@RequestBody RegistrationRequest request) {
+  @PostMapping(path = "/user")
+  public ResponseEntity<Object> register(@RequestBody AppUserRegistrationRequest request) {
+    Map<String, Object> body = new HashMap<>();
+    HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
+    try {
+      String token = registrationService.register(request);
+      body.put("confirmation-token", token);
+      body.put("message", "Registered!");
+    } catch (IllegalStateException e) {
+      body.put("message", e.getMessage());
+      statusCode = HttpStatusCode.valueOf(500);
+    }
+    return new ResponseEntity<Object>(body, statusCode);
+  }
+
+  @PostMapping(path = "/business")
+  public ResponseEntity<Object> register(@RequestBody BusinessUserRegistrationRequest request) {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
     try {

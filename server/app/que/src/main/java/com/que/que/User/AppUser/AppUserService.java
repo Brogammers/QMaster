@@ -1,4 +1,4 @@
-package com.que.que.User;
+package com.que.que.User.AppUser;
 
 import lombok.AllArgsConstructor;
 
@@ -61,10 +61,11 @@ public class AppUserService implements UserDetailsService {
     Map<String, String> context = new HashMap<>();
     context.put("name", appUser.getFirstName());
     // TODO: Disabled for now
-    /* 
-    emailService.send(appUser.getEmail(),
-        "src/main/resources/templates/Hello.html", "Welcome!", context); // TODO: Send email
-    */
+    /*
+     * emailService.send(appUser.getEmail(),
+     * "src/main/resources/templates/Hello.html", "Welcome!", context); // TODO:
+     * Send email
+     */
     return confirmationToken.toString();
   }
 
