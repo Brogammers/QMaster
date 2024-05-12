@@ -58,4 +58,12 @@ public class ConfirmationToken {
   public String toString() {
     return this.token;
   }
+
+  public User getAppUser() {
+    if (this.appUser != null) {
+      return this.appUser;
+    } else {
+      return this.businessUser;
+    }
+  }
 }
