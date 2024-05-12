@@ -9,6 +9,7 @@ import com.que.que.Email.EmailSender;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.Security.PasswordValidator;
 import com.que.que.User.AppUser.AppUserService;
+import com.que.que.User.BusinessUser.BusinessUserService;
 
 import java.util.HashSet;
 
@@ -17,6 +18,9 @@ import static org.mockito.Mockito.*;
 public class RegistrationServiceTest {
 
     private RegistrationService registrationService;
+
+    @Mock
+    private BusinessUserService businessUserService;
 
     @Mock
     private AppUserService appUserService;
@@ -38,6 +42,7 @@ public class RegistrationServiceTest {
         MockitoAnnotations.openMocks(this);
         registrationService = new RegistrationService(
                 appUserService,
+                businessUserService,
                 emailValidator,
                 confirmationTokenService,
                 passwordValidator,
@@ -59,7 +64,7 @@ public class RegistrationServiceTest {
         when(passwordValidator.test(request.getPassword())).thenReturn(false);
 
         // Act
-        registrationService.registerAppUser(request);
+        registrationService.register(request);
 
         // Assert
         // Expects IllegalStateException to be thrown
@@ -78,7 +83,7 @@ public class RegistrationServiceTest {
         when(emailValidator.test(request.getEmail())).thenReturn(false);
 
         // Act
-        registrationService.registerAppUser(request);
+        registrationService.register(request);
 
         // Assert
         // Expects IllegalStateException to be thrown
@@ -97,7 +102,7 @@ public class RegistrationServiceTest {
         when(emailValidator.test(request.getEmail())).thenReturn(false);
 
         // Act
-        registrationService.registerAppUser(request);
+        registrationService.register(request);
 
         // Assert
         // Expects IllegalStateException to be thrown
@@ -116,7 +121,7 @@ public class RegistrationServiceTest {
         when(emailValidator.test(request.getEmail())).thenReturn(false);
 
         // Act
-        registrationService.registerAppUser(request);
+        registrationService.register(request);
 
         // Assert
         // Expects IllegalStateException to be thrown
@@ -133,7 +138,7 @@ public class RegistrationServiceTest {
                 confirmPassword, "+1", "1234567890");
 
         // Act
-        registrationService.registerAppUser(request);
+        registrationService.register(request);
 
         // Assert
         // Expects IllegalStateException to be thrown

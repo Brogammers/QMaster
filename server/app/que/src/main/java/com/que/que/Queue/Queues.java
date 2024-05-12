@@ -4,7 +4,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.BusinessUser.BusinessUser;
 
 import jakarta.persistence.Column;
