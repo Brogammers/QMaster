@@ -54,7 +54,7 @@ public class RegistrationController {
     return new ResponseEntity<Object>(body, statusCode);
   }
 
-  @GetMapping(path = "confirm")
+  @GetMapping(path = "/confirm")
   public ResponseEntity<Object> confirm(@RequestParam("token") String token) {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(200);

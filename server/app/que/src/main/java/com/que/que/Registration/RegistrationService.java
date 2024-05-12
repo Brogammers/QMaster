@@ -144,7 +144,11 @@ public class RegistrationService {
     }
 
     confirmationTokenService.setConfirmedAt(token);
-    appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
+
+    if (confirmationToken.getAppUser() instanceof BusinessUser)
+      businessUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
+    else
+      appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
   }
 
   public void renderCountryCodes() {
