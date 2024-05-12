@@ -4,9 +4,10 @@ import com.que.que.Email.EmailSender;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.Security.PasswordValidator;
-import com.que.que.User.AppUser;
-import com.que.que.User.AppUserRole;
-import com.que.que.User.AppUserService;
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.AppUser.AppUserRole;
+import com.que.que.User.AppUser.AppUserService;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;

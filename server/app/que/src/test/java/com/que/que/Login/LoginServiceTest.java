@@ -2,8 +2,8 @@ package com.que.que.Login;
 
 import com.que.que.Registration.EmailValidator;
 import com.que.que.Security.JwtUtil;
-import com.que.que.User.AppUser;
-import com.que.que.User.AppUserRepository;
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.AppUser.AppUserRepository;
 
 import org.junit.Before;
 import org.junit.Test;

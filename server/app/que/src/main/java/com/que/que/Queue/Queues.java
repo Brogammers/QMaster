@@ -4,7 +4,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.que.que.User.AppUser;
+import com.que.que.User.AppUser.AppUser;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,7 +53,7 @@ public class Queues {
         this.peopleInQueue = 0;
         this.rating = -1; // -1 if there are no ratings yet
     }
-    
+
     public Queues(String name, AppUser creator, int queueSlot, int specificSlot, int maxQueueSize) {
         this.name = name;
         this.creator = creator;

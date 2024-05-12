@@ -1,6 +1,8 @@
-package com.que.que.User;
+package com.que.que.User.BusinessUser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.que.que.User.SubscriptionPlans;
+import com.que.que.User.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

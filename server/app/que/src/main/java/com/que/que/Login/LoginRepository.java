@@ -3,7 +3,7 @@ package com.que.que.Login;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
-import com.que.que.User.AppUser;
+import com.que.que.User.AppUser.AppUser;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

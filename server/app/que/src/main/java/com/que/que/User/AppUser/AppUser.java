@@ -1,9 +1,10 @@
-package com.que.que.User;
+package com.que.que.User.AppUser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.que.que.User.User;
 
 import jakarta.persistence.Entity;
 import lombok.EqualsAndHashCode;

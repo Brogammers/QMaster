@@ -2,7 +2,7 @@ package com.que.que.Login;
 
 import java.time.LocalDateTime;
 
-import com.que.que.User.AppUser;
+import com.que.que.User.AppUser.AppUser;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

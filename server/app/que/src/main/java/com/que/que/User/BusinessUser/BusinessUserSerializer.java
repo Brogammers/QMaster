@@ -1,4 +1,4 @@
-package com.que.que.User;
+package com.que.que.User.BusinessUser;
 
 import java.io.IOException;
 

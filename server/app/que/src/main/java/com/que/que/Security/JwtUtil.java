@@ -10,7 +10,7 @@ import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Service;
 
-import com.que.que.User.AppUser;
+import com.que.que.User.AppUser.AppUser;
 
 @Service
 public class JwtUtil {

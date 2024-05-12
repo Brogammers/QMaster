@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.que.que.User.AppUser;
-import com.que.que.User.AppUserRole;
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.AppUser.AppUserRole;
 
 import static org.junit.Assert.*;
 import java.util.Collection;
