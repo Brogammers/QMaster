@@ -24,7 +24,7 @@ public class RegistrationController {
 
   private RegistrationService registrationService;
 
-  @PostMapping
+  @PostMapping(path = "/user")
   public ResponseEntity<Object> register(@RequestBody AppUserRegistrationRequest request) {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
@@ -39,7 +39,7 @@ public class RegistrationController {
     return new ResponseEntity<Object>(body, statusCode);
   }
 
-  @PostMapping
+  @PostMapping(path = "/business")
   public ResponseEntity<Object> register(@RequestBody BusinessUserRegistrationRequest request) {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
