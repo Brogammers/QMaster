@@ -29,7 +29,7 @@ public class RegistrationController {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
     try {
-      String token = registrationService.register(request);
+      String token = registrationService.registerAppUser(request);
       body.put("confirmation-token", token);
       body.put("message", "Registered!");
     } catch (IllegalStateException e) {

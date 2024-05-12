@@ -58,7 +58,7 @@ public class RegistrationServiceTest {
         when(passwordValidator.test(request.getPassword())).thenReturn(false);
 
         // Act
-        registrationService.register(request);
+        registrationService.registerAppUser(request);
 
         // Assert
         // Expects IllegalStateException to be thrown
@@ -76,7 +76,7 @@ public class RegistrationServiceTest {
         when(emailValidator.test(request.getEmail())).thenReturn(false);
 
         // Act
-        registrationService.register(request);
+        registrationService.registerAppUser(request);
 
         // Assert
         // Expects IllegalStateException to be thrown
@@ -94,7 +94,7 @@ public class RegistrationServiceTest {
         when(emailValidator.test(request.getEmail())).thenReturn(false);
 
         // Act
-        registrationService.register(request);
+        registrationService.registerAppUser(request);
 
         // Assert
         // Expects IllegalStateException to be thrown
@@ -112,7 +112,7 @@ public class RegistrationServiceTest {
         when(emailValidator.test(request.getEmail())).thenReturn(false);
 
         // Act
-        registrationService.register(request);
+        registrationService.registerAppUser(request);
 
         // Assert
         // Expects IllegalStateException to be thrown
@@ -128,7 +128,7 @@ public class RegistrationServiceTest {
                 confirmPassword, "+1", "1234567890");
 
         // Act
-        registrationService.register(request);
+        registrationService.registerAppUser(request);
 
         // Assert
         // Expects IllegalStateException to be thrown

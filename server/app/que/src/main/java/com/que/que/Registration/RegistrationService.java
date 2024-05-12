@@ -28,7 +28,7 @@ public class RegistrationService {
   private final EmailSender emailSender;
   private final HashSet<String> phoneCodes;
 
-  public String register(RegistrationRequest request) {
+  public String registerAppUser(RegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
     boolean isValidPassword = passwordValidator.test(request.getPassword());
     if (phoneCodes.isEmpty()) {
