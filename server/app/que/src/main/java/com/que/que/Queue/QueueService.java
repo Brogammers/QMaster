@@ -3,6 +3,7 @@ package com.que.que.Queue;
 import com.que.que.QRcode.QRCodeService;
 import com.que.que.User.AppUser;
 import com.que.que.User.AppUserRepository;
+import com.que.que.User.BusinessUserRepository;
 import com.que.que.User.SubscriptionPlans;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 public class QueueService {
 
   private final AppUserRepository appUserRepository;
+  private final BusinessUserRepository businessUserRepository;
   private final QueueRepository queueRepository;
   private final QueueCreationRepository queueCreationRepository;
   private final QueueDequeueRepository queueDequeueRepository;
