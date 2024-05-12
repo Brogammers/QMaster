@@ -39,6 +39,21 @@ public class RegistrationController {
     return new ResponseEntity<Object>(body, statusCode);
   }
 
+  @PostMapping
+  public ResponseEntity<Object> register(@RequestBody BusinessUserRegistrationRequest request) {
+    Map<String, Object> body = new HashMap<>();
+    HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
+    try {
+      String token = registrationService.register(request);
+      body.put("confirmation-token", token);
+      body.put("message", "Registered!");
+    } catch (IllegalStateException e) {
+      body.put("message", e.getMessage());
+      statusCode = HttpStatusCode.valueOf(500);
+    }
+    return new ResponseEntity<Object>(body, statusCode);
+  }
+
   @GetMapping(path = "confirm")
   public ResponseEntity<Object> confirm(@RequestParam("token") String token) {
     Map<String, Object> body = new HashMap<>();
