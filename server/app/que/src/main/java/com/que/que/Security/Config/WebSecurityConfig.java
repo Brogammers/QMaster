@@ -47,12 +47,11 @@ public class WebSecurityConfig {
 
 		http
 				.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests((authorize) -> authorize
-						.requestMatchers(
-								"api/v1/token", "api/v1/login", "api/v1/registration/**",
-								"api/v1/registration/confirm")
-						.permitAll()
-						.anyRequest().authenticated())
+				.authorizeHttpRequests((authorize) -> authorize.anyRequest()
+						// .requestMatchers(
+						// "api/v1/token", "api/v1/login", "api/v1/registration/**",
+						// "api/v1/registration/confirm")
+						.permitAll())
 				.httpBasic(Customizer.withDefaults())
 				.sessionManagement(
 						(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
