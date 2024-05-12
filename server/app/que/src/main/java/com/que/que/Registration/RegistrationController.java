@@ -25,7 +25,7 @@ public class RegistrationController {
   private RegistrationService registrationService;
 
   @PostMapping
-  public ResponseEntity<Object> register(@RequestBody RegistrationRequest request) {
+  public ResponseEntity<Object> register(@RequestBody AppUserRegistrationRequest request) {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
     try {

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class RegistrationRequest {
+public class AppUserRegistrationRequest {
 
     private final String firstName;
     private final String lastName;

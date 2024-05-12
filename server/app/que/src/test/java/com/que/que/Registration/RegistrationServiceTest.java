@@ -51,7 +51,8 @@ public class RegistrationServiceTest {
         String email = "test@example.com";
         String password = "123";
         String confirmPassword = "123";
-        RegistrationRequest request = new RegistrationRequest("Test", "Testerson", null, "USA", password, email, "test",
+        AppUserRegistrationRequest request = new AppUserRegistrationRequest("Test", "Testerson", null, "USA", password,
+                email, "test",
                 confirmPassword, "+1", "1234567890");
 
         when(emailValidator.test(request.getEmail())).thenReturn(true);
@@ -70,7 +71,8 @@ public class RegistrationServiceTest {
         String email = "xample.com";
         String password = "Abcdefg1";
         String confirmPassword = "Abcdefg1";
-        RegistrationRequest request = new RegistrationRequest("Test", "Testerson", null, "USA", password, email, "test",
+        AppUserRegistrationRequest request = new AppUserRegistrationRequest("Test", "Testerson", null, "USA", password,
+                email, "test",
                 confirmPassword, "+1", "1234567890");
 
         when(emailValidator.test(request.getEmail())).thenReturn(false);
@@ -88,7 +90,8 @@ public class RegistrationServiceTest {
         String email = "email@.com";
         String password = "Abcdefg1";
         String confirmPassword = "Abcdefg1";
-        RegistrationRequest request = new RegistrationRequest("Test", "Testerson", null, "USA", password, email, "test",
+        AppUserRegistrationRequest request = new AppUserRegistrationRequest("Test", "Testerson", null, "USA", password,
+                email, "test",
                 confirmPassword, "+1", "1234567890");
 
         when(emailValidator.test(request.getEmail())).thenReturn(false);
@@ -106,7 +109,8 @@ public class RegistrationServiceTest {
         String email = "@meial.com";
         String password = "Abcdefg1";
         String confirmPassword = "Abcdefg1";
-        RegistrationRequest request = new RegistrationRequest("Test", "Testerson", null, "USA", password, email, "test",
+        AppUserRegistrationRequest request = new AppUserRegistrationRequest("Test", "Testerson", null, "USA", password,
+                email, "test",
                 confirmPassword, "+1", "1234567890");
 
         when(emailValidator.test(request.getEmail())).thenReturn(false);
@@ -124,7 +128,8 @@ public class RegistrationServiceTest {
         String email = "test@example.com";
         String password = "Abcdasf1";
         String confirmPassword = "Abcdefg1";
-        RegistrationRequest request = new RegistrationRequest("Test", "Testerson", null, "USA", password, email, "test",
+        AppUserRegistrationRequest request = new AppUserRegistrationRequest("Test", "Testerson", null, "USA", password,
+                email, "test",
                 confirmPassword, "+1", "1234567890");
 
         // Act
