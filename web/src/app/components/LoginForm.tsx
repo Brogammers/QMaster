@@ -6,7 +6,10 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signIn } from 'next-auth/react';
 import SplashScreen from "../shared/SplashScreen";
+import axios, { AxiosError } from "axios";
+import { API_BASE_URL_LOGIN } from "@env";
 // import { useDispatch } from "react-redux";
 // import { login, setUser } from "../redux/authSlice";
 
@@ -18,7 +21,6 @@ const LoginSchema = Yup.object().shape({
 
 export default function LoginForm({ setIsLoading }: any) {
   const [errorMessage, setErrorMessage] = useState("");
-
   const router = useRouter();
   // const dispatch = useDispatch();
 
@@ -29,29 +31,21 @@ export default function LoginForm({ setIsLoading }: any) {
   }
 
   // const handleLogin = (values: { email: string; password: string }) => {
-  const handleLogin = async (values: any) => {
-    // try {
-    //   const response = await signInWithEmailAndPassword(
-    //     auth,
-    //     values.email,
-    //     values.password
-    //   );
-    //   console.log({ response });
-    //   const username = extractUsername(values.email);
-    //   dispatch(login(username));
-    //   router.push(`/${username}`);
-    // } catch (error) {
-    //   console.error(error);
-    //   setErrorMessage(
-    //     "An error has occurred, please try again. If the error persists, please contact us at hatemthedev@gmail.com"
-    //   );
-    // }
-    setIsLoading(true);
-    setTimeout(async () => {
-      await router.push("/qmaster/counter");
-      console.log("Logging in...");
-      setIsLoading(false);
-    }, 2000);
+  const handleLogin = async (
+    values: any,
+    { setErrors }: { setErrors: Function }
+  ) => {
+    const result = await signIn('credentials', {
+      redirect: false,
+      username: values.email,
+      password: values.password,
+    });
+
+    if (result?.error) {
+      setErrorMessage(result.error);
+    } else {
+      router.push('/dashboard'); // Redirect to your dashboard or home page
+    }
   };
 
   return (
