@@ -44,7 +44,7 @@ export default function LoginForm({ setIsLoading }: any) {
     if (result?.error) {
       setErrorMessage(result.error);
     } else {
-      router.push('/dashboard'); // Redirect to your dashboard or home page
+      router.push('../[entity]/counter'); // Redirect to your dashboard or home page
     }
   };
 

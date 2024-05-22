@@ -1,4 +1,5 @@
 // pages/api/auth/[...nextauth].ts
+import { API_BASE_URL_LOGIN } from '@env';
 import axios from 'axios';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -41,7 +42,7 @@ const options: NextAuthOptions = {
 
         const { username, password } = credentials;
         try {
-          const response = await axios.post(`${process.env.API_BASE_URL_LOGIN}`, {
+          const response = await axios.post(`${API_BASE_URL_LOGIN}`, {
             username,
             password,
           });
