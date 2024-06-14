@@ -22,7 +22,6 @@ const LoginSchema = Yup.object().shape({
 export default function LoginForm({ setIsLoading }: any) {
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
-  // const dispatch = useDispatch();
 
   function extractUsername(email: string) {
     const usernamePart = email.substring(0, email.indexOf("@"));
@@ -30,26 +29,27 @@ export default function LoginForm({ setIsLoading }: any) {
     return username;
   }
 
-  // const handleLogin = (values: { email: string; password: string }) => {
   const handleLogin = async (
     values: any,
     { setErrors }: { setErrors: Function }
   ) => {
-    console.log(values);
+    console.log("Login values:", values);
     const result = await signIn('credentials', {
-      redirect: false,
       email: values.email,
       password: values.password,
       callbackUrl: 'http://localhost:3000/qmaster/counter',
+      redirect: false,
     });
-
+  
     if (result?.error) {
+      console.error("Login error:", result.error);
       setErrorMessage(result.error);
     } else {
-      router.push(`${extractUsername(values.email)}/counter`); // Redirect to your dashboard or home page
+      console.log("Login successful, redirecting...");
+      router.push('qmaster/counter');
     }
   };
-
+    
   return (
     <div className="w-1/2 my-8 flex justify-center items-center">
       <Formik
