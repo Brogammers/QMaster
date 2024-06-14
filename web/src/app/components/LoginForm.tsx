@@ -35,16 +35,18 @@ export default function LoginForm({ setIsLoading }: any) {
     values: any,
     { setErrors }: { setErrors: Function }
   ) => {
+    console.log(values);
     const result = await signIn('credentials', {
       redirect: false,
-      username: values.email,
+      email: values.email,
       password: values.password,
+      callbackUrl: 'http://localhost:3000/qmaster/counter',
     });
 
     if (result?.error) {
       setErrorMessage(result.error);
     } else {
-      router.push('../[entity]/counter'); // Redirect to your dashboard or home page
+      router.push(`${extractUsername(values.email)}/counter`); // Redirect to your dashboard or home page
     }
   };
 
