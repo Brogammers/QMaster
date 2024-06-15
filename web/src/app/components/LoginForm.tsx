@@ -34,16 +34,15 @@ export default function LoginForm({ setIsLoading }: any) {
     { setErrors }: { setErrors: Function }
   ) => {
     console.log("Login values:", values);
-    const result = await signIn('credentials', {
-      email: values.email,
-      password: values.password,
-      callbackUrl: 'http://localhost:3000/qmaster/counter',
-      redirect: false,
+    const response = await signIn("credentials", { 
+      email: formData.get("email"),
+      password: formData.get("password"),
+      redirect: false, 
     });
   
-    if (result?.error) {
-      console.error("Login error:", result.error);
-      setErrorMessage(result.error);
+    if (response?.error) {
+      console.error("Login error:", response.error);
+      setErrorMessage(response.error);
     } else {
       console.log("Login successful, redirecting...");
       router.push('qmaster/counter');
