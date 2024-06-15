@@ -1,83 +1,78 @@
-import NextAuth from "next-auth";
-import GitHub from "next-auth/providers/github";
-
+import NextAuth, { NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
-import RedditProvider from "next-auth/providers/reddit";
-import GitHubProvider from "next-auth/providers/github";
-import TwitterProvider from "next-auth/providers/twitter";
+import axios from "axios";
 
-
-// import userData from '@/dummy.json';
-
-export const {
-  handlers: { GET, POST },
-  auth,
-} = NextAuth({
-  session: { strategy: 'jwt' },
-
+// Define the configuration object directly
+const authOptions: NextAuthConfig = {
+  session: {
+    strategy: 'jwt', // Type should match "jwt" | "database" | undefined
+    maxAge: 864000000, // 10 days
+  },
   providers: [
-
     CredentialsProvider({
-
+      name: 'Credentials',
       credentials: {
-        username: {},
-        password: {}
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
-
       async authorize(credentials) {
+        if (!credentials) {
+          throw new Error("No credentials provided");
+        }
 
-        const username = credentials.username;
-        const password = credentials.password;
+        const { email, password } = credentials;
 
-        console.log(username);
-        console.log(password);
+        try {
+          const response = await axios.post(`${process.env.API_BASE_URL_LOGIN}`, {
+            email,
+            password,
+          });
 
-        for (var index in userData.users) {
+          const user = response.data;
 
-          let record = userData.users[index];
-          var user = {}
-          var flag=false;
+          if (user && user.token) {
+            return {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+              token: user.token,
+            };
+          }
 
-          if(record.username==username) {
-            if(record.password==password) {
-              user = {
-                id: record.id,
-                name: record.username,
-              }
-              flag=true;
-              break;
-            } 
+          return null;
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            console.error("Error during authorization:", error.response?.data || error.message);
+            throw new Error(error.response?.data?.message || 'Authorization error');
+          } else {
+            console.error("Unknown error during authorization:", error);
+            throw new Error('Authorization error');
           }
         }
-
-        if(flag) {
-          return user;
-        }
-
-        return null;
-
       }
     }),
-
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-    
-    RedditProvider({
-      clientId: process.env.REDDIT_CLIENT_ID,
-      clientSecret: process.env.REDDIT_CLIENT_SECRET
-    }),
-
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET
-    }),
-
-    TwitterProvider({
-      clientId: process.env.TWITTER_CLIENT_ID,
-      clientSecret: process.env.TWITTER_CLIENT_SECRET
-    }),
   ],
-})
+  callbacks: {
+    async jwt({ token, user }: { token: any, user?: any }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.accessToken = user.token;
+      }
+      return token;
+    },
+    async session({ session, token }: { session: any, token: any }) {
+      session.user = {
+        ...session.user,
+        id: token.id as string,
+        email: token.email as string,
+      };
+      return session;
+    },
+  },
+  // secret: process.env.JWT_SECRET, // Moved to top level as per NextAuth v5
+};
+
+// Export the handlers directly
+export const { handlers: { GET, POST }, auth } = NextAuth(authOptions);

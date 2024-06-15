@@ -1,9 +1,9 @@
 "use client"
 
-import { QueueModalProps } from "../../../types";
+import { QueueModalProps } from "../../../../types";
 import { Layout } from "antd";
 import { useParams, usePathname } from "next/navigation";
-import Sidebar from "../shared/Sidebar";
+import Sidebar from "../../shared/Sidebar";
 
 
 export default function Entity({ children }: QueueModalProps) {
