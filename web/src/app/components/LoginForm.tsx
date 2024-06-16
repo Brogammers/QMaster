@@ -1,17 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-// import { signInWithEmailAndPassword } from "firebase/auth";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from 'next-auth/react';
-import SplashScreen from "../shared/SplashScreen";
-import axios, { AxiosError } from "axios";
-import { API_BASE_URL_LOGIN } from "@env";
-// import { useDispatch } from "react-redux";
-// import { login, setUser } from "../redux/authSlice";
+import axios from "axios";
 
 // Define validation schema
 const LoginSchema = Yup.object().shape({
@@ -19,43 +13,78 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required("Password required"),
 });
 
+const API_BASE_URL_LOGIN = process.env.NEXT_PUBLIC_API_BASE_URL_LOGIN;
+
 export default function LoginForm({ setIsLoading }: any) {
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
-  function extractUsername(email: string) {
-    const usernamePart = email.substring(0, email.indexOf("@"));
-    const username = usernamePart.replace(/[^\w\s-]/g, "");
-    return username;
-  }
+  const handleLogin = async (values: any, { setErrors }: { setErrors: Function }) => {
+    setIsLoading(true);
+    setErrorMessage(""); // Reset error message at the beginning
 
-  const handleLogin = async (
-    values: any,
-    { setErrors }: { setErrors: Function }
-  ) => {
-    console.log("Login values:", values);
-    const response = await signIn("credentials", { 
-      email: formData.get("email"),
-      password: formData.get("password"),
-      redirect: false, 
-    });
-  
-    if (response?.error) {
-      console.error("Login error:", response.error);
-      setErrorMessage(response.error);
-    } else {
-      console.log("Login successful, redirecting...");
-      router.push('qmaster/counter');
+    console.log("Starting login process...");
+    console.log("API_BASE_URL_LOGIN:", API_BASE_URL_LOGIN);
+
+    try {
+      const response = await axios.post(`${API_BASE_URL_LOGIN}`, {
+        email: values.email,
+        password: values.password,
+      });
+
+      if (response.status === 200 && response.data.token) {
+        console.log("Login successful:", response.data);
+        // Store token in cookie/localStorage if needed
+        document.cookie = `jwt=${response.data.token}; path=/;`;
+        router.push('/qmaster/counter');
+
+        // Necessary CORS headers to allow requests from localhost:3000
+        axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
+        axios.defaults.headers.common["Content-Type"] = "application/json";
+
+        axios.interceptors.request.use(
+          (config) => {
+            config.headers["Authorization"] = `Bearer ${response.data.token}`;
+            return config;
+          },
+          (error) => {
+            return Promise.reject(error);
+          }
+        );
+      } else {
+        // Handle case where the response is not as expected
+        setErrorMessage("Invalid login credentials");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      // Type assertion to access properties of the error object
+      if (axios.isAxiosError(error)) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        if (error.response) {
+          console.error("Login error:", error.response.data);
+          setErrorMessage(error.response.data.message || "Invalid login credentials");
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error("Login error:", error.request);
+          setErrorMessage("No response from server");
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error("Login error:", error.message);
+          setErrorMessage("Login error");
+        }
+      } else {
+        console.error("Unexpected error:", error);
+        setErrorMessage("Unexpected error occurred");
+      }
+      setIsLoading(false);
     }
   };
-    
+
   return (
     <div className="w-1/2 my-8 flex justify-center items-center">
       <Formik
-        initialValues={{
-          email: "",
-          password: "",
-        }}
+        initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}
         onSubmit={handleLogin}
       >
@@ -108,7 +137,6 @@ export default function LoginForm({ setIsLoading }: any) {
             <button
               type="submit"
               className="rounded-xl bg-baby-blue text-white text-md sm:text-xl font-semibold w-full px-4 py-3 sm:px-8 sm:py-4 mt-2"
-              // onClick={() => handleLogin()}
             >
               Submit
             </button>
