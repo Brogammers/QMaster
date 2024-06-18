@@ -42,6 +42,10 @@ body {
   }
 }
 
+button {
+  transition: all 300ms ease;
+}
+
 .container {
   width: 100% !important;
   margin: 0 auto;
@@ -90,6 +94,16 @@ LANDING PAGE
     #34F5C5 0%,
     #1DCDFE 100%
   );
+}
+
+.double__color--text {
+  background: linear-gradient(
+    to right,
+    #34F5C5 0%,
+    #1DCDFE 100%
+  );
+  -webkit-background-clip: text; /* Ensures text color is clipped to the gradient */
+  -webkit-text-fill-color: transparent; /* Hides the original text color */
 }
 
 /* 
