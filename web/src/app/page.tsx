@@ -11,6 +11,11 @@ export default function LandingPage() {
       <Hero />
       <main className="w-full">
         <Perks />
+        <h5 className="text-lg text-center py-48">
+          Join QMaster with just a few clicks
+          <br />
+          and enjoy <span className="font-bold underline">wait-free</span> customer experiences
+        </h5>
       </main>
     </div>
   );
