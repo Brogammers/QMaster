@@ -80,3 +80,29 @@ export const socialMediaPlatforms = [
     icon: faLink,
   },
 ];
+
+// Landing Page Footer Links
+export const footerLinks = [
+  {
+    title: "Social",
+    links: [
+      // { title: "Facebook", url: "https://www.facebook.com/" },
+      // { title: "Instagram", url: "https://www.instagram.com/" },
+      // { title: "Twitter", url: "https://www.x.com/" },
+      { title: "Linkedin", url: "https://www.linkedin.com/company/qmasterapp/" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { title: "Terms of Use", url: "/" },
+      { title: "Privacy Policy", url: "/" },
+    ],
+  },
+  {
+    title: "Media",
+    links: [
+      { title: "Release Content", url: "/" },
+    ],
+  },
+];
