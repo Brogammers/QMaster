@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { CarouselProps } from "../../../types";
+import "./styles/Carousel.module.css";
 
 export default function Carousel({ children }: CarouselProps) {
   const [counter, setCounter] = useState(1);
