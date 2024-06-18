@@ -49,6 +49,11 @@ export default function Hero() {
               </figure>
             </div>
           </Carousel>
+          {/* <button className="text-center flex items-center">
+            <a href="" className="text-center">
+              &#9660;
+            </a>
+          </button> */}
         </header>
       </div>
     </div>
