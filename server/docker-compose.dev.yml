@@ -7,12 +7,13 @@ services:
     image: mysql:8
     environment:
       - MYSQL_ROOT_PASSWORD=123456789
+      - MYSQL_DATABASE=test_db
     networks:
       - backend-network
     volumes:
       - queue_mysql_data:/var/lib/mysql
-    expose:
-      - "3306"
+    ports:
+      - 60003:3306
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 5s
@@ -29,9 +30,11 @@ services:
     depends_on:
       database:
         condition: service_healthy
-
+    networks:
+      - backend-network
 volumes:
   queue_mysql_data:
 
 networks:
   backend-network:
+    driver: bridge
