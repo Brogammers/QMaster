@@ -19,7 +19,7 @@ export default function Hero() {
               <h2 className="text-2xl">
                 Effortlessly <span className="font-bold">manage</span> and <span className="font-bold">optimize</span> <span className="double__color--text">wait times</span>
               </h2>
-              <button className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none hover:bg-white hover:text-baby-blue">
+              <button className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none">
                 Download Now
               </button>
               <figure className="w-1/2 max-h-52 flex justify-center items-center">
@@ -38,7 +38,7 @@ export default function Hero() {
               <h2 className="text-2xl">
                 Enhance <span className="font-bold">customer satisfaction</span> with seamless queue <span className="double__color--text">integration</span>
               </h2>
-              <button className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none hover:bg-white hover:text-baby-blue">
+              <button className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none">
                 Get Started
               </button>
               <figure className="w-1/2 max-h-52 flex justify-center items-center">
