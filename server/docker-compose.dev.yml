@@ -11,8 +11,8 @@ services:
       - backend-network
     volumes:
       - queue_mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
+    expose:
+      - "3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
@@ -23,9 +23,9 @@ services:
   backend:
     container_name: queue-springboot-backend
     build:
-      dockerfile: ./server/Dockerfile.dev
+      dockerfile: ./Dockerfile.dev
     ports:
-      - "8080:8080"
+      - 8080:8080
     depends_on:
       database:
         condition: service_healthy

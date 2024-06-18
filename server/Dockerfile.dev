@@ -1,8 +1,8 @@
 FROM openjdk:21
 
-WORKDIR /server/app/que
+WORKDIR /app
 
-COPY target/que-0.0.1-SNAPSHOT.jar /app
+COPY app/que/target/que-0.0.1-SNAPSHOT.jar /app
 
 CMD ["java", "-jar", "que-0.0.1-SNAPSHOT.jar"]
 
