@@ -8,7 +8,7 @@ export default function Footer() {
     <footer>
       <div className="container">
         <div className="row">
-          <div className="flex justify-between items-start">
+          <div className="mb-24 flex justify-between items-start">
             <figure>
               <Image
                 src={FooterLogo}
@@ -53,6 +53,7 @@ export default function Footer() {
               ))}
             </ul>
           </div>
+          <h6 className="text-sm">All rights reserved &ndash; 2024 &copy; QMaster</h6>
         </div>
       </div>
     </footer>
