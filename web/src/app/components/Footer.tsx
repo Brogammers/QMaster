@@ -38,12 +38,12 @@ export default function Footer() {
                 </div>
               ))}
             </ul>
-            <ul className="flex flex-col justify-start items-center">
+            <ul className="flex flex-col justify-start items-center gap-4">
               {StoreBadges.map((StoreBadge, index) => (
                 <li key={index}>
                   <Link href={StoreBadge.url}>
                     <Image
-                      src={`/${StoreBadge.icon}`}
+                      src={StoreBadge.icon}
                       alt={StoreBadge.name}
                       width={160}
                       height={51}

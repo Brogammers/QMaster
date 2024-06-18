@@ -112,11 +112,11 @@ export const StoreBadges = [
   {
     name: "App Store",
     url: "https://apps.apple.com/us/app/qmaster/id1581537622",
-    icon: "../public/apple-store.png",
+    icon: "/apple-store.png",
   },
   {
     name: "Google Play",
     url: "https://play.google.com/store/apps/details?id=com.qmaster",
-    icon: "../public/google-play-badge.png",
+    icon: "/google-play-badge.png",
   },
 ];
