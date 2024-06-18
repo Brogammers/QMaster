@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { CarouselProps } from "../../../types";
-import "./styles/Carousel.module.css";
+import "./styles/Carousel.css";
 
 export default function Carousel({ children }: CarouselProps) {
   const [counter, setCounter] = useState(1);
@@ -38,7 +38,7 @@ export default function Carousel({ children }: CarouselProps) {
       } else {
         clearInterval(interval);
       }
-    }, 3000);
+    }, 6000);
     return () => clearInterval(interval);
   });
 
