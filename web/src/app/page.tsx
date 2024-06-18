@@ -3,6 +3,7 @@
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Perks from "./components/Perks";
+import Footer from "./components/Footer";
 
 export default function LandingPage() {
   return (
@@ -17,6 +18,7 @@ export default function LandingPage() {
           and enjoy <span className="font-bold underline">wait-free</span> customer experiences
         </h5>
       </main>
+      <Footer />
     </div>
   );
 }
