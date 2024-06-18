@@ -1,36 +1,9 @@
-import Image from "next/image";
-import NavLogo from "../../public/NavigationLogo.svg";
+import Nav from "./components/Nav";
 
 export default function LandingPage() {
   return (
     <div className="body w-full">
-      <nav>
-        <div className="container">
-          <div className="row">
-            <div className="w-full flex justify-between items-center">
-              <figure>
-              <Image
-                src={NavLogo}
-                alt="QMaster Logo"
-                width={200}
-              />
-              </figure>
-              <ul className="flex justify-between items-center gap-24">
-                <li>
-                  <a href="" className="text-white text-md font-bold">
-                    Download
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="double__color--btn text-white text-md font-bold rounded-full py-3 px-6">
-                    Login
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Nav />
     </div>
   );
 }
