@@ -89,7 +89,7 @@ export const features = [
       "Check-in at your favorite spots without the hassle of standing in line. Our app allows you to queue virtually, giving you the freedom to manage your time efficiently.",
       "Receive instant updates on your queue status and estimated wait times directly to your phone. Stay informed and save time with QMaster!",
     ],
-    image: "/featureOne.png",
+    image: "/featureOne.svg",
     attribution: "Photo by Lisanto 李奕良 on Unsplash",
   },
   {
@@ -99,7 +99,7 @@ export const features = [
       "Book appointments and secure your place in line for services at your convenience. Whether it's a doctor's appointment, a restaurant reservation, or a salon visit, QMaster has got you covered.",
       "Get reminders and notifications to ensure you never miss your turn. Our app keeps you organized and on schedule.",
     ],
-    image: "/featureTwo.png",
+    image: "/featureTwo.svg",
     attribution: "Photo by Austin Distel on Unsplash",
   },
   {
@@ -109,7 +109,7 @@ export const features = [
       "Navigate the app with ease thanks to its user-friendly design and intuitive interface. Whether you're tech-savvy or a beginner, iQueue is simple and straightforward to use.",
       "Our app is designed to provide a seamless experience, ensuring that all users can enjoy its benefits without any hassle.",
     ],
-    image: "/featureThree.png",
+    image: "/featureThree.svg",
     attribution: "N/A",
   },
   {
@@ -119,7 +119,7 @@ export const features = [
       "Enjoy peace of mind with robust security features. Control what information you share and manage your data with ease.",
       "Our app uses advanced security measures to protect your personal information, ensuring a safe and secure experience for all users.",
     ],
-    image: "/featureFour.png",
+    image: "/featureFour.svg",
     attribution: "Photo by Markus Spiske on Unsplash",
   },
 ];
