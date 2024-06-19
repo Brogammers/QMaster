@@ -5,6 +5,7 @@ import Hero from "./components/Hero";
 import Perks from "./components/Perks";
 import Footer from "./components/Footer";
 import Support from "./components/Support";
+import Features from "./components/Features";
 
 export default function LandingPage() {
   return (
@@ -18,6 +19,7 @@ export default function LandingPage() {
           <br />
           and enjoy <span className="font-bold underline">wait-free</span> customer experiences
         </h5>
+        <Features />
         <Support />
       </main>
       <Footer />

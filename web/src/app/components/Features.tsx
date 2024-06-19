@@ -1,20 +1,33 @@
+import Image from "next/image";
+import { features } from "../../../constants";
+
 export default function Features() {
   return (
     <section>
       <div className="container">
         <div className="row">
-          {features.map((feature, index) => (
-            <div className="flex justify-between items-start">
-              <figure>
-                <Image />
+        {features.map((feature, index) => (
+            <div key={index} className={`w-full mb-32 flex ${index % 2 !== 0 ? "flex-row-reverse" : "flex-row"} justify-between items-start gap-56`}>
+              <figure className="w-1/2">
+                <Image
+                  src={feature.image}
+                  alt={feature.attribution}
+                  width={658}
+                  height={504}
+                />
               </figure>
-              <div>
-                <h4>
-
+              <div className="w-1/2 text-coal-black flex flex-col gap-4">
+                <h4 className="text-2xl font-bold">
+                  {feature.title}
                 </h4>
-                <p>
-
-                </p>
+                <h5 className="text-2xl font-bold mb-8">
+                  {feature.subtitle}
+                </h5>
+                {feature.paragraphs.map((para, paraIndex) => (
+                  <p key={paraIndex} className="leading-loose mb-2">
+                    {para}
+                  </p>
+                ))}
               </div>
             </div>
           ))}
