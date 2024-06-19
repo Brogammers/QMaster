@@ -3,7 +3,7 @@ import NavLogo from "../../../public/NavigationLogo.svg";
 
 export default function Nav() {
   return (
-    <nav>
+    <nav id="nav">
       <div className="container">
         <div className="row">
           <div className="w-full flex justify-between items-center">

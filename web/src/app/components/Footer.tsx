@@ -10,10 +10,14 @@ export default function Footer() {
         <div className="row">
           <div className="mb-24 flex justify-between items-start">
             <figure>
-              <Image
-                src={FooterLogo}
-                alt="QMaster Footer Logo"
-              />
+              <Link
+                href="#nav"
+              >
+                <Image
+                  src={FooterLogo}
+                  alt="QMaster Footer Logo"
+                />
+              </Link>
             </figure>
             <ul className="flex justify-between items-start gap-16">
               {footerLinks.map((item) => (
