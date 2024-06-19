@@ -4,19 +4,21 @@ import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Perks from "./components/Perks";
 import Footer from "./components/Footer";
+import Support from "./components/Support";
 
 export default function LandingPage() {
   return (
-    <div className="body w-full">
+    <div className="body w-full leading-loose">
       <Nav />
       <Hero />
       <main className="w-full">
         <Perks />
-        <h5 className="text-lg text-center py-48">
+        <h5 className="text-lg text-center py-48 leading-loose">
           Join QMaster with just a few clicks
           <br />
           and enjoy <span className="font-bold underline">wait-free</span> customer experiences
         </h5>
+        <Support />
       </main>
       <Footer />
     </div>

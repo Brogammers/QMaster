@@ -81,7 +81,7 @@ LANDING PAGE
 
 */
 .body {
-  /* background: linear-gradient(
+  background: linear-gradient(
     to bottom,
     #17222D 0%,
     #13404D 9%,
@@ -89,8 +89,8 @@ LANDING PAGE
     #E6E6E6 32%,
     #FFFFFF 34%,
     #FFFFFF 100%
-  ); */
-  background-color: black;
+  );
+  /* background-color: black; */
 }
 
 .double__color--btn {

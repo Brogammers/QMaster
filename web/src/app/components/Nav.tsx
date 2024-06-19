@@ -14,7 +14,7 @@ export default function Nav() {
               width={200}
             />
             </figure>
-            <ul className="flex justify-between items-center gap-24">
+            <ul className="flex justify-between items-center gap-20">
               <li>
                 <a href="" className="text-white text-md font-bold">
                   Download

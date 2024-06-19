@@ -8,7 +8,7 @@ export default function Perks() {
       <div className="container">
         <div className="w-full flex items-start mb-96">
           <div className="row">
-            <h3 className="text-8xl w-1/2">
+            <h3 className="text-8xl w-1/2 leading-normal">
               Powerful Account
             </h3>
           </div>
@@ -25,7 +25,7 @@ export default function Perks() {
             className="absolute left-0"
           />
           <div className="row">
-            <h3 className="pl-16 text-8xl w-1/2 float-right">
+            <h3 className="pl-16 text-8xl w-1/2 float-right leading-normal">
               Seamless Queuing
             </h3>
           </div>

@@ -58,10 +58,10 @@ export default function Carousel({ children }: CarouselProps) {
           </div>
         ))}
 
-        <button className="prev" onClick={handlePre}>
+        <button className="prev text-white text-4xl" onClick={handlePre}>
           &#10094;
         </button>
-        <button className="next" onClick={handleNext}>
+        <button className="next text-white text-4xl" onClick={handleNext}>
           &#10095;
         </button>
       </div>

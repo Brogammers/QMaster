@@ -10,7 +10,7 @@ export default function Hero() {
       <div className="row">
         <header>
           <Carousel>
-            <div className="text-center flex flex-col items-center gap-16">
+            <div className="py-4 text-center flex flex-col items-center gap-16">
               <h1 className="text-8xl font-bold">
                 Wait Less.
                 <br />
@@ -29,7 +29,7 @@ export default function Hero() {
                 />
               </figure>
             </div>
-            <div className="text-center flex flex-col items-center gap-16">
+            <div className="py-4 text-center flex flex-col items-center gap-16">
               <h1 className="text-8xl font-bold">
                 Streamline Operations.
                 <br />
