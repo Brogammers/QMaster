@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer>
+    <footer className="text-coal-black">
       <div className="container">
         <div className="row">
           <div className="mb-24 flex justify-between items-start">
@@ -24,8 +24,8 @@ export default function Footer() {
                       <Link
                         key={link.title}
                         href={link.url}
-                        className={`text-gray-500 ${(link.title === "Events" || link.title === "Partnership" || link.title === "Invite a friend") &&  "cursor-not-allowed"}`}
-                        {...(!(link.title === "Events" || link.title === "Partnership" || link.title === "Invite a friend") && { target: "_blank" })}
+                        className={`${(link.title === "Facebook" || link.title === "Instagram" || link.title === "Twitter") &&  "cursor-not-allowed"}`}
+                        {...(!(link.title === "Facebook" || link.title === "Instagram" || link.title === "Twitter") && { target: "_blank" })}
                         // onClick={(e) => {
                         //   e.preventDefault(); 
                         //   handleLinkClick(link);
