@@ -20,7 +20,7 @@ import background from "@/assets/images/background.png";
 import { useAuth } from "@/ctx/AuthContext";
 import SplashScreen from "../SplashScreen";
 import DropDownPicker from "react-native-dropdown-picker";
-import { API_BASE_URL } from "@env";
+// import { API_BASE_URL } from "@env";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useDispatch } from "react-redux";
 import { setEmail } from "../redux/authSlice";
@@ -87,7 +87,7 @@ export default function SignUp() {
     try {
       setIsLoading(true);
       // IOS Simulator
-      const response = await axios.post(`${API_BASE_URL}`, values);
+      const response = await axios.post(`${process.env.EXPO_PUBLIC_API_BASE_URL}`, values);
       // Android Emulator
       // const response = await axios.post(
       //   "http://10.0.2.2:8080/api/v1/registration",
