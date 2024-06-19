@@ -1,13 +1,25 @@
+import { useEffect } from "react";
 import Image from "next/image";
 import { features } from "../../../constants";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export default function Features() {
+
+  useEffect(() => {
+    AOS.init({
+      duration: 600, // Animation duration
+      offset: 200,
+      easing: 'ease-in-out',
+    });
+  }, []);
+
   return (
     <section>
       <div className="container">
         <div className="row">
         {features.map((feature, index) => (
-            <div key={index} className={`w-full mb-32 flex ${index % 2 !== 0 ? "flex-row-reverse" : "flex-row"} justify-between items-start gap-56`}>
+            <div key={index} data-aos="fade-up" className={`w-full mb-32 flex ${index % 2 !== 0 ? "flex-row-reverse" : "flex-row"} justify-between items-start gap-56`}>
               <figure className="w-1/2">
                 <Image
                   src={feature.image}
