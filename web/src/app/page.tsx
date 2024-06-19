@@ -21,7 +21,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="body w-full leading-loose overflow-x-hidden">
+    <div className="body w-full leading-loose scroll-smooth overflow-x-hidden">
       <Nav />
       <Hero />
       <main className="w-full">
