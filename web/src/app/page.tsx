@@ -26,7 +26,7 @@ export default function LandingPage() {
       <Hero />
       <main className="w-full">
         <Perks />
-        <h5 data-aos="fade-up" className="text-coal-black text-lg text-center py-48 leading-loose">
+        <h5 data-aos="fade-up" className="text-coal-black text-md xsm:text-lg text-center py-48 leading-loose">
           Join QMaster with just a few clicks
           <br />
           and enjoy <span className="font-bold underline">wait-free</span> customer experiences
