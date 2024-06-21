@@ -32,6 +32,7 @@ section {
 }
 
 html {
+  width: 100%;
   scroll-behavior: smooth;
 }
 
@@ -51,6 +52,10 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+nav {
+  width: 100%;
 }
 
 button {
