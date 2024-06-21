@@ -1,5 +1,6 @@
 import Image from "next/image";
 import NavLogo from "../../../public/NavigationLogo.svg";
+import Link from "next/link";
 
 export default function Nav() {
   return (
@@ -14,16 +15,22 @@ export default function Nav() {
               width={200}
             />
             </figure>
-            <ul className="flex justify-between items-center gap-20">
+            <ul className="flex justify-between items-center sm:gap-20">
               <li>
-                <a href="" className="text-white text-md font-bold">
+                <Link 
+                  href="" 
+                  className="download__btn py-3 px-6 rounded-full sm:p-0 sm:rounded-none text-white text-md font-bold"
+                >
                   Download
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="" className="double__color--btn text-white text-md font-bold rounded-full py-3 px-6">
+                <Link 
+                  href="/login" 
+                  className="hidden sm:block double__color--btn text-white text-md font-bold rounded-full py-3 px-6"
+                >
                   Login
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

@@ -122,6 +122,16 @@ LANDING PAGE
   -webkit-text-fill-color: transparent; /* Hides the original text color */
 }
 
+@media(max-width: 640px) {
+  .download__btn {
+    background: linear-gradient(
+      to right,
+      #34F5C5 0%,
+      #1DCDFE 100%
+    );
+  }
+}
+
 
 /* 
 
