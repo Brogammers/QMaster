@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="text-coal-black">
       <div className="container">
         <div className="row">
-          <div className="mb-24 flex justify-between items-start">
+          <div className="mb-24 flex flex-col gap-16 items-start xsm:items-center sm:gap-0 sm:flex-row justify-between sm:items-start">
             <figure>
               <Link
                 href="#nav"
@@ -19,7 +19,7 @@ export default function Footer() {
                 />
               </Link>
             </figure>
-            <ul className="flex justify-between items-start gap-16">
+            <ul className="flex flex-col xsm:flex-row justify-between items-start gap-16">
               {footerLinks.map((item) => (
                 <div key={item.title} className="footer__link">
                   <h3 className="font-bold mb-4">{item.title}</h3>
@@ -57,7 +57,7 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-          <h6 className="text-sm">All rights reserved &ndash; 2024 &copy; QMaster</h6>
+          <h6 className="text-sm text-center xsm:text-start">All rights reserved &ndash; 2024 &copy; QMaster</h6>
         </div>
       </div>
     </footer>
