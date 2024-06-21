@@ -122,6 +122,20 @@ LANDING PAGE
   -webkit-text-fill-color: transparent; /* Hides the original text color */
 }
 
+
+/* 
+
+PERKS
+
+*/
+
+@media(max-width: 1280px) {
+  .phone__mockup {
+    width: 45%;
+  }
+}
+
+
 /* 
 
 LOGIN MESH

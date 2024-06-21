@@ -19,15 +19,15 @@ export default function Perks() {
     <section>
       <div className="container">
         <div className="w-full flex items-start mb-96">
-          <div className="row">
-            <h3 data-aos="fade-right" className="text-8xl w-1/2 leading-normal font-bold">
+          <div className="row w-1/2">
+            <h3 data-aos="fade-right" className="text-6xl xl:text-8xl w-1/2 leading-normal font-bold">
               Powerful Account
             </h3>
           </div>
           <Image
             src={HomeScreenImg}
             alt="QMaster App - Home Screen"
-            className="absolute right-0"
+            className="phone__mockup absolute right-0"
             data-aos="fade-left"
           />
         </div>
@@ -35,11 +35,11 @@ export default function Perks() {
           <Image
             src={QueueScreenImg}
             alt="QMaster App - Queuing Screen"
-            className="absolute left-0"
+            className="phone__mockup absolute left-0"
             data-aos="fade-right"
           />
-          <div className="row">
-            <h3 data-aos="fade-left" className="pl-16 text-8xl w-1/2 float-right leading-normal font-bold">
+          <div className="row w-1/2">
+            <h3 data-aos="fade-left" className="pl-8 lg:pl-12 xl:pl-16 text-6xl xl:text-8xl w-1/2 float-right leading-normal font-bold">
               Seamless Queuing
             </h3>
           </div>
