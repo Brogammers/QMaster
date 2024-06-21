@@ -18,9 +18,9 @@ export default function Features() {
     <section>
       <div className="container">
         <div className="row">
-        {features.map((feature, index) => (
-            <div key={index} data-aos="fade-up" className={`w-full mb-32 flex ${index % 2 !== 0 ? "flex-row-reverse" : "flex-row"} justify-between items-start gap-56`}>
-              <figure className="w-1/2">
+          {features.map((feature, index) => (
+            <div key={index} data-aos="fade-up" className={`w-full mb-32 flex flex-col sm:${index % 2 !== 0 ? "flex-row-reverse" : "flex-row"} items-center sm:justify-between sm:items-start md:gap-56`}>
+              <figure className="w-full sm:w-1/2 mb-16 sm:mb-0">
                 <Image
                   src={feature.image}
                   alt={feature.attribution}
@@ -28,7 +28,7 @@ export default function Features() {
                   height={504}
                 />
               </figure>
-              <div className="w-1/2 text-coal-black flex flex-col gap-4">
+              <div className="w-full sm:w-1/2 text-coal-black flex flex-col gap-4 text-center sm:text-start">
                 <h4 className="text-2xl font-bold">
                   {feature.title}
                 </h4>
