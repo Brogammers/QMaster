@@ -6,12 +6,12 @@ import HeroManagementImg from "../../../public/HeroManagement.svg";
 
 export default function Hero() {
   return (
-    <div className="container">
+    <div className="container h-screen">
       <div className="row">
         <header>
           <Carousel>
             <div className="py-4 text-center flex flex-col items-center gap-16">
-              <h1 className="text-8xl font-bold">
+              <h1 className="text-6xl xl:text-8xl font-bold">
                 Wait Less.
                 <br />
                 Live More.
@@ -30,7 +30,7 @@ export default function Hero() {
               </figure>
             </div>
             <div className="py-4 text-center flex flex-col items-center gap-16">
-              <h1 className="text-8xl font-bold">
+              <h1 className="text-6xl xl:text-8xl font-bold">
                 Streamline Operations.
                 <br />
                 Boost Efficiency
