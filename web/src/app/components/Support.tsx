@@ -21,7 +21,7 @@ export default function Support() {
         <div className="row">
           <div data-aos="fade-right" data-aos-duration="800" data-aos-offset="600" className="w-full flex flex-col sm:flex-row items-center sm:justify-between sm:items-start gap-24">
             <div className="w-full sm:w-1/2 flex flex-col gap-8">
-              <h3 className="text-7xl sm:text-5xl font-bold leading-normal">
+              <h3 className="text-6xl sm:text-5xl font-bold leading-normal">
                 Need Assistance?
                 <br />
                 We&apos;re Here to Help! 
