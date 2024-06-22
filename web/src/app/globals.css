@@ -75,6 +75,12 @@ button {
   padding: 0 12px;
 }
 
+@media(max-width: 468px) {
+  .row {
+    padding: 0 24px;
+  }
+}
+
 .entity__row {
   width: 100%;
   margin: 0 auto;

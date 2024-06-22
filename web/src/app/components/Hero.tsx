@@ -8,7 +8,7 @@ export default function Hero() {
   return (
     <div className="container h-screen">
       <div className="row">
-        <header>
+        <header className="mt-4 xsm:m-0">
           <Carousel>
             <div className="py-4 text-center flex flex-col items-center gap-16">
               <h1 className="text-4xl xsm:text-6xl xl:text-8xl font-bold">
