@@ -23,7 +23,9 @@
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.15",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "@react-spring/web": "^9.7.3",
     "antd": "^5.16.1",
+    "aos": "^2.3.4",
     "formik": "^2.4.5",
     "gsap": "^3.12.5",
     "jose": "^5.2.4",
@@ -44,6 +46,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@types/aos": "^3.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-beautiful-dnd": "^13.1.8",

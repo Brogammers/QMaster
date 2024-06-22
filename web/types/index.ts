@@ -1,6 +1,10 @@
 import { FieldArrayRenderProps } from "formik";
 import { ReactNode } from "react";
 
+export interface CarouselProps {
+  children: ReactNode[];
+}
+
 export interface QueueModalProps {
   title?: string;
   description?: string;
