@@ -19,7 +19,7 @@ export default function Footer() {
                 />
               </Link>
             </figure>
-            <ul className="flex flex-col xsm:flex-row justify-between items-start gap-16">
+            <ul className="pl-4 xsm:pl-0 flex flex-col xsm:flex-row justify-between items-start gap-16">
               {footerLinks.map((item) => (
                 <div key={item.title} className="footer__link">
                   <h3 className="font-bold mb-4">{item.title}</h3>
