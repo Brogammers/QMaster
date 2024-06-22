@@ -19,7 +19,7 @@ export default function Features() {
       <div className="container">
         <div className="row">
           {features.map((feature, index) => (
-            <div key={index} data-aos="fade-up" className={`w-full mb-32 flex flex-col sm:${index % 2 !== 0 ? "flex-row-reverse" : "flex-row"} items-center sm:justify-between sm:items-start md:gap-56`}>
+            <div key={index} data-aos="fade-up" className={`w-full mb-32 flex flex-col sm:flex-row ${index % 2 !== 0 ? "sm:flex-row-reverse" : ""} items-center sm:justify-between sm:items-start md:gap-56`}>
               <figure className="w-full sm:w-1/2 mb-16 sm:mb-0">
                 <Image
                   src={feature.image}
