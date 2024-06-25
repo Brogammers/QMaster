@@ -1,14 +1,28 @@
+"use client"
+
 import { useEffect } from "react";
 import Image from "next/image";
 import { features } from "../../../constants";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import PhoneFrame from "react-framify"
+import FrameSetSSOne from "../../../public/iqueue-1.png";
+import FrameSetSSTwo from "../../../public/iqueue-2.png";
+import FrameSetSSThree from "../../../public/iqueue-3.png";
+import FrameSetSSFour from "../../../public/iqueue-4.png";
 
 export default function Features() {
 
+  const screenshotList = [
+    FrameSetSSOne.src,
+    FrameSetSSTwo.src,
+    FrameSetSSThree.src,
+    FrameSetSSFour.src
+  ];
+
   useEffect(() => {
     AOS.init({
-      duration: 600, // Animation duration
+      duration: 600, 
       offset: 200,
       easing: 'ease-in-out',
     });
@@ -43,6 +57,10 @@ export default function Features() {
               </div>
             </div>
           ))}
+          <div className="pt-24">
+            <h5 className="text-4xl font-bold mb-2 text-coal-black text-center">A Sneak Peek of What <span className="text-baby-blue">QMaster Offers.</span></h5>
+            <PhoneFrame screenshotList={screenshotList} />
+          </div>
         </div>
       </div>
     </section>
