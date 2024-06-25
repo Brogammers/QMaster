@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react";
-import Image, { StaticImageData } from "next/image";
+import { useEffect } from "react";
+import Image from "next/image";
 import { features } from "../../../constants";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -11,11 +11,7 @@ import FrameSetSSTwo from "../../../public/iqueue-2.png";
 import FrameSetSSThree from "../../../public/iqueue-3.png";
 import FrameSetSSFour from "../../../public/iqueue-4.png";
 
-interface PhoneFrameProps {
-  screenshotList: (string | StaticImageData)[];
-}
-
-export default function Features({initialScreenshotList}: any) {
+export default function Features() {
 
   const screenshotList = [
     FrameSetSSOne.src,
@@ -24,25 +20,9 @@ export default function Features({initialScreenshotList}: any) {
     FrameSetSSFour.src
   ];
 
-  // const [screenshotList, setScreenshotList] = useState<string[]>(initialScreenshotList);
-  // const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  // const [initialTouchPosition, setInitialTouchPosition] = useState<number | null>(null);
-  // const [fadeOut, setFadeOut] = useState(false);
-
-  // useEffect(() => {
-  //   setCurrentImageIndex(0);
-  // }, [screenshotList]);
-
-  // // Handlers remain the same
-
-  // // Example function to update the screenshotList
-  // const addScreenshot = (screenshot: string) => {
-  //   setScreenshotList((prevList) => [...prevList, screenshot]);
-  // };
-
   useEffect(() => {
     AOS.init({
-      duration: 600, // Animation duration
+      duration: 600, 
       offset: 200,
       easing: 'ease-in-out',
     });
