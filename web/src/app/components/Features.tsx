@@ -59,7 +59,9 @@ export default function Features() {
           ))}
           <div className="pt-24">
             <h5 className="text-4xl font-bold mb-2 text-coal-black text-center">A Sneak Peek of What <span className="text-baby-blue">QMaster Offers.</span></h5>
-            <PhoneFrame screenshotList={screenshotList} />
+            <PhoneFrame 
+              screenshotList={screenshotList} 
+            />
           </div>
         </div>
       </div>
