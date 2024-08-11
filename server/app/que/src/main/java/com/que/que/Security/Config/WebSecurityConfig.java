@@ -47,12 +47,8 @@ public class WebSecurityConfig {
 
 		http
 				.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests((authorize) -> authorize
-						.requestMatchers(
-								"api/v1/token", "api/v1/login", "api/v1/registration",
-								"api/v1/registration/confirm")
-						.permitAll()
-						.anyRequest().authenticated())
+				.cors(cors -> cors.disable())
+				.authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll())
 				.httpBasic(Customizer.withDefaults())
 				.sessionManagement(
 						(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

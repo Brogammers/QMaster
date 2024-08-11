@@ -3,6 +3,10 @@ package com.que.que.Registration.Token;
 import java.time.LocalDateTime;
 
 import com.que.que.User.User;
+
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.BusinessUser.BusinessUser;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,8 +37,12 @@ public class ConfirmationToken {
   private LocalDateTime confirmedAt;
 
   @ManyToOne
-  @JoinColumn(nullable = false, name = "app_user_id")
-  private User appUser;
+  @JoinColumn(name = "app_user_id")
+  private AppUser appUser;
+
+  @ManyToOne
+  @JoinColumn(name = "business_user_id")
+  private BusinessUser businessUser;
 
   public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiredAt, LocalDateTime confirmedAt,
       User appUser) {
@@ -42,10 +50,21 @@ public class ConfirmationToken {
     this.createdAt = createdAt;
     this.expiresAt = expiredAt;
     this.confirmedAt = confirmedAt;
-    this.appUser = appUser;
+    if (appUser instanceof BusinessUser)
+      this.businessUser = (BusinessUser) appUser;
+    else
+      this.appUser = (AppUser) appUser;
   }
 
   public String toString() {
     return this.token;
+  }
+
+  public User getAppUser() {
+    if (this.appUser != null) {
+      return this.appUser;
+    } else {
+      return this.businessUser;
+    }
   }
 }

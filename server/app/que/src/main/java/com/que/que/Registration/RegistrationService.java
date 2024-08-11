@@ -1,5 +1,6 @@
 package com.que.que.Registration;
 
+import com.que.que.Email.EmailSender;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.Security.PasswordValidator;
@@ -28,7 +29,7 @@ public class RegistrationService {
   private final EmailValidator emailValidator;
   private final ConfirmationTokenService confirmationTokenService;
   private final PasswordValidator passwordValidator;
-  // private final EmailSender emailSender;
+  private final EmailSender emailSender;
   private final HashSet<String> phoneCodes;
 
   public String register(AppUserRegistrationRequest request) {
@@ -143,7 +144,11 @@ public class RegistrationService {
     }
 
     confirmationTokenService.setConfirmedAt(token);
-    appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
+
+    if (confirmationToken.getAppUser() instanceof BusinessUser)
+      businessUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
+    else
+      appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
   }
 
   public void renderCountryCodes() {

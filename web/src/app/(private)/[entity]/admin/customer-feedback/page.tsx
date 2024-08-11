@@ -1,8 +1,7 @@
 import Image from "next/image";
 import Entity from "../../page";
-import UnderConstruction from "../../../../../public/under-construction.svg";
+import UnderConstruction from "../../../../../../public/under-construction.svg";
 import Tag from "@/app/shared/Tag";
-
 
 export default function CustimerFeedback() {
   return (
@@ -24,5 +23,5 @@ export default function CustimerFeedback() {
         </div>
       </div>
     </Entity>
-  )
+  );
 }

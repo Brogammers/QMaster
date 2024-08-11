@@ -38,7 +38,7 @@ public class LoginControllerTest {
         when(loginService.loginUser(request.getEmail(), request.getPassword())).thenReturn(expectedBody);
 
         // Act
-        ResponseEntity<Object> response = loginController.login(request);
+        ResponseEntity<Object> response = loginController.loginUser(request);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -58,7 +58,7 @@ public class LoginControllerTest {
                 .thenThrow(new IllegalStateException(errorMessage));
 
         // Act
-        ResponseEntity<Object> response = loginController.login(request);
+        ResponseEntity<Object> response = loginController.loginUser(request);
 
         // Assert
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
