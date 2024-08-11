@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.que.que.Email.EmailService;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 
@@ -24,7 +23,7 @@ public class BusinessUserService implements UserDetailsService {
     private final BusinessUserRepository appUserRepository;
     private static final String USER_NOT_FOUND_MSG = "User with email %s was not found in the database";
     private final ConfirmationTokenService confirmationTokenService;
-    private final EmailService emailService;
+    // private final EmailService emailService;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -17,7 +18,8 @@ public interface QueueRepository extends JpaRepository<Queues, Long> {
 
         ArrayList<Queues> findByQueueSlotAndSpecificSlot(int queueSlot, int specificSlot);
 
-        Page<Queues> findAll(Pageable page);
+        @NonNull
+        Page<Queues> findAll(@NonNull Pageable page);
 
         ArrayList<Queues> findByQueueSlot(int queueSlot);
 
