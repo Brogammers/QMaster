@@ -2,7 +2,7 @@
 import QueueModal from "@/app/shared/QueueModal";
 import Entity from "../../page";
 import QueueBuilder from "@/app/components/QueueBuilder";
-import { QueuesData } from "../../../../../constants";
+import { QueuesData } from "../../../../../../constants";
 import QueuesList from "@/app/components/QueuesList";
 import { useState } from "react";
 

@@ -13,72 +13,125 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required("Password required"),
 });
 
-const API_BASE_URL_LOGIN = process.env.NEXT_PUBLIC_API_BASE_URL_LOGIN;
-
 export default function LoginForm({ setIsLoading }: any) {
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
-  const handleLogin = async (values: any, { setErrors }: { setErrors: Function }) => {
+  const handleLogin = (values: any, { setErrors }: { setErrors: Function }) => {
+    const API_BASE_URL_LOGIN = process.env.NEXT_PUBLIC_API_BASE_URL_LOGIN;
+
     setIsLoading(true);
     setErrorMessage(""); // Reset error message at the beginning
 
     console.log("Starting login process...");
     console.log("API_BASE_URL_LOGIN:", API_BASE_URL_LOGIN);
 
-    try {
-      const response = await axios.post(`${API_BASE_URL_LOGIN}`, {
+    axios
+      .post(`${API_BASE_URL_LOGIN}`, {
         email: values.email,
         password: values.password,
+      })
+      .then((response) => {
+        if (response.status === 200 && response.data.token) {
+          console.log("Login successful:", response.data);
+          // Store token in cookie/localStorage if needed
+          document.cookie = `jwt=${response.data.token}; path=/;`;
+          router.push("/qmaster/counter");
+
+          // Necessary CORS headers to allow requests from localhost:3000
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${response.data.token}`;
+          axios.defaults.headers.common["Content-Type"] = "application/json";
+
+          axios.interceptors.request.use(
+            (config) => {
+              config.headers["Authorization"] = `Bearer ${response.data.token}`;
+              return config;
+            },
+            (error) => {
+              return Promise.reject(error);
+            }
+          );
+        } else {
+          // Handle case where the response is not as expected
+          setErrorMessage("Invalid login credentials");
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        // Type assertion to access properties of the error object
+        if (axios.isAxiosError(error)) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          if (error.response) {
+            console.error("Login error:", error.response.data);
+            setErrorMessage(
+              error.response.data.message || "Invalid login credentials"
+            );
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.error("Login error:", error.request);
+            setErrorMessage("No response from server");
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error("Login error:", error.message);
+            setErrorMessage("Login error");
+          }
+        } else {
+          console.error("Unexpected error:", error);
+          setErrorMessage("Unexpected error occurred");
+        }
+        setIsLoading(false);
       });
 
-      if (response.status === 200 && response.data.token) {
-        console.log("Login successful:", response.data);
-        // Store token in cookie/localStorage if needed
-        document.cookie = `jwt=${response.data.token}; path=/;`;
-        router.push('/qmaster/counter');
+    // if (response.status === 200 && response.data.token) {
+    //   console.log("Login successful:", response.data);
+    //   // Store token in cookie/localStorage if needed
+    //   document.cookie = `jwt=${response.data.token}; path=/;`;
+    //   router.push('/qmaster/counter');
 
-        // Necessary CORS headers to allow requests from localhost:3000
-        axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-        axios.defaults.headers.common["Content-Type"] = "application/json";
+    //   // Necessary CORS headers to allow requests from localhost:3000
+    //   axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
+    //   axios.defaults.headers.common["Content-Type"] = "application/json";
 
-        axios.interceptors.request.use(
-          (config) => {
-            config.headers["Authorization"] = `Bearer ${response.data.token}`;
-            return config;
-          },
-          (error) => {
-            return Promise.reject(error);
-          }
-        );
-      } else {
-        // Handle case where the response is not as expected
-        setErrorMessage("Invalid login credentials");
-        setIsLoading(false);
-      }
-    } catch (error) {
-      // Type assertion to access properties of the error object
-      if (axios.isAxiosError(error)) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        if (error.response) {
-          console.error("Login error:", error.response.data);
-          setErrorMessage(error.response.data.message || "Invalid login credentials");
-        } else if (error.request) {
-          // The request was made but no response was received
-          console.error("Login error:", error.request);
-          setErrorMessage("No response from server");
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.error("Login error:", error.message);
-          setErrorMessage("Login error");
-        }
-      } else {
-        console.error("Unexpected error:", error);
-        setErrorMessage("Unexpected error occurred");
-      }
-      setIsLoading(false);
-    }
+    //   axios.interceptors.request.use(
+    //     (config) => {
+    //       config.headers["Authorization"] = `Bearer ${response.data.token}`;
+    //       return config;
+    //     },
+    //     (error) => {
+    //       return Promise.reject(error);
+    //     }
+    //   );
+    // } else {
+    //   // Handle case where the response is not as expected
+    //   setErrorMessage("Invalid login credentials");
+    //   setIsLoading(false);
+    // }
+    // // Type assertion to access properties of the error object
+    // if (axios.isAxiosError(error)) {
+    //   // The request was made and the server responded with a status code
+    //   // that falls out of the range of 2xx
+    //   if (error.response) {
+    //     console.error("Login error:", error.response.data);
+    //     setErrorMessage(
+    //       error.response.data.message || "Invalid login credentials"
+    //     );
+    //   } else if (error.request) {
+    //     // The request was made but no response was received
+    //     console.error("Login error:", error.request);
+    //     setErrorMessage("No response from server");
+    //   } else {
+    //     // Something happened in setting up the request that triggered an Error
+    //     console.error("Login error:", error.message);
+    //     setErrorMessage("Login error");
+    //   }
+    // } else {
+    //   console.error("Unexpected error:", error);
+    //   setErrorMessage("Unexpected error occurred");
+    // }
+    // setIsLoading(false);
   };
 
   return (
