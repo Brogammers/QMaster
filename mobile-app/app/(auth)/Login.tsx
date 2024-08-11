@@ -19,7 +19,7 @@ import background from "@/assets/images/background.png";
 import LoginImg from "@/assets/images/login.png";
 import axios, { AxiosError } from "axios";
 import { useAuth } from "@/ctx/AuthContext";
-import { API_BASE_URL_LOGIN } from "@env";
+// import { API_BASE_URL_LOGIN } from "@env";
 
 import { useDispatch } from "react-redux";
 import { setEmail, setToken } from "../redux/authSlice";
@@ -48,7 +48,7 @@ export default function Login() {
     try {
       setIsLoading(true);
       // IOS Simulator
-      const response = await axios.post(`${API_BASE_URL_LOGIN}`, values);
+      const response = await axios.post(`${process.env.EXPO_PUBLIC_API_BASE_URL_LOGIN}`, values);
       // Android Emulator
       // const response = await axios.post(
       // 	"http://10.0.2.2:8080/api/v1/login",

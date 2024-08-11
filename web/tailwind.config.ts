@@ -29,6 +29,9 @@ const config: Config = {
         "lava-black": "444444",
         "lava-red": "#B41818",
       },
+      screens: {
+        'xsm': '478px',
+      }
     },
   },
   plugins: [],

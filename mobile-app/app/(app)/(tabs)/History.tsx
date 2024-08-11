@@ -14,11 +14,6 @@ import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 
 import axios, { AxiosResponse } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  API_BASE_URL_HISTORY_ANDROID,
-  API_BASE_URL_HISTORY,
-  BASE_URL,
-} from "@env";
 
 export default function History() {
   const isFocused = useIsFocused();
@@ -42,7 +37,7 @@ export default function History() {
           });
 
           const [response, _] = (await Promise.all([
-            axios.get(`${API_BASE_URL_HISTORY}?id=1`, {
+            axios.get(`${process.env.EXPO_PUBLIC_API_BASE_URL_HISTORY}?id=1`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },

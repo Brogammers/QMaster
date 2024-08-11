@@ -8,11 +8,11 @@ import {
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import HistoryComponent from "@/shared/components/HistoryComponent";
-import {
-  API_BASE_URL_HISTORY_ANDROID,
-  API_BASE_URL_HISTORY,
-  BASE_URL,
-} from "@env";
+// import {
+//   API_BASE_URL_HISTORY_ANDROID,
+//   API_BASE_URL_HISTORY,
+//   BASE_URL,
+// } from "@env";
 import { HistoryComponentProps } from "@/types";
 import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -42,7 +42,7 @@ export default function History() {
           });
 
           const [response, _] = (await Promise.all([
-            axios.get(`${API_BASE_URL_HISTORY}?id=1`, {
+            axios.get(`${process.env.EXPO_PUBLIC_API_BASE_URL_HISTORY}?id=1`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },

@@ -3,7 +3,7 @@ import SearchItem from "../shared/components/SearchItem";
 import { View, FlatList, Text } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { CurrentQueuesProps, SearchFilterProps } from "@/types";
-import { API_BASE_URL_SEARCH } from "@env";
+// import { API_BASE_URL_SEARCH } from "@env";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -18,7 +18,7 @@ export default function SearchFilter(props: SearchFilterProps) {
       try {
         const token = await AsyncStorage.getItem("token");
         const response = await axios.get(
-          `${API_BASE_URL_SEARCH}?filter=${input}&page=1&per-page=1&order=order`, {
+          `${process.env.EXPO_PUBLIC_API_BASE_URL_SEARCH}?filter=${input}&page=1&per-page=1&order=order`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
