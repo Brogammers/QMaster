@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 // Define validation schema
 const LoginSchema = Yup.object().shape({
@@ -15,7 +17,12 @@ const LoginSchema = Yup.object().shape({
 
 export default function LoginForm({ setIsLoading }: any) {
   const [errorMessage, setErrorMessage] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const router = useRouter();
+
+  const handlePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
 
   const handleLogin = (values: any, { setErrors }: { setErrors: Function }) => {
     const API_BASE_URL_LOGIN = process.env.NEXT_PUBLIC_API_BASE_URL_LOGIN;
@@ -167,15 +174,24 @@ export default function LoginForm({ setIsLoading }: any) {
                 {errors.email}
               </span>
             )}
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-              placeholder="Enter your password"
-              className="w-full rounded-full mb-4 px-4 py-3 sm:px-8 sm:py-4 bg-white text-gray-700 font-normal text-sm sm:text-lg outline-none border-none"
-            />
+            <div className="bg-white rounded-full mb-4 px-4 py-3 sm:px-8 sm:py-4 w-full flex justify-between items-center">
+              <input
+                type={isPasswordVisible ? "text" : "password"}
+                name="password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.password}
+                placeholder="Enter your password"
+                className="w-full rounded-full bg-white text-gray-700 font-normal text-sm sm:text-lg outline-none border-none"
+              />
+              <button
+                onClick={handlePasswordVisibility}
+                type="button"
+                className="ml-2"
+                >
+                <FontAwesomeIcon size="lg" color="#7D7D7D" icon={isPasswordVisible ? faEyeSlash : faEye} />
+              </button>
+            </div>
             {errors.password && touched.password && (
               <span className="text-red-600 font-normal text-lg mb-2">
                 {errors.password}
