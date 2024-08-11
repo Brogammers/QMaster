@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
@@ -36,7 +36,7 @@ export default function LoginForm({ setIsLoading }: any) {
           console.log("Login successful:", response.data);
           // Store token in cookie/localStorage if needed
           document.cookie = `jwt=${response.data.token}; path=/;`;
-          router.push("/qmaster/counter");
+          router.push(`/${response.data.firstName}/counter`);
 
           // Necessary CORS headers to allow requests from localhost:3000
           axios.defaults.headers.common[
