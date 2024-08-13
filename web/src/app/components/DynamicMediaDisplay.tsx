@@ -60,17 +60,19 @@ export default function DynamicMediaDisplay() {
     <div className="relative h-screen w-full flex justify-center items-center">
       {mediaList.length === 0 ? (
         <div className="flex flex-col items-center">
-          <label className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-lg">
-            Upload Media
-            <input
-              type="file"
-              accept="image/*,video/*"
-              multiple
-              onChange={handleMediaUpload}
-              className="hidden"
-            />
-          </label>
-          <p className="mt-4 text-white">Please upload content to display</p>
+          <button className="border-0 border-baby-blue bg-transparent px-2 py-3 rounded-xl animate-pulse">
+            <label className="cursor-pointer double__color--btn text-white px-4 py-2 rounded-lg font-bold text-2xl animate-pulse">
+              Upload Media
+              <input
+                type="file"
+                accept="image/*,video/*"
+                multiple
+                onChange={handleMediaUpload}
+                className="hidden"
+              />
+            </label>
+          </button>
+          <p className="absolute bottom-5 mt-4 bg-lava-red text-white p-2">Please upload content to display</p>
         </div>
       ) : (
         mediaList.map((media, index) =>
