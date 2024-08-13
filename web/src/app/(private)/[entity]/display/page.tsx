@@ -10,6 +10,7 @@ import QueueModal from "@/app/shared/QueueModal";
 import Entity from "../page";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import DynamicMediaDisplay from "@/app/components/DynamicMediaDisplay";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,12 +74,13 @@ export default function Display() {
     <>
       {fullscreen ? (
         <div className="bg-gradient-to-r from-baby-blue to-ocean-blue h-screen w-full flex justify-between overflow-hidden">
-          <Image
+          {/* <Image
             src={TeamImg}
             alt="QMaster"
             width={width * 0.75}
             height={height}
-          />
+          /> */}
+          <DynamicMediaDisplay />
           <div className="scrollContainer w-1/4 bg-ocean-blue flex flex-col">
             {queuedPersons.map((person) => (
               <TicketNumber
