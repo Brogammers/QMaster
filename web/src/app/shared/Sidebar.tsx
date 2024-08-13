@@ -1,31 +1,28 @@
-import { useState, useEffect} from "react";
+// import { 
+//   CAlert, 
+//   CBadge,
+//   CNavGroup, 
+//   CNavItem, 
+//   CNavTitle, 
+//   CSidebar, 
+//   CSidebarBrand, 
+//   CSidebarHeader, 
+//   CSidebarNav, 
+//   CSidebarToggler 
+// } from '@coreui/react';
+// import '@coreui/coreui/dist/css/coreui.min.css';
+// import CIcon from '@coreui/icons-react';
+// import { cilSettings, cilScreenDesktop, cilPeople } from '@coreui/icons';
+
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from 'next/image';
-import { 
-  CAlert, 
-  CBadge,
-  CNavGroup, 
-  CNavItem, 
-  CNavTitle, 
-  CSidebar, 
-  CSidebarBrand, 
-  CSidebarHeader, 
-  CSidebarNav, 
-  CSidebarToggler 
-} from '@coreui/react';
-import '@coreui/coreui/dist/css/coreui.min.css';
-import CIcon from '@coreui/icons-react';
-import { cilSettings, cilScreenDesktop, cilPeople } from '@coreui/icons';
-
 import QMasterLogo from "../../../public/qmaster.svg";
-import { QueueModalProps } from "../../../types";
 import { Menu, Layout } from "antd";
 import { SettingOutlined, DesktopOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons'; // Import required icons
 import Tag from "./Tag";
 
 const { Sider } = Layout;
-const { SubMenu } = Menu;
-
 
 export default function Sidebar() {
   let { entity } = useParams();
@@ -33,8 +30,8 @@ export default function Sidebar() {
     entity = entity[0];
   }
   const router = useRouter();
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const toggleCollapsed = () => {
     setIsCollapsed(!isCollapsed);
@@ -57,12 +54,59 @@ export default function Sidebar() {
     }, 2000);
   }
 
-  useEffect(() => {
-    // Fetch the user's role from a server when they log in
-    // and store it in the `role` state.
-
-    // fetchUserRole().then(setRole);
-  }, []);
+  const menuItems = [
+    {
+      key: '1',
+      icon: <SettingOutlined />,
+      label: 'Admin',
+      children: [
+        {
+          key: '2',
+          label: (
+            <div className="flex justify-center items-center gap-4">
+              <span>Customer Feedback</span>
+              <Tag text="Coming Soon" bgColor="red-500" fontSize="xs" />
+            </div>
+          ),
+          onClick: () => handleRouting(`admin/customer-feedback`)
+        },
+        {
+          key: '3',
+          label: 'Details',
+          onClick: () => handleRouting(`admin/details`)
+        },
+        {
+          key: '4',
+          label: 'Queues',
+          onClick: () => handleRouting(`admin/queues`)
+        },
+        {
+          key: '5',
+          label: 'Sharing Info',
+          onClick: () => handleRouting(`admin/sharing-info`)
+        }
+      ]
+    },
+    {
+      key: '6',
+      icon: <UserOutlined />,
+      label: 'Counter',
+      onClick: () => handleRouting(`counter`)
+    },
+    {
+      key: '7',
+      icon: <DesktopOutlined />,
+      label: 'Display',
+      onClick: () => handleRouting(`display`)
+    },
+    {
+      key: '8',
+      icon: <LogoutOutlined />,
+      label: 'Logout',
+      danger: true,
+      onClick: handleLogout
+    }
+  ];
 
   return (
     <Sider 
@@ -81,69 +125,7 @@ export default function Sidebar() {
           <span className="font-bold text-white text-xl ml-4">QMaster</span>
         }
       </div>
-      <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-        <SubMenu 
-          key="1" 
-          title="Admin" 
-          icon={<SettingOutlined />}
-        >
-          <Menu.Item 
-            key="2" 
-            onClick={() => handleRouting(`admin/customer-feedback`)}
-          >
-            <div className="flex justify-center items-center gap-4">
-              <span>Customer Feedback</span>
-              <Tag 
-                text="Coming Soon" 
-                bgColor="red-500" 
-                fontSize="xs" 
-              />
-            </div>
-          </Menu.Item>
-          <Menu.Item 
-            key="3" 
-            onClick={() => handleRouting(`admin/details`)}
-          >
-            Details
-          </Menu.Item>
-          <Menu.Item 
-            key="4" 
-            onClick={() => handleRouting(`admin/queues`)}
-          >
-            Queues
-          </Menu.Item>
-          <Menu.Item 
-            key="5" 
-            onClick={() => handleRouting(`admin/sharing-info`)}
-          >
-            Sharing Info
-          </Menu.Item>
-        </SubMenu>
-        <Menu.Item 
-          key="6" 
-          icon={<UserOutlined />} 
-          onClick={() => handleRouting(`counter`)}
-        >
-          Counter
-        </Menu.Item>
-        <Menu.Item 
-          key="7" 
-          icon={<DesktopOutlined />} 
-          onClick={() => handleRouting(`display`)}
-        >
-          Display
-        </Menu.Item>
-      </Menu>
-      <Menu>
-        <Menu.Item
-          key="8"
-          danger
-          icon={<LogoutOutlined />}
-          onClick={() => handleLogout()}
-        >
-          Logout
-        </Menu.Item>
-      </Menu>
+      <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" items={menuItems} />
     </Sider>
     // <CSidebar className="sidebar border-end h-screen" colorScheme="dark" unfoldable>
     //   <CSidebarHeader className="border-bottom">
