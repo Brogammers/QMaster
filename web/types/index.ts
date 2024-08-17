@@ -72,10 +72,14 @@ export interface StyledFieldProps {
   type?: string;
 }
 
-
 export interface DayFormProps { 
   day: string, 
   values: any, 
   setFieldValue: any 
 }
 
+export interface Media {
+  id: number;
+  type: "image" | "video";
+  src: string;
+}

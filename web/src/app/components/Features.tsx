@@ -61,7 +61,8 @@ export default function Features() {
             <h5 className="text-4xl font-bold mb-2 text-coal-black text-center">A Sneak Peek of What <span className="text-baby-blue">QMaster Offers.</span></h5>
             <PhoneFrame 
               screenshotList={screenshotList}
-              buttonColor="#1DCDFE" 
+              buttonColor="#1DCDFE"
+              statusBar="light" 
             />
           </div>
         </div>
