@@ -5,7 +5,7 @@ import Image from "next/image";
 import { features } from "../../../constants";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import PhoneFrame from "react-framify"
+import { IPhoneFrame } from "react-framify";
 import FrameSetSSOne from "../../../public/iqueue-1.png";
 import FrameSetSSTwo from "../../../public/iqueue-2.png";
 import FrameSetSSThree from "../../../public/iqueue-3.png";
@@ -59,7 +59,7 @@ export default function Features() {
           ))}
           <div className="pt-24">
             <h5 className="text-4xl font-bold mb-2 text-coal-black text-center">A Sneak Peek of What <span className="text-baby-blue">QMaster Offers.</span></h5>
-            <PhoneFrame 
+            <IPhoneFrame 
               screenshotList={screenshotList}
               buttonColor="#1DCDFE"
               statusBar="light" 
