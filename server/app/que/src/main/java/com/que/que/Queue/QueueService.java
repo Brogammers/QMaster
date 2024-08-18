@@ -85,9 +85,9 @@ public class QueueService {
           queueHolderID,
           queueHolderQueue.size(),
           String.format(
-              "http://192.168.56.1:8080/api/v1/queue/user?queueHolderId=%d&queue=%d",
+              "http://localhost:8080/api/v1/queue/user?userId=%d&queueName=%s",
               queueHolderID,
-              queueHolderQueue.size()));
+              name));
     } catch (Exception e) {
       throw new IllegalStateException("Error while creating queue.");
     }
