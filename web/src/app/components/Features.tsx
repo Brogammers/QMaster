@@ -5,7 +5,7 @@ import Image from "next/image";
 import { features } from "../../../constants";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { IPhoneFrame } from "react-framify";
+import { IPhoneFrame } from "react-framify"
 import FrameSetSSOne from "../../../public/iqueue-1.png";
 import FrameSetSSTwo from "../../../public/iqueue-2.png";
 import FrameSetSSThree from "../../../public/iqueue-3.png";
