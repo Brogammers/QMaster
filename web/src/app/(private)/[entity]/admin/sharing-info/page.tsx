@@ -7,8 +7,8 @@ import Entity from "../../page";
 import jsPDF from "jspdf";
 
 export default function SharingInfo() {
-  const [url, setUrl] = useState("");
-  const [qrCode, setQrCode] = useState("");
+  const [url, setUrl] = useState<string>("");
+  const [qrCode, setQrCode] = useState<string>("");
 
   useEffect(() => {
     // For testing purposes

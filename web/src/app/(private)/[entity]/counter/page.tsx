@@ -55,10 +55,10 @@ export default function Counter() {
   const [visibleTickets2, setVisibleTickets2] = useState<any[]>([]);
   const [remainingCount1, setRemainingCount1] = useState<number>(0);
   const [remainingCount2, setRemainingCount2] = useState<number>(0);
-  const [counterSetup, setCounterSetup] = useState(true);
+  const [counterSetup, setCounterSetup] = useState<boolean>(true);
   const [counters, setCounters] = useState<any[]>([]);
   const [formValues, setFormValues] = useState<any>(null);
-  const [isDuplicate, setIsDuplicate] = useState(false);
+  const [isDuplicate, setIsDuplicate] = useState<boolean>(false);
   const [tickets1, setTickets1] = useState<any[]>([
     // Add more ticket data as needed
   ]);

@@ -4,7 +4,7 @@ import { CNav, CNavItem, CNavLink } from '@coreui/react'
 import { onSelectedProps } from '../../../types';
 
 export default function AdminDetailsNavBar({ onItemSelected }: onSelectedProps) {
-  const [activeLink, setActiveLink] = useState('Details');
+  const [activeLink, setActiveLink] = useState<string>('Details');
 
   const handleClick = (item: string): void => {
     setActiveLink(item);

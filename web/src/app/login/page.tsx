@@ -5,7 +5,7 @@ import LoginForm from "../components/LoginForm";
 import SplashScreen from "../shared/SplashScreen";
 
 export default function Login() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   if (isLoading) {
     return <SplashScreen />;
