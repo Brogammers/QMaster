@@ -6,35 +6,40 @@ import QueueModal from "@/app/shared/QueueModal";
 import Entity from "../../page";
 import jsPDF from "jspdf";
 import axios from "axios";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from "@/app/redux/store";
 
 export default function SharingInfo() {
   const [url, setUrl] = useState<string>("");
   const [qrCode, setQrCode] = useState<string>("");
+  // const dispatch = useDispatch();
+  // const queueName = useSelector((state: RootState) => state.entity.name);
 
   useEffect(() => {
     // For testing purposes
     const fakeUrl = "https://book.qmaster.app/places/gok0IwQodWYLcLxTF9hS";
-    const fakeQrCodeUrl = "https://via.placeholder.com/300";
+    const fakeQrCodeUrl = "http://localhost:8080/images/1-0.png";
 
-    // TODO: Fetch the queue name
-    const queueName = "Fam";
-    const qrCodeUrl = `http://localhost:5000/api/v1/qr?queueName=${queueName}`;
+    // // TODO: Fetch the queue name
+    // const queueName = "Fam";
+    // const qrCodeUrl = `http://localhost:5000/api/v1/qr?queueName=${queueName}`;
+    // console.log("This is the entity name: ", queueName);
 
-    axios
-      .post(qrCodeUrl)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error("Failed to generate QR code");
-          return;
-        }
+    // axios
+    //   .post(qrCodeUrl)
+    //   .then((response) => {
+    //     if (response.status !== 200) {
+    //       console.error("Failed to generate QR code");
+    //       return;
+    //     }
 
-        const qrCodeData = response.data;
+    //     const qrCodeData = response.data;
 
-        setQrCode(qrCodeData.file);
-      })
-      .catch((error) => {
-        console.error("Failed to generate QR code: ", error);
-      });
+    //     setQrCode(qrCodeData.file);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Failed to generate QR code: ", error);
+    //   });
 
     setUrl(fakeUrl);
     setQrCode(fakeQrCodeUrl);
