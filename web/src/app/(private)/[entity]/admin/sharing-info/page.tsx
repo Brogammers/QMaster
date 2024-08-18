@@ -5,6 +5,7 @@ import { Formik, Field, Form } from "formik";
 import QueueModal from "@/app/shared/QueueModal";
 import Entity from "../../page";
 import jsPDF from "jspdf";
+import axios from "axios";
 
 export default function SharingInfo() {
   const [url, setUrl] = useState<string>("");
@@ -13,39 +14,61 @@ export default function SharingInfo() {
   useEffect(() => {
     // For testing purposes
     const fakeUrl = "https://book.qmaster.app/places/gok0IwQodWYLcLxTF9hS";
-    const fakeQrCodeUrl = "https://via.placeholder.com/300"; 
+    const fakeQrCodeUrl = "https://via.placeholder.com/300";
+
+    // TODO: Fetch the queue name
+    const queueName = "Fam";
+    const qrCodeUrl = `http://localhost:5000/api/v1/qr?queueName=${queueName}`;
+
+    axios
+      .post(qrCodeUrl)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error("Failed to generate QR code");
+          return;
+        }
+
+        const qrCodeData = response.data;
+
+        setQrCode(qrCodeData.file);
+      })
+      .catch((error) => {
+        console.error("Failed to generate QR code: ", error);
+      });
 
     setUrl(fakeUrl);
-    setQrCode(fakeQrCodeUrl); 
+    setQrCode(fakeQrCodeUrl);
   }, []);
 
   const handlePreview = () => {
     if (qrCode) {
       const doc = new jsPDF();
-  
+
       // A4 page dimensions in points (595.28 x 841.89)
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
-  
+
       // QR Code dimensions
       const qrCodeHeight = pageHeight / 2; // Half the page height
       const qrCodeWidth = qrCodeHeight; // Maintain aspect ratio (square)
-  
+
       // QR Code position (centered)
       const xOffset = (pageWidth - qrCodeWidth) / 2;
       const yOffset = (pageHeight - qrCodeHeight) / 2 + 20; // Adding some padding for the text
-  
+
       // Adding text above the QR code
       doc.setFontSize(18);
-      doc.text("Please Scan to Queue Up", pageWidth / 2, yOffset - 10, { align: "center" });
-  
+      doc.text("Please Scan to Queue Up", pageWidth / 2, yOffset - 10, {
+        align: "center",
+      });
+
       // Adding the QR code image
       doc.addImage(qrCode, "JPEG", xOffset, yOffset, qrCodeWidth, qrCodeHeight);
-  
+
       // Convert the PDF to a Blob and create a URL for the Blob
       const pdfBlob = doc.output("blob");
       const pdfUrl = URL.createObjectURL(pdfBlob);
-  
+
       // Open the PDF in a new tab using the Blob URL
       window.open(pdfUrl, "_blank");
     } else {
@@ -71,7 +94,9 @@ export default function SharingInfo() {
 
       // Adding text above the QR code
       doc.setFontSize(18);
-      doc.text("Please Scan to Queue Up", pageWidth / 2, yOffset - 10, { align: "center" });
+      doc.text("Please Scan to Queue Up", pageWidth / 2, yOffset - 10, {
+        align: "center",
+      });
 
       // Adding the QR code image
       doc.addImage(qrCode, "JPEG", xOffset, yOffset, qrCodeWidth, qrCodeHeight);
@@ -85,7 +110,8 @@ export default function SharingInfo() {
 
   const handleCopyURL = () => {
     if (url) {
-      navigator.clipboard.writeText(url)
+      navigator.clipboard
+        .writeText(url)
         .then(() => {
           console.log("URL copied to clipboard");
         })
@@ -99,7 +125,7 @@ export default function SharingInfo() {
 
   return (
     <Entity>
-      <QueueModal 
+      <QueueModal
         title="Sharing Info"
         description="This QR-code is automatically generated for this Place"
       >
