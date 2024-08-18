@@ -13,10 +13,10 @@ export default function SharingInfo() {
   useEffect(() => {
     // For testing purposes
     const fakeUrl = "https://book.qmaster.app/places/gok0IwQodWYLcLxTF9hS";
-    const fakeQrCodeUrl = "https://via.placeholder.com/300"; // Placeholder image for QR code
+    const fakeQrCodeUrl = "https://via.placeholder.com/300"; 
 
     setUrl(fakeUrl);
-    setQrCode(fakeQrCodeUrl); // For generating QR code in the PDF
+    setQrCode(fakeQrCodeUrl); 
   }, []);
 
   const handlePreview = () => {
