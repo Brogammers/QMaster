@@ -1,7 +1,8 @@
 package com.que.que.Login;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -23,12 +24,13 @@ public class LoginControllerTest {
     @InjectMocks
     private LoginController loginController;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testLogin_Success() {
         // Arrange
         LoginRequest request = new LoginRequest("test@example.com", "password");
@@ -46,7 +48,8 @@ public class LoginControllerTest {
         verify(loginService, times(1)).loginUser(request.getEmail(), request.getPassword());
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testLogin_Exception() {
         // Arrange
         LoginRequest request = new LoginRequest("test@example.com", "password");
