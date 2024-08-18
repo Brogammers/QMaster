@@ -5,8 +5,9 @@ import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -18,13 +19,14 @@ public class QueuePoissonDistributionTest {
     @Mock
     private QueuePoissonDistribution queuePoissonDistribution;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         // Create an instance of the class under test
         queuePoissonDistribution = Mockito.mock(QueuePoissonDistribution.class);
     }
 
-    @Test(timeout = 5000)
+    @Test
+    @Timeout(5000)
     public void testFunctionCallCount() {
         // Mocking the fac method
         when(queuePoissonDistribution.factorial(anyInt())).thenCallRealMethod();
@@ -32,11 +34,13 @@ public class QueuePoissonDistributionTest {
         queuePoissonDistribution.factorial(7);
 
         // Verify that the method was called exactly once
-        Mockito.verify(queuePoissonDistribution, Mockito.atMost(2)).factorial(anyInt());
+        Mockito.verify(queuePoissonDistribution,
+                Mockito.atMost(2)).factorial(anyInt());
 
         // Testing code fucntionality
         when(queuePoissonDistribution.factorial(anyInt())).thenReturn(120);
-        when(queuePoissonDistribution.calculateProbability(anyDouble(), anyInt())).thenCallRealMethod();
+        when(queuePoissonDistribution.calculateProbability(anyDouble(),
+                anyInt())).thenCallRealMethod();
 
         double probability = queuePoissonDistribution.calculateProbability(4, 5);
 

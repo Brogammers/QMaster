@@ -1,7 +1,8 @@
 package com.que.que.Queue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.BeforeAll;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -48,12 +49,13 @@ public class QueueServiceTest {
     @InjectMocks
     private QueueService queueService;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
+    @BeforeAll
+    public static void setUp() {
+        MockitoAnnotations.openMocks(QueueServiceTest.class);
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testCreateNewQueue() {
         // Arrange
         Long queueHolderID = 1L;
@@ -88,7 +90,8 @@ public class QueueServiceTest {
         verify(businessUserRepository, times(3)).findById(queueHolderID);
         verify(queueRepository, times(1)).findByName(name);
         try {
-            verify(qrCodeService, times(1)).createQRCode(eq(queueHolderID), anyInt(), anyString());
+            verify(qrCodeService, times(1)).createQRCode(eq(queueHolderID), anyInt(),
+                    anyString());
         } catch (IOException | WriterException e) {
             assert (false);
         }
@@ -97,7 +100,8 @@ public class QueueServiceTest {
         // Add additional assertions as needed
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testIsValidForNewQueue_Basic() {
         // Arrange
         Long queueHolderID = 1L;
@@ -120,7 +124,8 @@ public class QueueServiceTest {
         assertFalse(isValidAfterQueue);
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testIsValidForNewQueue_Enterprise() {
         // Arrange
         Long queueHolderID = 1L;
@@ -144,7 +149,8 @@ public class QueueServiceTest {
         assertFalse(isValidAfterQueue);
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testIsValidForNewQueue_Premium() {
         // Arrange
         Long queueHolderID = 1L;
@@ -167,7 +173,8 @@ public class QueueServiceTest {
         assertFalse(isValidAfterQueue);
     }
 
-    @Test(expected = IllegalStateException.class, timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testCreatingMoreQueuesThanMaxAllowed_Basic() {
         // Arrange
         Long queueHolderID = 1L;
@@ -177,14 +184,17 @@ public class QueueServiceTest {
         when(businessUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
 
         // Act
-        for (int i = 0; i < queueService.MAX_BASIC_QUEUES + 1; i++)
-            queueService.createNewQueue(queueHolderID, "test" + i);
+        assertThrows(IllegalStateException.class, () -> {
+            for (int i = 0; i < queueService.MAX_BASIC_QUEUES + 1; i++)
+                queueService.createNewQueue(queueHolderID, "test" + i);
+        });
 
         // Assert
         // Expects IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class, timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testCreatingMoreQueuesThanMaxAllowed_Premium() {
         // Arrange
         Long queueHolderID = 1L;
@@ -193,15 +203,18 @@ public class QueueServiceTest {
         appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
         when(businessUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
 
-        // Act
-        for (int i = 0; i < queueService.MAX_PREMIUM_QUEUES + 1; i++)
-            queueService.createNewQueue(queueHolderID, "test" + i);
+        assertThrows(IllegalStateException.class, () -> {
+            // Act
+            for (int i = 0; i < queueService.MAX_PREMIUM_QUEUES + 1; i++)
+                queueService.createNewQueue(queueHolderID, "test" + i);
+        });
 
         // Assert
         // Expects IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class, timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testCreatingMoreQueuesThanMaxAllowed_Enterprise() {
         // Arrange
         Long queueHolderID = 1L;
@@ -211,8 +224,10 @@ public class QueueServiceTest {
         when(businessUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
 
         // Act
-        for (int i = 0; i < queueService.MAX_ENTERPRISE_QUEUES + 1; i++)
-            queueService.createNewQueue(queueHolderID, "test" + i);
+        assertThrows(IllegalStateException.class, () -> {
+            for (int i = 0; i < queueService.MAX_ENTERPRISE_QUEUES + 1; i++)
+                queueService.createNewQueue(queueHolderID, "test" + i);
+        });
 
         // Assert
         // Expects IllegalStateException to be thrown
@@ -228,13 +243,14 @@ public class QueueServiceTest {
      * appUser.setId(appUserId);
      * appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
      * appUser.setQueueId(-1);
+     *
      * when(appUserRepository.findById(appUserId)).thenReturn(Optional.of(appUser));
-     * 
+     *
      * queueService.createNewQueue(appUserId, queueName);
-     * 
+     *
      * // Act
      * queueService.enqueueUser(appUserId, queueName);
-     * 
+     *
      * // Assert
      * verify(appUserRepository, times(1)).findById(appUserId);
      * verify(queueRepository, times(1)).findByName(queueName);
@@ -242,7 +258,8 @@ public class QueueServiceTest {
      * // Add additional assertions as needed
      * }
      */
-    @Test(expected = IllegalStateException.class, timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testEnqueueUser_UserNotFound() {
         // Arrange
         Long appUserId = 1L;
@@ -250,13 +267,14 @@ public class QueueServiceTest {
         when(appUserRepository.findById(appUserId)).thenReturn(Optional.empty());
 
         // Act
-        queueService.enqueueUser(appUserId, queueName);
+        assertThrows(IllegalStateException.class, () -> queueService.enqueueUser(appUserId, queueName));
 
         // Assert
         // Expects IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class, timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testEnqueueUser_QueueNotFound() {
         // Arrange
         Long appUserId = 1L;
@@ -267,30 +285,38 @@ public class QueueServiceTest {
         when(queueRepository.findByName(queueName)).thenReturn(Optional.empty());
 
         // Act
-        queueService.enqueueUser(appUserId, queueName);
+        assertThrows(IllegalStateException.class, () -> queueService.enqueueUser(appUserId, queueName));
 
         // Assert
         // Expects IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class, timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testEnqueueUser_UserAlreadyInQueue() {
         // Arrange
-        Long appUserId = 1L;
-        String queueName = "TestQueue";
-        AppUser appUser = new AppUser();
-        appUser.setId(appUserId);
-        queueService.createNewQueue(appUserId, queueName);
-        when(appUserRepository.findById(appUserId)).thenReturn(Optional.of(appUser));
+        Long queueHolderID = 1L;
+        BusinessUser appUser = new BusinessUser();
+        appUser.setQueueId(-1);
+        appUser.setSubscriptionPlan(SubscriptionPlans.BASIC);
+        when(businessUserRepository.findById(queueHolderID)).thenReturn(Optional.of(appUser));
 
-        queueService.enqueueUser(appUserId, queueName);
-        queueService.enqueueUser(appUserId, queueName);
+        String queueName = "TestQueue";
+
+        queueService.createNewQueue(queueHolderID, queueName);
+
+        // Act
+        assertThrows(IllegalStateException.class, () -> {
+            queueService.enqueueUser(queueHolderID, queueName);
+            queueService.enqueueUser(queueHolderID, queueName);
+        });
 
         // Assert
         // Expects IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class, timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testEnqueueUser_CouldNotAddUserToQueue() {
         // Arrange
         Long appUserId = 1L;
@@ -301,13 +327,14 @@ public class QueueServiceTest {
         when(appUserRepository.findById(appUserId)).thenReturn(Optional.of(appUser));
 
         // Act
-        queueService.enqueueUser(appUserId, queueName);
+        assertThrows(IllegalStateException.class, () -> queueService.enqueueUser(appUserId, queueName));
 
         // Assert
         // Expects IllegalStateException to be thrown
     }
 
-    @Test(expected = IllegalStateException.class, timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testMaxQueueSize_Fail() {
         // Arrange
         AppUser[] appUsers = new AppUser[queueService.MAX_QUEUE_SIZE + 1];
@@ -320,7 +347,8 @@ public class QueueServiceTest {
         }
 
         for (int i = 0; i < queueService.MAX_QUEUE_SIZE + 1; i++) {
-            when(appUserRepository.findById((long) i + 1)).thenReturn(Optional.of(appUsers[i]));
+            when(appUserRepository.findById((long) i +
+                    1)).thenReturn(Optional.of(appUsers[i]));
         }
 
         BusinessUser creator = new BusinessUser();
@@ -338,16 +366,20 @@ public class QueueServiceTest {
         queues.setCreator(creator);
         queues.setName(queueName);
         when(queueRepository.findByName(queueName)).thenReturn(Optional.of(queues));
-        // Act
-        for (int i = 0; i < queueService.MAX_QUEUE_SIZE + 3; i++) {
-            queueService.enqueueUser((long) (i + 1), queueName);
-        }
+
+        assertThrows(IllegalStateException.class, () -> {
+            // Act
+            for (int i = 0; i < queueService.MAX_QUEUE_SIZE + 1; i++) {
+                queueService.enqueueUser((long) (i + 1), queueName);
+            }
+        });
 
         // Assert
         // Expects IllegalStateException to be thrown
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testMaxQueueSize_Succeed() {
         // Arrange
         AppUser[] appUsers = new AppUser[queueService.MAX_QUEUE_SIZE];
@@ -360,7 +392,8 @@ public class QueueServiceTest {
         }
 
         for (int i = 0; i < queueService.MAX_QUEUE_SIZE; i++) {
-            when(appUserRepository.findById((long) i + 1)).thenReturn(Optional.of(appUsers[i]));
+            when(appUserRepository.findById((long) i +
+                    1)).thenReturn(Optional.of(appUsers[i]));
         }
 
         BusinessUser creator = new BusinessUser();

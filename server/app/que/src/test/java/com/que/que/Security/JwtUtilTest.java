@@ -1,8 +1,9 @@
 package com.que.que.Security;
 
 import io.jsonwebtoken.Claims;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import com.que.que.User.AppUser.AppUser;
 
@@ -16,12 +17,13 @@ public class JwtUtilTest {
 
     private JwtUtil jwtUtil;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         jwtUtil = new JwtUtil();
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testGenerateToken() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -30,7 +32,8 @@ public class JwtUtilTest {
         assertTrue(token.length() > 0);
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testExtractBody_ValidToken() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -41,14 +44,16 @@ public class JwtUtilTest {
         assertTrue(body instanceof Claims);
     }
 
-    @Test(expected = IllegalStateException.class, timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testExtractBody_InvalidToken() {
         String invalidToken = "invalidToken";
 
-        JwtUtil.extractBody(invalidToken);
+        assertThrows(IllegalStateException.class, () -> JwtUtil.extractBody(invalidToken));
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testGetUsername() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -59,14 +64,17 @@ public class JwtUtilTest {
     }
 
     /**
-     * Test case to verify the functionality of the getIssuedDate method in JwtUtil
+     * Test case to verify the functionality of the getIssuedDate method in
+     * JwtUtil
      * class.
-     * It generates a token for a test user, and then retrieves the issued date from
+     * It generates a token for a test user, and then retrieves the issued date
+     * from
      * the token.
      * The test ensures that the issued date is not null.
      */
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testGetExpirationDate() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -75,7 +83,8 @@ public class JwtUtilTest {
         assertNotNull(expirationDate);
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testIsTokenExpired_NotExpired() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -85,7 +94,8 @@ public class JwtUtilTest {
         assertFalse(isExpired);
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testGetClaimFromToken() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -95,7 +105,8 @@ public class JwtUtilTest {
         assertEquals(username, extractedUsername);
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testValidateToken_ValidToken() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
@@ -108,7 +119,8 @@ public class JwtUtilTest {
         assertTrue(isValid);
     }
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(5000)
     public void testValidateToken_InvalidUser() {
         String username = "testUser";
         String token = JwtUtil.generateToken(username);
