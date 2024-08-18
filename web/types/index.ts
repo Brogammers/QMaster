@@ -83,3 +83,9 @@ export interface Media {
   type: "image" | "video";
   src: string;
 }
+
+export interface QueuedPerson {
+  id: number;
+  ticketNumber: string;
+  counter: string;
+}

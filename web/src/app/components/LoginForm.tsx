@@ -16,7 +16,7 @@ const LoginSchema = Yup.object().shape({
 });
 
 export default function LoginForm({ setIsLoading }: any) {
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const router = useRouter();
 

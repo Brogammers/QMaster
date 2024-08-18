@@ -8,7 +8,7 @@ import { Media } from "../../../types";
 export default function DynamicMediaDisplay() {
   const [mediaList, setMediaList] = useState<Media[]>([]);
   const { width, height } = useWindowSize();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleMediaUpload = (event: React.ChangeEvent<HTMLInputElement>) => {

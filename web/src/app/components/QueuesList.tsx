@@ -17,12 +17,12 @@ export default function QueuesList({
   queues: any[];
   setQueues: React.Dispatch<React.SetStateAction<any[]>>;
 }) {
-  const [openMenuIndex, setOpenMenuIndex] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
+  const [openMenuIndex, setOpenMenuIndex] = useState<number | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+  const [modalText, setModalText] = useState<string>("Content of the modal");
   // const menuRef = useRef(null);
-  const [initialValues, setInitialValues] = useState({});
+  const [initialValues, setInitialValues] = useState<any>({});
 
   const showModal = (index: number) => {
     //console.log(queues[index]);

@@ -7,16 +7,16 @@ import Entity from "../../page";
 import jsPDF from "jspdf";
 
 export default function SharingInfo() {
-  const [url, setUrl] = useState("");
-  const [qrCode, setQrCode] = useState("");
+  const [url, setUrl] = useState<string>("");
+  const [qrCode, setQrCode] = useState<string>("");
 
   useEffect(() => {
     // For testing purposes
     const fakeUrl = "https://book.qmaster.app/places/gok0IwQodWYLcLxTF9hS";
-    const fakeQrCodeUrl = "https://via.placeholder.com/300"; // Placeholder image for QR code
+    const fakeQrCodeUrl = "https://via.placeholder.com/300"; 
 
     setUrl(fakeUrl);
-    setQrCode(fakeQrCodeUrl); // For generating QR code in the PDF
+    setQrCode(fakeQrCodeUrl); 
   }, []);
 
   const handlePreview = () => {
