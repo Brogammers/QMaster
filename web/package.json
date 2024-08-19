@@ -40,7 +40,7 @@
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
-    "react-framify": "^1.3.69",
+    "react-framify": "^1.3.81",
     "react-icons": "^5.0.1",
     "react-lottie": "^1.2.4",
     "react-phone-number-input": "^3.3.12",
