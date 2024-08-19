@@ -61,7 +61,7 @@ export default function Features() {
             <h5 className="text-4xl font-bold mb-2 text-coal-black text-center">A Sneak Peek of What <span className="text-baby-blue">QMaster Offers.</span></h5>
             <IPhoneFrame 
               screenshotList={screenshotList}
-              statusBar={{ mode: "light"  }}
+              statusBar={{ mode: "light" }}
               buttonStyles={{
                 backgroundColor: "#1DCDFE",
               }}
