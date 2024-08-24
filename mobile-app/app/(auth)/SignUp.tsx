@@ -26,8 +26,9 @@ import { useDispatch } from "react-redux";
 import { setEmail } from "../redux/authSlice";
 import { countries } from "@/constants";
 import PhoneInput from "react-native-phone-input";
-import { isValidPhoneNumber } from 'libphonenumber-js'
-
+import { isValidPhoneNumber } from "libphonenumber-js";
+// import EXPO_PUBLIC_API_BASE_URL from ""
+import Config from "react-native-config";
 
 const window = Dimensions.get("window");
 
@@ -56,12 +57,11 @@ const SignupSchema = Yup.object().shape({
     // .max(new Date(), "Date of birth cannot be in the future")
     .required("Date of birth is required"),
   phoneNumber: Yup.string()
-    .test('is-valid-phone-number', 'Invalid phone number', (value) => {
-      return isValidPhoneNumber(value || '')
+    .test("is-valid-phone-number", "Invalid phone number", (value) => {
+      return isValidPhoneNumber(value || "");
     })
     .required("Phone number required"),
-  countryOfOrigin: Yup.string()
-    .required("Country of origin required"),
+  countryOfOrigin: Yup.string().required("Country of origin required"),
 });
 
 export default function SignUp() {
@@ -86,16 +86,27 @@ export default function SignUp() {
 
     try {
       setIsLoading(true);
-      // IOS Simulator
-      const response = await axios.post(`${process.env.EXPO_PUBLIC_API_BASE_URL}`, values);
-      // Android Emulator
-      // const response = await axios.post(
-      //   "http://10.0.2.2:8080/api/v1/registration",
-      //   values
-      // );
+      const url =
+        Config.EXPO_PUBLIC_API_BASE_URL ||
+        "http://localhost:8080/api/v1/registration/user";
+
+      console.log("This is the URL: ", url);
+
+      if (!url) {
+        console.error("API base URL is not set.");
+        Alert.alert(
+          "Configuration Error",
+          "API base URL is not set. Please configure the environment correctly."
+        );
+        return; // Exit the function early if the URL is not set
+      }
+
+      const response = await axios.post(url, values);
 
       if (response.status === 200 || response.status === 201) {
         console.log("Signup successful", values);
+        console.log("Signup response:", response.data);
+
         if (auth && auth.signIn) {
           console.log("This is the type of response: " + typeof response.data);
           console.log(
@@ -104,6 +115,7 @@ export default function SignUp() {
             " and type: ",
             typeof response.data.email
           );
+
           await new Promise<void>((resolve) => {
             dispatch(setEmail(response.data.email));
             resolve();
@@ -137,7 +149,7 @@ export default function SignUp() {
       } else {
         console.error("Non-Axios error:", error);
       }
-      throw error;
+      // It might be better to handle the error without throwing it, depending on your error handling strategy
     } finally {
       setIsLoading(false);
     }
