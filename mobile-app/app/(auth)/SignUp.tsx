@@ -26,9 +26,9 @@ import { useDispatch } from "react-redux";
 import { setEmail } from "../redux/authSlice";
 import { countries } from "@/constants";
 import PhoneInput from "react-native-phone-input";
-import { isValidPhoneNumber } from 'libphonenumber-js'
+import { isValidPhoneNumber } from "libphonenumber-js";
 // import EXPO_PUBLIC_API_BASE_URL from ""
-
+import Config from "react-native-config";
 
 const window = Dimensions.get("window");
 
@@ -57,12 +57,11 @@ const SignupSchema = Yup.object().shape({
     // .max(new Date(), "Date of birth cannot be in the future")
     .required("Date of birth is required"),
   phoneNumber: Yup.string()
-    .test('is-valid-phone-number', 'Invalid phone number', (value) => {
-      return isValidPhoneNumber(value || '')
+    .test("is-valid-phone-number", "Invalid phone number", (value) => {
+      return isValidPhoneNumber(value || "");
     })
     .required("Phone number required"),
-  countryOfOrigin: Yup.string()
-    .required("Country of origin required"),
+  countryOfOrigin: Yup.string().required("Country of origin required"),
 });
 
 export default function SignUp() {
@@ -89,7 +88,10 @@ export default function SignUp() {
     try {
       setIsLoading(true);
       // IOS Simulator
-      const response = await axios.post("http://localhost:8080/api/v1/registration/user", values);
+
+      const url = Config.EXPO_PUBLIC_API_BASE_URL;
+
+      const response = await axios.post(url, values);
       // Android Emulator
       // const response = await axios.post(
       //   "http://10.0.2.2:8080/api/v1/registration",
