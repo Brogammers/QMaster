@@ -27,6 +27,7 @@ import { setEmail } from "../redux/authSlice";
 import { countries } from "@/constants";
 import PhoneInput from "react-native-phone-input";
 import { isValidPhoneNumber } from 'libphonenumber-js'
+// import EXPO_PUBLIC_API_BASE_URL from ""
 
 
 const window = Dimensions.get("window");
@@ -83,11 +84,12 @@ export default function SignUp() {
 
   const handleSignUp = async (values: any) => {
     console.log("Form values:", values);
+    // const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL
 
     try {
       setIsLoading(true);
       // IOS Simulator
-      const response = await axios.post(`${process.env.EXPO_PUBLIC_API_BASE_URL}`, values);
+      const response = await axios.post("http://localhost:8080/api/v1/registration/user", values);
       // Android Emulator
       // const response = await axios.post(
       //   "http://10.0.2.2:8080/api/v1/registration",
