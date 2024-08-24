@@ -99,6 +99,7 @@ export default function SignUp() {
 
       if (response.status === 200 || response.status === 201) {
         console.log("Signup successful", values);
+        console.log("Signup response:", response.data);
         if (auth && auth.signIn) {
           console.log("This is the type of response: " + typeof response.data);
           console.log(
