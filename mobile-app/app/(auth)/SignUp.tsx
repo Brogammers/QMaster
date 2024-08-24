@@ -83,23 +83,28 @@ export default function SignUp() {
 
   const handleSignUp = async (values: any) => {
     console.log("Form values:", values);
-  
+
     try {
       setIsLoading(true);
-      const url = Config.EXPO_PUBLIC_API_BASE_URL;
-  
+      const url =
+        Config.EXPO_PUBLIC_API_BASE_URL ||
+        "http://localhost:8080/api/v1/registration/user";
+
       if (!url) {
         console.error("API base URL is not set.");
-        Alert.alert("Configuration Error", "API base URL is not set. Please configure the environment correctly.");
+        Alert.alert(
+          "Configuration Error",
+          "API base URL is not set. Please configure the environment correctly."
+        );
         return; // Exit the function early if the URL is not set
       }
-  
+
       const response = await axios.post(url, values);
-  
+
       if (response.status === 200 || response.status === 201) {
         console.log("Signup successful", values);
         console.log("Signup response:", response.data);
-  
+
         if (auth && auth.signIn) {
           console.log("This is the type of response: " + typeof response.data);
           console.log(
@@ -108,12 +113,12 @@ export default function SignUp() {
             " and type: ",
             typeof response.data.email
           );
-  
+
           await new Promise<void>((resolve) => {
             dispatch(setEmail(response.data.email));
             resolve();
           });
-  
+
           router.replace("/(auth)/VerificationSent");
           auth.signIn();
         }
@@ -127,10 +132,10 @@ export default function SignUp() {
         "Error",
         "An unexpected error occurred. Please try again later."
       );
-  
+
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
-  
+
         if (axiosError.response) {
           console.error("Axios error status:", axiosError.response.status);
           console.error("Axios error data:", axiosError.response.data);
