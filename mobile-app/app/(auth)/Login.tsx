@@ -51,7 +51,7 @@ export default function Login() {
       setIsLoading(true);
       // IOS Simulator
       const response = await axios.post(
-        `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN}`,
+        `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN || "http://localhost:8080/api/v1/login/user"}`,
         values
       );
       // Android Emulator

@@ -90,6 +90,8 @@ export default function SignUp() {
         Config.EXPO_PUBLIC_API_BASE_URL ||
         "http://localhost:8080/api/v1/registration/user";
 
+      console.log("This is the URL: ", url);
+
       if (!url) {
         console.error("API base URL is not set.");
         Alert.alert(

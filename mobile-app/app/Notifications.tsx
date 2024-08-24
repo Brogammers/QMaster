@@ -19,6 +19,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { AxiosResponse } from "axios";
 import { Skeleton } from "moti/skeleton";
 import { HistoryList } from "@/constants";
+import Config from "react-native-config";
 
 export default function History() {
   const isFocused = useIsFocused();
@@ -42,7 +43,7 @@ export default function History() {
           });
 
           const [response, _] = (await Promise.all([
-            axios.get(`${process.env.EXPO_PUBLIC_API_BASE_URL_HISTORY}?id=1`, {
+            axios.get(`${Config.EXPO_PUBLIC_API_BASE_URL_HISTORY || "http://localhost:8080/api/v1/history/all"}?id=1`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
