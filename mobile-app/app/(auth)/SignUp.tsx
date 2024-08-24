@@ -88,8 +88,7 @@ export default function SignUp() {
     try {
       setIsLoading(true);
       // IOS Simulator
-
-      const url = Config.EXPO_PUBLIC_API_BASE_URL;
+      const url = Config.EXPO_PUBLIC_API_BASE_URL || "";
 
       const response = await axios.post(url, values);
       // Android Emulator
