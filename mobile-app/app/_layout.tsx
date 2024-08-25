@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import SplashScreen from './SplashScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import AppEntry from './(app)/(tabs)/_layout';
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -16,7 +17,7 @@ export default function RootLayout() {
     IstokBold: require('../assets/fonts/static/IstokWeb-Bold.ttf'),
   });
 
-  const { session } = useAuth(); 
+  const { session } = useAuth();
   const [showLoading, setShowLoading] = useState(true);
 
   useEffect(() => {
@@ -38,7 +39,10 @@ export default function RootLayout() {
   }
 
   return (
-    <RootLayoutNav />
+    // <RootLayoutNav />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppEntry />
+    </GestureHandlerRootView>
   );
 }
 
