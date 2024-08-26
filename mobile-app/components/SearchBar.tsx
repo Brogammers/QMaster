@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View, Text } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useLinkTo } from '@react-navigation/native';
+import i18n from '@/i18n';
 
 export default function SearchBar() {
   const linkTo = useLinkTo();
@@ -19,7 +20,7 @@ export default function SearchBar() {
     >
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <FontAwesome name="search" size={24} color="black" />
-        <Text style={{ marginLeft: 10 }}>Search for the name of the queue</Text>
+        <Text style={{ marginLeft: 10 }}>{i18n.t('search')}</Text>
       </View>
     </TouchableOpacity>
   );

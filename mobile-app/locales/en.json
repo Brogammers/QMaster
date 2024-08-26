@@ -1,6 +1,8 @@
 {
-  "welcome": "Welcome",
   "login": "Login",
   "logout": "Logout",
-  "FAQ": "Frequently Asked Questions"
+  "faq": "Frequently Asked Questions",
+  "scan": "Scan QR",
+  "search": "Search for the name of the queue"
+  
 }

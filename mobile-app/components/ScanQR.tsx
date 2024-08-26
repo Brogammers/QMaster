@@ -11,6 +11,7 @@ import Logo from '@/assets/images/Logo.svg';
 import QRCode from '@/assets/images/QrCode.svg';
 import ElipseBackground from '@/assets/images/ElipseBackground.svg';
 import { useLinkTo } from '@react-navigation/native';
+import i18n from '@/i18n';
 
 const { width, height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
@@ -43,7 +44,7 @@ export default function ScanQR() {
       </View>
       <TouchableOpacity>
         <QRCode />
-        <Text className='text-3xl text-white mt-2.5 font-semibold'>Scan QR</Text>
+        <Text className='text-3xl text-white mt-2.5 font-semibold'>{i18n.t('scan')}</Text>
       </TouchableOpacity>
     </View>
   )

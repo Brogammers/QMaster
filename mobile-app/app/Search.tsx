@@ -6,6 +6,7 @@ import RecentItemsSearch from '@/components/RecentItemsSearch';
 import PopularQueues from '@/components/PopularQueues';
 import SearchFilter from '@/components/SearchFilter';
 import { Current } from '@/constants';
+import i18n from '@/i18n';
 
 export default function Search() {
   const [input, setInput] = useState("");
@@ -16,11 +17,11 @@ export default function Search() {
         <View style={styles.searchBar} className='flex-row items-center self-center w-full mt-6 mb-2.5'>
           <FontAwesome name="search" size={24} color="black" />
           <TextInput
-            placeholder="Search for the name of queue"
+            placeholder={i18n.t('search')}
             autoFocus={true}
             value={input}
             onChangeText={(text) => setInput(text)}
-            className='pl-2.5 w-full'
+            className='pl-2.5 pr-9 w-full'
           />
         </View>
 
