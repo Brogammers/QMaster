@@ -20,6 +20,7 @@ import axios, { AxiosResponse } from "axios";
 import { Skeleton } from "moti/skeleton";
 import { HistoryList } from "@/constants";
 import Config from "react-native-config";
+import i18n from "@/i18n";
 
 export default function History() {
   const isFocused = useIsFocused();
@@ -121,10 +122,10 @@ export default function History() {
           // style={styles.noDataContainer}
         >
           <Text className="text-coal-black text-lg font-bold">
-            No Data Found
+            {i18n.t("noData")}
           </Text>
           <Text className="text-coal-black text-md">
-            There is no data to display at the moment.
+            {i18n.t("noDisplay")}
           </Text>
         </View>
       ) : (

@@ -1,6 +1,6 @@
 {
   "login": "Login",
-  "logout": "Logout",
+  "logout": "Log Out",
   "faq": "Frequently Asked Questions",
   "scan": "Scan QR",
   "search": "Search for the name of the queue",
@@ -15,5 +15,12 @@
   "recent": "Recent Queues",
   "entities": "Entities",
   "past queues": "Past Queues",
-  "notifications": "Notifications"
+  "notifications": "Notifications",
+  "language": "Language",
+  "about": "About",
+  "rate": "Rate App",
+  "home": "Home",
+  "accout": "Account",
+  "noData": "No Data Found",
+  "noDisplay": "There is no data to display at the moment"
 }

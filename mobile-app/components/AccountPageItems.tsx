@@ -3,6 +3,7 @@ import React from "react";
 import { View, Linking, Platform, Alert } from "react-native";
 import SearchItem from "@/shared/components/SearchItem";
 import { useLinkTo } from '@react-navigation/native';
+import i18n from "@/i18n";
 
 export default function AccountPageItems() {
   const linkTo = useLinkTo();
@@ -43,32 +44,32 @@ export default function AccountPageItems() {
 
   return (
     <View className="items-center justify-center w-full">
-      <SearchItem
-        title={'Language'}
+      {/* <SearchItem
+        title= {i18n.t('language')}
         icon={'globe'}
         isAccount 
         onPress={() => console.log('Language and Region')} 
-      />
+      /> */}
       <SearchItem 
-        title={'Notifications'} 
+        title={i18n.t('notifications')} 
         icon={'bell'} 
         isAccount 
         onPress={handleNotificationsPress}
       />
       <SearchItem 
-        title={'About'} 
+        title={i18n.t('about')} 
         icon={'circle-info'} 
         isAccount 
         onPress={() => console.log('About')} 
       />
       <SearchItem 
-        title={'Rate App'}
+        title={i18n.t('rate')}
         icon={'star'} 
         isAccount 
         onPress={handleRateApp} 
       />
       <SearchItem 
-        title={'Log Out'}
+        title={i18n.t('logout')}
         icon={'arrow-right-from-bracket'}
         isAccount
         onPress={()=> handleLogout()}

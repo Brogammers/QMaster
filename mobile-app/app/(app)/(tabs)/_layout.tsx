@@ -34,7 +34,7 @@ export default function AppEntry() {
           }}
         >
           <Tab.Screen
-            name="Home"
+            name={i18n.t("home")}
             component={Home}
             options={{
               tabBarIcon: ({ focused }) => (
@@ -47,7 +47,7 @@ export default function AppEntry() {
             }}
           />
           <Tab.Screen
-            name="History"
+            name={i18n.t("history")}
             component={History}
             options={{
               tabBarIcon: ({ focused }) => (
@@ -67,7 +67,7 @@ export default function AppEntry() {
             }}
           />
           <Tab.Screen
-            name="Account"
+            name={i18n.t("account")}
             component={Account}
             options={{
               tabBarIcon: ({ focused }) => (
