@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import Category from '@/shared/components/Category';
 import { Categories } from '@/constants';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import i18n from '@/i18n';
 
 export default function CategoriesList() {  
 
@@ -12,7 +13,7 @@ export default function CategoriesList() {
   return (
     <View>
       <Text className='my-3 text-2xl font-bold'>
-        Categories
+        {i18n.t('categories')}
       </Text>
       <View className='flex flex-row flex-wrap self-center justify-between'>
         {Categories.map((category, index) => (

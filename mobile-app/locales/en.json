@@ -3,6 +3,14 @@
   "logout": "Logout",
   "faq": "Frequently Asked Questions",
   "scan": "Scan QR",
-  "search": "Search for the name of the queue"
-  
+  "search": "Search for the name of the queue",
+  "categories": "Categories",
+  "restaurants": "Restaurants",
+  "governments": "Governments",
+  "clinics": "Clinics",
+  "groceries": "Groceries",
+  "banks": "Banks",
+  "others": "Others",
+  "recent": "Recent Queues",
+  "entities": "Entities"
 }

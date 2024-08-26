@@ -10,6 +10,7 @@ import Notifications from "@/app/Notifications";
 import { Entypo } from "@expo/vector-icons";
 import BrandsList from "@/app/BrandsList";
 import QueuePage from "@/app/QueuePage";
+import i18n from "@/i18n";
 
 const Tab = createBottomTabNavigator();
 
@@ -115,7 +116,7 @@ export default function AppEntry() {
               headerStyle: {
                 backgroundColor: "#17222D",
               },
-              headerTitle: "Brands",
+              headerTitle: i18n.t("entities"),
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}

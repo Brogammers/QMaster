@@ -15,6 +15,7 @@ import nationalBank from '@/assets/images/NationalBank.png';
 import alSalamHospital from '@/assets/images/alsalam.png';
 import profile from '@/assets/images/Profile.png';
 import CarrefourLogo from '@/assets/images/CarrefourLogo.png';
+import i18n from '@/i18n';
 
 import {
   AccountInfoProps,
@@ -51,27 +52,27 @@ export const EmailVerificationText = "Sit tight while we search our database to 
 export const Categories: CategoryProps[] = [
   {
     image: Restaurant,
-    title: 'Restaurant',
+    title: i18n.t('restaurants'),
   },
   {
     image: Government,
-    title: 'Government',
+    title: i18n.t('governments'),
   },
   {
     image: Clinic,
-    title: 'Clinic',
+    title: i18n.t('clinics'),
   },
   {
     image: Grocery,
-    title: 'Grocery',
+    title: i18n.t('groceries'),
   },
   {
     image: Bank,
-    title: 'Bank',
+    title: i18n.t('banks'),
   },
   {
     image: Other,
-    title: 'Other',
+    title: i18n.t('others'),
   },
 ]
 
