@@ -5,6 +5,7 @@ import Carousel from '@/shared/components/Carousel';
 import TextButton from '@/shared/components/TextButton';
 import QLogo from '@/assets/images/logoImage.svg';
 import Return from '@/shared/components/Return';
+import i18n from '@/i18n';
 
 export default function Onboarding() {
   return (
@@ -23,10 +24,10 @@ export default function Onboarding() {
         <Carousel />
         <View className='mt-10'>
           <Link href='/Login'>
-            <TextButton text={'Log In'} buttonColor={'#1DCDFE'} textColor={'white'} />
+            <TextButton text={i18n.t('login')} buttonColor={'#1DCDFE'} textColor={'white'} />
           </Link>
           <Link href='/SignUp'>
-            <TextButton text={'Sign Up'} buttonColor={'white'} textColor={'black'} />
+            <TextButton text={i18n.t('signup')} buttonColor={'white'} textColor={'black'} />
           </Link>
         </View>
       </View>

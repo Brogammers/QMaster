@@ -28,25 +28,25 @@ import {
 export const OnboardingData: OnboardingItem[] = [
   {
     image: FirstOnboarding,
-    text: 'Say goodbye to waiting in queues to finish a single errand.',
+    text: i18n.t('goodByeToWaiting'),
   },
   {
     image: SecondOnboarding,
-    text: 'With Queue, you can finish your errands without wasting a second.',
+    text: i18n.t('finishErrands'),
   },
   {
     image: ThirdOnboarding,
-    text: 'Save your money using our exclusive deals and special coupons.',
+    text: i18n.t('saveMoney'),
   },
   {
     image: FourthOnboarding,
-    text: 'Spend your time on the important things in life.',
+    text: i18n.t('spendTime'),
   }
 ];
 
 
 // Email Verification - SplashScreen 
-export const EmailVerificationText = "Sit tight while we search our database to see if your email has a reservation with us!";
+export const EmailVerificationText = i18n.t('sitTight');
 
 //Categories
 export const Categories: CategoryProps[] = [
@@ -138,7 +138,7 @@ export const HistoryList: HistoryComponentProps[] = [
     name: 'carrefour',
     location: 'New administrative Capital',
     date: '18 January 2024',
-    id : '1234XXXXXXXXX',
+    id: '1234XXXXXXXXX',
     status: 'Queued',
     queues: 75,
     time: '10:09',
@@ -150,7 +150,7 @@ export const HistoryList: HistoryComponentProps[] = [
     name: 'Arabiata',
     location: 'German University in Cairo',
     date: '18 January 2024',
-    id : '1234XXXXXXXXX',
+    id: '1234XXXXXXXXX',
     status: 'Cancelled',
     queues: 1,
     time: '10:09',
@@ -162,7 +162,7 @@ export const HistoryList: HistoryComponentProps[] = [
     name: 'Elections',
     location: '5th settlement',
     date: '18 January 2024',
-    id : '1234XXXXXXXXX',
+    id: '1234XXXXXXXXX',
     status: 'Queued',
     queues: 100,
     time: '10:09',
@@ -174,7 +174,7 @@ export const HistoryList: HistoryComponentProps[] = [
     name: 'National Bank',
     location: 'New administrative Capital',
     date: '18 January 2024',
-    id : '1234XXXXXXXXX',
+    id: '1234XXXXXXXXX',
     status: 'Cancelled',
     queues: 5,
     time: '10:09',
@@ -186,7 +186,7 @@ export const HistoryList: HistoryComponentProps[] = [
     name: 'Al-Salam Hospital',
     location: 'Al-Salam',
     date: '18 January 2024',
-    id : '1234XXXXXXXXX',
+    id: '1234XXXXXXXXX',
     status: 'Queued',
     queues: 1,
     time: '10:09',
@@ -198,7 +198,7 @@ export const HistoryList: HistoryComponentProps[] = [
     name: 'carrefour',
     location: 'New administrative Capital',
     date: '18 January 2024',
-    id : '1234XXXXXXXXX',
+    id: '1234XXXXXXXXX',
     status: 'Queued',
     queues: 75,
     time: '10:09',
@@ -210,7 +210,7 @@ export const HistoryList: HistoryComponentProps[] = [
     name: 'carrefour',
     location: 'New administrative Capital',
     date: '18 January 2024',
-    id : '1234XXXXXXXXX',
+    id: '1234XXXXXXXXX',
     status: 'Queued',
     queues: 75,
     time: '10:09',
@@ -222,7 +222,7 @@ export const HistoryList: HistoryComponentProps[] = [
     name: 'carrefour',
     location: 'New administrative Capital',
     date: '18 January 2024',
-    id : '1234XXXXXXXXX',
+    id: '1234XXXXXXXXX',
     status: 'Cancelled',
     queues: 75,
     time: '10:09',
@@ -234,7 +234,7 @@ export const HistoryList: HistoryComponentProps[] = [
     name: 'carrefour',
     location: 'New administrative Capital',
     date: '18 January 2024',
-    id : '1234XXXXXXXXX',
+    id: '1234XXXXXXXXX',
     status: 'Queued',
     queues: 75,
     time: '10:09',
@@ -246,7 +246,7 @@ export const HistoryList: HistoryComponentProps[] = [
     name: 'carrefour',
     location: 'New administrative Capital',
     date: '18 January 2024',
-    id : '1234XXXXXXXXX',
+    id: '1234XXXXXXXXX',
     status: 'Cancelled',
     queues: 75,
     time: '10:09',

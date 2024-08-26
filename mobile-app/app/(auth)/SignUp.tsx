@@ -29,6 +29,7 @@ import PhoneInput from "react-native-phone-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
 // import EXPO_PUBLIC_API_BASE_URL from ""
 import Config from "react-native-config";
+import i18n from "@/i18n";
 
 const window = Dimensions.get("window");
 
@@ -125,14 +126,14 @@ export default function SignUp() {
           auth.signIn();
         }
       } else {
-        console.error("Signup failed", response.data);
-        Alert.alert("Signup Failed", "Please check your input and try again.");
+        console.error("SignUp failed", response.data);
+        Alert.alert(i18n.t("signupPage.failed"), i18n.t("loginPage.failedMessage"));
       }
     } catch (error) {
       console.error("Signup error:", error);
       Alert.alert(
-        "Error",
-        "An unexpected error occurred. Please try again later."
+        i18n.t("loginPage.error"),
+        i18n.t("loginPage.errorMessage")
       );
 
       if (axios.isAxiosError(error)) {
@@ -178,12 +179,12 @@ export default function SignUp() {
       }>>;
       (arg0: string, arg1: Date): void;
     }) =>
-    () => {
-      const formattedDate = formatDate(date);
-      setDisplayDate(formattedDate); // Set the display date
-      setFieldValue("dateOfBirth", date); // Use the Date object for Formik
-      toggleDatePicker();
-    };
+      () => {
+        const formattedDate = formatDate(date);
+        setDisplayDate(formattedDate); // Set the display date
+        setFieldValue("dateOfBirth", date); // Use the Date object for Formik
+        toggleDatePicker();
+      };
 
   const formatDate = (rawData: Date | undefined) => {
     if (!rawData) return "";
@@ -216,22 +217,22 @@ export default function SignUp() {
       }>>;
       (arg0: string, arg1: Date): void;
     }) =>
-    ({ type }: any, dateOfBirth: Date | undefined) => {
-      if (type === "set" && dateOfBirth) {
-        const currentDate: Date = dateOfBirth;
-        setDate(currentDate);
+      ({ type }: any, dateOfBirth: Date | undefined) => {
+        if (type === "set" && dateOfBirth) {
+          const currentDate: Date = dateOfBirth;
+          setDate(currentDate);
 
-        const formattedDate = formatDate(currentDate);
-        setDisplayDate(formattedDate); // Set the display date
-        setFieldValue("dateOfBirth", currentDate); // Use the Date object for Formik
+          const formattedDate = formatDate(currentDate);
+          setDisplayDate(formattedDate); // Set the display date
+          setFieldValue("dateOfBirth", currentDate); // Use the Date object for Formik
 
-        if (Platform.OS === "android") {
+          if (Platform.OS === "android") {
+            toggleDatePicker();
+          }
+        } else {
           toggleDatePicker();
         }
-      } else {
-        toggleDatePicker();
-      }
-    };
+      };
 
   return (
     <>
@@ -252,13 +253,13 @@ export default function SignUp() {
               style={styles.title}
               className="mt-10 mb-4 text-2xl text-white"
             >
-              Welcome!
+              {i18n.t("signupPage.welcome")}
             </Text>
             <Text
               className="mb-16 text-base text-white"
               style={styles.subTitle}
             >
-              Let's help you save more time.
+              {i18n.t("signupPage.welcomeComment")}
             </Text>
             <ScrollView
               horizontal={false}
@@ -298,7 +299,7 @@ export default function SignUp() {
                   <View className="flex items-center justify-center w-3/4 gap-4">
                     <TextInput
                       style={styles.input}
-                      placeholder="Enter your first name"
+                      placeholder={i18n.t("signupPage.firstName")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("firstName")}
                       value={values.firstName}
@@ -317,7 +318,7 @@ export default function SignUp() {
                     )}
                     <TextInput
                       style={styles.input}
-                      placeholder="Enter your last name"
+                      placeholder={i18n.t("signupPage.lastName")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("lastName")}
                       value={values.lastName}
@@ -336,7 +337,7 @@ export default function SignUp() {
                     )}
                     <TextInput
                       style={styles.input}
-                      placeholder="Enter your email"
+                      placeholder={i18n.t("signupPage.email")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("email")}
                       keyboardType="email-address"
@@ -356,7 +357,7 @@ export default function SignUp() {
                     )}
                     <TextInput
                       style={styles.input}
-                      placeholder="Enter new password"
+                      placeholder={i18n.t("signupPage.password")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("password")}
                       onBlur={handleBlur("password")}
@@ -376,7 +377,7 @@ export default function SignUp() {
                     )}
                     <TextInput
                       style={styles.input}
-                      placeholder="Confirm new password"
+                      placeholder={i18n.t("signupPage.confirmPassword")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("confirmPassword")}
                       onBlur={handleBlur("confirmPassword")}
@@ -440,7 +441,7 @@ export default function SignUp() {
                       <Pressable onPress={toggleDatePicker}>
                         <TextInput
                           style={styles.input}
-                          placeholder="Date of birth           03/10/2023"
+                          placeholder={i18n.t("signupPage.dateOfBirth")}
                           placeholderTextColor={"#515151"}
                           onChangeText={handleChange("dateOfBirth")}
                           value={displayDate}
@@ -480,7 +481,7 @@ export default function SignUp() {
                         ]}
                         dropDownDirection="TOP"
                         dropDownContainerStyle={[styles.dropDownPicker]}
-                        placeholder="Choose your country"
+                        placeholder={i18n.t("signupPage.country")}
                         textStyle={{
                           color: "#515151",
                           fontSize: 16,
@@ -521,7 +522,7 @@ export default function SignUp() {
                     <View className="my-4" />
                     <View className="my-16">
                       <TextButton
-                        text={"Sign Up"}
+                        text={i18n.t("signup")}
                         buttonColor={!isValid ? "#C5C5C5" : "#1DCDFE"}
                         textColor={"white"}
                         onPress={handleSubmit}
@@ -529,7 +530,7 @@ export default function SignUp() {
                         width={windowWidth}
                       />
                       <TextButton
-                        text={"Continue with Google"}
+                        text={i18n.t("google")}
                         icon={"google"}
                         buttonColor={"white"}
                         textColor={"#17222D"}

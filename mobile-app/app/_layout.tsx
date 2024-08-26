@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import SplashScreen from './SplashScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import AppEntry from './(app)/(tabs)/_layout';
+// import AppEntry from './(app)/(tabs)/_layout';
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({

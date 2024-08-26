@@ -1,6 +1,8 @@
 {
   "login": "Login",
   "logout": "Log Out",
+  "signup": "Sign Up",
+  "google": "Sign up with Google",
   "faq": "Frequently Asked Questions",
   "scan": "Scan QR",
   "search": "Search for the name of the queue",
@@ -28,11 +30,41 @@
   "enterEmail": "Enter your email",
   "findMyAccount": "Find My Account",
   "exploreQMaster": "Explore QMaster",
+  "sitTight": "Sit tight while we search our database to see if your email has a reservation with us!",
   "accountNotFound": "No account found",
   "accountNotFoundComment": "It seems we couldn't find an account linked to the provided email. Double-check or consider registering if you're new.",
   "reEnter": "Re-enter",
   "register": "Register",
   "accountFound": "Account Found!",
   "accountFoundComment": "Great news! We found an account linked to this email. Continue to sign in or reset your password if needed.",
-  "resetPassword": "Reset Password"
+  "resetPassword": "Reset Password",
+  "goodByeToWaiting": "Say goodbye to waiting in queues to finish a single errand",
+  "finishErrands": "With QMaster, you can finish your errands without waiting a second",
+  "saveMoney": "Save your money using our exclusive deals and special coupons",
+  "spendTime": "Spend your time on the important things in life",
+  "signupPage": {
+    "welcome": "Welcome!",
+    "welcomeComment": "Let's help you save more time.",
+    "firstName": "Enter your first name",
+    "lastName": "Enter your last name",
+    "email": "Enter your email",
+    "password": "Enter your password",
+    "confirmPassword": "Confirm your password",
+    "dateOfBirth": "Date of birth",
+    "country": "Choose your country",
+    "phoneNumber": "Enter your phone number",
+    "failed": "Signup Failed"
+  },
+  "loginPage": {
+    "welcomeBack": "Welcome back!",
+    "forgotPassword": "Forgot Password?",
+    "error": "error",
+    "errorMessage": "An unexpected error occurred. Please try again later.",
+    "failed": "Login Failed",
+    "failedMessage": "Please check your input and try again."
+  },
+  "verificationSentPage":{
+    "verificationSent": "Verification Email Sent",
+    "verificationSentComment": "Check your email for a link to verify your email address"
+  }
 }
