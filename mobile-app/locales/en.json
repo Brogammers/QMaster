@@ -22,5 +22,17 @@
   "home": "Home",
   "accout": "Account",
   "noData": "No Data Found",
-  "noDisplay": "There is no data to display at the moment"
+  "noDisplay": "There is no data to display at the moment",
+  "findAccount": "Find Your Account",
+  "findAccountComment": "Already have an account but don't remember the email? Enter it below and we'll check for an existing account.",
+  "enterEmail": "Enter your email",
+  "findMyAccount": "Find My Account",
+  "exploreQMaster": "Explore QMaster",
+  "accountNotFound": "No account found",
+  "accountNotFoundComment": "It seems we couldn't find an account linked to the provided email. Double-check or consider registering if you're new.",
+  "reEnter": "Re-enter",
+  "register": "Register",
+  "accountFound": "Account Found!",
+  "accountFoundComment": "Great news! We found an account linked to this email. Continue to sign in or reset your password if needed.",
+  "resetPassword": "Reset Password"
 }

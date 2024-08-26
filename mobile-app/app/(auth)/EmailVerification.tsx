@@ -16,6 +16,7 @@ import background from '@/assets/images/background.png';
 import EmailVerifImg from '@/assets/images/email-verification.png';
 import Loading from '@/app/SplashScreen';
 import { EmailVerificationText } from '@/constants';
+import i18n from '@/i18n';
 
 export default function EmailVerification() {
   const [loading, setLoading] = useState(false);
@@ -32,15 +33,15 @@ export default function EmailVerification() {
 
   const showAlertNoAccountFound = () => {
     Alert.alert(
-      'No Account Found',
-      "It seems we couldn't find an account linked to the provided email. Double-check or consider registering if you're new.",
+      i18n.t('accountNotFound'),
+      i18n.t('accountNotFoundComment'),
       [
         {
-          text: 'Re-enter',
+          text: i18n.t('reEnter'),
           onPress: () => console.log('Re-enter Pressed'),
         },
         {
-          text: 'Register',
+          text: i18n.t('register'),
           onPress: () => console.log('Register Pressed'),
         },
       ],
@@ -49,15 +50,15 @@ export default function EmailVerification() {
 
   const showAlertAccountFound = () => {
     Alert.alert(
-      'Account Found!',
-      'Great news! We found an account linked to this email. Continue to sign in or reset your password if needed.',
+      i18n.t('accountFound'),
+      i18n.t('accountFoundComment'),
       [
         {
-          text: 'Login',
+          text: i18n.t('login'),
           onPress: () => console.log('Login Pressed'),
         },
         {
-          text: 'Reset Password',
+          text: i18n.t('resetPassword'),
           onPress: () => console.log('Reset Password Pressed'),
         },
       ],
@@ -81,11 +82,11 @@ export default function EmailVerification() {
           style={styles.title}
           className='mb-10 text-2xl text-white mt-14'
         >
-          Find Your Account
+          {i18n.t('findAccount')}
         </Text>
         <Image source={EmailVerifImg} className='mt-8 mb-12' />
         <Text style={styles.description} className="w-full mt-2 mb-10 text-base text-center text-white">
-          Already have an account but don't remember the email? Enter it below and we'll check for an existing account.
+          {i18n.t('findAccountComment')}
         </Text>
         <Formik
           initialValues={{
@@ -97,7 +98,7 @@ export default function EmailVerification() {
             <View className='flex items-center justify-center w-full gap-4'>
               <TextInput
                 style={styles.input}
-                placeholder='Enter your email'
+                placeholder={i18n.t('enterEmail')}
                 placeholderTextColor={'#515151'}
                 onChangeText={handleChange('email')}
                 keyboardType='email-address'
@@ -109,13 +110,13 @@ export default function EmailVerification() {
         </Formik>
         <View className='mt-12'>
           <TextButton
-            text={'Find My Account'}
+            text={i18n.t('findMyAccount')}
             buttonColor={'#1DCDFE'}
             textColor={'white'}
             onPress={() => !loading && handleEmailSearch('values.email')}
           />
           <Link href='/Onboarding'>
-            <TextButton text={'Explore QMaster'} buttonColor={'white'} textColor={'#17222D'} />
+            <TextButton text={i18n.t('exploreQMaster')} buttonColor={'white'} textColor={'#17222D'} />
           </Link>
         </View>
       </View>

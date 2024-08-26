@@ -39,10 +39,7 @@ export default function RootLayout() {
   }
 
   return (
-    // <RootLayoutNav />
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <AppEntry />
-    </GestureHandlerRootView>
+    <RootLayoutNav />
   );
 }
 
