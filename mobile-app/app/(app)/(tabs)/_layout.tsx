@@ -61,7 +61,7 @@ export default function AppEntry() {
               headerStyle: {
                 backgroundColor: "#17222D",
               },
-              headerTitle: "Past Queues",
+              headerTitle: i18n.t("past queues"),
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}
@@ -88,7 +88,7 @@ export default function AppEntry() {
               headerStyle: {
                 backgroundColor: "#17222D",
               },
-              headerTitle: "Search Queue",
+              headerTitle: i18n.t("search queue"),
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}
@@ -102,7 +102,7 @@ export default function AppEntry() {
               headerStyle: {
                 backgroundColor: "#17222D",
               },
-              headerTitle: "Notifications",
+              headerTitle: i18n.t("notifications"),
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}

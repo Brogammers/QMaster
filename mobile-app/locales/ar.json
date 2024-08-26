@@ -5,6 +5,7 @@
   "faq": "الأسئلة الشائعة",
   "scan": "مسح الرمز",
   "search": "ابحث عن اسم الطابور",
+  "search queue": "ابحث عن طابور",
   "categories": "الفئات",
   "restaurants": "المطاعم",
   "governments": "الحكومات",
@@ -13,5 +14,8 @@
   "banks": "البنوك",
   "others": "الآخرين",
   "recent": "الطوابير الأخيرة",
-  "entities": "الكيانات"
+  "entities": "الكيانات",
+  "history": "السجل",
+  "past queues": "الطوابير السابقة",
+  "notifications": "الإشعارات"
 }

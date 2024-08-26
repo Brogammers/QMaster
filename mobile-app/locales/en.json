@@ -4,6 +4,7 @@
   "faq": "Frequently Asked Questions",
   "scan": "Scan QR",
   "search": "Search for the name of the queue",
+  "search queue": "Search Queue",
   "categories": "Categories",
   "restaurants": "Restaurants",
   "governments": "Governments",
@@ -12,5 +13,7 @@
   "banks": "Banks",
   "others": "Others",
   "recent": "Recent Queues",
-  "entities": "Entities"
+  "entities": "Entities",
+  "past queues": "Past Queues",
+  "notifications": "Notifications"
 }
