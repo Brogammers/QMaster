@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions
+  Dimensions,
+  I18nManager,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
@@ -33,8 +34,8 @@ export default function ScanQR() {
           width={width}
         />
       </View>
-      <View className='flex-row items-center justify-between w-full px-5 h-max'>
-        <View className='flex-row '>
+      <View className={`${I18nManager.isRTL ? `flex-row-reverse` : `flex-row`} items-center justify-between w-full px-5 h-max`}>
+        <View className={`${I18nManager.isRTL ? `flex-row-reverse` : `flex-row`}`}>
           <Logo />
           <Text className='ml-1 text-xl font-medium text-white'>QMaster</Text>
         </View>
