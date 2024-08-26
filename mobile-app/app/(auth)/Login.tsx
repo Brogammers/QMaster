@@ -202,7 +202,10 @@ export default function Login() {
               }) => (
                 <View className="flex items-center justify-center w-full gap-4">
                   <TextInput
-                    style={styles.input}
+                    style={[
+                      styles.input,
+                      I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                    ]}
                     placeholder={i18n.t("signupPage.email")}
                     placeholderTextColor={"#515151"}
                     onChangeText={handleChange("email")}
@@ -222,7 +225,10 @@ export default function Login() {
                     </Text>
                   )}
                   <TextInput
-                    style={styles.input}
+                    style={[
+                      styles.input,
+                      I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                    ]}
                     placeholder={i18n.t("signupPage.password")}
                     placeholderTextColor={"#515151"}
                     onChangeText={handleChange("password")}
@@ -324,6 +330,12 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 24,
     width: "100%",
+  },
+  inputRTL: {
+    textAlign: "right", // Align text to the right for RTL languages
+  },
+  inputLTR: {
+    textAlign: "left", // Align text to the left for LTR languages
   },
   button: {
     borderRadius: 10,

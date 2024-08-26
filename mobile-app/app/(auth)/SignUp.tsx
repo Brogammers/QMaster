@@ -299,7 +299,10 @@ export default function SignUp() {
                 }) => (
                   <View className="flex items-center justify-center w-3/4 gap-4">
                     <TextInput
-                      style={styles.input}
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
                       placeholder={i18n.t("signupPage.firstName")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("firstName")}
@@ -318,7 +321,10 @@ export default function SignUp() {
                       </Text>
                     )}
                     <TextInput
-                      style={styles.input}
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
                       placeholder={i18n.t("signupPage.lastName")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("lastName")}
@@ -337,7 +343,10 @@ export default function SignUp() {
                       </Text>
                     )}
                     <TextInput
-                      style={styles.input}
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
                       placeholder={i18n.t("signupPage.email")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("email")}
@@ -357,7 +366,10 @@ export default function SignUp() {
                       </Text>
                     )}
                     <TextInput
-                      style={styles.input}
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
                       placeholder={i18n.t("signupPage.password")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("password")}
@@ -377,7 +389,10 @@ export default function SignUp() {
                       </Text>
                     )}
                     <TextInput
-                      style={styles.input}
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
                       placeholder={i18n.t("signupPage.confirmPassword")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("confirmPassword")}
@@ -441,7 +456,10 @@ export default function SignUp() {
                     {!showPicker && (
                       <Pressable onPress={toggleDatePicker}>
                         <TextInput
-                          style={styles.input}
+                          style={[
+                            styles.input,
+                            I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                          ]}
                           placeholder={i18n.t("signupPage.dateOfBirth")}
                           placeholderTextColor={"#515151"}
                           onChangeText={handleChange("dateOfBirth")}
@@ -601,6 +619,12 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 24,
     width: window.width * 0.75,
+  },
+  inputRTL: {
+    textAlign: "right", // Align text to the right for RTL languages
+  },
+  inputLTR: {
+    textAlign: "left", // Align text to the left for LTR languages
   },
   datePicker: {
     height: 120,
