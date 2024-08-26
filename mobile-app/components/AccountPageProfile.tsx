@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, useWindowDimensions } from "react-native";
+import { View, Text, Image, I18nManager } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
@@ -20,9 +20,13 @@ export default function AccountPageProfile() {
 
   return (
     <View className="flex-row items-center justify-between w-11/12 my-6 bg-ocean-blue rounded-3xl p-3.5 pr-6 self-center">
-      <TouchableOpacity className="flex-row items-center">
-        {isLoading ? <Image source={AccountInfo[0].image} className="mr-1" /> :  <Image source={AccountInfo[0].image} className="mr-1" />}
-        <View>
+      <TouchableOpacity className={`flex-row items-center gap-2 ${I18nManager.isRTL ? "flex-row" : "flex-row-reverse"}`}>
+        {isLoading ?
+          <Image source={AccountInfo[0].image} /> 
+          : 
+          <Image source={AccountInfo[0].image} />
+        }
+        <View className="flex flex-col gap-2">
           <Skeleton
             colorMode={colorMode}
             width={150} 
@@ -31,7 +35,7 @@ export default function AccountPageProfile() {
             {isLoading ? (
               null
             ) : (
-              <Text className="text-base text-white">
+              <Text className={`text-base text-white ${I18nManager.isRTL ? "text-left" : "text-right"}`}>
                 {username && username.charAt(0).toUpperCase() + username.slice(1)}
               </Text>
             )}
@@ -43,7 +47,7 @@ export default function AccountPageProfile() {
             height={10}
           >
             {isLoading ? null : (
-              <Text className="text-slate-grey text-xs">
+              <Text className={`text-slate-grey text-xs ${I18nManager.isRTL ? "text-left" : "text-right"}`}>
                 {AccountInfo[0].number}
               </Text>
             )}
