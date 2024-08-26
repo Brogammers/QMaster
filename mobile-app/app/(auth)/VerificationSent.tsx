@@ -42,7 +42,8 @@ export default function VerificationSent() {
             i18n.t("VerificationSentPage.verificationSent")
           </Text>
           <Text className="text-center text-white mb-24 px-14">
-            i18n.t("VerificationSentPage.verificationSentComment")          </Text>
+            i18n.t("VerificationSentPage.verificationSentComment")
+          </Text>
         </View>
         {/* <Text className=" text-blue-300">
           Need help? Visit our <Text className="underline">help center.</Text>
