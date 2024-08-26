@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  I18nManager
 } from "react-native";
 import background from "@/assets/images/background.png";
 import QLogo from "@/assets/images/logoImage.svg";
@@ -57,7 +58,8 @@ const styles = StyleSheet.create({
   returnButton: {
     position: "absolute",
     top: 60,
-    left: 18,
+    left: I18nManager.isRTL ? "auto" : 18,  // Ensure the button stays on the left
+    right: I18nManager.isRTL ? 18 : "auto",
   },
   animatedLogo: {
     marginVertical: 40,

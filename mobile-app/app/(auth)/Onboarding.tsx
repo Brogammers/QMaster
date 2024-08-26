@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { I18nManager, StatusBar, StyleSheet, View } from 'react-native';
 import { Link } from 'expo-router';
 import Carousel from '@/shared/components/Carousel';
 import TextButton from '@/shared/components/TextButton';
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 10,
     top: 60,
-    left: 18,
+    left: I18nManager.isRTL ? "auto" : 18,  // Ensure the button stays on the left
+    right: I18nManager.isRTL ? 18 : "auto",
   },
 });

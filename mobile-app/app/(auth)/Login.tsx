@@ -8,6 +8,7 @@ import {
   TextInput,
   Alert,
   StatusBar,
+  I18nManager,
 } from "react-native";
 import { Link } from "expo-router";
 import { Formik } from "formik";
@@ -252,7 +253,7 @@ export default function Login() {
                     </Text>
                   )}
                   <Text className="mt-2 text-sm underline text-baby-blue">
-                   {i18n.t("loginPage.forgotPassword")}
+                    {i18n.t("loginPage.forgotPassword")}
                   </Text>
                   <View className="mt-8">
                     <TextButton
@@ -298,7 +299,8 @@ const styles = StyleSheet.create({
   returnButton: {
     position: "absolute",
     top: 60,
-    left: 18,
+    left: I18nManager.isRTL ? "auto" : 18,  // Ensure the button stays on the left
+    right: I18nManager.isRTL ? 18 : "auto",
   },
   title: {
     fontFamily: "InterBold",

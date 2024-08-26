@@ -7,6 +7,7 @@ import {
   Pressable,
   Platform,
   Dimensions,
+  I18nManager,
 } from "react-native";
 import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
@@ -568,7 +569,8 @@ const styles = StyleSheet.create({
   returnButton: {
     position: "absolute",
     top: 60,
-    left: 18,
+    left: I18nManager.isRTL ? "auto" : 18,  // Ensure the button stays on the left
+    right: I18nManager.isRTL ? 18 : "auto",
   },
   title: {
     fontFamily: "InterBold",
