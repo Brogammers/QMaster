@@ -67,6 +67,9 @@
   "verificationSentPage": {
     "verificationSent": "تم إرسال رمز التحقق",
     "verificationSentComment": "تحقق من بريدك الإلكتروني للعثور على رابط للتحقق من عنوان بريدك الإلكتروني"
+  },
+  "searchPage": {
+    "recentQueues": "الطوابير الأخيرة",
+    "popularQueues": "الطوابير الشائعة"
   }
-  
 }

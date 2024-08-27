@@ -64,8 +64,12 @@
     "failed": "Login Failed",
     "failedMessage": "Please check your input and try again."
   },
-  "verificationSentPage":{
+  "verificationSentPage": {
     "verificationSent": "Verification Email Sent",
     "verificationSentComment": "Check your email for a link to verify your email address"
+  },
+  "searchPage": {
+    "recentQueues": "Recent Queues",
+    "popularQueues": "Popular Queues"
   }
 }
