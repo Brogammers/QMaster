@@ -11,7 +11,7 @@ export default function CategoriesList() {
   const navigation = useNavigation() as NavigationProp<any>;
   
   return (
-    <View className={`flex flex-col ${I18nManager.isRTL ? "items-start" : "items-end"}`}>
+    <View className={`flex flex-col`}>
       <Text className="my-3 text-2xl font-bold">
         {i18n.t('categories')}
       </Text>

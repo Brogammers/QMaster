@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 10,
     top: 60,
-    left: I18nManager.isRTL ? "auto" : 18,  // Ensure the button stays on the left
-    right: I18nManager.isRTL ? 18 : "auto",
+    left: 18,
+    transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
   },
 });

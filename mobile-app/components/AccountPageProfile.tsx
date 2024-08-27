@@ -20,7 +20,7 @@ export default function AccountPageProfile() {
 
   return (
     <View className="flex-row items-center justify-between w-11/12 my-6 bg-ocean-blue rounded-3xl p-3.5 pr-6 self-center">
-      <TouchableOpacity className={`flex-row items-center gap-2 ${I18nManager.isRTL ? "flex-row" : "flex-row-reverse"}`}>
+      <TouchableOpacity className={`flex-row items-center gap-2`}>
         {isLoading ?
           <Image source={AccountInfo[0].image} /> 
           : 
