@@ -40,10 +40,10 @@ export default function VerificationSent() {
         />
         <View>
           <Text className="text-2xl font-medium text-white mb-3.5 text-center">
-            i18n.t("VerificationSentPage.verificationSent")
+            {i18n.t("verificationSentPage.verificationSent")}
           </Text>
           <Text className="text-center text-white mb-24 px-14">
-            i18n.t("VerificationSentPage.verificationSentComment")
+            {i18n.t("verificationSentPage.verificationSentComment")}
           </Text>
         </View>
         {/* <Text className=" text-blue-300">
