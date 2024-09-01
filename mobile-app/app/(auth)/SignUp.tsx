@@ -37,17 +37,17 @@ const window = Dimensions.get("window");
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
     .nullable()
-    .matches(/^[a-zA-Z]+$/, "Full name must contain only letters")
+    .matches(/^[a-zA-Z\u0600-\u06FF\s]+$/, "Full name must contain only letters")
     .required("First name required"),
   lastName: Yup.string()
     .nullable()
-    .matches(/^[a-zA-Z]+$/, "Full name must contain only letters")
+    .matches(/^[a-zA-Z\u0600-\u06FF\s]+$/, "Full name must contain only letters")
     .required("Last name required"),
   email: Yup.string().email("Invalid email").required("Email required"),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+      /^(?=.*[a-z\u0600-\u06FF])(?=.*[A-Z\u0600-\u06FF])(?=.*\d)/,
       "Password must contain at least one lowercase letter, one uppercase letter, and one numeric digit"
     )
     .required("Password required"),
