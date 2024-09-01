@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, Dimensions } from 'react-native';
+import { Text, StyleSheet, Dimensions, I18nManager } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FontAwesome } from '@expo/vector-icons';
 import { TextButtonProps } from '@/types';
@@ -33,16 +33,28 @@ export default function TextButton(props: TextButtonProps) {
         disabled={props.disabled}
         onPress={(props.onPress)}
         className='flex flex-row items-center justify-center mt-5 rounded-lg'
-        style={[{ padding: buttonPadding , backgroundColor: props.buttonColor, width: buttonWidth }]}
+        style={[
+          {
+            padding: buttonPadding,
+            backgroundColor: props.buttonColor,
+            width: buttonWidth,
+            flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
+          },
+        ]}
       >
         <FontAwesome 
           name={props.icon}
           size={24} 
           color="#17222D"
+          style={{ marginLeft: I18nManager.isRTL ? 0 : 10, marginRight: I18nManager.isRTL ? 10 : 0 }} // Adjust icon margin based on RTL
         />
         <Text 
           className={`${props.textSize ? props.textSize : "text-xl"} font-bold pl-3.5`}
-          style={[{ color: props.textColor }, styles.font]}
+          style={[
+            { color: props.textColor },
+            styles.font,
+            { paddingLeft: I18nManager.isRTL ? 0 : 10, paddingRight: I18nManager.isRTL ? 10 : 0 }, // Adjust text padding based on RTL
+          ]}
         >
           {props.text}
         </Text>

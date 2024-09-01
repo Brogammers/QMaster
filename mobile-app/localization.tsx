@@ -16,4 +16,4 @@ const ar = {
   logOut: 'تسجيل الخروج',
 }
 
-export { en, ar }
+export default { en, ar }

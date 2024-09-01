@@ -15,6 +15,7 @@ import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 import axios, { AxiosResponse } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Config from "react-native-config";
+import i18n from "@/i18n";
 
 export default function History() {
   const isFocused = useIsFocused();
@@ -116,10 +117,10 @@ export default function History() {
           // style={styles.noDataContainer}
         >
           <Text className="text-lg font-bold text-coal-black">
-            No Data Found
+            {i18n.t("noData")}
           </Text>
           <Text className="text-coal-black text-md">
-            There is no data to display at the moment.
+            {i18n.t("noDisplay")}
           </Text>
         </View>
       ) : (

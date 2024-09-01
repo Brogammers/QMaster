@@ -15,6 +15,6 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "react-native-dotenv.d.ts"
-  ],
+, "i18n.ts"  ],
   "extends": "expo/tsconfig.base"
 }

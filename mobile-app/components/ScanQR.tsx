@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions
+  Dimensions,
+  I18nManager,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,6 +12,7 @@ import Logo from '@/assets/images/Logo.svg';
 import QRCode from '@/assets/images/QrCode.svg';
 import ElipseBackground from '@/assets/images/ElipseBackground.svg';
 import { useLinkTo } from '@react-navigation/native';
+import i18n from '@/i18n';
 
 const { width, height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
@@ -32,8 +34,8 @@ export default function ScanQR() {
           width={width}
         />
       </View>
-      <View className='flex-row items-center justify-between w-full px-5 h-max'>
-        <View className='flex-row '>
+      <View className={`${I18nManager.isRTL ? `flex-row-reverse` : `flex-row`} items-center justify-between w-full px-5 h-max`}>
+        <View className={`${I18nManager.isRTL ? `flex-row-reverse` : `flex-row`}`}>
           <Logo />
           <Text className='ml-1 text-xl font-medium text-white'>QMaster</Text>
         </View>
@@ -43,7 +45,7 @@ export default function ScanQR() {
       </View>
       <TouchableOpacity>
         <QRCode />
-        <Text className='text-3xl text-white mt-2.5 font-semibold'>Scan QR</Text>
+        <Text className='text-3xl text-white mt-2.5 font-semibold'>{i18n.t('scan')}</Text>
       </TouchableOpacity>
     </View>
   )

@@ -98,7 +98,6 @@ export default function Index() {
           <View className="w-10/12 self-center">
             <SearchBar />
             {isLoading ? (
-              // Skeleton loading for current queues
               <SkeletonLoading />
             ) : currentQueues ? (
               <CurrentQueuesList />
