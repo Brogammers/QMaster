@@ -11,6 +11,7 @@ import Entity from "../page";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import DynamicMediaDisplay from "@/app/components/DynamicMediaDisplay";
+import { QueuedPerson } from "../../../../../types";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,7 +30,7 @@ const queuedPersonsData = [
 
 export default function Display() {
   const [fullscreen, setFullscreen] = useState<boolean>(false);
-  const [queuedPersons, setQueuedPersons] = useState(queuedPersonsData);
+  const [queuedPersons, setQueuedPersons] = useState<QueuedPerson[]>(queuedPersonsData);
   const { width, height } = useWindowSize();
 
   useEffect(() => {

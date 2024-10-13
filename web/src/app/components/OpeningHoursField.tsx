@@ -10,7 +10,6 @@ export default function OpeningHoursField() {
     console.log(`switch to ${checked}`);
   };
   
-  
   return (
     <div>
       <div className='flex gap-5'>

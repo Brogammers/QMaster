@@ -9,7 +9,7 @@ import { useState } from "react";
 export default function Queues() {
   const initialQueueData = [...QueuesData];
 
-  const [queues, setQueues] = useState(initialQueueData);
+  const [queues, setQueues] = useState<string[][]>(initialQueueData);
   return (
     <Entity>
       <QueueModal>

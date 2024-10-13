@@ -3,8 +3,8 @@ import { CarouselProps } from "../../../types";
 import "./styles/Carousel.css";
 
 export default function Carousel({ children }: CarouselProps) {
-  const [counter, setCounter] = useState(1);
-  const [pause, setPause] = useState(false);
+  const [counter, setCounter] = useState<number>(1);
+  const [pause, setPause] = useState<boolean>(false);
   const content = children;
 
   const handleNext = () => {

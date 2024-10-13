@@ -13,6 +13,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.AppUser.AppUserRepository;
+import com.que.que.User.BusinessUser.BusinessUser;
+import com.que.que.User.BusinessUser.BusinessUserRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,6 +28,7 @@ import org.springframework.util.StringUtils;
 @AllArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
+  private final BusinessUserRepository businessUserRepository;
   private final AppUserRepository appUserRepository;
   private final JwtUtil jwtUtil;
 
@@ -41,8 +44,13 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     String token = header.split(" ")[1].trim();
+    BusinessUser businessUser = businessUserRepository.findByEmail(jwtUtil.getUsername(token)).orElse(null);
+    if (businessUser != null && !jwtUtil.validateToken(token, businessUser)) {
+      filterChain.doFilter(request, response);
+      return;
+    }
     AppUser user = appUserRepository.findByEmail(jwtUtil.getUsername(token)).orElse(null);
-    if (!jwtUtil.validateToken(token, user)) {
+    if (user != null && !jwtUtil.validateToken(token, user)) {
       filterChain.doFilter(request, response);
       return;
     }

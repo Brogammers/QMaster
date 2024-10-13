@@ -66,6 +66,7 @@
     "metro-config": "^0.80.10",
     "metro-resolver": "^0.80.10",
     "moti": "^0.28.1",
+    "my-app": "file:",
     "nativewind": "^2.0.11",
     "npm-check-updates": "^16.14.14",
     "punycode": "^2.3.1",

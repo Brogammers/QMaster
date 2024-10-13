@@ -9,7 +9,7 @@ import { faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import TimezoneSelect, { type ITimezone } from 'react-timezone-select';
 
 export default function DetailsForm() {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [file, setFile] = useState<string | undefined>(undefined); // Fix: Specify the type of 'file' as 'string | undefined' and provide a default value of 'undefined'
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) { // Fix: Add type annotation for the event parameter
     console.log(e.target.files);
