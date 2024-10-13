@@ -48,10 +48,13 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
   const hasNavigated = useRef(false);
 
   const token = useSelector((state: RootState) => state.tokenSetter.token);
+  
 
   useEffect(() => {
     const fetchToken = async () => {
+      await AsyncStorage.setItem("TOKEN_KEY", "your-test-token");
       const token = await AsyncStorage.getItem("TOKEN_KEY");
+      console.log("Fetched Token:", token);
       setTokenState(token);
     };
 

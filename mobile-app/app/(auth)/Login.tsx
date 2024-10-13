@@ -27,6 +27,7 @@ import { isEmpty } from "lodash";
 import { setUsername } from "../redux/userSlice";
 import SplashScreen from "../SplashScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Config from "react-native-config";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email required"),
@@ -37,23 +38,27 @@ export default function Login() {
   const dispatch = useDispatch();
   const auth = useAuth();
   const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (
     values: any,
     { setErrors }: { setErrors: Function }
   ) => {
+    console.log("Button pressed");
     console.log("Logging in...", values);
 
     try {
       setIsLoading(true);
       // IOS Simulator
-      const response = await axios.post(`${process.env.EXPO_PUBLIC_API_BASE_URL_LOGIN}`, values);
+      const response = await axios.post(
+        `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN || "http://localhost:8080/api/v1/login/user"}`,
+        values
+      );
       // Android Emulator
       // const response = await axios.post(
-      // 	"http://10.0.2.2:8080/api/v1/login",
-      // 	values
-      //  );
+      //   "http://10.0.2.2:8080/api/v1/login",
+      //   values
+      // );
 
       if (response.status === 200 || response.status === 201) {
         console.log("Login successful", values);
@@ -182,9 +187,7 @@ export default function Login() {
                 server: "",
               }}
               validationSchema={LoginSchema}
-              onSubmit={(values, formikHelpers) =>
-                handleLogin(values, formikHelpers)
-              }
+              onSubmit={handleLogin}
             >
               {({
                 handleChange,

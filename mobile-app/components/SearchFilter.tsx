@@ -6,6 +6,7 @@ import { CurrentQueuesProps, SearchFilterProps } from "@/types";
 // import { API_BASE_URL_SEARCH } from "@env";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Config from "react-native-config";
 
 export default function SearchFilter(props: SearchFilterProps) {
   const { input } = props;
@@ -18,7 +19,7 @@ export default function SearchFilter(props: SearchFilterProps) {
       try {
         const token = await AsyncStorage.getItem("token");
         const response = await axios.get(
-          `${process.env.EXPO_PUBLIC_API_BASE_URL_SEARCH}?filter=${input}&page=1&per-page=1&order=order`, {
+          `${Config.EXPO_PUBLIC_API_BASE_URL_SEARCH || "http://localhost:8080/api/v1/queues/list"}?filter=${input}&page=1&per-page=1&order=order`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
