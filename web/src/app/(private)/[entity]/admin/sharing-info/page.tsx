@@ -8,7 +8,7 @@ import jsPDF from "jspdf";
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "@/app/redux/store";
-import QRCode from "qrcode.react";
+// import QRCode from "qrcode.react";
 
 export default function SharingInfo() {
   const [url, setUrl] = useState<string>("");
@@ -163,7 +163,7 @@ export default function SharingInfo() {
 
         {/* QR code rendered here */}
         <div ref={qrCodeRef} style={{ display: "none" }}>
-          <QRCode value={url} size={200} />
+          {/* <QRCode value={url} size={200} /> */}
         </div>
       </QueueModal>
     </Entity>
