@@ -15,10 +15,10 @@ export default function SettingsPage() {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               activeTab === tab 
-                ? 'bg-crystal-blue text-black' 
-                : 'text-white/70 hover:bg-white/[0.05]'
+                ? 'bg-crystal-blue' 
+                : 'hover:bg-white/[0.05]'
             }`}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -33,17 +33,17 @@ export default function SettingsPage() {
               <h3 className="text-lg font-semibold">Profile Information</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-white/70 mb-2">Name</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Name</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2 rounded-lg border border-white/10 bg-white/[0.02] focus:outline-none focus:ring-2 focus:ring-crystal-blue"
+                    className="w-full px-4 py-2 rounded-lg border border-white/10 bg-white/[0.35] focus:outline-none focus:ring-2 focus:ring-crystal-blue"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-white/70 mb-2">Email</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
                   <input
                     type="email"
-                    className="w-full px-4 py-2 rounded-lg border border-white/10 bg-white/[0.02] focus:outline-none focus:ring-2 focus:ring-crystal-blue"
+                    className="w-full px-4 py-2 rounded-lg border border-white/10 bg-white/[0.35] focus:outline-none focus:ring-2 focus:ring-crystal-blue"
                   />
                 </div>
               </div>
@@ -55,7 +55,7 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-medium">Language</h4>
-                    <p className="text-sm text-white/50">Select your preferred language</p>
+                    <p className="text-sm text-slate-700">Select your preferred language</p>
                   </div>
                   <select className="px-4 py-2 rounded-lg border border-white/10 bg-white/[0.02]">
                     <option value="en">English</option>
@@ -66,7 +66,7 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-medium">Time Zone</h4>
-                    <p className="text-sm text-white/50">Set your local time zone</p>
+                    <p className="text-sm text-slate-700">Set your local time zone</p>
                   </div>
                   <select className="px-4 py-2 rounded-lg border border-white/10 bg-white/[0.02]">
                     <option value="utc">UTC</option>
