@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useAuth } from '@/lib/auth/AuthContext';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { FaUsers, FaSearch, FaFilter, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
@@ -27,11 +27,24 @@ export default function UsersPage() {
   const { admin } = useAuth();
   const dispatch = useAppDispatch();
   const users = useAppSelector((state: RootState) => state.users.users);
-  const [isDarkMode] = useState(() => localStorage.getItem('qmaster-dark-mode') === 'true');
+  const [isDarkMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
+  const [searchQuery, setSearchQuery] = useState('');
   
   const isAdmin = admin?.email === 'hatemthedev@gmail.com';
+
+  // Filter users based on search query
+  const filteredUsers = useMemo(() => {
+    if (!searchQuery.trim()) return users;
+    
+    const query = searchQuery.toLowerCase().trim();
+    return users.filter(user => 
+      user.name.toLowerCase().includes(query) ||
+      user.email.toLowerCase().includes(query) ||
+      user.role.toLowerCase().includes(query)
+    );
+  }, [users, searchQuery]);
 
   const handleEditUser = (user: User) => {
     setEditingUser(user);
@@ -100,7 +113,9 @@ export default function UsersPage() {
             <FaSearch className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDarkMode ? 'text-gray-400' : 'text-slate-400'}`} />
             <input
               type="text"
-              placeholder="Search users..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search users by name, email, or role..."
               className={`w-full pl-10 pr-4 py-2 rounded-lg transition-colors duration-300
                 ${isDarkMode 
                   ? 'border-white/10 bg-white/[0.09] text-white focus:border-crystal-blue' 
@@ -121,7 +136,7 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <tr key={user.id} className={`border-b last:border-b-0 ${isDarkMode ? 'border-white/10 hover:bg-white/[0.02]' : 'border-slate-300 hover:bg-slate-50/50'}`}>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
@@ -176,6 +191,13 @@ export default function UsersPage() {
                 )}
               </tr>
             ))}
+            {filteredUsers.length === 0 && (
+              <tr>
+                <td colSpan={isAdmin ? 5 : 4} className="px-6 py-8 text-center text-slate-500">
+                  No users found matching your search.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
