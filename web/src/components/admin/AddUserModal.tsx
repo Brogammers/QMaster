@@ -106,11 +106,11 @@ export default function AddUserModal({ isOpen, onClose, isDarkMode, editUser }: 
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className={`fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md z-50
+            className={`modal__positioning w-full max-w-md z-50
               ${isDarkMode 
                 ? 'bg-[#1A1A1A] border border-white/10' 
                 : 'bg-white'} 
-              rounded-xl p-6 shadow-2xl backdrop-blur-sm`}
+              rounded-xl p-6 shadow-2xl backdrop-blur-sm transform-gpu`}
           >
             <h2 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
               {editUser ? 'Edit User' : 'Add New User'}
@@ -125,7 +125,7 @@ export default function AddUserModal({ isOpen, onClose, isDarkMode, editUser }: 
                   type="text"
                   value={formData.name}
                   onChange={handleNameChange}
-                  placeholder="First Last"
+                  placeholder="First Last (e.g. John Doe)"
                   className={`w-full px-4 py-2 rounded-lg transition-colors duration-300
                     ${isDarkMode 
                       ? 'bg-black/20 border border-white/10 text-white focus:border-crystal-blue placeholder:text-white/30' 
