@@ -23,7 +23,7 @@ const initialState: UserState = {
   users: [
     {
       id: 1,
-      name: 'Hatem',
+      name: 'Hatem Soliman',
       email: 'hatemthedev@gmail.com',
       role: 'Admin',
       lastActive: '2 minutes ago',
@@ -36,7 +36,7 @@ const initialState: UserState = {
     },
     {
       id: 2,
-      name: 'Fam',
+      name: 'Fam Awad',
       email: 'fam@awadlouis.com',
       role: 'Backend Developer',
       lastActive: '5 minutes ago',
@@ -49,7 +49,7 @@ const initialState: UserState = {
     },
     {
       id: 3,
-      name: 'Tony',
+      name: 'Tony Makaryous',
       email: 'tonymakaryousm@gmail.com',
       role: 'Project Manager',
       lastActive: '15 minutes ago',
