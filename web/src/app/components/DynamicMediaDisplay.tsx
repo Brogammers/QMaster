@@ -73,26 +73,26 @@ export default function DynamicMediaDisplay() {
           <p className="absolute bottom-2 bg-lava-red text-white p-2 rounded">Please upload content to display</p>
         </div>
       ) : (
-        <div className="relative w-full h-full flex items-center justify-center">
+        <div className="w-full h-full">
           {mediaList.map((media, index) =>
             index === currentIndex ? (
               media.type === "image" ? (
-                <div key={media.id} className="relative w-full h-full flex items-center justify-center p-8">
+                <div key={media.id} className="w-full h-full">
                   <Image
                     src={media.src}
                     alt="User Uploaded Content"
                     width={width}
                     height={height}
-                    className="max-w-full max-h-full object-contain"
-                    style={{ width: 'auto', height: 'auto' }}
+                    className="w-full h-full object-contain"
+                    priority
                   />
                 </div>
               ) : (
-                <div key={media.id} className="w-full h-full flex items-center justify-center p-8">
+                <div key={media.id} className="w-full h-full">
                   <video
                     ref={videoRef}
                     src={media.src}
-                    className="max-w-full max-h-full object-contain"
+                    className="w-full h-full object-contain"
                     autoPlay
                     muted
                   />
