@@ -5,7 +5,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Provider } from "react-redux"
-import { store } from "./redux/store";
+import { store } from "@/store/store";
+import { Toaster } from 'react-hot-toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
       <Provider store={store}>
         <SessionProvider session={session}>
           <body className={inter.className}>{children}</body>
+          <Toaster position="bottom-right" />
         </SessionProvider>
       </Provider>
     </html>

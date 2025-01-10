@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
 import { FaUsers, FaSearch, FaFilter, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { deleteUser, restoreUser } from '@/store/features/userSlice';
+import { toast } from 'react-hot-toast';
+import AddUserModal from '@/components/admin/AddUserModal';
+import type { RootState } from '@/store/store';
 
 interface User {
   id: number;
@@ -20,51 +25,40 @@ interface User {
 
 export default function UsersPage() {
   const { admin } = useAuth();
+  const dispatch = useDispatch();
+  const users = useSelector((state: RootState) => state.users.users);
   const [isDarkMode] = useState(() => localStorage.getItem('qmaster-dark-mode') === 'true');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   
-  const [users] = useState<User[]>([
-    {
-      id: 1,
-      name: 'Hatem',
-      email: 'hatemthedev@gmail.com',
-      role: 'Admin',
-      lastActive: '2 minutes ago',
-      status: 'online',
-      permissions: {
-        canAddUsers: true,
-        canEditUsers: true,
-        canDeleteUsers: true,
-      }
-    },
-    {
-      id: 2,
-      name: 'Fam',
-      email: 'fam@awadlouis.com',
-      role: 'Backend Lead',
-      lastActive: '5 minutes ago',
-      status: 'online',
-      permissions: {
-        canAddUsers: false,
-        canEditUsers: false,
-        canDeleteUsers: false,
-      }
-    },
-    {
-      id: 3,
-      name: 'Tony',
-      email: 'tonymakaryousm@gmail.com',
-      role: 'Project Manager',
-      lastActive: '15 minutes ago',
-      status: 'away',
-      permissions: {
-        canAddUsers: false,
-        canEditUsers: false,
-        canDeleteUsers: false,
-      }
-    },
-  ]);
-
   const isAdmin = admin?.email === 'hatemthedev@gmail.com';
+
+  const handleDeleteUser = (userId: number) => {
+    dispatch(deleteUser(userId));
+    toast.success(
+      (t) => (
+        <div className="flex items-center gap-2">
+          <span>User deleted successfully</span>
+          <button
+            onClick={() => {
+              dispatch(restoreUser());
+              toast.dismiss(t.id);
+            }}
+            className="px-2 py-1 bg-white/10 rounded-lg hover:bg-white/20"
+          >
+            Undo
+          </button>
+        </div>
+      ),
+      {
+        duration: 5000,
+        style: {
+          background: isDarkMode ? '#1A1A1A' : 'white',
+          color: isDarkMode ? 'white' : 'black',
+          border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
+        },
+      }
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -87,6 +81,7 @@ export default function UsersPage() {
           </button>
 
           <button 
+            onClick={() => setIsAddModalOpen(true)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
               ${!isAdmin 
                 ? 'opacity-50 cursor-not-allowed bg-gray-500' 
@@ -162,7 +157,10 @@ export default function UsersPage() {
                       <button className="p-2 hover:bg-white/[0.05] rounded-lg">
                         <FaEdit className="text-crystal-blue w-4 h-4" />
                       </button>
-                      <button className="p-2 hover:bg-white/[0.05] rounded-lg">
+                      <button 
+                        onClick={() => handleDeleteUser(user.id)}
+                        className="p-2 hover:bg-white/[0.05] rounded-lg"
+                      >
                         <FaTrash className="text-rose-400 w-4 h-4" />
                       </button>
                     </div>
@@ -173,6 +171,12 @@ export default function UsersPage() {
           </tbody>
         </table>
       </div>
+
+      <AddUserModal 
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        isDarkMode={isDarkMode}
+      />
     </div>
   );
 } 
