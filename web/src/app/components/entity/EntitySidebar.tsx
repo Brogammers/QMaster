@@ -121,7 +121,7 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
         <motion.button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
-            bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 transition-colors"
+            bg-red-500/40 text-rose-300 hover:bg-rose-500/20 transition-colors"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
