@@ -19,21 +19,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <motion.main 
         className={`flex-1 overflow-y-auto p-8 relative
           ${isDarkMode 
-            ? 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#121212] via-[#0A0A0A] to-[#0A0A0A]' 
+            ? 'bg-[#0A0A0A] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#141414] via-[#0A0A0A] to-black' 
             : 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-50 via-white to-white'}`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Gradient background effect */}
+        {/* Noise texture overlay */}
+        <div className={`absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none`} />
+        
+        {/* Subtle gradient overlays */}
         <div className={`absolute inset-0 
           ${isDarkMode 
-            ? 'bg-[linear-gradient(110deg,#13404D,#34F5C5)] opacity-[0.07]' 
+            ? 'bg-gradient-to-b from-concrete-turqouise/5 via-transparent to-transparent' 
             : 'bg-[linear-gradient(to_right,#6366f1,#0ea5e9)] opacity-[0.03]'}`} 
         />
         <div className={`absolute inset-0 
           ${isDarkMode 
-            ? 'bg-[radial-gradient(circle_at_top,rgba(19,64,77,0.15),transparent_50%)] pointer-events-none' 
+            ? 'bg-[radial-gradient(circle_at_top,rgba(19,64,77,0.1),transparent_70%)] pointer-events-none' 
             : 'bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.1),transparent)]'}`} 
         />
         
