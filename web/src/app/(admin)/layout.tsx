@@ -5,8 +5,7 @@ import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useAuth, AuthProvider } from '@/lib/auth/AuthContext';
 import AdminSidebar from '@/app/components/admin/AdminSidebar';
-import LoadingScreen from '@/components/LoadingScreen';
-import DarkModeToggle from '@/components/admin/DarkModeToggle';
+import LoadingScreen from '@/app/components/LoadingScreen';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -41,7 +40,10 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     <div className={`flex h-screen overflow-hidden transition-colors duration-300
       ${isDarkMode ? 'bg-[#0A0A0A] text-white' : 'bg-white text-slate-900'}`}
     >
-      <AdminSidebar isDarkMode={isDarkMode} />
+      <AdminSidebar 
+        isDarkMode={isDarkMode} 
+        onDarkModeToggle={handleDarkModeToggle}
+      />
       <motion.main 
         className={`flex-1 overflow-y-auto p-8 relative
           ${isDarkMode 

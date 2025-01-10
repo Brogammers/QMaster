@@ -28,9 +28,10 @@ const menuItems = [
 
 interface AdminSidebarProps {
   isDarkMode: boolean;
+  onDarkModeToggle: (value: boolean) => void;
 }
 
-export default function AdminSidebar({ isDarkMode }: AdminSidebarProps) {
+export default function AdminSidebar({ isDarkMode, onDarkModeToggle }: AdminSidebarProps) {
   const pathname = usePathname();
   const { logout } = useAuth();
 
@@ -93,8 +94,18 @@ export default function AdminSidebar({ isDarkMode }: AdminSidebarProps) {
         })}
       </nav>
 
-      {/* Add before the bottom gradient overlay */}
-      <div className="absolute bottom-20 left-0 right-0 px-6">
+      {/* Bottom actions */}
+      <div className="absolute bottom-20 left-0 right-0 px-6 space-y-4">
+        {/* Dark Mode Toggle */}
+        <div className="flex items-center gap-3 px-4 py-2">
+          <DarkModeToggle 
+            isDarkMode={isDarkMode} 
+            onToggle={onDarkModeToggle}
+            showLabel={true}
+          />
+        </div>
+
+        {/* Sign Out Button */}
         <motion.button
           onClick={logout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
