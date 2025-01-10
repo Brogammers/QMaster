@@ -51,21 +51,29 @@ export default function Display() {
     };
   }, [fullscreen]);
 
-  const handleFullscreen = () => {
-    setFullscreen(!fullscreen);
+  const handleFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch (err) {
+      console.error("Error attempting to enable fullscreen:", err);
+    }
   };
 
   useEffect(() => {
     if (fullscreen) {
       gsap.to(".scrollContainer", {
-        y: -(queuedPersonsData.length * 164), // Adjust according to your ticket height
-        duration: queuedPersonsData.length * 8, // Adjust the duration based on total tickets
-        repeat: -1, // Infinite repeat
+        y: -(queuedPersonsData.length * 164),
+        duration: queuedPersonsData.length * 8,
+        repeat: -1,
         ease: "linear",
         onComplete: () => {
           setTimeout(() => {
-            gsap.set(".scrollContainer", { y: 0 }); // Reset to start position
-          }, 2000); // Wait for 2 seconds before restarting
+            gsap.set(".scrollContainer", { y: 0 });
+          }, 2000);
         },
       });
     }
@@ -74,28 +82,28 @@ export default function Display() {
   return (
     <>
       {fullscreen ? (
-        <div className="bg-gradient-to-r from-baby-blue to-ocean-blue h-screen w-full flex justify-between overflow-hidden">
-          {/* <Image
-            src={TeamImg}
-            alt="QMaster"
-            width={width * 0.75}
-            height={height}
-          /> */}
-          <DynamicMediaDisplay />
-          <div className="scrollContainer w-1/4 bg-ocean-blue flex flex-col">
-            {queuedPersons.map((person) => (
-              <TicketNumber
-                key={person.id}
-                bgColor="ocean-blue"
-                textColor="white"
-                fontSize="3xl"
-                borderRadius="none"
-                width="full"
-                maxWidth="16"
-                ticketNum={person.ticketNumber}
-                queue={person.counter}
-              />
-            ))}
+        <div className="fixed inset-0 w-screen h-screen bg-gradient-to-r from-baby-blue to-ocean-blue overflow-hidden">
+          <div className="flex h-full">
+            <div className="flex-1 h-full">
+              <DynamicMediaDisplay />
+            </div>
+            <div className="w-1/4 bg-ocean-blue h-full flex flex-col">
+              <div className="scrollContainer flex flex-col">
+                {queuedPersons.map((person) => (
+                  <TicketNumber
+                    key={person.id}
+                    bgColor="ocean-blue"
+                    textColor="white"
+                    fontSize="3xl"
+                    borderRadius="none"
+                    width="full"
+                    maxWidth="16"
+                    ticketNum={person.ticketNumber}
+                    queue={person.counter}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       ) : (
@@ -112,7 +120,7 @@ export default function Display() {
               </p>
               <button
                 onClick={handleFullscreen}
-                className="bg-baby-blue px-4 py-2 rounded-lg text-white text-lg font-bold"
+                className="bg-baby-blue px-4 py-2 rounded-lg text-white text-lg font-bold hover:bg-opacity-90 transition-colors"
               >
                 Fullscreen
               </button>
