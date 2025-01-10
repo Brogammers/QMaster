@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import useWindowSize from "../../../../../hooks/useWindowSize";
 import TicketNumber from "@/app/shared/TicketNumber";
 import Image from "next/image";
@@ -31,17 +31,14 @@ export default function Display() {
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [queuedPersons, setQueuedPersons] = useState<QueuedPerson[]>(queuedPersonsData);
   const { width, height } = useWindowSize();
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        document.exitFullscreen().catch(console.error);
-      }
+      if (event.key === "Escape" && fullscreen) setFullscreen(false);
     };
 
     const handleFullscreenChange = () => {
-      setFullscreen(!!document.fullscreenElement);
+      setFullscreen(!document.fullscreenElement);
     };
 
     document.addEventListener("keydown", handleKeyPress);
@@ -51,14 +48,13 @@ export default function Display() {
       document.removeEventListener("keydown", handleKeyPress);
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
-  }, []);
+  }, [fullscreen]);
 
-  const handleFullscreen = async () => {
-    try {
-      await document.documentElement.requestFullscreen();
-    } catch (err) {
-      console.error("Error attempting to enable fullscreen:", err);
+  const handleFullscreen = () => {
+    if (!fullscreen) {
+      document.documentElement.requestFullscreen().catch(console.error);
     }
+    setFullscreen(!fullscreen);
   };
 
   useEffect(() => {
@@ -78,30 +74,24 @@ export default function Display() {
   }, [fullscreen]);
 
   return (
-    <div ref={containerRef}>
+    <>
       {fullscreen ? (
-        <div className="fixed inset-0 w-screen h-screen bg-gradient-to-r from-baby-blue to-ocean-blue overflow-hidden">
-          <div className="flex h-full">
-            <div className="flex-1 h-full">
-              <DynamicMediaDisplay />
-            </div>
-            <div className="w-1/4 bg-ocean-blue h-full flex flex-col">
-              <div className="scrollContainer flex flex-col">
-                {queuedPersons.map((person) => (
-                  <TicketNumber
-                    key={person.id}
-                    bgColor="ocean-blue"
-                    textColor="white"
-                    fontSize="3xl"
-                    borderRadius="none"
-                    width="full"
-                    maxWidth="16"
-                    ticketNum={person.ticketNumber}
-                    queue={person.counter}
-                  />
-                ))}
-              </div>
-            </div>
+        <div className="bg-gradient-to-r from-baby-blue to-ocean-blue h-screen w-full flex justify-between overflow-hidden">
+          <DynamicMediaDisplay />
+          <div className="scrollContainer w-1/4 bg-ocean-blue flex flex-col">
+            {queuedPersons.map((person) => (
+              <TicketNumber
+                key={person.id}
+                bgColor="ocean-blue"
+                textColor="white"
+                fontSize="3xl"
+                borderRadius="none"
+                width="full"
+                maxWidth="16"
+                ticketNum={person.ticketNumber}
+                queue={person.counter}
+              />
+            ))}
           </div>
         </div>
       ) : (
@@ -126,6 +116,6 @@ export default function Display() {
           </QueueModal>
         </Entity>
       )}
-    </div>
+    </>
   );
 }
