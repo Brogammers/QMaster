@@ -1,5 +1,7 @@
-import LoadingScreen from '@/components/shared/LoadingScreen';
+'use client'
+
+import SplashScreen from '@/app/shared/SplashScreen';
 
 export default function Loading() {
-  return <LoadingScreen />;
+  return <SplashScreen />;
 } 
