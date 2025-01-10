@@ -16,6 +16,7 @@ import { Button } from 'antd';
 import QueueModal from '@/app/shared/QueueModal';
 import StyledFieldArray from '@/app/shared/StyledFieldArray';
 import StyledField from '@/app/shared/StyledField';
+import CustomModal from '@/app/components/CustomModal';
 
 const validationSchema = Yup.object().shape({
   services: Yup.array()
@@ -78,6 +79,8 @@ export default function Counter() {
     { id: 13, ticketNumber: 'A-799', service: 'New Customer' },
     { id: 14, ticketNumber: 'P-799', service: 'Payments' },
   ]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState<any>(null);
 
   const handleSubmit = (values: { services: { name: string; count: number; }[] }, { setSubmitting }: any) => {
     const serviceNames = new Set<string>();
@@ -198,25 +201,30 @@ export default function Counter() {
 
   const handleAddTicket = () => {
     if (tickets2.length > 0) {
-      const counterSelection = prompt("Please select the counter to add the ticket to:");
-      if (counterSelection) {
-        const selectedCounter = counters.find(counter => parseInt(counter.id) === parseInt(counterSelection));
-        if (selectedCounter) {
-          const ticketToAdd = tickets2.find(ticket => ticket.service === selectedCounter.service);
-          if (ticketToAdd) {
-            const updatedTickets2 = tickets2.filter(ticket => ticket !== ticketToAdd);
-            const updatedTickets1 = tickets1.filter(ticket => ticket.counterNum !== selectedCounter.id);
+      setModalOpen(true);
+    } else {
+      alert("Celebrate! No waiting line!");
+    }
+  };
 
-            const ticketWithCounter = { ...ticketToAdd, counterNum: selectedCounter.id };
-            
-            updatedTickets1.push(ticketWithCounter);
-            setTickets1(updatedTickets1);
-            setTickets2(updatedTickets2);
+  const handleModalConfirm = (counterId: string) => {
+    const selectedCounter = counters.find(counter => counter.id === parseInt(counterId));
+    if (selectedCounter) {
+      const ticketToAdd = tickets2.find(ticket => ticket.service === selectedCounter.service);
+      if (ticketToAdd) {
+        const updatedTickets2 = tickets2.filter(ticket => ticket !== ticketToAdd);
+        const updatedTickets1 = tickets1.filter(ticket => ticket.counterNum !== selectedCounter.id);
 
-          }
-        } else alert("Select a valid counter");
+        const ticketWithCounter = { ...ticketToAdd, counterNum: selectedCounter.id };
+        
+        updatedTickets1.push(ticketWithCounter);
+        setTickets1(updatedTickets1);
+        setTickets2(updatedTickets2);
+        setModalOpen(false);
       }
-    } else alert("Celebrate! No waiting line!")
+    } else {
+      alert("Select a valid counter");
+    }
   };
 
   return (
@@ -234,35 +242,33 @@ export default function Counter() {
                   <StyledFieldArray name="services" render={({ push, remove }) => (
                     <div>
                       {values.services.map((_, index) => (
-                        <>
-                          <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
-                            <div className="flex justify-center items-center gap-2">
-                              <div className="flex flex-col">
-                                <StyledField
-                                  name={`services.${index}.name`}
-                                  placeholder="Service"
-                                />
-                                <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.name`} />
-                              </div>
-                              <div className="flex flex-col">
-                                <StyledField 
-                                  name={`services.${index}.count`} 
-                                  placeholder="Number of Counters" 
-                                  type="number" 
-                                />
-                                <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.count`} />
-                              </div>
+                        <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
+                          <div className="flex justify-center items-center gap-2">
+                            <div className="flex flex-col">
+                              <StyledField
+                                name={`services.${index}.name`}
+                                placeholder="Service"
+                              />
+                              <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.name`} />
                             </div>
-                            <Button
-                              className="bg-red-500 text-white"
-                              type="text"
-                              onClick={() => remove(index)}
-                              disabled={isDuplicate} 
-                            >
-                              Remove
-                            </Button>
+                            <div className="flex flex-col">
+                              <StyledField 
+                                name={`services.${index}.count`} 
+                                placeholder="Number of Counters" 
+                                type="number" 
+                              />
+                              <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.count`} />
+                            </div>
                           </div>
-                        </>
+                          <Button
+                            className="bg-red-500 text-white"
+                            type="text"
+                            onClick={() => remove(index)}
+                            disabled={isDuplicate} 
+                          >
+                            Remove
+                          </Button>
+                        </div>
                       ))}
                       <Button
                         className="bg-ocean-blue font-bold"
@@ -433,6 +439,12 @@ export default function Counter() {
           </div>
         </div>
       )}
+      <CustomModal 
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={handleModalConfirm}
+        counters={counters}
+      />
     </Entity>
   );
 };
