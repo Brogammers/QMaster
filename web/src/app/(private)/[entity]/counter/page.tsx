@@ -66,14 +66,29 @@ const ShowFormErrors = ({
   useEffect(() => {
     if (errors.services) {
       if (typeof errors.services === 'string') {
-        toast.error(errors.services);
+        toast.error(errors.services, {
+          style: {
+            background: '#ef4444',
+            color: '#fff',
+          },
+        });
       } else if (Array.isArray(errors.services)) {
         errors.services.forEach((error: any, index: number) => {
           if (error?.name && touched.services?.[index]?.name) {
-            toast.error(`Service ${index + 1}: Service Name is required`);
+            toast.error(`Service Name is required`, {
+              style: {
+                background: '#ef4444',
+                color: '#fff',
+              },
+            });
           }
           if (error?.count && touched.services?.[index]?.count) {
-            toast.error(`Service ${index + 1}: Counter Count is required`);
+            toast.error(`Counter Count is required`, {
+              style: {
+                background: '#ef4444',
+                color: '#fff',
+              },
+            });
           }
         });
       }
