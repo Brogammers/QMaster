@@ -13,6 +13,7 @@ module.exports = {
         "slate-grey": "#7D7D7D",
         "slight-slate-grey": "#C3C3C3",
         "dark-grey": "#515151",
+        "rock-stone": "#969696",
         "ignite-black": "#3E3E3E",
         "coal-black": "#2F2E41",
         "lava-black": "444444",

@@ -7,6 +7,7 @@ import {
   Pressable,
   Platform,
   Dimensions,
+  I18nManager,
 } from "react-native";
 import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
@@ -29,23 +30,24 @@ import PhoneInput from "react-native-phone-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
 // import EXPO_PUBLIC_API_BASE_URL from ""
 import Config from "react-native-config";
+import i18n from "@/i18n";
 
 const window = Dimensions.get("window");
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
     .nullable()
-    .matches(/^[a-zA-Z]+$/, "Full name must contain only letters")
+    .matches(/^[a-zA-Z\u0600-\u06FF\s]+$/, "Full name must contain only letters")
     .required("First name required"),
   lastName: Yup.string()
     .nullable()
-    .matches(/^[a-zA-Z]+$/, "Full name must contain only letters")
+    .matches(/^[a-zA-Z\u0600-\u06FF\s]+$/, "Full name must contain only letters")
     .required("Last name required"),
   email: Yup.string().email("Invalid email").required("Email required"),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+      /^(?=.*[a-z\u0600-\u06FF])(?=.*[A-Z\u0600-\u06FF])(?=.*\d)/,
       "Password must contain at least one lowercase letter, one uppercase letter, and one numeric digit"
     )
     .required("Password required"),
@@ -125,14 +127,14 @@ export default function SignUp() {
           auth.signIn();
         }
       } else {
-        console.error("Signup failed", response.data);
-        Alert.alert("Signup Failed", "Please check your input and try again.");
+        console.error("SignUp failed", response.data);
+        Alert.alert(i18n.t("signupPage.failed"), i18n.t("loginPage.failedMessage"));
       }
     } catch (error) {
       console.error("Signup error:", error);
       Alert.alert(
-        "Error",
-        "An unexpected error occurred. Please try again later."
+        i18n.t("loginPage.error"),
+        i18n.t("loginPage.errorMessage")
       );
 
       if (axios.isAxiosError(error)) {
@@ -178,12 +180,12 @@ export default function SignUp() {
       }>>;
       (arg0: string, arg1: Date): void;
     }) =>
-    () => {
-      const formattedDate = formatDate(date);
-      setDisplayDate(formattedDate); // Set the display date
-      setFieldValue("dateOfBirth", date); // Use the Date object for Formik
-      toggleDatePicker();
-    };
+      () => {
+        const formattedDate = formatDate(date);
+        setDisplayDate(formattedDate); // Set the display date
+        setFieldValue("dateOfBirth", date); // Use the Date object for Formik
+        toggleDatePicker();
+      };
 
   const formatDate = (rawData: Date | undefined) => {
     if (!rawData) return "";
@@ -216,22 +218,22 @@ export default function SignUp() {
       }>>;
       (arg0: string, arg1: Date): void;
     }) =>
-    ({ type }: any, dateOfBirth: Date | undefined) => {
-      if (type === "set" && dateOfBirth) {
-        const currentDate: Date = dateOfBirth;
-        setDate(currentDate);
+      ({ type }: any, dateOfBirth: Date | undefined) => {
+        if (type === "set" && dateOfBirth) {
+          const currentDate: Date = dateOfBirth;
+          setDate(currentDate);
 
-        const formattedDate = formatDate(currentDate);
-        setDisplayDate(formattedDate); // Set the display date
-        setFieldValue("dateOfBirth", currentDate); // Use the Date object for Formik
+          const formattedDate = formatDate(currentDate);
+          setDisplayDate(formattedDate); // Set the display date
+          setFieldValue("dateOfBirth", currentDate); // Use the Date object for Formik
 
-        if (Platform.OS === "android") {
+          if (Platform.OS === "android") {
+            toggleDatePicker();
+          }
+        } else {
           toggleDatePicker();
         }
-      } else {
-        toggleDatePicker();
-      }
-    };
+      };
 
   return (
     <>
@@ -252,13 +254,13 @@ export default function SignUp() {
               style={styles.title}
               className="mt-10 mb-4 text-2xl text-white"
             >
-              Welcome!
+              {i18n.t("signupPage.welcome")}
             </Text>
             <Text
               className="mb-16 text-base text-white"
               style={styles.subTitle}
             >
-              Let's help you save more time.
+              {i18n.t("signupPage.welcomeComment")}
             </Text>
             <ScrollView
               horizontal={false}
@@ -297,8 +299,11 @@ export default function SignUp() {
                 }) => (
                   <View className="flex items-center justify-center w-3/4 gap-4">
                     <TextInput
-                      style={styles.input}
-                      placeholder="Enter your first name"
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
+                      placeholder={i18n.t("signupPage.firstName")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("firstName")}
                       value={values.firstName}
@@ -316,8 +321,11 @@ export default function SignUp() {
                       </Text>
                     )}
                     <TextInput
-                      style={styles.input}
-                      placeholder="Enter your last name"
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
+                      placeholder={i18n.t("signupPage.lastName")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("lastName")}
                       value={values.lastName}
@@ -335,8 +343,11 @@ export default function SignUp() {
                       </Text>
                     )}
                     <TextInput
-                      style={styles.input}
-                      placeholder="Enter your email"
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
+                      placeholder={i18n.t("signupPage.email")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("email")}
                       keyboardType="email-address"
@@ -355,8 +366,11 @@ export default function SignUp() {
                       </Text>
                     )}
                     <TextInput
-                      style={styles.input}
-                      placeholder="Enter new password"
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
+                      placeholder={i18n.t("signupPage.password")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("password")}
                       onBlur={handleBlur("password")}
@@ -375,8 +389,11 @@ export default function SignUp() {
                       </Text>
                     )}
                     <TextInput
-                      style={styles.input}
-                      placeholder="Confirm new password"
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
+                      placeholder={i18n.t("signupPage.confirmPassword")}
                       placeholderTextColor={"#515151"}
                       onChangeText={handleChange("confirmPassword")}
                       onBlur={handleBlur("confirmPassword")}
@@ -439,8 +456,11 @@ export default function SignUp() {
                     {!showPicker && (
                       <Pressable onPress={toggleDatePicker}>
                         <TextInput
-                          style={styles.input}
-                          placeholder="Date of birth           03/10/2023"
+                          style={[
+                            styles.input,
+                            I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                          ]}
+                          placeholder={i18n.t("signupPage.dateOfBirth")}
                           placeholderTextColor={"#515151"}
                           onChangeText={handleChange("dateOfBirth")}
                           value={displayDate}
@@ -480,7 +500,7 @@ export default function SignUp() {
                         ]}
                         dropDownDirection="TOP"
                         dropDownContainerStyle={[styles.dropDownPicker]}
-                        placeholder="Choose your country"
+                        placeholder={i18n.t("signupPage.country")}
                         textStyle={{
                           color: "#515151",
                           fontSize: 16,
@@ -521,7 +541,7 @@ export default function SignUp() {
                     <View className="my-4" />
                     <View className="my-16">
                       <TextButton
-                        text={"Sign Up"}
+                        text={i18n.t("signup")}
                         buttonColor={!isValid ? "#C5C5C5" : "#1DCDFE"}
                         textColor={"white"}
                         onPress={handleSubmit}
@@ -529,7 +549,7 @@ export default function SignUp() {
                         width={windowWidth}
                       />
                       <TextButton
-                        text={"Continue with Google"}
+                        text={i18n.t("google")}
                         icon={"google"}
                         buttonColor={"white"}
                         textColor={"#17222D"}
@@ -568,6 +588,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 60,
     left: 18,
+    transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
   },
   title: {
     fontFamily: "InterBold",
@@ -598,6 +619,12 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 24,
     width: window.width * 0.75,
+  },
+  inputRTL: {
+    textAlign: "right", // Align text to the right for RTL languages
+  },
+  inputLTR: {
+    textAlign: "left", // Align text to the left for LTR languages
   },
   datePicker: {
     height: 120,

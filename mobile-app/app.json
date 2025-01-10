@@ -38,6 +38,9 @@
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
+    },
+    "extra": {
+      "supportsRTL": true
     }
   }
 }

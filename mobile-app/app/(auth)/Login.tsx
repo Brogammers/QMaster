@@ -8,6 +8,7 @@ import {
   TextInput,
   Alert,
   StatusBar,
+  I18nManager,
 } from "react-native";
 import { Link } from "expo-router";
 import { Formik } from "formik";
@@ -28,6 +29,7 @@ import { setUsername } from "../redux/userSlice";
 import SplashScreen from "../SplashScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Config from "react-native-config";
+import i18n from "@/i18n";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email required"),
@@ -116,13 +118,13 @@ export default function Login() {
         }
       } else {
         console.error("Login failed", response.data);
-        Alert.alert("Signup Failed", "Please check your input and try again.");
+        Alert.alert(i18n.t("loginPage.failed"), i18n.t("loginPage.failedMessage"));
       }
     } catch (error) {
       console.error("Login error:", error);
       Alert.alert(
-        "Error",
-        "An unexpected error occurred. Please try again later."
+        i18n.t("loginPage.error"),
+        i18n.t("loginPage.errorMessage")
       );
 
       if (axios.isAxiosError(error)) {
@@ -177,7 +179,7 @@ export default function Login() {
               style={styles.title}
               className="mb-10 text-2xl text-white mt-14"
             >
-              Welcome Back!
+              {i18n.t("loginPage.welcomeBack")}
             </Text>
             <Image source={LoginImg} className="mt-6 mb-12" />
             <Formik<MyFormValues>
@@ -200,8 +202,11 @@ export default function Login() {
               }) => (
                 <View className="flex items-center justify-center w-full gap-4">
                   <TextInput
-                    style={styles.input}
-                    placeholder="Enter your email"
+                    style={[
+                      styles.input,
+                      I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                    ]}
+                    placeholder={i18n.t("signupPage.email")}
                     placeholderTextColor={"#515151"}
                     onChangeText={handleChange("email")}
                     keyboardType="email-address"
@@ -220,8 +225,11 @@ export default function Login() {
                     </Text>
                   )}
                   <TextInput
-                    style={styles.input}
-                    placeholder="Enter your password"
+                    style={[
+                      styles.input,
+                      I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                    ]}
+                    placeholder={i18n.t("signupPage.password")}
                     placeholderTextColor={"#515151"}
                     onChangeText={handleChange("password")}
                     onBlur={handleBlur("password")}
@@ -251,18 +259,18 @@ export default function Login() {
                     </Text>
                   )}
                   <Text className="mt-2 text-sm underline text-baby-blue">
-                    Forgot password?
+                    {i18n.t("loginPage.forgotPassword")}
                   </Text>
                   <View className="mt-8">
                     <TextButton
-                      text={"Log In"}
+                      text={i18n.t("login")}
                       buttonColor={!isValid ? "#C5C5C5" : "#1DCDFE"}
                       textColor={"white"}
                       disabled={!isValid || isLoading}
                       onPress={handleSubmit}
                     />
                     <TextButton
-                      text={"Continue with Google"}
+                      text={i18n.t("google")}
                       icon={"google"}
                       buttonColor={"white"}
                       textColor={"#17222D"}
@@ -298,6 +306,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 60,
     left: 18,
+    transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
   },
   title: {
     fontFamily: "InterBold",
@@ -321,6 +330,12 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 24,
     width: "100%",
+  },
+  inputRTL: {
+    textAlign: "right", // Align text to the right for RTL languages
+  },
+  inputLTR: {
+    textAlign: "left", // Align text to the left for LTR languages
   },
   button: {
     borderRadius: 10,

@@ -1,3 +1,5 @@
+'use client'
+
 import { QueueModalProps } from "../../../types";
 
 export default function QueueModal({ title, description, width, children }: QueueModalProps) {
