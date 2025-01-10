@@ -75,7 +75,7 @@ export default function DynamicMediaDisplay() {
       ) : (
         <div className="w-full h-full">
           {mediaList.map((media, index) =>
-            index === currentIndex ? (
+            index === currentIndex && (
               media.type === "image" ? (
                 <div key={media.id} className="w-full h-full">
                   <Image
@@ -98,7 +98,7 @@ export default function DynamicMediaDisplay() {
                   />
                 </div>
               )
-            ) : null
+            )
           )}
         </div>
       )}
