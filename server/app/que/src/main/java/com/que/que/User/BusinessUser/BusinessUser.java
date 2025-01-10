@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.que.que.Store.Store;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.User;
 import com.que.que.User.UserRole;
@@ -15,6 +16,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,11 +34,14 @@ public class BusinessUser extends User {
     @Column(nullable = false)
     private SubscriptionPlans subscriptionPlan;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "integer default -1")
     private int queueId;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "businessUser")
     private List<Store> stores;
+
+    @ManyToMany(cascade = CascadeType.DETACH, mappedBy = "businessUsers")
+    private List<BusinessCategory> businessCategories;
 
     public BusinessUser(
             UserRole appUserRole,
@@ -75,4 +80,7 @@ public class BusinessUser extends User {
         this.stores.add(store);
     }
 
+    public void addBusinessCategory(BusinessCategory businessCategory) {
+        this.businessCategories.add(businessCategory);
+    }
 }

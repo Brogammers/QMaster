@@ -10,6 +10,7 @@ import lombok.ToString;
 public class QueueRequest {
     private final String name;
     private Long id;
+    private Long storeId;
 
     public QueueRequest(String name) {
         this.name = name;

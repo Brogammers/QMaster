@@ -1,12 +1,15 @@
 package com.que.que.User.BusinessUser;
 
+import java.util.List;
+
+import com.que.que.Store.Store;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +22,7 @@ import lombok.Setter;
 public class OpeningHours {
 
     @Id
-    @SequenceGenerator(name = "opening_hours_generator", sequenceName = "opening_hours_generator_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "opening_hours_generator_sequence", sequenceName = "opening_hours_generator_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "opening_hours_generator_sequence")
     private Long id;
 
@@ -32,9 +35,8 @@ public class OpeningHours {
     @Column(nullable = false)
     private String closeTime;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "store_id")
-    private Store store;
+    @ManyToMany(mappedBy = "openingHours")
+    private List<Store> store;
 
     public OpeningHours(String day, String openTime, String closeTime) {
         this.day = day;
