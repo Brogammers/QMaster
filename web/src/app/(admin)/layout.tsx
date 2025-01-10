@@ -6,6 +6,7 @@ import AdminSidebar from '@/app/components/admin/AdminSidebar';
 import { motion } from 'framer-motion';
 import { AuthProvider, useAuth } from '@/lib/auth/AuthContext';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import LoadingScreen from '@/components/shared/LoadingScreen';
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -24,11 +25,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
   // Show loading state while checking auth
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
-        <div className="text-crystal-blue">Loading...</div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   const toggleDarkMode = (value: boolean) => {

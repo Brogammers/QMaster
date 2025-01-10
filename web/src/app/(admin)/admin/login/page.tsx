@@ -26,15 +26,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center p-4">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-concrete-turqouise/5 via-transparent to-transparent" />
+    <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center p-4 relative">
+      {/* Background effects - moved to back */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light" />
+        <div className="absolute inset-0 bg-gradient-to-b from-concrete-turqouise/5 via-transparent to-transparent" />
+      </div>
       
+      {/* Content - brought to front */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md relative z-10"
       >
         <div className="text-center mb-8">
           <Image
@@ -48,7 +51,7 @@ export default function LoginPage() {
           <p className="text-white/60 mt-2">Please sign in to continue</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 space-y-6 backdrop-blur-sm">
           {error && (
             <div className="bg-rose-500/10 text-rose-300 px-4 py-2 rounded-lg text-sm">
               {error}

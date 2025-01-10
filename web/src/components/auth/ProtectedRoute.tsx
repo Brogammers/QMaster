@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth/AuthContext';
+import LoadingScreen from '@/components/shared/LoadingScreen';
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { admin, isLoading } = useAuth();
@@ -16,11 +17,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   }, [admin, isLoading, router, pathname]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
-        <div className="text-crystal-blue">Loading...</div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return children;
