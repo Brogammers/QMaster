@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  I18nManager
 } from "react-native";
 import background from "@/assets/images/background.png";
 import QLogo from "@/assets/images/logoImage.svg";
@@ -12,6 +13,7 @@ import { Link } from "expo-router";
 import Return from "@/shared/components/Return";
 import LottieView from "lottie-react-native";
 import MailBoxAnimation from "@/assets/images/mailbox_animation.json";
+import i18n from "@/i18n";
 
 export default function VerificationSent() {
   return (
@@ -38,15 +40,15 @@ export default function VerificationSent() {
         />
         <View>
           <Text className="text-2xl font-medium text-white mb-3.5 text-center">
-            Verification Email Sent
+            {i18n.t("verificationSentPage.verificationSent")}
           </Text>
           <Text className="text-center text-white mb-24 px-14">
-            Check your email for a link to verify your email address
+            {i18n.t("verificationSentPage.verificationSentComment")}
           </Text>
         </View>
-        <Text className=" text-blue-300">
+        {/* <Text className=" text-blue-300">
           Need help? Visit our <Text className="underline">help center.</Text>
-        </Text>
+        </Text> */}
       </View>
     </ImageBackground>
   );
@@ -57,6 +59,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 60,
     left: 18,
+    transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
   },
   animatedLogo: {
     marginVertical: 40,

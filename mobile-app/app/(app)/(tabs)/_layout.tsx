@@ -10,6 +10,7 @@ import Notifications from "@/app/Notifications";
 import { Entypo } from "@expo/vector-icons";
 import BrandsList from "@/app/BrandsList";
 import QueuePage from "@/app/QueuePage";
+import i18n from "@/i18n";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +34,7 @@ export default function AppEntry() {
           }}
         >
           <Tab.Screen
-            name="Home"
+            name={i18n.t("home")}
             component={Home}
             options={{
               tabBarIcon: ({ focused }) => (
@@ -46,7 +47,7 @@ export default function AppEntry() {
             }}
           />
           <Tab.Screen
-            name="History"
+            name={i18n.t("history")}
             component={History}
             options={{
               tabBarIcon: ({ focused }) => (
@@ -60,13 +61,13 @@ export default function AppEntry() {
               headerStyle: {
                 backgroundColor: "#17222D",
               },
-              headerTitle: "Past Queues",
+              headerTitle: i18n.t("past queues"),
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}
           />
           <Tab.Screen
-            name="Account"
+            name={i18n.t("account")}
             component={Account}
             options={{
               tabBarIcon: ({ focused }) => (
@@ -87,7 +88,7 @@ export default function AppEntry() {
               headerStyle: {
                 backgroundColor: "#17222D",
               },
-              headerTitle: "Search Queue",
+              headerTitle: i18n.t("search queue"),
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}
@@ -101,7 +102,7 @@ export default function AppEntry() {
               headerStyle: {
                 backgroundColor: "#17222D",
               },
-              headerTitle: "Notifications",
+              headerTitle: i18n.t("notifications"),
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}
@@ -115,7 +116,7 @@ export default function AppEntry() {
               headerStyle: {
                 backgroundColor: "#17222D",
               },
-              headerTitle: "Brands",
+              headerTitle: i18n.t("entities"),
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}

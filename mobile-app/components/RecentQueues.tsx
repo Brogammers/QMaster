@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Alert } from "react-native";
 import Category from "@/shared/components/Category";
 import { Current } from "@/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import i18n from "@/i18n";
 
 export default function RecentQueues() {
   const [historyDataExists, setHistoryDataExists] = useState<boolean>(false);
@@ -26,7 +27,7 @@ export default function RecentQueues() {
 
   return (
     <View>
-      <Text className="my-3 text-2xl font-bold">Recent queues</Text>
+      <Text className="my-3 text-2xl font-bold">{i18n.t('recent')}</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
