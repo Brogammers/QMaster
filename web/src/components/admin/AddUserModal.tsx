@@ -13,8 +13,9 @@ interface AddUserModalProps {
 
 const ROLES = [
   'Project Manager',
-  'Backend Lead',
+  'Backend Developer',
   'Frontend Developer',
+  'Full Stack Developer',
   'PR Manager',
   'UI/UX Designer',
   'QA Engineer',
@@ -29,6 +30,14 @@ export default function AddUserModal({ isOpen, onClose, isDarkMode }: AddUserMod
     email: '',
     role: 'Project Manager' as typeof ROLES[number],
   });
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const names = e.target.value.split(' ');
+    const capitalizedNames = names.map(name => 
+      name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+    );
+    setFormData({ ...formData, name: capitalizedNames.join(' ') });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,16 +81,17 @@ export default function AddUserModal({ isOpen, onClose, isDarkMode }: AddUserMod
               <div>
                 <label className={`block text-sm font-medium mb-2 
                   ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
-                  Name
+                  Full Name
                 </label>
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={handleNameChange}
+                  placeholder="First Last"
                   className={`w-full px-4 py-2 rounded-lg transition-colors duration-300
                     ${isDarkMode 
-                      ? 'bg-black/20 border border-white/10 text-white focus:border-crystal-blue' 
-                      : 'border border-slate-200 bg-white text-slate-900 focus:border-crystal-blue'}`}
+                      ? 'bg-black/20 border border-white/10 text-white focus:border-crystal-blue placeholder:text-white/30' 
+                      : 'border border-slate-200 bg-white text-slate-900 focus:border-crystal-blue placeholder:text-slate-400'}`}
                   required
                 />
               </div>

@@ -4,7 +4,7 @@ interface User {
   id: number;
   name: string;
   email: string;
-  role: 'Admin' | 'Project Manager' | 'Backend Lead' | 'Frontend Developer' | 'PR Manager' | 'UI/UX Designer' | 'QA Engineer' | 'DevOps Engineer' | 'Marketing Manager';
+  role: 'Admin' | 'Project Manager' | 'Backend Developer' | 'Frontend Developer' | 'Full Stack Developer' | 'PR Manager' | 'UI/UX Designer' | 'QA Engineer' | 'DevOps Engineer' | 'Marketing Manager';
   lastActive: string;
   status: 'online' | 'offline' | 'away';
   permissions: {
@@ -38,7 +38,7 @@ const initialState: UserState = {
       id: 2,
       name: 'Fam',
       email: 'fam@awadlouis.com',
-      role: 'Backend Lead',
+      role: 'Backend Developer',
       lastActive: '5 minutes ago',
       status: 'online',
       permissions: {
