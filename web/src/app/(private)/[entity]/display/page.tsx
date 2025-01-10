@@ -76,7 +76,7 @@ export default function Display() {
   return (
     <>
       {fullscreen ? (
-        <div className="bg-gradient-to-r from-baby-blue to-ocean-blue h-screen w-full flex justify-between overflow-hidden">
+        <div className=" bg-gradient-to-r from-baby-blue to-ocean-blue h-screen w-full flex justify-between overflow-hidden">
           <DynamicMediaDisplay />
           <div className="scrollContainer w-1/4 bg-ocean-blue flex flex-col">
             {queuedPersons.map((person) => (

@@ -55,7 +55,7 @@ export default function DynamicMediaDisplay() {
   }, [mediaList, currentIndex]);
 
   return (
-    <div className="relative h-screen w-full flex justify-center items-center">
+    <div className="relative h-full w-full flex justify-center items-center">
       {mediaList.length === 0 ? (
         <div className="flex flex-col items-center">
           <button className="border-0 border-baby-blue bg-transparent px-2 py-3 rounded-xl animate-pulse">
@@ -80,17 +80,17 @@ export default function DynamicMediaDisplay() {
                 key={media.id}
                 src={media.src}
                 alt="User Uploaded Content"
-                className="py-8"
-                style={{ width: width * 0.75, height: height, objectFit: "contain" }}
-                width={width * 0.75}
+                className="h-screen w-full object-contain py-8"
+                width={width}
                 height={height}
+                style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
             ) : (
               <video
                 key={media.id}
                 ref={videoRef}
                 src={media.src}
-                style={{ width: width * 0.75, height: height, objectFit: "contain" }}
+                className="h-screen w-full object-contain"
                 autoPlay
                 muted
               />
