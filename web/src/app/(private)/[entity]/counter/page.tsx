@@ -10,13 +10,21 @@ import useWindowSize from '../../../../../hooks/useWindowSize';
 import TextButton from '@/app/shared/TextButton';
 import MissionAccomplished from "../../../../../public/mission-accomplished.svg";
 import ExceptionMessage from '@/app/shared/ExceptionMessage';
-import { Formik, Form, ErrorMessage } from 'formik';
+import { Formik, Form, FormikErrors, FormikTouched } from 'formik';
 import * as Yup from 'yup';
 import { Button } from 'antd';
 import QueueModal from '@/app/shared/QueueModal';
 import StyledFieldArray from '@/app/shared/StyledFieldArray';
 import StyledField from '@/app/shared/StyledField';
 import CustomModal from '@/app/components/CustomModal';
+import toast from 'react-hot-toast';
+
+interface ServiceForm {
+  services: Array<{
+    name: string;
+    count: number;
+  }>;
+}
 
 const validationSchema = Yup.object().shape({
   services: Yup.array()
@@ -46,6 +54,33 @@ const validationSchema = Yup.object().shape({
 
 const initialValues = {
   services: [{ name: '', count: 0 }],
+};
+
+const ShowFormErrors = ({ 
+  errors, 
+  touched 
+}: { 
+  errors: FormikErrors<ServiceForm>, 
+  touched: FormikTouched<ServiceForm> 
+}) => {
+  useEffect(() => {
+    if (errors.services) {
+      if (typeof errors.services === 'string') {
+        toast.error(errors.services);
+      } else if (Array.isArray(errors.services)) {
+        errors.services.forEach((error: any, index: number) => {
+          if (error?.name && touched.services?.[index]?.name) {
+            toast.error(`Service ${index + 1}: Service Name is required`);
+          }
+          if (error?.count && touched.services?.[index]?.count) {
+            toast.error(`Service ${index + 1}: Counter Count is required`);
+          }
+        });
+      }
+    }
+  }, [errors.services, touched.services]);
+
+  return null;
 };
 
 export default function Counter() {
@@ -231,48 +266,51 @@ export default function Counter() {
       {counterSetup ? (
         <QueueModal title="Setup Counter Space">
           <div className="max-w-4xl mx-auto py-8">
-            <Formik 
+            <Formik<ServiceForm>
               initialValues={initialValues} 
               onSubmit={handleSubmit} 
               validationSchema={validationSchema}
+              validateOnChange={true}
+              validateOnBlur={true}
             >
-              {({ values, errors, isValid, setFieldValue }) => (
+              {({ values, errors, isValid, setFieldValue, touched }) => (
                 <Form className="space-y-8">
+                  <ShowFormErrors errors={errors} touched={touched} />
                   <StyledFieldArray name="services" render={({ push, remove }) => (
                     <div className="space-y-6">
                       {values.services.map((_, index) => (
-                        <div key={index} className="flex items-center gap-6 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg">
+                        <div key={index} className="flex items-start gap-6 p-8 bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-lg">
                           <div className="flex-1 flex gap-6">
                             <div className="flex-1">
                               <label className="block text-sm font-medium text-coal-black mb-2">Service Name</label>
-                              <StyledField
-                                name={`services.${index}.name`}
-                                placeholder="Service"
-                                className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-3 text-coal-black placeholder-coal-black/50 focus:ring-2 focus:ring-baby-blue"
-                              />
-                              <ErrorMessage className="mt-2 text-rose-500 text-sm" component="span" name={`services.${index}.name`} />
+                              <div className="relative">
+                                <StyledField
+                                  name={`services.${index}.name`}
+                                  placeholder="Service"
+                                  className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-3 text-coal-black placeholder-coal-black/50 focus:ring-2 focus:ring-baby-blue"
+                                />
+                              </div>
                             </div>
                             <div className="w-56">
                               <label className="block text-sm font-medium text-coal-black mb-2">Counter Count</label>
-                              <StyledField 
-                                name={`services.${index}.count`} 
-                                placeholder="Number of Counters" 
-                                type="number"
-                                className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-3 text-coal-black placeholder-coal-black/50 focus:ring-2 focus:ring-baby-blue"
-                              />
-                              <ErrorMessage className="mt-2 text-rose-500 text-sm" component="span" name={`services.${index}.count`} />
+                              <div className="relative">
+                                <StyledField 
+                                  name={`services.${index}.count`} 
+                                  placeholder="Number of Counters" 
+                                  type="number"
+                                  className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-3 text-coal-black placeholder-coal-black/50 focus:ring-2 focus:ring-baby-blue"
+                                />
+                              </div>
                             </div>
                           </div>
-                          <div className="self-end mb-1">
-                            <Button
-                              onClick={() => remove(index)}
-                              disabled={isDuplicate}
-                              className="!bg-rose-500/90 !text-white hover:!bg-rose-600 border-0 rounded-xl h-11"
-                              icon={<span className="text-lg">×</span>}
-                            >
-                              Remove
-                            </Button>
-                          </div>
+                          <Button
+                            onClick={() => remove(index)}
+                            disabled={isDuplicate}
+                            className="!bg-rose-500/90 !text-white hover:!bg-rose-600 border-0 rounded-xl h-11 mt-8"
+                            icon={<span className="text-lg">×</span>}
+                          >
+                            Remove
+                          </Button>
                         </div>
                       ))}
                       <Button
@@ -284,11 +322,6 @@ export default function Counter() {
                       </Button>
                     </div>
                   )} />
-                  {errors.services && typeof errors.services === 'string' && 
-                    <div className="text-rose-500 text-center font-medium p-4 bg-rose-500/10 backdrop-blur-sm rounded-xl border border-rose-500/20">
-                      {errors.services}
-                    </div>
-                  }
                   <Button
                     htmlType="submit"
                     disabled={!isValid || isDuplicate}
