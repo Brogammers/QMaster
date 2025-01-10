@@ -1,18 +1,21 @@
 // StyledField.jsx
 import React from 'react';
-import { Field, FieldProps } from 'formik';
-import { Input } from 'antd';
-import { StyledFieldProps } from '../../../types';
+import { Field } from 'formik';
 
+interface StyledFieldProps {
+  name: string;
+  placeholder?: string;
+  type?: string;
+  className?: string;
+}
 
-export default function StyledField({ name, placeholder, type }: StyledFieldProps) {
-  const inputType = type || 'text'; // Default type is 'text'
-
+export default function StyledField({ name, placeholder, type = 'text', className }: StyledFieldProps) {
   return (
-    <div className="border-2 rounded-xl bg-ocean-blue p-1">
-      <Field name={name}>
-        {({ field }: FieldProps<any>) => <Input {...field} placeholder={placeholder} type={inputType} />}
-      </Field>
-    </div>
+    <Field
+      name={name}
+      placeholder={placeholder}
+      type={type}
+      className={className || 'w-full bg-white border-0 rounded-lg px-4 py-2 text-coal-black placeholder-coal-black/50 focus:ring-2 focus:ring-baby-blue'}
+    />
   );
 }

@@ -44,7 +44,6 @@ const validationSchema = Yup.object().shape({
     .min(1, 'At least one service must be entered'),
 });
 
-
 const initialValues = {
   services: [{ name: '', count: 0 }],
 };
@@ -231,93 +230,106 @@ export default function Counter() {
     <Entity>
       {counterSetup ? (
         <QueueModal title="Setup Counter Space">
-          <Formik 
-            initialValues={initialValues} 
-            onSubmit={handleSubmit} 
-            validationSchema={validationSchema}
-          >
-            {({ values, errors, isValid, setFieldValue }) => (
-              <Form>
-                <div className="flex flex-col gap-4">
+          <div className="max-w-4xl mx-auto py-8">
+            <Formik 
+              initialValues={initialValues} 
+              onSubmit={handleSubmit} 
+              validationSchema={validationSchema}
+            >
+              {({ values, errors, isValid, setFieldValue }) => (
+                <Form className="space-y-8">
                   <StyledFieldArray name="services" render={({ push, remove }) => (
-                    <div>
+                    <div className="space-y-6">
                       {values.services.map((_, index) => (
-                        <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
-                          <div className="flex justify-center items-center gap-2">
-                            <div className="flex flex-col">
+                        <div key={index} className="flex items-center gap-6 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg">
+                          <div className="flex-1 flex gap-6">
+                            <div className="flex-1">
+                              <label className="block text-sm font-medium text-coal-black mb-2">Service Name</label>
                               <StyledField
                                 name={`services.${index}.name`}
                                 placeholder="Service"
+                                className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-3 text-coal-black placeholder-coal-black/50 focus:ring-2 focus:ring-baby-blue"
                               />
-                              <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.name`} />
+                              <ErrorMessage className="mt-2 text-rose-500 text-sm" component="span" name={`services.${index}.name`} />
                             </div>
-                            <div className="flex flex-col">
+                            <div className="w-56">
+                              <label className="block text-sm font-medium text-coal-black mb-2">Counter Count</label>
                               <StyledField 
                                 name={`services.${index}.count`} 
                                 placeholder="Number of Counters" 
-                                type="number" 
+                                type="number"
+                                className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-3 text-coal-black placeholder-coal-black/50 focus:ring-2 focus:ring-baby-blue"
                               />
-                              <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.count`} />
+                              <ErrorMessage className="mt-2 text-rose-500 text-sm" component="span" name={`services.${index}.count`} />
                             </div>
                           </div>
-                          <Button
-                            className="bg-red-500 text-white"
-                            type="text"
-                            onClick={() => remove(index)}
-                            disabled={isDuplicate} 
-                          >
-                            Remove
-                          </Button>
+                          <div className="self-end mb-1">
+                            <Button
+                              onClick={() => remove(index)}
+                              disabled={isDuplicate}
+                              className="!bg-rose-500/90 !text-white hover:!bg-rose-600 border-0 rounded-xl h-11"
+                              icon={<span className="text-lg">×</span>}
+                            >
+                              Remove
+                            </Button>
+                          </div>
                         </div>
                       ))}
                       <Button
-                        className="bg-ocean-blue font-bold"
-                        type="primary"
                         onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
-                        disabled={isDuplicate} 
+                        disabled={isDuplicate}
+                        className="!bg-ocean-blue/90 !text-white hover:!bg-ocean-blue border-0 rounded-xl w-full h-12 text-lg"
                       >
                         Add Service
                       </Button>
                     </div>
                   )} />
                   {errors.services && typeof errors.services === 'string' && 
-                    <span className="text-red-500 font-bold text-center">
+                    <div className="text-rose-500 text-center font-medium p-4 bg-rose-500/10 backdrop-blur-sm rounded-xl border border-rose-500/20">
                       {errors.services}
-                    </span>
+                    </div>
                   }
                   <Button
-                    className="bg-baby-blue font-bold"
-                    type="primary"
                     htmlType="submit"
-                    disabled={!isValid || isDuplicate} // Disable submit button if form is invalid or duplicates exist
+                    disabled={!isValid || isDuplicate}
+                    className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white !border-0 !rounded-xl w-full !h-14 !text-lg !font-medium mt-4"
                   >
-                    Create
+                    Create Counter Space
                   </Button>
-                  {/* <ErrorMessage className="text-red-500 font-bold text-center" name="services" component="span" /> */}
-                </div>
-              </Form>
-            )}
-          </Formik>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </QueueModal>
       ) : (
-        <div className="flex flex-col justify-start gap-16">
+        <div className="space-y-8">
           <div>
-            <h2>Serving</h2>
-            <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
+            <h2 className="text-2xl font-bold text-coal-black mb-4">Serving</h2>
+            <div className="bg-white rounded-xl p-6 shadow-sm">
               <TabContext value={activeTab1}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <TabList onChange={handleServingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'rgba(0,0,0,0.1)' }}>
+                  <TabList 
+                    onChange={handleServingChange} 
+                    aria-label="serving tabs"
+                    sx={{ 
+                      '& .MuiTab-root': { 
+                        color: 'rgba(0,0,0,0.6)',
+                        '&.Mui-selected': { color: '#1DCDFE' }
+                      },
+                      '& .MuiTabs-indicator': { backgroundColor: '#1DCDFE' }
+                    }}
+                  >
                     <Tab label="All servings" value="0" />
-                    {formValues && formValues.services && formValues.services.map((service: any) => (
+                    {formValues?.services?.map((service: any) => (
                       <Tab key={service.name} label={service.name} value={service.name} />
                     ))}
                   </TabList>
                 </Box>
 
-                <TabPanel className="px-0" value={activeTab1}>
-                  <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets1.length <= 0 && ` justify-center items-center`}`}>
+                <TabPanel className="px-0 py-6" value={activeTab1}>
+                  <div className={`counter__scrollbar flex gap-4 ${tickets1.length <= 0 && 'justify-center items-center'}`}>
                     {tickets1.length <= 0 ? (
-                      <div className="flex items-center gap-56">
+                      <div className="flex items-center gap-16">
                         <TextButton
                           text="Add to Queue"
                           textSize="sm"
@@ -372,26 +384,34 @@ export default function Counter() {
                   </div>
                 </TabPanel>
               </TabContext>
-            </Box>
+            </div>
           </div>
 
           <div>
-            <h2>In waiting line</h2>
-            <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
+            <h2 className="text-2xl font-bold text-coal-black mb-4">In waiting line</h2>
+            <div className="bg-white rounded-xl p-6 shadow-sm">
               <TabContext value={activeTab2}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <TabList onChange={handleWaitingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'rgba(0,0,0,0.1)' }}>
+                  <TabList 
+                    onChange={handleWaitingChange} 
+                    aria-label="waiting tabs"
+                    sx={{ 
+                      '& .MuiTab-root': { 
+                        color: 'rgba(0,0,0,0.6)',
+                        '&.Mui-selected': { color: '#1DCDFE' }
+                      },
+                      '& .MuiTabs-indicator': { backgroundColor: '#1DCDFE' }
+                    }}
+                  >
                     <Tab label="All queues" value="0" />
-                    {/* <Tab label="Customer Service" value="Customer Service" />
-                    <Tab label="New Customer" value="New Customer" /> */}
-                    {formValues && formValues.services && formValues.services.map((service: any) => (
+                    {formValues?.services?.map((service: any) => (
                       <Tab key={service.name} label={service.name} value={service.name} />
                     ))}
                   </TabList>
                 </Box>
 
-                <TabPanel className="px-0" value={activeTab2}>
-                  <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets2.length <= 0 && ` justify-center items-center`}`}>
+                <TabPanel className="px-0 py-6" value={activeTab2}>
+                  <div className={`counter__scrollbar flex gap-4 ${tickets2.length <= 0 && 'justify-center items-center'}`}>
                     {tickets2.length <= 0 ? (
                       <ExceptionMessage
                         image={MissionAccomplished}
@@ -435,7 +455,7 @@ export default function Counter() {
                   </div>
                 </TabPanel>
               </TabContext>
-            </Box>
+            </div>
           </div>
         </div>
       )}
@@ -447,4 +467,4 @@ export default function Counter() {
       />
     </Entity>
   );
-};
+}
