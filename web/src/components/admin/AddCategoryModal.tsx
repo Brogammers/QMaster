@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   FaStore, FaHospital, FaUniversity, FaLandmark, FaShoppingBag, 
@@ -8,6 +8,15 @@ import {
   FaGraduationCap, FaFootballBall, FaPaintBrush, FaMusic,
   FaTimes 
 } from 'react-icons/fa';
+
+interface Category {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+  partnersCount: number;
+  status: 'active' | 'inactive';
+}
 
 interface AddCategoryModalProps {
   isOpen: boolean;
@@ -19,6 +28,7 @@ interface AddCategoryModalProps {
     icon: string;
     status: 'active' | 'inactive';
   }) => void;
+  initialData?: Category | null;
 }
 
 const ICONS = [
@@ -39,11 +49,21 @@ const ICONS = [
   { name: 'entertainment', icon: FaMusic, label: 'Entertainment' }
 ];
 
-export default function AddCategoryModal({ isOpen, onClose, isDarkMode, onSubmit }: AddCategoryModalProps) {
+export default function AddCategoryModal({ isOpen, onClose, isDarkMode, onSubmit, initialData }: AddCategoryModalProps) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [selectedIcon, setSelectedIcon] = useState('');
   const [status, setStatus] = useState<'active' | 'inactive'>('active');
+
+  // Populate form with initial data when editing
+  useEffect(() => {
+    if (initialData) {
+      setName(initialData.name);
+      setDescription(initialData.description);
+      setSelectedIcon(initialData.icon);
+      setStatus(initialData.status);
+    }
+  }, [initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +79,14 @@ export default function AddCategoryModal({ isOpen, onClose, isDarkMode, onSubmit
     setDescription('');
     setSelectedIcon('');
     setStatus('active');
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const words = e.target.value.split(' ');
+    const capitalizedWords = words.map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    );
+    setName(capitalizedWords.join(' '));
   };
 
   if (!isOpen) return null;
@@ -81,7 +109,9 @@ export default function AddCategoryModal({ isOpen, onClose, isDarkMode, onSubmit
         } relative w-full max-w-lg p-6 rounded-xl border shadow-2xl`}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Add Category</h2>
+          <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+            {initialData ? 'Edit Category' : 'Add Category'}
+          </h2>
           <button 
             onClick={onClose}
             className={`p-2 hover:bg-white/[0.05] rounded-lg ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}
@@ -98,7 +128,7 @@ export default function AddCategoryModal({ isOpen, onClose, isDarkMode, onSubmit
             <input
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={handleNameChange}
               className={`w-full px-4 py-2 rounded-lg border ${
                 isDarkMode 
                   ? 'bg-white/[0.02] border-white/[0.1] text-white' 
@@ -184,7 +214,7 @@ export default function AddCategoryModal({ isOpen, onClose, isDarkMode, onSubmit
               type="submit"
               className="px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90"
             >
-              Add Category
+              {initialData ? 'Update Category' : 'Add Category'}
             </button>
           </div>
         </form>

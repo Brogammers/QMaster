@@ -1,11 +1,12 @@
 'use client'
 
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { 
   FaStore, FaHospital, FaUniversity, FaLandmark, FaShoppingBag, 
   FaCode, FaIndustry, FaPlane, FaHotel, FaUtensils, FaCar,
   FaGraduationCap, FaFootballBall, FaPaintBrush, FaMusic,
-  FaPlus, FaSearch, FaEdit, FaTrash 
+  FaPlus, FaSearch, FaEdit, FaTrash, FaUndo 
 } from 'react-icons/fa';
 import AddCategoryModal from '@/components/admin/AddCategoryModal';
 
@@ -39,6 +40,7 @@ const ICON_MAP = {
 export default function CategoriesPage() {
   const [isDarkMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [categories, setCategories] = useState<Category[]>([
     {
       id: 1,
@@ -75,12 +77,61 @@ export default function CategoriesPage() {
     setCategories(prev => [...prev, newCategory]);
   };
 
+  const handleEditCategory = (category: Category) => {
+    setEditingCategory(category);
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateCategory = (categoryData: Omit<Category, 'id' | 'partnersCount'>) => {
+    setCategories(prev => prev.map(cat => 
+      cat.id === editingCategory?.id 
+        ? { ...cat, ...categoryData }
+        : cat
+    ));
+    setEditingCategory(null);
+  };
+
+  const handleDeleteCategory = (categoryId: number) => {
+    const categoryToDelete = categories.find(cat => cat.id === categoryId);
+    if (!categoryToDelete) return;
+
+    setCategories(prev => prev.filter(cat => cat.id !== categoryId));
+
+    toast.success(
+      (t) => (
+        <div className="flex items-center gap-2">
+          <span>Category deleted</span>
+          <button
+            onClick={() => {
+              setCategories(prev => [...prev, categoryToDelete]);
+              toast.dismiss(t.id);
+            }}
+            className="px-2 py-1 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition-colors flex items-center gap-1"
+          >
+            <FaUndo />
+            <span>Undo</span>
+          </button>
+        </div>
+      ),
+      {
+        duration: 5000,
+        style: {
+          background: '#1e293b',
+          color: '#fff',
+        }
+      }
+    );
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Categories</h1>
         <button 
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setEditingCategory(null);
+            setIsModalOpen(true);
+          }}
           className="flex items-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90"
         >
           <FaPlus /> Add Category
@@ -107,10 +158,16 @@ export default function CategoriesPage() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button className={`p-2 hover:bg-white/[0.05] rounded-lg ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
+                  <button 
+                    onClick={() => handleEditCategory(category)}
+                    className={`p-2 hover:bg-white/[0.05] rounded-lg ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}
+                  >
                     <FaEdit />
                   </button>
-                  <button className="p-2 hover:bg-white/[0.05] rounded-lg text-rose-400">
+                  <button 
+                    onClick={() => handleDeleteCategory(category.id)}
+                    className="p-2 hover:bg-white/[0.05] rounded-lg text-rose-400"
+                  >
                     <FaTrash />
                   </button>
                 </div>
@@ -132,9 +189,13 @@ export default function CategoriesPage() {
 
       <AddCategoryModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingCategory(null);
+        }}
         isDarkMode={isDarkMode}
-        onSubmit={handleAddCategory}
+        onSubmit={editingCategory ? handleUpdateCategory : handleAddCategory}
+        initialData={editingCategory}
       />
     </div>
   );
