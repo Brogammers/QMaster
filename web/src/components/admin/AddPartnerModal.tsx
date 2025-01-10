@@ -74,7 +74,9 @@ export default function AddPartnerModal({
   }, [isOpen]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newName = e.target.value;
+    const newName = e.target.value.split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
     setFormData(prev => ({ ...prev, name: newName }));
     
     // Check for existing partner with similar name
@@ -112,25 +114,40 @@ export default function AddPartnerModal({
   };
 
   const handleLocationChange = (index: number, field: keyof Location, value: string) => {
+    // Capitalize every word in the input
+    const capitalizedValue = value.split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+
     setFormData(prev => ({
       ...prev,
       locations: prev.locations.map((location, i) => 
-        i === index ? { ...location, [field]: value } : location
+        i === index ? { ...location, [field]: capitalizedValue } : location
       )
     }));
 
-    // Update Google Maps URL when city or state changes
-    if (field === 'city' || field === 'stateOrProvince') {
+    // Update location name and Google Maps URL when city or state changes
+    if (field === 'city' || field === 'stateOrProvince' || field === 'country') {
       const location = formData.locations[index];
+      const updatedLocation = {
+        ...location,
+        [field]: capitalizedValue,
+      };
+      
+      // Set the name as a combination of city and state/province
+      const locationName = `${updatedLocation.city} ${updatedLocation.stateOrProvince}`.trim();
+      
+      // Generate Google Maps URL with all location components
       const searchQuery = encodeURIComponent(
-        `${field === 'city' ? value : location.city} ${field === 'stateOrProvince' ? value : location.stateOrProvince}`
+        `${updatedLocation.city} ${updatedLocation.stateOrProvince} ${updatedLocation.country}`.trim()
       );
+      
       setFormData(prev => ({
         ...prev,
         locations: prev.locations.map((loc, i) => 
           i === index ? { 
-            ...loc, 
-            [field]: value,
+            ...updatedLocation,
+            name: locationName,
             googleMapsUrl: `https://maps.google.com/?q=${searchQuery}`
           } : loc
         )
@@ -146,8 +163,12 @@ export default function AddPartnerModal({
         onAddLocation(matchedPartner.id, location);
       });
     } else {
-      // Create new partner
-      onSubmit(formData);
+      // Create new partner with temporary location IDs
+      const partnerWithIds = {
+        ...formData,
+        locations: formData.locations.map((loc, index) => ({ ...loc, id: index + 1 }))
+      };
+      onSubmit(partnerWithIds);
     }
     onClose();
   };
@@ -168,7 +189,7 @@ export default function AddPartnerModal({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className={`fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl z-50
+            className={`modal__positioning w-full max-w-2xl z-50
               ${isDarkMode 
                 ? 'bg-[#1A1A1A] border border-white/10' 
                 : 'bg-white'} 
@@ -253,13 +274,13 @@ export default function AddPartnerModal({
                       <div>
                         <label className={`block text-sm font-medium mb-2 
                           ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
-                          Branch Name
+                          Google Maps URL
                         </label>
                         <input
                           type="text"
-                          value={location.name}
-                          onChange={(e) => handleLocationChange(index, 'name', e.target.value)}
-                          placeholder="Main Branch"
+                          value={location.googleMapsUrl}
+                          onChange={(e) => handleLocationChange(index, 'googleMapsUrl', e.target.value)}
+                          placeholder="Maps URL"
                           className={`w-full px-4 py-2 rounded-lg transition-colors duration-300
                             ${isDarkMode 
                               ? 'bg-black/20 border border-white/10 text-white focus:border-crystal-blue placeholder:text-white/30' 
