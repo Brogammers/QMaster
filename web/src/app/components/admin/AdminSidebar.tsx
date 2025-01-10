@@ -11,10 +11,12 @@ import {
   FaStore,
   FaCalendarAlt,
   FaMoon,
-  FaSun
+  FaSun,
+  FaSignOutAlt
 } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import QMasterLogo from "../../../../public/qmaster-logo.svg"
+import { useAuth } from '@/lib/auth/AuthContext';
 
 const menuItems = [
   { path: '/admin/dashboard', label: 'Dashboard', icon: FaChartLine },
@@ -32,6 +34,7 @@ interface AdminSidebarProps {
 
 export default function AdminSidebar({ isDarkMode, setIsDarkMode }: AdminSidebarProps) {
   const pathname = usePathname();
+  const { logout } = useAuth();
 
   return (
     <div className="w-64 bg-gradient-to-b from-concrete-turqouise to-coal-black text-white h-screen relative overflow-hidden">
@@ -93,17 +96,16 @@ export default function AdminSidebar({ isDarkMode, setIsDarkMode }: AdminSidebar
       </nav>
 
       {/* Add before the bottom gradient overlay */}
-      <div className="absolute bottom-8 left-0 right-0 px-6">
+      <div className="absolute bottom-20 left-0 right-0 px-6">
         <motion.button
-          onClick={() => setIsDarkMode(!isDarkMode)}
+          onClick={logout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
-            bg-gradient-to-r from-concrete-turqouise/50 to-coal-black/50
-            border border-crystal-blue/20 text-crystal-blue"
+            bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 transition-colors"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          {isDarkMode ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
-          <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
+          <FaSignOutAlt className="w-5 h-5" />
+          <span>Sign Out</span>
         </motion.button>
       </div>
       

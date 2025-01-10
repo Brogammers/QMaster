@@ -1,19 +1,35 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import AdminSidebar from '@/app/components/admin/AdminSidebar';
 import { motion } from 'framer-motion';
+import { AuthProvider, useAuth } from '@/lib/auth/AuthContext';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
+function AdminLayoutContent({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const { admin, isLoading } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    // Get initial dark mode preference from localStorage
     const savedDarkMode = localStorage.getItem('qmaster-dark-mode');
     setIsDarkMode(savedDarkMode === 'true');
   }, []);
+
+  // If we're on the login page, just render the children
+  if (pathname === '/admin/login') {
+    return children;
+  }
+
+  // Show loading state while checking auth
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
+        <div className="text-crystal-blue">Loading...</div>
+      </div>
+    );
+  }
 
   const toggleDarkMode = (value: boolean) => {
     setIsDarkMode(value);
@@ -51,17 +67,40 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         
         {/* Content */}
         <div className="relative max-w-7xl mx-auto">
-          <h1 className={`text-3xl font-bold mb-8 
-            ${isDarkMode 
-              ? 'text-white bg-clip-text text-transparent bg-gradient-to-r from-crystal-blue via-crystal-blue to-baby-blue' 
-              : 'text-slate-900'}`}>
-            Dashboard
-          </h1>
+          {pathname === '/admin/dashboard' && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-8"
+            >
+              <h2 className={`text-lg ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
+                Welcome back,
+              </h2>
+              <h1 className={`text-3xl font-bold 
+                ${isDarkMode 
+                  ? 'text-white bg-clip-text text-transparent bg-gradient-to-r from-crystal-blue via-crystal-blue to-baby-blue' 
+                  : 'text-slate-900'}`}>
+                {admin?.name}
+              </h1>
+            </motion.div>
+          )}
           <div className="space-y-6">
             {children}
           </div>
         </div>
       </motion.main>
     </div>
+  );
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthProvider>
+      <ProtectedRoute>
+        <AdminLayoutContent>
+          {children}
+        </AdminLayoutContent>
+      </ProtectedRoute>
+    </AuthProvider>
   );
 } 
