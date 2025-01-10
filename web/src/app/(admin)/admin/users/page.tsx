@@ -79,7 +79,7 @@ export default function UsersPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Users</h1>
+        <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Users</h1>
         <div className="flex items-center gap-4">
           <button 
             onClick={handleAddUser}
@@ -94,60 +94,64 @@ export default function UsersPage() {
         </div>
       </div>
 
-      <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl overflow-hidden">
-        <div className="p-4 border-b border-white/[0.05]">
+      <div className={`${isDarkMode ? 'border-white/[0.05]' : 'border-slate-300'} border rounded-xl overflow-hidden backdrop-blur-sm`}>
+        <div className={`p-4 border-b ${isDarkMode ? 'border-white/[0.05]' : 'border-slate-300'}`}>
           <div className="relative">
-            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FaSearch className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDarkMode ? 'text-gray-400' : 'text-slate-400'}`} />
             <input
               type="text"
               placeholder="Search users..."
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-white/10 bg-white/[0.02] focus:outline-none focus:ring-2 focus:ring-crystal-blue"
+              className={`w-full pl-10 pr-4 py-2 rounded-lg transition-colors duration-300
+                ${isDarkMode 
+                  ? 'border-white/10 bg-white/[0.02] text-white focus:border-crystal-blue' 
+                  : 'border-slate-300 bg-white text-slate-900 focus:border-crystal-blue'} 
+                border focus:outline-none focus:ring-2 focus:ring-crystal-blue`}
             />
           </div>
         </div>
 
         <table className="w-full">
           <thead>
-            <tr className="border-b border-white/10">
-              <th className="px-6 py-3 text-left text-sm font-semibold">User</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold">Role</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold">Last Active</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold">Status</th>
-              {isAdmin && <th className="px-6 py-3 text-left text-sm font-semibold">Actions</th>}
+            <tr className={`border-b ${isDarkMode ? 'border-white/10' : 'border-slate-300'}`}>
+              <th className={`px-6 py-3 text-left text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>User</th>
+              <th className={`px-6 py-3 text-left text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Role</th>
+              <th className={`px-6 py-3 text-left text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Last Active</th>
+              <th className={`px-6 py-3 text-left text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Status</th>
+              {isAdmin && <th className={`px-6 py-3 text-left text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Actions</th>}
             </tr>
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.id} className="border-b border-white/10 hover:bg-white/[0.02]">
+              <tr key={user.id} className={`border-b ${isDarkMode ? 'border-white/10 hover:bg-white/[0.02]' : 'border-slate-300 hover:bg-slate-50/50'}`}>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-crystal-blue/20 flex items-center justify-center">
+                    <div className={`w-8 h-8 rounded-full ${isDarkMode ? 'bg-crystal-blue/20' : 'bg-crystal-blue/10'} flex items-center justify-center ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                       {user.name.charAt(0)}
                     </div>
                     <div>
-                      <div className="font-medium">{user.name}</div>
-                      <div className="text-sm text-white/50">{user.email}</div>
+                      <div className={`font-medium ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{user.name}</div>
+                      <div className="text-sm text-slate-500">{user.email}</div>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   <span className={`px-3 py-1 rounded-full text-sm 
                     ${user.role === 'Admin' 
-                      ? 'bg-crystal-blue/10 text-crystal-blue'
+                      ? isDarkMode ? 'bg-crystal-blue/10 text-crystal-blue' : 'bg-crystal-blue/20 text-crystal-blue-700'
                       : user.role === 'Project Manager'
-                      ? 'bg-purple-500/10 text-purple-400'
-                      : 'bg-amber-500/10 text-amber-400'}`}>
+                      ? isDarkMode ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-500/20 text-purple-700'
+                      : isDarkMode ? 'bg-amber-500/10 text-amber-400' : 'bg-amber-500/20 text-amber-700'}`}>
                     {user.role}
                   </span>
                 </td>
-                <td className="px-6 py-4">{user.lastActive}</td>
+                <td className={`px-6 py-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{user.lastActive}</td>
                 <td className="px-6 py-4">
                   <span className={`px-3 py-1 rounded-full text-sm ${
                     user.status === 'online' 
-                      ? 'bg-emerald-500/10 text-emerald-300' 
+                      ? isDarkMode ? 'bg-emerald-500/10 text-emerald-300' : 'bg-emerald-500/20 text-emerald-700'
                       : user.status === 'away'
-                      ? 'bg-amber-500/10 text-amber-300'
-                      : 'bg-rose-500/10 text-rose-300'
+                      ? isDarkMode ? 'bg-amber-500/10 text-amber-300' : 'bg-amber-500/20 text-amber-700'
+                      : isDarkMode ? 'bg-rose-500/10 text-rose-300' : 'bg-rose-500/20 text-rose-700'
                   }`}>
                     {user.status}
                   </span>
@@ -157,15 +161,15 @@ export default function UsersPage() {
                     <div className="flex gap-2">
                       <button 
                         onClick={() => handleEditUser(user)}
-                        className="p-2 hover:bg-white/[0.05] rounded-lg"
+                        className={`p-2 rounded-lg ${isDarkMode ? 'hover:bg-white/[0.05]' : 'hover:bg-slate-100'}`}
                       >
-                        <FaEdit className="text-crystal-blue w-4 h-4" />
+                        <FaEdit className={`w-4 h-4 ${isDarkMode ? 'text-crystal-blue' : 'text-crystal-blue-600'}`} />
                       </button>
                       <button 
                         onClick={() => handleDeleteUser(user.id)}
-                        className="p-2 hover:bg-white/[0.05] rounded-lg"
+                        className={`p-2 rounded-lg ${isDarkMode ? 'hover:bg-white/[0.05]' : 'hover:bg-slate-100'}`}
                       >
-                        <FaTrash className="text-rose-400 w-4 h-4" />
+                        <FaTrash className={`w-4 h-4 ${isDarkMode ? 'text-rose-400' : 'text-rose-600'}`} />
                       </button>
                     </div>
                   </td>
