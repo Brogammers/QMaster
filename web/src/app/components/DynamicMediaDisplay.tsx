@@ -10,19 +10,29 @@ export default function DynamicMediaDisplay() {
   const { width, height } = useWindowSize();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleMediaUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
     if (event.target.files) {
       const newMediaList: Media[] = [];
       Array.from(event.target.files).forEach((file, index) => {
         const fileType = file.type.startsWith("image/") ? "image" : "video";
         const src = URL.createObjectURL(file);
-
         newMediaList.push({ id: index, type: fileType, src });
       });
-
       setMediaList(newMediaList);
       setCurrentIndex(0); 
+    }
+  };
+
+  const handleUploadClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    if (fileInputRef.current) {
+      setTimeout(() => {
+        fileInputRef.current?.click();
+      }, 0);
     }
   };
 
@@ -56,22 +66,35 @@ export default function DynamicMediaDisplay() {
     }
   }, [mediaList, currentIndex]);
 
+  const handleContainerClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   return (
-    <div className="relative h-screen w-full flex justify-center items-center">
+    <div className="relative h-screen w-full flex justify-center items-center" onClick={handleContainerClick}>
       {mediaList.length === 0 ? (
-        <div className="flex flex-col items-center">
-          <button className="border-0 border-baby-blue bg-transparent px-2 py-3 rounded-xl animate-pulse">
-            <label className="cursor-pointer double__color--btn text-white px-4 py-2 rounded-lg font-bold text-2xl animate-pulse">
+        <div className="flex flex-col items-center" onClick={handleContainerClick}>
+          <button 
+            onClick={handleUploadClick}
+            className="border-0 border-baby-blue bg-transparent px-2 py-3 rounded-xl animate-pulse"
+          >
+            <span className="cursor-pointer double__color--btn text-white px-4 py-2 rounded-lg font-bold text-2xl animate-pulse">
               Upload Media
-              <input
-                type="file"
-                accept="image/*,video/*"
-                multiple
-                onChange={handleMediaUpload}
-                className="hidden"
-              />
-            </label>
+            </span>
           </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*,video/*"
+            multiple
+            onChange={handleMediaUpload}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            className="hidden"
+          />
           <p className="absolute bottom-5 mt-4 bg-lava-red text-white p-2">Please upload content to display</p>
         </div>
       ) : (
