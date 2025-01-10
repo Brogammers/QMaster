@@ -1,12 +1,10 @@
 "use client";
 
 import { QueueModalProps } from "../../../../types";
-import { Layout } from "antd";
 import { useParams, usePathname } from "next/navigation";
-import Sidebar from "@/app/shared/Sidebar";
 import { useDispatch, useSelector } from 'react-redux';
-import { setEntityName } from "@/app/redux/entitySlice";
-import { RootState } from "@/app/redux/store";
+import { setEntity } from "@/store/features/entitySlice";
+import { RootState } from "@/store/store";
 import { useEffect } from 'react';
 
 export default function Entity({ children }: QueueModalProps) {
@@ -18,18 +16,15 @@ export default function Entity({ children }: QueueModalProps) {
 
   const formatPageName = (name: string) => {
     const formattedName = name.replace(/[^\w\s]/gi, " ");
-
-    const capitalizeWord = (str: string) =>
-      str.charAt(0).toUpperCase() + str.slice(1);
+    const capitalizeWord = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
     const capitalizedWords = formattedName.split(" ").map(capitalizeWord);
-
     return capitalizedWords.join(" ");
   };
 
   useEffect(() => {
     if (typeof entity === "string") {
       const formattedEntity = formatPageName(entity);
-      dispatch(setEntityName(formattedEntity));
+      dispatch(setEntity({ name: formattedEntity, id: null, type: null }));
     }
   }, [entity, dispatch]);
 
@@ -44,18 +39,19 @@ export default function Entity({ children }: QueueModalProps) {
   }
 
   return (
-    <Layout className="custom w-full min-h-screen overflow-x-hidden">
-      <Sidebar />
-      <div className="custom bg-coal-black">
-        <div className="container custom w-full text-white mx-4">
-          <div className="entity__row">
-            <h2 className="text-xl border-b-2 border-b-slight-slate-grey mb-4 py-3">
-              {entityName}&apos;s Coworking Space &gt; {page}
-            </h2>
-            {children}
-          </div>
-        </div>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">
+          <span className="text-baby-blue">{entityName}</span>
+          {page && (
+            <>
+              <span className="mx-2 text-slate-400">/</span>
+              <span>{page}</span>
+            </>
+          )}
+        </h2>
       </div>
-    </Layout>
+      {children}
+    </div>
   );
 }
