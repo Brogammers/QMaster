@@ -9,7 +9,9 @@ import {
   FaUsers, 
   FaCog,
   FaStore,
-  FaCalendarAlt
+  FaCalendarAlt,
+  FaMoon,
+  FaSun
 } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import QMasterLogo from "../../../../public/qmaster-logo.svg"
@@ -23,7 +25,12 @@ const menuItems = [
   { path: '/admin/settings', label: 'Settings', icon: FaCog },
 ];
 
-export default function AdminSidebar() {
+interface AdminSidebarProps {
+  isDarkMode: boolean;
+  setIsDarkMode: (value: boolean) => void;
+}
+
+export default function AdminSidebar({ isDarkMode, setIsDarkMode }: AdminSidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -85,6 +92,21 @@ export default function AdminSidebar() {
         })}
       </nav>
 
+      {/* Add before the bottom gradient overlay */}
+      <div className="absolute bottom-8 left-0 right-0 px-6">
+        <motion.button
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
+            bg-gradient-to-r from-concrete-turqouise/50 to-coal-black/50
+            border border-crystal-blue/20 text-crystal-blue"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          {isDarkMode ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
+          <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
+        </motion.button>
+      </div>
+      
       {/* Bottom gradient overlay */}
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-coal-black to-transparent pointer-events-none" />
     </div>
