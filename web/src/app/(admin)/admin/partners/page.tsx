@@ -33,7 +33,6 @@ export default function PartnersPage() {
       locations: [
         {
           id: 1,
-          name: 'Main Branch',
           city: 'Manhattan',
           stateOrProvince: 'New York',
           country: 'USA',
@@ -41,7 +40,6 @@ export default function PartnersPage() {
         },
         {
           id: 2,
-          name: 'Brooklyn Branch',
           city: 'Brooklyn',
           stateOrProvince: 'New York',
           country: 'USA',
@@ -90,16 +88,22 @@ export default function PartnersPage() {
 
   const filteredPartners = partners.filter(partner => {
     const searchLower = searchQuery.toLowerCase();
-    return (
+    
+    // Search in partner details
+    if (
       partner.name.toLowerCase().includes(searchLower) ||
       partner.category.toLowerCase().includes(searchLower) ||
-      partner.status.toLowerCase().includes(searchLower) ||
-      partner.locations.some(location => 
-        location.name.toLowerCase().includes(searchLower) ||
-        location.city.toLowerCase().includes(searchLower) ||
-        location.stateOrProvince.toLowerCase().includes(searchLower) ||
-        location.country.toLowerCase().includes(searchLower)
-      )
+      partner.status.toLowerCase().includes(searchLower)
+    ) {
+      return true;
+    }
+
+    // Search in locations
+    return partner.locations.some(location => 
+      location.city.toLowerCase().includes(searchLower) ||
+      location.stateOrProvince.toLowerCase().includes(searchLower) ||
+      location.country.toLowerCase().includes(searchLower) ||
+      location.googleMapsUrl.toLowerCase().includes(searchLower)
     );
   });
 
