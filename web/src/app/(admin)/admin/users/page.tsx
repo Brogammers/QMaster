@@ -94,7 +94,7 @@ export default function UsersPage() {
         </div>
       </div>
 
-      <div className={`${isDarkMode ? 'border-white/[0.05]' : 'border-slate-300'} border rounded-xl overflow-hidden backdrop-blur-sm`}>
+      <div className={`${isDarkMode ? 'border-y border-white/[0.05]' : 'border-y border-slate-300'} overflow-hidden backdrop-blur-sm`}>
         <div className={`p-4 border-b ${isDarkMode ? 'border-white/[0.05]' : 'border-slate-300'}`}>
           <div className="relative">
             <FaSearch className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDarkMode ? 'text-gray-400' : 'text-slate-400'}`} />
@@ -103,8 +103,8 @@ export default function UsersPage() {
               placeholder="Search users..."
               className={`w-full pl-10 pr-4 py-2 rounded-lg transition-colors duration-300
                 ${isDarkMode 
-                  ? 'border-white/10 bg-white/[0.02] text-white focus:border-crystal-blue' 
-                  : 'border-slate-300 bg-white text-slate-900 focus:border-crystal-blue'} 
+                  ? 'border-white/10 bg-white/[0.09] text-white focus:border-crystal-blue' 
+                  : 'border-slate-300 bg-white/[0.04] text-slate-900 focus:border-crystal-blue'} 
                 border focus:outline-none focus:ring-2 focus:ring-crystal-blue`}
             />
           </div>
@@ -122,7 +122,7 @@ export default function UsersPage() {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.id} className={`border-b ${isDarkMode ? 'border-white/10 hover:bg-white/[0.02]' : 'border-slate-300 hover:bg-slate-50/50'}`}>
+              <tr key={user.id} className={`border-b last:border-b-0 ${isDarkMode ? 'border-white/10 hover:bg-white/[0.02]' : 'border-slate-300 hover:bg-slate-50/50'}`}>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full ${isDarkMode ? 'bg-crystal-blue/20' : 'bg-crystal-blue/10'} flex items-center justify-center ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
