@@ -419,7 +419,7 @@ export default function Counter() {
                           text="+"
                           textSize="3xl"
                           textColor="white"
-                          buttonColor="coal-black"
+                          buttonColor="baby-blue"
                           borderRadius="xl"
                           width="32"
                           minWidth="56"
