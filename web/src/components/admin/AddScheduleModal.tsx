@@ -2,90 +2,82 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaTimes, FaPlus, FaMinus } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
+
+interface Company {
+  id: number;
+  name: string;
+  branches: Branch[];
+}
+
+interface Branch {
+  id: number;
+  city: string;
+  state: string;
+  country: string;
+  openHours: {
+    day: string;
+    open: string;
+    close: string;
+  }[];
+  takesHolidays: boolean;
+}
 
 interface AddScheduleModalProps {
   isOpen: boolean;
   onClose: () => void;
   isDarkMode: boolean;
+  companies: Company[];
   onSubmit: (data: {
-    name: string;
-    branches: {
-      city: string;
-      state: string;
-      country: string;
-      openHours: {
-        day: string;
-        open: string;
-        close: string;
-      }[];
-      takesHolidays: boolean;
-    }[];
+    companyId: number;
+    branchId: number;
+    holidays: { name: string; date: string }[];
   }) => void;
 }
 
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const HOLIDAYS = [
+  { name: "New Year's Day", date: "January 1" },
+  { name: "Good Friday", date: "Variable" },
+  { name: "Victoria Day", date: "Third Monday in May" },
+  { name: "Canada Day", date: "July 1" },
+  { name: "Labor Day", date: "First Monday in September" },
+  { name: "Thanksgiving Day", date: "Second Monday in October" },
+  { name: "Christmas Day", date: "December 25" },
+  { name: "Boxing Day", date: "December 26" }
+];
 
-export default function AddScheduleModal({ isOpen, onClose, isDarkMode, onSubmit }: AddScheduleModalProps) {
-  const [name, setName] = useState('');
-  const [branches, setBranches] = useState([{
-    city: '',
-    state: '',
-    country: '',
-    openHours: DAYS.map(day => ({ day, open: '09:00', close: '17:00' })),
-    takesHolidays: true
-  }]);
+export default function AddScheduleModal({ isOpen, onClose, isDarkMode, companies, onSubmit }: AddScheduleModalProps) {
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | ''>('');
+  const [selectedBranchId, setSelectedBranchId] = useState<number | ''>('');
+  const [selectedHolidays, setSelectedHolidays] = useState<{ name: string; date: string }[]>([]);
+
+  const selectedCompany = companies.find(c => c.id === selectedCompanyId);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({
-      name,
-      branches
+    if (selectedCompanyId && selectedBranchId) {
+      onSubmit({
+        companyId: selectedCompanyId,
+        branchId: selectedBranchId,
+        holidays: selectedHolidays
+      });
+      onClose();
+      // Reset form
+      setSelectedCompanyId('');
+      setSelectedBranchId('');
+      setSelectedHolidays([]);
+    }
+  };
+
+  const toggleHoliday = (holiday: { name: string; date: string }) => {
+    setSelectedHolidays(prev => {
+      const exists = prev.some(h => h.name === holiday.name);
+      if (exists) {
+        return prev.filter(h => h.name !== holiday.name);
+      } else {
+        return [...prev, holiday];
+      }
     });
-    onClose();
-    // Reset form
-    setName('');
-    setBranches([{
-      city: '',
-      state: '',
-      country: '',
-      openHours: DAYS.map(day => ({ day, open: '09:00', close: '17:00' })),
-      takesHolidays: true
-    }]);
-  };
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const words = e.target.value.split(' ');
-    const capitalizedWords = words.map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-    );
-    setName(capitalizedWords.join(' '));
-  };
-
-  const addBranch = () => {
-    setBranches([...branches, {
-      city: '',
-      state: '',
-      country: '',
-      openHours: DAYS.map(day => ({ day, open: '09:00', close: '17:00' })),
-      takesHolidays: true
-    }]);
-  };
-
-  const removeBranch = (index: number) => {
-    setBranches(branches.filter((_, i) => i !== index));
-  };
-
-  const updateBranch = (index: number, field: string, value: string | boolean) => {
-    const newBranches = [...branches];
-    newBranches[index] = { ...newBranches[index], [field]: value };
-    setBranches(newBranches);
-  };
-
-  const updateHours = (branchIndex: number, dayIndex: number, field: 'open' | 'close', value: string) => {
-    const newBranches = [...branches];
-    newBranches[branchIndex].openHours[dayIndex][field] = value;
-    setBranches(newBranches);
   };
 
   if (!isOpen) return null;
@@ -122,173 +114,92 @@ export default function AddScheduleModal({ isOpen, onClose, isDarkMode, onSubmit
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className={`block mb-2 text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
-              Company Name
+              Select Company
             </label>
-            <input
-              type="text"
-              value={name}
-              onChange={handleNameChange}
+            <select
+              value={selectedCompanyId}
+              onChange={(e) => {
+                setSelectedCompanyId(Number(e.target.value) || '');
+                setSelectedBranchId('');
+              }}
               className={`w-full px-4 py-2 rounded-lg border ${
                 isDarkMode 
                   ? 'bg-white/[0.02] border-white/[0.1] text-white' 
                   : 'bg-white border-slate-200 text-slate-900'
               } focus:outline-none focus:border-crystal-blue`}
               required
-            />
-          </div>
-
-          <div className="space-y-6">
-            {branches.map((branch, index) => (
-              <div 
-                key={index}
-                className={`p-4 rounded-lg border ${isDarkMode ? 'border-white/10' : 'border-slate-200'}`}
-              >
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className={`font-medium ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                    Branch {index + 1}
-                  </h3>
-                  {branches.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeBranch(index)}
-                      className="text-rose-400 hover:text-rose-500"
-                    >
-                      <FaMinus />
-                    </button>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-3 gap-4 mb-4">
-                  <div>
-                    <label className={`block mb-2 text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
-                      City
-                    </label>
-                    <input
-                      type="text"
-                      value={branch.city}
-                      onChange={(e) => updateBranch(index, 'city', e.target.value)}
-                      className={`w-full px-4 py-2 rounded-lg border ${
-                        isDarkMode 
-                          ? 'bg-white/[0.02] border-white/[0.1] text-white' 
-                          : 'bg-white border-slate-200 text-slate-900'
-                      } focus:outline-none focus:border-crystal-blue`}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className={`block mb-2 text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
-                      State/Province
-                    </label>
-                    <input
-                      type="text"
-                      value={branch.state}
-                      onChange={(e) => updateBranch(index, 'state', e.target.value)}
-                      className={`w-full px-4 py-2 rounded-lg border ${
-                        isDarkMode 
-                          ? 'bg-white/[0.02] border-white/[0.1] text-white' 
-                          : 'bg-white border-slate-200 text-slate-900'
-                      } focus:outline-none focus:border-crystal-blue`}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className={`block mb-2 text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
-                      Country
-                    </label>
-                    <input
-                      type="text"
-                      value={branch.country}
-                      onChange={(e) => updateBranch(index, 'country', e.target.value)}
-                      className={`w-full px-4 py-2 rounded-lg border ${
-                        isDarkMode 
-                          ? 'bg-white/[0.02] border-white/[0.1] text-white' 
-                          : 'bg-white border-slate-200 text-slate-900'
-                      } focus:outline-none focus:border-crystal-blue`}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <label className={`block mb-2 text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
-                    Operating Hours
-                  </label>
-                  <div className={`rounded-lg border ${isDarkMode ? 'border-white/10' : 'border-slate-200'}`}>
-                    <table className="w-full">
-                      <thead>
-                        <tr className={isDarkMode ? 'border-b border-white/10' : 'border-b border-slate-200'}>
-                          <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Day</th>
-                          <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Open</th>
-                          <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Close</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {branch.openHours.map((hours, dayIndex) => (
-                          <tr 
-                            key={hours.day}
-                            className={dayIndex !== 0 ? isDarkMode ? 'border-t border-white/10' : 'border-t border-slate-200' : ''}
-                          >
-                            <td className={`px-4 py-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{hours.day}</td>
-                            <td className="px-4 py-2">
-                              <input
-                                type="time"
-                                value={hours.open}
-                                onChange={(e) => updateHours(index, dayIndex, 'open', e.target.value)}
-                                className={`px-2 py-1 rounded border ${
-                                  isDarkMode 
-                                    ? 'bg-white/[0.02] border-white/[0.1] text-white' 
-                                    : 'bg-white border-slate-200 text-slate-900'
-                                } focus:outline-none focus:border-crystal-blue`}
-                              />
-                            </td>
-                            <td className="px-4 py-2">
-                              <input
-                                type="time"
-                                value={hours.close}
-                                onChange={(e) => updateHours(index, dayIndex, 'close', e.target.value)}
-                                className={`px-2 py-1 rounded border ${
-                                  isDarkMode 
-                                    ? 'bg-white/[0.02] border-white/[0.1] text-white' 
-                                    : 'bg-white border-slate-200 text-slate-900'
-                                } focus:outline-none focus:border-crystal-blue`}
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={branch.takesHolidays}
-                      onChange={(e) => updateBranch(index, 'takesHolidays', e.target.checked)}
-                      className="rounded border-gray-300 text-crystal-blue focus:ring-crystal-blue"
-                    />
-                    <span className={`text-sm ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
-                      Takes Holidays
-                    </span>
-                  </label>
-                </div>
-              </div>
-            ))}
-
-            <button
-              type="button"
-              onClick={addBranch}
-              className={`w-full px-4 py-2 rounded-lg border ${
-                isDarkMode
-                  ? 'border-white/[0.1] text-white/70 hover:bg-white/[0.05]'
-                  : 'border-slate-200 text-slate-600 hover:bg-slate-50'
-              } flex items-center justify-center gap-2`}
             >
-              <FaPlus />
-              <span>Add Branch</span>
-            </button>
+              <option value="">Select a company</option>
+              {companies.map(company => (
+                <option key={company.id} value={company.id}>
+                  {company.name}
+                </option>
+              ))}
+            </select>
           </div>
+
+          {selectedCompany && (
+            <div>
+              <label className={`block mb-2 text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
+                Select Branch
+              </label>
+              <select
+                value={selectedBranchId}
+                onChange={(e) => setSelectedBranchId(Number(e.target.value) || '')}
+                className={`w-full px-4 py-2 rounded-lg border ${
+                  isDarkMode 
+                    ? 'bg-white/[0.02] border-white/[0.1] text-white' 
+                    : 'bg-white border-slate-200 text-slate-900'
+                } focus:outline-none focus:border-crystal-blue`}
+                required
+              >
+                <option value="">Select a branch</option>
+                {selectedCompany.branches.map(branch => (
+                  <option key={branch.id} value={branch.id}>
+                    {branch.city}, {branch.state}, {branch.country}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {selectedBranchId && (
+            <div>
+              <label className={`block mb-2 text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
+                Select Holidays
+              </label>
+              <div className={`rounded-lg border ${isDarkMode ? 'border-white/10' : 'border-slate-200'}`}>
+                <table className="w-full">
+                  <thead>
+                    <tr className={isDarkMode ? 'border-b border-white/10' : 'border-b border-slate-200'}>
+                      <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Holiday</th>
+                      <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Date</th>
+                      <th className={`px-4 py-2 text-center text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Select</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {HOLIDAYS.map((holiday, index) => (
+                      <tr 
+                        key={holiday.name}
+                        className={index !== 0 ? isDarkMode ? 'border-t border-white/10' : 'border-t border-slate-200' : ''}
+                      >
+                        <td className={`px-4 py-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{holiday.name}</td>
+                        <td className={`px-4 py-2 ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>{holiday.date}</td>
+                        <td className="px-4 py-2 text-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedHolidays.some(h => h.name === holiday.name)}
+                            onChange={() => toggleHoliday(holiday)}
+                            className="rounded border-gray-300 text-crystal-blue focus:ring-crystal-blue"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
           <div className="flex justify-end gap-3">
             <button

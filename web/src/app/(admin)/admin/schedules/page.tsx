@@ -85,16 +85,39 @@ export default function SchedulesPage() {
     }
   ]);
 
-  const handleAddSchedule = (data: any) => {
-    const newCompany: Company = {
-      id: companies.length + 1,
-      name: data.name,
-      branches: data.branches.map((branch: any, index: number) => ({
-        id: Math.max(...companies.flatMap(c => c.branches.map(b => b.id)), 0) + index + 1,
-        ...branch
-      }))
-    };
-    setCompanies(prev => [...prev, newCompany]);
+  const handleAddSchedule = (data: {
+    companyId: number;
+    branchId: number;
+    holidays: { name: string; date: string }[];
+  }) => {
+    const company = companies.find(c => c.id === data.companyId);
+    const branch = company?.branches.find(b => b.id === data.branchId);
+    
+    if (company && branch) {
+      // Update the branch's holidays
+      const updatedBranches = company.branches.map(b => {
+        if (b.id === branch.id) {
+          return {
+            ...b,
+            takesHolidays: data.holidays.length > 0
+          };
+        }
+        return b;
+      });
+
+      // Update the company
+      const updatedCompanies = companies.map(c => {
+        if (c.id === company.id) {
+          return {
+            ...c,
+            branches: updatedBranches
+          };
+        }
+        return c;
+      });
+
+      setCompanies(updatedCompanies);
+    }
   };
 
   return (
@@ -176,7 +199,7 @@ export default function SchedulesPage() {
                                 {branch.takesHolidays ? 'Takes Holidays' : 'Open on Holidays'}
                               </span>
                             </div>
-                            <div className={`rounded-lg ${isDarkMode ? 'border border-white/10' : 'border border-slate-200'}`}>
+                            <div className={`rounded-lg border ${isDarkMode ? 'border-white/10' : 'border-slate-200'}`}>
                               <table className="w-full">
                                 <thead>
                                   <tr className={isDarkMode ? 'border-b border-white/10' : 'border-b border-slate-200'}>
@@ -226,6 +249,7 @@ export default function SchedulesPage() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         isDarkMode={isDarkMode}
+        companies={companies}
         onSubmit={handleAddSchedule}
       />
     </div>
