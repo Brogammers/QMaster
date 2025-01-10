@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useAuth, AuthProvider } from '@/lib/auth/AuthContext';
 import AdminSidebar from '@/app/components/admin/AdminSidebar';
-import LoadingScreen from '@/app/components/LoadingScreen';
+import SplashScreen from '@/app/shared/SplashScreen';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -28,12 +28,14 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
 
   // Show loading state while checking auth
   if (isLoading) {
-    return <LoadingScreen />;
+    return <SplashScreen />;
   }
 
   const handleDarkModeToggle = (value: boolean) => {
     setIsDarkMode(value);
     localStorage.setItem('qmaster-dark-mode', value.toString());
+    // Dispatch a custom event for other components to listen to
+    window.dispatchEvent(new CustomEvent('darkModeChange', { detail: value }));
   };
 
   return (
