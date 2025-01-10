@@ -34,7 +34,7 @@ public class Queues {
     @Column(nullable = false, unique = true)
     private String name;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "app_user_id")
+    @JoinColumn(nullable = false, name = "business_user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private BusinessUser creator;
     @Column(nullable = false)
@@ -46,7 +46,7 @@ public class Queues {
     private int rating;
     private int maxQueueSize = 100;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 

@@ -1,8 +1,8 @@
 package com.que.que.User.BusinessUser;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,8 +27,8 @@ public class BusinessCategory {
     private String name;
     private String description;
 
-    @ManyToMany(cascade = CascadeType.DETACH, mappedBy = "businessCategories")
-    private List<BusinessUser> businessUsers;
+    @ManyToMany
+    private Set<BusinessUser> businessUsers = new HashSet<>();
 
     public BusinessCategory(String name) {
         this.name = name;

@@ -51,7 +51,8 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll())
 				.httpBasic(Customizer.withDefaults())
 				.sessionManagement(
-						(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+						(sessionManagement) -> sessionManagement
+								.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();

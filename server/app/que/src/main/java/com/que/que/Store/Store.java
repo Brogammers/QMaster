@@ -1,6 +1,9 @@
 package com.que.que.Store;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.que.que.Queue.Queues;
 import com.que.que.User.BusinessUser.BusinessUser;
@@ -39,32 +42,32 @@ public class Store {
     @Column(nullable = false)
     private String location;
 
-    @ManyToMany(mappedBy = "store")
-    private List<OpeningHours> openingHours;
+    @ManyToMany
+    private Set<OpeningHours> openingHourss = new HashSet<>();
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "business_user_id", nullable = false)
     private BusinessUser businessUser;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "store")
-    private List<Queues> queues;
+    private List<Queues> queues = new ArrayList<>();
 
     public Store(String name, String location, BusinessUser businessUser) {
         this.name = name;
         this.location = location;
         this.description = "";
-        this.businessUser = businessUser;
+        // this.businessUser = businessUser;
     }
 
     public Store(String name, String location, String description, BusinessUser businessUser) {
         this.name = name;
         this.location = location;
         this.description = description;
-        this.businessUser = businessUser;
+        // this.businessUser = businessUser;
     }
 
     public void addOpeningHours(OpeningHours openingHours) {
-        this.openingHours.add(openingHours);
+        this.openingHourss.add(openingHours);
     }
 
     public void addQueue(Queues queue) {

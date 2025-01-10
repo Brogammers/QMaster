@@ -2,7 +2,10 @@ package com.que.que.User.BusinessUser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Store.Store;
@@ -38,10 +41,10 @@ public class BusinessUser extends User {
     private int queueId;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "businessUser")
-    private List<Store> stores;
+    private List<Store> stores = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.DETACH, mappedBy = "businessUsers")
-    private List<BusinessCategory> businessCategories;
+    @ManyToMany
+    private Set<BusinessCategory> businessCategories = new HashSet<>();
 
     public BusinessUser(
             UserRole appUserRole,

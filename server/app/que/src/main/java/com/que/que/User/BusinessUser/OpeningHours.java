@@ -1,6 +1,7 @@
 package com.que.que.User.BusinessUser;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.que.que.Store.Store;
 
@@ -35,12 +36,16 @@ public class OpeningHours {
     @Column(nullable = false)
     private String closeTime;
 
-    @ManyToMany(mappedBy = "openingHours")
-    private List<Store> store;
+    @ManyToMany
+    private Set<Store> store = new HashSet<>();
 
     public OpeningHours(String day, String openTime, String closeTime) {
         this.day = day;
         this.openTime = openTime;
         this.closeTime = closeTime;
+    }
+
+    public void addStore(Store store) {
+        this.store.add(store);
     }
 }
