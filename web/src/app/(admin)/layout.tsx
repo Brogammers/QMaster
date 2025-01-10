@@ -9,13 +9,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  useEffect(() => {
+    // Get initial dark mode preference from localStorage
+    const savedDarkMode = localStorage.getItem('qmaster-dark-mode');
+    setIsDarkMode(savedDarkMode === 'true');
+  }, []);
+
+  const toggleDarkMode = (value: boolean) => {
+    setIsDarkMode(value);
+    localStorage.setItem('qmaster-dark-mode', value.toString());
+  };
+
   return (
     <div className={`flex h-screen overflow-hidden transition-colors duration-300
-      ${isDarkMode 
-        ? 'bg-[#0A0A0A] text-white' 
-        : 'bg-white text-slate-900'}`}
+      ${isDarkMode ? 'bg-[#0A0A0A] text-white' : 'bg-white text-slate-900'}`}
     >
-      <AdminSidebar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+      <AdminSidebar isDarkMode={isDarkMode} setIsDarkMode={toggleDarkMode} />
       <motion.main 
         className={`flex-1 overflow-y-auto p-8 relative
           ${isDarkMode 
