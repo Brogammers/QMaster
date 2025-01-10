@@ -91,54 +91,6 @@ export default function LoginForm({ setIsLoading }: any) {
         }
         setIsLoading(false);
       });
-
-    // if (response.status === 200 && response.data.token) {
-    //   console.log("Login successful:", response.data);
-    //   // Store token in cookie/localStorage if needed
-    //   document.cookie = `jwt=${response.data.token}; path=/;`;
-    //   router.push('/qmaster/counter');
-
-    //   // Necessary CORS headers to allow requests from localhost:3000
-    //   axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-    //   axios.defaults.headers.common["Content-Type"] = "application/json";
-
-    //   axios.interceptors.request.use(
-    //     (config) => {
-    //       config.headers["Authorization"] = `Bearer ${response.data.token}`;
-    //       return config;
-    //     },
-    //     (error) => {
-    //       return Promise.reject(error);
-    //     }
-    //   );
-    // } else {
-    //   // Handle case where the response is not as expected
-    //   setErrorMessage("Invalid login credentials");
-    //   setIsLoading(false);
-    // }
-    // // Type assertion to access properties of the error object
-    // if (axios.isAxiosError(error)) {
-    //   // The request was made and the server responded with a status code
-    //   // that falls out of the range of 2xx
-    //   if (error.response) {
-    //     console.error("Login error:", error.response.data);
-    //     setErrorMessage(
-    //       error.response.data.message || "Invalid login credentials"
-    //     );
-    //   } else if (error.request) {
-    //     // The request was made but no response was received
-    //     console.error("Login error:", error.request);
-    //     setErrorMessage("No response from server");
-    //   } else {
-    //     // Something happened in setting up the request that triggered an Error
-    //     console.error("Login error:", error.message);
-    //     setErrorMessage("Login error");
-    //   }
-    // } else {
-    //   console.error("Unexpected error:", error);
-    //   setErrorMessage("Unexpected error occurred");
-    // }
-    // setIsLoading(false);
   };
 
   return (
@@ -187,7 +139,7 @@ export default function LoginForm({ setIsLoading }: any) {
               <button
                 onClick={handlePasswordVisibility}
                 type="button"
-                className="ml-2"
+                className="w-11 ml-2 flex justify-center items-center"
                 >
                 <FontAwesomeIcon size="lg" color="#7D7D7D" icon={isPasswordVisible ? faEyeSlash : faEye} />
               </button>
