@@ -1,76 +1,185 @@
 'use client'
 
-import { useState } from 'react';
-import { FaCalendarAlt, FaClock, FaBuilding } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { FaClock, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
-interface Schedule {
-  id: number;
-  partnerName: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  status: 'upcoming' | 'in-progress' | 'completed';
+interface OpenHours {
+  day: string;
+  open: string;
+  close: string;
 }
 
+interface Branch {
+  id: number;
+  city: string;
+  state: string;
+  country: string;
+  openHours: OpenHours[];
+  takesHolidays: boolean;
+}
+
+interface Company {
+  id: number;
+  name: string;
+  branches: Branch[];
+}
+
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
 export default function SchedulesPage() {
-  const [schedules] = useState<Schedule[]>([
+  const [isDarkMode] = useState(false);
+  const [expandedCompany, setExpandedCompany] = useState<number | null>(null);
+  const [companies] = useState<Company[]>([
     {
       id: 1,
-      partnerName: 'City Hospital',
-      date: '2024-02-20',
-      startTime: '09:00 AM',
-      endTime: '05:00 PM',
-      status: 'upcoming',
+      name: 'Healthcare Center',
+      branches: [
+        {
+          id: 1,
+          city: 'Toronto',
+          state: 'Ontario',
+          country: 'Canada',
+          openHours: DAYS.map(day => ({
+            day,
+            open: '09:00',
+            close: day === 'Sunday' ? '13:00' : '17:00'
+          })),
+          takesHolidays: true
+        },
+        {
+          id: 2,
+          city: 'Vancouver',
+          state: 'British Columbia',
+          country: 'Canada',
+          openHours: DAYS.map(day => ({
+            day,
+            open: '08:30',
+            close: day === 'Sunday' ? '14:00' : '18:00'
+          })),
+          takesHolidays: true
+        }
+      ]
     },
-    // Add more schedules
+    {
+      id: 2,
+      name: 'Tech Solutions Inc',
+      branches: [
+        {
+          id: 3,
+          city: 'San Francisco',
+          state: 'California',
+          country: 'USA',
+          openHours: DAYS.map(day => ({
+            day,
+            open: day === 'Saturday' || day === 'Sunday' ? 'Closed' : '08:00',
+            close: day === 'Saturday' || day === 'Sunday' ? 'Closed' : '16:30'
+          })),
+          takesHolidays: true
+        }
+      ]
+    }
   ]);
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Schedules</h1>
-        <div className="flex gap-4">
-          <button className="flex items-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90">
-            <FaCalendarAlt /> Add Schedule
-          </button>
-        </div>
+        <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Schedules</h1>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {schedules.map((schedule) => (
-          <div key={schedule.id} className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 hover:bg-white/[0.04] hover:border-white/[0.08] transition-all">
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-full bg-crystal-blue/10 text-crystal-blue">
-                  <FaBuilding />
-                </div>
-                <div>
-                  <h3 className="font-semibold">{schedule.partnerName}</h3>
-                  <p className="text-sm text-white/50">{schedule.date}</p>
-                </div>
-              </div>
-              <span className={`px-3 py-1 rounded-full text-sm ${
-                schedule.status === 'upcoming' 
-                  ? 'bg-amber-500/10 text-amber-300'
-                  : schedule.status === 'in-progress'
-                  ? 'bg-crystal-blue/10 text-crystal-blue'
-                  : 'bg-emerald-500/10 text-emerald-300'
-              }`}>
-                {schedule.status}
-              </span>
-            </div>
-            <div className="flex items-center gap-6 text-white/70">
-              <div className="flex items-center gap-2">
-                <FaClock />
-                <span>{schedule.startTime}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaClock />
-                <span>{schedule.endTime}</span>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className={`rounded-lg ${isDarkMode ? 'border-t border-b border-white/10' : 'border-t border-b border-slate-200'}`}>
+        <table className="w-full">
+          <thead>
+            <tr>
+              <th className={`px-6 py-4 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Company</th>
+              <th className={`px-6 py-4 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Branches</th>
+              <th className={`px-6 py-4 text-right text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {companies.map((company, index) => (
+              <React.Fragment key={company.id}>
+                <tr 
+                  onClick={() => setExpandedCompany(expandedCompany === company.id ? null : company.id)}
+                  className={`cursor-pointer transition-colors ${
+                    isDarkMode 
+                      ? 'hover:bg-white/[0.02]' 
+                      : 'hover:bg-slate-50'
+                  } ${index !== 0 ? isDarkMode ? 'border-t border-white/10' : 'border-t border-slate-200' : ''}`}
+                >
+                  <td className={`px-6 py-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                    <div className="flex items-center gap-2">
+                      <FaClock className="text-crystal-blue" />
+                      <span>{company.name}</span>
+                    </div>
+                  </td>
+                  <td className={`px-6 py-4 ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
+                    {company.branches.length} {company.branches.length === 1 ? 'branch' : 'branches'}
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    {expandedCompany === company.id ? <FaChevronUp /> : <FaChevronDown />}
+                  </td>
+                </tr>
+                {expandedCompany === company.id && (
+                  <tr className={isDarkMode ? 'border-t border-white/10' : 'border-t border-slate-200'}>
+                    <td colSpan={3} className="px-6 py-4">
+                      <div className="space-y-6">
+                        {company.branches.map((branch, branchIndex) => (
+                          <div key={branch.id} className={`space-y-4 ${
+                            branchIndex !== 0 ? 'pt-6 border-t border-dashed ' + (isDarkMode ? 'border-white/10' : 'border-slate-200') : ''
+                          }`}>
+                            <div className="flex justify-between items-center">
+                              <h3 className={`font-medium ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                {branch.city}, {branch.state}, {branch.country}
+                              </h3>
+                              <span className={`px-3 py-1 rounded-full text-sm ${
+                                branch.takesHolidays
+                                  ? isDarkMode 
+                                    ? 'bg-amber-500/10 text-amber-300' 
+                                    : 'bg-amber-500/20 text-amber-700'
+                                  : isDarkMode
+                                    ? 'bg-emerald-500/10 text-emerald-300'
+                                    : 'bg-emerald-500/20 text-emerald-700'
+                              }`}>
+                                {branch.takesHolidays ? 'Takes Holidays' : 'Open on Holidays'}
+                              </span>
+                            </div>
+                            <div className={`rounded-lg ${isDarkMode ? 'border border-white/10' : 'border border-slate-200'}`}>
+                              <table className="w-full">
+                                <thead>
+                                  <tr className={isDarkMode ? 'border-b border-white/10' : 'border-b border-slate-200'}>
+                                    <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Day</th>
+                                    <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Open</th>
+                                    <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Close</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {branch.openHours.map((hours, hourIndex) => (
+                                    <tr 
+                                      key={hours.day}
+                                      className={hourIndex !== 0 ? isDarkMode ? 'border-t border-white/10' : 'border-t border-slate-200' : ''}
+                                    >
+                                      <td className={`px-4 py-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{hours.day}</td>
+                                      <td className={`px-4 py-2 ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
+                                        {hours.open}
+                                      </td>
+                                      <td className={`px-4 py-2 ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>
+                                        {hours.close}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
