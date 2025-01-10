@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth/AuthContext';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { FaUsers, FaSearch, FaFilter, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { deleteUser, restoreUser } from '@/store/features/userSlice';
 import { toast } from 'react-hot-toast';
@@ -25,8 +25,8 @@ interface User {
 
 export default function UsersPage() {
   const { admin } = useAuth();
-  const dispatch = useDispatch();
-  const users = useSelector((state: RootState) => state.users.users);
+  const dispatch = useAppDispatch();
+  const users = useAppSelector((state: RootState) => state.users.users);
   const [isDarkMode] = useState(() => localStorage.getItem('qmaster-dark-mode') === 'true');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   

@@ -73,7 +73,7 @@ const userSlice = createSlice({
         ...action.payload,
         id: Math.max(...state.users.map(u => u.id)) + 1,
         lastActive: 'Just now',
-        status: 'online',
+        status: 'online' as const,
       };
       state.users.push(newUser);
     },

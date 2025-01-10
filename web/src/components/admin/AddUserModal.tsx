@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@/store/hooks';
 import { addUser } from '@/store/features/userSlice';
 
 interface AddUserModalProps {
@@ -12,7 +12,7 @@ interface AddUserModalProps {
 }
 
 export default function AddUserModal({ isOpen, onClose, isDarkMode }: AddUserModalProps) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
