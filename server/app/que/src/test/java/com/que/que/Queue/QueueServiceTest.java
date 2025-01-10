@@ -11,9 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.google.zxing.WriterException;
 import com.que.que.QRcode.QRCodeService;
 import com.que.que.User.SubscriptionPlans;
+import com.que.que.User.UserRole;
 import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.AppUser.AppUserRepository;
-import com.que.que.User.AppUser.AppUserRole;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserRepository;
 
@@ -64,7 +64,7 @@ public class QueueServiceTest {
 
         // Set values using setters
         appUser.setId(1L);
-        appUser.setAppUserRole(AppUserRole.ADMIN);
+        appUser.setUserRole(UserRole.ADMIN);
         appUser.setFirstName("John");
         appUser.setLastName("Doe");
         appUser.setUserName("johndoe"); // Fix undefined method error

@@ -5,8 +5,8 @@ import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.Security.PasswordValidator;
 import com.que.que.User.SubscriptionPlans;
+import com.que.que.User.UserRole;
 import com.que.que.User.AppUser.AppUser;
-import com.que.que.User.AppUser.AppUserRole;
 import com.que.que.User.AppUser.AppUserService;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserService;
@@ -54,7 +54,7 @@ public class RegistrationService {
      */
     String token = appUserService.signUpUser(
         new AppUser(
-            AppUserRole.USER,
+            UserRole.USER,
             request.getFirstName(),
             request.getLastName(),
             request.getUsername(),
@@ -102,7 +102,7 @@ public class RegistrationService {
      */
     String token = businessUserService.signUpUser(
         new BusinessUser(
-            AppUserRole.USER,
+            UserRole.USER,
             request.getFirstName(),
             request.getLastName(),
             request.getUsername(),

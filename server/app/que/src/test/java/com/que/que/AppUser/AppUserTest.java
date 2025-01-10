@@ -5,8 +5,9 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import org.junit.jupiter.api.Timeout;
+
+import com.que.que.User.UserRole;
 import com.que.que.User.AppUser.AppUser;
-import com.que.que.User.AppUser.AppUserRole;
 
 import static org.junit.Assert.*;
 import java.util.Collection;
@@ -29,7 +30,7 @@ public class AppUserTest {
 
         // Set values using setters
         appUser.setId(1L);
-        appUser.setAppUserRole(AppUserRole.ADMIN);
+        appUser.setUserRole(UserRole.ADMIN);
         appUser.setFirstName("John");
         appUser.setLastName("Doe");
         appUser.setUserName("johndoe"); // Fix undefined method error
@@ -46,7 +47,7 @@ public class AppUserTest {
 
         // Verify values using getters
         assertEquals(1L, appUser.getId().longValue());
-        assertEquals(AppUserRole.ADMIN, appUser.getAppUserRole());
+        assertEquals(UserRole.ADMIN, appUser.getUserRole());
         assertEquals("John", appUser.getFirstName());
         assertEquals("Doe", appUser.getLastName());
         assertEquals("johndoe", appUser.getUsername());
@@ -70,14 +71,14 @@ public class AppUserTest {
     public void testGetAuthorities() {
         // Create a sample AppUser object
         AppUser appUser = new AppUser();
-        appUser.setAppUserRole(AppUserRole.USER);
+        appUser.setUserRole(UserRole.USER);
 
         // Get authorities
         Collection<? extends GrantedAuthority> authorities = appUser.getAuthorities();
 
         // Verify authorities
         assertEquals(1, authorities.size());
-        assertTrue(authorities.contains(new SimpleGrantedAuthority(AppUserRole.USER.name())));
+        assertTrue(authorities.contains(new SimpleGrantedAuthority(UserRole.USER.name())));
     }
 
     /**
