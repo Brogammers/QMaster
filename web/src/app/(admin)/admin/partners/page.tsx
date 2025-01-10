@@ -7,7 +7,6 @@ import AddPartnerModal from '@/components/admin/AddPartnerModal';
 
 interface Location {
   id: number;
-  name: string;
   city: string;
   stateOrProvince: string;
   country: string;
@@ -200,7 +199,6 @@ export default function PartnersPage() {
                           <table className="w-full">
                             <thead>
                               <tr className={`${isDarkMode ? 'bg-black/20' : 'bg-slate-100'}`}>
-                                <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Branch Name</th>
                                 <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>City</th>
                                 <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>State/Province</th>
                                 <th className={`px-4 py-2 text-left text-sm font-medium ${isDarkMode ? 'text-white/70' : 'text-slate-600'}`}>Country</th>
@@ -210,7 +208,6 @@ export default function PartnersPage() {
                             <tbody>
                               {partner.locations.map((location) => (
                                 <tr key={location.id} className={`border-t ${isDarkMode ? 'border-white/5' : 'border-slate-200'}`}>
-                                  <td className={`px-4 py-2 text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{location.name}</td>
                                   <td className={`px-4 py-2 text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{location.city}</td>
                                   <td className={`px-4 py-2 text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{location.stateOrProvince}</td>
                                   <td className={`px-4 py-2 text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{location.country}</td>

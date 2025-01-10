@@ -6,7 +6,6 @@ import { FaPlus, FaMinus } from 'react-icons/fa';
 
 interface Location {
   id: number;
-  name: string;
   city: string;
   stateOrProvince: string;
   country: string;
@@ -46,7 +45,6 @@ export default function AddPartnerModal({
     category: 'Healthcare',
     status: 'active' as const,
     locations: [{
-      name: '',
       city: '',
       stateOrProvince: '',
       country: '',
@@ -63,7 +61,6 @@ export default function AddPartnerModal({
         category: 'Healthcare',
         status: 'active',
         locations: [{
-          name: '',
           city: '',
           stateOrProvince: '',
           country: '',
@@ -97,7 +94,6 @@ export default function AddPartnerModal({
     setFormData(prev => ({
       ...prev,
       locations: [...prev.locations, {
-        name: '',
         city: '',
         stateOrProvince: '',
         country: '',
@@ -126,16 +122,13 @@ export default function AddPartnerModal({
       )
     }));
 
-    // Update location name and Google Maps URL when city or state changes
+    // Update Google Maps URL when city, state, or country changes
     if (field === 'city' || field === 'stateOrProvince' || field === 'country') {
       const location = formData.locations[index];
       const updatedLocation = {
         ...location,
         [field]: capitalizedValue,
       };
-      
-      // Set the name as a combination of city and state/province
-      const locationName = `${updatedLocation.city} ${updatedLocation.stateOrProvince}`.trim();
       
       // Generate Google Maps URL with all location components
       const searchQuery = encodeURIComponent(
@@ -147,7 +140,6 @@ export default function AddPartnerModal({
         locations: prev.locations.map((loc, i) => 
           i === index ? { 
             ...updatedLocation,
-            name: locationName,
             googleMapsUrl: `https://maps.google.com/?q=${searchQuery}`
           } : loc
         )
