@@ -13,7 +13,7 @@ interface User {
   id: number;
   name: string;
   email: string;
-  role: 'Admin' | 'Project Manager' | 'Backend Lead';
+  role: 'Admin' | 'Project Manager' | 'Backend Developer' | 'Frontend Developer' | 'Full Stack Developer' | 'PR Manager' | 'UI/UX Designer' | 'QA Engineer' | 'DevOps Engineer' | 'Marketing Manager';
   lastActive: string;
   status: 'online' | 'offline' | 'away';
   permissions: {
@@ -28,9 +28,25 @@ export default function UsersPage() {
   const dispatch = useAppDispatch();
   const users = useAppSelector((state: RootState) => state.users.users);
   const [isDarkMode] = useState(() => localStorage.getItem('qmaster-dark-mode') === 'true');
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
   
   const isAdmin = admin?.email === 'hatemthedev@gmail.com';
+
+  const handleEditUser = (user: User) => {
+    setEditingUser(user);
+    setIsModalOpen(true);
+  };
+
+  const handleAddUser = () => {
+    setEditingUser(undefined);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingUser(undefined);
+  };
 
   const handleDeleteUser = (userId: number) => {
     dispatch(deleteUser(userId));
@@ -66,7 +82,7 @@ export default function UsersPage() {
         <h1 className="text-3xl font-bold">Users</h1>
         <div className="flex items-center gap-4">
           <button 
-            onClick={() => setIsAddModalOpen(true)}
+            onClick={handleAddUser}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
               ${!isAdmin 
                 ? 'opacity-50 cursor-not-allowed bg-gray-500' 
@@ -139,7 +155,10 @@ export default function UsersPage() {
                 {isAdmin && (
                   <td className="px-6 py-4">
                     <div className="flex gap-2">
-                      <button className="p-2 hover:bg-white/[0.05] rounded-lg">
+                      <button 
+                        onClick={() => handleEditUser(user)}
+                        className="p-2 hover:bg-white/[0.05] rounded-lg"
+                      >
                         <FaEdit className="text-crystal-blue w-4 h-4" />
                       </button>
                       <button 
@@ -158,9 +177,10 @@ export default function UsersPage() {
       </div>
 
       <AddUserModal 
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
         isDarkMode={isDarkMode}
+        editUser={editingUser}
       />
     </div>
   );

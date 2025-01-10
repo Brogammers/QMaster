@@ -1,15 +1,9 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppDispatch } from '@/store/hooks';
-import { addUser } from '@/store/features/userSlice';
-
-interface AddUserModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  isDarkMode: boolean;
-}
+import { addUser, updateUser } from '@/store/features/userSlice';
 
 const ROLES = [
   'Project Manager',
@@ -23,13 +17,50 @@ const ROLES = [
   'Marketing Manager'
 ] as const;
 
-export default function AddUserModal({ isOpen, onClose, isDarkMode }: AddUserModalProps) {
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: 'Admin' | 'Project Manager' | 'Backend Developer' | 'Frontend Developer' | 'Full Stack Developer' | 'PR Manager' | 'UI/UX Designer' | 'QA Engineer' | 'DevOps Engineer' | 'Marketing Manager';
+  lastActive: string;
+  status: 'online' | 'offline' | 'away';
+  permissions: {
+    canAddUsers: boolean;
+    canEditUsers: boolean;
+    canDeleteUsers: boolean;
+  };
+}
+
+interface AddUserModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  isDarkMode: boolean;
+  editUser?: User;
+}
+
+export default function AddUserModal({ isOpen, onClose, isDarkMode, editUser }: AddUserModalProps) {
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    role: 'Project Manager' as typeof ROLES[number],
+    role: 'Project Manager' as User['role'],
   });
+
+  useEffect(() => {
+    if (editUser) {
+      setFormData({
+        name: editUser.name,
+        email: editUser.email,
+        role: editUser.role,
+      });
+    } else {
+      setFormData({
+        name: '',
+        email: '',
+        role: 'Project Manager',
+      });
+    }
+  }, [editUser, isOpen]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const names = e.target.value.split(' ');
@@ -41,14 +72,21 @@ export default function AddUserModal({ isOpen, onClose, isDarkMode }: AddUserMod
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(addUser({
-      ...formData,
-      permissions: {
-        canAddUsers: false,
-        canEditUsers: false,
-        canDeleteUsers: false,
-      },
-    }));
+    if (editUser) {
+      dispatch(updateUser({
+        id: editUser.id,
+        ...formData,
+      }));
+    } else {
+      dispatch(addUser({
+        ...formData,
+        permissions: {
+          canAddUsers: false,
+          canEditUsers: false,
+          canDeleteUsers: false,
+        },
+      }));
+    }
     onClose();
   };
 
@@ -75,7 +113,7 @@ export default function AddUserModal({ isOpen, onClose, isDarkMode }: AddUserMod
               rounded-xl p-6 shadow-2xl backdrop-blur-sm`}
           >
             <h2 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-              Add New User
+              {editUser ? 'Edit User' : 'Add New User'}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -118,7 +156,7 @@ export default function AddUserModal({ isOpen, onClose, isDarkMode }: AddUserMod
                 </label>
                 <select
                   value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value as typeof ROLES[number] })}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value as User['role'] })}
                   className={`w-full px-4 py-2 rounded-lg transition-colors duration-300
                     ${isDarkMode 
                       ? 'bg-black/20 border border-white/10 text-white focus:border-crystal-blue' 
@@ -127,6 +165,9 @@ export default function AddUserModal({ isOpen, onClose, isDarkMode }: AddUserMod
                   {ROLES.map((role) => (
                     <option key={role} value={role}>{role}</option>
                   ))}
+                  {editUser?.role === 'Admin' && (
+                    <option value="Admin">Admin</option>
+                  )}
                 </select>
               </div>
               <div className="flex justify-end gap-3 mt-6">
@@ -144,7 +185,7 @@ export default function AddUserModal({ isOpen, onClose, isDarkMode }: AddUserMod
                   type="submit"
                   className="px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90 transition-colors duration-300"
                 >
-                  Add User
+                  {editUser ? 'Save Changes' : 'Add User'}
                 </button>
               </div>
             </form>
