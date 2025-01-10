@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { FaBuilding, FaPlus, FaSearch, FaChevronDown, FaChevronUp, FaMapMarkerAlt } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
+import AddPartnerModal from '@/components/admin/AddPartnerModal';
 
 interface Location {
   id: number;
@@ -23,7 +24,7 @@ interface Partner {
 }
 
 export default function PartnersPage() {
-  const [partners] = useState<Partner[]>([
+  const [partners, setPartners] = useState<Partner[]>([
     {
       id: 1,
       name: 'City Hospital',
@@ -53,16 +54,64 @@ export default function PartnersPage() {
   ]);
   const [isDarkMode] = useState(false);
   const [expandedPartnerId, setExpandedPartnerId] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const togglePartnerExpansion = (partnerId: number) => {
     setExpandedPartnerId(expandedPartnerId === partnerId ? null : partnerId);
   };
 
+  const handleAddPartner = (partnerData: Omit<Partner, 'id' | 'joinedDate'>) => {
+    const newPartner: Partner = {
+      ...partnerData,
+      id: partners.length + 1,
+      joinedDate: new Date().toISOString().split('T')[0],
+      locations: partnerData.locations.map((location, index) => ({
+        ...location,
+        id: index + 1
+      }))
+    };
+    setPartners(prev => [...prev, newPartner]);
+  };
+
+  const handleAddLocation = (partnerId: number, locationData: Omit<Location, 'id'>) => {
+    setPartners(prev => prev.map(partner => {
+      if (partner.id === partnerId) {
+        return {
+          ...partner,
+          locations: [...partner.locations, {
+            ...locationData,
+            id: partner.locations.length + 1
+          }]
+        };
+      }
+      return partner;
+    }));
+  };
+
+  const filteredPartners = partners.filter(partner => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      partner.name.toLowerCase().includes(searchLower) ||
+      partner.category.toLowerCase().includes(searchLower) ||
+      partner.status.toLowerCase().includes(searchLower) ||
+      partner.locations.some(location => 
+        location.name.toLowerCase().includes(searchLower) ||
+        location.city.toLowerCase().includes(searchLower) ||
+        location.stateOrProvince.toLowerCase().includes(searchLower) ||
+        location.country.toLowerCase().includes(searchLower)
+      )
+    );
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Partners</h1>
-        <button className="flex items-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90">
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90"
+        >
           <FaPlus /> Add Partner
         </button>
       </div>
@@ -73,6 +122,8 @@ export default function PartnersPage() {
             <FaSearch className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDarkMode ? 'text-gray-400' : 'text-slate-400'}`} />
             <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search partners..."
               className={`w-full pl-10 pr-4 py-2 rounded-lg transition-colors duration-300
                 ${isDarkMode 
@@ -94,7 +145,7 @@ export default function PartnersPage() {
             </tr>
           </thead>
           <tbody>
-            {partners.map((partner) => (
+            {filteredPartners.map((partner) => (
               <>
                 <tr 
                   key={partner.id} 
@@ -188,6 +239,15 @@ export default function PartnersPage() {
           </tbody>
         </table>
       </div>
+
+      <AddPartnerModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        isDarkMode={isDarkMode}
+        existingPartners={partners}
+        onSubmit={handleAddPartner}
+        onAddLocation={handleAddLocation}
+      />
     </div>
   );
 } 
