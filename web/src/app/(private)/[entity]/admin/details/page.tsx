@@ -9,7 +9,7 @@ import VisitorData from "@/app/components/VisitorData";
 import QueueModal from "@/app/shared/QueueModal";
 
 export default function Details() {
-  const [selectedItem, setSelectedItem] = useState("Details");
+  const [selectedItem, setSelectedItem] = useState<string>("Details");
 
   const handleItemSelected = (item: string): void => {
     setSelectedItem(item);

@@ -4,9 +4,9 @@ import { Button, Modal } from "antd";
 import NewQueueForm from './NewQueueForm';
 
 export default function CreateNewQueueButton({onAddQueue}:any){
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
+  const [open, setOpen] = useState<boolean>(false);
+  const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+  const [modalText, setModalText] = useState<string>('Content of the modal');
 
   const showModal = () => {
     setOpen(true);

@@ -3,6 +3,7 @@ package com.que.que.Queue;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -41,11 +42,11 @@ public class QueueController {
 
     @PutMapping(path = "/user")
     @Secured("USER")
-    public ResponseEntity<Object> enqueue(@RequestBody QueueRequest request) {
+    public ResponseEntity<Object> enqueue(@Param("userId") long userId, @Param("queueName") String queueName) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
-            queueService.enqueueUser(request.getId(), request.getName());
+            queueService.enqueueUser(userId, queueName);
             body.put("message", "Added user!");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());

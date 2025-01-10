@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
+import { Provider } from "react-redux"
+import { store } from "./redux/store";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,9 +18,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <SessionProvider session={session}>
-        <body className={inter.className}>{children}</body>
-      </SessionProvider>
+      <Provider store={store}>
+        <SessionProvider session={session}>
+          <body className={inter.className}>{children}</body>
+        </SessionProvider>
+      </Provider>
     </html>
   );
 }

@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import org.springframework.stereotype.Service;
 
 import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.BusinessUser.BusinessUser;
 
 @Service
 public class JwtUtil {
@@ -73,6 +74,11 @@ public class JwtUtil {
   }
 
   public boolean validateToken(String token, AppUser userDetails) {
+    String email = getUsername(token);
+    return (email.equals(userDetails.getEmail()) && !isTokenExpired(token));
+  }
+
+  public boolean validateToken(String token, BusinessUser userDetails) {
     String email = getUsername(token);
     return (email.equals(userDetails.getEmail()) && !isTokenExpired(token));
   }

@@ -1,91 +1,87 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Formik, Field, Form } from "formik";
 import QueueModal from "@/app/shared/QueueModal";
 import Entity from "../../page";
 import jsPDF from "jspdf";
+import axios from "axios";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from "@/app/redux/store";
+import QRCode from "qrcode.react";
 
 export default function SharingInfo() {
-  const [url, setUrl] = useState("");
-  const [qrCode, setQrCode] = useState("");
+  const [url, setUrl] = useState<string>("");
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
+  const qrCodeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // For testing purposes
+    // Replace with actual backend calls
     const fakeUrl = "https://book.qmaster.app/places/gok0IwQodWYLcLxTF9hS";
-    const fakeQrCodeUrl = "https://via.placeholder.com/300"; // Placeholder image for QR code
 
+    // Set URL and trigger QR code generation
     setUrl(fakeUrl);
-    setQrCode(fakeQrCodeUrl); // For generating QR code in the PDF
   }, []);
 
   const handlePreview = () => {
-    if (qrCode) {
+    if (qrCodeDataUrl) {
       const doc = new jsPDF();
-  
-      // A4 page dimensions in points (595.28 x 841.89)
+
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
-  
-      // QR Code dimensions
-      const qrCodeHeight = pageHeight / 2; // Half the page height
-      const qrCodeWidth = qrCodeHeight; // Maintain aspect ratio (square)
-  
-      // QR Code position (centered)
+
+      const qrCodeHeight = pageHeight / 2;
+      const qrCodeWidth = qrCodeHeight;
+
       const xOffset = (pageWidth - qrCodeWidth) / 2;
-      const yOffset = (pageHeight - qrCodeHeight) / 2 + 20; // Adding some padding for the text
-  
-      // Adding text above the QR code
+      const yOffset = (pageHeight - qrCodeHeight) / 2 + 20;
+
       doc.setFontSize(18);
-      doc.text("Please Scan to Queue Up", pageWidth / 2, yOffset - 10, { align: "center" });
-  
-      // Adding the QR code image
-      doc.addImage(qrCode, "JPEG", xOffset, yOffset, qrCodeWidth, qrCodeHeight);
-  
-      // Convert the PDF to a Blob and create a URL for the Blob
+      doc.text("Please Scan to Queue Up", pageWidth / 2, yOffset - 10, {
+        align: "center",
+      });
+
+      doc.addImage(qrCodeDataUrl, "PNG", xOffset, yOffset, qrCodeWidth, qrCodeHeight);
+
       const pdfBlob = doc.output("blob");
       const pdfUrl = URL.createObjectURL(pdfBlob);
-  
-      // Open the PDF in a new tab using the Blob URL
+
       window.open(pdfUrl, "_blank");
     } else {
-      console.error("QR code URL not available");
+      console.error("QR code data URL is not available");
     }
   };
 
   const handleExportPDF = () => {
-    if (qrCode) {
+    if (qrCodeDataUrl) {
       const doc = new jsPDF();
 
-      // A4 page dimensions in points (595.28 x 841.89)
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
 
-      // QR Code dimensions
-      const qrCodeHeight = pageHeight / 2; // Half the page height
-      const qrCodeWidth = qrCodeHeight; // Maintain aspect ratio (square)
+      const qrCodeHeight = pageHeight / 2;
+      const qrCodeWidth = qrCodeHeight;
 
-      // QR Code position (centered)
       const xOffset = (pageWidth - qrCodeWidth) / 2;
-      const yOffset = (pageHeight - qrCodeHeight) / 2 + 20; // Adding some padding for the text
+      const yOffset = (pageHeight - qrCodeHeight) / 2 + 20;
 
-      // Adding text above the QR code
       doc.setFontSize(18);
-      doc.text("Please Scan to Queue Up", pageWidth / 2, yOffset - 10, { align: "center" });
+      doc.text("Please Scan to Queue Up", pageWidth / 2, yOffset - 10, {
+        align: "center",
+      });
 
-      // Adding the QR code image
-      doc.addImage(qrCode, "JPEG", xOffset, yOffset, qrCodeWidth, qrCodeHeight);
+      doc.addImage(qrCodeDataUrl, "PNG", xOffset, yOffset, qrCodeWidth, qrCodeHeight);
 
-      // Save the PDF
       doc.save("QRCode.pdf");
     } else {
-      console.error("QR code URL not available");
+      console.error("QR code data URL is not available");
     }
   };
 
   const handleCopyURL = () => {
     if (url) {
-      navigator.clipboard.writeText(url)
+      navigator.clipboard
+        .writeText(url)
         .then(() => {
           console.log("URL copied to clipboard");
         })
@@ -97,9 +93,23 @@ export default function SharingInfo() {
     }
   };
 
+  const generateQrCode = () => {
+    if (qrCodeRef.current) {
+      const canvas = qrCodeRef.current.querySelector("canvas");
+      if (canvas) {
+        const dataUrl = canvas.toDataURL("image/png");
+        setQrCodeDataUrl(dataUrl);
+      }
+    }
+  };
+
+  useEffect(() => {
+    generateQrCode();
+  }, [url]);
+
   return (
     <Entity>
-      <QueueModal 
+      <QueueModal
         title="Sharing Info"
         description="This QR-code is automatically generated for this Place"
       >
@@ -111,8 +121,7 @@ export default function SharingInfo() {
         >
           <Form>
             <label htmlFor="url" className="text-md font-bold">
-              Copy this link or download a QR code to share it anywhere, in any
-              way!
+              Copy this link or download a QR code to share it anywhere, in any way!
             </label>
             <div className="w-full my-4 flex items-center gap-4">
               <Field
@@ -135,8 +144,7 @@ export default function SharingInfo() {
         </Formik>
 
         <span className="text-md font-bold">
-          Download and print this document and place it where your customers can
-          easily see it.
+          Download and print this document and place it where your customers can easily see it.
         </span>
         <div className="my-4 flex space-x-4">
           <button
@@ -151,6 +159,11 @@ export default function SharingInfo() {
           >
             Download QR Code
           </button>
+        </div>
+
+        {/* QR code rendered here */}
+        <div ref={qrCodeRef} style={{ display: "none" }}>
+          <QRCode value={url} size={200} />
         </div>
       </QueueModal>
     </Entity>
