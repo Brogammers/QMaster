@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import useWindowSize from "../../../../../hooks/useWindowSize";
 import TicketNumber from "@/app/shared/TicketNumber";
 import Image from "next/image";
-import TeamImg from "../../../../../public/team.jpg";
 import DisplayImg from "../../../../../public/display.svg";
 import QueueModal from "@/app/shared/QueueModal";
 import Entity from "../page";
@@ -32,14 +31,17 @@ export default function Display() {
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [queuedPersons, setQueuedPersons] = useState<QueuedPerson[]>(queuedPersonsData);
   const { width, height } = useWindowSize();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && fullscreen) setFullscreen(false);
+      if (event.key === "Escape") {
+        document.exitFullscreen().catch(console.error);
+      }
     };
 
     const handleFullscreenChange = () => {
-      setFullscreen(!document.fullscreenElement);
+      setFullscreen(!!document.fullscreenElement);
     };
 
     document.addEventListener("keydown", handleKeyPress);
@@ -49,15 +51,11 @@ export default function Display() {
       document.removeEventListener("keydown", handleKeyPress);
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
-  }, [fullscreen]);
+  }, []);
 
   const handleFullscreen = async () => {
     try {
-      if (!document.fullscreenElement) {
-        await document.documentElement.requestFullscreen();
-      } else {
-        await document.exitFullscreen();
-      }
+      await document.documentElement.requestFullscreen();
     } catch (err) {
       console.error("Error attempting to enable fullscreen:", err);
     }
@@ -80,7 +78,7 @@ export default function Display() {
   }, [fullscreen]);
 
   return (
-    <>
+    <div ref={containerRef}>
       {fullscreen ? (
         <div className="fixed inset-0 w-screen h-screen bg-gradient-to-r from-baby-blue to-ocean-blue overflow-hidden">
           <div className="flex h-full">
@@ -128,6 +126,6 @@ export default function Display() {
           </QueueModal>
         </Entity>
       )}
-    </>
+    </div>
   );
 }
