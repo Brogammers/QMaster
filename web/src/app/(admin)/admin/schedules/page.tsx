@@ -1,7 +1,9 @@
 'use client'
 
 import React, { useState } from 'react';
-import { FaClock, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaClock, FaChevronDown, FaChevronUp, FaPlus } from 'react-icons/fa';
+import HolidaysModal from '@/components/admin/HolidaysModal';
+import AddScheduleModal from '@/components/admin/AddScheduleModal';
 
 interface OpenHours {
   day: string;
@@ -29,7 +31,10 @@ const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 export default function SchedulesPage() {
   const [isDarkMode] = useState(false);
   const [expandedCompany, setExpandedCompany] = useState<number | null>(null);
-  const [companies] = useState<Company[]>([
+  const [isHolidaysModalOpen, setIsHolidaysModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedBranch, setSelectedBranch] = useState<{ name: string; city: string }>({ name: '', city: '' });
+  const [companies, setCompanies] = useState<Company[]>([
     {
       id: 1,
       name: 'Healthcare Center',
@@ -80,10 +85,28 @@ export default function SchedulesPage() {
     }
   ]);
 
+  const handleAddSchedule = (data: any) => {
+    const newCompany: Company = {
+      id: companies.length + 1,
+      name: data.name,
+      branches: data.branches.map((branch: any, index: number) => ({
+        id: Math.max(...companies.flatMap(c => c.branches.map(b => b.id)), 0) + index + 1,
+        ...branch
+      }))
+    };
+    setCompanies(prev => [...prev, newCompany]);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Schedules</h1>
+        <button 
+          onClick={() => setIsAddModalOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90"
+        >
+          <FaPlus /> Add Schedule
+        </button>
       </div>
 
       <div className={`rounded-lg ${isDarkMode ? 'border-t border-b border-white/10' : 'border-t border-b border-slate-200'}`}>
@@ -131,15 +154,25 @@ export default function SchedulesPage() {
                               <h3 className={`font-medium ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                                 {branch.city}, {branch.state}, {branch.country}
                               </h3>
-                              <span className={`px-3 py-1 rounded-full text-sm ${
-                                branch.takesHolidays
-                                  ? isDarkMode 
-                                    ? 'bg-amber-500/10 text-amber-300' 
-                                    : 'bg-amber-500/20 text-amber-700'
-                                  : isDarkMode
-                                    ? 'bg-emerald-500/10 text-emerald-300'
-                                    : 'bg-emerald-500/20 text-emerald-700'
-                              }`}>
+                              <span 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedBranch({ 
+                                    name: company.name,
+                                    city: branch.city
+                                  });
+                                  setIsHolidaysModalOpen(true);
+                                }}
+                                className={`px-3 py-1 rounded-full text-sm cursor-pointer ${
+                                  branch.takesHolidays
+                                    ? isDarkMode 
+                                      ? 'bg-amber-500/10 text-amber-300 hover:bg-amber-500/20' 
+                                      : 'bg-amber-500/20 text-amber-700 hover:bg-amber-500/30'
+                                    : isDarkMode
+                                      ? 'bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20'
+                                      : 'bg-emerald-500/20 text-emerald-700 hover:bg-emerald-500/30'
+                                }`}
+                              >
                                 {branch.takesHolidays ? 'Takes Holidays' : 'Open on Holidays'}
                               </span>
                             </div>
@@ -181,6 +214,20 @@ export default function SchedulesPage() {
           </tbody>
         </table>
       </div>
+
+      <HolidaysModal
+        isOpen={isHolidaysModalOpen}
+        onClose={() => setIsHolidaysModalOpen(false)}
+        isDarkMode={isDarkMode}
+        branchName={`${selectedBranch.name} - ${selectedBranch.city}`}
+      />
+
+      <AddScheduleModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        isDarkMode={isDarkMode}
+        onSubmit={handleAddSchedule}
+      />
     </div>
   );
 } 
