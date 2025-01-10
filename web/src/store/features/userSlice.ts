@@ -4,7 +4,7 @@ interface User {
   id: number;
   name: string;
   email: string;
-  role: 'Admin' | 'Project Manager' | 'Backend Lead';
+  role: 'Admin' | 'Project Manager' | 'Backend Lead' | 'Frontend Developer' | 'PR Manager' | 'UI/UX Designer' | 'QA Engineer' | 'DevOps Engineer' | 'Marketing Manager';
   lastActive: string;
   status: 'online' | 'offline' | 'away';
   permissions: {

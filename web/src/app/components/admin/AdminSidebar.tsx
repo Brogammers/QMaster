@@ -10,13 +10,12 @@ import {
   FaCog,
   FaStore,
   FaCalendarAlt,
-  FaMoon,
-  FaSun,
   FaSignOutAlt
 } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import QMasterLogo from "../../../../public/qmaster-logo.svg"
 import { useAuth } from '@/lib/auth/AuthContext';
+import DarkModeToggle from '@/components/admin/DarkModeToggle';
 
 const menuItems = [
   { path: '/admin/dashboard', label: 'Dashboard', icon: FaChartLine },
@@ -29,10 +28,9 @@ const menuItems = [
 
 interface AdminSidebarProps {
   isDarkMode: boolean;
-  setIsDarkMode: (value: boolean) => void;
 }
 
-export default function AdminSidebar({ isDarkMode, setIsDarkMode }: AdminSidebarProps) {
+export default function AdminSidebar({ isDarkMode }: AdminSidebarProps) {
   const pathname = usePathname();
   const { logout } = useAuth();
 

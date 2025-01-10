@@ -65,21 +65,6 @@ export default function UsersPage() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Users</h1>
         <div className="flex items-center gap-4">
-          {/* Dark Mode Toggle */}
-          <button
-            onClick={() => {
-              const newMode = !isDarkMode;
-              localStorage.setItem('qmaster-dark-mode', newMode.toString());
-              window.location.reload(); // Simple way to apply the change
-            }}
-            className={`p-2 rounded-lg transition-all duration-300
-              ${isDarkMode 
-                ? 'bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05]' 
-                : 'bg-white shadow-lg shadow-black/5 ring-1 ring-black/5 hover:bg-gray-50'}`}
-          >
-            {isDarkMode ? '🌙' : '☀️'}
-          </button>
-
           <button 
             onClick={() => setIsAddModalOpen(true)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors

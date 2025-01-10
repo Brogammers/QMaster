@@ -1,14 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import AdminSidebar from '@/app/components/admin/AdminSidebar';
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { AuthProvider, useAuth } from '@/lib/auth/AuthContext';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import LoadingScreen from '@/components/shared/LoadingScreen';
+import { useAuth, AuthProvider } from '@/lib/auth/AuthContext';
+import AdminSidebar from '@/app/components/admin/AdminSidebar';
+import LoadingScreen from '@/components/LoadingScreen';
+import DarkModeToggle from '@/components/admin/DarkModeToggle';
 
-function AdminLayoutContent({ children }: { children: React.ReactNode }) {
+interface AdminLayoutProps {
+  children: React.ReactNode;
+}
+
+function AdminLayoutContent({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const { admin, isLoading } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -28,7 +32,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     return <LoadingScreen />;
   }
 
-  const toggleDarkMode = (value: boolean) => {
+  const handleDarkModeToggle = (value: boolean) => {
     setIsDarkMode(value);
     localStorage.setItem('qmaster-dark-mode', value.toString());
   };
@@ -37,7 +41,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     <div className={`flex h-screen overflow-hidden transition-colors duration-300
       ${isDarkMode ? 'bg-[#0A0A0A] text-white' : 'bg-white text-slate-900'}`}
     >
-      <AdminSidebar isDarkMode={isDarkMode} setIsDarkMode={toggleDarkMode} />
+      <AdminSidebar isDarkMode={isDarkMode} />
       <motion.main 
         className={`flex-1 overflow-y-auto p-8 relative
           ${isDarkMode 
@@ -90,14 +94,10 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <AuthProvider>
-      <ProtectedRoute>
-        <AdminLayoutContent>
-          {children}
-        </AdminLayoutContent>
-      </ProtectedRoute>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
     </AuthProvider>
   );
 } 
