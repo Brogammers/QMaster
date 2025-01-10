@@ -95,17 +95,13 @@ export default function AdminSidebar({ isDarkMode, onDarkModeToggle }: AdminSide
       </nav>
 
       {/* Bottom actions */}
-      <div className="absolute bottom-20 left-0 right-0 px-6 space-y-4">
-        {/* Dark Mode Toggle */}
-        <div className="flex items-center gap-3 px-4 py-2">
-          <DarkModeToggle 
-            isDarkMode={isDarkMode} 
-            onToggle={onDarkModeToggle}
-            showLabel={true}
-          />
-        </div>
+      <div className="absolute bottom-20 left-0 right-0 px-6 space-y-3">
+        <DarkModeToggle 
+          isDarkMode={isDarkMode} 
+          onToggle={onDarkModeToggle}
+          showLabel={true}
+        />
 
-        {/* Sign Out Button */}
         <motion.button
           onClick={logout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
