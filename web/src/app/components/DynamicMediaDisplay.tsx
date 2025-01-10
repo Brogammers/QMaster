@@ -70,14 +70,14 @@ export default function DynamicMediaDisplay() {
               />
             </label>
           </button>
-          <p className="mt-4 bg-lava-red text-white p-2 rounded">Please upload content to display</p>
+          <p className="absolute bottom-2 bg-lava-red text-white p-2 rounded">Please upload content to display</p>
         </div>
       ) : (
         <div className="relative w-full h-full flex items-center justify-center">
           {mediaList.map((media, index) =>
             index === currentIndex ? (
               media.type === "image" ? (
-                <div key={media.id} className="w-full h-full flex items-center justify-center p-8">
+                <div key={media.id} className="relative w-full h-full flex items-center justify-center p-8">
                   <Image
                     src={media.src}
                     alt="User Uploaded Content"
@@ -100,18 +100,6 @@ export default function DynamicMediaDisplay() {
               )
             ) : null
           )}
-          <button className="absolute top-4 right-4 border-0 border-baby-blue bg-transparent px-2 py-1 rounded-xl">
-            <label className="cursor-pointer double__color--btn text-white px-3 py-1 rounded-lg font-bold text-lg">
-              Change Media
-              <input
-                type="file"
-                accept="image/*,video/*"
-                multiple
-                onChange={handleMediaUpload}
-                className="hidden"
-              />
-            </label>
-          </button>
         </div>
       )}
     </div>
