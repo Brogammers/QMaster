@@ -2,6 +2,8 @@ package com.que.que.User.BusinessUser;
 
 import java.util.List;
 
+import com.que.que.Queue.Queues;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,6 +43,9 @@ public class Store {
     @JoinColumn(name = "business_user_id")
     private BusinessUser businessUser;
 
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "store")
+    private List<Queues> queues;
+
     public Store(String name, String location) {
         this.name = name;
         this.location = location;
@@ -51,5 +56,13 @@ public class Store {
         this.name = name;
         this.location = location;
         this.description = description;
+    }
+
+    public void addOpeningHours(OpeningHours openingHours) {
+        this.openingHours.add(openingHours);
+    }
+
+    public void addQueue(Queues queue) {
+        this.queues.add(queue);
     }
 }

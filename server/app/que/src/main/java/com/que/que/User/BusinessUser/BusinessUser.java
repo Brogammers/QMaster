@@ -71,4 +71,8 @@ public class BusinessUser extends User {
         return true;
     }
 
+    public void addStore(Store store) {
+        this.stores.add(store);
+    }
+
 }
