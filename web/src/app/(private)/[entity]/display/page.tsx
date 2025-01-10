@@ -14,7 +14,6 @@ import { QueuedPerson } from "../../../../../types";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Sample queued persons data
 const queuedPersonsData = [
   { id: 1, ticketNumber: "C-123", counter: "counter 1" },
   { id: 2, ticketNumber: "C-124", counter: "counter 6" },
@@ -76,22 +75,26 @@ export default function Display() {
   return (
     <>
       {fullscreen ? (
-        <div className=" bg-gradient-to-r from-baby-blue to-ocean-blue h-screen w-full flex justify-between overflow-hidden">
-          <DynamicMediaDisplay />
-          <div className="scrollContainer w-1/4 bg-ocean-blue flex flex-col">
-            {queuedPersons.map((person) => (
-              <TicketNumber
-                key={person.id}
-                bgColor="ocean-blue"
-                textColor="white"
-                fontSize="3xl"
-                borderRadius="none"
-                width="full"
-                maxWidth="16"
-                ticketNum={person.ticketNumber}
-                queue={person.counter}
-              />
-            ))}
+        <div className="fixed inset-0 bg-gradient-to-r from-baby-blue to-ocean-blue flex overflow-hidden">
+          <div className="flex-1 h-screen">
+            <DynamicMediaDisplay />
+          </div>
+          <div className="w-1/4 bg-ocean-blue h-screen">
+            <div className="scrollContainer flex flex-col">
+              {queuedPersons.map((person) => (
+                <TicketNumber
+                  key={person.id}
+                  bgColor="ocean-blue"
+                  textColor="white"
+                  fontSize="3xl"
+                  borderRadius="none"
+                  width="full"
+                  maxWidth="16"
+                  ticketNum={person.ticketNumber}
+                  queue={person.counter}
+                />
+              ))}
+            </div>
           </div>
         </div>
       ) : (

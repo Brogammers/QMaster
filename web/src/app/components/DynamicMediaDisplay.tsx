@@ -20,7 +20,7 @@ export default function DynamicMediaDisplay() {
         newMediaList.push({ id: index, type: fileType, src });
       });
       setMediaList(newMediaList);
-      setCurrentIndex(0); 
+      setCurrentIndex(0);
     }
   };
 
@@ -55,7 +55,7 @@ export default function DynamicMediaDisplay() {
   }, [mediaList, currentIndex]);
 
   return (
-    <div className="relative h-full w-full flex justify-center items-center">
+    <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-ocean-blue bg-opacity-20">
       {mediaList.length === 0 ? (
         <div className="flex flex-col items-center">
           <button className="border-0 border-baby-blue bg-transparent px-2 py-3 rounded-xl animate-pulse">
@@ -70,33 +70,49 @@ export default function DynamicMediaDisplay() {
               />
             </label>
           </button>
-          <p className="absolute bottom-5 mt-4 bg-lava-red text-white p-2">Please upload content to display</p>
+          <p className="mt-4 bg-lava-red text-white p-2 rounded">Please upload content to display</p>
         </div>
       ) : (
-        mediaList.map((media, index) =>
-          index === currentIndex ? (
-            media.type === "image" ? (
-              <Image
-                key={media.id}
-                src={media.src}
-                alt="User Uploaded Content"
-                className="h-screen w-full object-contain py-8"
-                width={width}
-                height={height}
-                style={{ maxWidth: "100%", maxHeight: "100%" }}
+        <div className="relative w-full h-full flex items-center justify-center">
+          {mediaList.map((media, index) =>
+            index === currentIndex ? (
+              media.type === "image" ? (
+                <div key={media.id} className="w-full h-full flex items-center justify-center p-8">
+                  <Image
+                    src={media.src}
+                    alt="User Uploaded Content"
+                    width={width}
+                    height={height}
+                    className="max-w-full max-h-full object-contain"
+                    style={{ width: 'auto', height: 'auto' }}
+                  />
+                </div>
+              ) : (
+                <div key={media.id} className="w-full h-full flex items-center justify-center p-8">
+                  <video
+                    ref={videoRef}
+                    src={media.src}
+                    className="max-w-full max-h-full object-contain"
+                    autoPlay
+                    muted
+                  />
+                </div>
+              )
+            ) : null
+          )}
+          <button className="absolute top-4 right-4 border-0 border-baby-blue bg-transparent px-2 py-1 rounded-xl">
+            <label className="cursor-pointer double__color--btn text-white px-3 py-1 rounded-lg font-bold text-lg">
+              Change Media
+              <input
+                type="file"
+                accept="image/*,video/*"
+                multiple
+                onChange={handleMediaUpload}
+                className="hidden"
               />
-            ) : (
-              <video
-                key={media.id}
-                ref={videoRef}
-                src={media.src}
-                className="h-screen w-full object-contain"
-                autoPlay
-                muted
-              />
-            )
-          ) : null
-        )
+            </label>
+          </button>
+        </div>
       )}
     </div>
   );
