@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
@@ -10,6 +11,8 @@ import {
   FaStore,
   FaCalendarAlt
 } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import QMasterLogo from "../../../../public/qmaster-logo.svg"
 
 const menuItems = [
   { path: '/admin/dashboard', label: 'Dashboard', icon: FaChartLine },
@@ -24,30 +27,66 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="w-64 bg-ocean-blue text-white h-screen">
-      <div className="p-6">
-        <h1 className="text-2xl font-bold">QMaster Admin</h1>
+    <div className="w-64 bg-gradient-to-b from-concrete-turqouise to-coal-black text-white h-screen relative overflow-hidden">
+      {/* Animated background effect */}
+      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+      
+      {/* Logo area */}
+      <div className="relative p-6 border-b border-crystal-blue/20 backdrop-blur-sm">
+        <div className="flex items-center gap-3">
+          <Image
+            src={QMasterLogo}
+            alt="QMaster Logo"
+            width={40}
+            height={40}
+            className="w-10 h-10"
+          />
+          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-crystal-blue to-baby-blue">
+            QMaster
+          </h1>
+        </div>
       </div>
-      <nav className="mt-6">
+
+      {/* Navigation */}
+      <nav className="relative mt-6 space-y-1 px-3">
         {menuItems.map((item) => {
+          const isActive = pathname === item.path;
           const Icon = item.icon;
+
           return (
-            <Link
-              key={item.path}
-              href={item.path}
-              className={`
-                flex items-center gap-3 px-6 py-3 text-sm
-                ${pathname === item.path 
-                  ? 'bg-baby-blue text-white' 
-                  : 'text-gray-200 hover:bg-baby-blue/50'}
-              `}
-            >
-              <Icon className="w-5 h-5" />
-              {item.label}
+            <Link key={item.path} href={item.path}>
+              <motion.div
+                className={`
+                  flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer
+                  transition-all duration-200 group relative
+                  ${isActive ? 'text-crystal-blue' : 'text-off-white hover:text-crystal-blue'}
+                `}
+                whileHover={{ x: 4 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                {isActive && (
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-concrete-turqouise/50 to-coal-black/50 rounded-xl border border-crystal-blue/20"
+                    layoutId="activeTab"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <div className="relative flex items-center gap-3">
+                  <Icon className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110
+                    ${isActive ? 'text-crystal-blue' : ''}`} 
+                  />
+                  <span className={`font-medium ${isActive ? 'text-crystal-blue' : ''}`}>
+                    {item.label}
+                  </span>
+                </div>
+              </motion.div>
             </Link>
           );
         })}
       </nav>
+
+      {/* Bottom gradient overlay */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-coal-black to-transparent pointer-events-none" />
     </div>
   );
 } 
