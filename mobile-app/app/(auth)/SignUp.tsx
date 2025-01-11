@@ -241,9 +241,7 @@ export default function SignUp() {
         <SplashScreen />
       ) : (
         <ImageBackground source={background} style={styles.container}>
-          <Link href="/Onboarding" style={styles.returnButton}>
-            <Return size={36} color="white" />
-          </Link>
+          <Return href="/Onboarding" size={36} color="white" />
           <StatusBar
             translucent
             backgroundColor="rgba(000, 000, 000, 0.5)"

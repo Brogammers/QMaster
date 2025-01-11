@@ -6,6 +6,7 @@ import Category from '@/shared/components/Category';
 import Return from '@/shared/components/Return';
 import { AllCategories as CategoryList } from '@/constants';
 import i18n from '@/i18n';
+import { Link } from 'expo-router';
 
 interface CategoryProps {
   title: string;
@@ -22,7 +23,7 @@ export default function AllCategories() {
   return (
     <SafeAreaView className="flex-1 bg-off-white">
       <View className="flex-row items-center p-4">
-        <Return size={24} color="black" />
+        <Return href="/" size={36} color="white" />
         <Text className="text-2xl font-bold">
           {i18n.t('allCategories')}
         </Text>

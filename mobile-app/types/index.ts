@@ -61,6 +61,7 @@ export interface PaginatorProps {
 }
 
 export interface ReturnButtonProps {
+  href: string;
   size: number;
   color: string;
   backgroundColor?: string;
