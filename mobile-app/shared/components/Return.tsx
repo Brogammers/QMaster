@@ -12,7 +12,7 @@ export default function Return({
   style,
 }: ReturnButtonProps) {
   return (
-    <Link href={`${href}`} style={styles.returnButton}>
+    <Link href={href} style={styles.returnButton}>
       <TouchableOpacity style={[styles.button, { backgroundColor, borderRadius: size / 2 }, style]}>
         <LeftArrow size={size} color={color} />
       </TouchableOpacity>
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 60,
     left: 18,
+    zIndex: 1000,
     transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
   },
 });

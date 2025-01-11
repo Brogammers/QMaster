@@ -1,3 +1,4 @@
+import { Href } from "expo-router";
 import {
   Animated,
   ImageSourcePropType,
@@ -61,7 +62,7 @@ export interface PaginatorProps {
 }
 
 export interface ReturnButtonProps {
-  href: string;
+  href: Href<string>;
   size: number;
   color: string;
   backgroundColor?: string;
