@@ -1,6 +1,6 @@
 # QMaster - Enterprise Queue Management System
 
-![QMaster Logo](public/qmaster-logo.svg)
+![QMaster Logo](/web/public/FooterLogo.svg)
 
 **Modern Queue Management for Modern Businesses**
 
@@ -93,6 +93,30 @@ QMaster provides a comprehensive SaaS platform that:
 ## 🏗 System Architecture
 
 ![System Architecture](docs/assets/architecture.png)
+
+```text
+[Client Layer]
+   │
+   ├─[Web Portal]
+   │
+   └─[Mobile App]
+      │
+      ▼
+[API Gateway]
+      │
+      ├────────────┬─────────────┐
+      │            │             │
+      ▼            ▼             ▼
+[Auth Service] [Queue Service] [Notification Service]
+      │            │             │
+      │            │             ├─>[SMS Provider]
+      │            │             │
+      │            │             └─>[Email Service]
+      └────────────┴─────────────┐
+                   │
+                   ▼
+             [Database]
+```
 
 > **Note**: If you're viewing the source code, the system follows this architecture:
 > - Client Layer connects to Web Portal and Mobile App
