@@ -389,3 +389,14 @@ DISPLAY
   position: relative;
   z-index: 1;
 }
+
+.modal__positioning {
+  position: absolute;
+  left: 25%;
+  top: 50%;
+  transform: translate(-50%, 50%);
+  margin: 0;
+  transform-origin: center;
+  transform-box: fill-box;
+  transform-style: preserve-3d;
+}

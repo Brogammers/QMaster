@@ -17,12 +17,10 @@ export default function DynamicMediaDisplay() {
       Array.from(event.target.files).forEach((file, index) => {
         const fileType = file.type.startsWith("image/") ? "image" : "video";
         const src = URL.createObjectURL(file);
-
         newMediaList.push({ id: index, type: fileType, src });
       });
-
       setMediaList(newMediaList);
-      setCurrentIndex(0); 
+      setCurrentIndex(0);
     }
   };
 
@@ -57,7 +55,7 @@ export default function DynamicMediaDisplay() {
   }, [mediaList, currentIndex]);
 
   return (
-    <div className="relative h-screen w-full flex justify-center items-center">
+    <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-ocean-blue bg-opacity-20">
       {mediaList.length === 0 ? (
         <div className="flex flex-col items-center">
           <button className="border-0 border-baby-blue bg-transparent px-2 py-3 rounded-xl animate-pulse">
@@ -72,33 +70,37 @@ export default function DynamicMediaDisplay() {
               />
             </label>
           </button>
-          <p className="absolute bottom-5 mt-4 bg-lava-red text-white p-2">Please upload content to display</p>
+          <p className="absolute bottom-2 bg-lava-red text-white p-2 rounded">Please upload content to display</p>
         </div>
       ) : (
-        mediaList.map((media, index) =>
-          index === currentIndex ? (
-            media.type === "image" ? (
-              <Image
-                key={media.id}
-                src={media.src}
-                alt="User Uploaded Content"
-                className="py-8"
-                style={{ width: width * 0.75, height: height, objectFit: "contain" }}
-                width={width * 0.75}
-                height={height}
-              />
-            ) : (
-              <video
-                key={media.id}
-                ref={videoRef}
-                src={media.src}
-                style={{ width: width * 0.75, height: height, objectFit: "contain" }}
-                autoPlay
-                muted
-              />
+        <div className="w-full h-full">
+          {mediaList.map((media, index) =>
+            index === currentIndex && (
+              media.type === "image" ? (
+                <div key={media.id} className="w-full h-full">
+                  <Image
+                    src={media.src}
+                    alt="User Uploaded Content"
+                    width={width}
+                    height={height}
+                    className="w-full h-full object-contain"
+                    priority
+                  />
+                </div>
+              ) : (
+                <div key={media.id} className="w-full h-full">
+                  <video
+                    ref={videoRef}
+                    src={media.src}
+                    className="w-full h-full object-contain"
+                    autoPlay
+                    muted
+                  />
+                </div>
+              )
             )
-          ) : null
-        )
+          )}
+        </div>
       )}
     </div>
   );

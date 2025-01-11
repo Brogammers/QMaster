@@ -10,43 +10,39 @@ import useWindowSize from '../../../../../hooks/useWindowSize';
 import TextButton from '@/app/shared/TextButton';
 import MissionAccomplished from "../../../../../public/mission-accomplished.svg";
 import ExceptionMessage from '@/app/shared/ExceptionMessage';
-import { Formik, Form, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button } from 'antd';
 import QueueModal from '@/app/shared/QueueModal';
-import StyledFieldArray from '@/app/shared/StyledFieldArray';
-import StyledField from '@/app/shared/StyledField';
+import CustomModal from '@/app/components/CustomModal';
+import toast from 'react-hot-toast';
+import { BusinessCategory, ServiceTemplate, businessTemplates } from '@/types/business';
+import ServiceFactory from '@/components/service/ServiceFactory';
+
+interface CounterSetupForm {
+  services: ServiceTemplate[];
+}
 
 const validationSchema = Yup.object().shape({
   services: Yup.array()
     .of(
       Yup.object().shape({
         name: Yup.string().required('Required'),
-        count: Yup.number().required('Required'),
+        defaultCount: Yup.number().test(
+          'conditional-required',
+          'Required for counter and table services',
+          function(value, context) {
+            const { type } = context.parent;
+            if (['COUNTER', 'TABLE'].includes(type)) {
+              return value !== undefined && value >= 1;
+            }
+            return true;
+          }
+        )
       })
     )
-    .test('is-duplicate', 'Duplicate service names found', function (value) {
-      const serviceNames = new Set();
-      let hasDuplicate = false;
-
-      value?.forEach(service => {
-        const serviceName = (service.name || '').replace(/\s+/g, '').trim().toLowerCase();
-        if (serviceNames.has(serviceName)) {
-          hasDuplicate = true;
-          return;
-        }
-        serviceNames.add(serviceName);
-      });
-
-      return !hasDuplicate;
-    })
-    .min(1, 'At least one service must be entered'),
+    .min(1, 'At least one service must be configured'),
 });
-
-
-const initialValues = {
-  services: [{ name: '', count: 0 }],
-};
 
 export default function Counter() {
   const [activeTab1, setActiveTab1] = useState<string>('0');
@@ -58,76 +54,42 @@ export default function Counter() {
   const [counterSetup, setCounterSetup] = useState<boolean>(true);
   const [counters, setCounters] = useState<any[]>([]);
   const [formValues, setFormValues] = useState<any>(null);
-  const [isDuplicate, setIsDuplicate] = useState<boolean>(false);
-  const [tickets1, setTickets1] = useState<any[]>([
-    // Add more ticket data as needed
-  ]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState<any>(null);
+  const [businessType, setBusinessType] = useState<BusinessCategory>(BusinessCategory.BANKING); // This should come from your auth context or API
+  const [tickets1, setTickets1] = useState<any[]>([]);
   const [tickets2, setTickets2] = useState<any[]>([
     { id: 1, ticketNumber: 'C-123', service: 'Customer Service' },
     { id: 2, ticketNumber: 'A-124', service: 'New Customer' },
     { id: 3, ticketNumber: 'C-126', service: 'Customer Service' },
     { id: 4, ticketNumber: 'C-127', service: 'Customer Service' },
     { id: 5, ticketNumber: 'A-125', service: 'New Customer' },
-    { id: 6, ticketNumber: 'A-435', service: 'New Customer' },
-    { id: 7, ticketNumber: 'A-450', service: 'New Customer' },
-    { id: 8, ticketNumber: 'C-455', service: 'Customer Service' },
-    { id: 9, ticketNumber: 'C-460', service: 'Customer Service' },
-    { id: 10, ticketNumber: 'A-670', service: 'New Customer' },
-    { id: 11, ticketNumber: 'A-677', service: 'New Customer' },
-    { id: 12, ticketNumber: 'A-790', service: 'New Customer' },
-    { id: 13, ticketNumber: 'A-799', service: 'New Customer' },
-    { id: 14, ticketNumber: 'P-799', service: 'Payments' },
   ]);
 
-  const handleSubmit = (values: { services: { name: string; count: number; }[] }, { setSubmitting }: any) => {
-    const serviceNames = new Set<string>();
-    let duplicateService: string | null = null;
+  const businessTemplate = businessTemplates[businessType];
+  const initialValues: CounterSetupForm = {
+    services: businessTemplate.defaultServices,
+  };
 
-    values.services.forEach((service: { name: string }) => {
-      if (serviceNames.has(service.name)) {
-        duplicateService = service.name;
-        return;
-      } else {
-        serviceNames.add(service.name);
-      }
-    });
-
-    if (duplicateService) {
-      return Promise.resolve();
-    }
-
+  const handleSubmit = (values: CounterSetupForm) => {
     console.log('Form values:', values);
-    setCounterSetup(!counterSetup);
+    setCounterSetup(false);
     setFormValues(values);
 
-    const serviceCounts: { [key: string]: number } = {};
-    values.services.forEach((service: any) => {
-      const { name } = service;
-      if (serviceCounts[name]) {
-        duplicateService = name;
-        return;
+    let counterId = 1;
+    const updatedCounters = values.services.flatMap(service => {
+      if (service.type === 'COUNTER' || service.type === 'TABLE') {
+        return Array.from({ length: service.defaultCount || 0 }, (_, index) => ({
+          id: counterId++,
+          service: service.name,
+          type: service.type,
+          properties: service.properties,
+        }));
       }
-      serviceCounts[name] = (serviceCounts[name] || 0) + 1;
-    });
-
-    if (duplicateService) {
-      alert(`You filled in the same service '${duplicateService}' more than once.`);
-      return Promise.resolve();
-    }
-
-    let counterId = 1; 
-    const updatedCounters = values.services.flatMap((service: any) => {
-      const { name, count } = service;
-      const countersForService = Array.from({ length: count }, (_, index) => ({
-        id: counterId++, 
-        service: name,
-      }));
-      return countersForService;
+      return [];
     });
 
     setCounters(updatedCounters);
-
-    return Promise.resolve(); 
   };
   
   const width = useWindowSize().width;
@@ -173,147 +135,132 @@ export default function Counter() {
     }
   };
 
-  const initialOverflowCount2 = Math.max(tickets2.length - MAX_TICKETS, 0);
-
-  const [overflowCount2, setOverflowCount2] = useState<number>(initialOverflowCount2);
-
-  const calculateOverflowCount = (filteredTickets: any[], maxTickets: number) => {
-    return Math.max(filteredTickets.length - maxTickets, 0);
-  };
-
-  useEffect(() => {
-    const initialOverflowCount2 = calculateOverflowCount(tickets2, MAX_TICKETS);
-
-    setOverflowCount2(initialOverflowCount2);
-  }, [tickets1, tickets2, MAX_TICKETS]);
-
-  useEffect(() => {
-    const filteredTickets1 = filterTickets(tickets1, activeTab1);
-    const filteredTickets2 = filterTickets(tickets2, activeTab2);
-
-    const overflowCount2 = calculateOverflowCount(filteredTickets2, MAX_TICKETS);
-
-    setOverflowCount2(overflowCount2);
-  }, [tickets1, tickets2, activeTab1, activeTab2, MAX_TICKETS]);
-
   const handleAddTicket = () => {
     if (tickets2.length > 0) {
-      const counterSelection = prompt("Please select the counter to add the ticket to:");
-      if (counterSelection) {
-        const selectedCounter = counters.find(counter => parseInt(counter.id) === parseInt(counterSelection));
-        if (selectedCounter) {
-          const ticketToAdd = tickets2.find(ticket => ticket.service === selectedCounter.service);
-          if (ticketToAdd) {
-            const updatedTickets2 = tickets2.filter(ticket => ticket !== ticketToAdd);
-            const updatedTickets1 = tickets1.filter(ticket => ticket.counterNum !== selectedCounter.id);
+      setModalOpen(true);
+    } else {
+      toast.success("Celebrate! No waiting line!", {
+        style: {
+          background: '#10B981',
+          color: '#fff',
+        },
+      });
+    }
+  };
 
-            const ticketWithCounter = { ...ticketToAdd, counterNum: selectedCounter.id };
-            
-            updatedTickets1.push(ticketWithCounter);
-            setTickets1(updatedTickets1);
-            setTickets2(updatedTickets2);
+  const handleModalConfirm = (counterId: string) => {
+    const selectedCounter = counters.find(counter => counter.id === parseInt(counterId));
+    if (selectedCounter) {
+      const ticketToAdd = tickets2.find(ticket => ticket.service === selectedCounter.service);
+      if (ticketToAdd) {
+        const updatedTickets2 = tickets2.filter(ticket => ticket !== ticketToAdd);
+        const updatedTickets1 = tickets1.filter(ticket => ticket.counterNum !== selectedCounter.id);
 
-          }
-        } else alert("Select a valid counter");
+        const ticketWithCounter = { ...ticketToAdd, counterNum: selectedCounter.id };
+        
+        updatedTickets1.push(ticketWithCounter);
+        setTickets1(updatedTickets1);
+        setTickets2(updatedTickets2);
+        setModalOpen(false);
       }
-    } else alert("Celebrate! No waiting line!")
+    } else {
+      toast.error("Select a valid counter", {
+        style: {
+          background: '#ef4444',
+          color: '#fff',
+        },
+      });
+    }
   };
 
   return (
     <Entity>
       {counterSetup ? (
-        <QueueModal title="Setup Counter Space">
-          <Formik 
-            initialValues={initialValues} 
-            onSubmit={handleSubmit} 
-            validationSchema={validationSchema}
-          >
-            {({ values, errors, isValid, setFieldValue }) => (
-              <Form>
-                <div className="flex flex-col gap-4">
-                  <StyledFieldArray name="services" render={({ push, remove }) => (
-                    <div>
-                      {values.services.map((_, index) => (
-                        <>
-                          <div key={index} className="mb-4 flex flex-row justify-start items-center gap-4">
-                            <div className="flex justify-center items-center gap-2">
-                              <div className="flex flex-col">
-                                <StyledField
-                                  name={`services.${index}.name`}
-                                  placeholder="Service"
-                                />
-                                <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.name`} />
-                              </div>
-                              <div className="flex flex-col">
-                                <StyledField 
-                                  name={`services.${index}.count`} 
-                                  placeholder="Number of Counters" 
-                                  type="number" 
-                                />
-                                <ErrorMessage className="text-red-500 font-semibold" component="span" name={`services.${index}.count`} />
-                              </div>
-                            </div>
-                            <Button
-                              className="bg-red-500 text-white"
-                              type="text"
-                              onClick={() => remove(index)}
-                              disabled={isDuplicate} 
-                            >
-                              Remove
-                            </Button>
-                          </div>
-                        </>
-                      ))}
+        <QueueModal title={`Setup ${businessTemplate.name} Space`}>
+          <div className="max-w-4xl mx-auto py-8">
+            <Formik
+              initialValues={initialValues}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+              validateOnChange={true}
+              validateOnBlur={true}
+            >
+              {({ values, setFieldValue }) => (
+                <Form className="space-y-8">
+                  <div className="space-y-6">
+                    {values.services.map((service, index) => (
+                      <ServiceFactory
+                        key={index}
+                        service={service}
+                        onServiceUpdate={(updates) => {
+                          const updatedServices = [...values.services];
+                          updatedServices[index] = { ...service, ...updates };
+                          setFieldValue('services', updatedServices);
+                        }}
+                        onRemove={() => {
+                          const updatedServices = [...values.services];
+                          updatedServices.splice(index, 1);
+                          setFieldValue('services', updatedServices);
+                        }}
+                        canRemove={values.services.length > 1}
+                      />
+                    ))}
+                    {businessTemplate.allowCustomServices && (
                       <Button
-                        className="bg-ocean-blue font-bold"
-                        type="primary"
-                        onClick={() => setFieldValue('services', [...values.services, { name: '', count: 0 }])}
-                        disabled={isDuplicate} 
+                        onClick={() => setFieldValue('services', [
+                          ...values.services,
+                          { name: '', type: 'COUNTER', defaultCount: 1 }
+                        ])}
+                        className="!bg-ocean-blue/90 !text-white hover:!bg-ocean-blue border-0 rounded-xl w-full h-12 text-lg"
                       >
-                        Add Service
+                        Add Custom Service
                       </Button>
-                    </div>
-                  )} />
-                  {errors.services && typeof errors.services === 'string' && 
-                    <span className="text-red-500 font-bold text-center">
-                      {errors.services}
-                    </span>
-                  }
+                    )}
+                  </div>
                   <Button
-                    className="bg-baby-blue font-bold"
-                    type="primary"
                     htmlType="submit"
-                    disabled={!isValid || isDuplicate} // Disable submit button if form is invalid or duplicates exist
+                    className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white !border-0 !rounded-xl w-full !h-14 !text-lg !font-medium mt-4"
                   >
-                    Create
+                    Create {businessTemplate.name} Space
                   </Button>
-                  {/* <ErrorMessage className="text-red-500 font-bold text-center" name="services" component="span" /> */}
-                </div>
-              </Form>
-            )}
-          </Formik>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </QueueModal>
       ) : (
-        <div className="flex flex-col justify-start gap-16">
+        <div className="space-y-8">
           <div>
-            <h2>Serving</h2>
-            <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
+            <h2 className="text-2xl font-bold text-coal-black mb-4">
+              {businessTemplate.hasWaitingQueue ? 'Serving' : 'Active'}
+            </h2>
+            <div className="bg-white rounded-xl p-6 shadow-sm">
               <TabContext value={activeTab1}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <TabList onChange={handleServingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
-                    <Tab label="All servings" value="0" />
-                    {formValues && formValues.services && formValues.services.map((service: any) => (
+                <Box sx={{ borderBottom: 1, borderColor: 'rgba(0,0,0,0.1)' }}>
+                  <TabList 
+                    onChange={handleServingChange} 
+                    aria-label="serving tabs"
+                    sx={{ 
+                      '& .MuiTab-root': { 
+                        color: 'rgba(0,0,0,0.6)',
+                        '&.Mui-selected': { color: '#1DCDFE' }
+                      },
+                      '& .MuiTabs-indicator': { backgroundColor: '#1DCDFE' }
+                    }}
+                  >
+                    <Tab label={businessTemplate.hasWaitingQueue ? "All servings" : "All active"} value="0" />
+                    {formValues?.services?.map((service: ServiceTemplate) => (
                       <Tab key={service.name} label={service.name} value={service.name} />
                     ))}
                   </TabList>
                 </Box>
 
-                <TabPanel className="px-0" value={activeTab1}>
-                  <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets1.length <= 0 && ` justify-center items-center`}`}>
+                <TabPanel className="px-0 py-6" value={activeTab1}>
+                  <div className={`counter__scrollbar flex gap-4 ${tickets1.length <= 0 && 'justify-center items-center'}`}>
                     {tickets1.length <= 0 ? (
-                      <div className="flex items-center gap-56">
+                      <div className="flex items-center gap-16">
                         <TextButton
-                          text="Add to Queue"
+                          text={businessTemplate.hasWaitingQueue ? "Add to Queue" : "Add Booking"}
                           textSize="sm"
                           textColor="white"
                           buttonColor="baby-blue"
@@ -326,10 +273,10 @@ export default function Counter() {
                         />
                         <ExceptionMessage
                           image={MissionAccomplished}
-                          imageTitle="Mission Accomplished"
+                          imageTitle="All Clear"
                           orientation="row"
                           width={185}
-                          message="Hooray! All served, no waiting!"
+                          message={businessTemplate.hasWaitingQueue ? "All served, no waiting!" : "No active bookings"}
                         />
                       </div>
                     ) : (
@@ -353,7 +300,7 @@ export default function Counter() {
                           text="+"
                           textSize="3xl"
                           textColor="white"
-                          buttonColor="coal-black"
+                          buttonColor="baby-blue"
                           borderRadius="xl"
                           width="32"
                           minWidth="56"
@@ -366,73 +313,89 @@ export default function Counter() {
                   </div>
                 </TabPanel>
               </TabContext>
-            </Box>
+            </div>
           </div>
 
-          <div>
-            <h2>In waiting line</h2>
-            <Box sx={{ width: '100%', typography: 'body1', bgcolor: 'white', borderRadius: 2, paddingX: 4, paddingY: 2, marginY: 4 }}>
-              <TabContext value={activeTab2}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <TabList onChange={handleWaitingChange} aria-label="lab API tabs example" sx={{ color: 'white' }}>
-                    <Tab label="All queues" value="0" />
-                    {/* <Tab label="Customer Service" value="Customer Service" />
-                    <Tab label="New Customer" value="New Customer" /> */}
-                    {formValues && formValues.services && formValues.services.map((service: any) => (
-                      <Tab key={service.name} label={service.name} value={service.name} />
-                    ))}
-                  </TabList>
-                </Box>
+          {businessTemplate.hasWaitingQueue && (
+            <div>
+              <h2 className="text-2xl font-bold text-coal-black mb-4">In waiting line</h2>
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <TabContext value={activeTab2}>
+                  <Box sx={{ borderBottom: 1, borderColor: 'rgba(0,0,0,0.1)' }}>
+                    <TabList 
+                      onChange={handleWaitingChange} 
+                      aria-label="waiting tabs"
+                      sx={{ 
+                        '& .MuiTab-root': { 
+                          color: 'rgba(0,0,0,0.6)',
+                          '&.Mui-selected': { color: '#1DCDFE' }
+                        },
+                        '& .MuiTabs-indicator': { backgroundColor: '#1DCDFE' }
+                      }}
+                    >
+                      <Tab label="All queues" value="0" />
+                      {formValues?.services?.map((service: ServiceTemplate) => (
+                        <Tab key={service.name} label={service.name} value={service.name} />
+                      ))}
+                    </TabList>
+                  </Box>
 
-                <TabPanel className="px-0" value={activeTab2}>
-                  <div className={`counter__scrollbar w-full overflow-x-scroll flex gap-4 ${tickets2.length <= 0 && ` justify-center items-center`}`}>
-                    {tickets2.length <= 0 ? (
-                      <ExceptionMessage
-                        image={MissionAccomplished}
-                        imageTitle="Mission Accomplished"
-                        orientation="row"
-                        width={185}
-                        message="Celebrate! No waiting line!"
-                      />
-                    ) : (
-                      <>
-                        {filterTickets(tickets2, activeTab2).slice(0, MAX_TICKETS).map((ticket, index) => (
-                          <TicketNumber 
-                            key={ticket.id} 
-                            active={index === parseInt(activeTab2)}
-                            bgColor="ocean-blue"
-                            textColor="white"
-                            fontSize="3xl"
-                            borderRadius="xl"
-                            width="6"
-                            maxWidth="16"
-                            queue={ticket.service}
-                            ticketNum={ticket.ticketNumber}
-                          />
-                        ))}
-                        {tickets2.length > MAX_TICKETS && (
-                          <TicketNumber
-                            key="overflow"
-                            ticketNum={`${overflowCount2}+`}
-                            queue="others waiting in queue"
-                            bgColor="baby-blue"
-                            textColor="white"
-                            fontSize="3xl"
-                            borderRadius="xl"
-                            width="6"
-                            maxWidth="16"
-                            labelPadding="4"
-                          />
-                        )}
-                      </>
-                    )}
-                  </div>
-                </TabPanel>
-              </TabContext>
-            </Box>
-          </div>
+                  <TabPanel className="px-0 py-6" value={activeTab2}>
+                    <div className={`counter__scrollbar flex gap-4 ${tickets2.length <= 0 && 'justify-center items-center'}`}>
+                      {tickets2.length <= 0 ? (
+                        <ExceptionMessage
+                          image={MissionAccomplished}
+                          imageTitle="Mission Accomplished"
+                          orientation="row"
+                          width={185}
+                          message="Celebrate! No waiting line!"
+                        />
+                      ) : (
+                        <>
+                          {filterTickets(tickets2, activeTab2).slice(0, MAX_TICKETS).map((ticket, index) => (
+                            <TicketNumber 
+                              key={ticket.id} 
+                              active={index === parseInt(activeTab2)}
+                              bgColor="ocean-blue"
+                              textColor="white"
+                              fontSize="3xl"
+                              borderRadius="xl"
+                              width="6"
+                              maxWidth="16"
+                              queue={ticket.service}
+                              ticketNum={ticket.ticketNumber}
+                            />
+                          ))}
+                          {tickets2.length > MAX_TICKETS && (
+                            <TicketNumber
+                              key="overflow"
+                              ticketNum={`${remainingCount2}+`}
+                              queue="others waiting in queue"
+                              bgColor="baby-blue"
+                              textColor="white"
+                              fontSize="3xl"
+                              borderRadius="xl"
+                              width="6"
+                              maxWidth="16"
+                              labelPadding="4"
+                            />
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </TabPanel>
+                </TabContext>
+              </div>
+            </div>
+          )}
         </div>
       )}
+      <CustomModal 
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={handleModalConfirm}
+        counters={counters}
+      />
     </Entity>
   );
-};
+}
