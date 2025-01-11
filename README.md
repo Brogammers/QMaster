@@ -322,7 +322,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 - Release Management
 
 ### Confluence
-- Technical Documentation
+- Technical Documentation (SRS): [QMaster Confluence Board](https://qrmasters.atlassian.net/wiki/x/YYAB)
 - Meeting Notes
 - Design Documents
 - Process Guidelines
