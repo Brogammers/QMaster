@@ -18,7 +18,7 @@ export default function AllCategories() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white">
+    <ScrollView className="flex-1 bg-off-white">
       <View className="p-4">
         <Text className="text-2xl font-bold mb-4">
           {i18n.t('allCategories')}

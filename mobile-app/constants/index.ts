@@ -100,7 +100,7 @@ export const AllCategories: CategoryProps[] = [
   },
   // Add new categories
   {
-    image: Other, // Using Other icon temporarily
+    image: Other,
     title: i18n.t('autoRepair'),
   },
   {
@@ -155,6 +155,94 @@ export const AllCategories: CategoryProps[] = [
     image: Other,
     title: i18n.t('entertainment'),
   },
+  {
+    image: Other,
+    title: i18n.t('pharmacies'),
+  },
+  {
+    image: Other,
+    title: i18n.t('hotels'),
+  },
+  {
+    image: Other,
+    title: i18n.t('laundry'),
+  },
+  {
+    image: Other,
+    title: i18n.t('bookstores'),
+  },
+  {
+    image: Other,
+    title: i18n.t('toyStores'),
+  },
+  {
+    image: Other,
+    title: i18n.t('sportingGoods'),
+  },
+  {
+    image: Other,
+    title: i18n.t('furniture'),
+  },
+  {
+    image: Other,
+    title: i18n.t('electronics'),
+  },
+  {
+    image: Other,
+    title: i18n.t('jewelry'),
+  },
+  {
+    image: Other,
+    title: i18n.t('opticians'),
+  },
+  {
+    image: Other,
+    title: i18n.t('tailors'),
+  },
+  {
+    image: Other,
+    title: i18n.t('carWash'),
+  },
+  {
+    image: Other,
+    title: i18n.t('postOffices'),
+  },
+  {
+    image: Other,
+    title: i18n.t('libraries'),
+  },
+  {
+    image: Other,
+    title: i18n.t('museums'),
+  },
+  {
+    image: Other,
+    title: i18n.t('theaters'),
+  },
+  {
+    image: Other,
+    title: i18n.t('cinemas'),
+  },
+  {
+    image: Other,
+    title: i18n.t('artGalleries'),
+  },
+  {
+    image: Other,
+    title: i18n.t('computerRepair'),
+  },
+  {
+    image: Other,
+    title: i18n.t('phoneRepair'),
+  },
+  {
+    image: Other,
+    title: i18n.t('homeServices'),
+  },
+  {
+    image: Other,
+    title: i18n.t('travelAgencies'),
+  }
 ];
 
 //Current Queues
