@@ -74,7 +74,88 @@ export const Categories: CategoryProps[] = [
     image: Other,
     title: i18n.t('others'),
   },
-]
+];
+
+export const AllCategories: CategoryProps[] = [
+  // Include original categories first
+  {
+    image: Restaurant,
+    title: i18n.t('restaurants'),
+  },
+  {
+    image: Government,
+    title: i18n.t('governments'),
+  },
+  {
+    image: Clinic,
+    title: i18n.t('clinics'),
+  },
+  {
+    image: Grocery,
+    title: i18n.t('groceries'),
+  },
+  {
+    image: Bank,
+    title: i18n.t('banks'),
+  },
+  // Add new categories
+  {
+    image: Other, // Using Other icon temporarily
+    title: i18n.t('autoRepair'),
+  },
+  {
+    image: Other,
+    title: i18n.t('bikeRepair'),
+  },
+  {
+    image: Other,
+    title: i18n.t('privateCatering'),
+  },
+  {
+    image: Other,
+    title: i18n.t('ceremonyHalls'),
+  },
+  {
+    image: Other,
+    title: i18n.t('carDealerships'),
+  },
+  {
+    image: Other,
+    title: i18n.t('education'),
+  },
+  {
+    image: Other,
+    title: i18n.t('salons'),
+  },
+  {
+    image: Other,
+    title: i18n.t('spas'),
+  },
+  {
+    image: Other,
+    title: i18n.t('telecom'),
+  },
+  {
+    image: Other,
+    title: i18n.t('realEstate'),
+  },
+  {
+    image: Other,
+    title: i18n.t('insurance'),
+  },
+  {
+    image: Other,
+    title: i18n.t('petCare'),
+  },
+  {
+    image: Other,
+    title: i18n.t('fitness'),
+  },
+  {
+    image: Other,
+    title: i18n.t('entertainment'),
+  },
+];
 
 //Current Queues
 export const Current: CurrentQueuesProps[] = [

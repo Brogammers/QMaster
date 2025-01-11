@@ -9,11 +9,11 @@
   "search queue": "ابحث عن طابور",
   "categories": "الفئات",
   "restaurants": "المطاعم",
-  "governments": "الحكومي",
+  "governments": "الحكومة",
   "clinics": "العيادات",
-  "groceries": "البقالات",
+  "groceries": "البقالة",
   "banks": "البنوك",
-  "others": "الآخرين",
+  "others": "أخرى",
   "recent": "الطوابير الأخيرة",
   "entities": "الكيانات",
   "history": "السجل",
@@ -71,5 +71,20 @@
   "searchPage": {
     "recentQueues": "الطوابير الأخيرة",
     "popularQueues": "الطوابير الشائعة"
-  }
+  },
+  "allCategories": "جميع الفئات",
+  "autoRepair": "إصلاح السيارات",
+  "bikeRepair": "إصلاح الدراجات",
+  "privateCatering": "خدمات الطعام الخاصة",
+  "ceremonyHalls": "قاعات المناسبات",
+  "carDealerships": "وكالات السيارات",
+  "education": "التعليم",
+  "salons": "صالونات التجميل",
+  "spas": "المنتجعات الصحية",
+  "telecom": "الاتصالات",
+  "realEstate": "العقارات",
+  "insurance": "التأمين",
+  "petCare": "رعاية الحيوانات",
+  "fitness": "اللياقة البدنية",
+  "entertainment": "الترفيه"
 }
