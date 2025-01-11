@@ -1,4 +1,4 @@
-# QMaster - Enterprise Queue Management System
+ # QMaster - Enterprise Queue Management System
 
 ![QMaster Logo](/web/public/FooterLogo.svg)
 
@@ -333,17 +333,24 @@ cd mobile-app
 eas build
 ```
 
-## 🤝 Contributing
+## 🏢 Company & Team
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+QMaster is a proprietary, closed-source SaaS product developed and maintained by QMaster Technologies.
 
-### Development Process
+### Leadership & Development Team
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit changes
-4. Push to the branch
-5. Create a Pull Request
+* [Fam Awad](https://www.linkedin.com/in/famalouiz/) - Co-founder
+* [Hatem Soliman](https://www.linkedin.com/in/h4temsoliman/) - Co-founder
+* [Mohammed ElAzab](https://www.linkedin.com/in/mohammed-elazab/) - Co-founder
+* [Omar Safwat](https://www.linkedin.com/in/omar-safwat-802122277/) - Co-founder
+* [Tony Makaryous](https://www.linkedin.com/in/tony-makaryous-6726b0212/) - Co-founder
+
+### Alumni Team Members
+
+* Hassan
+* Youssef Effat
+
+> **Note**: QMaster is proprietary software. All rights reserved. This codebase is not open for external contributions and is protected under intellectual property laws.
 
 ## 📊 Project Management
 
@@ -367,7 +374,7 @@ QMaster is licensed under the GPL-3.0 License. See the [LICENSE](LICENSE) file f
 
 ---
 
-[![Website](https://img.shields.io/badge/Website-QMaster-blue)](https://qmaster.com)
+[![Website](https://img.shields.io/badge/Website-QMaster-blue)](https://linkedin.com/company/qmasterapp)
 [![Docs](https://img.shields.io/badge/Docs-QMaster-green)](https://docs.qmaster.com)
 [![Blog](https://img.shields.io/badge/Blog-QMaster-orange)](https://qmaster.com/blog)
 
