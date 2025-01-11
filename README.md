@@ -1,136 +1,133 @@
 # QMaster - Enterprise Queue Management System
 
-<div align="center">
-  <img src="public/qmaster-logo.svg" alt="QMaster Logo" width="200"/>
-  <p><strong>Modern Queue Management for Modern Businesses</strong></p>
-</div>
+![QMaster Logo](public/qmaster-logo.svg)
+
+**Modern Queue Management for Modern Businesses**
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [System Architecture](#system-architecture)
-- [Technology Stack](#technology-stack)
-- [Projects](#projects)
-  - [Web Portal](#web-portal)
-  - [Server](#server)
-  - [Mobile App](#mobile-app)
-- [Getting Started](#getting-started)
-- [Development](#development)
-- [API Documentation](#api-documentation)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [Project Management](#project-management)
-- [License](#license)
+* [Overview](#overview)
+* [Features](#features)
+* [System Architecture](#system-architecture)
+* [Technology Stack](#technology-stack)
+* [Projects](#projects)
+  * [Web Portal](#web-portal)
+  * [Server](#server)
+  * [Mobile App](#mobile-app)
+* [Getting Started](#getting-started)
+* [Development](#development)
+* [API Documentation](#api-documentation)
+* [Deployment](#deployment)
+* [Contributing](#contributing)
+* [Project Management](#project-management)
+* [License](#license)
 
 ## 🌟 Overview
 
 QMaster is an enterprise-grade queue management system designed to revolutionize how businesses handle customer flow and service delivery. Our system addresses the universal challenge of queue management across various sectors including:
 
-- Healthcare (Clinics, Hospitals)
-- Banking & Financial Services
-- Government Services
-- Retail
-- Telecommunications
-- Education
-- Automotive Services
-- Private Catering
-- Restaurant Management
+* Healthcare (Clinics, Hospitals)
+* Banking & Financial Services
+* Government Services
+* Retail
+* Telecommunications
+* Education
+* Automotive Services
+* Private Catering
+* Restaurant Management
 
 ### The Problem
 
 Traditional queue management systems often suffer from:
-- Poor customer experience due to long wait times
-- Inefficient resource allocation
-- Lack of real-time analytics
-- Limited integration capabilities
-- Inflexible service configurations
+
+* Poor customer experience due to long wait times
+* Inefficient resource allocation
+* Lack of real-time analytics
+* Limited integration capabilities
+* Inflexible service configurations
 
 ### Our Solution
 
 QMaster provides a comprehensive SaaS platform that:
-- Streamlines customer flow
-- Provides real-time queue analytics
-- Offers multi-channel queue management
-- Supports diverse business categories
-- Enables data-driven decision making
+
+* Streamlines customer flow
+* Provides real-time queue analytics
+* Offers multi-channel queue management
+* Supports diverse business categories
+* Enables data-driven decision making
 
 ## 🎯 Features
 
 ### Core Features
 
 1. **Multi-Service Queue Management**
-   - Counter-based services
-   - Table management
-   - Appointment scheduling
-   - Booking systems
+   * Counter-based services
+   * Table management
+   * Appointment scheduling
+   * Booking systems
 
 2. **Real-time Monitoring**
-   - Live queue status
-   - Wait time predictions
-   - Service performance metrics
-   - Resource utilization tracking
+   * Live queue status
+   * Wait time predictions
+   * Service performance metrics
+   * Resource utilization tracking
 
 3. **Business Administration**
-   - Service configuration
-   - Staff management
-   - Operating hours
-   - Customer feedback collection
+   * Service configuration
+   * Staff management
+   * Operating hours
+   * Customer feedback collection
 
 4. **Customer Experience**
-   - Mobile ticket generation
-   - SMS notifications
-   - Queue position tracking
-   - Service ratings
+   * Mobile ticket generation
+   * SMS notifications
+   * Queue position tracking
+   * Service ratings
 
 5. **Analytics & Reporting**
-   - Service performance metrics
-   - Customer flow analysis
-   - Peak hour identification
-   - Resource optimization insights
+   * Service performance metrics
+   * Customer flow analysis
+   * Peak hour identification
+   * Resource optimization insights
 
 ## 🏗 System Architecture
 
-\`\`\`mermaid
-graph TD
-    A[Client Layer] --> B[Web Portal]
-    A --> C[Mobile App]
-    B --> D[API Gateway]
-    C --> D
-    D --> E[Authentication Service]
-    D --> F[Queue Service]
-    D --> G[Notification Service]
-    E --> H[(Database)]
-    F --> H
-    G --> H
-    G --> I[SMS Provider]
-    G --> J[Email Service]
-\`\`\`
+![System Architecture](docs/assets/architecture.png)
+
+> **Note**: If you're viewing the source code, the system follows this architecture:
+> - Client Layer connects to Web Portal and Mobile App
+> - Both connect to API Gateway
+> - Gateway routes to Authentication, Queue, and Notification Services
+> - All services connect to the Database
+> - Notification Service connects to SMS and Email providers
 
 ## 🛠 Technology Stack
 
 ### Frontend Technologies
-- **Web Portal**: Next.js 14, React 18, TypeScript
-- **State Management**: Redux Toolkit
-- **UI Components**: 
-  - Ant Design
-  - Material-UI
-  - Tailwind CSS
-- **Animations**: Framer Motion, GSAP
-- **Form Handling**: Formik, Yup
+
+* **Web Portal**: Next.js 14, React 18, TypeScript
+* **State Management**: Redux Toolkit
+* **UI Components**: 
+  * Ant Design
+  * Material-UI
+  * Tailwind CSS
+* **Animations**: Framer Motion, GSAP
+* **Form Handling**: Formik, Yup
 
 ### Backend Technologies
-- **Server**: Java Spring Boot
-- **Database**: MySQL
-- **Authentication**: JWT, Spring Security
-- **Email Service**: SMTP Integration
-- **API Documentation**: Swagger/OpenAPI
+
+* **Server**: Java Spring Boot
+* **Database**: MySQL
+* **Authentication**: JWT, Spring Security
+* **Email Service**: SMTP Integration
+* **API Documentation**: Swagger/OpenAPI
 
 ### Mobile Technologies
-- **Framework**: React Native
-- **Build Tool**: Expo
-- **State Management**: Redux Toolkit
-- **Navigation**: React Navigation
+
+* **Framework**: React Native
+* **Build Tool**: Expo
+* **State Management**: Redux Toolkit
+* **Navigation**: React Navigation
 
 ## 📱 Projects
 
@@ -140,7 +137,7 @@ The web portal serves as the primary interface for businesses to manage their qu
 
 #### Key Components
 
-\`\`\`typescript
+```typescript
 // Example of Queue Configuration
 interface QueueConfig {
   id: string;
@@ -152,14 +149,15 @@ interface QueueConfig {
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
   allowsPreBooking: boolean;
 }
-\`\`\`
+```
 
 #### Features
-- Dynamic service configuration
-- Real-time queue monitoring
-- Staff management
-- Analytics dashboard
-- Customer feedback management
+
+* Dynamic service configuration
+* Real-time queue monitoring
+* Staff management
+* Analytics dashboard
+* Customer feedback management
 
 ### Server
 
@@ -167,7 +165,7 @@ The backend server handles all business logic and data management.
 
 #### API Structure
 
-\`\`\`java
+```java
 @RestController
 @RequestMapping("/api/v1/queues")
 public class QueueController {
@@ -181,11 +179,11 @@ public class QueueController {
         // Queue status retrieval logic
     }
 }
-\`\`\`
+```
 
 #### Database Schema
 
-\`\`\`sql
+```sql
 CREATE TABLE queues (
     id VARCHAR(36) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -194,57 +192,62 @@ CREATE TABLE queues (
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-\`\`\`
+```
 
 ### Mobile App
 
 The mobile app provides customers with easy access to queue services.
 
 #### Features
-- Digital ticket generation
-- Queue status tracking
-- Push notifications
-- Service ratings
-- Booking management
+
+* Digital ticket generation
+* Queue status tracking
+* Push notifications
+* Service ratings
+* Booking management
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
-- Java 17+
-- MySQL 8+
-- Android Studio / Xcode
+* Node.js 18+
+* Java 17+
+* MySQL 8+
+* Android Studio / Xcode
 
 ### Installation
 
 1. **Clone the Repository**
-   \`\`\`bash
+
+   ```bash
    git clone https://github.com/Brogammers/QMaster.git
    cd QMaster
-   \`\`\`
+   ```
 
 2. **Web Portal Setup**
-   \`\`\`bash
+
+   ```bash
    cd web
    yarn install
    cp .env.example .env
    yarn dev
-   \`\`\`
+   ```
 
 3. **Server Setup**
-   \`\`\`bash
+
+   ```bash
    cd server
    ./mvnw clean install
    ./mvnw spring-boot:run
-   \`\`\`
+   ```
 
 4. **Mobile App Setup**
-   \`\`\`bash
+
+   ```bash
    cd mobile-app
    yarn install
    npx expo start
-   \`\`\`
+   ```
 
 ## 👩‍💻 Development
 
@@ -252,15 +255,15 @@ The mobile app provides customers with easy access to queue services.
 
 We follow strict coding standards across all projects:
 
-- **TypeScript**: [AirBnB Style Guide](https://github.com/airbnb/javascript)
-- **Java**: [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html)
-- **React/React Native**: [React Style Guide](https://reactjs.org/docs/code-splitting.html)
+* **TypeScript**: [AirBnB Style Guide](https://github.com/airbnb/javascript)
+* **Java**: [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html)
+* **React/React Native**: [React Style Guide](https://reactjs.org/docs/code-splitting.html)
 
 ### Testing
 
 Each project includes comprehensive testing:
 
-\`\`\`bash
+```bash
 # Web Portal Tests
 cd web
 yarn test
@@ -272,41 +275,46 @@ cd server
 # Mobile App Tests
 cd mobile-app
 yarn test
-\`\`\`
+```
 
 ## 📚 API Documentation
 
 API documentation is available through Swagger UI:
-- Development: http://localhost:8080/swagger-ui.html
-- Production: https://api.qmaster.com/swagger-ui.html
+
+* Development: `http://localhost:8080/swagger-ui.html`
+* Production: `https://api.qmaster.com/swagger-ui.html`
 
 ## 🌐 Deployment
 
 ### Web Portal
-\`\`\`bash
+
+```bash
 cd web
 yarn build
 yarn start
-\`\`\`
+```
 
 ### Server
-\`\`\`bash
+
+```bash
 cd server
 ./mvnw clean package
 java -jar target/qmaster-server.jar
-\`\`\`
+```
 
 ### Mobile App
-\`\`\`bash
+
+```bash
 cd mobile-app
 eas build
-\`\`\`
+```
 
 ## 🤝 Contributing
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ### Development Process
+
 1. Fork the repository
 2. Create a feature branch
 3. Commit changes
@@ -316,16 +324,18 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ## 📊 Project Management
 
 ### JIRA
-- Project Board: [QMaster JIRA Board](https://qrmasters.atlassian.net/jira/software/projects/QUEUE/boards/1)
-- Sprint Planning
-- Issue Tracking
-- Release Management
+
+* Project Board: [QMaster JIRA Board](https://qrmasters.atlassian.net/jira/software/projects/QUEUE/boards/1)
+* Sprint Planning
+* Issue Tracking
+* Release Management
 
 ### Confluence
-- Technical Documentation (SRS): [QMaster Confluence Board](https://qrmasters.atlassian.net/wiki/x/YYAB)
-- Meeting Notes
-- Design Documents
-- Process Guidelines
+
+* Technical Documentation (SRS): [QMaster Confluence Board](https://qrmasters.atlassian.net/wiki/x/YYAB)
+* Meeting Notes
+* Design Documents
+* Process Guidelines
 
 ## 📄 License
 
@@ -333,11 +343,8 @@ QMaster is licensed under the GPL-3.0 License. See the [LICENSE](LICENSE) file f
 
 ---
 
-<div align="center">
-  <p>Built with ❤️ by the QMaster Team</p>
-  <p>
-    <a href="https://qmaster.com">Website</a> •
-    <a href="https://docs.qmaster.com">Documentation</a> •
-    <a href="https://qmaster.com/blog">Blog</a>
-  </p>
-</div>
+[![Website](https://img.shields.io/badge/Website-QMaster-blue)](https://qmaster.com)
+[![Docs](https://img.shields.io/badge/Docs-QMaster-green)](https://docs.qmaster.com)
+[![Blog](https://img.shields.io/badge/Blog-QMaster-orange)](https://qmaster.com/blog)
+
+Built with ❤️ by the QMaster Team
