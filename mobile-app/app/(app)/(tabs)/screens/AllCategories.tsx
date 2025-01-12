@@ -1,20 +1,24 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import Category from '@/shared/components/Category';
 import { AllCategories as CategoryList } from '@/constants';
-import { useRouter } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 interface CategoryProps {
   title: string;
   image: any;
 }
 
+type RootStackParamList = {
+  category: { name: string };
+};
+
 export default function AllCategories() {
-  const router = useRouter();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const handleCategoryPress = (category: CategoryProps) => {
-    router.push(`/(app)/(tabs)/screens/category/${encodeURIComponent(category.title)}`);
+    navigation.navigate('category', { name: category.title });
   };
 
   return (
