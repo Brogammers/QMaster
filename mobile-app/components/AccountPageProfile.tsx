@@ -16,6 +16,8 @@ interface AccountPageProfileProps {
 
 export default function AccountPageProfile({ isDarkMode }: AccountPageProfileProps) {
   const username = useSelector((state: RootState) => state.username.username);
+  const phoneCode = useSelector((state: RootState) => state.phoneCode.phoneCode);
+  const phoneNumber = useSelector((state: RootState) => state.phoneNumber.phoneNumber);
   const [isLoading, setIsLoading] = useState(true);
   const colorMode = isDarkMode ? "dark" : "light";
   const linkTo = useLinkTo();
@@ -87,7 +89,7 @@ export default function AccountPageProfile({ isDarkMode }: AccountPageProfilePro
               >
                 {isLoading ? null : (
                   <Text className="text-xs text-slight-slate-grey">
-                    {AccountInfo[0].number}
+                    {`${phoneCode}${phoneNumber}`}
                   </Text>
                 )}
               </Skeleton>

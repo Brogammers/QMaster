@@ -140,8 +140,12 @@ export interface QueueInfoCardProps {
 }
 
 export interface UserState {
-  firstName: string | null;
-  lastName: string | null;
+    userId: string | null;
+    username: string | null;
+    phoneCode: string | null;
+    phoneNumber: string | null;
+    firstName: string | null;
+    lastName: string | null;
 }
 
 export interface NavigationState {

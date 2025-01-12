@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Switch, Platform } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTheme } from '@/ctx/ThemeContext';
@@ -7,6 +7,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import i18n from '@/i18n';
 import Return from '@/shared/components/Return';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/redux/store';
 
 interface AccountInfo {
   firstName: string;
@@ -22,15 +24,25 @@ export default function AccountInfoSettings() {
   const { session } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+   const firstName = useSelector(
+       (state: RootState) => state.firstName.firstName
+   )?.split(" ")[0];
+   const lastName = useSelector(
+       (state: RootState) => state.lastName.lastName
+   )?.split(" ")[0];
+
+
   const [accountInfo, setAccountInfo] = useState<AccountInfo>({
-    firstName: '',
-    lastName: '',
+    firstName: firstName ?? '',
+    lastName: lastName ?? '',
     dateOfBirth: new Date(),
     gender: 'prefer_not_to_say',
     receiveOffers: false,
     newsletter: false,
   });
 
+    
   const handleSave = async () => {
     // TODO: Implement save functionality
     setIsEditing(false);
