@@ -66,6 +66,7 @@ export interface ReturnButtonProps {
   size: number;
   color: string;
   backgroundColor?: string;
+  title?: string;
   style?: StyleProp<ViewStyle>;
 }
 

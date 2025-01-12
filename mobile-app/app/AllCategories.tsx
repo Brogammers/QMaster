@@ -22,14 +22,10 @@ export default function AllCategories() {
 
   return (
     <SafeAreaView className="flex-1 bg-off-white">
-        <Return href="/" size={36} backgroundColor='concrete-turqouise' color="white" />
+      <View className="absolute top-0 left-0 right-0 h-32 bg-ocean-blue shadow-sm z-10" />
+      <Return href="/(app)/(tabs)" size={32} color="white" title="allCategories" />
       <ScrollView>
-        <View className="flex-row items-center p-4">
-          <Text className="text-2xl font-bold mt-12">
-            {i18n.t('allCategories')}
-          </Text>
-        </View>
-        <View className="p-4">
+        <View className="p-4 mt-20">
           <View className="flex flex-row flex-wrap justify-between">
             {CategoryList.map((category: CategoryProps, index: number) => (
               <Category
