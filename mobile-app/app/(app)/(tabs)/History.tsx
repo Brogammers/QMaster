@@ -48,6 +48,7 @@ export default function History() {
         const jsonData = await AsyncStorage.getItem("historyData");
         let historyData = JSON.parse(jsonData || "{}");
         const checkDate = new Date();      
+        console.log("History Data: ", historyData.date, "Check date: ", checkDate);
         
         if (historyData && new Date(historyData.date).getTime() > checkDate.getTime()) {
           setHistoryList(historyData.history);
@@ -92,7 +93,7 @@ export default function History() {
             setIsLoading(false);
 
             const timeoutDate = new Date();
-            timeoutDate.setMinutes(timeoutDate.getMinutes() + 0.5);
+            timeoutDate.setSeconds(timeoutDate.getSeconds() + 15);
             AsyncStorage.setItem(
                 "historyData",
                 JSON.stringify({ history: combinedHistory, date: timeoutDate })
