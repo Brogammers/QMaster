@@ -21,25 +21,25 @@ export default function Settings() {
     {
       title: "account_info",
       icon: "account-circle",
-      route: "/Settings/AccountInfo" as Href<string>,
+      route: "/AccountInfoSettings" as Href<string>,
       iconComponent: MaterialIcons,
     },
     {
       title: "security",
       icon: "security",
-      route: "/Settings/Security" as Href<string>,
+      route: "/SecuritySettings" as Href<string>,
       iconComponent: MaterialIcons,
     },
     {
       title: "notifications",
       icon: "notifications",
-      route: "/Settings/Notifications" as Href<string>,
+      route: "/NotificationSettings" as Href<string>,
       iconComponent: MaterialIcons,
     },
     {
       title: "region_language",
       icon: "language",
-      route: "/Settings/RegionLanguage" as Href<string>,
+      route: "/RegionLanguageSettings" as Href<string>,
       iconComponent: MaterialIcons,
     },
   ];
