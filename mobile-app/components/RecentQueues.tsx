@@ -5,7 +5,11 @@ import { Current } from "@/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import i18n from "@/i18n";
 
-export default function RecentQueues() {
+interface RecentQueuesProps {
+  isDarkMode?: boolean;
+}
+
+export default function RecentQueues({ isDarkMode }: RecentQueuesProps) {
   const [historyDataExists, setHistoryDataExists] = useState<boolean>(false);
 
   useEffect(() => {
@@ -27,7 +31,7 @@ export default function RecentQueues() {
 
   return (
     <View>
-      <Text className="my-3 text-2xl font-bold">{i18n.t('recent')}</Text>
+      <Text className={`my-3 text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>{i18n.t('recent')}</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -35,7 +39,7 @@ export default function RecentQueues() {
       >
         {Current.map((recent, index) => (
           <View className="mr-2.5" key={index}>
-            <Category title={recent.name} image={recent.image} spacing={8} />
+            <Category title={recent.name} image={recent.image} spacing={8} isDarkMode={isDarkMode} />
           </View>
         ))}
       </ScrollView>
