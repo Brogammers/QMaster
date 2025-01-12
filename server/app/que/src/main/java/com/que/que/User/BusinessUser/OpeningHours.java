@@ -1,5 +1,6 @@
 package com.que.que.User.BusinessUser;
 
+import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,15 +32,15 @@ public class OpeningHours {
     private String day;
 
     @Column(nullable = false)
-    private String openTime;
+    private Time openTime;
 
     @Column(nullable = false)
-    private String closeTime;
+    private Time closeTime;
 
     @ManyToMany
     private Set<Store> store = new HashSet<>();
 
-    public OpeningHours(String day, String openTime, String closeTime) {
+    public OpeningHours(String day, Time openTime, Time closeTime) {
         this.day = day;
         this.openTime = openTime;
         this.closeTime = closeTime;
