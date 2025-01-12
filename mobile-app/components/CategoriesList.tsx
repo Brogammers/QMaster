@@ -14,7 +14,7 @@ export default function CategoriesList() {
     if (category.title === i18n.t('others')) {
       linkTo('/AllCategories');
     } else {
-      router.push(`/(app)/(tabs)/screens/category/${category.title}`);
+      linkTo(`/Category`);
     }
   };
 
