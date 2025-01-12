@@ -41,7 +41,7 @@ export default function ScanQR({ isDarkMode }: ScanQRProps) {
       <View className={`${I18nManager.isRTL ? `flex-row-reverse` : `flex-row`} items-center justify-between w-full px-5 h-max`}>
         <View className={`${I18nManager.isRTL ? `flex-row-reverse` : `flex-row`}`}>
           <Logo />
-          <Text className='ml-1 text-xl font-medium text-white'>QMaster</Text>
+          <Text className='ml-1 text-xl text-white' style={{ fontFamily: 'JostBold' }}>QMaster</Text>
         </View>
         <TouchableOpacity 
           onPress={handleNotificationsPress}
