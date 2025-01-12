@@ -142,13 +142,14 @@
   "change_password": "Change Password",
   "new_password": "New Password",
   "submit": "Submit",
-  "notifications": "Notifications",
   "external_notifications": "External Notifications",
   "internal_notifications": "In-App Notifications",
+  "external_notifications_desc": "Get notified about your queue status and updates even when the app is closed",
+  "internal_notifications_desc": "Receive notifications about your queue status and updates while using the app",
   "region_language": "Region & Language",
   "country": "Country",
-  "language": "Language",
   "security": "Security",
   "email": "Email",
-  "unchangeable": "Unchangeable"
+  "unchangeable": "Unchangeable",
+  "confirm_password": "Confirm Password"
 }
