@@ -4,6 +4,7 @@ import { View, Linking, Platform, Alert } from "react-native";
 import SearchItem from "@/shared/components/SearchItem";
 import { useLinkTo } from '@react-navigation/native';
 import i18n from "@/i18n";
+import { MotiView } from "moti";
 
 export default function AccountPageItems() {
   const linkTo = useLinkTo();
@@ -16,7 +17,7 @@ export default function AccountPageItems() {
     })|| '';
     
     Linking.openURL(storeUrl).catch((err) =>
-    console.error('An error occurred', err)
+      console.error('An error occurred', err)
     );
   };
   
@@ -26,54 +27,68 @@ export default function AccountPageItems() {
   
   const handleLogout = () => {
     Alert.alert(
-      'Log Out',
-      'Are you sure you want to log out?',
+      i18n.t('logout'),
+      i18n.t('logout_confirm'),
       [
         {
-          text: 'Cancel',
+          text: i18n.t('cancel'),
           style: 'cancel',
         },
         {
-          text: 'OK',
-          onPress: () => auth.signOut(), 
+          text: i18n.t('confirm'),
+          onPress: () => auth.signOut(),
+          style: 'destructive',
         },
       ],
-      { cancelable: false }
+      { cancelable: true }
     );
   };
 
+  const items = [
+    {
+      title: i18n.t('notifications'),
+      icon: 'bell',
+      onPress: handleNotificationsPress,
+    },
+    {
+      title: i18n.t('about'),
+      icon: 'circle-info',
+      onPress: () => console.log('About'),
+    },
+    {
+      title: i18n.t('rate'),
+      icon: 'star',
+      onPress: handleRateApp,
+    },
+    {
+      title: i18n.t('logout'),
+      icon: 'arrow-right-from-bracket',
+      onPress: handleLogout,
+    },
+  ];
+
   return (
-    <View className="p-4 items-center justify-center w-full z-50">
-      {/* <SearchItem
-        title= {i18n.t('language')}
-        icon={'globe'}
-        isAccount 
-        onPress={() => console.log('Language and Region')} 
-      /> */}
-      <SearchItem 
-        title={i18n.t('notifications')} 
-        icon={'bell'} 
-        isAccount 
-        onPress={handleNotificationsPress}
-      />
-      <SearchItem 
-        title={i18n.t('about')} 
-        icon={'circle-info'} 
-        isAccount 
-        onPress={() => console.log('About')} 
-      />
-      <SearchItem 
-        title={i18n.t('rate')}
-        icon={'star'} 
-        isAccount 
-        onPress={handleRateApp} 
-      />
-      <SearchItem 
-        title={i18n.t('logout')}
-        icon={'arrow-right-from-bracket'}
-        isAccount
-        onPress={()=> handleLogout()}
-      />
+    <View className="p-6 w-full">
+      {items.map((item, index) => (
+        <MotiView
+          key={item.title}
+          from={{ opacity: 0, translateX: -20 }}
+          animate={{ opacity: 1, translateX: 0 }}
+          transition={{
+            delay: index * 100,
+            damping: 20,
+            mass: 0.8,
+          }}
+          className="mb-4"
+        >
+          <SearchItem
+            title={item.title}
+            icon={item.icon}
+            isAccount
+            onPress={item.onPress}
+          />
+        </MotiView>
+      ))}
     </View>
-  )
+  );
 }
