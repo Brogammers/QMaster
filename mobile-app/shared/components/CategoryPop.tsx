@@ -18,7 +18,7 @@ export default function CategoryPop(props: ExtendedCategoryProps) {
   return (
     <TouchableOpacity 
       className={`flex items-center justify-center h-24 rounded-2xl mb-2.5 ${
-        isDarkMode ? 'bg-slate-800/60 border border-slate-700' : 'bg-white'
+        isDarkMode ? 'bg-slate-700/80 border border-slate-700' : 'bg-white'
       }`} 
       style={{ width: wide }} 
       onPress={onPress}
