@@ -8,7 +8,7 @@ import Account from "./Account";
 import Search from "@/app/(app)/(tabs)/screens/Search";
 import Notifications from "@/app/(app)/(tabs)/screens/Notifications";
 import { Entypo } from "@expo/vector-icons";
-import QueuePage from "@/app/(app)/(tabs)/screens/QueuePage";
+import QueuePage from "@/app/(app)/(tabs)/screens/Partner";
 import i18n from "@/i18n";
 import AllCategories from "@/app/(app)/(tabs)/screens/AllCategories";
 
