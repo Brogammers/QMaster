@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/app/redux/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setToken } from "@/app/redux/authSlice";
+import axios from "axios";
 
 const AuthContext = React.createContext<{
   signIn: () => void;
@@ -129,6 +130,7 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
     setUser("");
     setSession(null);
     dispatch(setToken(""));
+    axios.defaults.headers.common["Authorization"] = "";
 
     try {
       await AsyncStorage.removeItem("TOKEN_KEY");

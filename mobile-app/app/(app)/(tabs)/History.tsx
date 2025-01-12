@@ -20,6 +20,19 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 
+function formatDate(date: any) {
+    let day = date.getDate();
+    if (day < 10) {
+        day = "0" + day;
+    }
+    let month = date.getMonth() + 1;
+    if (month < 10) {
+        month = "0" + month;
+    }
+    let year = date.getFullYear();
+    return day + "/" + month + "/" + year;
+}
+
 export default function History() {
   const isFocused = useIsFocused();
   const [historyList, setHistoryList] = useState<HistoryComponentProps[]>([]);
@@ -30,45 +43,47 @@ export default function History() {
   const userId = useSelector((state:RootState) => state.userId.userId);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async () => {      
       try {
-        let historyData = await AsyncStorage.getItem("historyData");
-        if (historyData) {
-          setHistoryList(JSON.parse(historyData));
+        const jsonData = await AsyncStorage.getItem("historyData");
+        let historyData = JSON.parse(jsonData || "{}");
+        const checkDate = new Date();      
+        
+        if (historyData && new Date(historyData.date).getTime() > checkDate.getTime()) {
+          setHistoryList(historyData.history);
         } else {
-          console.log("History Response ", axios.defaults.headers);
           const token = await AsyncStorage.getItem("token");
 
-          const timeoutPromise = new Promise((resolve, reject) => {
-            setTimeout(() => reject("Timeout"), 5000);
-          });
-
-          const [response, _] = (await Promise.all([
-            axios.get(`${Config.EXPO_PUBLIC_API_BASE_URL_HISTORY_ANDROID || "http://10.0.2.2:8080/api/v1/history/all"}?id=${userId}`, {
+          const response = axios.get(`${Config.EXPO_PUBLIC_API_BASE_URL_HISTORY_ANDROID || "http://10.0.2.2:8080/api/v1/history/all"}?id=${userId}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
-            }),
-            timeoutPromise,
-          ])) as [AxiosResponse, unknown];
-
-          if (response.status === 200) {
-            const data = response.data.history;
+            });
+          
+        response.then((res: AxiosResponse) => {          
+          if (res.status === 200) {
+            const data = res.data.history;
             let historyEnqueue = data.enqueuings.content;
             let historyDequeue = data.dequeuings.content;
-
+            
             historyDequeue.forEach(
-              (item: { isHistory: boolean; status: string; date: string }) => {
+              (item: { id: number, isHistory: boolean; status: string; date: string, name: string, time: string, notification: string; location: string}) => {
+                item.id = item.id;
                 item.isHistory = true;
                 item.status = "Dequeued";
-                item.date = "Today";
+                item.date = formatDate(new Date(item.time));
+                item.name = item.name;
+                item.location = item.location;
               }
             );
             historyEnqueue.forEach(
-              (item: { isHistory: boolean; status: string; date: string }) => {
+              (item: { id: number, isHistory: boolean; status: string; date: string; name: string, time: string, notification: string; location: string}) => {
+                item.id = item.id;
                 item.isHistory = true;
                 item.status = "Enqueued";
-                item.date = "Today";
+                item.date = formatDate(new Date(item.time));
+                item.name = item.name;
+                item.location = item.location;
               }
             );
 
@@ -76,26 +91,27 @@ export default function History() {
             setHistoryList(combinedHistory);
             setIsLoading(false);
 
-            await AsyncStorage.setItem(
-              "historyData",
-              JSON.stringify(combinedHistory)
-            );
-          } else {
+            const timeoutDate = new Date();
+            timeoutDate.setMinutes(timeoutDate.getMinutes() + 0.5);
+            AsyncStorage.setItem(
+                "historyData",
+                JSON.stringify({ history: combinedHistory, date: timeoutDate })
+            ).then(() => {
+                console.log("History Data Saved");
+            });
+          } else {            
             setIsLoading(false);
           }
+        }
+          );
         }
       } catch (error) {
         console.error(error);
       }
     };
-
-    const fetchDataTimeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 5000);
+    
 
     fetchData();
-
-    return () => clearTimeout(fetchDataTimeout);
   }, [isFocused]);
 
   return (
@@ -140,7 +156,7 @@ export default function History() {
               key={index}
               image={CarrefourLogo}
               name={item.name}
-              location={"Anything for now"}
+              location={item.location}
               date={item.date}
               id={item.id}
               status={item.status}

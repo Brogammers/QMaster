@@ -56,14 +56,14 @@ public class Store {
         this.name = name;
         this.location = location;
         this.description = "";
-        // this.businessUser = businessUser;
+        this.businessUser = businessUser;
     }
 
     public Store(String name, String location, String description, BusinessUser businessUser) {
         this.name = name;
         this.location = location;
         this.description = description;
-        // this.businessUser = businessUser;
+        this.businessUser = businessUser;
     }
 
     public void addOpeningHours(OpeningHours openingHours) {

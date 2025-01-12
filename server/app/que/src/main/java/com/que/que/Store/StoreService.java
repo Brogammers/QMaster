@@ -3,6 +3,7 @@ package com.que.que.Store;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
+import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserRepository;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class StoreService {
 
     public Store createStore(long businessUserId, String name, String description, String location) {
         // TODO: Add validation
-        var businessUser = businessUserRepository.findById(businessUserId)
+        BusinessUser businessUser = businessUserRepository.findById(businessUserId)
                 .orElseThrow(() -> new IllegalStateException("Business user with id " + businessUserId + " not found"));
 
         return storeRepository.save(
