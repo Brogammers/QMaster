@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import Category from '@/shared/components/Category';
+import Category from '@/shared/components/CategoryPop';
 import { AllCategories as CategoryList } from '@/constants';
 import { useLinkTo } from '@react-navigation/native';
 

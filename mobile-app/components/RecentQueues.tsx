@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, Alert } from "react-native";
-import Category from "@/shared/components/Category";
+import Category from "@/shared/components/CategoryPop";
 import { Current } from "@/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import i18n from "@/i18n";

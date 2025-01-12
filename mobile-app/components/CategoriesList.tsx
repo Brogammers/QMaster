@@ -1,6 +1,6 @@
 import React from 'react';
 import { I18nManager, Text, View } from 'react-native';
-import CategoryPop from '@/shared/components/Category';
+import CategoryPop from '@/shared/components/CategoryPop';
 import { Categories } from '@/constants';
 import i18n from '@/i18n';
 import { useLinkTo } from '@react-navigation/native';
