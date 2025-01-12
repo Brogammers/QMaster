@@ -22,15 +22,16 @@ export default function AllCategories() {
     <View className={`flex-1 ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="p-4">
-          <View className="flex flex-row flex-wrap justify-between">
+          <View className="flex flex-row flex-wrap justify-start gap-x-4">
             {CategoryList.map((category: CategoryProps, index: number) => (
-              <Category
-                key={index}
-                title={category.title}
-                image={category.image}
-                onPress={() => handleCategoryPress(category)}
-                isDarkMode={isDarkMode}
-              />
+              <View key={index} className="mb-4">
+                <Category
+                  title={category.title}
+                  image={category.image}
+                  onPress={() => handleCategoryPress(category)}
+                  isDarkMode={isDarkMode}
+                />
+              </View>
             ))}
           </View>
         </View>
