@@ -90,7 +90,7 @@ export default function Account() {
                 height={35}
               >
                 {isLoading ? null : (
-                  <Text className="pb-4 text-3xl font-extrabold text-baby-blue">
+                  <Text className={`pb-4 text-3xl font-extrabold ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
                     Hi {firstName &&
                       firstName.charAt(0).toUpperCase() + firstName.slice(1)
                     }! 👋

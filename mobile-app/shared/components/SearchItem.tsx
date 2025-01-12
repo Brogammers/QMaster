@@ -23,6 +23,8 @@ export default function SearchItem(props: ExtendedSearchItemProps) {
     }
   };
 
+  const iconColor = isDarkMode ? "#1DCDFE" : "#17222D";
+
   return (
     <TouchableOpacity
       className={`w-full ${isAccount ? 'py-4 px-4' : 'py-2 border-b-2 border-lite-grey'}`}
@@ -34,7 +36,7 @@ export default function SearchItem(props: ExtendedSearchItemProps) {
             <FontAwesome6 
               name={icon} 
               size={22} 
-              color="#1DCDFE"
+              color={iconColor}
               className="rounded-sm w-7 h-7" 
             />
             <Text className={`ml-5 text-base font-medium ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
@@ -56,7 +58,7 @@ export default function SearchItem(props: ExtendedSearchItemProps) {
           <AntDesign 
             name={I18nManager.isRTL ? "caretleft" : "caretright"} 
             size={18} 
-            color="#1DCDFE" 
+            color={iconColor}
           />
         ) : (
           isPopular && 
