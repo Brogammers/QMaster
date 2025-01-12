@@ -140,35 +140,44 @@ export default function Login() {
           console.error("Axios error status:", axiosError.response.status);
           console.error("Axios error data:", axiosError.response.data);
           
+          // Map backend error messages to our translation keys
+          let errorMessage = axiosError.response.data.message;
+          if (errorMessage.includes("Invalid credentials")) {
+            errorMessage = i18n.t("loginPage.invalidCredentials");
+          } else if (errorMessage.includes("not verified")) {
+            errorMessage = i18n.t("loginPage.accountNotVerified");
+          } else if (errorMessage.includes("locked")) {
+            errorMessage = i18n.t("loginPage.accountLocked");
+          }
+          
           Alert.alert(
             i18n.t("loginPage.failed"),
-            axiosError.response.data.message || i18n.t("loginPage.failedMessage")
+            errorMessage || i18n.t("loginPage.failedMessage")
           );
           
           setErrors({
-            server: axiosError.response.data.message,
+            server: errorMessage,
           });
         } else if (axiosError.request) {
           console.error("Axios error request:", axiosError.request);
           Alert.alert(
             i18n.t("loginPage.error"),
-            i18n.t("loginPage.errorMessage")
+            i18n.t("loginPage.networkError")
           );
         } else {
           console.error("Axios error message:", axiosError.message);
           Alert.alert(
             i18n.t("loginPage.error"),
-            axiosError.message || i18n.t("loginPage.errorMessage")
+            i18n.t("loginPage.errorMessage")
           );
         }
       } else if (error instanceof Error) {
         setErrorMessage(error.message);
         Alert.alert(
           i18n.t("loginPage.error"),
-          error.message || i18n.t("loginPage.errorMessage")
+          i18n.t("loginPage.errorMessage")
         );
       } else {
-        // Handle non-Axios errors
         console.error("Non-Axios error:", error);
         Alert.alert(
           i18n.t("loginPage.error"),

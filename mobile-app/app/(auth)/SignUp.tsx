@@ -146,21 +146,34 @@ export default function SignUp() {
         if (axiosError.response) {
           console.error("Axios error status:", axiosError.response.status);
           console.error("Axios error data:", axiosError.response.data);
+          
+          // Map backend error messages to our translation keys
+          let errorMessage = axiosError.response.data.message;
+          if (errorMessage.includes("Email is already in use")) {
+            errorMessage = i18n.t("signupPage.emailInUse");
+          } else if (errorMessage.includes("Invalid email")) {
+            errorMessage = i18n.t("signupPage.invalidEmail");
+          } else if (errorMessage.includes("Password")) {
+            errorMessage = i18n.t("signupPage.invalidPassword");
+          } else if (errorMessage.includes("phone")) {
+            errorMessage = i18n.t("signupPage.invalidPhone");
+          }
+          
           Alert.alert(
             i18n.t("signupPage.failed"),
-            axiosError.response.data.message || i18n.t("signupPage.failedMessage")
+            errorMessage || i18n.t("signupPage.failedMessage")
           );
         } else if (axiosError.request) {
           console.error("Axios error request:", axiosError.request);
           Alert.alert(
             i18n.t("signupPage.error"),
-            i18n.t("signupPage.errorMessage")
+            i18n.t("signupPage.networkError")
           );
         } else {
           console.error("Axios error message:", axiosError.message);
           Alert.alert(
             i18n.t("signupPage.error"),
-            axiosError.message || i18n.t("signupPage.errorMessage")
+            i18n.t("signupPage.errorMessage")
           );
         }
       } else {
