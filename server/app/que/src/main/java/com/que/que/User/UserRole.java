@@ -1,6 +1,6 @@
-package com.que.que.User.AppUser;
+package com.que.que.User;
 
-public enum AppUserRole {
+public enum UserRole {
   USER,
   ADMIN,
   BUSINESS_OWNER,

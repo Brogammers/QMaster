@@ -26,12 +26,12 @@ public class QueueController {
     private final QueueService queueService;
 
     @PostMapping
-    @Secured("USER")
+    @Secured("BUSINESS_OWNER")
     public ResponseEntity<Object> createNewQueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
         try {
-            queueService.createNewQueue(request.getId(), request.getName());
+            queueService.createNewQueue(request.getId(), request.getStoreId(), request.getName());
             body.put("message", "Queue was successful");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());

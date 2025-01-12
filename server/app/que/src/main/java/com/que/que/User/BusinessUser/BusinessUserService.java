@@ -20,7 +20,7 @@ import com.que.que.Registration.Token.ConfirmationTokenService;
 @AllArgsConstructor
 public class BusinessUserService implements UserDetailsService {
 
-    private final BusinessUserRepository appUserRepository;
+    private final BusinessUserRepository businessUserRepository;
     private static final String USER_NOT_FOUND_MSG = "User with email %s was not found in the database";
     private final ConfirmationTokenService confirmationTokenService;
     // private final EmailService emailService;
@@ -29,14 +29,14 @@ public class BusinessUserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        return appUserRepository
+        return businessUserRepository
                 .findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         String.format(USER_NOT_FOUND_MSG, username)));
     }
 
     public String signUpUser(BusinessUser appUser) {
-        boolean userExists = appUserRepository
+        boolean userExists = businessUserRepository
                 .findByEmail(appUser.getEmail())
                 .isPresent();
         if (userExists) {
@@ -46,7 +46,7 @@ public class BusinessUserService implements UserDetailsService {
         String encodedPassword = passwordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPassword);
 
-        appUserRepository.save(appUser);
+        businessUserRepository.save(appUser);
 
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(
@@ -69,7 +69,7 @@ public class BusinessUserService implements UserDetailsService {
     }
 
     public void enableAppUser(String email) {
-        BusinessUser appUser = appUserRepository.findByEmail(email)
+        BusinessUser appUser = businessUserRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("User was not found"));
         appUser.setEnabled(true);
     }

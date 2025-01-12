@@ -1,6 +1,8 @@
 package com.que.que.Queue;
 
 import com.que.que.QRcode.QRCodeService;
+import com.que.que.Store.Store;
+import com.que.que.Store.StoreRepository;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.AppUser.AppUserRepository;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 public class QueueService {
 
   private final AppUserRepository appUserRepository;
+  private final StoreRepository storeRepository;
   private final BusinessUserRepository businessUserRepository;
   private final QueueRepository queueRepository;
   private final QueueCreationRepository queueCreationRepository;
@@ -48,7 +51,7 @@ public class QueueService {
     print();
   }
 
-  public void createNewQueue(@NonNull Long queueHolderID, String name) {
+  public void createNewQueue(@NonNull Long queueHolderID, @NonNull Long storeId, String name) {
     BusinessUser appUser = businessUserRepository.findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find User"));
 
@@ -79,15 +82,20 @@ public class QueueService {
     } else {
       queueHolderQueue = queueSet.get(queueLocation);
     }
+
+    // Check if store exists
+    Store store = storeRepository.findById(storeId)
+        .orElseThrow(() -> new IllegalStateException("Could not find store"));
+
     try {
       // This currently has an error because the createQRCode method is not static
-      qrCodeService.createQRCode(
-          queueHolderID,
-          queueHolderQueue.size(),
-          String.format(
-              "http://localhost:8080/api/v1/queue/user?userId=%d&queueName=%s",
-              queueHolderID,
-              name));
+      // qrCodeService.createQRCode(
+      // queueHolderID,
+      // queueHolderQueue.size(),
+      // String.format(
+      // "http://localhost:8080/api/v1/queue/user?userId=%d&queueName=%s",
+      // queueHolderID,
+      // name));
     } catch (Exception e) {
       throw new IllegalStateException("Error while creating queue.");
     }
@@ -96,7 +104,8 @@ public class QueueService {
         name,
         appUser,
         queueLocation,
-        queueHolderQueue.size()));
+        queueHolderQueue.size(),
+        store));
     queueCreationRepository.save(new QueueCreation(createdQueue));
     queueHolderQueue.add(new LinkedList<>());
     print();

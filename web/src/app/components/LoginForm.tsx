@@ -24,6 +24,10 @@ export default function LoginForm({ setIsLoading }: any) {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
+  const handleNav = () => {
+    router.push(`/AboHawa/counter`);
+  } 
+
   const handleLogin = (values: any, { setErrors }: { setErrors: Function }) => {
     const API_BASE_URL_LOGIN = process.env.NEXT_PUBLIC_API_BASE_URL_LOGIN;
 
@@ -98,7 +102,7 @@ export default function LoginForm({ setIsLoading }: any) {
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}
-        onSubmit={handleLogin}
+        onSubmit={handleNav} // handleLogin
       >
         {({
           handleChange,
