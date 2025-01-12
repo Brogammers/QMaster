@@ -46,33 +46,37 @@ export default function NotificationsSettings() {
           className={`rounded-xl p-4 mt-4 mb-6 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}
         >
           <View className="space-y-6">
-            <View className="flex-row items-center justify-between">
-              <View>
-                <Text className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+            <View className="flex-row items-center justify-between py-2">
+              <View className="flex-1 mr-4">
+                <Text className={`text-base font-medium ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
                   {i18n.t('external_notifications')}
                 </Text>
-                <Text className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                <Text className={`text-sm mt-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                   {i18n.t('external_notifications_desc')}
                 </Text>
               </View>
               <Switch
                 value={externalNotifications}
                 onValueChange={() => handleNotificationToggle(true)}
+                trackColor={{ false: '#767577', true: isDarkMode ? '#1DCDFE' : '#0369A1' }}
+                thumbColor={externalNotifications ? '#fff' : '#f4f3f4'}
               />
             </View>
 
-            <View className="flex-row items-center justify-between">
-              <View>
-                <Text className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+            <View className="flex-row items-center justify-between py-2">
+              <View className="flex-1 mr-4">
+                <Text className={`text-base font-medium ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
                   {i18n.t('internal_notifications')}
                 </Text>
-                <Text className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                <Text className={`text-sm mt-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                   {i18n.t('internal_notifications_desc')}
                 </Text>
               </View>
               <Switch
                 value={internalNotifications}
                 onValueChange={() => handleNotificationToggle(false)}
+                trackColor={{ false: '#767577', true: isDarkMode ? '#1DCDFE' : '#0369A1' }}
+                thumbColor={internalNotifications ? '#fff' : '#f4f3f4'}
               />
             </View>
           </View>

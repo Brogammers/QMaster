@@ -55,31 +55,35 @@ export default function SecuritySettings() {
             animate={{ opacity: 1, translateY: 0 }}
             className={`rounded-xl p-4 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}
           >
-            <Text className="text-xl font-semibold mb-4 text-white">
+            <Text className={`text-lg font-medium mb-4 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
               {i18n.t('change_email')}
             </Text>
             <View className="space-y-4">
               <View>
-                <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('current_password')}</Text>
+                <Text className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                  {i18n.t('current_password')}
+                </Text>
                 <TextInput 
                   value={currentPassword}
                   onChangeText={setCurrentPassword}
                   secureTextEntry
-                  className={`p-2 rounded-lg ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
+                  className={`py-3.5 px-4 rounded-xl ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
                 />
               </View>
               <View>
-                <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('new_email')}</Text>
+                <Text className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                  {i18n.t('new_email')}
+                </Text>
                 <TextInput 
                   value={newEmail}
                   onChangeText={setNewEmail}
                   keyboardType="email-address"
-                  className={`p-2 rounded-lg ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
+                  className={`py-3.5 px-4 rounded-xl ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
                 />
               </View>
               <TouchableOpacity
                 onPress={handleEmailChange}
-                className={`py-3 rounded-lg ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'}`}
+                className={`py-3.5 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'}`}
               >
                 <Text className="text-white text-center font-semibold">
                   {i18n.t('submit')}
@@ -94,40 +98,46 @@ export default function SecuritySettings() {
             animate={{ opacity: 1, translateY: 0 }}
             className={`rounded-xl p-4 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}
           >
-            <Text className="text-xl font-semibold mb-4 text-white">
+            <Text className={`text-lg font-medium mb-4 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
               {i18n.t('change_password')}
             </Text>
             <View className="space-y-4">
               <View>
-                <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('current_email')}</Text>
+                <Text className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                  {i18n.t('current_email')}
+                </Text>
                 <TextInput 
                   value={currentEmail}
                   onChangeText={setCurrentEmail}
                   keyboardType="email-address"
-                  className={`p-2 rounded-lg ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
+                  className={`py-3.5 px-4 rounded-xl ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
                 />
               </View>
               <View>
-                <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('current_password')}</Text>
+                <Text className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                  {i18n.t('current_password')}
+                </Text>
                 <TextInput 
                   value={currentPasswordForPass}
                   onChangeText={setCurrentPasswordForPass}
                   secureTextEntry
-                  className={`p-2 rounded-lg ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
+                  className={`py-3.5 px-4 rounded-xl ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
                 />
               </View>
               <View>
-                <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('new_password')}</Text>
+                <Text className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                  {i18n.t('new_password')}
+                </Text>
                 <TextInput 
                   value={newPassword}
                   onChangeText={setNewPassword}
                   secureTextEntry
-                  className={`p-2 rounded-lg ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
+                  className={`py-3.5 px-4 rounded-xl ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
                 />
               </View>
               <TouchableOpacity
                 onPress={handlePasswordChange}
-                className={`py-3 rounded-lg ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'}`}
+                className={`py-3.5 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'}`}
               >
                 <Text className="text-white text-center font-semibold">
                   {i18n.t('submit')}

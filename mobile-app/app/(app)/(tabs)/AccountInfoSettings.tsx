@@ -80,48 +80,47 @@ export default function AccountInfoSettings() {
         <MotiView 
           from={{ opacity: 0, translateY: 10 }}
           animate={{ opacity: 1, translateY: 0 }}
-          transition={{ type: 'timing', duration: 350 }}
           className={`rounded-xl p-4 mt-4 mb-6 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}
         >
           <View className="space-y-4">
             <View>
-              <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('email')}</Text>
+              <Text className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>{i18n.t('email')}</Text>
               <TextInput 
                 value={typeof session === 'string' ? session : ''}
                 editable={false}
-                className={`p-2 rounded-lg ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
+                className={`py-3.5 px-4 rounded-xl ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
               />
             </View>
 
             <View>
-              <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('first_name')}</Text>
+              <Text className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>{i18n.t('first_name')}</Text>
               <TextInput 
                 value={accountInfo.firstName}
                 onChangeText={text => setAccountInfo({...accountInfo, firstName: text})}
                 editable={isEditing}
-                className={`p-2 rounded-lg ${
+                className={`py-3.5 px-4 rounded-xl ${
                   isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'
                 } ${!isEditing && 'opacity-50'}`}
               />
             </View>
 
             <View>
-              <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('last_name')}</Text>
+              <Text className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>{i18n.t('last_name')}</Text>
               <TextInput 
                 value={accountInfo.lastName}
                 onChangeText={text => setAccountInfo({...accountInfo, lastName: text})}
                 editable={isEditing}
-                className={`p-2 rounded-lg ${
+                className={`py-3.5 px-4 rounded-xl ${
                   isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'
                 } ${!isEditing && 'opacity-50'}`}
               />
             </View>
 
             <View>
-              <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('date_of_birth')}</Text>
+              <Text className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>{i18n.t('date_of_birth')}</Text>
               <TouchableOpacity 
                 onPress={() => isEditing && setShowDatePicker(true)}
-                className={`p-2 rounded-lg ${
+                className={`py-3.5 px-4 rounded-xl ${
                   isDarkMode ? 'bg-slate-700' : 'bg-gray-100'
                 } ${!isEditing && 'opacity-50'}`}
               >
@@ -132,63 +131,53 @@ export default function AccountInfoSettings() {
             </View>
 
             <View>
-              <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('gender')}</Text>
-              <View className={`rounded-lg ${
-                isDarkMode ? 'bg-slate-700' : 'bg-gray-100'
-              } ${!isEditing && 'opacity-50'}`}>
+              <Text className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>{i18n.t('gender')}</Text>
+              <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'} ${!isEditing && 'opacity-50'}`}>
                 <Picker
                   enabled={isEditing}
                   selectedValue={accountInfo.gender}
-                  onValueChange={value => setAccountInfo({...accountInfo, gender: value})}
-                  style={{ color: isDarkMode ? '#fff' : '#000' }}
+                  onValueChange={(value) => setAccountInfo({...accountInfo, gender: value})}
+                  style={{ color: isDarkMode ? '#fff' : '#000', height: 50 }}
                 >
                   <Picker.Item label={i18n.t('prefer_not_to_say')} value="prefer_not_to_say" />
                   <Picker.Item label={i18n.t('male')} value="male" />
                   <Picker.Item label={i18n.t('female')} value="female" />
-                  <Picker.Item label={i18n.t('other')} value="other" />
                 </Picker>
               </View>
             </View>
 
-            <View className="flex-row items-center justify-between">
-              <Text className={isDarkMode ? 'text-white' : 'text-coal-black'}>{i18n.t('receive_offers')}</Text>
+            <View className="flex-row items-center justify-between py-2">
+              <Text className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                {i18n.t('receive_offers')}
+              </Text>
               <Switch
                 value={accountInfo.receiveOffers}
-                onValueChange={(value) => {
-                  if (isEditing) {
-                    setAccountInfo({...accountInfo, receiveOffers: value});
-                  }
-                }}
+                onValueChange={(value) => isEditing && setAccountInfo({...accountInfo, receiveOffers: value})}
                 disabled={!isEditing}
               />
             </View>
 
-            <View className="flex-row items-center justify-between">
-              <Text className={isDarkMode ? 'text-white' : 'text-coal-black'}>{i18n.t('newsletter')}</Text>
+            <View className="flex-row items-center justify-between py-2">
+              <Text className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                {i18n.t('newsletter')}
+              </Text>
               <Switch
                 value={accountInfo.newsletter}
-                onValueChange={(value) => {
-                  if (isEditing) {
-                    setAccountInfo({...accountInfo, newsletter: value});
-                  }
-                }}
+                onValueChange={(value) => isEditing && setAccountInfo({...accountInfo, newsletter: value})}
                 disabled={!isEditing}
               />
             </View>
 
-            <TouchableOpacity
-              onPress={handleSave}
-              disabled={!isEditing}
-              className={`py-3 rounded-lg ${
-                isEditing 
-                  ? isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'
-                  : 'bg-gray-400'
-              }`}
-            >
-              <Text className="text-white text-center font-semibold">
-                {i18n.t('save')}
-              </Text>
-            </TouchableOpacity>
+            {isEditing && (
+              <TouchableOpacity
+                onPress={handleSave}
+                className={`py-3.5 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'}`}
+              >
+                <Text className="text-white text-center font-semibold">
+                  {i18n.t('save')}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </MotiView>
       </ScrollView>

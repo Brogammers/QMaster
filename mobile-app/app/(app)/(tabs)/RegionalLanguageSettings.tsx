@@ -36,14 +36,18 @@ export default function RegionLanguageSettings() {
         >
           <View className="space-y-6">
             <View>
-              <Text className={`text-lg font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+              <Text className={`text-base font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
                 {i18n.t('country')}
               </Text>
-              <View className={`rounded-lg overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
+              <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
                 <Picker
                   selectedValue={selectedCountry}
                   onValueChange={setSelectedCountry}
-                  style={{ color: isDarkMode ? '#fff' : '#000' }}
+                  style={{ 
+                    color: isDarkMode ? '#fff' : '#000',
+                    height: 50,
+                    backgroundColor: 'transparent'
+                  }}
                 >
                   <Picker.Item label="United States" value="US" />
                   <Picker.Item label="United Kingdom" value="UK" />
@@ -51,31 +55,27 @@ export default function RegionLanguageSettings() {
                   <Picker.Item label="Australia" value="AU" />
                   <Picker.Item label="Germany" value="DE" />
                   <Picker.Item label="France" value="FR" />
-                  <Picker.Item label="Spain" value="ES" />
-                  <Picker.Item label="Italy" value="IT" />
                   <Picker.Item label="Japan" value="JP" />
-                  <Picker.Item label="South Korea" value="KR" />
                   <Picker.Item label="China" value="CN" />
                   <Picker.Item label="India" value="IN" />
                   <Picker.Item label="Brazil" value="BR" />
-                  <Picker.Item label="Mexico" value="MX" />
-                  <Picker.Item label="Saudi Arabia" value="SA" />
-                  <Picker.Item label="United Arab Emirates" value="AE" />
-                  <Picker.Item label="Egypt" value="EG" />
-                  <Picker.Item label="South Africa" value="ZA" />
                 </Picker>
               </View>
             </View>
 
             <View>
-              <Text className={`text-lg font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+              <Text className={`text-base font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
                 {i18n.t('language')}
               </Text>
-              <View className={`rounded-lg overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
+              <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
                 <Picker
                   selectedValue={selectedLanguage}
                   onValueChange={setSelectedLanguage}
-                  style={{ color: isDarkMode ? '#fff' : '#000' }}
+                  style={{ 
+                    color: isDarkMode ? '#fff' : '#000',
+                    height: 50,
+                    backgroundColor: 'transparent'
+                  }}
                 >
                   <Picker.Item label="English" value="en" />
                   <Picker.Item label="Arabic (العربية)" value="ar" />
