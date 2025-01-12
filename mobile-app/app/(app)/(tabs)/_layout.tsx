@@ -12,6 +12,7 @@ import QueuePage from "@/app/(app)/(tabs)/Partner";
 import i18n from "@/i18n";
 import AllCategories from "@/app/(app)/(tabs)/AllCategories";
 import Category from "@/app/(app)/(tabs)/Category";
+import Settings from "./Settings";
 
 const Tab = createBottomTabNavigator();
 
@@ -144,6 +145,20 @@ export default function AppEntry() {
                 backgroundColor: "#17222D",
               },
               headerTitle: i18n.t("allCategories"),
+              headerTintColor: "white",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="Settings"
+            component={Settings}
+            options={{
+              tabBarButton: () => null,
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: "#17222D",
+              },
+              headerTitle: i18n.t("settings"),
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}

@@ -122,10 +122,6 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Login error:", error);
-      Alert.alert(
-        i18n.t("loginPage.error"),
-        i18n.t("loginPage.errorMessage")
-      );
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ServerError>;
@@ -133,19 +129,42 @@ export default function Login() {
         if (axiosError.response) {
           console.error("Axios error status:", axiosError.response.status);
           console.error("Axios error data:", axiosError.response.data);
+          
+          // Show the actual error message from the server
+          Alert.alert(
+            i18n.t("loginPage.failed"),
+            axiosError.response.data.message || i18n.t("loginPage.failedMessage")
+          );
+          
           setErrors({
             server: axiosError.response.data.message,
           });
         } else if (axiosError.request) {
           console.error("Axios error request:", axiosError.request);
+          Alert.alert(
+            i18n.t("loginPage.error"),
+            i18n.t("loginPage.errorMessage")
+          );
         } else {
           console.error("Axios error message:", axiosError.message);
+          Alert.alert(
+            i18n.t("loginPage.error"),
+            axiosError.message || i18n.t("loginPage.errorMessage")
+          );
         }
       } else if (error instanceof Error) {
         setErrorMessage(error.message);
+        Alert.alert(
+          i18n.t("loginPage.error"),
+          error.message
+        );
       } else {
         // Handle non-Axios errors
         console.error("Non-Axios error:", error);
+        Alert.alert(
+          i18n.t("loginPage.error"),
+          i18n.t("loginPage.errorMessage")
+        );
       }
     } finally {
       setTimeout(() => {
