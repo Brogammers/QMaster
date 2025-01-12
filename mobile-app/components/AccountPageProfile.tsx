@@ -9,6 +9,7 @@ import { Skeleton } from "moti/skeleton";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import { useLinkTo } from "@react-navigation/native";
+import _ from "lodash";
 
 interface AccountPageProfileProps {
   isDarkMode: boolean;
@@ -76,7 +77,7 @@ export default function AccountPageProfile({ isDarkMode }: AccountPageProfilePro
               >
                 {isLoading ? null : (
                   <Text className={`text-lg font-bold text-baby-blue ${I18nManager.isRTL ? "text-left" : "text-left"}`}>
-                    {username && username.charAt(0).toUpperCase() + username.slice(1)}
+                    {username && _.capitalize(username)}
                   </Text>
                 )}
               </Skeleton>

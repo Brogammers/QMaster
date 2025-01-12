@@ -10,6 +10,7 @@ import { Skeleton } from "moti/skeleton";
 import { MotiView } from "moti";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "@/ctx/ThemeContext";
+import _ from "lodash";
 
 const { width } = Dimensions.get('window');
 
@@ -18,7 +19,7 @@ export default function Account() {
   const { isDarkMode, toggleTheme } = useTheme();
   const colorMode = isDarkMode ? 'dark' : 'light';
 
-  const firstName = useSelector((state: RootState) => state.username.username)?.split(' ')[0];
+  const firstName = _.capitalize(useSelector((state: RootState) => state.username.username)?.split(' ')[0]);
 
   useEffect(() => {
     if (typeof firstName === "string") {

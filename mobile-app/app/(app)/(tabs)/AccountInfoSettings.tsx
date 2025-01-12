@@ -1,10 +1,10 @@
 import { RootState } from '@/app/redux/store';
-import { useAuth } from '@/ctx/AuthContext';
 import { useTheme } from '@/ctx/ThemeContext';
 import i18n from '@/i18n';
 import Return from '@/shared/components/Return';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
+import _ from 'lodash';
 import React, { useState } from 'react';
 import { Platform, ScrollView, Switch, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -21,16 +21,16 @@ interface AccountInfo {
 
 export default function AccountInfoSettings() {
   const { isDarkMode } = useTheme();
-  const { session } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-   const firstName = useSelector(
+   const firstName = _.capitalize(useSelector(
        (state: RootState) => state.firstName.firstName
-   )?.split(" ")[0];
-   const lastName = useSelector(
+   )?.split(" ")[0]);
+   const lastName = _.capitalize(useSelector(
        (state: RootState) => state.lastName.lastName
-   )?.split(" ")[0];
+   )?.split(" ")[0]);
+   const email = useSelector((state: RootState) => state.emailSetter.email);
 
 
   const [accountInfo, setAccountInfo] = useState<AccountInfo>({
@@ -73,7 +73,7 @@ export default function AccountInfoSettings() {
             <View>
               <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('email')}</Text>
               <TextInput 
-                value={typeof session === 'string' ? session : ''}
+                value={typeof email === 'string' ? email : ''}
                 editable={false}
                 className={`p-2 rounded-lg ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-coal-black'}`}
               />
@@ -82,7 +82,7 @@ export default function AccountInfoSettings() {
             <View>
               <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('first_name')}</Text>
               <TextInput 
-                value={accountInfo.firstName}
+                value={firstName}
                 onChangeText={text => setAccountInfo({...accountInfo, firstName: text})}
                 editable={isEditing}
                 className={`p-2 rounded-lg ${
@@ -94,7 +94,7 @@ export default function AccountInfoSettings() {
             <View>
               <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('last_name')}</Text>
               <TextInput 
-                value={accountInfo.lastName}
+                value={lastName}
                 onChangeText={text => setAccountInfo({...accountInfo, lastName: text})}
                 editable={isEditing}
                 className={`p-2 rounded-lg ${

@@ -17,6 +17,8 @@ import Config from "react-native-config";
 import i18n from "@/i18n";
 import { useTheme } from "@/ctx/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
 
 export default function History() {
   const isFocused = useIsFocused();
@@ -24,6 +26,8 @@ export default function History() {
   const [isLoading, setIsLoading] = useState(true);
   const windowWidth = useWindowDimensions().width;
   const { isDarkMode } = useTheme();
+
+  const userId = useSelector((state:RootState) => state.userId.userId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +44,7 @@ export default function History() {
           });
 
           const [response, _] = (await Promise.all([
-            axios.get(`${Config.EXPO_PUBLIC_API_BASE_URL_HISTORY || "http://localhost:8080/api/v1/history/all"}?id=1`, {
+            axios.get(`${Config.EXPO_PUBLIC_API_BASE_URL_HISTORY_ANDROID || "http://10.0.2.2:8080/api/v1/history/all"}?id=${userId}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },

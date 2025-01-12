@@ -52,15 +52,15 @@ export default function Login() {
     try {
       setIsLoading(true);
       // IOS Simulator
-      const response = await axios.post(
-        `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN || "http://localhost:8080/api/v1/login/user"}`,
-        values
-      );
-      // Android Emulator
       // const response = await axios.post(
-      //   "http://10.0.2.2:8080/api/v1/login/user",
+      //   `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN || "http://localhost:8080/api/v1/login/user"}`,
       //   values
       // );
+      // Android Emulator
+      const response = await axios.post(
+        "http://10.0.2.2:8080/api/v1/login/user",
+        values
+      );
 
       if (response.status === 200 || response.status === 201) {
         console.log("Login successful", values);
@@ -74,14 +74,14 @@ export default function Login() {
           );
           // Update the session state and wait for the update to complete
           await new Promise<void>(async (resolve) => {
-            dispatch(setEmail(response.data.email));
+            dispatch(setEmail(values.email));
             dispatch(setToken(response.data.token));
             dispatch(
               setUsername(
                 response.data.firstName + " " + response.data.lastName
               )
             );
-            dispatch(setUserId(response.data.userId));
+            dispatch(setUserId(response.data.userID));
             dispatch(setFirstName(response.data.firstName));
             dispatch(setLastName(response.data.lastName));
             dispatch(setPhoneCode(response.data.phoneCode));
