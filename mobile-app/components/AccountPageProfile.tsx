@@ -89,7 +89,7 @@ export default function AccountPageProfile({ isDarkMode }: AccountPageProfilePro
               >
                 {isLoading ? null : (
                   <Text className="text-xs text-slight-slate-grey">
-                    {`${phoneCode}${phoneNumber}`}
+                    {phoneCode && phoneNumber && `${phoneCode}${phoneNumber}`}
                   </Text>
                 )}
               </Skeleton>
