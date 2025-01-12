@@ -33,6 +33,10 @@ export default function AccountPageProfile({ isDarkMode }: AccountPageProfilePro
     }
   }, [username]);
 
+  const capitalizeFullName = (name: string) => {
+    return name.split(' ').map(word => _.capitalize(word)).join(' ');
+  };
+
   return (
     <View className="w-11/12 my-6 self-center">
       <LinearGradient
@@ -77,7 +81,7 @@ export default function AccountPageProfile({ isDarkMode }: AccountPageProfilePro
               >
                 {isLoading ? null : (
                   <Text className={`text-lg font-bold text-baby-blue ${I18nManager.isRTL ? "text-left" : "text-left"}`}>
-                    {username && _.capitalize(username)}
+                    {username && capitalizeFullName(username)}
                   </Text>
                 )}
               </Skeleton>
