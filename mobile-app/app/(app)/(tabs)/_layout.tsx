@@ -12,7 +12,7 @@ import QueuePage from "@/app/(app)/(tabs)/Partner";
 import i18n from "@/i18n";
 import AllCategories from "@/app/(app)/(tabs)/AllCategories";
 import Category from "@/app/(app)/(tabs)/Category";
-import Settings from "./Settings";
+import Settings from "@/app/(app)/(tabs)/Settings";
 
 const Tab = createBottomTabNavigator();
 

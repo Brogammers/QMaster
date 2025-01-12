@@ -8,7 +8,7 @@ import { AccountInfo } from "@/constants";
 import { Skeleton } from "moti/skeleton";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
-import { useRouter } from "expo-router";
+import { useLinkTo } from "@react-navigation/native";
 
 interface AccountPageProfileProps {
   isDarkMode: boolean;
@@ -16,9 +16,13 @@ interface AccountPageProfileProps {
 
 export default function AccountPageProfile({ isDarkMode }: AccountPageProfileProps) {
   const username = useSelector((state: RootState) => state.username.username);
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const colorMode = isDarkMode ? "dark" : "light";
+  const linkTo = useLinkTo();
+
+  const handleSettingsPress = () => {
+    linkTo("/Settings");
+  };
 
   useEffect(() => {
     if (typeof username === "string") {
@@ -90,9 +94,9 @@ export default function AccountPageProfile({ isDarkMode }: AccountPageProfilePro
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.push("/Settings")}>
-            <Ionicons name="settings-outline" size={24} color="#1DCDFE" />
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleSettingsPress()}>
+              <Ionicons name="settings-outline" size={24} color="#1DCDFE" />
+            </TouchableOpacity>
         </MotiView>
       </LinearGradient>
     </View>
