@@ -2,23 +2,18 @@ import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import Category from '@/shared/components/Category';
 import { AllCategories as CategoryList } from '@/constants';
-import { useLinkTo, useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useLinkTo } from '@react-navigation/native';
 
 interface CategoryProps {
   title: string;
   image: any;
 }
 
-type RootStackParamList = {
-  category: { name: string };
-};
-
 export default function AllCategories() {
   const linkTo = useLinkTo();
 
   const handleCategoryPress = (category: CategoryProps) => {
-    linkTo(`/Category`);
+    linkTo(`/Category/${encodeURIComponent(category.title)}`);
   };
 
   return (

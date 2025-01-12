@@ -11,6 +11,7 @@ import { Entypo } from "@expo/vector-icons";
 import QueuePage from "@/app/(app)/(tabs)/screens/Partner";
 import i18n from "@/i18n";
 import AllCategories from "@/app/(app)/(tabs)/screens/AllCategories";
+import Category from "@/app/(app)/(tabs)/screens/Category";
 
 const Tab = createBottomTabNavigator();
 
@@ -113,6 +114,19 @@ export default function AppEntry() {
             options={{
               tabBarButton: () => null,
               headerShown: false,
+              headerStyle: {
+                backgroundColor: "#17222D",
+              },
+              headerTintColor: "white",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="Category"
+            component={Category}
+            options={{
+              tabBarButton: () => null,
+              headerShown: true,
               headerStyle: {
                 backgroundColor: "#17222D",
               },
