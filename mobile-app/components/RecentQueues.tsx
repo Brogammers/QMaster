@@ -17,8 +17,8 @@ export default function RecentQueues({ isDarkMode }: RecentQueuesProps) {
       try {
         const historyData = await AsyncStorage.getItem("historyData");
         setHistoryDataExists(!!historyData);
-      } catch (error) {
-        Alert.alert("ERRR!", `Error checking history data. ${error}`);
+      } catch (error: any) {
+        Alert.alert("Error", error.response?.data?.message || "An error occurred while checking history data");
       }
     };
 

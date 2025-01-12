@@ -140,7 +140,6 @@ export default function Login() {
           console.error("Axios error status:", axiosError.response.status);
           console.error("Axios error data:", axiosError.response.data);
           
-          // Show the actual error message from the server
           Alert.alert(
             i18n.t("loginPage.failed"),
             axiosError.response.data.message || i18n.t("loginPage.failedMessage")
@@ -166,7 +165,7 @@ export default function Login() {
         setErrorMessage(error.message);
         Alert.alert(
           i18n.t("loginPage.error"),
-          error.message
+          error.message || i18n.t("loginPage.errorMessage")
         );
       } else {
         // Handle non-Axios errors

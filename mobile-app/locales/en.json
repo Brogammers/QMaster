@@ -97,15 +97,27 @@
     "dateOfBirth": "Date of birth",
     "country": "Choose your country",
     "phoneNumber": "Enter your phone number",
-    "failed": "Signup Failed"
+    "failed": "Signup Failed",
+    "failedMessage": "Unable to create account. Please try again.",
+    "error": "Signup Error",
+    "errorMessage": "An unexpected error occurred during signup.",
+    "emailInUse": "Email is already in use.",
+    "invalidEmail": "Please enter a valid email address.",
+    "invalidPassword": "Password must be at least 8 characters with one uppercase, one lowercase, and one number.",
+    "passwordMismatch": "Passwords do not match.",
+    "invalidPhone": "Please enter a valid phone number."
   },
   "loginPage": {
     "welcomeBack": "Welcome back!",
     "forgotPassword": "Forgot Password?",
-    "error": "error",
+    "error": "Login Error",
     "errorMessage": "An unexpected error occurred. Please try again later.",
     "failed": "Login Failed",
-    "failedMessage": "Please check your input and try again."
+    "failedMessage": "Please check your input and try again.",
+    "invalidCredentials": "Invalid email or password.",
+    "accountNotVerified": "Please verify your email address before logging in.",
+    "accountLocked": "Your account has been locked. Please contact support.",
+    "networkError": "Unable to connect to server. Please check your internet connection."
   },
   "verificationSentPage": {
     "verificationSent": "Verification Email Sent",
