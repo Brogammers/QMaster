@@ -17,10 +17,14 @@ import AccountInfoSettings from "./AccountInfoSettings";
 import NotificationsSettings from "./NotificationSettings";
 import SecuritySettings from "./SecuritySettings";
 import RegionLanguageSettings from "./RegionalLanguageSettings";
+import { Stack } from "expo-router";
+import { useTheme } from "@/ctx/ThemeContext";
 
 const Tab = createBottomTabNavigator();
 
 export default function AppEntry() {
+  const { isDarkMode } = useTheme();
+
   return (
     <NavigationContainer independent>
         <Tab.Navigator
