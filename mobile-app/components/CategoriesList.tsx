@@ -10,9 +10,9 @@ export default function CategoriesList() {
   
   const handleCategoryPress = (category: { title: string }) => {
     if (category.title === i18n.t('others')) {
-      router.push('/AllCategories');
+      router.push('/(app)/(tabs)/screens/AllCategories');
     } else {
-      router.push(`/(app)/(tabs)/brands/${category.title}`);
+      router.push(`/(app)/(tabs)/screens/category/${category.title}`);
     }
   };
 

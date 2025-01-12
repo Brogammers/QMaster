@@ -14,7 +14,7 @@ export default function AllCategories() {
   const router = useRouter();
 
   const handleCategoryPress = (category: CategoryProps) => {
-    router.push(`/(app)/(tabs)/brands/${encodeURIComponent(category.title)}`);
+    router.push(`/(app)/(tabs)/screens/category/${encodeURIComponent(category.title)}`);
   };
 
   return (
