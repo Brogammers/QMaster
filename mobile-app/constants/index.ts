@@ -248,7 +248,7 @@ export const AllCategories: CategoryProps[] = [
 //Current Queues
 export const Current: CurrentQueuesProps[] = [
   {
-    image: carrefour,
+    image: CarrefourLogo,
     name: 'Carrefour',
     people: 5,
     time: 15,

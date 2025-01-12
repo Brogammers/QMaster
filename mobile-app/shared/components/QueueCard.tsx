@@ -2,20 +2,27 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, ImageSourcePropType } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import i18n from '@/i18n';
+import { useLinkTo } from '@react-navigation/native';
 
 interface QueueCardProps {
   name: string;
   image: ImageSourcePropType;
   time: number;
   people: number;
-  onPress: () => void;
+  onPress?: () => void;
   isDarkMode?: boolean;
 }
 
-export default function QueueCard({ name, image, time, people, onPress, isDarkMode }: QueueCardProps) {
+export default function QueueCard({ name, image, time, people, isDarkMode }: QueueCardProps) {
+  const linkTo = useLinkTo();
+
+  const handlePress = () => {
+    linkTo('/Partner');
+  };
+
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={handlePress}
       className={`rounded-2xl p-4 mb-4 ${isDarkMode ? 'bg-slate-700/80' : 'bg-white'}`}
     >
       <View className="flex-row items-center justify-between">

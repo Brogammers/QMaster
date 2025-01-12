@@ -19,6 +19,7 @@ import SecuritySettings from "./SecuritySettings";
 import RegionLanguageSettings from "./RegionalLanguageSettings";
 import { Stack } from "expo-router";
 import { useTheme } from "@/ctx/ThemeContext";
+import Partner from "@/app/(app)/(tabs)/Partner";
 
 const Tab = createBottomTabNavigator();
 
@@ -118,8 +119,8 @@ export default function AppEntry() {
             }}
           />
           <Tab.Screen
-            name="QueuePage"
-            component={QueuePage}
+            name="Partner"
+            component={Partner}
             options={{
               tabBarButton: () => null,
               headerShown: false,

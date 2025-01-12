@@ -2,15 +2,20 @@ import React from "react";
 import { View } from 'react-native';
 import QueueInfoCard from "@/components/QueueInfoCard";
 import JoinQueue from '@/components/JoinQueue';
-import { useRoute } from '@react-navigation/native';
+import { useTheme } from '@/ctx/ThemeContext';
+
+// Hardcoded data for development
+const hardcodedData = {
+  brandName: "Carrefour",
+  image: require('../../../assets/images/CarrefourLogo.png')
+};
 
 export default function Partner() {
-  const route = useRoute();
-  const { brandName, image }: any = route.params;
+  const { isDarkMode } = useTheme();
 
   return (
-    <View className="bg-off-white flex-1 items-center">
-      <QueueInfoCard image={image} name={brandName} />
+    <View className={`flex-1 items-center ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
+      <QueueInfoCard image={hardcodedData.image} name={hardcodedData.brandName} />
       <JoinQueue />     
     </View>
   )
