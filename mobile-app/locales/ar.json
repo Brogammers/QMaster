@@ -142,11 +142,14 @@
   "change_password": "تغيير كلمة المرور",
   "new_password": "كلمة المرور الجديدة",
   "submit": "إرسال",
-  "notifications": "الإشعارات",
   "external_notifications": "الإشعارات الخارجية",
   "internal_notifications": "إشعارات التطبيق",
+  "external_notifications_desc": "احصل على إشعارات حول حالة الطابور والتحديثات حتى عندما يكون التطبيق مغلقًا",
+  "internal_notifications_desc": "تلقي إشعارات حول حالة الطابور والتحديثات أثناء استخدام التطبيق",
   "region_language": "المنطقة واللغة",
   "country": "البلد",
-  "language": "اللغة",
-  "security": "الأمان"
+  "security": "الأمان",
+  "email": "البريد الإلكتروني",
+  "unchangeable": "غير قابل للتغيير",
+  "confirm_password": "تأكيد كلمة المرور"
 }

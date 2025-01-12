@@ -1,99 +1,111 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useTheme } from '@/ctx/ThemeContext';
 import { Picker } from '@react-native-picker/picker';
 import i18n from '@/i18n';
-import Return from '@/shared/components/Return';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
+import { Ionicons } from '@expo/vector-icons';
+import { useLinkTo } from "@react-navigation/native";
 
 export default function RegionLanguageSettings() {
   const { isDarkMode } = useTheme();
+  const linkTo = useLinkTo();
   const [selectedCountry, setSelectedCountry] = useState('US');
   const [selectedLanguage, setSelectedLanguage] = useState('en');
 
+  const handleReturn = () => {
+    linkTo("/Settings");
+  }
+
   return (
-    <View className={`flex-1 ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
-      <LinearGradient
-        colors={['#17222D', '#13404D']}
-        className="pt-14 pb-4 px-5"
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <View className="flex-row items-center">
-          <Return href="/Settings" size={30} color="#fff" />
-          <Text className="text-2xl font-bold ml-4 text-white">
-            {i18n.t('region_language')}
-          </Text>
-        </View>
-      </LinearGradient>
-
-      <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
-        <MotiView 
-          from={{ opacity: 0, translateY: 10 }}
-          animate={{ opacity: 1, translateY: 0 }}
-          className={`rounded-xl p-4 mt-4 mb-6 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}
+    <>
+      <View className="absolute top-4 left-4 z-10">
+        <TouchableOpacity onPress={() => handleReturn()}>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+      </View>
+      <View className={`flex-1 ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
+        <LinearGradient
+          colors={['#17222D', '#13404D']}
+          className="pt-14 pb-4 px-5"
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
         >
-          <View className="space-y-6">
-            <View>
-              <Text className={`text-base font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
-                {i18n.t('country')}
-              </Text>
-              <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
-                <Picker
-                  selectedValue={selectedCountry}
-                  onValueChange={setSelectedCountry}
-                  style={{ 
-                    color: isDarkMode ? '#fff' : '#000',
-                    height: 50,
-                    backgroundColor: 'transparent'
-                  }}
-                >
-                  <Picker.Item label="United States" value="US" />
-                  <Picker.Item label="United Kingdom" value="UK" />
-                  <Picker.Item label="Canada" value="CA" />
-                  <Picker.Item label="Australia" value="AU" />
-                  <Picker.Item label="Germany" value="DE" />
-                  <Picker.Item label="France" value="FR" />
-                  <Picker.Item label="Japan" value="JP" />
-                  <Picker.Item label="China" value="CN" />
-                  <Picker.Item label="India" value="IN" />
-                  <Picker.Item label="Brazil" value="BR" />
-                </Picker>
-              </View>
-            </View>
-
-            <View>
-              <Text className={`text-base font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
-                {i18n.t('language')}
-              </Text>
-              <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
-                <Picker
-                  selectedValue={selectedLanguage}
-                  onValueChange={setSelectedLanguage}
-                  style={{ 
-                    color: isDarkMode ? '#fff' : '#000',
-                    height: 50,
-                    backgroundColor: 'transparent'
-                  }}
-                >
-                  <Picker.Item label="English" value="en" />
-                  <Picker.Item label="Arabic (العربية)" value="ar" />
-                  <Picker.Item label="Spanish (Español)" value="es" />
-                  <Picker.Item label="French (Français)" value="fr" />
-                  <Picker.Item label="German (Deutsch)" value="de" />
-                  <Picker.Item label="Italian (Italiano)" value="it" />
-                  <Picker.Item label="Japanese (日本語)" value="ja" />
-                  <Picker.Item label="Korean (한국어)" value="ko" />
-                  <Picker.Item label="Chinese (中文)" value="zh" />
-                  <Picker.Item label="Hindi (हिन्दी)" value="hi" />
-                  <Picker.Item label="Portuguese (Português)" value="pt" />
-                </Picker>
-              </View>
-            </View>
+          <View className="flex-row items-center">
+            <Text className="text-2xl font-bold text-white">
+              {i18n.t('region_language')}
+            </Text>
           </View>
-        </MotiView>
-      </ScrollView>
-    </View>
+        </LinearGradient>
+
+        <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
+          <MotiView 
+            from={{ opacity: 0, translateY: 10 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            className={`rounded-xl p-4 mt-4 mb-6 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}
+          >
+            <View className="space-y-6">
+              <View>
+                <Text className={`text-base font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                  {i18n.t('country')}
+                </Text>
+                <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
+                  <Picker
+                    selectedValue={selectedCountry}
+                    onValueChange={setSelectedCountry}
+                    style={{ 
+                      color: isDarkMode ? '#fff' : '#000',
+                      height: 50,
+                      backgroundColor: 'transparent'
+                    }}
+                  >
+                    <Picker.Item label="United States" value="US" />
+                    <Picker.Item label="United Kingdom" value="UK" />
+                    <Picker.Item label="Canada" value="CA" />
+                    <Picker.Item label="Australia" value="AU" />
+                    <Picker.Item label="Germany" value="DE" />
+                    <Picker.Item label="France" value="FR" />
+                    <Picker.Item label="Japan" value="JP" />
+                    <Picker.Item label="China" value="CN" />
+                    <Picker.Item label="India" value="IN" />
+                    <Picker.Item label="Brazil" value="BR" />
+                  </Picker>
+                </View>
+              </View>
+
+              <View>
+                <Text className={`text-base font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                  {i18n.t('language')}
+                </Text>
+                <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
+                  <Picker
+                    selectedValue={selectedLanguage}
+                    onValueChange={setSelectedLanguage}
+                    style={{ 
+                      color: isDarkMode ? '#fff' : '#000',
+                      height: 50,
+                      backgroundColor: 'transparent'
+                    }}
+                  >
+                    <Picker.Item label="English" value="en" />
+                    <Picker.Item label="Arabic (العربية)" value="ar" />
+                    <Picker.Item label="Spanish (Español)" value="es" />
+                    <Picker.Item label="French (Français)" value="fr" />
+                    <Picker.Item label="German (Deutsch)" value="de" />
+                    <Picker.Item label="Italian (Italiano)" value="it" />
+                    <Picker.Item label="Japanese (日本語)" value="ja" />
+                    <Picker.Item label="Korean (한국어)" value="ko" />
+                    <Picker.Item label="Chinese (中文)" value="zh" />
+                    <Picker.Item label="Hindi (हिन्दी)" value="hi" />
+                    <Picker.Item label="Portuguese (Português)" value="pt" />
+                  </Picker>
+                </View>
+              </View>
+            </View>
+          </MotiView>
+        </ScrollView>
+      </View>
+    </>
   );
 } 
