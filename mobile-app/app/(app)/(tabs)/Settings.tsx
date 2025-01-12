@@ -3,6 +3,7 @@ import { Link, Href } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import i18n from "@/i18n";
 import { useTheme } from "@/ctx/ThemeContext";
+import { MotiView } from "moti";
 
 interface MenuItem {
   title: string;
@@ -44,27 +45,43 @@ export default function Settings() {
   return (
     <View className={`flex-1 ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
       <ScrollView className="flex-1 px-4 pt-4">
-        <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}>
+        <View className="w-full">
           {menuItems.map((item, index) => (
-            <Link key={index} href={item.route} asChild>
-              <View className={`flex-row items-center py-3.5 px-4 ${
-                index !== menuItems.length - 1 ? isDarkMode ? 'border-b border-slate-700/50' : 'border-b border-gray-100' : ''
-              }`}>
-                <item.iconComponent
-                  name={item.icon as any}
-                  size={24}
-                  color="#1DCDFE"
-                />
-                <Text className={`ml-3 flex-1 text-base ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
-                  {i18n.t(item.title)}
-                </Text>
-                <MaterialIcons
-                  name="chevron-right"
-                  size={24}
-                  color="#1DCDFE"
-                />
+            <MotiView
+              key={index}
+              from={{ opacity: 0, translateX: -20 }}
+              animate={{ opacity: 1, translateX: 0 }}
+              transition={{
+                delay: index * 100,
+                damping: 20,
+                mass: 0.8,
+              }}
+              className="mb-4"
+            >
+              <View className={`${isDarkMode ? 'bg-concrete-turqouise/20' : 'bg-ocean-blue/5'} rounded-2xl border border-baby-blue/10`}>
+                <Link href={item.route} asChild>
+                  <View className="py-4 px-4">
+                    <View className="flex-row items-center justify-between">
+                      <View className="flex-row items-center">
+                        <item.iconComponent
+                          name={item.icon as any}
+                          size={22}
+                          color={isDarkMode ? "#1DCDFE" : "#17222D"}
+                        />
+                        <Text className={`ml-5 text-base font-medium ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
+                          {i18n.t(item.title)}
+                        </Text>
+                      </View>
+                      <MaterialIcons
+                        name="chevron-right"
+                        size={18}
+                        color={isDarkMode ? "#1DCDFE" : "#17222D"}
+                      />
+                    </View>
+                  </View>
+                </Link>
               </View>
-            </Link>
+            </MotiView>
           ))}
         </View>
       </ScrollView>
