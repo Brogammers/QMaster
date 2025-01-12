@@ -109,5 +109,11 @@
   "searchPage": {
     "recentQueues": "Recent Queues",
     "popularQueues": "Popular Queues"
+  },
+  "QueueCard": {
+    "minutes": "minutes",
+    "people": "people",
+    "averageTime": "Average time",
+    "peopleAhead": "People ahead"
   }
 }

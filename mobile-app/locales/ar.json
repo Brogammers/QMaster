@@ -109,5 +109,11 @@
   "searchPage": {
     "recentQueues": "الطوابير الأخيرة",
     "popularQueues": "الطوابير الشائعة"
+  },
+  "QueueCard": {
+    "minutes": "دقائق",
+    "people": "أشخاص",
+    "averageTime": "الوقت المتوقع",
+    "peopleAhead": "عدد الأشخاص"
   }
 }

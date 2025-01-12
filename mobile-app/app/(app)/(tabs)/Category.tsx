@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Current } from '@/constants';
 import i18n from '@/i18n';
+import QueueCard from '@/shared/components/QueueCard';
 
 export default function Category() {
   const { name } = useLocalSearchParams();
@@ -11,7 +12,7 @@ export default function Category() {
 
   const handleBrandPress = (brand: any) => {
     router.push({
-      pathname: "/(app)/(tabs)/QueuePage",
+      pathname: "/(app)/(tabs)/Partner",
       params: { 
         brandName: brand.name,
         image: brand.image
@@ -27,26 +28,14 @@ export default function Category() {
             {i18n.t(categoryName)}
           </Text>
           {Current.map((brand, index) => (
-            <TouchableOpacity
+            <QueueCard
               key={index}
+              name={brand.name}
+              image={brand.image}
+              time={brand.time}
+              people={brand.people}
               onPress={() => handleBrandPress(brand)}
-              className="bg-white rounded-lg p-4 mb-4 shadow-sm"
-            >
-              <View className="flex-row items-center">
-                <Image
-                  source={brand.image}
-                  className="w-16 h-16 rounded-full"
-                />
-                <View className="ml-4">
-                  <Text className="text-lg font-bold text-coal-black">{brand.name}</Text>
-                  <View className="flex-row items-center mt-1">
-                    <Text className="text-sm text-gray-600">
-                      {brand.people} {i18n.t('people')} • {brand.time} {i18n.t('minutes')}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
+            />
           ))}
         </View>
       </ScrollView>
