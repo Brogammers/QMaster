@@ -46,7 +46,7 @@ export default function ScanQR({ isDarkMode }: ScanQRProps) {
         <TouchableOpacity 
           onPress={handleNotificationsPress}
           className={`w-10 h-10 rounded-xl items-center justify-center ${
-            isDarkMode ? 'bg-slate-800/40' : 'bg-white/20'
+            isDarkMode ? 'bg-slate-500/40' : 'bg-white/20'
           }`}
         >
           <Ionicons 
