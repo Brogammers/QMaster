@@ -11,10 +11,9 @@ import { MotiView } from "moti";
 
 interface AccountPageProfileProps {
   isDarkMode: boolean;
-  onThemeToggle: () => void;
 }
 
-export default function AccountPageProfile({ isDarkMode, onThemeToggle }: AccountPageProfileProps) {
+export default function AccountPageProfile({ isDarkMode }: AccountPageProfileProps) {
   const username = useSelector((state: RootState) => state.username.username);
   const [isLoading, setIsLoading] = useState(true);
   const colorMode = isDarkMode ? "dark" : "light";
@@ -89,23 +88,11 @@ export default function AccountPageProfile({ isDarkMode, onThemeToggle }: Accoun
             </View>
           </TouchableOpacity>
 
-          <View className="flex-row items-center space-x-3">
-            <TouchableOpacity 
-              className="bg-concrete-turqouise/30 p-3 rounded-xl border border-baby-blue/20"
-              onPress={onThemeToggle}
-            >
-              <Ionicons 
-                name={isDarkMode ? "sunny-outline" : "moon-outline"} 
-                size={22} 
-                color="#1DCDFE" 
-              />
-            </TouchableOpacity>
-            <TouchableOpacity 
-              className="bg-concrete-turqouise/30 p-3 rounded-xl border border-baby-blue/20"
-            >
-              <Ionicons name="settings-outline" size={22} color="#1DCDFE" />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity 
+            className="bg-concrete-turqouise/30 p-3 rounded-xl border border-baby-blue/20"
+          >
+            <Ionicons name="settings-outline" size={22} color="#1DCDFE" />
+          </TouchableOpacity>
         </MotiView>
       </LinearGradient>
     </View>

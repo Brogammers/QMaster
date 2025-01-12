@@ -2,6 +2,8 @@
   "login": "Login",
   "logout": "Log Out",
   "signup": "Sign Up",
+  "dark_mode": "Dark Mode",
+  "light_mode": "Light Mode",
   "googleSignup": "Sign up with Google",
   "googleLogin": "Login with Google",
   "faq": "Frequently Asked Questions",

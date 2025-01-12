@@ -8,9 +8,10 @@ import { MotiView } from "moti";
 
 interface AccountPageItemsProps {
   isDarkMode: boolean;
+  onThemeToggle?: () => void;
 }
 
-export default function AccountPageItems({ isDarkMode }: AccountPageItemsProps) {
+export default function AccountPageItems({ isDarkMode, onThemeToggle }: AccountPageItemsProps) {
   const linkTo = useLinkTo();
   const auth = useAuth();
   
@@ -49,6 +50,11 @@ export default function AccountPageItems({ isDarkMode }: AccountPageItemsProps) 
   };
 
   const items = [
+    {
+      title: isDarkMode ? i18n.t('light_mode') : i18n.t('dark_mode'),
+      icon: isDarkMode ? 'sun' : 'moon',
+      onPress: onThemeToggle,
+    },
     {
       title: i18n.t('notifications'),
       icon: 'bell',

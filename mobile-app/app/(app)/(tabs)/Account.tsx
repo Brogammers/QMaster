@@ -73,7 +73,7 @@ export default function Account() {
           }}
           className="flex-1"
         >
-          <AccountPageProfile isDarkMode={isDarkMode} onThemeToggle={handleThemeToggle} />
+          <AccountPageProfile isDarkMode={isDarkMode} />
           
           <View className="px-6">
             <MotiView
@@ -103,7 +103,7 @@ export default function Account() {
               </Text>
             </MotiView>
 
-            <AccountPageItems isDarkMode={isDarkMode} />
+            <AccountPageItems isDarkMode={isDarkMode} onThemeToggle={handleThemeToggle} />
           </View>
         </MotiView>
       </ScrollView>
