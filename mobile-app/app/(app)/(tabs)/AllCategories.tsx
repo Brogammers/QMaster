@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, I18nManager } from 'react-native';
 import Category from '@/shared/components/CategoryPop';
 import { AllCategories as CategoryList } from '@/constants';
 import { useLinkTo } from '@react-navigation/native';
@@ -22,7 +22,7 @@ export default function AllCategories() {
     <View className={`flex-1 ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="p-4">
-          <View className="flex flex-row flex-wrap justify-start gap-x-4">
+          <View className={`flex flex-row flex-wrap ${I18nManager.isRTL ? 'justify-end' : 'justify-start'} gap-x-4`}>
             {CategoryList.map((category: CategoryProps, index: number) => (
               <View key={index} className="mb-4">
                 <Category
