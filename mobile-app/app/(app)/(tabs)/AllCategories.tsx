@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import Category from '@/shared/components/CategoryPop';
 import { AllCategories as CategoryList } from '@/constants';
 import { useLinkTo } from '@react-navigation/native';
+import { useTheme } from '@/ctx/ThemeContext';
 
 interface CategoryProps {
   title: string;
@@ -11,13 +12,14 @@ interface CategoryProps {
 
 export default function AllCategories() {
   const linkTo = useLinkTo();
+  const { isDarkMode } = useTheme();
 
   const handleCategoryPress = (category: CategoryProps) => {
     linkTo(`/Category/${encodeURIComponent(category.title)}`);
   };
 
   return (
-    <View style={styles.container}>
+    <View className={`flex-1 ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="p-4">
           <View className="flex flex-row flex-wrap justify-between">
@@ -27,6 +29,7 @@ export default function AllCategories() {
                 title={category.title}
                 image={category.image}
                 onPress={() => handleCategoryPress(category)}
+                isDarkMode={isDarkMode}
               />
             ))}
           </View>
@@ -34,11 +37,4 @@ export default function AllCategories() {
       </ScrollView>
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#D9D9D9',
-  },
-}); 
+} 

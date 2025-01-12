@@ -1,14 +1,16 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Current } from '@/constants';
 import i18n from '@/i18n';
 import QueueCard from '@/shared/components/QueueCard';
+import { useTheme } from '@/ctx/ThemeContext';
 
 export default function Category() {
   const { name } = useLocalSearchParams();
   const categoryName = decodeURIComponent(String(name));
   const router = useRouter();
+  const { isDarkMode } = useTheme();
 
   const handleBrandPress = (brand: any) => {
     router.push({
@@ -21,10 +23,10 @@ export default function Category() {
   };
 
   return (
-    <View style={styles.container}>
+    <View className={`flex-1 ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="p-4">
-          <Text className="text-xl font-bold mb-4 text-ocean-blue">
+          <Text className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-ocean-blue'}`}>
             {i18n.t(categoryName)}
           </Text>
           {Current.map((brand, index) => (
@@ -35,6 +37,7 @@ export default function Category() {
               time={brand.time}
               people={brand.people}
               onPress={() => handleBrandPress(brand)}
+              isDarkMode={isDarkMode}
             />
           ))}
         </View>
@@ -42,10 +45,3 @@ export default function Category() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F5F5',
-  }
-});

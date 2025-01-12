@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ImageSourcePropType } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import i18n from '@/i18n';
 
 interface QueueCardProps {
   name: string;
-  image: any;
+  image: ImageSourcePropType;
   time: number;
   people: number;
   onPress: () => void;
+  isDarkMode?: boolean;
 }
 
 export default function QueueCard({ name, image, time, people, onPress }: QueueCardProps) {
