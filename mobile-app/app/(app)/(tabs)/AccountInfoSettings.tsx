@@ -18,6 +18,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
+import { Ionicons } from '@expo/vector-icons';
 
 interface AccountInfo {
   firstName: string;
@@ -91,22 +92,32 @@ export default function AccountInfoSettings() {
         >
           <View className="space-y-4">
             <View>
-              <Text
-                className={`text-sm font-medium mb-2 ${
-                  isDarkMode ? "text-white" : "text-coal-black"
-                }`}
-              >
-                {i18n.t("email")}
-              </Text>
-              <TextInput
-                value={typeof email === "string" ? email : ""}
-                editable={false}
-                className={`py-3.5 px-4 rounded-xl ${
-                  isDarkMode
-                    ? "bg-slate-700 text-white"
-                    : "bg-gray-100 text-coal-black"
-                }`}
-              />
+              <View className="flex-row items-center justify-between mb-2">
+                <Text className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                  {i18n.t('email')}
+                </Text>
+                <View className="flex-row items-center">
+                  <View className={`px-2 py-1 rounded-md ${isDarkMode ? 'bg-slate-700' : 'bg-gray-200'}`}>
+                    <Text className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      {i18n.t('unchangeable')}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View className={`flex-row items-center rounded-xl ${isDarkMode ? 'bg-slate-700/50' : 'bg-gray-100/80'}`}>
+                <TextInput 
+                  value={typeof email === 'string' ? email : ''}
+                  editable={false}
+                  className={`flex-1 py-3.5 px-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}
+                />
+                <View className="pr-4">
+                  <Ionicons 
+                    name="lock-closed" 
+                    size={16} 
+                    color={isDarkMode ? '#9CA3AF' : '#6B7280'} 
+                  />
+                </View>
+              </View>
             </View>
 
             <View>

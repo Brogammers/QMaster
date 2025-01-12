@@ -149,5 +149,6 @@
   "country": "Country",
   "language": "Language",
   "security": "Security",
-  "email": "Email"
+  "email": "Email",
+  "unchangeable": "Unchangeable"
 }

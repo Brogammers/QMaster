@@ -148,5 +148,7 @@
   "region_language": "المنطقة واللغة",
   "country": "البلد",
   "language": "اللغة",
-  "security": "الأمان"
+  "security": "الأمان",
+  "email": "البريد الإلكتروني",
+  "unchangeable": "غير قابل للتغيير"
 }
