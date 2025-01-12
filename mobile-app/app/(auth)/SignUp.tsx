@@ -547,7 +547,7 @@ export default function SignUp() {
                         width={windowWidth}
                       />
                       <TextButton
-                        text={i18n.t("google")}
+                        text={i18n.t("googleSignup")}
                         icon={"google"}
                         buttonColor={"white"}
                         textColor={"#17222D"}

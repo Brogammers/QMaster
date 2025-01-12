@@ -268,7 +268,7 @@ export default function Login() {
                       onPress={handleSubmit}
                     />
                     <TextButton
-                      text={i18n.t("google")}
+                      text={i18n.t("googleLogin")}
                       icon={"google"}
                       buttonColor={"white"}
                       textColor={"#17222D"}

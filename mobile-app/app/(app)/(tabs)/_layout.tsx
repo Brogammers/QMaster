@@ -5,12 +5,12 @@ import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import Home from "./index";
 import History from "./History";
 import Account from "./Account";
-import Search from "@/app/Search";
-import Notifications from "@/app/Notifications";
+import Search from "@/app/(app)/(tabs)/search/Search";
+import Notifications from "@/app/(app)/(tabs)/notifications/Notifications";
 import { Entypo } from "@expo/vector-icons";
-import BrandsList from "@/app/BrandsList";
-import QueuePage from "@/app/QueuePage";
+import QueuePage from "@/app/(app)/(tabs)/partner/QueuePage";
 import i18n from "@/i18n";
+import AllCategories from "@/app/(app)/(tabs)/categories/AllCategories";
 
 const Tab = createBottomTabNavigator();
 
@@ -108,20 +108,6 @@ export default function AppEntry() {
             }}
           />
           <Tab.Screen
-            name="Brands"
-            component={BrandsList}
-            options={{
-              tabBarButton: () => null,
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTitle: i18n.t("entities"),
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
             name="QueuePage"
             component={QueuePage}
             options={{
@@ -130,6 +116,20 @@ export default function AppEntry() {
               headerStyle: {
                 backgroundColor: "#17222D",
               },
+              headerTintColor: "white",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="AllCategories"
+            component={AllCategories}
+            options={{
+              tabBarButton: () => null,
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: "#17222D",
+              },
+              headerTitle: i18n.t("allCategories"),
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}

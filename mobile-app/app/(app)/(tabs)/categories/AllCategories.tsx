@@ -1,12 +1,9 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { useLinkTo } from '@react-navigation/native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Category from '@/shared/components/Category';
-import Return from '@/shared/components/Return';
 import { AllCategories as CategoryList } from '@/constants';
-import i18n from '@/i18n';
-import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 interface CategoryProps {
   title: string;
@@ -14,18 +11,16 @@ interface CategoryProps {
 }
 
 export default function AllCategories() {
-  const linkTo = useLinkTo();
+  const router = useRouter();
 
   const handleCategoryPress = (category: CategoryProps) => {
-    linkTo(`/(app)/(tabs)/brands/${encodeURIComponent(category.title)}`);
+    router.push(`/(app)/(tabs)/brands/${encodeURIComponent(category.title)}`);
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-off-white">
-      <View className="absolute top-0 left-0 right-0 h-32 bg-ocean-blue shadow-sm z-10" />
-      <Return href="/(app)/(tabs)" size={32} color="white" title="allCategories" />
-      <ScrollView>
-        <View className="p-4 mt-20">
+    <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View className="p-4">
           <View className="flex flex-row flex-wrap justify-between">
             {CategoryList.map((category: CategoryProps, index: number) => (
               <Category
@@ -38,6 +33,13 @@ export default function AllCategories() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
-} 
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#D9D9D9',
+  },
+}); 
