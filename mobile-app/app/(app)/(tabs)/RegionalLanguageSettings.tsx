@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, I18nManager, NativeModules, Platform, TextInput } from 'react-native';
 import { useTheme } from '@/ctx/ThemeContext';
-import { Picker } from '@react-native-picker/picker';
 import i18n from '@/i18n';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
@@ -11,8 +10,21 @@ import { useLinkTo } from "@react-navigation/native";
 export default function RegionLanguageSettings() {
   const { isDarkMode } = useTheme();
   const linkTo = useLinkTo();
-  const [selectedCountry, setSelectedCountry] = useState('US');
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [selectedCountry, setSelectedCountry] = useState('Egypt (مصر)');
+  const [selectedLanguage, setSelectedLanguage] = useState('English');
+
+  useEffect(() => {
+    // Get device language
+    const deviceLanguage =
+      Platform.OS === 'ios'
+        ? NativeModules.SettingsManager.settings.AppleLocale ||
+          NativeModules.SettingsManager.settings.AppleLanguages[0]
+        : NativeModules.I18nManager.localeIdentifier;
+
+    // Set language based on device settings
+    const languageCode = deviceLanguage.split('_')[0]; // This will give us 'en', 'ar', etc.
+    setSelectedLanguage(languageCode === 'ar' ? 'Arabic (العربية)' : 'English');
+  }, []);
 
   const handleReturn = () => {
     linkTo("/Settings");
@@ -50,57 +62,38 @@ export default function RegionLanguageSettings() {
                 <Text className={`text-base font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
                   {i18n.t('country')}
                 </Text>
-                <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
-                  <Picker
-                    selectedValue={selectedCountry}
-                    onValueChange={setSelectedCountry}
-                    style={{ 
-                      color: isDarkMode ? '#fff' : '#000',
-                      height: 50,
-                      backgroundColor: 'transparent'
-                    }}
-                  >
-                    <Picker.Item label="United States" value="US" />
-                    <Picker.Item label="United Kingdom" value="UK" />
-                    <Picker.Item label="Canada" value="CA" />
-                    <Picker.Item label="Australia" value="AU" />
-                    <Picker.Item label="Germany" value="DE" />
-                    <Picker.Item label="France" value="FR" />
-                    <Picker.Item label="Japan" value="JP" />
-                    <Picker.Item label="China" value="CN" />
-                    <Picker.Item label="India" value="IN" />
-                    <Picker.Item label="Brazil" value="BR" />
-                  </Picker>
+                <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'} flex-row items-center`}>
+                  <TextInput
+                    value={selectedCountry}
+                    editable={false}
+                    className={`px-4 py-3 flex-1 ${isDarkMode ? 'text-white/50' : 'text-black/50'}`}
+                  />
+                  <View className="pr-4">
+                    <Ionicons name="lock-closed" size={16} color={isDarkMode ? "#ffffff80" : "#00000080"} />
+                  </View>
                 </View>
+                <Text className="text-xs mt-2 text-gray-500">
+                  {i18n.t('system_settings_note')}
+                </Text>
               </View>
 
               <View>
                 <Text className={`text-base font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
                   {i18n.t('language')}
                 </Text>
-                <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
-                  <Picker
-                    selectedValue={selectedLanguage}
-                    onValueChange={setSelectedLanguage}
-                    style={{ 
-                      color: isDarkMode ? '#fff' : '#000',
-                      height: 50,
-                      backgroundColor: 'transparent'
-                    }}
-                  >
-                    <Picker.Item label="English" value="en" />
-                    <Picker.Item label="Arabic (العربية)" value="ar" />
-                    <Picker.Item label="Spanish (Español)" value="es" />
-                    <Picker.Item label="French (Français)" value="fr" />
-                    <Picker.Item label="German (Deutsch)" value="de" />
-                    <Picker.Item label="Italian (Italiano)" value="it" />
-                    <Picker.Item label="Japanese (日本語)" value="ja" />
-                    <Picker.Item label="Korean (한국어)" value="ko" />
-                    <Picker.Item label="Chinese (中文)" value="zh" />
-                    <Picker.Item label="Hindi (हिन्दी)" value="hi" />
-                    <Picker.Item label="Portuguese (Português)" value="pt" />
-                  </Picker>
+                <View className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'} flex-row items-center`}>
+                  <TextInput
+                    value={selectedLanguage}
+                    editable={false}
+                    className={`px-4 py-3 flex-1 ${isDarkMode ? 'text-white/50' : 'text-black/50'}`}
+                  />
+                  <View className="pr-4">
+                    <Ionicons name="lock-closed" size={16} color={isDarkMode ? "#ffffff80" : "#00000080"} />
+                  </View>
                 </View>
+                <Text className="text-xs mt-2 text-gray-500">
+                  {i18n.t('system_settings_note')}
+                </Text>
               </View>
             </View>
           </MotiView>

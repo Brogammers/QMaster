@@ -163,5 +163,6 @@
   "security": "Security",
   "email": "Email",
   "unchangeable": "Unchangeable",
-  "confirm_password": "Confirm Password"
+  "confirm_password": "Confirm Password",
+  "system_settings_note": "This setting is controlled by your device's system settings"
 }
