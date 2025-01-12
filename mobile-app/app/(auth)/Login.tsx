@@ -25,7 +25,7 @@ import { useAuth } from "@/ctx/AuthContext";
 import { useDispatch } from "react-redux";
 import { setEmail, setToken } from "../redux/authSlice";
 import { isEmpty } from "lodash";
-import { setUsername } from "../redux/userSlice";
+import { setFirstName, setLastName, setPhoneCode, setPhoneNumber, setUserId, setUsername } from "../redux/userSlice";
 import SplashScreen from "../SplashScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Config from "react-native-config";
@@ -52,15 +52,15 @@ export default function Login() {
     try {
       setIsLoading(true);
       // IOS Simulator
-      const response = await axios.post(
-        `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN || "http://localhost:8080/api/v1/login/user"}`,
-        values
-      );
-      // Android Emulator
       // const response = await axios.post(
-      //   "http://10.0.2.2:8080/api/v1/login",
+      //   `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN || "http://localhost:8080/api/v1/login/user"}`,
       //   values
       // );
+      // Android Emulator
+      const response = await axios.post(
+        "http://10.0.2.2:8080/api/v1/login/user",
+        values
+      );
 
       if (response.status === 200 || response.status === 201) {
         console.log("Login successful", values);
@@ -81,8 +81,12 @@ export default function Login() {
                 response.data.firstName + " " + response.data.lastName
               )
             );
-            console.log(response.data);
-            console.log(typeof response.data.email);
+            dispatch(setUserId(response.data.userId));
+            dispatch(setFirstName(response.data.firstName));
+            dispatch(setLastName(response.data.lastName));
+            dispatch(setPhoneCode(response.data.phoneCode));
+            dispatch(setPhoneNumber(response.data.phoneNumber));
+            console.log(response.data);            
 
             await AsyncStorage.setItem("token", response.data.token);
             const tokenCheck = await AsyncStorage.getItem("token");

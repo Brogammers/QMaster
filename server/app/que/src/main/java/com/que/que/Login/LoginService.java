@@ -46,14 +46,19 @@ public class LoginService {
     if (user != null) {
       LoginEntry loginEntry = new LoginEntry(user);
       loginRepository.save(loginEntry);
+      String jwtToken = JwtUtil.generateToken(user.getEmail());
+
       System.out.println("Logged in!");
+
       Map<String, Object> object = new HashMap<>();
       object.put("email", email);
       object.put("username", user.getUsername());
+      object.put("phoneCode", user.getPhoneCode());
+      object.put("phoneNumber", user.getPhoneNumber());
       object.put("userID", user.getId());
       object.put("firstName", user.getFirstName());
       object.put("lastName", user.getLastName());
-      object.put("token", JwtUtil.generateToken(user.getEmail()));
+      object.put("token", jwtToken);
       return object;
     } else {
       throw new IllegalStateException("User not found");
