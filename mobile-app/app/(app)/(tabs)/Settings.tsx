@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, StatusBar } from "react-native";
 import { Link, Href } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import i18n from "@/i18n";
@@ -44,6 +44,7 @@ export default function Settings() {
 
   return (
     <View className={`flex-1 ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
+      <StatusBar barStyle="light-content" />
       <ScrollView className="flex-1 px-4 pt-4">
         <View className="w-full">
           {menuItems.map((item, index) => (

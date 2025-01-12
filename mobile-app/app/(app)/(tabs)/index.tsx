@@ -87,7 +87,7 @@ export default function Index() {
       <StatusBar
         translucent
         backgroundColor="#17222D"
-        barStyle={scrollY > scanQrHeight ? (isDarkMode ? "light-content" : "dark-content") : "light-content"}
+        barStyle={isDarkMode || scrollY <= scanQrHeight ? "light-content" : "dark-content"}
       />
       <ScrollView
         className="w-screen"

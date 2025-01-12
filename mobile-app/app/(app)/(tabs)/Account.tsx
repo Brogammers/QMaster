@@ -28,7 +28,7 @@ export default function Account() {
 
   return (
     <SafeAreaView className={`flex-1 ${isDarkMode ? 'bg-ocean-blue' : 'bg-off-white'}`}>
-      <StatusBar translucent barStyle={isDarkMode ? "light-content" : "dark-content"} />
+      <StatusBar translucent barStyle={isDarkMode ? "dark-content" : "light-content"} />
       {!isDarkMode && (
         <LinearGradient
           colors={['rgba(0, 119, 182, 0.1)', 'rgba(255, 255, 255, 0)']}
