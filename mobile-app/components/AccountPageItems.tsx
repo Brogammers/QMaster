@@ -43,7 +43,7 @@ export default function AccountPageItems() {
   };
 
   return (
-    <View className="items-center justify-center w-full">
+    <View className="p-4 items-center justify-center w-full z-50">
       {/* <SearchItem
         title= {i18n.t('language')}
         icon={'globe'}
