@@ -9,44 +9,22 @@ import { RootState } from "@/app/redux/store";
 import { Skeleton } from "moti/skeleton";
 import { MotiView } from "moti";
 import { LinearGradient } from "expo-linear-gradient";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from "@/ctx/ThemeContext";
 
 const { width } = Dimensions.get('window');
 
 export default function Account() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode, toggleTheme } = useTheme();
   const colorMode = isDarkMode ? 'dark' : 'light';
 
   const firstName = useSelector((state: RootState) => state.username.username)?.split(' ')[0];
-
-  useEffect(() => {
-    const loadTheme = async () => {
-      try {
-        const savedTheme = await AsyncStorage.getItem('theme');
-        setIsDarkMode(savedTheme === 'dark');
-      } catch (error) {
-        console.log('Error loading theme:', error);
-      }
-    };
-    loadTheme();
-  }, []);
 
   useEffect(() => {
     if (typeof firstName === "string") {
       setIsLoading(false);
     }
   }, [firstName]);
-
-  const handleThemeToggle = async () => {
-    try {
-      const newTheme = !isDarkMode;
-      await AsyncStorage.setItem('theme', newTheme ? 'dark' : 'light');
-      setIsDarkMode(newTheme);
-    } catch (error) {
-      console.log('Error saving theme:', error);
-    }
-  };
 
   return (
     <SafeAreaView className={`flex-1 ${isDarkMode ? 'bg-ocean-blue' : 'bg-off-white'}`}>
@@ -103,7 +81,7 @@ export default function Account() {
               </Text>
             </MotiView>
 
-            <AccountPageItems isDarkMode={isDarkMode} onThemeToggle={handleThemeToggle} />
+            <AccountPageItems isDarkMode={isDarkMode} onThemeToggle={toggleTheme} />
           </View>
         </MotiView>
       </ScrollView>
