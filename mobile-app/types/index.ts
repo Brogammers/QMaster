@@ -44,6 +44,7 @@ export interface CategoryProps {
   title: string;
   onPress?: any;
   spacing?: number;
+  isDarkMode?: boolean;
 }
 
 export interface CurrentQueuesProps {

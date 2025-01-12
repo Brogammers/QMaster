@@ -5,7 +5,11 @@ import { Categories } from '@/constants';
 import i18n from '@/i18n';
 import { useLinkTo } from '@react-navigation/native';
 
-export default function CategoriesList() {  
+interface CategoriesListProps {
+  isDarkMode?: boolean;
+}
+
+export default function CategoriesList({ isDarkMode }: CategoriesListProps) {  
   const linkTo = useLinkTo();
   
   const handleCategoryPress = (category: any) => {
@@ -17,8 +21,8 @@ export default function CategoriesList() {
   };
 
   return (
-    <View className="bg-off-white flex flex-col">
-      <Text className="my-3 text-2xl font-bold text-left">
+    <View className="flex flex-col">
+      <Text className={`my-3 text-2xl font-bold text-left ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
         {i18n.t('categories')}
       </Text>
       <View className="w-full flex flex-row flex-wrap self-center justify-between">
@@ -28,6 +32,7 @@ export default function CategoriesList() {
             title={category.title}
             image={category.image}
             onPress={() => handleCategoryPress(category)}
+            isDarkMode={isDarkMode}
           />
         ))}
       </View>

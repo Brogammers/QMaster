@@ -9,10 +9,20 @@ import { CategoryProps } from "@/types";
 const { width } = Dimensions.get('window')
 const wide = width * 27 / 100
 
-export default function CategoryPop(props: CategoryProps) {
-  const { image, title, spacing, onPress } = props;
+interface ExtendedCategoryProps extends CategoryProps {
+  isDarkMode?: boolean;
+}
+
+export default function CategoryPop(props: ExtendedCategoryProps) {
+  const { image, title, spacing, onPress, isDarkMode } = props;
   return (
-    <TouchableOpacity className="flex items-center justify-center h-24 bg-white rounded-2xl mb-2.5 " style={{ width: wide }} onPress={onPress}>
+    <TouchableOpacity 
+      className={`flex items-center justify-center h-24 rounded-2xl mb-2.5 ${
+        isDarkMode ? 'bg-slate-800/60 border border-slate-700' : 'bg-white'
+      }`} 
+      style={{ width: wide }} 
+      onPress={onPress}
+    >
       <View>
         <View className="absolute self-center">
           <Ellipse />
@@ -23,10 +33,10 @@ export default function CategoryPop(props: CategoryProps) {
           style={{ marginBottom: spacing }}
         />
       </View>
-      <Text className="px-2 text-center">
+      <Text className={`px-2 text-center ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
         {title}
       </Text>
     </TouchableOpacity>
-  )
+  );
 }
 
