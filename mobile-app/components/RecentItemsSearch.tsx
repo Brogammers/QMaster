@@ -4,10 +4,16 @@ import { Current } from '@/constants';
 import SearchItem from '../shared/components/SearchItem';
 import i18n from '@/i18n';
 
-export default function RecentItemsSearch() {
+interface RecentItemsSearchProps {
+  isDarkMode?: boolean;
+}
+
+export default function RecentItemsSearch({ isDarkMode }: RecentItemsSearchProps) {
   return (
     <View>
-      <Text className="my-3 text-lg font-semibold text-left">{i18n.t("searchPage.recentQueues")}</Text>
+      <Text className={`my-3 text-lg font-semibold text-left ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
+        {i18n.t("searchPage.recentQueues")}
+      </Text>
       <View>
         {Current.slice(0, 5).map((recent, index) => (
           <SearchItem 
@@ -16,6 +22,7 @@ export default function RecentItemsSearch() {
             title={recent.name} 
             isPopular={false}
             isAccount={false}
+            isDarkMode={isDarkMode}
           />
         ))}
       </View>

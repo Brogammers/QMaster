@@ -6,34 +6,55 @@ import PopularQueues from '@/components/PopularQueues';
 import SearchFilter from '@/components/SearchFilter';
 import { Current } from '@/constants';
 import i18n from '@/i18n';
+import { useTheme } from '@/ctx/ThemeContext';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Search() {
   const [input, setInput] = useState("");
+  const { isDarkMode } = useTheme();
 
   return (
-    <View className='bg-off-white flex-1'>
+    <View className={`flex-1 ${isDarkMode ? 'bg-ocean-blue' : 'bg-off-white'}`}>
+      {!isDarkMode && (
+        <LinearGradient
+          colors={['rgba(0, 119, 182, 0.1)', 'rgba(255, 255, 255, 0)']}
+          className="absolute top-0 w-full h-64"
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+        />
+      )}
       <View className='w-10/12 self-center'>
-        <View className={`h-11 border-2 rounded-lg border-rock-stone mt-7 mb-4 px-4 py-2 flex-row items-center ${I18nManager.isRTL ? "flex-row-reverse" : "flex-row"}`}>
-          <FontAwesome name="search" size={24} color="black" />
+        <View className={`h-11 border-2 rounded-lg mt-7 mb-4 px-4 py-2 flex-row items-center 
+          ${isDarkMode ? 'border-baby-blue/20 bg-concrete-turqouise/20' : 'border-rock-stone bg-white/80'} 
+          ${I18nManager.isRTL ? "flex-row-reverse" : "flex-row"}`}>
+          <FontAwesome 
+            name="search" 
+            size={24} 
+            color={isDarkMode ? "#1DCDFE" : "#17222D"} 
+          />
           <TextInput
             placeholder={i18n.t('search')}
             autoFocus={true}
             value={input}
             onChangeText={(text) => setInput(text)}
             className={`flex-1 ${I18nManager.isRTL ? "text-right mr-2" : "text-left ml-2"}`}
-            style={{ textAlign: I18nManager.isRTL ? 'right' : 'left' }}
+            style={{ 
+              textAlign: I18nManager.isRTL ? 'right' : 'left',
+              color: isDarkMode ? '#1DCDFE' : '#17222D',
+            }}
+            placeholderTextColor={isDarkMode ? '#1DCDFE80' : '#17222D80'}
           />
         </View>
 
         {input.length == 0 ? (
           <ScrollView showsVerticalScrollIndicator={false}>
-            <RecentItemsSearch />
-            <PopularQueues />
+            <RecentItemsSearch isDarkMode={isDarkMode} />
+            <PopularQueues isDarkMode={isDarkMode} />
           </ScrollView>
         ) : (
-          <SearchFilter data={Current} input={input} />
+          <SearchFilter data={Current} input={input} isDarkMode={isDarkMode} />
         )}
       </View>
     </View>
-  )
+  );
 }

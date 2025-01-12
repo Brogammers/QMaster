@@ -27,7 +27,9 @@ export default function SearchItem(props: ExtendedSearchItemProps) {
 
   return (
     <TouchableOpacity
-      className={`w-full ${isAccount ? 'py-4 px-4' : 'py-2 border-b-2 border-lite-grey'}`}
+      className={`w-full ${isAccount ? 'py-4 px-4' : 'py-2'} ${
+        isDarkMode ? 'border-baby-blue/20' : 'border-lite-grey'
+      } ${!isAccount && 'border-b-2'}`}
       onPress={handlePress}
     >
       <View className={`flex-row items-center justify-between w-full`}>
@@ -49,7 +51,7 @@ export default function SearchItem(props: ExtendedSearchItemProps) {
               source={image} 
               className="rounded-sm w-7 h-7" 
             />
-            <Text className={`ml-5 text-${isAccount ? 'ignite-black' : 'concrete-turquoise'} text-${isAccount ? 'base font-medium' : 'sm'}`}>
+            <Text className={`ml-5 text-sm ${isDarkMode ? 'text-baby-blue' : 'text-concrete-turquoise'}`}>
               {title}
             </Text>
           </View>
@@ -65,7 +67,7 @@ export default function SearchItem(props: ExtendedSearchItemProps) {
             <FontAwesome6 
               name="arrow-up-right-dots" 
               size={24} 
-              color="black" 
+              color={isDarkMode ? "#1DCDFE" : "#17222D"}
             />
         )}
       </View>

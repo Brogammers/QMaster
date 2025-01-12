@@ -18,12 +18,15 @@ export default function HistoryComponent(props: HistoryComponentProps) {
 		isHistory,
 		isCategory,
 		isNotification,
+		isDarkMode,
 	} = props;
 	const navigation = useNavigation() as NavigationProp<any>;
 
 	return (
 		<TouchableOpacity
-			className="w-[85%] bg-white self-center h-[85] mt-4 rounded-xl items-center px-5 flex-row"
+			className={`w-[85%] self-center h-[85] mt-4 rounded-xl items-center px-5 flex-row ${
+				isDarkMode ? 'bg-concrete-turqouise/20' : 'bg-white'
+			}`}
 			onPress={() =>
 				navigation.navigate("QueuePage", {
 					brandName: name,
@@ -39,7 +42,7 @@ export default function HistoryComponent(props: HistoryComponentProps) {
 					/>
 					<View className="w-[70%] ml-4 h-full justify-between py-2">
 						<View>
-							<Text className="text-sm font-semibold">
+							<Text className={`text-sm font-semibold ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
 								{name}
 							</Text>
 							<View className="flex-row items-center">
@@ -48,17 +51,17 @@ export default function HistoryComponent(props: HistoryComponentProps) {
 									size={14}
 									color="#E50404"
 								/>
-								<Text className="text-xs">
+								<Text className={`text-xs ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
 									{location}
 								</Text>
 							</View>
 						</View>
 						<View className="flex-row justify-between">
 							<View>
-								<Text className="text-[8px]">
+								<Text className={`text-[8px] ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
 									{date}
 								</Text>
-								<Text className="text-[8px]">
+								<Text className={`text-[8px] ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
 									Queue ID: {id}
 								</Text>
 							</View>
@@ -77,7 +80,7 @@ export default function HistoryComponent(props: HistoryComponentProps) {
 					/>
 					<View className="w-[70%] ml-4 h-full justify-center py-2">
 						<View>
-							<Text className="text-xl font-semibold">
+							<Text className={`text-xl font-semibold ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
 								{name}
 							</Text>
 							<View className="flex-row items-center">
@@ -86,7 +89,7 @@ export default function HistoryComponent(props: HistoryComponentProps) {
 									size={20}
 									color="#E50404"
 								/>
-								<Text className="text-base">
+								<Text className={`text-base ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
 									{queues} Queues
 								</Text>
 							</View>
@@ -101,18 +104,18 @@ export default function HistoryComponent(props: HistoryComponentProps) {
 						className="w-16 h-16 rounded-lg"
 					/>
 					<View className="w-[70%] ml-4 h-full justify-between py-2">
-						<Text className="text-sm font-semibold">
+						<Text className={`text-sm font-semibold ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
 							{name}
 						</Text>
-						<Text className="text-xs font-light">
+						<Text className={`text-xs font-light ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
 							{notification}
 						</Text>
 						<View className="flex-row justify-between">
 							<View className="flex-row">
-								<Text className="text-[8px]">
+								<Text className={`text-[8px] ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
 									{date}
 								</Text>
-								<Text className="text-[8px] ml-3">
+								<Text className={`text-[8px] ml-3 ${isDarkMode ? 'text-baby-blue' : 'text-coal-black'}`}>
 									{time}
 								</Text>
 							</View>

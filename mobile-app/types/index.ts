@@ -36,6 +36,7 @@ export interface CurrentItem {
 export interface SearchFilterProps {
   data: any;
   input: string;
+  isDarkMode?: boolean;
 }
 
 export interface CategoryProps {
@@ -130,6 +131,7 @@ export interface HistoryComponentProps {
   isHistory?: boolean;
   isCategory?: boolean;
   isNotification?: boolean;
+  isDarkMode?: boolean;
 }
 
 export interface QueueInfoCardProps {
