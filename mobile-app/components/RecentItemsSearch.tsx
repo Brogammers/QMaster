@@ -10,9 +10,15 @@ export default function RecentItemsSearch() {
       <Text className="my-3 text-lg font-semibold text-left">{i18n.t("searchPage.recentQueues")}</Text>
       <View>
         {Current.slice(0, 5).map((recent, index) => (
-          <SearchItem image={recent.image} title={recent.name} key={index} />
+          <SearchItem 
+            key={index}
+            image={recent.image} 
+            title={recent.name} 
+            isPopular={false}
+            isAccount={false}
+          />
         ))}
       </View>
     </View>
-  )
+  );
 }

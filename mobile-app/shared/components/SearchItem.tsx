@@ -5,14 +5,22 @@ import Image from 'react-native-remote-svg';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { SearchItemProps } from '@/types';
 import { AntDesign } from '@expo/vector-icons';
+import { useLinkTo } from '@react-navigation/native';
 
 export default function SearchItem(props: SearchItemProps) {
-  const { image, title, isPopular, isAccount, icon, onPress } = props;
+  const { image, title, isPopular, isAccount, icon } = props;
+  const linkTo = useLinkTo();
+
+  const handlePress = () => {
+    if (!isAccount) {
+      linkTo(`/Partner?brandName=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}`);
+    }
+  };
 
   return (
     <TouchableOpacity
       className={`py-4 border-b-2 border-lite-grey w-full`}
-      onPress={(props.onPress)}
+      onPress={handlePress}
     >
       <View className={`flex-row items-center justify-between w-full`}>
         {isAccount ? (
