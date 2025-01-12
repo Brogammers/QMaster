@@ -52,10 +52,9 @@ export interface CurrentQueuesProps {
   name: string;
   people: number;
   time: number;
-  isJoin?: boolean;
   isLeave?: boolean;
   isCurrent?: boolean;
-  isPopular?: boolean;
+  isDarkMode?: boolean;
 }
 
 export interface PaginatorProps {

@@ -8,6 +8,7 @@ import { AccountInfo } from "@/constants";
 import { Skeleton } from "moti/skeleton";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
+import { useRouter } from "expo-router";
 
 interface AccountPageProfileProps {
   isDarkMode: boolean;
@@ -15,6 +16,7 @@ interface AccountPageProfileProps {
 
 export default function AccountPageProfile({ isDarkMode }: AccountPageProfileProps) {
   const username = useSelector((state: RootState) => state.username.username);
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const colorMode = isDarkMode ? "dark" : "light";
 
@@ -88,10 +90,8 @@ export default function AccountPageProfile({ isDarkMode }: AccountPageProfilePro
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity 
-            className="bg-concrete-turqouise/30 p-3 rounded-xl border border-baby-blue/20"
-          >
-            <Ionicons name="settings-outline" size={22} color="#1DCDFE" />
+          <TouchableOpacity onPress={() => router.push("/Settings")}>
+            <Ionicons name="settings-outline" size={24} color="#1DCDFE" />
           </TouchableOpacity>
         </MotiView>
       </LinearGradient>

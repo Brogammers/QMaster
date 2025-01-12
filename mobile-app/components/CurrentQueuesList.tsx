@@ -5,7 +5,11 @@ import { default as QueueCarousel } from 'react-native-reanimated-carousel';
 import { Current } from '@/constants';
 import { CurrentQueuesProps } from '@/types';
 
-export default function CurrentQueuesList() {
+interface CurrentQueuesListProps {
+  isDarkMode?: boolean;
+}
+
+export default function CurrentQueuesList({ isDarkMode }: CurrentQueuesListProps) {
   const windowWidth = useWindowDimensions().width;
   const carouselWidth = windowWidth * 0.85; // 85% of the screen width
 
@@ -18,6 +22,7 @@ export default function CurrentQueuesList() {
       key={index}
       isLeave
       isCurrent
+      isDarkMode={isDarkMode}
     />
   );
 
