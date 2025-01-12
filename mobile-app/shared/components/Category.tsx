@@ -9,7 +9,7 @@ import { CategoryProps } from "@/types";
 const { width } = Dimensions.get('window')
 const wide = width * 27 / 100
 
-export default function Category(props: CategoryProps) {
+export default function CategoryPop(props: CategoryProps) {
   const { image, title, spacing, onPress } = props;
   return (
     <TouchableOpacity className="flex items-center justify-center h-24 bg-white rounded-2xl mb-2.5 " style={{ width: wide }} onPress={onPress}>

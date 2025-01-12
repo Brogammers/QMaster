@@ -1,6 +1,6 @@
 import React from 'react';
 import { I18nManager, Text, View } from 'react-native';
-import Category from '@/shared/components/Category';
+import CategoryPop from '@/shared/components/Category';
 import { Categories } from '@/constants';
 import i18n from '@/i18n';
 import { useLinkTo } from '@react-navigation/native';
@@ -8,11 +8,11 @@ import { useLinkTo } from '@react-navigation/native';
 export default function CategoriesList() {  
   const linkTo = useLinkTo();
   
-  const handleCategoryPress = (category: { title: string }) => {
+  const handleCategoryPress = (category: any) => {
     if (category.title === i18n.t('others')) {
       linkTo('/AllCategories');
     } else {
-      linkTo(`/Category/${encodeURIComponent(category.title)}`);
+      linkTo(`/Category}`);
     }
   };
 
@@ -23,7 +23,7 @@ export default function CategoriesList() {
       </Text>
       <View className="w-full flex flex-row flex-wrap self-center justify-between">
         {Categories.map((category, index) => (
-          <Category
+          <CategoryPop
             key={index}
             title={category.title}
             image={category.image}
