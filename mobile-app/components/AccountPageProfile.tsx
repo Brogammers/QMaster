@@ -9,12 +9,15 @@ import { Skeleton } from "moti/skeleton";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 
-const { width } = Dimensions.get('window');
+interface AccountPageProfileProps {
+  isDarkMode: boolean;
+  onThemeToggle: () => void;
+}
 
-export default function AccountPageProfile() {
+export default function AccountPageProfile({ isDarkMode, onThemeToggle }: AccountPageProfileProps) {
   const username = useSelector((state: RootState) => state.username.username);
   const [isLoading, setIsLoading] = useState(true);
-  const colorMode: "light" | "dark" = "light";
+  const colorMode = isDarkMode ? "dark" : "light";
 
   useEffect(() => {
     if (typeof username === "string") {
@@ -26,7 +29,7 @@ export default function AccountPageProfile() {
     <View className="w-11/12 my-6 self-center">
       <LinearGradient
         colors={['#17222D', '#13404D']}
-        className="rounded-3xl p-5 shadow-lg border border-slate-grey/10"
+        className="rounded-3xl p-5 shadow-lg border border-baby-blue/10"
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
       >
@@ -86,11 +89,23 @@ export default function AccountPageProfile() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity 
-            className="bg-concrete-turqouise/30 p-3 rounded-xl border border-baby-blue/20"
-          >
-            <Ionicons name="settings-outline" size={24} color="#1DCDFE" />
-          </TouchableOpacity>
+          <View className="flex-row items-center space-x-3">
+            <TouchableOpacity 
+              className="bg-concrete-turqouise/30 p-3 rounded-xl border border-baby-blue/20"
+              onPress={onThemeToggle}
+            >
+              <Ionicons 
+                name={isDarkMode ? "sunny-outline" : "moon-outline"} 
+                size={22} 
+                color="#1DCDFE" 
+              />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              className="bg-concrete-turqouise/30 p-3 rounded-xl border border-baby-blue/20"
+            >
+              <Ionicons name="settings-outline" size={22} color="#1DCDFE" />
+            </TouchableOpacity>
+          </View>
         </MotiView>
       </LinearGradient>
     </View>

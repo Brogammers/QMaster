@@ -6,7 +6,11 @@ import { useLinkTo } from '@react-navigation/native';
 import i18n from "@/i18n";
 import { MotiView } from "moti";
 
-export default function AccountPageItems() {
+interface AccountPageItemsProps {
+  isDarkMode: boolean;
+}
+
+export default function AccountPageItems({ isDarkMode }: AccountPageItemsProps) {
   const linkTo = useLinkTo();
   const auth = useAuth();
   
@@ -68,7 +72,7 @@ export default function AccountPageItems() {
   ];
 
   return (
-    <View className="p-6 w-full">
+    <View className="w-full">
       {items.map((item, index) => (
         <MotiView
           key={item.title}
@@ -81,12 +85,15 @@ export default function AccountPageItems() {
           }}
           className="mb-4"
         >
-          <SearchItem
-            title={item.title}
-            icon={item.icon}
-            isAccount
-            onPress={item.onPress}
-          />
+          <View className={`${isDarkMode ? 'bg-concrete-turqouise/20' : 'bg-ocean-blue/5'} rounded-2xl border border-baby-blue/10`}>
+            <SearchItem
+              title={item.title}
+              icon={item.icon}
+              isAccount
+              onPress={item.onPress}
+              isDarkMode={isDarkMode}
+            />
+          </View>
         </MotiView>
       ))}
     </View>

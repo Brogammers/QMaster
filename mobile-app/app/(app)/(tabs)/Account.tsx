@@ -9,14 +9,28 @@ import { RootState } from "@/app/redux/store";
 import { Skeleton } from "moti/skeleton";
 import { MotiView } from "moti";
 import { LinearGradient } from "expo-linear-gradient";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 
 export default function Account() {
   const [isLoading, setIsLoading] = useState(true);
-  const colorMode: 'light' | 'dark' = 'light';
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const colorMode = isDarkMode ? 'dark' : 'light';
 
   const firstName = useSelector((state: RootState) => state.username.username)?.split(' ')[0];
+
+  useEffect(() => {
+    const loadTheme = async () => {
+      try {
+        const savedTheme = await AsyncStorage.getItem('theme');
+        setIsDarkMode(savedTheme === 'dark');
+      } catch (error) {
+        console.log('Error loading theme:', error);
+      }
+    };
+    loadTheme();
+  }, []);
 
   useEffect(() => {
     if (typeof firstName === "string") {
@@ -24,59 +38,74 @@ export default function Account() {
     }
   }, [firstName]);
 
+  const handleThemeToggle = async () => {
+    try {
+      const newTheme = !isDarkMode;
+      await AsyncStorage.setItem('theme', newTheme ? 'dark' : 'light');
+      setIsDarkMode(newTheme);
+    } catch (error) {
+      console.log('Error saving theme:', error);
+    }
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-off-white">
-      <StatusBar translucent barStyle="dark-content" />
-      <LinearGradient
-        colors={['rgba(0, 119, 182, 0.1)', 'rgba(255, 255, 255, 0)']}
-        className="absolute top-0 w-full h-64"
-      />
+    <SafeAreaView className={`flex-1 ${isDarkMode ? 'bg-ocean-blue' : 'bg-off-white'}`}>
+      <StatusBar translucent barStyle={isDarkMode ? "light-content" : "dark-content"} />
+      {!isDarkMode && (
+        <LinearGradient
+          colors={['rgba(0, 119, 182, 0.1)', 'rgba(255, 255, 255, 0)']}
+          className="absolute top-0 w-full h-64"
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+        />
+      )}
       <ScrollView 
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 40 }}
+        className="flex-1"
       >
         <MotiView
           from={{ opacity: 0, translateY: 20 }}
           animate={{ opacity: 1, translateY: 0 }}
-          transition={{ type: 'timing', duration: 1000 }}
+          transition={{
+            mass: 0.8,
+            damping: 15,
+          }}
+          className="flex-1"
         >
-          <AccountPageProfile />
-        </MotiView>
-        
-        <View className="px-6">
-          <MotiView
-            from={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: 'spring', delay: 200 }}
-          >
-            <Skeleton
-              colorMode={colorMode}
-              width={width * 0.7}
-              height={35}
+          <AccountPageProfile isDarkMode={isDarkMode} onThemeToggle={handleThemeToggle} />
+          
+          <View className="px-6">
+            <MotiView
+              from={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                mass: 0.8,
+                damping: 15,
+              }}
             >
-              {!isLoading && (
-                <Text className="pb-4 text-3xl font-extrabold text-ocean-blue-2">
-                  Hi {firstName &&
-                    firstName.charAt(0).toUpperCase() + firstName.slice(1)
-                  }! 👋
-                </Text>
-              )}
-            </Skeleton>
-            
-            <Text className="mt-2 mb-6 text-sm text-slate-grey">
-              Manage your account settings and preferences
-            </Text>
-          </MotiView>
+              <Skeleton
+                colorMode={colorMode}
+                width={width * 0.7}
+                height={35}
+              >
+                {isLoading ? null : (
+                  <Text className="pb-4 text-3xl font-extrabold text-baby-blue">
+                    Hi {firstName &&
+                      firstName.charAt(0).toUpperCase() + firstName.slice(1)
+                    }! 👋
+                  </Text>
+                )}
+              </Skeleton>
+              
+              <Text className={`mt-2 mb-6 text-sm ${isDarkMode ? 'text-slight-slate-grey' : 'text-slate-grey'}`}>
+                Manage your account settings and preferences
+              </Text>
+            </MotiView>
 
-          <MotiView
-            from={{ opacity: 0, translateY: 20 }}
-            animate={{ opacity: 1, translateY: 0 }}
-            transition={{ type: 'spring', delay: 400 }}
-            className="bg-white rounded-3xl shadow-sm"
-          >
-            <AccountPageItems />
-          </MotiView>
-        </View>
+            <AccountPageItems isDarkMode={isDarkMode} />
+          </View>
+        </MotiView>
       </ScrollView>
     </SafeAreaView>
   );
