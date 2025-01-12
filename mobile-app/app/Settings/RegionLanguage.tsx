@@ -1,67 +1,73 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useTheme } from '@/ctx/ThemeContext';
-import { Picker } from '@react-native-picker/picker';
-import i18n from '@/i18n';
-import Return from '@/shared/components/Return';
+import { View, Text, ScrollView } from "react-native";
+import { useTheme } from "@/ctx/ThemeContext";
+import i18n from "@/i18n";
+import { useState } from "react";
+import Return from "@/shared/components/Return";
+import { Href } from "expo-router";
+import { Picker } from "@react-native-picker/picker";
 
 export default function RegionLanguageSettings() {
   const { isDarkMode } = useTheme();
-  const [selectedCountry, setSelectedCountry] = useState('US');
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [selectedCountry, setSelectedCountry] = useState("EG");
+  const [selectedLanguage, setSelectedLanguage] = useState("ar");
 
   return (
-    <View className={`flex-1 ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
-      <View className="flex-row items-center px-5 pt-14 pb-4">
-        <View className="flex-row items-center">
-          <Return href="/Settings" size={30} color={isDarkMode ? "#fff" : "#000"} />
-          <Text className={`text-2xl font-bold ml-4 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
-            {i18n.t('region_language')}
-          </Text>
-        </View>
+    <View className="flex-1 bg-slate-900">
+      <View className="bg-ocean-blue px-4 py-3">
+        <Return 
+          href={"/(app)/Settings" as Href<string>} 
+          size={24} 
+          color="white"
+          title={i18n.t("settings")}
+        />
       </View>
-
-      <View className="flex-1 px-5">
-        <View className={`rounded-xl p-4 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}>
-          <View className="space-y-4">
+      
+      <ScrollView className="flex-1 px-4 pt-4">
+        <View className="rounded-xl overflow-hidden bg-slate-800/60">
+          <View className="p-4 space-y-4">
             <View>
-              <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('country')}</Text>
-              <View className={`rounded-lg ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
+              <Text className="text-baby-blue text-base font-semibold mb-2">
+                {i18n.t("country")}
+              </Text>
+              <View className="bg-slate-700/50 rounded-lg">
                 <Picker
                   selectedValue={selectedCountry}
                   onValueChange={setSelectedCountry}
-                  style={{ color: isDarkMode ? '#fff' : '#000' }}
+                  dropdownIconColor="#1DCDFE"
+                  style={{ color: "white" }}
                 >
-                  <Picker.Item label="United States" value="US" />
-                  <Picker.Item label="United Kingdom" value="UK" />
-                  <Picker.Item label="Canada" value="CA" />
+                  <Picker.Item label="Egypt" value="EG" />
                   <Picker.Item label="Saudi Arabia" value="SA" />
                   <Picker.Item label="United Arab Emirates" value="AE" />
-                  <Picker.Item label="Egypt" value="EG" />
-                  <Picker.Item label="Qatar" value="QA" />
                   <Picker.Item label="Kuwait" value="KW" />
+                  <Picker.Item label="Qatar" value="QA" />
                   <Picker.Item label="Bahrain" value="BH" />
                   <Picker.Item label="Oman" value="OM" />
                 </Picker>
               </View>
             </View>
+
+            <View className="h-px bg-slate-700/50" />
+
             <View>
-              <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('language')}</Text>
-              <View className={`rounded-lg ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
+              <Text className="text-baby-blue text-base font-semibold mb-2">
+                {i18n.t("language")}
+              </Text>
+              <View className="bg-slate-700/50 rounded-lg">
                 <Picker
                   selectedValue={selectedLanguage}
                   onValueChange={setSelectedLanguage}
-                  style={{ color: isDarkMode ? '#fff' : '#000' }}
+                  dropdownIconColor="#1DCDFE"
+                  style={{ color: "white" }}
                 >
+                  <Picker.Item label="العربية" value="ar" />
                   <Picker.Item label="English" value="en" />
-                  <Picker.Item label="Arabic" value="ar" />
                 </Picker>
               </View>
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 } 
