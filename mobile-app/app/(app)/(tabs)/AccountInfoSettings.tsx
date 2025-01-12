@@ -19,6 +19,8 @@ import { useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from "expo-router";
+import { useLinkTo } from "@react-navigation/native";
 
 interface AccountInfo {
   firstName: string;
@@ -33,6 +35,7 @@ export default function AccountInfoSettings() {
   const { isDarkMode } = useTheme();
   const [isEditing, setIsEditing] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const linkTo = useLinkTo();
 
   const firstName = _.capitalize(
     useSelector((state: RootState) => state.firstName.firstName)?.split(" ")[0]
@@ -51,6 +54,10 @@ export default function AccountInfoSettings() {
     newsletter: false,
   });
 
+  const handleReturn = () => {
+    linkTo("/Settings");
+  }
+
   const handleSave = async () => {
     // TODO: Implement save functionality
     setIsEditing(false);
@@ -58,8 +65,10 @@ export default function AccountInfoSettings() {
 
   return (
     <>
-      <View className="absolute -top-14 -left-2 z-10">
-        <Return href="/Settings" size={24} color="#fff" />
+      <View className="absolute top-4 left-4 z-10">
+        <TouchableOpacity onPress={() => handleReturn()}>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
       </View>
       <View className={`flex-1 ${isDarkMode ? "bg-slate-900" : "bg-off-white"}`}>
         <LinearGradient
