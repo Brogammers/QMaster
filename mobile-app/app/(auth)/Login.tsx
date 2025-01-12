@@ -30,6 +30,7 @@ import SplashScreen from "../SplashScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Config from "react-native-config";
 import i18n from "@/i18n";
+import configConverter from "@/api/configConverter";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email required"),
@@ -57,8 +58,13 @@ export default function Login() {
       //   values
       // );
       // Android Emulator
+      // const response = await axios.post(
+      //   "http://10.0.2.2:8080/api/v1/login/user",
+      //   values
+      // );
+
       const response = await axios.post(
-        "http://10.0.2.2:8080/api/v1/login/user",
+        configConverter("EXPO_PUBLIC_API_BASE_URL_LOGIN"),
         values
       );
 

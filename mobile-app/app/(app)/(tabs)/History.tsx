@@ -19,6 +19,7 @@ import { useTheme } from "@/ctx/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
+import configConverter from "@/api/configConverter";
 
 function formatDate(date: any) {
     let day = date.getDate();
@@ -55,7 +56,7 @@ export default function History() {
         } else {
           const token = await AsyncStorage.getItem("token");
 
-          const response = axios.get(`${Config.EXPO_PUBLIC_API_BASE_URL_HISTORY_ANDROID || "http://10.0.2.2:8080/api/v1/history/all"}?id=${userId}`, {
+          const response = axios.get(`${configConverter("EXPO_PUBLIC_API_BASE_URL_HISTORY")}?id=${userId}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },

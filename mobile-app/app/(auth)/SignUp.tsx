@@ -31,6 +31,7 @@ import { isValidPhoneNumber } from "libphonenumber-js";
 // import EXPO_PUBLIC_API_BASE_URL from ""
 import Config from "react-native-config";
 import i18n from "@/i18n";
+import configConverter from "@/api/configConverter";
 
 const window = Dimensions.get("window");
 
@@ -88,9 +89,11 @@ export default function SignUp() {
 
     try {
       setIsLoading(true);
-      const url =
-        Config.EXPO_PUBLIC_API_BASE_URL ||
-        "http://localhost:8080/api/v1/registration/user";
+      // const url =
+      //   Config.EXPO_PUBLIC_API_BASE_URL ||
+      //   "http://localhost:8080/api/v1/registration/user";
+
+      const url = configConverter("EXPO_PUBLIC_API_BASE_URL");
 
       console.log("This is the URL: ", url);
 

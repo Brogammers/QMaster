@@ -18,6 +18,7 @@ import Config from "react-native-config";
 import i18n from "@/i18n";
 import { useTheme } from "@/ctx/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
+import configConverter from "@/api/configConverter";
 
 export default function History() {
   const isFocused = useIsFocused();
@@ -41,7 +42,7 @@ export default function History() {
           });
 
           const [response, _] = (await Promise.all([
-            axios.get(`${Config.EXPO_PUBLIC_API_BASE_URL_HISTORY || "http://localhost:8080/api/v1/history/all"}?id=1`, {
+            axios.get(`${configConverter("EXPO_PUBLIC_API_BASE_URL_HISTORY")}?id=1`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
