@@ -1,9 +1,10 @@
-import { View, Text, ScrollView, StatusBar } from "react-native";
-import { Link, Href } from "expo-router";
+import { View, Text, ScrollView, StatusBar, TouchableOpacity } from "react-native";
+import { Href } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import i18n from "@/i18n";
 import { useTheme } from "@/ctx/ThemeContext";
 import { MotiView } from "moti";
+import { useLinkTo } from "@react-navigation/native";
 
 interface MenuItem {
   title: string;
@@ -14,6 +15,7 @@ interface MenuItem {
 
 export default function Settings() {
   const { isDarkMode } = useTheme();
+  const linkTo = useLinkTo();
 
   const menuItems: MenuItem[] = [
     {
@@ -59,29 +61,28 @@ export default function Settings() {
               }}
               className="mb-4"
             >
-              <View className={`${isDarkMode ? 'bg-concrete-turqouise/20' : 'bg-ocean-blue/5'} rounded-2xl border border-baby-blue/10`}>
-                <Link href={item.route} asChild>
-                  <View className="py-4 px-4">
-                    <View className="flex-row items-center justify-between">
-                      <View className="flex-row items-center">
-                        <item.iconComponent
-                          name={item.icon as any}
-                          size={22}
-                          color={isDarkMode ? "#1DCDFE" : "#17222D"}
-                        />
-                        <Text className={`ml-5 text-base font-medium ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
-                          {i18n.t(item.title)}
-                        </Text>
-                      </View>
-                      <MaterialIcons
-                        name="chevron-right"
-                        size={18}
-                        color={isDarkMode ? "#1DCDFE" : "#17222D"}
-                      />
-                    </View>
+              <TouchableOpacity 
+                onPress={() => linkTo(item.route.toString())}
+                className={`${isDarkMode ? 'bg-concrete-turqouise/20' : 'bg-ocean-blue/5'} rounded-2xl border border-baby-blue/10 py-4 px-4`}
+              >
+                <View className="flex-row items-center justify-between">
+                  <View className="flex-row items-center">
+                    <item.iconComponent
+                      name={item.icon as any}
+                      size={22}
+                      color={isDarkMode ? "#1DCDFE" : "#17222D"}
+                    />
+                    <Text className={`ml-5 text-base font-medium ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
+                      {i18n.t(item.title)}
+                    </Text>
                   </View>
-                </Link>
-              </View>
+                  <MaterialIcons
+                    name="chevron-right"
+                    size={18}
+                    color={isDarkMode ? "#1DCDFE" : "#17222D"}
+                  />
+                </View>
+              </TouchableOpacity>
             </MotiView>
           ))}
         </View>
