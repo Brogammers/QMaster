@@ -13,6 +13,10 @@ import i18n from "@/i18n";
 import AllCategories from "@/app/(app)/(tabs)/AllCategories";
 import Category from "@/app/(app)/(tabs)/Category";
 import Settings from "@/app/(app)/(tabs)/Settings";
+import AccountInfoSettings from "./AccountInfoSettings";
+import NotificationsSettings from "./NotificationSettings";
+import SecuritySettings from "./SecuritySettings";
+import RegionLanguageSettings from "./RegionalLanguageSettings";
 
 const Tab = createBottomTabNavigator();
 
@@ -152,6 +156,62 @@ export default function AppEntry() {
           <Tab.Screen
             name="Settings"
             component={Settings}
+            options={{
+              tabBarButton: () => null,
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: "#17222D",
+              },
+              headerTitle: i18n.t("settings"),
+              headerTintColor: "white",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="AccountInfoSettings"
+            component={AccountInfoSettings}
+            options={{
+              tabBarButton: () => null,
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: "#17222D",
+              },
+              headerTitle: i18n.t("settings"),
+              headerTintColor: "white",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="NotificationSettings"
+            component={NotificationsSettings}
+            options={{
+              tabBarButton: () => null,
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: "#17222D",
+              },
+              headerTitle: i18n.t("settings"),
+              headerTintColor: "white",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="SecuritySettings"
+            component={SecuritySettings}
+            options={{
+              tabBarButton: () => null,
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: "#17222D",
+              },
+              headerTitle: i18n.t("settings"),
+              headerTintColor: "white",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="RegionLanguageSettings"
+            component={RegionLanguageSettings}
             options={{
               tabBarButton: () => null,
               headerShown: true,
