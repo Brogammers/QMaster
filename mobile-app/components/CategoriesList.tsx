@@ -12,7 +12,7 @@ export default function CategoriesList() {
     if (category.title === i18n.t('others')) {
       linkTo('/AllCategories');
     } else {
-      linkTo(`/Category}`);
+      linkTo(`/Category/${encodeURIComponent(category.title)}`);
     }
   };
 
