@@ -52,15 +52,15 @@ export default function Login() {
     try {
       setIsLoading(true);
       // IOS Simulator
-      // const response = await axios.post(
-      //   `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN || "http://localhost:8080/api/v1/login/user"}`,
-      //   values
-      // );
-      // Android Emulator
       const response = await axios.post(
-        "http://10.0.2.2:8080/api/v1/login/user",
+        `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN || "http://localhost:8080/api/v1/login/user"}`,
         values
       );
+      // Android Emulator
+      // const response = await axios.post(
+      //   "http://10.0.2.2:8080/api/v1/login/user",
+      //   values
+      // );
 
       if (response.status === 200 || response.status === 201) {
         console.log("Login successful", values);

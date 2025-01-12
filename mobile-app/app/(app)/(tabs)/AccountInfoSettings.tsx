@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Switch, Platform } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useTheme } from '@/ctx/ThemeContext';
+import { RootState } from '@/app/redux/store';
 import { useAuth } from '@/ctx/AuthContext';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
+import { useTheme } from '@/ctx/ThemeContext';
 import i18n from '@/i18n';
 import Return from '@/shared/components/Return';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker';
+import React, { useState } from 'react';
+import { Platform, ScrollView, Switch, Text, TextInput, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/app/redux/store';
 
 interface AccountInfo {
   firstName: string;
@@ -67,8 +67,8 @@ export default function AccountInfoSettings() {
         </TouchableOpacity>
       </View>
 
-      <View className="flex-1 px-5">
-        <View className={`rounded-xl p-4 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}>
+      <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
+        <View className={`rounded-xl p-4 mb-6 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}>
           <View className="space-y-4">
             <View>
               <Text className={`mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{i18n.t('email')}</Text>
@@ -177,7 +177,7 @@ export default function AccountInfoSettings() {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </ScrollView>
 
       {showDatePicker && Platform.OS === 'android' && (
         <DateTimePicker

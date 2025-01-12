@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useTheme } from '@/ctx/ThemeContext';
 import { Picker } from '@react-native-picker/picker';
 import i18n from '@/i18n';
@@ -21,8 +21,8 @@ export default function RegionLanguageSettings() {
         </View>
       </View>
 
-      <View className="flex-1 px-5">
-        <View className={`rounded-xl p-4 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}>
+      <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
+        <View className={`rounded-xl p-4 mb-6 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}>
           <View className="space-y-6">
             <View>
               <Text className={`text-lg font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
@@ -82,7 +82,7 @@ export default function RegionLanguageSettings() {
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 } 

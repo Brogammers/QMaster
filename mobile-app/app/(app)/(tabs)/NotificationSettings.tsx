@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Switch } from 'react-native';
+import { View, Text, Switch, ScrollView } from 'react-native';
 import { useTheme } from '@/ctx/ThemeContext';
 import * as Notifications from 'expo-notifications';
 import i18n from '@/i18n';
@@ -32,8 +32,8 @@ export default function NotificationsSettings() {
         </View>
       </View>
 
-      <View className="flex-1 px-5">
-        <View className={`rounded-xl p-4 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}>
+      <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
+        <View className={`rounded-xl p-4 mb-6 ${isDarkMode ? 'bg-slate-800/60' : 'bg-white'}`}>
           <View className="space-y-6">
             <View className="flex-row items-center justify-between">
               <View>
@@ -66,7 +66,7 @@ export default function NotificationsSettings() {
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 } 
