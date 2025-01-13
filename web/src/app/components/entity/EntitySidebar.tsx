@@ -34,8 +34,8 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
   ];
 
   const queueMenuItems = [
-    { path: `/${entity}/admin/queues`, label: 'Queues' },
-    { path: `/${entity}/admin/queues/counters`, label: 'Counters' },
+    { path: `/${entity}/queue-settings/queues`, label: 'Queues' },
+    { path: `/${entity}/queue-settings/counters`, label: 'Counters' },
   ];
   
   const menuItems = [
@@ -47,7 +47,7 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
       children: adminMenuItems,
     },
     { 
-      path: `/${entity}/queues`, 
+      path: `/${entity}/queue-settings`, 
       label: 'Queue Settings', 
       icon: FaPeopleArrows, 
       isDropdown: true,

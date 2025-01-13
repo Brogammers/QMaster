@@ -1,6 +1,6 @@
 "use client";
 
-import Entity from "../../../page";
+import Entity from "../../page";
 import CustomModal from "@/app/components/CustomModal";
 import QueueModal from "@/app/shared/QueueModal";
 import ServiceFactory from "@/components/service/ServiceFactory";
@@ -13,7 +13,7 @@ import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
-import useWindowSize from "../../../../../../../hooks/useWindowSize";
+import useWindowSize from "../../../../../../hooks/useWindowSize";
 
 interface CounterSetupForm {
     services: ServiceTemplate[];
