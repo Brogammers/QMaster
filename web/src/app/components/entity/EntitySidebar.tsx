@@ -12,6 +12,7 @@ import {
   FaPeopleArrows,
   FaSignOutAlt,
   FaUsers
+  FaStore
 } from 'react-icons/fa';
 import QMasterLogo from "../../../../public/qmaster-logo.svg";
 
@@ -54,6 +55,7 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
     },
     { path: `/${entity}/counter`, label: 'Counter', icon: FaUsers },
     { path: `/${entity}/display`, label: 'Display', icon: FaDesktop },
+    { path: `/${entity}/store`, label: 'Store', icon: FaStore },
   ];
 
   const handleLogout = () => {

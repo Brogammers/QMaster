@@ -24,6 +24,7 @@ const menuItems = [
   { path: '/admin/categories', label: 'Categories', icon: FaStore },
   { path: '/admin/users', label: 'Users', icon: FaUsers },
   { path: '/admin/schedules', label: 'Schedules', icon: FaCalendarAlt },
+  { path: '/admin/store', label: 'Store', icon: FaStore },
   { path: '/admin/settings', label: 'Settings', icon: FaCog },
 ];
 
