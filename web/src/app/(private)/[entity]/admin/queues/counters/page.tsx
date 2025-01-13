@@ -51,7 +51,6 @@ export default function Counter() {
     const [counters, setCounters] = useState<any[]>([]);
     const [formValues, setFormValues] = useState<any>(null);
     const [modalOpen, setModalOpen] = useState(false);
-    const [selectedTicket, setSelectedTicket] = useState<any>(null);
     const [businessType, setBusinessType] = useState<BusinessCategory>(
         BusinessCategory.BANKING
     ); // This should come from your auth context or API
@@ -209,7 +208,7 @@ export default function Counter() {
 
     return (
         <Entity>
-            <QueueModal title={`Setup ${businessTemplate.name} Space`}>
+            <QueueModal title={`Setup counters for your queues`}>
                 <div className="max-w-4xl mx-auto py-8">
                     <Formik
                         initialValues={initialValues}
