@@ -17,7 +17,6 @@ import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserRepository;
 
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -35,23 +34,35 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain)
-            throws ServletException, IOException {
+            throws SecurityException, IOException {
         // Get authorization header and validate
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (!StringUtils.hasText(header) || !header.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+            try {
+                filterChain.doFilter(request, response);
+            } catch (Exception e) {
+                throw new SecurityException("Invalid token");
+            }
             return;
         }
 
         String token = header.split(" ")[1].trim();
         BusinessUser businessUser = businessUserRepository.findByEmail(jwtUtil.getUsername(token)).orElse(null);
         if (businessUser != null && !jwtUtil.validateToken(token, businessUser)) {
-            filterChain.doFilter(request, response);
+            try {
+                filterChain.doFilter(request, response);
+            } catch (Exception e) {
+                throw new SecurityException("Invalid token");
+            }
             return;
         }
         AppUser user = appUserRepository.findByEmail(jwtUtil.getUsername(token)).orElse(null);
         if (user != null && !jwtUtil.validateToken(token, user)) {
-            filterChain.doFilter(request, response);
+            try {
+                filterChain.doFilter(request, response);
+            } catch (Exception e) {
+                throw new SecurityException("Invalid token");
+            }
             return;
         }
 
@@ -61,6 +72,10 @@ public class JwtFilter extends OncePerRequestFilter {
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
+        try {
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            throw new SecurityException("Invalid token");
+        }
     }
 }
