@@ -1,21 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Entity from "../../page";
 import QueueModal from "@/app/shared/QueueModal";
 import { Button, Select, Input, Switch, TimePicker } from 'antd';
 import { FaPlus, FaClock, FaUsers } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import axios from "axios";
 
 interface QueueConfig {
-  id: string;
   name: string;
   type: 'COUNTER' | 'TABLE' | 'APPOINTMENT' | 'BOOKING';
-  maxCapacity: number;
+  maxQueueSize: number;
   isActive: boolean;
   averageServiceTime: number; // in minutes
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
   allowsPreBooking: boolean;
+  storeId: number;
   operatingHours?: {
     start: string;
     end: string;
@@ -23,6 +24,10 @@ interface QueueConfig {
 }
 
 export default function Queues() {
+  const userId = document.cookie
+      .split(";")
+      .find((cookie) => cookie.includes("userId"))
+      ?.split("=")[1];
   const [queueConfigs, setQueueConfigs] = useState<QueueConfig[]>([]);
   const [isAddingQueue, setIsAddingQueue] = useState(false);
   const [newQueue, setNewQueue] = useState<Partial<QueueConfig>>({
@@ -33,30 +38,64 @@ export default function Queues() {
   });
 
   const handleAddQueue = () => {
-    if (newQueue.name && newQueue.maxCapacity) {
-      setQueueConfigs([
-        ...queueConfigs,
-        {
-          id: Date.now().toString(),
+    if (newQueue.name && newQueue.maxQueueSize) {
+      const newQueueConfig: QueueConfig = {
+          storeId: 7,
           name: newQueue.name,
-          type: newQueue.type || 'COUNTER',
-          maxCapacity: newQueue.maxCapacity,
+          type: newQueue.type || "COUNTER",
+          maxQueueSize: newQueue.maxQueueSize,
           isActive: newQueue.isActive || true,
           averageServiceTime: newQueue.averageServiceTime || 10,
-          priority: newQueue.priority || 'MEDIUM',
+          priority: newQueue.priority || "MEDIUM",
           allowsPreBooking: newQueue.allowsPreBooking || false,
           operatingHours: newQueue.operatingHours,
-        } as QueueConfig
-      ]);
-      setIsAddingQueue(false);
-      setNewQueue({
-        type: 'COUNTER',
-        isActive: true,
-        priority: 'MEDIUM',
-        allowsPreBooking: false,
-      });
+      };
+
+      const url = process.env.NEXT_PUBLIC_API_BASE_URL_CREATE_QUEUE || "";
+
+      const queueBody = {
+        id: userId,
+        storeId: newQueueConfig.storeId,
+        name: newQueueConfig.name,
+        maxQueueSize: newQueueConfig.maxQueueSize,
+        isActive: newQueueConfig.isActive,
+        averageServiceTime: newQueueConfig.averageServiceTime,
+      }
+      console.log("Adding queue:", queueBody);
+      
+      axios.post(url, queueBody)
+        .then(res => {
+            if(res.status === 200 || res.status === 201) {  
+            setQueueConfigs([...queueConfigs, newQueueConfig]);
+            setIsAddingQueue(false);
+            setNewQueue({
+                type: "COUNTER",
+                isActive: true,
+                priority: "MEDIUM",
+                allowsPreBooking: false,
+            });
+          } else {
+            console.error("Error adding queue:", res.data);
+          }
+        }).catch(err => {
+          console.error("Error adding queue:", err);
+        });
     }
   };
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_QUEUES || "";
+    axios.get(url)
+      .then(res => {
+        if(res.status === 200) {
+          console.log("Queues:", res.data.queues);
+        } else {
+          console.error("Error fetching queues:", res.data);
+        }
+      }).catch(err => {
+        console.error("Error fetching queues:", err);
+      });
+  }, []);
 
   return (
     <Entity>
@@ -64,9 +103,9 @@ export default function Queues() {
         <div className="max-w-4xl mx-auto py-8 space-y-8">
           {/* Queue List */}
           <div className="space-y-4">
-            {queueConfigs.map((queue) => (
+            {queueConfigs.map((queue, idx) => (
               <motion.div
-                key={queue.id}
+                key={idx}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="p-6 bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-lg"
@@ -82,7 +121,7 @@ export default function Queues() {
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <FaUsers className="w-4 h-4" />
-                      <span>Max: {queue.maxCapacity}</span>
+                      <span>Max: {queue.maxQueueSize}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <FaClock className="w-4 h-4" />
@@ -104,7 +143,7 @@ export default function Queues() {
             >
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Queue Name</label>
+                  <label className="block text-sm font-medium mb-2">Queue Name<p className="inline text-red-600">*</p></label>
                   <Input
                     placeholder="Enter queue name"
                     value={newQueue.name}
@@ -127,12 +166,12 @@ export default function Queues() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Max Capacity</label>
+                  <label className="block text-sm font-medium mb-2">Max Capacity<p className="inline text-red-600">*</p></label>
                   <Input
                     type="number"
                     placeholder="Enter max capacity"
-                    value={newQueue.maxCapacity}
-                    onChange={(e) => setNewQueue({ ...newQueue, maxCapacity: parseInt(e.target.value) })}
+                    value={newQueue.maxQueueSize}
+                    onChange={(e) => setNewQueue({ ...newQueue, maxQueueSize: parseInt(e.target.value) })}
                     className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
                   />
                 </div>

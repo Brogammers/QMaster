@@ -43,14 +43,17 @@ public class Queues {
     private int specificSlot;
     @Column(nullable = false)
     private int peopleInQueue;
+    private int averageServiceTime;
     private int rating;
     private int maxQueueSize = 100;
+    private boolean isActive = true;
 
     @ManyToOne
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
-    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, Store store) {
+    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, Store store,
+            int averageServiceTime, boolean isActive) {
         this.name = name;
         this.creator = creator;
         this.queueSlot = queueSlot;
@@ -58,9 +61,12 @@ public class Queues {
         this.peopleInQueue = 0;
         this.rating = -1; // -1 if there are no ratings yet
         this.store = store;
+        this.averageServiceTime = averageServiceTime;
+        this.isActive = isActive;
     }
 
-    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, int maxQueueSize, Store store) {
+    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, int maxQueueSize, Store store,
+            int averageServiceTime, boolean isActive) {
         this.name = name;
         this.creator = creator;
         this.queueSlot = queueSlot;
@@ -69,5 +75,7 @@ public class Queues {
         this.rating = -1; // -1 if there are no ratings yet
         this.maxQueueSize = maxQueueSize;
         this.store = store;
+        this.averageServiceTime = averageServiceTime;
+        this.isActive = isActive;
     }
 }

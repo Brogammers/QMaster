@@ -16,6 +16,7 @@ import { motion } from 'framer-motion';
 import QMasterLogo from "../../../../public/qmaster-logo.svg"
 import { useAuth } from '@/lib/auth/AuthContext';
 import DarkModeToggle from '@/components/admin/DarkModeToggle';
+import axios from 'axios';
 
 const menuItems = [
   { path: '/admin/dashboard', label: 'Dashboard', icon: FaChartLine },
@@ -34,6 +35,13 @@ interface AdminSidebarProps {
 export default function AdminSidebar({ isDarkMode, onDarkModeToggle }: AdminSidebarProps) {
   const pathname = usePathname();
   const { logout } = useAuth();
+
+  const handleLogout = () => {
+    axios.defaults.headers.common['Authorization'] = '';
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    logout();
+  }
 
   return (
     <div className="w-64 bg-gradient-to-b from-concrete-turqouise to-coal-black text-white h-screen relative overflow-hidden">
@@ -103,7 +111,7 @@ export default function AdminSidebar({ isDarkMode, onDarkModeToggle }: AdminSide
         />
 
         <motion.button
-          onClick={logout}
+          onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
             bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 transition-colors"
           whileHover={{ scale: 1.02 }}

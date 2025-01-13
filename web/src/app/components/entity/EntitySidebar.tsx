@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import QMasterLogo from "../../../../public/qmaster-logo.svg";
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import axios from 'axios';
 
 interface EntitySidebarProps {
   isDarkMode: boolean;
@@ -45,6 +46,9 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
 
   const handleLogout = () => {
     router.replace('/login');
+    axios.defaults.headers.common['Authorization'] = '';
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   };
 
   const toggleAdmin = () => {

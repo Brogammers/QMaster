@@ -1,5 +1,17 @@
 package com.que.que.Queue;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Stack;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+
 import com.que.que.QRcode.QRCodeService;
 import com.que.que.Store.Store;
 import com.que.que.Store.StoreRepository;
@@ -9,18 +21,7 @@ import com.que.que.User.AppUser.AppUserRepository;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Stack;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
 
 @Service
 @Configuration
@@ -52,7 +53,8 @@ public class QueueService {
     print();
   }
 
-  public void createNewQueue(@NonNull Long queueHolderID, @NonNull Long storeId, String name) {
+  public void createNewQueue(@NonNull Long queueHolderID, @NonNull Long storeId, String name, int maxQueueSize,
+      int averageServiceTime, boolean isActive) {
     BusinessUser appUser = businessUserRepository.findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find User"));
 
@@ -100,13 +102,15 @@ public class QueueService {
     } catch (Exception e) {
       throw new IllegalStateException("Error while creating queue.");
     }
-
     Queues createdQueue = queueRepository.save(new Queues(
         name,
         appUser,
         queueLocation,
         queueHolderQueue.size(),
-        store));
+        maxQueueSize,
+        store,
+        averageServiceTime,
+        isActive));
     queueCreationRepository.save(new QueueCreation(createdQueue));
     queueHolderQueue.add(new LinkedList<>());
     print();

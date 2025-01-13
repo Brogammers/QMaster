@@ -24,10 +24,6 @@ export default function LoginForm({ setIsLoading }: any) {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  const handleNav = () => {
-    router.push(`/AboHawa/counter`);
-  } 
-
   const handleLogin = (values: any, { setErrors }: { setErrors: Function }) => {
     const API_BASE_URL_LOGIN = process.env.NEXT_PUBLIC_API_BASE_URL_LOGIN;
 
@@ -45,11 +41,10 @@ export default function LoginForm({ setIsLoading }: any) {
       .then((response) => {
         if (response.status === 200 && response.data.token) {
           console.log("Login successful:", response.data);
-          // Store token in cookie/localStorage if needed
-          document.cookie = `jwt=${response.data.token}; path=/;`;
-          router.push(`/${response.data.firstName}/counter`);
+          router.push(`/${response.data.username}/counter`);
 
           // Necessary CORS headers to allow requests from localhost:3000
+          document.cookie = `userId=${response.data.userID}; SameSite=None; Secure;`;
           axios.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${response.data.token}`;
@@ -102,7 +97,7 @@ export default function LoginForm({ setIsLoading }: any) {
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}
-        onSubmit={handleNav} // handleLogin
+        onSubmit={handleLogin} // handleLogin
       >
         {({
           handleChange,
