@@ -34,7 +34,8 @@ export interface CurrentItem {
 }
 
 export interface SearchFilterProps {
-  data: any;
+  page: number;
+  perPage: number;
   input: string;
   isDarkMode?: boolean;
 }

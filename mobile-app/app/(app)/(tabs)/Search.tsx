@@ -4,12 +4,15 @@ import { FontAwesome } from '@expo/vector-icons';
 import RecentItemsSearch from '@/components/RecentItemsSearch';
 import PopularQueues from '@/components/PopularQueues';
 import SearchFilter from '@/components/SearchFilter';
-import { Current } from '@/constants';
 import i18n from '@/i18n';
 import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Search() {
+
+  const page = 1;
+  const perPage = 8;
+
   const [input, setInput] = useState("");
   const { isDarkMode } = useTheme();
 
@@ -52,7 +55,7 @@ export default function Search() {
             <PopularQueues isDarkMode={isDarkMode} />
           </ScrollView>
         ) : (
-          <SearchFilter data={Current} input={input} isDarkMode={isDarkMode} />
+          <SearchFilter page={page} perPage={perPage} input={input} isDarkMode={isDarkMode} />
         )}
       </View>
     </View>
