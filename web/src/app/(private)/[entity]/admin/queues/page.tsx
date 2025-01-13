@@ -84,14 +84,34 @@ export default function Queues() {
   };
 
   useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_QUEUES || "";
+    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_QUEUES}?id=${userId}` || "";
     axios.get(url)
       .then(res => {
         if(res.status === 200) {
           console.log("Queues:", res.data.queues);
+          return res.data.queues;
         } else {
           console.error("Error fetching queues:", res.data);
         }
+      }).then((data: any[]) => {
+        const modifiedData: QueueConfig[] = data.map((queue) => {
+          return {
+            name: queue.name,
+            type: "COUNTER",
+            maxQueueSize: queue.maxQueueSize,
+            isActive: queue.isActive,
+            averageServiceTime: queue.averageServiceTime,
+            priority: "MEDIUM",
+            allowsPreBooking: false,
+            storeId: queue.storeId,
+            operatingHours: {
+              start: "",
+              end: "",
+            },
+          };
+        });
+
+        setQueueConfigs(modifiedData);
       }).catch(err => {
         console.error("Error fetching queues:", err);
       });

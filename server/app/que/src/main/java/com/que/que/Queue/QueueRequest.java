@@ -15,5 +15,5 @@ public class QueueRequest {
     private Long storeId;
     private int maxQueueSize;
     private int averageServiceTime;
-    private boolean active;
+    private boolean isActive;
 }

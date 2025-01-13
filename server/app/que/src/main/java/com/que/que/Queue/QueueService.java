@@ -254,21 +254,11 @@ public class QueueService {
   }
 
   public ArrayList<Queues> currentQueuesOfUser(long appUserId) {
-    ArrayList<Queues> currentQueues = new ArrayList<>();
-    for (int queueSlot = 0; queueSlot < queueSet.size(); queueSlot++) {
-      ArrayList<Queue<Long>> list = queueSet.get(queueSlot);
+    BusinessUser appUser = businessUserRepository.findById(appUserId)
+        .orElseThrow(() -> new IllegalStateException("Could not find user"));
 
-      // If slot is empty in memory
-      if (list.equals(null))
-        continue;
-      for (int specificSlot = 0; specificSlot < list.size(); specificSlot++) {
-        Queue<Long> tempQueue = list.get(specificSlot);
-        if (tempQueue.contains(appUserId)) {
-          ArrayList<Queues> queueToBeAdded = queueRepository.findByQueueSlotAndSpecificSlot(queueSlot, specificSlot);
-          currentQueues.add(queueToBeAdded.get(0));
-        }
-      }
-    }
+    ArrayList<Queues> currentQueues = queueRepository.findByCreator(appUser);
+
     return currentQueues;
   }
 
