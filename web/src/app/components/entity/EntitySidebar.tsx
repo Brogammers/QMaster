@@ -11,7 +11,7 @@ import {
   FaDesktop,
   FaPeopleArrows,
   FaSignOutAlt,
-  FaUsers
+  FaUsers,
   FaStore
 } from 'react-icons/fa';
 import QMasterLogo from "../../../../public/qmaster-logo.svg";
