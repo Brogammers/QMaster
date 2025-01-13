@@ -1,19 +1,19 @@
+import axios from 'axios';
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useParams } from 'next/navigation';
-import { 
-  FaCog, 
-  FaDesktop, 
-  FaUsers,
-  FaSignOutAlt,
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import {
   FaChevronDown,
   FaChevronUp,
+  FaCog,
+  FaDesktop,
+  FaPeopleArrows,
+  FaSignOutAlt,
+  FaUsers
 } from 'react-icons/fa';
-import { motion, AnimatePresence } from 'framer-motion';
 import QMasterLogo from "../../../../public/qmaster-logo.svg";
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import axios from 'axios';
 
 interface EntitySidebarProps {
   isDarkMode: boolean;
@@ -24,14 +24,19 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
   const router = useRouter();
   const { entity } = useParams();
   const [isAdminOpen, setIsAdminOpen] = useState(() => pathname.includes('/admin'));
+  const [isQueueManagementOpen, setIsQueueManagementOpen] = useState(() => pathname.includes('/queues'));
 
   const adminMenuItems = [
     { path: `/${entity}/admin/details`, label: 'Details' },
     { path: `/${entity}/admin/customer-feedback`, label: 'Customer Feedback' },
-    { path: `/${entity}/admin/queues`, label: 'Queues' },
     { path: `/${entity}/admin/sharing-info`, label: 'Sharing Info' },
   ];
 
+  const queueMenuItems = [
+    { path: `/${entity}/admin/queues`, label: 'Queues' },
+    { path: `/${entity}/admin/queues/counters`, label: 'Counters' },
+  ];
+  
   const menuItems = [
     {
       path: `/${entity}/admin`,
@@ -39,6 +44,13 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
       icon: FaCog,
       isDropdown: true,
       children: adminMenuItems,
+    },
+    { 
+      path: `/${entity}/queues`, 
+      label: 'Queue Settings', 
+      icon: FaPeopleArrows, 
+      isDropdown: true,
+      children: queueMenuItems
     },
     { path: `/${entity}/counter`, label: 'Counter', icon: FaUsers },
     { path: `/${entity}/display`, label: 'Display', icon: FaDesktop },
@@ -54,6 +66,10 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
   const toggleAdmin = () => {
     setIsAdminOpen(!isAdminOpen);
   };
+
+  const toggleQueueManagement = () => {
+    setIsQueueManagementOpen(!isQueueManagementOpen);
+  }
 
   return (
     <div className="w-64 bg-gradient-to-b from-baby-blue to-ocean-blue text-white h-screen relative overflow-hidden">
@@ -86,7 +102,7 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
 
           return (
             <div key={item.path}>
-              {item.isDropdown ? (
+              {item.isDropdown && item.label == 'Admin' ? (
                 <div>
                   <motion.div
                     className={`
@@ -113,6 +129,61 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
                   </motion.div>
                   <AnimatePresence>
                     {isAdminOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="ml-12 mt-2 space-y-1 overflow-hidden"
+                      >
+                        {item.children?.map((child) => {
+                          const isChildActive = pathname === child.path;
+                          return (
+                            <Link key={child.path} href={child.path}>
+                              <motion.div
+                                className={`
+                                  px-4 py-2 rounded-lg text-sm cursor-pointer
+                                  ${isChildActive ? 'text-white' : 'text-white/70 hover:text-white'}
+                                `}
+                                whileHover={{ x: 2 }}
+                              >
+                                {child.label}
+                              </motion.div>
+                            </Link>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : 
+              item.isDropdown && item.label == 'Queue Settings' ? (
+              <div>
+                  <motion.div
+                    className={`
+                      flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer
+                      transition-all duration-200 group relative
+                      ${isActive ? 'text-white' : 'text-white/70 hover:text-white'}
+                    `}
+                    onClick={toggleQueueManagement}
+                    whileHover={{ x: 4 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    {isActive && (
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl"
+                        layoutId="activeTab"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                    <div className="relative flex items-center gap-3">
+                      <Icon className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110`} />
+                      <span className="font-medium">{item.label}</span>
+                    </div>
+                    {isQueueManagementOpen ? <FaChevronUp className="w-4 h-4" /> : <FaChevronDown className="w-4 h-4" />}
+                  </motion.div>
+                  <AnimatePresence>
+                    {isQueueManagementOpen && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
