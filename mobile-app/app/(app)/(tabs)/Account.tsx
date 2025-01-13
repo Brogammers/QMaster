@@ -70,9 +70,7 @@ export default function Account() {
               >
                 {isLoading ? null : (
                   <Text className={`pb-4 text-3xl font-extrabold ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
-                    Hi {firstName &&
-                      firstName.charAt(0).toUpperCase() + firstName.slice(1)
-                    }! 👋
+                    {firstName && `Hi ${firstName}! 👋`}
                   </Text>
                 )}
               </Skeleton>

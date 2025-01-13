@@ -164,5 +164,7 @@
   "email": "Email",
   "unchangeable": "Unchangeable",
   "confirm_password": "Confirm Password",
-  "system_settings_note": "This setting is controlled by your device's system settings"
+  "system_settings_note": "This setting is controlled by your device's system settings",
+  "password_changed": "Password changed successfully",
+  "password_change_failed": "Password change failed"
 }

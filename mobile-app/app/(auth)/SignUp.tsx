@@ -28,8 +28,6 @@ import { setEmail } from "../redux/authSlice";
 import { countries } from "@/constants";
 import PhoneInput from "react-native-phone-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
-// import EXPO_PUBLIC_API_BASE_URL from ""
-import Config from "react-native-config";
 import i18n from "@/i18n";
 import configConverter from "@/api/configConverter";
 
@@ -95,8 +93,10 @@ export default function SignUp() {
     const [isScrollEnabled, setIsScrollEnabled] = useState(true);
 
     const handleSignUp = async (values: any) => {
+        // TODO: Remove this hardcoded value
+        values.phoneCode = "+20";
+        values.phoneNumber = values.phoneNumber.slice(3);
         console.log("Form values:", values);
-
         try {
             setIsLoading(true);
             // const url =

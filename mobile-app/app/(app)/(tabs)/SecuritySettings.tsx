@@ -8,6 +8,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLinkTo } from "@react-navigation/native";
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import axios, { AxiosResponse } from 'axios';
+import configConverter from '@/api/configConverter';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/redux/store';
 
 const PasswordChangeSchema = Yup.object().shape({
   currentEmail: Yup.string()
@@ -29,6 +34,7 @@ const PasswordChangeSchema = Yup.object().shape({
 
 export default function SecuritySettings() {
   const { isDarkMode } = useTheme();
+  const userId = useSelector((state: RootState) => state.userId.userId);
   const linkTo = useLinkTo();
 
   const handleReturn = () => {
@@ -36,8 +42,25 @@ export default function SecuritySettings() {
   }
 
   const handlePasswordChange = async (values: any) => {
-    // TODO: Implement password change with validated values
-    console.log(values);
+    const url = configConverter("EXPO_PUBLIC_API_BASE_URL_RESET_PASSWORD");
+
+    const body = {
+      id: userId,
+      email: values.currentEmail,
+      oldPassword: values.currentPassword,
+      newPassword: values.newPassword,
+      confirmPassword: values.confirmPassword,
+    }
+
+    axios.post(url, body)
+    .then((response: AxiosResponse) => {
+      if(response.status === 200 || response.status === 201) {
+        console.log(response.data);
+        alert(i18n.t('password_changed'));
+      }else {
+        alert(i18n.t('password_change_failed'));
+      }
+    });
   };
 
   return (
