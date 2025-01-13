@@ -36,16 +36,17 @@ public class QueueService {
   private final QueueEnqueueRepository queueEnqueueRepository;
   private final QueueDeletionRepository queueDeletionRepository;
   private final QRCodeService qrCodeService;
-  private final ArrayList<ArrayList<Queue<Long>>> queueSet = queue();
-  private final Stack<Integer> queueSlots = stack();
+  private final ArrayList<ArrayList<Queue<Long>>> queueSet = initQueue();
+  private final Stack<Integer> queueSlots = initStack();
   public final int MAX_BASIC_QUEUES = 1;
   public final int MAX_PREMIUM_QUEUES = 10;
   public final int MAX_ENTERPRISE_QUEUES = 20;
   public final int MAX_QUEUE_SIZE = 100;
+  public final int MAX_QUEUE_SLOTS = 1000000;
 
   // Function called once upon server startup
   public void initializeQueueSlots(Stack<Integer> temp) {
-    for (int i = 1000000; i >= 0; i--) {
+    for (int i = this.MAX_QUEUE_SLOTS; i >= 0; i--) {
       temp.push(i);
     }
     print();
@@ -318,7 +319,7 @@ public class QueueService {
     return queueDequeues;
   }
 
-  public void print() {
+  private void print() {
     for (int i = 0; i < queueSet.size(); i++) {
       ArrayList<Queue<Long>> current = queueSet.get(i);
       for (int j = 0; j < current.size(); j++) {
@@ -327,11 +328,15 @@ public class QueueService {
     }
   }
 
-  public ArrayList<ArrayList<Queue<Long>>> queue() {
-    return new ArrayList<>();
+  private ArrayList<ArrayList<Queue<Long>>> initQueue() {
+    ArrayList<ArrayList<Queue<Long>>> temp = new ArrayList<>();
+    for (int i = 0; i < this.MAX_QUEUE_SLOTS; i++) {
+      temp.add(new ArrayList<>());
+    }
+    return temp;
   }
 
-  public Stack<Integer> stack() {
+  private Stack<Integer> initStack() {
     Stack<Integer> temp = new Stack<>();
     initializeQueueSlots(temp);
     return temp;
