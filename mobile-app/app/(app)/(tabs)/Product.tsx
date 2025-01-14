@@ -89,21 +89,26 @@ export default function Product() {
               </Text>
             </TouchableOpacity>
           ) : (
-            <View className="flex-row items-center justify-between">
+            <View className="flex-row items-center justify-between bg-slate-grey/10 rounded-xl p-2">
               <TouchableOpacity 
-                className={`w-16 py-4 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'}`}
+                className={`w-14 h-14 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}
                 onPress={() => setQuantity(Math.max(0, quantity - 1))}
               >
-                <Text className="text-white text-center font-semibold text-lg">-</Text>
+                <Text className="text-white text-center font-bold text-2xl">−</Text>
               </TouchableOpacity>
-              <Text className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
-                {quantity}
-              </Text>
+              <View className="items-center">
+                <Text className={`text-sm ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
+                  Quantity
+                </Text>
+                <Text className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                  {quantity}
+                </Text>
+              </View>
               <TouchableOpacity 
-                className={`w-16 py-4 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'}`}
+                className={`w-14 h-14 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}
                 onPress={() => setQuantity(quantity + 1)}
               >
-                <Text className="text-white text-center font-semibold text-lg">+</Text>
+                <Text className="text-white text-center font-bold text-2xl">+</Text>
               </TouchableOpacity>
             </View>
           )}

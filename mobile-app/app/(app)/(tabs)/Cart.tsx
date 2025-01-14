@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
 export default function Cart() {
   const { isDarkMode } = useTheme();
@@ -41,15 +42,24 @@ export default function Cart() {
           </View>
         </View>
 
-        <ScrollView 
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 40 }}
-          className="flex-1 px-6"
-        >
-          <Text className={`text-base ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
-            Your cart is empty
-          </Text>
-        </ScrollView>
+        <View className="flex-1 items-center justify-center px-6">
+          <Animated.View 
+            entering={FadeIn.duration(500)}
+            className="items-center"
+          >
+            <MaterialCommunityIcons 
+              name="cart-outline" 
+              size={64} 
+              color={isDarkMode ? '#FFFFFF40' : '#17222D40'} 
+            />
+            <Text className={`text-lg mt-4 ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
+              Your cart is empty
+            </Text>
+            <Text className={`text-sm mt-2 text-center ${isDarkMode ? 'text-white/50' : 'text-slate-grey/70'}`}>
+              Browse our products and add items to your cart
+            </Text>
+          </Animated.View>
+        </View>
       </SafeAreaView>
     </View>
   );
