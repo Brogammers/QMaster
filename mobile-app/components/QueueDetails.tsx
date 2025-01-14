@@ -8,7 +8,6 @@ import {
   Dimensions,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Wandering from "@/assets/images/wandering.svg";
 import { FontAwesome } from "@expo/vector-icons";
 import { QueueDetailsProps } from "@/types";
 import { Entypo } from "@expo/vector-icons";
@@ -47,7 +46,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
             ? ['rgba(29, 205, 254, 0.1)', 'rgba(29, 205, 254, 0.05)']
             : ['#FFFFFF', '#F8FAFC']
         }
-        className="w-full p-8 items-center justify-center rounded-xl relative"
+        className="w-full p-8 items-center justify-center rounded-xl"
         style={{
           borderWidth: 1.5,
           borderColor: isDarkMode ? 'rgba(29, 205, 254, 0.2)' : '#E5E7EB',
@@ -68,7 +67,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
           className="items-center w-full"
         >
           <View className="flex-row items-start justify-between w-full">
-            <View className="items-center flex-1 mr-4">
+            <View className="items-center flex-1">
               <Entypo 
                 name="location-pin" 
                 size={50} 
@@ -77,9 +76,6 @@ export default function QueueDetails(props: QueueDetailsProps) {
               <Text className={`text-center mt-3.5 text-base ${isDarkMode ? 'text-baby-blue' : 'text-lava-black'}`}>
                 Please insert location or allow the app to access your location from settings.
               </Text>
-            </View>
-            <View className="absolute -bottom-14 right-0 z-[9999px]">
-              <Wandering width={70} height={70} />
             </View>
           </View>
         </MotiView>
