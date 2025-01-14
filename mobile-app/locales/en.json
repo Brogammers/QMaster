@@ -166,5 +166,24 @@
   "confirm_password": "Confirm Password",
   "system_settings_note": "This setting is controlled by your device's system settings",
   "password_changed": "Password changed successfully",
-  "password_change_failed": "Password change failed"
+  "password_change_failed": "Password change failed",
+  "common": {
+    "queue": {
+      "peopleCount": "{{count}} people in queue",
+      "waitTime": "~{{minutes}} min",
+      "joined": "Queue Joined!",
+      "leave": "Leave Queue",
+      "join": "Join Queue",
+      "leaveConfirm": {
+        "title": "Leave Queue?",
+        "message": "Once you leave, your position in the queue will be lost.",
+        "cancel": "Cancel",
+        "confirm": "Leave"
+      },
+      "fast": "Fast",
+      "ratings": "({{count}} ratings)",
+      "chooseBranch": "Choose Branch",
+      "searchBranches": "Search branches..."
+    }
+  }
 }

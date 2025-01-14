@@ -166,5 +166,24 @@
   "confirm_password": "تأكيد كلمة المرور",
   "system_settings_note": "يتم التحكم في هذا الإعداد من خلال إعدادات النظام في جهازك",
    "password_changed": "تم تغيير كلمة المرور بنجاح",
-  "password_change_failed": "فشل تغيير كلمة المرور"
+  "password_change_failed": "فشل تغيير كلمة المرور",
+  "common": {
+    "queue": {
+      "peopleCount": "{{count}} شخص في الطابور",
+      "waitTime": "~{{minutes}} دقيقة",
+      "joined": "تم الانضمام للطابور!",
+      "leave": "مغادرة الطابور",
+      "join": "انضم للطابور",
+      "leaveConfirm": {
+        "title": "مغادرة الطابور؟",
+        "message": "عند المغادرة، سيتم فقدان موقعك في الطابور.",
+        "cancel": "إلغاء",
+        "confirm": "مغادرة"
+      },
+      "fast": "سريع",
+      "ratings": "({{count}} تقييم)",
+      "chooseBranch": "اختر الفرع",
+      "searchBranches": "البحث عن الفروع..."
+    }
+  }
 }

@@ -1,10 +1,20 @@
 {
   "common": {
+    "locationAccess": "Please enable location access to find nearby queues",
     "queue": {
       "peopleCount": "{{count}} people in queue",
       "waitTime": "~{{minutes}} min",
       "joined": "Queue Joined!",
-      "leave": "Leave Queue"
+      "leave": "Leave Queue",
+      "join": "Join Queue",
+      "leaveConfirm": {
+        "title": "Leave Queue?",
+        "message": "Once you leave, your position in the queue will be lost.",
+        "cancel": "Cancel",
+        "confirm": "Leave"
+      },
+      "fast": "Fast",
+      "ratings": "({{count}} ratings)"
     }
   }
 } 

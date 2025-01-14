@@ -6,6 +6,7 @@ import QueueDetails from "./QueueDetails";
 import { useTheme } from '@/ctx/ThemeContext';
 import { MotiView } from 'moti';
 import Wandering from "@/assets/images/wandering.svg";
+import i18n from '@/i18n';
 
 export default function QueuePage() {
   const width = Dimensions.get('window').width * 0.85;
@@ -98,9 +99,9 @@ export default function QueuePage() {
                 height: 40,
                 paddingHorizontal: 12,
               }}
-              placeholder="Choose Branch"
+              placeholder={i18n.t('common.queue.chooseBranch')}
               searchable
-              searchPlaceholder="Search branches..."
+              searchPlaceholder={i18n.t('common.queue.searchBranches')}
               ArrowUpIconComponent={() => (
                 <Text style={{ color: isDarkMode ? '#1DCDFE' : '#17222D', fontSize: 18 }}>▲</Text>
               )}
