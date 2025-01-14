@@ -19,7 +19,7 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
   const [hasStore, setHasStore] = React.useState(true); // For demo purposes
 
   const handleStorePress = () => {
-    linkTo('/store');
+    linkTo('/Store');
   };
 
   return (
