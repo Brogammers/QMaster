@@ -26,7 +26,8 @@ export default function QueuePage() {
             zIndex: Platform.OS === 'ios' ? 999 : undefined,
             elevation: Platform.OS === 'android' ? 999 : undefined,
             width: '100%',
-            alignItems: 'center'
+            alignItems: 'center',
+            marginBottom: open ? 150 : 0,
           }}>
             <DropDownPicker
               open={open}
@@ -59,7 +60,7 @@ export default function QueuePage() {
               dropDownContainerStyle={{
                 width: width,
                 position: 'absolute',
-                top: 70,
+                top: 72,
                 borderRadius: 12,
                 borderWidth: 1.5,
                 backgroundColor: isDarkMode ? '#0B1218' : 'white',
@@ -72,15 +73,21 @@ export default function QueuePage() {
                 shadowOpacity: 0.25,
                 shadowRadius: 3.84,
                 elevation: Platform.OS === 'android' ? 5 : undefined,
+                overflow: 'visible'
               }}
               listItemContainerStyle={{
                 borderBottomWidth: 1,
                 borderBottomColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : '#F1F5F9',
+                padding: 12,
+              }}
+              listItemLabelStyle={{
+                color: isDarkMode ? '#1DCDFE' : '#17222D',
               }}
               searchContainerStyle={{
                 borderBottomWidth: 1,
                 borderBottomColor: isDarkMode ? 'rgba(29, 205, 254, 0.2)' : '#E5E7EB',
                 padding: 12,
+                marginBottom: 4,
               }}
               searchTextInputStyle={{
                 color: isDarkMode ? '#1DCDFE' : '#17222D',
@@ -103,8 +110,9 @@ export default function QueuePage() {
               listMode="SCROLLVIEW"
               scrollViewProps={{
                 nestedScrollEnabled: true,
+                showsVerticalScrollIndicator: false,
               }}
-              maxHeight={300}
+              maxHeight={250}
               itemSeparator={true}
               theme={isDarkMode ? "DARK" : "LIGHT"}
             />
