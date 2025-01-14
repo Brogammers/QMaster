@@ -39,7 +39,13 @@ export default function Store() {
           <Text className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
             Store
           </Text>
-          <View style={{ width: 24 }} /> {/* Placeholder for symmetry */}
+          <TouchableOpacity onPress={() => linkTo('/cart')}>
+            <MaterialCommunityIcons 
+              name="cart" 
+              size={24} 
+              color={isDarkMode ? '#FFFFFF' : '#17222D'} 
+            />
+          </TouchableOpacity>
         </View>
 
         <ScrollView 
@@ -74,15 +80,25 @@ export default function Store() {
             ))}
           </ScrollView>
 
-          {/* Product Grid Placeholder */}
+          {/* Product Grid */}
           <View className="flex-row flex-wrap justify-between mt-4">
             {[1, 2, 3, 4].map((item) => (
-              <View 
+              <TouchableOpacity 
                 key={item}
-                className={`w-[48%] aspect-square rounded-xl mb-4 ${
+                onPress={() => linkTo('/product')}
+                className={`w-[48%] aspect-square rounded-xl mb-4 p-3 ${
                   isDarkMode ? 'bg-slate-grey' : 'bg-slate-grey/10'
                 }`}
-              />
+              >
+                <View className="mt-auto">
+                  <Text className={`text-sm ${isDarkMode ? 'text-white' : 'text-coal-black'}`} numberOfLines={2}>
+                    Product {item}
+                  </Text>
+                  <Text className={`text-base font-semibold mt-1 ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
+                    ${(item * 9.99).toFixed(2)}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             ))}
           </View>
         </ScrollView>
