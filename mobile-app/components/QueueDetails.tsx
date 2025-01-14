@@ -84,15 +84,22 @@ export default function QueueDetails(props: QueueDetailsProps) {
         mass: 0.8,
         damping: 15
       }}
-      className="items-center justify-center"
+      className="items-center justify-center w-full"
       style={{ height: 100 }}
     >
-      <View className="flex-row items-center bg-opacity-10 rounded-full px-6 py-3"
-        style={{ backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : 'rgba(0, 119, 182, 0.1)' }}>
-        <FontAwesome name="check-circle" size={24} color="#1DCDFE" />
-        <Text className="text-baby-blue text-xl font-bold ml-3">
-          Queue Joined!
-        </Text>
+      <View 
+        className="flex-row items-center justify-center bg-opacity-10 rounded-full px-6 py-3"
+        style={{ 
+          backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : 'rgba(0, 119, 182, 0.1)',
+          width: buttonWidth 
+        }}
+      >
+        <View className="flex-row items-center justify-center">
+          <FontAwesome name="check-circle" size={24} color="#1DCDFE" />
+          <Text className="text-baby-blue text-xl font-bold ml-3">
+            Queue Joined!
+          </Text>
+        </View>
       </View>
     </MotiView>
   );
@@ -195,7 +202,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
                         ? ['rgba(29, 205, 254, 0.2)', 'rgba(29, 205, 254, 0.1)']
                         : ['#F1F5F9', '#F8FAFC']
                     }
-                    className="w-full rounded-full h-full flex-row items-center px-3"
+                    className="w-full rounded-full h-full flex-row items-center justify-center px-3"
                     style={{
                       borderWidth: 1.5,
                       borderColor: isDarkMode ? 'rgba(29, 205, 254, 0.2)' : '#E5E7EB',
