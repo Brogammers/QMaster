@@ -1,6 +1,6 @@
 {
   "common": {
-    "locationAccess": "Please enable location access to find nearby queues",
+    "locationAccess": "Choose location to join the queue",
     "queue": {
       "peopleCount": "{{count}} people in queue",
       "waitTime": "~{{minutes}} min",

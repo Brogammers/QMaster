@@ -1,6 +1,6 @@
 {
   "common": {
-    "locationAccess": "يرجى تمكين الوصول إلى الموقع للعثور على الطوابير القريبة",
+    "locationAccess": "اختر الموقع للانضمام إلى الطابور",
     "queue": {
       "peopleCount": "{{count}} شخص في الطابور",
       "waitTime": "~{{minutes}} دقيقة",

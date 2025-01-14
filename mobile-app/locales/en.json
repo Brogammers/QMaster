@@ -168,6 +168,7 @@
   "password_changed": "Password changed successfully",
   "password_change_failed": "Password change failed",
   "common": {
+    "locationAccess": "Choose location to join the queue",
     "queue": {
       "peopleCount": "{{count}} people in queue",
       "waitTime": "~{{minutes}} min",
