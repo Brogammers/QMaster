@@ -30,7 +30,7 @@ export default function Store() {
       <SafeAreaView className="flex-1" edges={['top', 'bottom', 'left', 'right']}>
         {/* Header */}
         <View className="flex-row justify-between items-center px-6 py-4">
-          <TouchableOpacity onPress={() => linkTo('/partner')}>
+          <TouchableOpacity onPress={() => linkTo('/Partner')}>
             <MaterialCommunityIcons 
               name="arrow-left" 
               size={24} 
