@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
 import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -19,6 +19,7 @@ export default function Product() {
 
   return (
     <View className="flex-1">
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <View className={`absolute top-0 left-0 right-0 bottom-0 ${isDarkMode ? 'bg-ocean-blue' : 'bg-off-white'}`}>
         {!isDarkMode && (
           <LinearGradient
