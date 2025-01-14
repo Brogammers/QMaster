@@ -1,0 +1,10 @@
+{
+  "common": {
+    "queue": {
+      "peopleCount": "{{count}} شخص في الطابور",
+      "waitTime": "~{{minutes}} دقيقة",
+      "joined": "تم الانضمام للطابور!",
+      "leave": "مغادرة الطابور"
+    }
+  }
+} 

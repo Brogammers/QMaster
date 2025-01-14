@@ -1,1 +1,10 @@
- 
+{
+  "common": {
+    "queue": {
+      "peopleCount": "{{count}} people in queue",
+      "waitTime": "~{{minutes}} min",
+      "joined": "Queue Joined!",
+      "leave": "Leave Queue"
+    }
+  }
+} 
