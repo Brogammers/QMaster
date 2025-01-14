@@ -13,6 +13,8 @@ export default function Product() {
   const { addToCart, updateQuantity, items } = useCart();
   const [quantity, setQuantity] = React.useState(0);
 
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+
   // Sample product data - in real app, this would come from props or API
   const product = {
     id: 1,
@@ -56,12 +58,19 @@ export default function Product() {
             <Text className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
               Product Details
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Cart')} className="relative">
               <MaterialCommunityIcons 
                 name="cart" 
                 size={24} 
                 color={isDarkMode ? '#FFFFFF' : '#17222D'} 
               />
+              {totalItems > 0 && (
+                <View className={`absolute -top-2 -right-2 w-5 h-5 rounded-full ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}>
+                  <Text className="text-white text-xs font-bold">
+                    {totalItems}
+                  </Text>
+                </View>
+              )}
             </TouchableOpacity>
           </View>
         </View>

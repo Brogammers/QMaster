@@ -5,11 +5,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useCart } from '@/ctx/CartContext';
 
 export default function Store() {
   const { isDarkMode } = useTheme();
   const navigation = useNavigation();
+  const { items } = useCart();
   const [selectedCategory, setSelectedCategory] = React.useState('All');
+
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   const categories = ['All', 'Food', 'Drinks', 'Snacks', 'Essentials'];
 
@@ -40,12 +44,19 @@ export default function Store() {
           <Text className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
             Store
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Cart')} className="relative">
             <MaterialCommunityIcons 
               name="cart" 
               size={24} 
               color={isDarkMode ? '#FFFFFF' : '#17222D'} 
             />
+            {totalItems > 0 && (
+              <View className={`absolute -top-2 -right-2 w-5 h-5 rounded-full ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}>
+                <Text className="text-white text-xs font-bold">
+                  {totalItems}
+                </Text>
+              </View>
+            )}
           </TouchableOpacity>
         </View>
 
