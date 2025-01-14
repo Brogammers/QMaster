@@ -1,17 +1,29 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, StatusBar, Dimensions } from 'react-native';
 import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useCart } from '@/ctx/CartContext';
+import Animated, { useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export default function Product() {
   const { isDarkMode } = useTheme();
   const navigation = useNavigation();
   const { addToCart, updateQuantity, items } = useCart();
-  const [quantity, setQuantity] = React.useState(0);
+  const [isAnimating, setIsAnimating] = React.useState(false);
+  
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { scale: withTiming(isAnimating ? 0.5 : 1, { duration: 300 }) },
+      { translateY: withTiming(isAnimating ? -150 : 0, { duration: 500 }) },
+      { translateX: withTiming(isAnimating ? SCREEN_WIDTH * 0.4 : 0, { duration: 500 }) },
+    ],
+    opacity: withTiming(isAnimating ? 0 : 1, { duration: 500 }),
+  }));
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -27,7 +39,11 @@ export default function Product() {
 
   const handleAddToCart = () => {
     if (cartQuantity === 0) {
-      addToCart(product, 1);
+      setIsAnimating(true);
+      setTimeout(() => {
+        addToCart(product, 1);
+        setIsAnimating(false);
+      }, 500);
     }
   };
 
@@ -80,11 +96,28 @@ export default function Product() {
           contentContainerStyle={{ paddingBottom: 40 }}
           className="flex-1 px-6"
         >
-          <View className="w-full aspect-square bg-slate-200 rounded-xl overflow-hidden mb-4">
+          <View className="w-full aspect-square bg-slate-200 rounded-xl overflow-hidden mb-4 relative">
             <Image
               source={{ uri: 'https://placehold.co/300x300' }}
               className="w-full h-full"
               resizeMode="cover"
+            />
+            <Animated.View
+              style={[
+                {
+                  position: 'absolute',
+                  width: 40,
+                  height: 40,
+                  backgroundColor: isDarkMode ? '#1DCDFE' : '#0077B6',
+                  borderRadius: 20,
+                  top: '50%',
+                  left: '50%',
+                  marginLeft: -20,
+                  marginTop: -20,
+                  opacity: 0,
+                },
+                animatedStyle,
+              ]}
             />
           </View>
 
@@ -104,6 +137,7 @@ export default function Product() {
             <TouchableOpacity 
               className={`w-full py-4 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'}`}
               onPress={handleAddToCart}
+              disabled={isAnimating}
             >
               <Text className="text-white text-center font-semibold text-lg">
                 Add to Cart
