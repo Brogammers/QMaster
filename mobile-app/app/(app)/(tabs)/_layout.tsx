@@ -8,7 +8,6 @@ import Account from "./Account";
 import Search from "@/app/(app)/(tabs)/Search";
 import Notifications from "@/app/(app)/(tabs)/Notifications";
 import { Entypo } from "@expo/vector-icons";
-import QueuePage from "@/app/(app)/(tabs)/Partner";
 import i18n from "@/i18n";
 import AllCategories from "@/app/(app)/(tabs)/AllCategories";
 import Category from "@/app/(app)/(tabs)/Category";
@@ -17,14 +16,13 @@ import AccountInfoSettings from "./AccountInfoSettings";
 import NotificationsSettings from "./NotificationSettings";
 import SecuritySettings from "./SecuritySettings";
 import RegionLanguageSettings from "./RegionalLanguageSettings";
-import { Stack } from "expo-router";
 import { useTheme } from "@/ctx/ThemeContext";
 import Partner from "@/app/(app)/(tabs)/Partner";
+import Store from "./store";
 
 const Tab = createBottomTabNavigator();
 
 export default function AppEntry() {
-  const { isDarkMode } = useTheme();
 
   return (
     <NavigationContainer independent>
@@ -121,6 +119,19 @@ export default function AppEntry() {
           <Tab.Screen
             name="Partner"
             component={Partner}
+            options={{
+              tabBarButton: () => null,
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: "#17222D",
+              },
+              headerTintColor: "white",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="Store"
+            component={Store}
             options={{
               tabBarButton: () => null,
               headerShown: false,
