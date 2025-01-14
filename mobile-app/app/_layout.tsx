@@ -7,6 +7,7 @@ import { useFonts } from 'expo-font';
 import SplashScreen from './SplashScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeProvider } from "@/ctx/ThemeContext";
+import { CartProvider } from '@/ctx/CartContext';
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -36,9 +37,11 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <ThemeProvider>
-          <SessionProvider>
-            <Slot />
-          </SessionProvider>
+          <CartProvider>
+            <SessionProvider>
+              <Slot />
+            </SessionProvider>
+          </CartProvider>
         </ThemeProvider>
       </Provider>
     </GestureHandlerRootView>

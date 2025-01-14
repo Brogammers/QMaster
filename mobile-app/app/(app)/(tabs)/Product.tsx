@@ -5,15 +5,27 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useCart } from '@/ctx/CartContext';
 
 export default function Product() {
   const { isDarkMode } = useTheme();
   const navigation = useNavigation();
+  const { addToCart, updateQuantity, items } = useCart();
   const [quantity, setQuantity] = React.useState(0);
 
+  // Sample product data - in real app, this would come from props or API
+  const product = {
+    id: 1,
+    name: 'Sample Product',
+    price: 19.99
+  };
+
+  const cartItem = items.find(item => item.id === product.id);
+  const cartQuantity = cartItem?.quantity || 0;
+
   const handleAddToCart = () => {
-    if (quantity === 0) {
-      setQuantity(1);
+    if (cartQuantity === 0) {
+      addToCart(product, 1);
     }
   };
 
@@ -79,7 +91,7 @@ export default function Product() {
             Experience the finest quality with our carefully selected products. This item represents our commitment to excellence and customer satisfaction.
           </Text>
 
-          {quantity === 0 ? (
+          {cartQuantity === 0 ? (
             <TouchableOpacity 
               className={`w-full py-4 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'}`}
               onPress={handleAddToCart}
@@ -92,7 +104,7 @@ export default function Product() {
             <View className="flex-row items-center justify-between bg-slate-grey/10 rounded-xl p-2">
               <TouchableOpacity 
                 className={`w-14 h-14 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}
-                onPress={() => setQuantity(Math.max(0, quantity - 1))}
+                onPress={() => updateQuantity(product.id, Math.max(0, cartQuantity - 1))}
               >
                 <Text className="text-white text-center font-bold text-2xl">−</Text>
               </TouchableOpacity>
@@ -101,12 +113,12 @@ export default function Product() {
                   Quantity
                 </Text>
                 <Text className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
-                  {quantity}
+                  {cartQuantity}
                 </Text>
               </View>
               <TouchableOpacity 
                 className={`w-14 h-14 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}
-                onPress={() => setQuantity(quantity + 1)}
+                onPress={() => updateQuantity(product.id, cartQuantity + 1)}
               >
                 <Text className="text-white text-center font-bold text-2xl">+</Text>
               </TouchableOpacity>
