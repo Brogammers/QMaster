@@ -4,11 +4,11 @@ import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useLinkTo } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Product() {
   const { isDarkMode } = useTheme();
-  const linkTo = useLinkTo();
+  const navigation = useNavigation();
   const [quantity, setQuantity] = React.useState(0);
 
   const handleAddToCart = () => {
@@ -34,7 +34,7 @@ export default function Product() {
       <SafeAreaView className="flex-1" edges={['top', 'bottom', 'left', 'right']}>
         <View className="px-6">
           <View className="flex-row justify-between items-center py-4">
-            <TouchableOpacity onPress={() => linkTo('/store')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Store')}>
               <MaterialCommunityIcons 
                 name="arrow-left" 
                 size={24} 
@@ -44,7 +44,7 @@ export default function Product() {
             <Text className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
               Product Details
             </Text>
-            <TouchableOpacity onPress={() => linkTo('/cart')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
               <MaterialCommunityIcons 
                 name="cart" 
                 size={24} 

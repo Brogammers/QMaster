@@ -4,11 +4,11 @@ import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useLinkTo } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Store() {
   const { isDarkMode } = useTheme();
-  const linkTo = useLinkTo();
+  const navigation = useNavigation();
   const [selectedCategory, setSelectedCategory] = React.useState('All');
 
   const categories = ['All', 'Food', 'Drinks', 'Snacks', 'Essentials'];
@@ -30,7 +30,7 @@ export default function Store() {
       <SafeAreaView className="flex-1" edges={['top', 'bottom', 'left', 'right']}>
         {/* Header */}
         <View className="flex-row justify-between items-center px-6 py-4">
-          <TouchableOpacity onPress={() => linkTo('/Partner')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Partner')}>
             <MaterialCommunityIcons 
               name="arrow-left" 
               size={24} 
@@ -40,7 +40,7 @@ export default function Store() {
           <Text className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
             Store
           </Text>
-          <TouchableOpacity onPress={() => linkTo('/cart')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
             <MaterialCommunityIcons 
               name="cart" 
               size={24} 
@@ -86,7 +86,7 @@ export default function Store() {
             {[1, 2, 3, 4].map((item) => (
               <TouchableOpacity 
                 key={item}
-                onPress={() => linkTo('/product')}
+                onPress={() => navigation.navigate('Product')}
                 className={`w-[48%] aspect-square rounded-xl mb-4 p-3 ${
                   isDarkMode ? 'bg-slate-grey' : 'bg-slate-grey/10'
                 }`}
