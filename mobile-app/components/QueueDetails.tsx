@@ -14,17 +14,13 @@ import { Entypo } from "@expo/vector-icons";
 import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
-import { router } from 'expo-router';
 import i18n from '@/i18n';
-import { useLinkTo } from "@react-navigation/native";
 
 export default function QueueDetails(props: QueueDetailsProps) {
   const width = Dimensions.get('window').width * 0.85;
-  const linkTo = useLinkTo();
   const buttonWidth = width * 0.7;
   const [leave, setLeave] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [hasStore, setHasStore] = useState(true); // For demo purposes, set to true
   const { branch } = props;
   const { isDarkMode } = useTheme();
 
@@ -60,10 +56,6 @@ export default function QueueDetails(props: QueueDetailsProps) {
     );
   };
 
-  const handleStorePress = () => {
-    linkTo('/store');
-  };
-
   const CardWrapper = ({ children }: { children: React.ReactNode }) => (
     <View style={{ width }} className="mt-6 self-center">
       <LinearGradient
@@ -72,38 +64,13 @@ export default function QueueDetails(props: QueueDetailsProps) {
             ? ['rgba(29, 205, 254, 0.1)', 'rgba(29, 205, 254, 0.05)']
             : ['#FFFFFF', '#F8FAFC']
         }
-        className="w-full p-6 items-center justify-center rounded-xl relative"
+        className="w-full p-6 items-center justify-center rounded-xl"
         style={{
           borderWidth: 1.5,
           borderColor: isDarkMode ? 'rgba(29, 205, 254, 0.2)' : '#E5E7EB',
           minHeight: 160,
         }}
       >
-        {hasStore && (
-          <TouchableOpacity 
-            onPress={handleStorePress}
-            className="absolute top-4 right-4 z-10"
-          >
-            <MotiView
-              from={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 300 }}
-            >
-              <View 
-                className="rounded-full p-2"
-                style={{ 
-                  backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : 'rgba(0, 119, 182, 0.1)',
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="store"
-                  size={24}
-                  color={isDarkMode ? "#1DCDFE" : "#0077B6"}
-                />
-              </View>
-            </MotiView>
-          </TouchableOpacity>
-        )}
         {children}
       </LinearGradient>
     </View>

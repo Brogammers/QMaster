@@ -1,25 +1,80 @@
 import React from "react";
-import { Text, View, Image, Dimensions } from 'react-native';
+import { Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import QueueBackground from '@/assets/images/QueueBackground.png';
 import AccessTime from '@/assets/images/accessTime.svg';
 import { QueueInfoCardProps } from "@/types";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MotiView } from 'moti';
+import { useTheme } from '@/ctx/ThemeContext';
+import { useLinkTo } from "@react-navigation/native";
+import { LinearGradient } from 'expo-linear-gradient';
+
 const { height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
 
 export default function QueueInfoCard(props: QueueInfoCardProps) {
-  const {name, image} = props;
+  const { name, image } = props;
+  const { isDarkMode } = useTheme();
+  const linkTo = useLinkTo();
+  const [hasStore, setHasStore] = React.useState(true); // For demo purposes
+
+  const handleStorePress = () => {
+    linkTo('/store');
+  };
+
   return (
-    <View className="justify-end w-screen"
+    <View className="justify-end w-screen relative"
       style={{ height: twoFifth }}
     >
       <Image source={QueueBackground} className="absolute top-0 w-screen h-5/6" />
-      <View className="bg-ocean-blue w-4/5 self-center h-1/2 rounded-sxl flex flex-row justify-center items-center">
+      
+      {/* Store Icon */}
+      {hasStore && (
+        <TouchableOpacity 
+          onPress={handleStorePress}
+          className="absolute top-14 right-6 z-50"
+        >
+          <MotiView
+            from={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 300 }}
+          >
+            <LinearGradient
+              colors={
+                isDarkMode 
+                  ? ['rgba(23, 34, 45, 0.7)', 'rgba(26, 26, 26, 0.7)']
+                  : ['rgba(23, 34, 45, 0.7)', 'rgba(26, 26, 26, 0.7)']
+              }
+              className="rounded-full p-2.5"
+              style={{
+                borderWidth: 1,
+                borderColor: isDarkMode ? 'rgba(0, 255, 255, 0.3)' : 'rgba(0, 255, 255, 0.3)',
+              }}
+            >
+              <MaterialCommunityIcons
+                name="store"
+                size={28}
+                color="#00FFFF"
+              />
+            </LinearGradient>
+          </MotiView>
+        </TouchableOpacity>
+      )}
+
+      <View 
+        className={`w-4/5 self-center h-1/2 rounded-sxl flex flex-row justify-center items-center ${!isDarkMode && 'bg-ocean-blue'}`}
+        style={isDarkMode ? {
+          backgroundColor: 'rgba(23, 34, 45, 0.7)',
+          borderWidth: 1.5,
+          borderColor: 'rgba(29, 205, 254, 0.25)',
+        } : undefined}
+      >
         <View className="justify-center h-full">
           <Image
             source={image}
             style={{
-              height: '60%',  // Adjust as needed
-              aspectRatio: 1, // Maintain a 1:1 aspect ratio
+              height: '60%',
+              aspectRatio: 1,
               borderRadius: 18,
               marginRight: 25,
             }}
@@ -30,7 +85,7 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
             <Text className="text-2xl font-black text-white">
               {name}
             </Text>
-            <Text className="text-slight-slate-grey text-base">
+            <Text className={`text-base ${isDarkMode ? 'text-baby-blue' : 'text-slight-slate-grey'}`}>
               Grocery
             </Text>
           </View>
@@ -39,7 +94,7 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
             <Text className="text-white">
               Fast
             </Text>
-            <Text className="text-slight-slate-grey">
+            <Text className={isDarkMode ? 'text-white' : 'text-slight-slate-grey'}>
               (224 ratings)
             </Text>
           </View>
