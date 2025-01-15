@@ -356,17 +356,38 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                     <div className="flex space-x-4">
                       <div>
                         <label className="block text-base text-black font-semibold mb-2">Price</label>
-                        <input
-                          type="number"
-                          placeholder="Price"
-                          value={product.price}
-                          onChange={(e) => {
-                            const newProducts = [...products];
-                            newProducts[index].price = Number(e.target.value);
-                            setProducts(newProducts);
-                          }}
-                          className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                        />
+                        <div className="relative">
+                          <span className="absolute left-2 top-1/2 -translate-y-1/2 text-black/50">EGP</span>
+                          <input
+                            type="text"
+                            placeholder="0.00"
+                            value={product.price.toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}
+                            onChange={(e) => {
+                              const cursorPosition = e.target.selectionStart || 0;
+                              const oldValue = e.target.value;
+                              const newProducts = [...products];
+                              // Remove non-numeric characters and convert to number
+                              const value = e.target.value.replace(/[^0-9.]/g, '');
+                              const numericValue = parseFloat(value) || 0;
+                              newProducts[index].price = numericValue;
+                              setProducts(newProducts);
+                              // Wait for re-render then restore cursor position
+                              requestAnimationFrame(() => {
+                                const newLength = numericValue.toLocaleString('en-US', {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2
+                                }).length;
+                                const oldLength = oldValue.length;
+                                const newPosition = Math.max(0, Math.min(cursorPosition + (newLength - oldLength), newLength));
+                                e.target.setSelectionRange(newPosition, newPosition);
+                              });
+                            }}
+                            className="w-full p-2 pl-12 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
+                          />
+                        </div>
                       </div>
                       <select
                         value={product.type}
@@ -430,6 +451,20 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
             </div>
             <Button
               variant="outline"
+              onClick={() => {
+                setProducts([
+                  ...products,
+                  {
+                    id: Date.now().toString(),
+                    name: '',
+                    description: '',
+                    price: 0,
+                    type: 'physical',
+                    stock: 0,
+                    images: []
+                  }
+                ]);
+              }}
               className="w-full border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/10 font-medium"
             >
               Add Another Product
