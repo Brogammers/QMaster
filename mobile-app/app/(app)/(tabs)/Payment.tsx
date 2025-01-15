@@ -1,14 +1,22 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StatusBar, TextInput } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StatusBar, TextInput, Image } from 'react-native';
 import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  Store: undefined;
+  Payment: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Payment'>;
 
 export default function Payment() {
   const { isDarkMode } = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const [isProcessing, setIsProcessing] = React.useState(false);
 
   const handlePayment = () => {
@@ -54,54 +62,54 @@ export default function Payment() {
           className="flex-1 px-6"
           showsVerticalScrollIndicator={false}
         >
-          <View className={`p-4 rounded-xl mb-6 ${isDarkMode ? 'bg-slate-grey' : 'bg-slate-grey/10'}`}>
+          <View className={`p-4 rounded-xl mb-6 ${isDarkMode ? 'bg-slate-grey/80' : 'bg-slate-grey/10'}`}>
             <Text className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
               Card Information
             </Text>
             
             <View className="mb-4">
-              <Text className={`mb-2 ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
+              <Text className={`mb-2 ${isDarkMode ? 'text-white' : 'text-slate-grey'}`}>
                 Card Number
               </Text>
               <TextInput
                 placeholder="4242 4242 4242 4242"
-                placeholderTextColor={isDarkMode ? '#FFFFFF50' : '#17222D50'}
-                className={`p-3 rounded-lg ${isDarkMode ? 'bg-slate-grey/50 text-white' : 'bg-white text-coal-black'}`}
+                placeholderTextColor={isDarkMode ? '#FFFFFF70' : '#17222D50'}
+                className={`p-3 rounded-lg ${isDarkMode ? 'bg-slate-grey text-white border border-white/20' : 'bg-white text-coal-black'}`}
               />
             </View>
 
             <View className="flex-row mb-4">
               <View className="flex-1 mr-2">
-                <Text className={`mb-2 ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
+                <Text className={`mb-2 ${isDarkMode ? 'text-white' : 'text-slate-grey'}`}>
                   Expiry Date
                 </Text>
                 <TextInput
                   placeholder="MM/YY"
-                  placeholderTextColor={isDarkMode ? '#FFFFFF50' : '#17222D50'}
-                  className={`p-3 rounded-lg ${isDarkMode ? 'bg-slate-grey/50 text-white' : 'bg-white text-coal-black'}`}
+                  placeholderTextColor={isDarkMode ? '#FFFFFF70' : '#17222D50'}
+                  className={`p-3 rounded-lg ${isDarkMode ? 'bg-slate-grey text-white border border-white/20' : 'bg-white text-coal-black'}`}
                 />
               </View>
               <View className="flex-1 ml-2">
-                <Text className={`mb-2 ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
+                <Text className={`mb-2 ${isDarkMode ? 'text-white' : 'text-slate-grey'}`}>
                   CVV
                 </Text>
                 <TextInput
                   placeholder="123"
-                  placeholderTextColor={isDarkMode ? '#FFFFFF50' : '#17222D50'}
-                  className={`p-3 rounded-lg ${isDarkMode ? 'bg-slate-grey/50 text-white' : 'bg-white text-coal-black'}`}
+                  placeholderTextColor={isDarkMode ? '#FFFFFF70' : '#17222D50'}
+                  className={`p-3 rounded-lg ${isDarkMode ? 'bg-slate-grey text-white border border-white/20' : 'bg-white text-coal-black'}`}
                   secureTextEntry
                 />
               </View>
             </View>
 
             <View className="mb-4">
-              <Text className={`mb-2 ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
+              <Text className={`mb-2 ${isDarkMode ? 'text-white' : 'text-slate-grey'}`}>
                 Cardholder Name
               </Text>
               <TextInput
                 placeholder="John Doe"
-                placeholderTextColor={isDarkMode ? '#FFFFFF50' : '#17222D50'}
-                className={`p-3 rounded-lg ${isDarkMode ? 'bg-slate-grey/50 text-white' : 'bg-white text-coal-black'}`}
+                placeholderTextColor={isDarkMode ? '#FFFFFF70' : '#17222D50'}
+                className={`p-3 rounded-lg ${isDarkMode ? 'bg-slate-grey text-white border border-white/20' : 'bg-white text-coal-black'}`}
               />
             </View>
           </View>
@@ -123,8 +131,17 @@ export default function Payment() {
               color={isDarkMode ? '#FFFFFF70' : '#17222D70'} 
             />
             <Text className={`ml-2 ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
-              Secured by PayMob
+              Secured by
             </Text>
+            <Image 
+              source={require('@/assets/images/paymob-blue-logo.png')}
+              className="h-4 w-16 ml-1"
+              resizeMode="contain"
+              style={{ 
+                opacity: isDarkMode ? 0.7 : 0.5,
+                tintColor: isDarkMode ? '#FFFFFF' : '#17222D'
+              }}
+            />
           </View>
         </ScrollView>
       </SafeAreaView>
