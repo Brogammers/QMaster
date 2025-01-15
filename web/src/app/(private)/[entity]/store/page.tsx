@@ -13,6 +13,8 @@ const StoreStatus = {
   DOCUMENTS_PENDING: 'DOCUMENTS_PENDING',
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
+  SETUP_PENDING: 'SETUP_PENDING',
+  SETUP_COMPLETED: 'SETUP_COMPLETED',
 } as const;
 
 type StoreStatus = typeof StoreStatus[keyof typeof StoreStatus];
@@ -20,6 +22,13 @@ type StoreStatus = typeof StoreStatus[keyof typeof StoreStatus];
 interface Document {
   type: string;
   file: File | null;
+}
+
+interface SetupStep {
+  id: string;
+  title: string;
+  description: string;
+  isCompleted: boolean;
 }
 
 interface StoreRequestViewProps {
@@ -157,7 +166,139 @@ const StorePendingView = () => (
   </div>
 );
 
-const StoreApprovedView = () => (
+const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [setupSteps, setSetupSteps] = useState<SetupStep[]>([
+    {
+      id: 'branding',
+      title: 'Store Branding',
+      description: 'Upload your logo and choose your store theme colors',
+      isCompleted: false
+    },
+    {
+      id: 'products',
+      title: 'Add Products',
+      description: 'Add your first products with images, prices, and inventory',
+      isCompleted: false
+    },
+    {
+      id: 'payment',
+      title: 'Payment Setup',
+      description: 'Configure your payment methods and bank account',
+      isCompleted: false
+    },
+    {
+      id: 'shipping',
+      title: 'Shipping Options',
+      description: 'Set up your shipping zones and delivery methods',
+      isCompleted: false
+    }
+  ]);
+
+  const [showGuide, setShowGuide] = useState(true);
+
+  const handleStepComplete = (stepId: string) => {
+    setSetupSteps(steps => 
+      steps.map(step => 
+        step.id === stepId ? { ...step, isCompleted: true } : step
+      )
+    );
+    setCurrentStep(curr => Math.min(curr + 1, setupSteps.length - 1));
+  };
+
+  const allStepsCompleted = setupSteps.every(step => step.isCompleted);
+
+  const renderCurrentStep = () => {
+    switch (setupSteps[currentStep].id) {
+      default:
+        return (
+          <div className="text-center p-8">
+            <p className="text-muted-foreground mb-4">Step component coming soon...</p>
+            <Button
+              onClick={() => handleStepComplete(setupSteps[currentStep].id)}
+              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+            >
+              Complete Step
+            </Button>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="space-y-8">
+      {/* Progress Bar */}
+      <div className="relative pt-4">
+        <div className="absolute top-8 left-0 right-0 h-0.5 bg-white/10">
+          <div
+            className="h-full bg-baby-blue transition-all duration-300"
+            style={{ width: `${(currentStep / (setupSteps.length - 1)) * 100}%` }}
+          />
+        </div>
+        <div className="flex justify-between mb-4 relative">
+          {setupSteps.map((step, index) => (
+            <div
+              key={step.id}
+              className={`flex flex-col items-center w-40 relative ${
+                index === currentStep ? 'text-baby-blue' : 
+                step.isCompleted ? 'text-green-500' : 'text-white/50'
+              }`}
+            >
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 bg-black
+                ${index === currentStep ? 'border-baby-blue bg-baby-blue/20' : 
+                step.isCompleted ? 'border-green-500 bg-green-500/20' : 'border-white/50 bg-white/10'}`}
+              >
+                {step.isCompleted ? '✓' : index + 1}
+              </div>
+              <p className="text-xs mt-2 text-center">{step.title}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Current Step Content */}
+      <div className="bg-white/5 rounded-2xl p-8 backdrop-blur-sm border-2 border-white/10">
+        <h3 className="text-xl font-semibold mb-2">{setupSteps[currentStep].title}</h3>
+        <p className="text-muted-foreground mb-6">{setupSteps[currentStep].description}</p>
+        {renderCurrentStep()}
+      </div>
+
+      {/* Guide Popup */}
+      {showGuide && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed bottom-8 right-8 bg-white/10 backdrop-blur-md p-6 rounded-2xl border-2 border-white/20 shadow-lg max-w-md"
+        >
+          <h4 className="text-lg font-semibold mb-2">Welcome to Store Setup! 🎉</h4>
+          <p className="text-sm text-muted-foreground mb-4">
+            Let&apos;s set up your online store. We&apos;ll guide you through configuring your branding, products, payments, and shipping options.
+          </p>
+          <Button
+            onClick={() => setShowGuide(false)}
+            variant="outline"
+            className="w-full border-2 hover:bg-white/5"
+          >
+            Got it!
+          </Button>
+        </motion.div>
+      )}
+
+      {allStepsCompleted && (
+        <div className="text-center">
+          <Button
+            onClick={onComplete}
+            className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+          >
+            Launch Store
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const StoreDashboardView = () => (
   <div className="space-y-8">
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <div className="p-6 bg-white/5 rounded-2xl backdrop-blur-sm">
@@ -225,12 +366,11 @@ export default function StorePage() {
   };
 
   const handleDocumentSubmit = async (documents: Document[]) => {
-    // Here you would typically upload the documents to your server
     setStoreStatus(StoreStatus.PENDING);
     // Simulate approval after 2 seconds
     setTimeout(() => {
-      setStoreStatus(StoreStatus.APPROVED);
-      toast.success('Your store has been approved!', {
+      setStoreStatus(StoreStatus.SETUP_PENDING);
+      toast.success('Your store has been approved! Let\'s set it up.', {
         style: {
           background: '#10B981',
           color: '#fff',
@@ -238,6 +378,17 @@ export default function StorePage() {
         duration: 4000,
       });
     }, 2000);
+  };
+
+  const handleSetupComplete = () => {
+    setStoreStatus(StoreStatus.SETUP_COMPLETED);
+    toast.success('Congratulations! Your store is now live.', {
+      style: {
+        background: '#10B981',
+        color: '#fff',
+      },
+      duration: 4000,
+    });
   };
 
   return (
@@ -252,7 +403,8 @@ export default function StorePage() {
             {storeStatus === StoreStatus.NOT_REQUESTED && <StoreRequestView onRequest={handleStoreRequest} />}
             {storeStatus === StoreStatus.DOCUMENTS_PENDING && <DocumentUploadView onSubmit={handleDocumentSubmit} />}
             {storeStatus === StoreStatus.PENDING && <StorePendingView />}
-            {storeStatus === StoreStatus.APPROVED && <StoreApprovedView />}
+            {storeStatus === StoreStatus.SETUP_PENDING && <StoreSetupView onComplete={handleSetupComplete} />}
+            {storeStatus === StoreStatus.SETUP_COMPLETED && <StoreDashboardView />}
           </motion.div>
         </div>
       </QueueModal>
