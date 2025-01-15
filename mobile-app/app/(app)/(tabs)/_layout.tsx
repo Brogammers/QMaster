@@ -21,6 +21,7 @@ import Partner from "@/app/(app)/(tabs)/Partner";
 import Store from "./Store";
 import Product from "./Product";
 import Cart from "./Cart";
+import Payment from "./Payment";
 
 const Tab = createBottomTabNavigator();
 
@@ -160,6 +161,19 @@ export default function AppEntry() {
           <Tab.Screen
             name="Cart"
             component={Cart}
+            options={{
+              tabBarButton: () => null,
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: "#17222D",
+              },
+              headerTintColor: "white",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="Payment"
+            component={Payment}
             options={{
               tabBarButton: () => null,
               headerShown: false,

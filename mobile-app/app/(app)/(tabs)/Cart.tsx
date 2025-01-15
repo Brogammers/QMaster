@@ -1,19 +1,26 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StatusBar, Linking } from 'react-native';
 import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useLinkTo, useNavigation } from '@react-navigation/native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useCart } from '@/ctx/CartContext';
 import { locations } from '@/constants/index';
+import { PayMobService } from '@/services/PayMobService';
 
 export default function Cart() {
   const { isDarkMode } = useTheme();
-  const navigation = useNavigation();
+  const linkTo = useLinkTo();
   const { items, updateQuantity, getTotal } = useCart();
   const [selectedLocation, setSelectedLocation] = React.useState<number | null>(null);
+  const [isProcessing, setIsProcessing] = React.useState(false);
+
+  const handlePayment = () => {
+    if (!selectedLocation) return;
+    linkTo('/Payment');
+  };
 
   return (
     <View className="flex-1">
@@ -173,17 +180,17 @@ export default function Cart() {
                     ? isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'
                     : isDarkMode ? 'bg-slate-grey' : 'bg-slate-grey/10'
                 }`}
-                onPress={() => {
-                  if (selectedLocation) {
-                    // Handle checkout with selected location
-                  }
-                }}
-                disabled={!selectedLocation}
+                onPress={handlePayment}
+                disabled={!selectedLocation || isProcessing}
               >
                 <Text className={`text-center font-semibold text-lg ${
                   selectedLocation ? 'text-white' : isDarkMode ? 'text-white/50' : 'text-slate-grey'
                 }`}>
-                  {selectedLocation ? 'Proceed to Payment' : 'Select Pickup Location'}
+                  {isProcessing 
+                    ? 'Processing...' 
+                    : selectedLocation 
+                      ? 'Proceed to Payment' 
+                      : 'Select Pickup Location'}
                 </Text>
               </TouchableOpacity>
             </View>
