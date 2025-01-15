@@ -90,7 +90,7 @@ export default function Orders() {
       case 'pending':
         return 'Ready for Pickup';
       case 'cancelled':
-        return 'Not Collected';
+        return 'Order Cancelled';
       default:
         return status;
     }
@@ -103,7 +103,7 @@ export default function Orders() {
       case 'pending':
         return 'Your order is ready for collection';
       case 'cancelled':
-        return 'Order was not picked up';
+        return 'Refund will be processed in 3-5 business days';
       default:
         return '';
     }

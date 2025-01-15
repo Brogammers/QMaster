@@ -45,7 +45,7 @@ export default function OrderDetails() {
       case 'pending':
         return 'Ready for Pickup';
       case 'cancelled':
-        return 'Order Not Collected';
+        return 'Order Cancelled';
       default:
         return status;
     }
@@ -58,7 +58,7 @@ export default function OrderDetails() {
       case 'pending':
         return 'Your order is ready and waiting for collection';
       case 'cancelled':
-        return 'This order was not picked up at the location';
+        return 'Order was cancelled. Your payment will be refunded within 3-5 business days.';
       default:
         return '';
     }
