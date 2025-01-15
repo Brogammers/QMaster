@@ -202,6 +202,53 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
   ]);
 
   const [showGuide, setShowGuide] = useState(true);
+  const [logo, setLogo] = useState<File | null>(null);
+  const [products, setProducts] = useState<Array<{
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    type: 'physical' | 'digital';
+    stock: number;
+    images: File[];
+  }>>([]);
+  const [paymentInfo, setPaymentInfo] = useState({
+    accountName: '',
+    iban: '',
+    bank: '',
+  });
+  const [shippingInfo, setShippingInfo] = useState({
+    courierType: 'self' as 'self' | 'outsourced',
+    courierCompany: '',
+    averageDeliveryTime: '',
+    termsAccepted: false
+  });
+
+  const egyptianBanks = [
+    'National Bank of Egypt',
+    'Banque Misr',
+    'Commercial International Bank',
+    'QNB Al Ahli',
+    'Arab African International Bank',
+    'HSBC Egypt',
+    'Credit Agricole Egypt',
+    'Arab Bank',
+    'Bank of Alexandria',
+    'Emirates NBD Egypt'
+  ];
+
+  const courierCompanies = [
+    'Aramex',
+    'DHL Express',
+    'FedEx Express',
+    'UPS',
+    'Egypt Post',
+    'Bosta',
+    'R2S',
+    'Mylerz',
+    'EGEX',
+    'Fetchr'
+  ];
 
   const handleStepComplete = (stepId: string) => {
     setSetupSteps(steps => 
@@ -216,18 +263,307 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
 
   const renderCurrentStep = () => {
     switch (setupSteps[currentStep].id) {
-      default:
+      case 'branding':
         return (
-          <div className="text-center p-8">
-            <p className="text-muted-foreground mb-4">Step component coming soon...</p>
+          <div className="space-y-6">
+            <div className="p-6 bg-black/30 rounded-2xl backdrop-blur-sm border border-white/20">
+              <h3 className="text-lg font-semibold mb-4 text-white">Store Logo</h3>
+              <div className="flex items-center space-x-4">
+                {logo ? (
+                  <div className="w-32 h-32 rounded-lg overflow-hidden">
+                    <img 
+                      src={URL.createObjectURL(logo)} 
+                      alt="Store logo" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 rounded-lg border-2 border-dashed border-white/20 flex items-center justify-center">
+                    <p className="text-sm text-white/50">No logo uploaded</p>
+                  </div>
+                )}
+                <div className="space-y-2">
+                  <label className="cursor-pointer px-4 py-2 rounded-lg bg-baby-blue hover:bg-ocean-blue transition-colors text-white">
+                    Upload Logo
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setLogo(e.target.files?.[0] || null)}
+                      className="hidden"
+                    />
+                  </label>
+                  <p className="text-sm text-white/50">Recommended size: 512x512px</p>
+                </div>
+              </div>
+            </div>
             <Button
-              onClick={() => handleStepComplete(setupSteps[currentStep].id)}
+              onClick={() => handleStepComplete('branding')}
+              disabled={!logo}
               className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
             >
-              Complete Step
+              Continue
             </Button>
           </div>
         );
+
+      case 'products':
+        return (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 gap-4">
+              {products.map((product, index) => (
+                <div key={product.id} className="p-4 bg-black/30 rounded-xl border border-white/20">
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="text-lg font-semibold text-white">Product {index + 1}</h4>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setProducts(products.filter(p => p.id !== product.id));
+                      }}
+                      className="text-red-500 border-red-500 hover:bg-red-500/10"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                  {/* Product form fields */}
+                  <div className="space-y-4 divide-y divide-white/10">
+                    <div>
+                      <label className="block text-base text-baby-blue mb-2 font-semibold">Product Name</label>
+                      <input
+                        type="text"
+                        placeholder="Product name"
+                        value={product.name}
+                        onChange={(e) => {
+                          const newProducts = [...products];
+                          newProducts[index].name = e.target.value;
+                          setProducts(newProducts);
+                        }}
+                        className="w-full p-2 rounded bg-black/40 border border-white/30 text-white placeholder:text-white/70"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-base text-baby-blue mb-2 font-semibold">Product Description</label>
+                      <textarea
+                        placeholder="Product description"
+                        value={product.description}
+                        onChange={(e) => {
+                          const newProducts = [...products];
+                          newProducts[index].description = e.target.value;
+                          setProducts(newProducts);
+                        }}
+                        className="w-full p-2 rounded bg-black/40 border border-white/30 text-white placeholder:text-white/70"
+                      />
+                    </div>
+                    <div className="flex space-x-4">
+                      <div>
+                        <label className="block text-base text-baby-blue mb-2 font-semibold">Price</label>
+                        <input
+                          type="number"
+                          placeholder="Price"
+                          value={product.price}
+                          onChange={(e) => {
+                            const newProducts = [...products];
+                            newProducts[index].price = Number(e.target.value);
+                            setProducts(newProducts);
+                          }}
+                          className="w-full p-2 rounded bg-black/40 border border-white/30 text-white placeholder:text-white/70"
+                        />
+                      </div>
+                      <select
+                        value={product.type}
+                        onChange={(e) => {
+                          const newProducts = [...products];
+                          newProducts[index].type = e.target.value as 'physical' | 'digital';
+                          setProducts(newProducts);
+                        }}
+                        className="w-full p-2 rounded bg-black/40 border border-white/30 text-white placeholder:text-white/70"
+                      >
+                        <option value="physical">Physical Product</option>
+                        <option value="digital">Digital Product</option>
+                      </select>
+                    </div>
+                    {product.type === 'physical' && (
+                      <div>
+                        <label className="block text-base text-baby-blue mb-2 font-semibold">Stock Quantity</label>
+                        <input
+                          type="number"
+                          placeholder="Stock quantity"
+                          value={product.stock}
+                          onChange={(e) => {
+                            const newProducts = [...products];
+                            newProducts[index].stock = Number(e.target.value);
+                            setProducts(newProducts);
+                          }}
+                          className="w-full p-2 rounded bg-black/40 border border-white/30 text-white placeholder:text-white/70"
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <label className="cursor-pointer px-4 py-2 rounded-lg bg-baby-blue hover:bg-ocean-blue transition-colors text-white font-medium">
+                        Add Product Images
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={(e) => {
+                            const newProducts = [...products];
+                            newProducts[index].images = Array.from(e.target.files || []);
+                            setProducts(newProducts);
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {product.images.map((image, imgIndex) => (
+                          <div key={imgIndex} className="w-16 h-16 rounded overflow-hidden">
+                            <img
+                              src={URL.createObjectURL(image)}
+                              alt={`Product ${index + 1} image ${imgIndex + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <Button
+              variant="outline"
+              className="w-full border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/10 font-medium"
+            >
+              Add Another Product
+            </Button>
+            <Button
+              onClick={() => handleStepComplete('products')}
+              disabled={products.length === 0}
+              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white w-full"
+            >
+              Continue
+            </Button>
+          </div>
+        );
+
+      case 'payment':
+        return (
+          <div className="space-y-6">
+            <div className="p-6 bg-black/30 rounded-2xl backdrop-blur-sm border border-white/20">
+              <h3 className="text-lg font-semibold mb-4 text-white">Payment Information</h3>
+              <div className="space-y-4 divide-y divide-white/10">
+                <div>
+                  <label className="block text-base text-baby-blue mb-2 font-semibold">Account Name</label>
+                  <input
+                    type="text"
+                    value={paymentInfo.accountName}
+                    onChange={(e) => setPaymentInfo({ ...paymentInfo, accountName: e.target.value })}
+                    className="w-full p-2 rounded bg-black/40 border border-white/30 text-white placeholder:text-white/70"
+                    placeholder="Enter account holder name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-base text-baby-blue mb-2 font-semibold">IBAN</label>
+                  <input
+                    type="text"
+                    value={paymentInfo.iban}
+                    onChange={(e) => setPaymentInfo({ ...paymentInfo, iban: e.target.value })}
+                    className="w-full p-2 rounded bg-black/40 border border-white/30 text-white placeholder:text-white/70"
+                    placeholder="Enter IBAN"
+                  />
+                </div>
+                <div>
+                  <label className="block text-base text-baby-blue mb-2 font-semibold">Bank</label>
+                  <select
+                    value={paymentInfo.bank}
+                    onChange={(e) => setPaymentInfo({ ...paymentInfo, bank: e.target.value })}
+                    className="w-full p-2 rounded bg-black/40 border border-white/30 text-white placeholder:text-white/70"
+                  >
+                    <option value="">Select a bank</option>
+                    {egyptianBanks.map(bank => (
+                      <option key={bank} value={bank}>{bank}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <Button
+              onClick={() => handleStepComplete('payment')}
+              disabled={!paymentInfo.accountName || !paymentInfo.iban || !paymentInfo.bank}
+              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white w-full"
+            >
+              Continue
+            </Button>
+          </div>
+        );
+
+      case 'shipping':
+        return (
+          <div className="space-y-6">
+            <div className="p-6 bg-black/30 rounded-2xl backdrop-blur-sm border border-white/20">
+              <h3 className="text-lg font-semibold mb-4 text-white">Shipping Information</h3>
+              <div className="space-y-4 divide-y divide-white/10">
+                <div>
+                  <label className="block text-base text-baby-blue mb-2 font-semibold">Delivery Method</label>
+                  <select
+                    value={shippingInfo.courierType}
+                    onChange={(e) => setShippingInfo({ ...shippingInfo, courierType: e.target.value as 'self' | 'outsourced' })}
+                    className="w-full p-2 rounded bg-black/40 border border-white/30 text-white placeholder:text-white/70"
+                  >
+                    <option value="self">Self-delivery</option>
+                    <option value="outsourced">Outsourced Courier</option>
+                  </select>
+                </div>
+                {shippingInfo.courierType === 'outsourced' && (
+                  <div>
+                    <label className="block text-base text-baby-blue mb-2 font-semibold">Courier Company</label>
+                    <select
+                      value={shippingInfo.courierCompany}
+                      onChange={(e) => setShippingInfo({ ...shippingInfo, courierCompany: e.target.value })}
+                      className="w-full p-2 rounded bg-black/40 border border-white/30 text-white placeholder:text-white/70"
+                    >
+                      <option value="">Select a courier company</option>
+                      {courierCompanies.map(company => (
+                        <option key={company} value={company}>{company}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                <div>
+                  <label className="block text-base text-baby-blue mb-2 font-semibold">Average Delivery Time</label>
+                  <input
+                    type="text"
+                    value={shippingInfo.averageDeliveryTime}
+                    onChange={(e) => setShippingInfo({ ...shippingInfo, averageDeliveryTime: e.target.value })}
+                    className="w-full p-2 rounded bg-black/40 border border-white/30 text-white placeholder:text-white/70"
+                    placeholder="e.g., 2-3 business days"
+                  />
+                </div>
+                <div className="p-4 bg-black/30 rounded-xl border border-white/20">
+                  <label className="flex items-start space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={shippingInfo.termsAccepted}
+                      onChange={(e) => setShippingInfo({ ...shippingInfo, termsAccepted: e.target.checked })}
+                      className="mt-1"
+                    />
+                    <span className="text-sm text-white/90">
+                      I acknowledge and agree that I am solely responsible for fulfilling all orders and delivering products to customers. QMaster acts solely as an intermediary platform facilitating the transaction between my business and customers. I understand that I am liable for ensuring timely delivery, product quality, and handling any shipping-related issues or returns. QMaster is not responsible for any delivery delays, damages, or disputes arising from the shipping process.
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <Button
+              onClick={() => handleStepComplete('shipping')}
+              disabled={!shippingInfo.averageDeliveryTime || !shippingInfo.termsAccepted || (shippingInfo.courierType === 'outsourced' && !shippingInfo.courierCompany)}
+              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white w-full"
+            >
+              Complete Setup
+            </Button>
+          </div>
+        );
+
+      default:
+        return null;
     }
   };
 
@@ -256,16 +592,16 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
               >
                 {step.isCompleted ? '✓' : index + 1}
               </div>
-              <p className="text-xs mt-2 text-center">{step.title}</p>
+              <p className="text-xs mt-2 text-center font-medium text-white">{step.title}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Current Step Content */}
-      <div className="bg-white/5 rounded-2xl p-8 backdrop-blur-sm border-2 border-white/10">
-        <h3 className="text-xl font-semibold mb-2">{setupSteps[currentStep].title}</h3>
-        <p className="text-muted-foreground mb-6">{setupSteps[currentStep].description}</p>
+      <div className="bg-black/20 rounded-2xl p-8 backdrop-blur-sm border-2 border-white/10">
+        <h3 className="text-2xl font-bold mb-2 text-baby-blue">{setupSteps[currentStep].title}</h3>
+        <p className="text-white text-lg mb-6">{setupSteps[currentStep].description}</p>
         {renderCurrentStep()}
       </div>
 
@@ -274,11 +610,17 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="fixed bottom-8 right-8 bg-white/10 backdrop-blur-md p-6 rounded-2xl border-2 border-white/20 shadow-lg max-w-md"
+          className="fixed bottom-8 right-8 bg-white/10 backdrop-blur-md p-6 rounded-2xl border-2 border-white/20 shadow-lg max-w-md z-50"
         >
-          <h4 className="text-lg font-semibold mb-2">Welcome to Store Setup! 🎉</h4>
-          <p className="text-sm text-muted-foreground mb-4">
-            Let&apos;s set up your online store. We&apos;ll guide you through configuring your branding, products, payments, and shipping options.
+          <h4 className="text-lg font-semibold text-white mb-4">Welcome to Store Setup! 🎉</h4>
+          <p className="text-base text-white mb-4">
+            Let's set up your online store. We'll guide you through:
+            <ul className="list-disc ml-4 mt-2 space-y-2 text-white/90">
+              <li>Uploading your store logo</li>
+              <li>Adding your products (physical or digital)</li>
+              <li>Setting up payment information</li>
+              <li>Configuring shipping options</li>
+            </ul>
           </p>
           <Button
             onClick={() => setShowGuide(false)}
