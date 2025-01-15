@@ -127,18 +127,24 @@ const DocumentUploadView = ({ onSubmit }: { onSubmit: (files: Document[]) => voi
                 <h3 className="font-semibold text-lg">{doc.type}</h3>
                 <p className="text-sm text-muted-foreground">{doc.description}</p>
               </div>
-              <input
-                type="file"
-                accept=".pdf"
-                onChange={(e) => handleFileChange(index, e.target.files?.[0] || null)}
-                className="text-sm text-white/70 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-baby-blue file:text-white hover:file:bg-ocean-blue"
-              />
+              <div className="flex flex-col items-end gap-2">
+                <label className="cursor-pointer text-sm px-4 py-2 rounded-full bg-baby-blue hover:bg-ocean-blue transition-colors text-white w-[120px] text-center">
+                  {documents[index].file ? 'Replace File' : 'Attach File'}
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => handleFileChange(index, e.target.files?.[0] || null)}
+                    className="hidden"
+                  />
+                </label>
+                {documents[index].file && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="text-green-500">✓</span>
+                    <span className="max-w-[200px] truncate text-white/70">{documents[index].file.name}</span>
+                  </div>
+                )}
+              </div>
             </div>
-            {documents[index].file && (
-              <p className="text-sm text-green-500 mt-2">
-                ✓ {documents[index].file.name}
-              </p>
-            )}
           </div>
         ))}
       </div>
@@ -370,7 +376,7 @@ export default function StorePage() {
     // Simulate approval after 2 seconds
     setTimeout(() => {
       setStoreStatus(StoreStatus.SETUP_PENDING);
-      toast.success('Your store has been approved! Let\'s set it up.', {
+      toast.success('Your store has been approved! Let&apos;s set it up.', {
         style: {
           background: '#10B981',
           color: '#fff',
@@ -410,4 +416,4 @@ export default function StorePage() {
       </QueueModal>
     </Entity>
   );
-} 
+}
