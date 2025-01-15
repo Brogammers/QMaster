@@ -7,11 +7,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useCart } from '@/ctx/CartContext';
+import { locations } from '@/constants/index';
 
 export default function Cart() {
   const { isDarkMode } = useTheme();
   const navigation = useNavigation();
   const { items, updateQuantity, getTotal } = useCart();
+  const [selectedLocation, setSelectedLocation] = React.useState<number | null>(null);
 
   return (
     <View className="flex-1">
@@ -69,6 +71,54 @@ export default function Cart() {
               className="flex-1 px-6"
               showsVerticalScrollIndicator={false}
             >
+              <Text className={`text-lg font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                Select Pickup Location
+              </Text>
+              
+              {locations.map((location) => (
+                <TouchableOpacity
+                  key={location.id}
+                  onPress={() => setSelectedLocation(location.id)}
+                  className={`flex-row items-center p-4 mb-3 rounded-xl ${
+                    selectedLocation === location.id
+                      ? isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'
+                      : isDarkMode ? 'bg-slate-grey' : 'bg-slate-grey/10'
+                  }`}
+                >
+                  <MaterialCommunityIcons 
+                    name={selectedLocation === location.id ? "radiobox-marked" : "radiobox-blank"}
+                    size={24}
+                    color={
+                      selectedLocation === location.id
+                        ? 'white'
+                        : isDarkMode ? '#FFFFFF70' : '#17222D70'
+                    }
+                  />
+                  <View className="ml-3">
+                    <Text className={`font-semibold ${
+                      selectedLocation === location.id
+                        ? 'text-white'
+                        : isDarkMode ? 'text-white' : 'text-coal-black'
+                    }`}>
+                      {location.name}
+                    </Text>
+                    <Text className={`text-sm ${
+                      selectedLocation === location.id
+                        ? 'text-white/80'
+                        : isDarkMode ? 'text-white/50' : 'text-slate-grey'
+                    }`}>
+                      {location.address}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+
+              <View className="h-4" />
+
+              <Text className={`text-lg font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                Cart Items
+              </Text>
+
               {items.map((item) => (
                 <Animated.View 
                   key={item.id}
@@ -118,13 +168,22 @@ export default function Cart() {
               </View>
               
               <TouchableOpacity 
-                className={`w-full py-4 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'}`}
+                className={`w-full py-4 rounded-xl ${
+                  selectedLocation
+                    ? isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'
+                    : isDarkMode ? 'bg-slate-grey' : 'bg-slate-grey/10'
+                }`}
                 onPress={() => {
-                  // Handle checkout
+                  if (selectedLocation) {
+                    // Handle checkout with selected location
+                  }
                 }}
+                disabled={!selectedLocation}
               >
-                <Text className="text-white text-center font-semibold text-lg">
-                  Checkout
+                <Text className={`text-center font-semibold text-lg ${
+                  selectedLocation ? 'text-white' : isDarkMode ? 'text-white/50' : 'text-slate-grey'
+                }`}>
+                  {selectedLocation ? 'Proceed to Payment' : 'Select Pickup Location'}
                 </Text>
               </TouchableOpacity>
             </View>
