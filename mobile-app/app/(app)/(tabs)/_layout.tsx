@@ -22,6 +22,8 @@ import Store from "./Store";
 import Product from "./Product";
 import Cart from "./Cart";
 import Payment from "./Payment";
+import Orders from "./Orders";
+import OrderDetails from "./OrderDetails";
 
 const Tab = createBottomTabNavigator();
 
@@ -174,6 +176,32 @@ export default function AppEntry() {
           <Tab.Screen
             name="Payment"
             component={Payment}
+            options={{
+              tabBarButton: () => null,
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: "#17222D",
+              },
+              headerTintColor: "white",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="Orders"
+            component={Orders}
+            options={{
+              tabBarButton: () => null,
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: "#17222D",
+              },
+              headerTintColor: "white",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="OrderDetails"
+            component={OrderDetails}
             options={{
               tabBarButton: () => null,
               headerShown: false,

@@ -1,43 +1,109 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { View, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
-// Mock data for orders
+type RootStackParamList = {
+  Orders: undefined;
+  OrderDetails: {
+    order: {
+      id: string;
+      customerName: string;
+      location: {
+        name: string;
+        address: string;
+        coordinates: {
+          latitude: number;
+          longitude: number;
+        }
+      };
+      total: number;
+      date: string;
+      status: 'completed' | 'pending' | 'cancelled';
+    };
+  };
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 const MOCK_ORDERS = [
   {
-    id: 'ORD-123456',
-    date: '2024-03-10',
-    location: 'Madinaty Store',
-    status: 'completed',
-    total: 299.99
+    id: "ORD-123456",
+    customerName: "John Smith",
+    location: {
+      name: "Madinaty Store",
+      address: "Madinaty, New Cairo, Cairo Governorate",
+      coordinates: {
+        latitude: 30.0742,
+        longitude: 31.6470
+      }
+    },
+    total: 150,
+    date: "2024-03-10",
+    status: 'completed' as const
   },
   {
-    id: 'ORD-123457',
-    date: '2024-03-09',
-    location: 'Maadi Store',
-    status: 'pending',
-    total: 149.99
+    id: "ORD-123457",
+    customerName: "John Smith",
+    location: {
+      name: "Maadi Store",
+      address: "Maadi, Cairo Governorate",
+      coordinates: {
+        latitude: 29.9602,
+        longitude: 31.2569
+      }
+    },
+    total: 200,
+    date: "2024-03-09",
+    status: 'pending' as const
   },
-  // Add more mock orders as needed
+  {
+    id: "ORD-123458",
+    customerName: "John Smith",
+    location: {
+      name: "Tagamoa Store",
+      address: "Fifth Settlement, New Cairo",
+      coordinates: {
+        latitude: 30.0271,
+        longitude: 31.4620
+      }
+    },
+    total: 175,
+    date: "2024-03-08",
+    status: 'cancelled' as const
+  }
 ];
 
 export default function Orders() {
   const { isDarkMode } = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: 'completed' | 'pending' | 'cancelled') => {
     switch (status) {
       case 'completed':
-        return isDarkMode ? 'text-green-400' : 'text-green-600';
+        return 'text-green-500';
       case 'pending':
-        return isDarkMode ? 'text-yellow-400' : 'text-yellow-600';
+        return 'text-yellow-500';
+      case 'cancelled':
+        return 'text-red-500';
       default:
-        return isDarkMode ? 'text-white/70' : 'text-slate-grey';
+        return 'text-slate-grey';
+    }
+  };
+
+  const getStatusIcon = (status: 'completed' | 'pending' | 'cancelled') => {
+    switch (status) {
+      case 'completed':
+        return 'check-circle';
+      case 'pending':
+        return 'clock-outline';
+      case 'cancelled':
+        return 'close-circle';
     }
   };
 
@@ -56,65 +122,58 @@ export default function Orders() {
       </View>
 
       <SafeAreaView className="flex-1" edges={['top', 'bottom', 'left', 'right']}>
-        <View className="px-6">
-          <View className="flex-row justify-between items-center py-4">
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <MaterialCommunityIcons 
-                name="arrow-left" 
-                size={24} 
-                color={isDarkMode ? '#FFFFFF' : '#17222D'} 
-              />
-            </TouchableOpacity>
-            <Text className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
-              Orders
-            </Text>
-            <View style={{ width: 24 }} />
-          </View>
-        </View>
-
         <ScrollView 
           className="flex-1 px-6"
           showsVerticalScrollIndicator={false}
         >
           {MOCK_ORDERS.map((order, index) => (
-            <Animated.View
+            <Animated.View 
               key={order.id}
-              entering={FadeIn.delay(index * 100)}
-              className={`mb-3 p-4 rounded-xl ${isDarkMode ? 'bg-slate-grey' : 'bg-slate-grey/10'}`}
+              entering={FadeIn.delay(index * 200).duration(1000)}
+              className={`p-4 rounded-xl mb-4 ${isDarkMode ? 'bg-slate-grey/80' : 'bg-slate-grey/10'}`}
             >
-              <TouchableOpacity>
-                <View className="flex-row justify-between items-start mb-2">
-                  <View>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('OrderDetails', { order })}
+                className="flex-1"
+              >
+                <View className="flex-row items-center mb-2">
+                  <MaterialCommunityIcons 
+                    name={getStatusIcon(order.status)}
+                    size={24} 
+                    color={isDarkMode ? '#FFFFFF' : '#17222D'} 
+                  />
+                  <View className="ml-3 flex-1">
                     <Text className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
                       {order.id}
                     </Text>
-                    <Text className={`text-sm ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
-                      {new Date(order.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
+                    <Text className={`${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
+                      {new Date(order.date).toLocaleDateString()}
                     </Text>
                   </View>
-                  <Text className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
-                    ${order.total}
+                  <Text className={`font-semibold capitalize ${getStatusColor(order.status)}`}>
+                    {order.status}
                   </Text>
                 </View>
 
-                <View className="flex-row justify-between items-center">
-                  <View className="flex-row items-center">
-                    <MaterialCommunityIcons 
-                      name="map-marker" 
-                      size={16} 
-                      color={isDarkMode ? '#FFFFFF70' : '#17222D70'} 
-                    />
-                    <Text className={`ml-1 text-sm ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
-                      {order.location}
+                <View className="flex-row items-center mt-2">
+                  <MaterialCommunityIcons 
+                    name="map-marker" 
+                    size={20} 
+                    color={isDarkMode ? '#FFFFFF70' : '#17222D70'} 
+                  />
+                  <View className="ml-2 flex-1">
+                    <Text className={`text-base font-semibold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                      {order.location.name}
+                    </Text>
+                    <Text className={`text-sm ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
+                      {order.location.address}
                     </Text>
                   </View>
-                  <Text className={`capitalize text-sm ${getStatusColor(order.status)}`}>
-                    {order.status}
-                  </Text>
+                  <MaterialCommunityIcons 
+                    name="chevron-right" 
+                    size={24} 
+                    color={isDarkMode ? '#FFFFFF70' : '#17222D70'} 
+                  />
                 </View>
               </TouchableOpacity>
             </Animated.View>

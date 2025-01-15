@@ -61,6 +61,11 @@ export default function AccountPageItems({ isDarkMode, onThemeToggle }: AccountP
       onPress: handleNotificationsPress,
     },
     {
+      title: i18n.t('orders'),
+      icon: 'history',
+      onPress: () => linkTo('/Orders'),
+    },
+    {
       title: i18n.t('about'),
       icon: 'circle-info',
       onPress: () => console.log('About'),
