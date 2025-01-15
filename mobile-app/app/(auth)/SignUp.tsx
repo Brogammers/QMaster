@@ -30,6 +30,7 @@ import PhoneInput from "react-native-phone-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import i18n from "@/i18n";
 import configConverter from "@/api/configConverter";
+import { useGoogleAuth } from '@/ctx/GoogleAuthContext';
 
 interface ServerError {
     message: string;
@@ -79,6 +80,7 @@ export default function SignUp() {
     const dispatch = useDispatch();
     const auth = useAuth();
     const router = useRouter();
+    const { handleGoogleSignIn, isLoading: isGoogleLoading } = useGoogleAuth();
     const windowWidth = window.width * 0.7;
 
     const [isStateUpdateComplete, setStateUpdateComplete] = useState(false);
@@ -286,7 +288,7 @@ export default function SignUp() {
 
     return (
         <>
-            {isLoading ? (
+            {isLoading || isGoogleLoading ? (
                 <SplashScreen />
             ) : (
                 <ImageBackground source={background} style={styles.container}>
@@ -679,6 +681,7 @@ export default function SignUp() {
                                                 buttonColor={"white"}
                                                 textColor={"#17222D"}
                                                 width={windowWidth}
+                                                onPress={handleGoogleSignIn}
                                             />
                                         </View>
                                     </View>

@@ -31,6 +31,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Config from "react-native-config";
 import i18n from "@/i18n";
 import configConverter from "@/api/configConverter";
+import { useGoogleAuth } from '@/ctx/GoogleAuthContext';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email required"),
@@ -40,6 +41,7 @@ const LoginSchema = Yup.object().shape({
 export default function Login() {
   const dispatch = useDispatch();
   const auth = useAuth();
+  const { handleGoogleSignIn, isLoading: isGoogleLoading } = useGoogleAuth();
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   
@@ -200,7 +202,7 @@ export default function Login() {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || isGoogleLoading ? (
         <SplashScreen />
       ) : (
         <ImageBackground source={background} style={styles.container}>
@@ -310,6 +312,7 @@ export default function Login() {
                       icon={"google"}
                       buttonColor={"white"}
                       textColor={"#17222D"}
+                      onPress={handleGoogleSignIn}
                     />
                   </View>
                 </View>
