@@ -169,10 +169,10 @@ export default function Product() {
               </View>
 
               <TouchableOpacity 
-                className={`w-full py-4 rounded-xl mt-4 ${isDarkMode ? 'bg-slate-grey' : 'bg-slate-grey/10'}`}
+                className={`w-full py-4 rounded-xl mt-4 ${isDarkMode ? 'bg-slate-grey' : 'bg-ocean-blue'}`}
                 onPress={() => navigation.navigate('Cart')}
               >
-                <Text className={`text-center font-semibold text-lg ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                <Text className="text-white text-center font-semibold text-lg">
                   View Cart
                 </Text>
               </TouchableOpacity>
