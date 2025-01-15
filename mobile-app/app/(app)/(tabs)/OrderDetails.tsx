@@ -38,6 +38,32 @@ export default function OrderDetails() {
   const route = useRoute<RouteProps>();
   const { order } = route.params;
 
+  const getStatusText = (status: 'completed' | 'pending' | 'cancelled') => {
+    switch (status) {
+      case 'completed':
+        return 'Order Picked Up';
+      case 'pending':
+        return 'Ready for Pickup';
+      case 'cancelled':
+        return 'Order Not Collected';
+      default:
+        return status;
+    }
+  };
+
+  const getStatusDescription = (status: 'completed' | 'pending' | 'cancelled') => {
+    switch (status) {
+      case 'completed':
+        return 'Your order has been successfully collected';
+      case 'pending':
+        return 'Your order is ready and waiting for collection';
+      case 'cancelled':
+        return 'This order was not picked up at the location';
+      default:
+        return '';
+    }
+  };
+
   return (
     <View className="flex-1">
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
@@ -67,9 +93,12 @@ export default function OrderDetails() {
               color={isDarkMode ? '#FFFFFF' : '#17222D'} 
             />
             <Text className={`text-2xl font-bold mt-4 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
-              Order {order.status === 'completed' ? 'Completed' : order.status === 'pending' ? 'Pending' : 'Cancelled'}
+              {getStatusText(order.status)}
             </Text>
-            <Text className={`text-lg mt-2 ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
+            <Text className={`text-lg mt-2 text-center ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
+              {getStatusDescription(order.status)}
+            </Text>
+            <Text className={`text-base mt-2 ${isDarkMode ? 'text-white/50' : 'text-slate-grey/70'}`}>
               {new Date(order.date).toLocaleDateString()}
             </Text>
           </Animated.View>

@@ -83,6 +83,32 @@ export default function Orders() {
   const { isDarkMode } = useTheme();
   const navigation = useNavigation<NavigationProp>();
 
+  const getStatusText = (status: 'completed' | 'pending' | 'cancelled') => {
+    switch (status) {
+      case 'completed':
+        return 'Picked Up';
+      case 'pending':
+        return 'Ready for Pickup';
+      case 'cancelled':
+        return 'Not Collected';
+      default:
+        return status;
+    }
+  };
+
+  const getStatusDescription = (status: 'completed' | 'pending' | 'cancelled') => {
+    switch (status) {
+      case 'completed':
+        return 'Order has been collected';
+      case 'pending':
+        return 'Your order is ready for collection';
+      case 'cancelled':
+        return 'Order was not picked up';
+      default:
+        return '';
+    }
+  };
+
   const getStatusColor = (status: 'completed' | 'pending' | 'cancelled') => {
     switch (status) {
       case 'completed':
@@ -151,7 +177,7 @@ export default function Orders() {
                     </Text>
                   </View>
                   <Text className={`font-semibold capitalize ${getStatusColor(order.status)}`}>
-                    {order.status}
+                    {getStatusText(order.status)}
                   </Text>
                 </View>
 
@@ -167,6 +193,9 @@ export default function Orders() {
                     </Text>
                     <Text className={`text-sm ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
                       {order.location.address}
+                    </Text>
+                    <Text className={`text-xs mt-1 ${isDarkMode ? 'text-white/50' : 'text-slate-grey/70'}`}>
+                      {getStatusDescription(order.status)}
                     </Text>
                   </View>
                   <MaterialCommunityIcons 
