@@ -361,7 +361,7 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                           <input
                             type="text"
                             placeholder="0.00"
-                            value={product.price.toLocaleString('en-US', {
+                            value={product.price === 0 ? "0.00" : product.price.toLocaleString('en-US', {
                               minimumFractionDigits: 2,
                               maximumFractionDigits: 2
                             })}
@@ -376,10 +376,11 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                               setProducts(newProducts);
                               // Wait for re-render then restore cursor position
                               requestAnimationFrame(() => {
-                                const newLength = numericValue.toLocaleString('en-US', {
+                                const newValue = numericValue === 0 ? "0.00" : numericValue.toLocaleString('en-US', {
                                   minimumFractionDigits: 2,
                                   maximumFractionDigits: 2
-                                }).length;
+                                });
+                                const newLength = newValue.length;
                                 const oldLength = oldValue.length;
                                 const newPosition = Math.max(0, Math.min(cursorPosition + (newLength - oldLength), newLength));
                                 e.target.setSelectionRange(newPosition, newPosition);
@@ -406,13 +407,26 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                       <div>
                         <label className="block text-base text-black font-semibold mb-2">Stock Quantity</label>
                         <input
-                          type="number"
-                          placeholder="Stock quantity"
-                          value={product.stock}
+                          type="text"
+                          placeholder="0"
+                          value={product.stock.toString().padStart(1, '0')}
                           onChange={(e) => {
+                            const cursorPosition = e.target.selectionStart || 0;
+                            const oldValue = e.target.value;
                             const newProducts = [...products];
-                            newProducts[index].stock = Number(e.target.value);
+                            // Remove non-numeric characters
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            // Convert to number and ensure it's not negative
+                            const numericValue = Math.max(0, parseInt(value) || 0);
+                            newProducts[index].stock = numericValue;
                             setProducts(newProducts);
+                            // Restore cursor position
+                            requestAnimationFrame(() => {
+                              const newLength = numericValue.toString().length;
+                              const oldLength = oldValue.length;
+                              const newPosition = Math.max(0, Math.min(cursorPosition + (newLength - oldLength), newLength));
+                              e.target.setSelectionRange(newPosition, newPosition);
+                            });
                           }}
                           className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
                         />
@@ -420,30 +434,32 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                     )}
                     <div>
                       <label className="cursor-pointer px-4 py-2 rounded-lg bg-baby-blue hover:bg-ocean-blue transition-colors text-white font-medium">
-                        Add Product Images
+                        {product.images.length > 0 ? 'Replace Image' : 'Add Product Image'}
                         <input
                           type="file"
-                          accept="image/*"
-                          multiple
+                          accept="image/png,image/jpeg"
                           onChange={(e) => {
                             const newProducts = [...products];
-                            newProducts[index].images = Array.from(e.target.files || []);
-                            setProducts(newProducts);
+                            const file = e.target.files?.[0];
+                            if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+                              newProducts[index].images = [file];
+                              setProducts(newProducts);
+                            }
                           }}
                           className="hidden"
                         />
                       </label>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {product.images.map((image, imgIndex) => (
-                          <div key={imgIndex} className="w-16 h-16 rounded overflow-hidden">
+                      {product.images.length > 0 && (
+                        <div className="mt-2">
+                          <div className="w-24 h-24 rounded overflow-hidden">
                             <img
-                              src={URL.createObjectURL(image)}
-                              alt={`Product ${index + 1} image ${imgIndex + 1}`}
+                              src={URL.createObjectURL(product.images[0])}
+                              alt={`Product ${index + 1} image`}
                               className="w-full h-full object-cover"
                             />
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -567,10 +583,38 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                   <input
                     type="text"
                     value={shippingInfo.averageDeliveryTime}
-                    onChange={(e) => setShippingInfo({ ...shippingInfo, averageDeliveryTime: e.target.value })}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Only allow numbers and a single hyphen
+                      if (value.split('-').length > 2) return;
+                      if (/^(\d*-?\d*)?$/.test(value)) {
+                        setShippingInfo({ ...shippingInfo, averageDeliveryTime: value });
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const value = e.target.value.trim();
+                      // Must have exactly two numbers separated by a hyphen
+                      const match = value.match(/^(\d+)-(\d+)$/);
+                      if (!match) {
+                        setShippingInfo({ ...shippingInfo, averageDeliveryTime: '' });
+                        return;
+                      }
+                      
+                      const [_, first, second] = match;
+                      const num1 = parseInt(first);
+                      const num2 = parseInt(second);
+                      
+                      if (!isNaN(num1) && !isNaN(num2)) {
+                        const formattedValue = `${num1}-${num2} business days`;
+                        setShippingInfo({ ...shippingInfo, averageDeliveryTime: formattedValue });
+                      } else {
+                        setShippingInfo({ ...shippingInfo, averageDeliveryTime: '' });
+                      }
+                    }}
                     className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                    placeholder="e.g., 2-3 business days"
+                    placeholder="e.g., 2-3"
                   />
+                  <p className="text-xs text-black/60 mt-1">Format must be x-y business days (e.g., 2-3)</p>
                 </div>
                 <div className="p-4 bg-white rounded-xl shadow-sm border border-black/10">
                   <label className="flex items-start space-x-2">
@@ -589,7 +633,12 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
             </div>
             <Button
               onClick={() => handleStepComplete('shipping')}
-              disabled={!shippingInfo.averageDeliveryTime || !shippingInfo.termsAccepted || (shippingInfo.courierType === 'outsourced' && !shippingInfo.courierCompany)}
+              disabled={
+                !shippingInfo.averageDeliveryTime || 
+                !shippingInfo.termsAccepted || 
+                (shippingInfo.courierType === 'outsourced' && !shippingInfo.courierCompany) ||
+                !/^\d+-\d+ business days$/.test(shippingInfo.averageDeliveryTime)  // Must exactly match format
+              }
               className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white w-full"
             >
               Complete Setup
