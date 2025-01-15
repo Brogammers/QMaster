@@ -122,12 +122,7 @@ export default function QueuePage() {
           <MotiView
             from={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              type: "spring",
-              mass: 1,
-              damping: 15,
-              delay: 150
-            }}
+            transition={{ delay: 150 }}
             className="w-full"
             style={{ 
               marginTop: 20,

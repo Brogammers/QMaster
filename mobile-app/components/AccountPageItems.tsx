@@ -89,11 +89,7 @@ export default function AccountPageItems({ isDarkMode, onThemeToggle }: AccountP
           key={item.title}
           from={{ opacity: 0, translateX: -20 }}
           animate={{ opacity: 1, translateX: 0 }}
-          transition={{
-            delay: index * 100,
-            damping: 20,
-            mass: 0.8,
-          }}
+          transition={{ delay: index * 100 }}
           className="mb-4"
         >
           <View className={`${isDarkMode ? 'bg-concrete-turqouise/20' : 'bg-ocean-blue/5'} rounded-2xl border border-baby-blue/10`}>
