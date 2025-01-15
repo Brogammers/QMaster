@@ -191,10 +191,11 @@ export default function AppEntry() {
             component={Orders}
             options={{
               tabBarButton: () => null,
-              headerShown: false,
+              headerShown: true,
               headerStyle: {
                 backgroundColor: "#17222D",
               },
+              headerTitle: i18n.t("orders"),
               headerTintColor: "white",
               headerTitleAlign: "center",
             }}
