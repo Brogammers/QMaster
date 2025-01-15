@@ -39,7 +39,7 @@ export default function Cart() {
       <SafeAreaView className="flex-1" edges={['top', 'bottom', 'left', 'right']}>
         <View className="px-6">
           <View className="flex-row justify-between items-center py-4">
-            <TouchableOpacity onPress={() => linkTo('Store')}>
+            <TouchableOpacity onPress={() => linkTo('/Product')}>
               <MaterialCommunityIcons 
                 name="arrow-left" 
                 size={24} 

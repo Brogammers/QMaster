@@ -5,11 +5,20 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCart } from '@/ctx/CartContext';
+
+type RootStackParamList = {
+  Partner: undefined;
+  Cart: undefined;
+  Product: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function Store() {
   const { isDarkMode } = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const { items } = useCart();
   const [selectedCategory, setSelectedCategory] = React.useState('All');
 
