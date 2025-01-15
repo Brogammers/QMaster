@@ -94,15 +94,15 @@ export default function Cart() {
                         : isDarkMode ? '#FFFFFF70' : '#17222D70'
                     }
                   />
-                  <View className="ml-3">
-                    <Text className={`font-semibold ${
+                  <View className="flex-1 ml-3">
+                    <Text className={`text-lg font-bold ${
                       selectedLocation === location.id
                         ? 'text-white'
                         : isDarkMode ? 'text-white' : 'text-coal-black'
                     }`}>
-                      {location.name}
+                      {location.label}
                     </Text>
-                    <Text className={`text-sm ${
+                    <Text className={`text-base ${
                       selectedLocation === location.id
                         ? 'text-white/80'
                         : isDarkMode ? 'text-white/50' : 'text-slate-grey'

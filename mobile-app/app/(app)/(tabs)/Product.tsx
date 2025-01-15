@@ -144,28 +144,39 @@ export default function Product() {
               </Text>
             </TouchableOpacity>
           ) : (
-            <View className="flex-row items-center justify-between bg-slate-grey/10 rounded-xl p-2">
-              <TouchableOpacity 
-                className={`w-14 h-14 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}
-                onPress={() => updateQuantity(product.id, Math.max(0, cartQuantity - 1))}
-              >
-                <Text className="text-white text-center font-bold text-2xl">−</Text>
-              </TouchableOpacity>
-              <View className="items-center">
-                <Text className={`text-sm ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
-                  Quantity
-                </Text>
-                <Text className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
-                  {cartQuantity}
-                </Text>
+            <>
+              <View className="flex-row items-center justify-between bg-slate-grey/10 rounded-xl p-2">
+                <TouchableOpacity 
+                  className={`w-14 h-14 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}
+                  onPress={() => updateQuantity(product.id, Math.max(0, cartQuantity - 1))}
+                >
+                  <Text className="text-white text-center font-bold text-2xl">−</Text>
+                </TouchableOpacity>
+                <View className="items-center">
+                  <Text className={`text-sm ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
+                    Quantity
+                  </Text>
+                  <Text className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                    {cartQuantity}
+                  </Text>
+                </View>
+                <TouchableOpacity 
+                  className={`w-14 h-14 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}
+                  onPress={() => updateQuantity(product.id, cartQuantity + 1)}
+                >
+                  <Text className="text-white text-center font-bold text-2xl">+</Text>
+                </TouchableOpacity>
               </View>
+
               <TouchableOpacity 
-                className={`w-14 h-14 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}
-                onPress={() => updateQuantity(product.id, cartQuantity + 1)}
+                className={`w-full py-4 rounded-xl mt-4 ${isDarkMode ? 'bg-slate-grey' : 'bg-slate-grey/10'}`}
+                onPress={() => navigation.navigate('Cart')}
               >
-                <Text className="text-white text-center font-bold text-2xl">+</Text>
+                <Text className={`text-center font-semibold text-lg ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
+                  View Cart
+                </Text>
               </TouchableOpacity>
-            </View>
+            </>
           )}
         </ScrollView>
       </SafeAreaView>
