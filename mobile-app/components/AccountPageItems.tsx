@@ -62,7 +62,7 @@ export default function AccountPageItems({ isDarkMode, onThemeToggle }: AccountP
     },
     {
       title: i18n.t('orders'),
-      icon: 'history',
+      icon: 'store',
       onPress: () => linkTo('/Orders'),
     },
     {
