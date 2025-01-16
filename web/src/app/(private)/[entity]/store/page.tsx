@@ -389,7 +389,6 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
     try {
       // Here you would typically send the data to your backend
       await onComplete();
-      router.push('/store/dashboard'); // Redirect to dashboard after completion
     } catch (error) {
       toast.error('Failed to complete store setup');
     }
