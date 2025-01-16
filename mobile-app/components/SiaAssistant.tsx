@@ -8,17 +8,105 @@ import {
   Modal,
   ScrollView,
   Platform,
-  Alert,
+  TextInput,
+  Image,
+  StatusBar,
+  Dimensions,
 } from 'react-native';
 import { useTheme } from "@/ctx/ThemeContext";
 import { FontAwesome5 } from '@expo/vector-icons';
-import Voice, { SpeechResultsEvent } from '@react-native-voice/voice';
+import { LinearGradient } from 'expo-linear-gradient';
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+const AnimatedFlare = ({ isDarkMode, initialPosition }: { isDarkMode: boolean; initialPosition?: { x: number; y: number } }) => {
+  const translateY = useRef(new Animated.Value(initialPosition?.y || 0)).current;
+  const translateX = useRef(new Animated.Value(initialPosition?.x || 0)).current;
+  const scale = useRef(new Animated.Value(1)).current;
+  const opacity = useRef(new Animated.Value(0.2)).current;
+
+  useEffect(() => {
+    const createAnimation = () => {
+      return Animated.parallel([
+        Animated.sequence([
+          Animated.timing(translateY, {
+            toValue: -150,
+            duration: 25000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(translateY, {
+            toValue: 150,
+            duration: 25000,
+            useNativeDriver: true,
+          }),
+        ]),
+        Animated.sequence([
+          Animated.timing(translateX, {
+            toValue: 150,
+            duration: 30000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(translateX, {
+            toValue: -150,
+            duration: 30000,
+            useNativeDriver: true,
+          }),
+        ]),
+        Animated.sequence([
+          Animated.timing(scale, {
+            toValue: 1.8,
+            duration: 27000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(scale, {
+            toValue: 1,
+            duration: 27000,
+            useNativeDriver: true,
+          }),
+        ]),
+        Animated.sequence([
+          Animated.timing(opacity, {
+            toValue: 0.4,
+            duration: 15000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(opacity, {
+            toValue: 0.2,
+            duration: 15000,
+            useNativeDriver: true,
+          }),
+        ]),
+      ]);
+    };
+
+    const animation = Animated.loop(createAnimation());
+    animation.start();
+
+    return () => animation.stop();
+  }, []);
+
+  return (
+    <Animated.View
+      style={[
+        styles.flare,
+        {
+          transform: [
+            { translateX },
+            { translateY },
+            { scale },
+          ],
+          opacity,
+          backgroundColor: isDarkMode 
+            ? Math.random() > 0.5 ? '#00FFFF10' : '#87CEEB10'
+            : Math.random() > 0.5 ? '#0077B610' : '#4682B410',
+        },
+      ]}
+    />
+  );
+};
 
 interface SiaResponse {
   message: string;
-  voice_message?: string;
-  action?: string;
-  data?: any;
   suggestions: string[];
 }
 
@@ -28,162 +116,117 @@ interface SiaAssistantProps {
 }
 
 export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }) => {
-  const [isListening, setIsListening] = useState(false);
-  const [isHotwordListening, setIsHotwordListening] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [response, setResponse] = useState<SiaResponse | null>(null);
+  const [inputText, setInputText] = useState('');
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const { isDarkMode } = useTheme();
 
+  // Pulse animation effect
   useEffect(() => {
-    // Initialize voice recognition
-    Voice.onSpeechResults = onSpeechResults;
-    Voice.onSpeechError = onSpeechError;
+    const pulseSequence = Animated.sequence([
+      Animated.timing(pulseAnim, {
+        toValue: 1.2,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(pulseAnim, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+    ]);
 
-    // Start listening for hotword when component mounts
-    startHotwordDetection();
-
-    return () => {
-      // Cleanup
-      Voice.destroy().then(Voice.removeAllListeners);
-    };
+    Animated.loop(pulseSequence).start();
   }, []);
 
-  const startHotwordDetection = async () => {
-    try {
-      await Voice.start('en-US');
-      setIsHotwordListening(true);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const onSpeechResults = (e: SpeechResultsEvent) => {
-    if (e.value) {
-      const transcript = e.value[0].toLowerCase();
-      if (transcript.includes('hey sia') || transcript.includes('hey saya')) {
-        // Stop hotword detection and start command listening
-        Voice.stop();
-        setIsHotwordListening(false);
-        handlePress();
-      } else if (!isHotwordListening) {
-        // Process the command
-        processCommand(transcript);
-        Voice.stop();
-        // Restart hotword detection
-        setTimeout(() => {
-          startHotwordDetection();
-        }, 1000);
-      }
-    }
-  };
-
-  const onSpeechError = (e: any) => {
-    console.error(e);
-    // Restart hotword detection if it fails
-    if (isHotwordListening) {
-      setTimeout(startHotwordDetection, 1000);
-    }
-  };
-
-  // Floating button animation
-  useEffect(() => {
-    if (isListening) {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.2,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-        ])
-      ).start();
-    } else {
-      pulseAnim.setValue(1);
-    }
-  }, [isListening]);
-
-  const handlePress = async () => {
-    setIsListening(true);
-    try {
-      await Voice.start('en-US');
-      // Remove the setTimeout and let the voice recognition handle the command
-    } catch (error) {
-      console.error('Error:', error);
-      setIsListening(false);
-    }
-  };
-
   const processCommand = async (command: string) => {
-    try {
-      const response = await fetch('http://localhost:9096/api/v1/mobile/assistant', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          command,
-          user_id: 'user123', // Get from auth
-          location: { lat: 30.0444, lng: 31.2357 }, // Get from location service
-        }),
-      });
-
-      const data: SiaResponse = await response.json();
-      setResponse(data);
-      setIsListening(false);
-
-    } catch (error) {
-      console.error('Error:', error);
-      setIsListening(false);
-    }
+    setResponse({
+      message: `You said: ${command}`,
+      suggestions: ["What's the wait time?", "How busy is it?", "When should I arrive?"],
+    });
+    setInputText('');
   };
 
   return (
     <>
       {/* Floating Sia Button */}
       <TouchableOpacity
-        style={[styles.floatingButton, { backgroundColor: isDarkMode ? '#0C1824' : '#D9D9D9' }]}
-        onPress={handlePress}
+        style={[styles.floatingButton, { backgroundColor: 'transparent' }]}
+        onPress={() => setShowModal(true)}
         activeOpacity={0.8}
       >
-        <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
-          <FontAwesome5 
-            name="robot" 
-            size={24} 
-            color={isDarkMode ? '#00FFFF' : '#0C1824'} 
+        <Animated.View 
+          style={[
+            styles.pulseContainer,
+            { transform: [{ scale: pulseAnim }] }
+          ]}
+        >
+          <Image 
+            source={require('../assets/images/Sia AI.png')}
+            style={styles.siaIcon}
           />
         </Animated.View>
       </TouchableOpacity>
 
       {/* Sia Assistant Modal */}
       <Modal
-        visible={isVisible}
-        animationType="slide"
+        visible={showModal}
+        animationType="fade"
         transparent
-        onRequestClose={onClose}
+        onRequestClose={() => setShowModal(false)}
       >
-        <View style={[styles.modalContainer, { backgroundColor: 'rgba(0,0,0,0.7)' }]}>
-          <View style={[styles.modalContent, { backgroundColor: isDarkMode ? '#0C1824' : '#D9D9D9' }]}>
-            {/* Header */}
-            <View style={styles.header}>
-              <Text style={[styles.title, { color: isDarkMode ? '#D9D9D9' : '#0C1824' }]}>Sia</Text>
-              <TouchableOpacity
-                onPress={onClose}
-                style={styles.closeButton}
-              >
-                <FontAwesome5 name="times" size={24} color={isDarkMode ? '#D9D9D9' : '#0C1824'} />
-              </TouchableOpacity>
-            </View>
+        <View style={[
+          styles.modalContainer,
+          { 
+            backgroundColor: isDarkMode 
+              ? 'rgba(12, 24, 36, 0.95)' 
+              : 'rgba(245, 245, 245, 0.95)' 
+          }
+        ]}>
+          <StatusBar translucent barStyle={isDarkMode ? "light-content" : "dark-content"} />
+          
+          {/* Animated Flares */}
+          <View style={StyleSheet.absoluteFill}>
+            <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: -100, y: -100 }} />
+            <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: 100, y: 100 }} />
+            <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: 0, y: 0 }} />
+            <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: -50, y: 50 }} />
+          </View>
 
+          {/* Background Gradient */}
+          {!isDarkMode && (
+            <LinearGradient
+              colors={['rgba(0, 119, 182, 0.1)', 'rgba(255, 255, 255, 0)']}
+              style={[StyleSheet.absoluteFill, { height: 250 }]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+            />
+          )}
+
+          {/* Close Button */}
+          <TouchableOpacity 
+            style={styles.closeButton}
+            onPress={() => setShowModal(false)}
+          >
+            <FontAwesome5 
+              name="times" 
+              size={20} 
+              color={isDarkMode ? '#FFF' : '#0C1824'} 
+            />
+          </TouchableOpacity>
+          
+          <View style={styles.contentContainer}>
             {/* Response Area */}
             <ScrollView style={styles.responseArea}>
               {response && (
                 <View style={styles.responseContainer}>
-                  <Text style={[styles.responseText, { color: isDarkMode ? '#D9D9D9' : '#0C1824' }]}>
+                  <Text style={[styles.responseText, { 
+                    color: isDarkMode ? '#D9D9D9' : '#0C1824',
+                    textShadowColor: 'rgba(0, 255, 255, 0.3)',
+                    textShadowOffset: { width: 0, height: 1 },
+                    textShadowRadius: 2,
+                  }]}>
                     {response.message}
                   </Text>
                   
@@ -192,10 +235,17 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                     {response.suggestions.map((suggestion, index) => (
                       <TouchableOpacity
                         key={index}
-                        style={[styles.suggestionButton, { backgroundColor: '#00FFFF' }]}
+                        style={[
+                          styles.suggestionButton, 
+                          { 
+                            backgroundColor: isDarkMode 
+                              ? 'rgba(0, 255, 255, 0.15)' 
+                              : 'rgba(12, 24, 36, 0.1)',
+                          }
+                        ]}
                         onPress={() => processCommand(suggestion)}
                       >
-                        <Text style={[styles.suggestionText, { color: '#0C1824' }]}>
+                        <Text style={[styles.suggestionText, { color: isDarkMode ? '#00FFFF' : '#0C1824' }]}>
                           {suggestion}
                         </Text>
                       </TouchableOpacity>
@@ -205,17 +255,41 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
               )}
             </ScrollView>
 
-            {/* Voice Input Button */}
-            <TouchableOpacity
-              style={[styles.voiceButton, { backgroundColor: '#00FFFF' }]}
-              onPress={handlePress}
-            >
-              <FontAwesome5 
-                name={isListening ? "stop" : "microphone"} 
-                size={24} 
-                color="#0C1824" 
-              />
-            </TouchableOpacity>
+            {/* Bottom Input Section */}
+            <View style={[styles.bottomSection, { marginBottom: Platform.OS === 'ios' ? 60 : 40 }]}>
+              <Animated.View 
+                style={[
+                  styles.pulseContainer,
+                  { transform: [{ scale: pulseAnim }] }
+                ]}
+              >
+                <Image 
+                  source={require('../assets/images/Sia AI.png')}
+                  style={styles.bottomSiaIcon}
+                />
+              </Animated.View>
+              
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      color: isDarkMode ? '#00FFFF' : '#0C1824',
+                      backgroundColor: isDarkMode 
+                        ? 'rgba(0, 255, 255, 0.08)' 
+                        : 'rgba(12, 24, 36, 0.08)',
+                      borderColor: isDarkMode ? '#00FFFF33' : '#0C182433',
+                      borderWidth: 1,
+                    }
+                  ]}
+                  placeholder="Ask Sia anything..."
+                  placeholderTextColor={isDarkMode ? '#00FFFF77' : '#0C182477'}
+                  value={inputText}
+                  onChangeText={setInputText}
+                  onSubmitEditing={() => processCommand(inputText)}
+                />
+              </View>
+            </View>
           </View>
         </View>
       </Modal>
@@ -228,42 +302,36 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 20,
     bottom: Platform.OS === 'ios' ? 90 : 70,
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+  },
+  pulseContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 255, 255, 0.1)',
+  },
+  siaIcon: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
   },
   modalContainer: {
     flex: 1,
+  },
+  contentContainer: {
+    flex: 1,
     justifyContent: 'flex-end',
-  },
-  modalContent: {
-    height: '80%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  closeButton: {
-    padding: 5,
+    paddingBottom: Platform.OS === 'ios' ? 40 : 20,
   },
   responseArea: {
     flex: 1,
+    paddingHorizontal: 20,
   },
   responseContainer: {
     marginBottom: 20,
@@ -272,10 +340,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     marginBottom: 15,
+    textAlign: 'center',
   },
   suggestionsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'center',
     gap: 10,
   },
   suggestionButton: {
@@ -285,15 +355,56 @@ const styles = StyleSheet.create({
   },
   suggestionText: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '500',
   },
-  voiceButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+  bottomSection: {
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingBottom: 10,
+    marginTop: 'auto',
+  },
+  bottomSiaIcon: {
+    width: 45,
+    height: 45,
+    resizeMode: 'contain',
+    marginBottom: 25,
+  },
+  inputContainer: {
+    width: '100%',
+    maxWidth: 500,
+    marginHorizontal: 'auto',
+    paddingTop: 15,
+  },
+  input: {
+    height: 42,
+    borderRadius: 21,
+    paddingHorizontal: 20,
+    fontSize: 16,
+    elevation: 3,
+    shadowColor: '#00FFFF',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 50 : 30,
+    right: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
-    marginTop: 20,
+    zIndex: 10,
+  },
+  flare: {
+    position: 'absolute',
+    width: SCREEN_WIDTH,
+    height: SCREEN_WIDTH,
+    borderRadius: SCREEN_WIDTH / 2,
+    opacity: 0.3,
+    left: -SCREEN_WIDTH / 2,
+    top: -SCREEN_WIDTH / 2,
   },
 }); 
