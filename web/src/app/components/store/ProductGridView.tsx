@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Trash2 } from 'lucide-react';
 
 interface Product {
@@ -28,32 +28,6 @@ export default function ProductGridView({
 }: ProductGridViewProps) {
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
-  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
-
-  // Clear the timer when component unmounts
-  useEffect(() => {
-    return () => {
-      if (longPressTimer) {
-        clearTimeout(longPressTimer);
-      }
-    };
-  }, [longPressTimer]);
-
-  const handleMouseDown = () => {
-    if (mode === 'manage') {
-      const timer = setTimeout(() => {
-        setIsDeleteMode(true);
-      }, 500); // 500ms for long press
-      setLongPressTimer(timer);
-    }
-  };
-
-  const handleMouseUp = () => {
-    if (longPressTimer) {
-      clearTimeout(longPressTimer);
-      setLongPressTimer(null);
-    }
-  };
 
   const handleDeleteSelected = () => {
     if (onDelete && selectedProducts.length > 0) {
@@ -80,12 +54,10 @@ export default function ProductGridView({
     <div className="space-y-4">
       {/* Delete mode header */}
       {isDeleteMode && (
-        <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-black/10 sticky top-0 z-50">
-          <div className="flex items-center gap-2">
-            <span className="font-medium">
-              {selectedProducts.length} items selected
-            </span>
-          </div>
+        <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-black/10">
+          <span className="font-medium">
+            {selectedProducts.length} items selected
+          </span>
           <div className="flex gap-4">
             <Button
               variant="outline"
@@ -117,9 +89,6 @@ export default function ProductGridView({
               mode === 'manage' ? 'cursor-pointer' : ''
             }`}
             {...vibrationAnimation}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
             onClick={() => {
               if (mode === 'manage' && isDeleteMode) {
                 if (selectedProducts.includes(product.id)) {
@@ -156,10 +125,28 @@ export default function ProductGridView({
               />
             </div>
             <div>
-              <h3 className="font-medium">{product.name}</h3>
-              <p className="text-lg font-bold text-baby-blue">
-                EGP {product.price}
-              </p>
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-medium">{product.name}</h3>
+                  <p className="text-lg font-bold text-baby-blue">
+                    EGP {product.price}
+                  </p>
+                </div>
+                {mode === 'manage' && !isDeleteMode && (
+                  <Button
+                    variant="ghost"
+                    className="!p-2 !min-w-0 text-red-500 hover:bg-red-500/5 hover:text-red-600"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onDelete) {
+                        onDelete(product.id);
+                      }
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
               <div className="flex items-center gap-2 mt-2">
                 <span
                   className={`px-2 py-1 rounded-full text-xs ${

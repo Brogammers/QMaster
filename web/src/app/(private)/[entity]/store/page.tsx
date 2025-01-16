@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Entity from "../page";
 import QueueModal from "@/app/shared/QueueModal";
-import { Store, ShoppingBag, Package, DollarSign, Users } from "lucide-react";
+import { Store, ShoppingBag, Package, DollarSign, Users, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
@@ -1176,6 +1176,7 @@ const StoreDashboardView = () => {
   const [showProductPreview, setShowProductPreview] = useState(false);
   const [isManagingProducts, setIsManagingProducts] = useState(false);
   const [showProductGrid, setShowProductGrid] = useState(false);
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
 
   // Mock data for testing
   const mockAnalytics = {
@@ -1254,6 +1255,14 @@ const StoreDashboardView = () => {
             {isManagingProducts ? (
               <>
                 <Button
+                variant="outline"
+                className="border-2 border-red-500 text-red-500 hover:bg-red-500/5 bg-transparent"
+                onClick={() => setIsDeleteMode(true)}
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete Products
+              </Button>
+              <Button
                 variant="outline"
                 className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
                 onClick={() => {
