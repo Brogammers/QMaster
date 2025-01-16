@@ -24,6 +24,7 @@ import ProductManagementModal from "@/app/components/store/ProductManagementModa
 import ExportProductsModal from "@/app/components/store/ExportProductsModal";
 import StorePreviewModal from "@/app/components/store/StorePreviewModal";
 import ProductPreviewModal from "@/app/components/store/ProductPreviewModal";
+import ProductGridView from '@/app/components/store/ProductGridView';
 
 const StoreStatus = {
   NOT_REQUESTED: "NOT_REQUESTED",
@@ -1167,12 +1168,14 @@ const mockGraphData = {
 };
 
 const StoreDashboardView = () => {
-  // Add state for modals
+  // Add state for modals and views
   const [showProductManagement, setShowProductManagement] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [showStorePreview, setShowStorePreview] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [showProductPreview, setShowProductPreview] = useState(false);
+  const [isManagingProducts, setIsManagingProducts] = useState(false);
+  const [showProductGrid, setShowProductGrid] = useState(false);
 
   // Mock data for testing
   const mockAnalytics = {
@@ -1233,6 +1236,66 @@ const StoreDashboardView = () => {
       image: "https://via.placeholder.com/150",
     },
   ];
+
+  const handleDeleteProduct = (productId: number) => {
+    // Here you would typically make an API call to delete the product
+    console.log('Deleting product:', productId);
+    toast.success('Product deleted successfully!');
+  };
+
+  if (showProductGrid) {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-semibold">
+            {isManagingProducts ? 'Manage Products' : 'Store Products'}
+          </h2>
+          <div className="flex gap-4">
+            {isManagingProducts ? (
+              <>
+                <Button
+                  variant="outline"
+                  className="border-2 hover:bg-white/5"
+                  onClick={() => {
+                    setIsManagingProducts(false);
+                    setShowProductGrid(false);
+                  }}
+                >
+                  Done
+                </Button>
+                <Button
+                  className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+                  onClick={() => setShowProductManagement(true)}
+                >
+                  Add Product
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="outline"
+                className="border-2 hover:bg-white/5"
+                onClick={() => setShowProductGrid(false)}
+              >
+                Back to Dashboard
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <ProductGridView
+          products={mockInventory}
+          mode={isManagingProducts ? 'manage' : 'view'}
+          onDelete={handleDeleteProduct}
+          onProductClick={(product) => {
+            if (!isManagingProducts) {
+              setSelectedProduct(product);
+              setShowProductPreview(true);
+            }
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <DragDropContext onDragEnd={() => {}}>
@@ -1509,64 +1572,14 @@ const StoreDashboardView = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {mockInventory.map((product) => (
-              <div key={product.id} className="border rounded-xl p-4 space-y-4">
-                <div className="aspect-square rounded-lg overflow-hidden bg-gray-50">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div>
-                  <h3 className="font-medium">{product.name}</h3>
-                  <p className="text-black/70">EGP {product.price}</p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs ${
-                        product.status === "in_stock"
-                          ? "bg-green-100 text-green-700"
-                          : product.status === "low_stock"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {product.status === "in_stock"
-                        ? "In Stock"
-                        : product.status === "low_stock"
-                        ? "Low Stock"
-                        : "Out of Stock"}
-                    </span>
-                    <span className="text-sm text-black/50">
-                      {product.stock} units
-                    </span>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    className="flex-1 border-2 hover:bg-white/5"
-                    onClick={() => {
-                      setSelectedProduct(product);
-                      setShowProductManagement(true);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                  <Button 
-                    className="flex-1 !bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
-                    onClick={() => {
-                      setSelectedProduct(product);
-                      setShowProductPreview(true);
-                    }}
-                  >
-                    Preview
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ProductGridView
+            products={mockInventory.slice(0, 3)}
+            mode="view"
+            onProductClick={(product) => {
+              setSelectedProduct(product);
+              setShowProductPreview(true);
+            }}
+          />
         </div>
 
         {/* Action Buttons */}
@@ -1574,13 +1587,19 @@ const StoreDashboardView = () => {
           <Button 
             variant="outline" 
             className="border-2 hover:bg-white/5"
-            onClick={() => setShowProductManagement(true)}
+            onClick={() => {
+              setIsManagingProducts(true);
+              setShowProductGrid(true);
+            }}
           >
             Manage Products
           </Button>
           <Button 
             className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
-            onClick={() => setShowStorePreview(true)}
+            onClick={() => {
+              setIsManagingProducts(false);
+              setShowProductGrid(true);
+            }}
           >
             View Store
           </Button>

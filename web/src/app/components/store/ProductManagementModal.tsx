@@ -1,239 +1,215 @@
-import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Package, Plus, Upload } from 'lucide-react';
-import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  status: 'in_stock' | 'low_stock' | 'out_of_stock';
-  image: string;
-}
+import { Package } from 'lucide-react';
+import { useState } from 'react';
 
 interface ProductManagementModalProps {
   isOpen: boolean;
   onClose: () => void;
-  product?: Product;
+  product?: any;
   mode: 'add' | 'edit';
-  onSubmit: (values: {
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    image: File | null;
-  }) => void;
+  onSubmit: (values: any) => void;
 }
-
-const productSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(3, 'Name must be at least 3 characters')
-    .required('Name is required'),
-  description: Yup.string()
-    .min(10, 'Description must be at least 10 characters')
-    .required('Description is required'),
-  price: Yup.number()
-    .min(0.01, 'Price must be greater than 0')
-    .required('Price is required'),
-  stock: Yup.number()
-    .min(0, 'Stock cannot be negative')
-    .required('Stock is required'),
-  image: Yup.mixed().required('Product image is required'),
-});
 
 export default function ProductManagementModal({
   isOpen,
   onClose,
   product,
   mode,
+  onSubmit,
 }: ProductManagementModalProps) {
-  const [previewImage, setPreviewImage] = useState<string | null>(
-    product?.image || null
-  );
+  const [formData, setFormData] = useState({
+    name: product?.name || '',
+    description: product?.description || '',
+    price: product?.price || '',
+    stock: product?.stock || '',
+    type: product?.type || 'physical',
+    image: null as File | null,
+  });
 
-  const handleSubmit = async (values: any) => {
-    // Here you would typically send the data to your backend
-    console.log('Submitting product:', values);
-    onClose();
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <Package className="w-5 h-5" />
             {mode === 'add' ? 'Add New Product' : 'Edit Product'}
           </DialogTitle>
         </DialogHeader>
 
-        <Formik
-          initialValues={{
-            name: product?.name || '',
-            description: product?.description || '',
-            price: product?.price || '',
-            stock: product?.stock || '',
-            image: null,
-          }}
-          validationSchema={productSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ values, errors, touched, handleChange, setFieldValue }) => (
-            <Form className="space-y-6">
-              <div className="space-y-4">
-                {/* Image Upload */}
-                <div className="flex justify-center">
-                  <div className="w-40 h-40 relative">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Image Upload */}
+          <div className="flex justify-center">
+            <div className="w-40 h-40 relative">
+              <div className="w-full h-full flex items-center justify-center border-2 border-dashed border-black/10 rounded-xl bg-white/5">
+                {formData.image || product?.image ? (
+                  <div className="relative w-full h-full">
+                    <img
+                      src={formData.image ? URL.createObjectURL(formData.image) : product?.image}
+                      alt="Product"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, image: null })}
+                      className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-center">
                     <input
                       type="file"
-                      id="image"
                       accept="image/*"
-                      className="hidden"
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
-                          setFieldValue('image', file);
-                          setPreviewImage(URL.createObjectURL(file));
+                          setFormData({ ...formData, image: file });
                         }
                       }}
+                      className="hidden"
+                      id="product-image"
                     />
                     <label
-                      htmlFor="image"
-                      className={`w-full h-full rounded-lg border-2 border-dashed flex flex-col items-center justify-center cursor-pointer
-                        ${
-                          previewImage
-                            ? ''
-                            : 'border-baby-blue hover:border-ocean-blue'
-                        }`}
+                      htmlFor="product-image"
+                      className="cursor-pointer flex flex-col items-center"
                     >
-                      {previewImage ? (
-                        <div className="relative w-full h-full">
-                          <img
-                            src={previewImage}
-                            alt="Preview"
-                            className="w-full h-full object-cover rounded-lg"
-                          />
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              setPreviewImage(null);
-                              setFieldValue('image', null);
-                            }}
-                            className="absolute -top-2 -right-2 !p-1 !min-w-0 rounded-full bg-red-500 hover:bg-red-600 text-white"
-                          >
-                            ×
-                          </Button>
-                        </div>
-                      ) : (
-                        <>
-                          <Upload className="w-8 h-8 text-baby-blue mb-2" />
-                          <span className="text-sm text-black/60">
-                            Upload Image
-                          </span>
-                        </>
-                      )}
+                      <Package className="w-12 h-12 text-black/50 mb-2" />
+                      <span className="text-sm text-black/50">Upload Image</span>
                     </label>
                   </div>
-                </div>
-
-                {/* Product Name */}
-                <div>
-                  <label className="block text-sm font-medium text-black/70 mb-1">
-                    Product Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={values.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 rounded-lg border border-black/10"
-                  />
-                  {touched.name && errors.name && (
-                    <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-                  )}
-                </div>
-
-                {/* Description */}
-                <div>
-                  <label className="block text-sm font-medium text-black/70 mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    name="description"
-                    value={values.description}
-                    onChange={handleChange}
-                    rows={4}
-                    className="w-full px-4 py-2 rounded-lg border border-black/10"
-                  />
-                  {touched.description && errors.description && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.description}
-                    </p>
-                  )}
-                </div>
-
-                {/* Price and Stock */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-black/70 mb-1">
-                      Price (EGP)
-                    </label>
-                    <input
-                      type="number"
-                      name="price"
-                      value={values.price}
-                      onChange={handleChange}
-                      min="0"
-                      step="0.01"
-                      className="w-full px-4 py-2 rounded-lg border border-black/10"
-                    />
-                    {touched.price && errors.price && (
-                      <p className="text-red-500 text-sm mt-1">{errors.price}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-black/70 mb-1">
-                      Stock
-                    </label>
-                    <input
-                      type="number"
-                      name="stock"
-                      value={values.stock}
-                      onChange={handleChange}
-                      min="0"
-                      className="w-full px-4 py-2 rounded-lg border border-black/10"
-                    />
-                    {touched.stock && errors.stock && (
-                      <p className="text-red-500 text-sm mt-1">{errors.stock}</p>
-                    )}
-                  </div>
-                </div>
+                )}
               </div>
+            </div>
+          </div>
 
-              {/* Action Buttons */}
-              <div className="flex justify-end gap-4 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={onClose}
-                  className="border-2 hover:bg-white/5"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
-                >
-                  {mode === 'add' ? 'Add Product' : 'Save Changes'}
-                </Button>
+          {/* Product Type */}
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, type: 'physical' })}
+              className={`p-4 rounded-lg border-2 transition-colors ${
+                formData.type === 'physical'
+                  ? 'border-baby-blue bg-baby-blue/5'
+                  : 'border-black/10 hover:border-baby-blue/50'
+              }`}
+            >
+              <Package className={`w-8 h-8 mx-auto mb-2 ${
+                formData.type === 'physical' ? 'text-baby-blue' : 'text-black/50'
+              }`} />
+              <p className={`text-sm font-medium ${
+                formData.type === 'physical' ? 'text-baby-blue' : 'text-black/70'
+              }`}>
+                Physical Product
+              </p>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, type: 'digital' })}
+              className={`p-4 rounded-lg border-2 transition-colors ${
+                formData.type === 'digital'
+                  ? 'border-baby-blue bg-baby-blue/5'
+                  : 'border-black/10 hover:border-baby-blue/50'
+              }`}
+            >
+              <Package className={`w-8 h-8 mx-auto mb-2 ${
+                formData.type === 'digital' ? 'text-baby-blue' : 'text-black/50'
+              }`} />
+              <p className={`text-sm font-medium ${
+                formData.type === 'digital' ? 'text-baby-blue' : 'text-black/70'
+              }`}>
+                Digital Product
+              </p>
+            </button>
+          </div>
+
+          {/* Product Name */}
+          <div>
+            <label className="block text-sm font-medium text-black/70 mb-1">
+              Product Name
+            </label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="w-full px-4 py-2 rounded-lg border border-black/10"
+              placeholder="Enter product name"
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-medium text-black/70 mb-1">
+              Description
+            </label>
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              className="w-full px-4 py-2 rounded-lg border border-black/10 min-h-[100px]"
+              placeholder="Enter product description"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            {/* Price */}
+            <div>
+              <label className="block text-sm font-medium text-black/70 mb-1">
+                Price (EGP)
+              </label>
+              <input
+                type="number"
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg border border-black/10"
+                placeholder="0.00"
+                min="0"
+                step="0.01"
+              />
+            </div>
+
+            {/* Stock (only for physical products) */}
+            {formData.type === 'physical' && (
+              <div>
+                <label className="block text-sm font-medium text-black/70 mb-1">
+                  Stock
+                </label>
+                <input
+                  type="number"
+                  value={formData.stock}
+                  onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                  className="w-full px-4 py-2 rounded-lg border border-black/10"
+                  placeholder="0"
+                  min="0"
+                />
               </div>
-            </Form>
-          )}
-        </Formik>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex justify-end gap-4 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="border-2 hover:bg-white/5"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+            >
+              {mode === 'add' ? 'Add Product' : 'Save Changes'}
+            </Button>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   );
