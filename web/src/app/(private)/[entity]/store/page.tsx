@@ -248,6 +248,31 @@ const StoreSetupSchema = Yup.object().shape({
   }),
 });
 
+const egyptianBanks = [
+  'National Bank of Egypt',
+  'Banque Misr',
+  'Commercial International Bank',
+  'QNB Al Ahli',
+  'Arab African International Bank',
+  'HSBC Egypt',
+  'Credit Agricole Egypt',
+  'Arab Bank',
+  'Bank of Alexandria',
+  'Emirates NBD Egypt',
+  'Faisal Islamic Bank',
+  'Suez Canal Bank',
+  'Al Baraka Bank',
+  'Abu Dhabi Islamic Bank',
+  'Egyptian Gulf Bank',
+  'Export Development Bank',
+  'Housing and Development Bank',
+  'Industrial Development Bank',
+  'United Bank',
+  'Ahli United Bank',
+  'Misr Iran Development Bank',
+  'Blom Bank Egypt'
+];
+
 const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
@@ -291,9 +316,28 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
 
       const currentStepFields = stepFields[currentStep as keyof typeof stepFields];
       await formik.validateForm();
-      const stepErrors = currentStepFields.some(field => 
-        formik.errors[field] || (formik.touched[field] && !formik.values[field])
-      );
+
+      // Special handling for products step
+      if (currentStep === 1 && formik.values.products.length === 0) {
+        toast.error('Please add at least one product');
+        return;
+      }
+
+      const stepErrors = currentStepFields.some(field => {
+        const fieldError = formik.errors[field];
+        const fieldTouched = formik.touched[field];
+        const fieldValue = formik.values[field];
+
+        // For products, check if any product is incomplete
+        if (field === 'products' && fieldValue.length > 0) {
+          return fieldValue.some((product: any) => 
+            !product.name || !product.description || !product.price || !product.images?.length
+          );
+        }
+
+        // For other fields, check if there are errors or if the field is empty
+        return fieldError || (fieldTouched && !fieldValue);
+      });
 
       if (!stepErrors) {
         if (currentStep < 3) {
@@ -301,9 +345,12 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
         } else {
           await formik.submitForm();
         }
+      } else {
+        toast.error('Please fill in all required fields correctly');
       }
     } catch (error) {
       console.error('Validation error:', error);
+      toast.error('Please fix the validation errors before continuing');
     }
   };
 
@@ -545,23 +592,62 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
       case 2:
         return (
           <div className="space-y-6">
-                <div>
+            <div>
               <label className="block text-sm font-medium text-black/70 mb-1">
                 Account Name
               </label>
-                  <input
-                    type="text"
+              <input
+                type="text"
                 name="paymentInfo.accountName"
                 value={formik.values.paymentInfo.accountName}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="w-full px-4 py-2 rounded-lg border border-black/10"
+                placeholder="Enter account holder name"
               />
               {formik.touched.paymentInfo?.accountName && formik.errors.paymentInfo?.accountName && (
                 <p className="text-red-500 text-sm mt-1">{formik.errors.paymentInfo.accountName}</p>
               )}
             </div>
-            {/* Add other payment fields similarly */}
+
+            <div>
+              <label className="block text-sm font-medium text-black/70 mb-1">
+                IBAN
+              </label>
+              <input
+                type="text"
+                name="paymentInfo.iban"
+                value={formik.values.paymentInfo.iban}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className="w-full px-4 py-2 rounded-lg border border-black/10"
+                placeholder="Enter Egyptian IBAN (starts with EG)"
+              />
+              {formik.touched.paymentInfo?.iban && formik.errors.paymentInfo?.iban && (
+                <p className="text-red-500 text-sm mt-1">{formik.errors.paymentInfo.iban}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-black/70 mb-1">
+                Bank
+              </label>
+              <select
+                name="paymentInfo.bank"
+                value={formik.values.paymentInfo.bank}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className="w-full px-4 py-2 rounded-lg border border-black/10"
+              >
+                <option value="">Select a bank</option>
+                {egyptianBanks.map(bank => (
+                  <option key={bank} value={bank}>{bank}</option>
+                ))}
+              </select>
+              {formik.touched.paymentInfo?.bank && formik.errors.paymentInfo?.bank && (
+                <p className="text-red-500 text-sm mt-1">{formik.errors.paymentInfo.bank}</p>
+              )}
+            </div>
           </div>
         );
 
