@@ -5,7 +5,9 @@ import { DataTable } from '@/components/ui/data-table';
 import { columns, type StoreData } from './columns';
 import { FaPlus } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
-import { FileText, CheckCircle, XCircle, ChevronLeft, ChevronRight, ListFilter } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { FileText, CheckCircle, XCircle, ChevronLeft, ChevronRight, ListFilter, Download, Eye } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const initialData: StoreData[] = [
   {
@@ -37,7 +39,7 @@ const initialData: StoreData[] = [
   },
 ];
 
-// Mock pending requests data
+// Mock pending requests data with document URLs
 const pendingRequests = [
   {
     id: '1',
@@ -45,11 +47,11 @@ const pendingRequests = [
     category: 'Auto & Motorcycles',
     submissionDate: '2024-01-13',
     documents: [
-      { name: 'Commercial Registration', status: 'pending' },
-      { name: 'Tax Card', status: 'pending' },
-      { name: 'VAT Registration', status: 'pending' },
-      { name: 'National ID', status: 'pending' },
-      { name: 'Bank Account', status: 'pending' },
+      { name: 'Commercial Registration', status: 'pending', url: '/mock-docs/cr.pdf' },
+      { name: 'Tax Card', status: 'pending', url: '/mock-docs/tax.pdf' },
+      { name: 'VAT Registration', status: 'pending', url: '/mock-docs/vat.pdf' },
+      { name: 'National ID', status: 'pending', url: '/mock-docs/id.pdf' },
+      { name: 'Bank Account', status: 'pending', url: '/mock-docs/bank.pdf' },
     ],
   },
   {
@@ -58,11 +60,11 @@ const pendingRequests = [
     category: 'Electronics',
     submissionDate: '2024-01-14',
     documents: [
-      { name: 'Commercial Registration', status: 'pending' },
-      { name: 'Tax Card', status: 'pending' },
-      { name: 'VAT Registration', status: 'pending' },
-      { name: 'National ID', status: 'pending' },
-      { name: 'Bank Account', status: 'pending' },
+      { name: 'Commercial Registration', status: 'pending', url: '/mock-docs/cr2.pdf' },
+      { name: 'Tax Card', status: 'pending', url: '/mock-docs/tax2.pdf' },
+      { name: 'VAT Registration', status: 'pending', url: '/mock-docs/vat2.pdf' },
+      { name: 'National ID', status: 'pending', url: '/mock-docs/id2.pdf' },
+      { name: 'Bank Account', status: 'pending', url: '/mock-docs/bank2.pdf' },
     ],
   },
 ];
@@ -71,6 +73,8 @@ export default function StorePage() {
   const [isDarkMode] = useState(false);
   const [currentRequestIndex, setCurrentRequestIndex] = useState(0);
   const [showAllRequests, setShowAllRequests] = useState(false);
+  const [showDocumentPreview, setShowDocumentPreview] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<any>(null);
 
   const currentRequest = pendingRequests[currentRequestIndex];
 
@@ -82,6 +86,20 @@ export default function StorePage() {
 
   const handlePrevious = () => {
     setCurrentRequestIndex((prev) => prev > 0 ? prev - 1 : prev);
+  };
+
+  const handleDocumentAction = (action: 'approve' | 'reject') => {
+    if (!selectedDocument) return;
+
+    // Here you would typically make an API call to update the document status
+    toast.success(`Document ${action === 'approve' ? 'approved' : 'rejected'} successfully`);
+    setShowDocumentPreview(false);
+  };
+
+  const handleDownloadAll = (request: typeof pendingRequests[0]) => {
+    // Here you would typically handle the batch download of all documents
+    console.log('Downloading all documents for:', request.partnerName);
+    toast.success('Downloading all documents...');
   };
 
   return (
@@ -162,16 +180,26 @@ export default function StorePage() {
                 <p>Submitted: {currentRequest.submissionDate}</p>
               </div>
             </div>
-            <Button
-              className="bg-crystal-blue hover:bg-opacity-90 text-black"
-              onClick={() => {
-                // Handle document review
-                console.log('Reviewing documents for:', currentRequest.partnerName);
-              }}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              Review Documents
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                className="border-slate-200"
+                onClick={() => handleDownloadAll(currentRequest)}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download All
+              </Button>
+              <Button
+                className="bg-crystal-blue hover:bg-opacity-90 text-black"
+                onClick={() => {
+                  setSelectedDocument(currentRequest.documents[0]);
+                  setShowDocumentPreview(true);
+                }}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Review Documents
+              </Button>
+            </div>
           </div>
           
           <div className="grid grid-cols-5 gap-4">
@@ -180,7 +208,11 @@ export default function StorePage() {
                 key={doc.name}
                 className={`p-4 rounded-lg border ${
                   isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'
-                }`}
+                } cursor-pointer hover:border-crystal-blue transition-colors`}
+                onClick={() => {
+                  setSelectedDocument(doc);
+                  setShowDocumentPreview(true);
+                }}
               >
                 <div className="flex items-center justify-between mb-2">
                   <FileText className="w-4 h-4 text-slate-400" />
@@ -194,11 +226,129 @@ export default function StorePage() {
                 </div>
                 <p className="text-sm font-medium">{doc.name}</p>
                 <p className="text-xs text-slate-500 capitalize">{doc.status}</p>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full mt-2 h-8"
+                >
+                  <Eye className="w-4 h-4 mr-2" />
+                  Preview
+                </Button>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      {/* View All Requests Modal */}
+      <Dialog open={showAllRequests} onOpenChange={setShowAllRequests}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>All Pending Store Requests</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-6">
+            {pendingRequests.map((request) => (
+              <div
+                key={request.id}
+                className="p-6 border border-slate-200 rounded-lg hover:border-crystal-blue transition-colors"
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="text-lg font-medium">{request.partnerName}</h3>
+                    <div className="text-sm text-slate-500 space-y-1">
+                      <p>Category: {request.category}</p>
+                      <p>Submitted: {request.submissionDate}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      className="border-slate-200"
+                      onClick={() => handleDownloadAll(request)}
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download All
+                    </Button>
+                    <Button
+                      className="bg-crystal-blue hover:bg-opacity-90 text-black"
+                      onClick={() => {
+                        setCurrentRequestIndex(pendingRequests.indexOf(request));
+                        setShowAllRequests(false);
+                      }}
+                    >
+                      Review
+                    </Button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-5 gap-4">
+                  {request.documents.map((doc) => (
+                    <div
+                      key={doc.name}
+                      className="p-3 rounded-lg border border-slate-200 bg-slate-50"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <FileText className="w-4 h-4 text-slate-400" />
+                        {doc.status === 'approved' ? (
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                        ) : doc.status === 'rejected' ? (
+                          <XCircle className="w-4 h-4 text-red-500" />
+                        ) : (
+                          <div className="w-2 h-2 rounded-full bg-yellow-400" />
+                        )}
+                      </div>
+                      <p className="text-sm font-medium truncate">{doc.name}</p>
+                      <p className="text-xs text-slate-500 capitalize">{doc.status}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Document Preview Modal */}
+      <Dialog open={showDocumentPreview} onOpenChange={setShowDocumentPreview}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Document Preview - {selectedDocument?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {/* Document Preview */}
+            <div className="aspect-[4/3] bg-slate-100 rounded-lg overflow-hidden">
+              <iframe
+                src={selectedDocument?.url}
+                className="w-full h-full"
+                title={selectedDocument?.name}
+              />
+            </div>
+            {/* Action Buttons */}
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setShowDocumentPreview(false)}
+              >
+                Close
+              </Button>
+              <Button
+                variant="outline"
+                className="border-red-500 text-red-500 hover:bg-red-50"
+                onClick={() => handleDocumentAction('reject')}
+              >
+                <XCircle className="w-4 h-4 mr-2" />
+                Reject
+              </Button>
+              <Button
+                className="bg-green-500 text-white hover:bg-green-600"
+                onClick={() => handleDocumentAction('approve')}
+              >
+                <CheckCircle className="w-4 h-4 mr-2" />
+                Approve
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 } 
