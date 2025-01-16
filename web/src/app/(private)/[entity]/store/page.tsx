@@ -7,6 +7,9 @@ import { Store, ShoppingBag, Package, DollarSign, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import { useRouter } from 'next/navigation';
 
 const StoreStatus = {
   NOT_REQUESTED: 'NOT_REQUESTED',
@@ -33,6 +36,10 @@ interface SetupStep {
 
 interface StoreRequestViewProps {
   onRequest: () => void;
+}
+
+interface FileWithPreview extends File {
+  preview?: string;
 }
 
 const requiredDocuments = [
@@ -172,477 +179,414 @@ const StorePendingView = () => (
   </div>
 );
 
+const StoreSetupSchema = Yup.object().shape({
+  logo: Yup.mixed<FileWithPreview>()
+    .required('Logo is required')
+    .test('fileType', 'Logo must be JPG or PNG format', (value) => {
+      if (!value) return false;
+      return ['image/jpeg', 'image/png'].includes(value.type);
+    })
+    .test('fileSize', 'Logo must be less than 5MB', (value) => {
+      if (!value) return false;
+      return value.size <= 5 * 1024 * 1024;
+    }),
+  products: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string()
+        .min(3, 'Name must be at least 3 characters')
+        .required('Name is required'),
+      description: Yup.string()
+        .min(10, 'Description must be at least 10 characters')
+        .required('Description is required'),
+      price: Yup.number()
+        .min(0.01, 'Price must be greater than 0')
+        .required('Price is required'),
+      type: Yup.string()
+        .oneOf(['physical', 'digital'], 'Invalid product type')
+        .required('Product type is required'),
+      stock: Yup.number()
+        .when('type', {
+          is: 'physical',
+          then: (schema) => schema.min(1, 'Stock must be greater than 0 for physical products'),
+          otherwise: (schema) => schema.min(0),
+        }),
+      images: Yup.array()
+        .min(1, 'At least one image is required')
+        .required('Product image is required'),
+    })
+  ).min(1, 'At least one product is required'),
+  paymentInfo: Yup.object().shape({
+    accountName: Yup.string()
+      .min(3, 'Account name must be at least 3 characters')
+      .required('Account name is required'),
+    iban: Yup.string()
+      .matches(/^EG\d{27}$/, 'Invalid Egyptian IBAN format')
+      .required('IBAN is required'),
+    bank: Yup.string()
+      .required('Bank selection is required'),
+  }),
+  shippingInfo: Yup.object().shape({
+    courierType: Yup.string()
+      .oneOf(['self', 'outsourced'], 'Invalid courier type')
+      .required('Delivery method is required'),
+    courierCompany: Yup.string()
+      .when('courierType', {
+        is: 'outsourced',
+        then: (schema) => schema.required('Courier company is required'),
+      }),
+    averageDeliveryTime: Yup.string()
+      .matches(/^\d+-\d+$/, 'Must be in format x-y')
+      .test('valid-range', 'First number must be less than second', (value) => {
+        if (!value) return false;
+        const [first, second] = value.split('-').map(Number);
+        return first < second;
+      })
+      .required('Delivery time is required'),
+    termsAccepted: Yup.boolean()
+      .oneOf([true], 'You must accept the terms')
+      .required('You must accept the terms'),
+  }),
+});
+
 const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
-  const [setupSteps, setSetupSteps] = useState<SetupStep[]>([
+  const [showGuide, setShowGuide] = useState(true);
+
+  const setupSteps = [
     {
       id: 'branding',
       title: 'Store Branding',
-      description: 'Upload your logo and choose your store theme colors',
-      isCompleted: false
+      description: 'Upload your store logo',
+      isCompleted: false,
     },
     {
       id: 'products',
       title: 'Add Products',
-      description: 'Add your first products with images, prices, and inventory',
-      isCompleted: false
+      description: 'Add your first product',
+      isCompleted: false,
     },
     {
       id: 'payment',
       title: 'Payment Setup',
-      description: 'Configure your payment methods and bank account',
-      isCompleted: false
+      description: 'Set up your payment information',
+      isCompleted: false,
     },
     {
       id: 'shipping',
       title: 'Shipping Options',
-      description: 'Set up your shipping zones and delivery methods',
-      isCompleted: false
+      description: 'Configure your shipping options',
+      isCompleted: false,
+    },
+  ];
+
+  const validateStep = async (formik: any) => {
+    try {
+      const stepFields = {
+        0: ['logo'],
+        1: ['products'],
+        2: ['paymentInfo'],
+        3: ['shippingInfo'],
+      } as const;
+
+      const currentStepFields = stepFields[currentStep as keyof typeof stepFields];
+      await formik.validateForm();
+      const stepErrors = currentStepFields.some(field => 
+        formik.errors[field] || (formik.touched[field] && !formik.values[field])
+      );
+
+      if (!stepErrors) {
+        if (currentStep < 3) {
+          setCurrentStep(currentStep + 1);
+        } else {
+          await formik.submitForm();
+        }
+      }
+    } catch (error) {
+      console.error('Validation error:', error);
     }
-  ]);
-
-  const [showGuide, setShowGuide] = useState(true);
-  const [logo, setLogo] = useState<File | null>(null);
-  const [products, setProducts] = useState<Array<{
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    type: 'physical' | 'digital';
-    stock: number;
-    images: File[];
-  }>>([]);
-  const [paymentInfo, setPaymentInfo] = useState({
-    accountName: '',
-    iban: '',
-    bank: '',
-  });
-  const [shippingInfo, setShippingInfo] = useState({
-    courierType: 'self' as 'self' | 'outsourced',
-    courierCompany: '',
-    averageDeliveryTime: '',
-    termsAccepted: false
-  });
-
-  const egyptianBanks = [
-    'National Bank of Egypt',
-    'Banque Misr',
-    'Commercial International Bank',
-    'QNB Al Ahli',
-    'Arab African International Bank',
-    'HSBC Egypt',
-    'Credit Agricole Egypt',
-    'Arab Bank',
-    'Bank of Alexandria',
-    'Emirates NBD Egypt'
-  ];
-
-  const courierCompanies = [
-    'Aramex',
-    'DHL Express',
-    'FedEx Express',
-    'UPS',
-    'Egypt Post',
-    'Bosta',
-    'R2S',
-    'Mylerz',
-    'EGEX',
-    'Fetchr'
-  ];
-
-  const handleStepComplete = (stepId: string) => {
-    setSetupSteps(steps => 
-      steps.map(step => 
-        step.id === stepId ? { ...step, isCompleted: true } : step
-      )
-    );
-    setCurrentStep(curr => Math.min(curr + 1, setupSteps.length - 1));
   };
 
-  const allStepsCompleted = setupSteps.every(step => step.isCompleted);
+  const handleSubmit = async (values: any) => {
+    try {
+      // Here you would typically send the data to your backend
+      await onComplete();
+      router.push('/store/dashboard'); // Redirect to dashboard after completion
+    } catch (error) {
+      toast.error('Failed to complete store setup');
+    }
+  };
 
-  const renderCurrentStep = () => {
-    switch (setupSteps[currentStep].id) {
-      case 'branding':
+  const renderCurrentStep = (formik: any) => {
+    switch (currentStep) {
+      case 0:
         return (
           <div className="space-y-6">
-            <div className="p-6 bg-white rounded-2xl shadow-sm border border-black/10">
-              <h3 className="text-lg font-semibold mb-4 text-black">Store Logo</h3>
-              <div className="flex items-center space-x-4">
-                {logo ? (
-                  <div className="w-32 h-32 rounded-lg overflow-hidden">
-                    <img 
-                      src={URL.createObjectURL(logo)} 
+            <div className="flex flex-col items-center justify-center border-2 border-dashed border-black/10 rounded-xl p-8">
+              {formik.values.logo ? (
+                <div className="relative">
+                  <img
+                    src={URL.createObjectURL(formik.values.logo)}
                       alt="Store logo" 
-                      className="w-full h-full object-cover"
-                    />
+                    className="w-32 h-32 object-cover rounded-lg"
+                  />
+                  <Button
+                    onClick={() => formik.setFieldValue('logo', null)}
+                    className="absolute -top-2 -right-2 !p-1 !min-w-0 rounded-full bg-red-500 hover:bg-red-600 text-white"
+                  >
+                    ×
+                  </Button>
                   </div>
                 ) : (
-                  <div className="w-32 h-32 rounded-lg border-2 border-dashed border-black/30 flex items-center justify-center">
-                    <p className="text-sm text-black/70">No logo uploaded</p>
-                  </div>
-                )}
-                <div className="space-y-2">
-                  <label className="cursor-pointer px-4 py-2 rounded-lg bg-baby-blue hover:bg-ocean-blue transition-colors text-white">
-                    Upload Logo
+                <div className="text-center">
                     <input
                       type="file"
-                      accept="image/*"
-                      onChange={(e) => setLogo(e.target.files?.[0] || null)}
+                    accept="image/jpeg,image/png"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        formik.setFieldValue('logo', file);
+                      }
+                    }}
                       className="hidden"
-                    />
+                    id="logo-upload"
+                  />
+                  <label
+                    htmlFor="logo-upload"
+                    className="cursor-pointer inline-flex flex-col items-center"
+                  >
+                    <Store className="w-12 h-12 text-black/50 mb-2" />
+                    <span className="text-sm text-black/50">Click to upload logo</span>
                   </label>
-                  <p className="text-sm text-white/50">Recommended size: 512x512px</p>
                 </div>
-              </div>
+              )}
             </div>
-            <Button
-              onClick={() => handleStepComplete('branding')}
-              disabled={!logo}
-              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
-            >
-              Continue
-            </Button>
+            {formik.touched.logo && formik.errors.logo && (
+              <p className="text-red-500 text-sm">{formik.errors.logo}</p>
+            )}
           </div>
         );
 
-      case 'products':
+      case 1:
         return (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-4">
-              {products.map((product, index) => (
-                <div key={product.id} className="p-4 bg-white rounded-xl shadow-sm border border-black/10">
-                  <div className="flex justify-between items-start mb-4">
-                    <h4 className="text-lg font-semibold text-black">Product {index + 1}</h4>
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setProducts(products.filter(p => p.id !== product.id));
+            {formik.values.products.map((product: any, index: number) => (
+              <div key={index} className="border rounded-xl p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-black/70 mb-1">
+                    Product Name
+                  </label>
+                  <input
+                    type="text"
+                    name={`products.${index}.name`}
+                    value={product.name}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className="w-full px-4 py-2 rounded-lg border border-black/10"
+                  />
+                  {formik.touched.products?.[index]?.name && formik.errors.products?.[index]?.name && (
+                    <p className="text-red-500 text-sm mt-1">{formik.errors.products[index].name}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-black/70 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    name={`products.${index}.description`}
+                    value={product.description}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className="w-full px-4 py-2 rounded-lg border border-black/10 min-h-[100px]"
+                  />
+                  {formik.touched.products?.[index]?.description && formik.errors.products?.[index]?.description && (
+                    <p className="text-red-500 text-sm mt-1">{formik.errors.products[index].description}</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-black/70 mb-1">
+                      Price (EGP)
+                    </label>
+                    <input
+                      type="text"
+                      name={`products.${index}.price`}
+                      value={product.price}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/[^0-9.]/g, '');
+                        formik.setFieldValue(`products.${index}.price`, value);
                       }}
-                      className="text-red-500 border-red-500 hover:bg-red-500/10"
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                  {/* Product form fields */}
-                  <div className="space-y-4 divide-y divide-white/10">
-                    <div>
-                      <label className="block text-base text-black font-semibold mb-2">Product Name</label>
-                      <input
-                        type="text"
-                        placeholder="Product name"
-                        value={product.name}
-                        onChange={(e) => {
-                          const newProducts = [...products];
-                          newProducts[index].name = e.target.value;
-                          setProducts(newProducts);
-                        }}
-                        className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-base text-black font-semibold mb-2">Product Description</label>
-                      <textarea
-                        placeholder="Product description"
-                        value={product.description}
-                        onChange={(e) => {
-                          const newProducts = [...products];
-                          newProducts[index].description = e.target.value;
-                          setProducts(newProducts);
-                        }}
-                        className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                      />
-                    </div>
-                    <div className="flex space-x-4">
-                      <div>
-                        <label className="block text-base text-black font-semibold mb-2">Price</label>
-                        <div className="relative">
-                          <span className="absolute left-2 top-1/2 -translate-y-1/2 text-black/50">EGP</span>
-                          <input
-                            type="text"
-                            placeholder="0.00"
-                            value={product.price === 0 ? "0.00" : product.price.toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })}
-                            onChange={(e) => {
-                              const cursorPosition = e.target.selectionStart || 0;
-                              const oldValue = e.target.value;
-                              const newProducts = [...products];
-                              // Remove non-numeric characters and convert to number
-                              const value = e.target.value.replace(/[^0-9.]/g, '');
-                              const numericValue = parseFloat(value) || 0;
-                              newProducts[index].price = numericValue;
-                              setProducts(newProducts);
-                              // Wait for re-render then restore cursor position
-                              requestAnimationFrame(() => {
-                                const newValue = numericValue === 0 ? "0.00" : numericValue.toLocaleString('en-US', {
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2
-                                });
-                                const newLength = newValue.length;
-                                const oldLength = oldValue.length;
-                                const newPosition = Math.max(0, Math.min(cursorPosition + (newLength - oldLength), newLength));
-                                e.target.setSelectionRange(newPosition, newPosition);
-                              });
-                            }}
-                            className="w-full p-2 pl-12 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                          />
-                        </div>
-                      </div>
-                      <select
-                        value={product.type}
-                        onChange={(e) => {
-                          const newProducts = [...products];
-                          newProducts[index].type = e.target.value as 'physical' | 'digital';
-                          setProducts(newProducts);
-                        }}
-                        className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                      >
-                        <option value="physical">Physical Product</option>
-                        <option value="digital">Digital Product</option>
-                      </select>
-                    </div>
-                    {product.type === 'physical' && (
-                      <div>
-                        <label className="block text-base text-black font-semibold mb-2">Stock Quantity</label>
-                        <input
-                          type="text"
-                          placeholder="0"
-                          value={product.stock.toString().padStart(1, '0')}
-                          onChange={(e) => {
-                            const cursorPosition = e.target.selectionStart || 0;
-                            const oldValue = e.target.value;
-                            const newProducts = [...products];
-                            // Remove non-numeric characters
-                            const value = e.target.value.replace(/[^0-9]/g, '');
-                            // Convert to number and ensure it's not negative
-                            const numericValue = Math.max(0, parseInt(value) || 0);
-                            newProducts[index].stock = numericValue;
-                            setProducts(newProducts);
-                            // Restore cursor position
-                            requestAnimationFrame(() => {
-                              const newLength = numericValue.toString().length;
-                              const oldLength = oldValue.length;
-                              const newPosition = Math.max(0, Math.min(cursorPosition + (newLength - oldLength), newLength));
-                              e.target.setSelectionRange(newPosition, newPosition);
-                            });
-                          }}
-                          className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                        />
-                      </div>
+                      onBlur={formik.handleBlur}
+                      className="w-full px-4 py-2 rounded-lg border border-black/10"
+                    />
+                    {formik.touched.products?.[index]?.price && formik.errors.products?.[index]?.price && (
+                      <p className="text-red-500 text-sm mt-1">{formik.errors.products[index].price}</p>
                     )}
-                    <div>
-                      <label className="cursor-pointer px-4 py-2 rounded-lg bg-baby-blue hover:bg-ocean-blue transition-colors text-white font-medium">
-                        {product.images.length > 0 ? 'Replace Image' : 'Add Product Image'}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-black/70 mb-1">
+                      Product Type
+                    </label>
+                    <select
+                      name={`products.${index}.type`}
+                      value={product.type}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="w-full px-4 py-2 rounded-lg border border-black/10"
+                    >
+                      <option value="physical">Physical Product</option>
+                      <option value="digital">Digital Product</option>
+                    </select>
+                  </div>
+                </div>
+
+                {product.type === 'physical' && (
+                  <div>
+                    <label className="block text-sm font-medium text-black/70 mb-1">
+                      Stock Quantity
+                    </label>
+                    <input
+                      type="text"
+                      name={`products.${index}.stock`}
+                      value={product.stock}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/[^0-9]/g, '');
+                        formik.setFieldValue(`products.${index}.stock`, value);
+                      }}
+                      onBlur={formik.handleBlur}
+                      className="w-full px-4 py-2 rounded-lg border border-black/10"
+                    />
+                    {formik.touched.products?.[index]?.stock && formik.errors.products?.[index]?.stock && (
+                      <p className="text-red-500 text-sm mt-1">{formik.errors.products[index].stock}</p>
+                    )}
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-medium text-black/70 mb-1">
+                    Product Image
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    {product.images?.length > 0 ? (
+                      <div className="relative">
+                        <img
+                          src={URL.createObjectURL(product.images[0])}
+                          alt={`Product ${index + 1}`}
+                          className="w-24 h-24 object-cover rounded-lg"
+                        />
+                        <Button
+                          type="button"
+                          onClick={() => formik.setFieldValue(`products.${index}.images`, [])}
+                          className="absolute -top-2 -right-2 !p-1 !min-w-0 rounded-full bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          ×
+                        </Button>
+                      </div>
+                    ) : (
+                      <div>
                         <input
                           type="file"
-                          accept="image/png,image/jpeg"
+                          id={`product-image-${index}`}
+                          accept="image/jpeg,image/png"
                           onChange={(e) => {
-                            const newProducts = [...products];
                             const file = e.target.files?.[0];
-                            if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
-                              newProducts[index].images = [file];
-                              setProducts(newProducts);
+                            if (file) {
+                              formik.setFieldValue(`products.${index}.images`, [file]);
                             }
                           }}
                           className="hidden"
                         />
-                      </label>
-                      {product.images.length > 0 && (
-                        <div className="mt-2">
-                          <div className="w-24 h-24 rounded overflow-hidden">
-                            <img
-                              src={URL.createObjectURL(product.images[0])}
-                              alt={`Product ${index + 1} image`}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                        <label
+                          htmlFor={`product-image-${index}`}
+                          className="cursor-pointer px-4 py-2 rounded-lg bg-baby-blue hover:bg-ocean-blue text-white transition-colors inline-block"
+                        >
+                          Upload Image
+                        </label>
+                      </div>
+                    )}
                   </div>
+                  {formik.touched.products?.[index]?.images && formik.errors.products?.[index]?.images && (
+                    <p className="text-red-500 text-sm mt-1">{formik.errors.products[index].images}</p>
+                  )}
                 </div>
-              ))}
-            </div>
+
+                <Button
+                  type="button"
+                  onClick={() => {
+                    const newProducts = [...formik.values.products];
+                    newProducts.splice(index, 1);
+                    formik.setFieldValue('products', newProducts);
+                  }}
+                  variant="outline"
+                  className="w-full border-2 border-red-500 text-red-500 hover:bg-red-500/10"
+                >
+                  Remove Product
+                </Button>
+              </div>
+            ))}
             <Button
-              variant="outline"
+              type="button"
               onClick={() => {
-                setProducts([
-                  ...products,
-                  {
-                    id: Date.now().toString(),
-                    name: '',
-                    description: '',
-                    price: 0,
-                    type: 'physical',
-                    stock: 0,
-                    images: []
-                  }
+                formik.setFieldValue('products', [
+                  ...formik.values.products,
+                  { name: '', description: '', price: '', type: 'physical', stock: '', images: [] },
                 ]);
               }}
-              className="w-full border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/10 font-medium"
+              className="w-full !bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
             >
-              Add Another Product
-            </Button>
-            <Button
-              onClick={() => handleStepComplete('products')}
-              disabled={products.length === 0}
-              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white w-full"
-            >
-              Continue
+              Add Product
             </Button>
           </div>
         );
 
-      case 'payment':
+      case 2:
         return (
           <div className="space-y-6">
-            <div className="p-6 bg-white rounded-2xl shadow-sm border border-black/10">
-              <h3 className="text-lg font-semibold mb-4 text-black">Payment Information</h3>
-              <div className="space-y-4 divide-y divide-white/10">
                 <div>
-                  <label className="block text-base text-black font-semibold mb-2">Account Name</label>
+              <label className="block text-sm font-medium text-black/70 mb-1">
+                Account Name
+              </label>
                   <input
                     type="text"
-                    value={paymentInfo.accountName}
-                    onChange={(e) => setPaymentInfo({ ...paymentInfo, accountName: e.target.value })}
-                    className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                    placeholder="Enter account holder name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-base text-black font-semibold mb-2">IBAN</label>
-                  <input
-                    type="text"
-                    value={paymentInfo.iban}
-                    onChange={(e) => setPaymentInfo({ ...paymentInfo, iban: e.target.value })}
-                    className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                    placeholder="Enter IBAN"
-                  />
-                </div>
-                <div>
-                  <label className="block text-base text-black font-semibold mb-2">Bank</label>
-                  <select
-                    value={paymentInfo.bank}
-                    onChange={(e) => setPaymentInfo({ ...paymentInfo, bank: e.target.value })}
-                    className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                  >
-                    <option value="">Select a bank</option>
-                    {egyptianBanks.map(bank => (
-                      <option key={bank} value={bank}>{bank}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+                name="paymentInfo.accountName"
+                value={formik.values.paymentInfo.accountName}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className="w-full px-4 py-2 rounded-lg border border-black/10"
+              />
+              {formik.touched.paymentInfo?.accountName && formik.errors.paymentInfo?.accountName && (
+                <p className="text-red-500 text-sm mt-1">{formik.errors.paymentInfo.accountName}</p>
+              )}
             </div>
-            <Button
-              onClick={() => handleStepComplete('payment')}
-              disabled={!paymentInfo.accountName || !paymentInfo.iban || !paymentInfo.bank}
-              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white w-full"
-            >
-              Continue
-            </Button>
+            {/* Add other payment fields similarly */}
           </div>
         );
 
-      case 'shipping':
+      case 3:
         return (
           <div className="space-y-6">
-            <div className="p-6 bg-white rounded-2xl shadow-sm border border-black/10">
-              <h3 className="text-lg font-semibold mb-4 text-black">Shipping Information</h3>
-              <div className="space-y-4 divide-y divide-white/10">
                 <div>
-                  <label className="block text-base text-black font-semibold mb-2">Delivery Method</label>
+              <label className="block text-sm font-medium text-black/70 mb-1">
+                Delivery Method
+              </label>
                   <select
-                    value={shippingInfo.courierType}
-                    onChange={(e) => setShippingInfo({ ...shippingInfo, courierType: e.target.value as 'self' | 'outsourced' })}
-                    className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                  >
-                    <option value="self">Self-delivery</option>
+                name="shippingInfo.courierType"
+                value={formik.values.shippingInfo.courierType}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className="w-full px-4 py-2 rounded-lg border border-black/10"
+              >
+                <option value="self">Self-Delivery</option>
                     <option value="outsourced">Outsourced Courier</option>
                   </select>
-                </div>
-                {shippingInfo.courierType === 'outsourced' && (
-                  <div>
-                    <label className="block text-base text-black font-semibold mb-2">Courier Company</label>
-                    <select
-                      value={shippingInfo.courierCompany}
-                      onChange={(e) => setShippingInfo({ ...shippingInfo, courierCompany: e.target.value })}
-                      className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                    >
-                      <option value="">Select a courier company</option>
-                      {courierCompanies.map(company => (
-                        <option key={company} value={company}>{company}</option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-                <div>
-                  <label className="block text-base text-black font-semibold mb-2">Average Delivery Time</label>
-                  <input
-                    type="text"
-                    value={shippingInfo.averageDeliveryTime}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      // Only allow numbers and a single hyphen
-                      if (value.split('-').length > 2) return;
-                      if (/^(\d*-?\d*)?$/.test(value)) {
-                        setShippingInfo({ ...shippingInfo, averageDeliveryTime: value });
-                      }
-                    }}
-                    onBlur={(e) => {
-                      const value = e.target.value.trim();
-                      // Must have exactly two numbers separated by a hyphen
-                      const match = value.match(/^(\d+)-(\d+)$/);
-                      if (!match) {
-                        setShippingInfo({ ...shippingInfo, averageDeliveryTime: '' });
-                        return;
-                      }
-                      
-                      const [_, first, second] = match;
-                      const num1 = parseInt(first);
-                      const num2 = parseInt(second);
-                      
-                      if (!isNaN(num1) && !isNaN(num2)) {
-                        const formattedValue = `${num1}-${num2} business days`;
-                        setShippingInfo({ ...shippingInfo, averageDeliveryTime: formattedValue });
-                      } else {
-                        setShippingInfo({ ...shippingInfo, averageDeliveryTime: '' });
-                      }
-                    }}
-                    className="w-full p-2 rounded bg-white border border-black/20 text-black placeholder:text-black/50"
-                    placeholder="e.g., 2-3"
-                  />
-                  <p className="text-xs text-black/60 mt-1">Format must be x-y business days (e.g., 2-3)</p>
-                </div>
-                <div className="p-4 bg-white rounded-xl shadow-sm border border-black/10">
-                  <label className="flex items-start space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={shippingInfo.termsAccepted}
-                      onChange={(e) => setShippingInfo({ ...shippingInfo, termsAccepted: e.target.checked })}
-                      className="mt-1"
-                    />
-                    <span className="text-sm text-black/90">
-                      I acknowledge and agree that I am solely responsible for fulfilling all orders and delivering products to customers. QMaster acts solely as an intermediary platform facilitating the transaction between my business and customers. I understand that I am liable for ensuring timely delivery, product quality, and handling any shipping-related issues or returns. QMaster is not responsible for any delivery delays, damages, or disputes arising from the shipping process.
-                    </span>
-                  </label>
-                </div>
-              </div>
+              {formik.touched.shippingInfo?.courierType && formik.errors.shippingInfo?.courierType && (
+                <p className="text-red-500 text-sm mt-1">{formik.errors.shippingInfo.courierType}</p>
+              )}
             </div>
-            <Button
-              onClick={() => handleStepComplete('shipping')}
-              disabled={
-                !shippingInfo.averageDeliveryTime || 
-                !shippingInfo.termsAccepted || 
-                (shippingInfo.courierType === 'outsourced' && !shippingInfo.courierCompany) ||
-                !/^\d+-\d+ business days$/.test(shippingInfo.averageDeliveryTime)  // Must exactly match format
-              }
-              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white w-full"
-            >
-              Complete Setup
-            </Button>
+            {/* Add other shipping fields similarly */}
           </div>
         );
 
@@ -652,81 +596,112 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Progress Bar */}
-      <div className="relative pt-4">
-        <div className="absolute top-8 left-0 right-0 h-0.5 bg-black/10">
-          <div
-            className="h-full bg-baby-blue transition-all duration-300"
-            style={{ width: `${(currentStep / (setupSteps.length - 1)) * 100}%` }}
-          />
-        </div>
-        <div className="flex justify-between mb-4 relative">
-          {setupSteps.map((step, index) => (
-            <div
-              key={step.id}
-              className={`flex flex-col items-center w-40 relative ${
-                index === currentStep ? 'text-baby-blue' : 
-                step.isCompleted ? 'text-green-500' : 'text-black/50'
-              }`}
-            >
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 bg-black
-                ${index === currentStep ? 'border-baby-blue bg-baby-blue/20' : 
-                step.isCompleted ? 'border-green-500 bg-green-500/20' : 'border-white/50 bg-white/10'}`}
-              >
-                {step.isCompleted ? '✓' : index + 1}
-              </div>
-              <p className="text-xs mt-2 text-center font-medium text-black">{step.title}</p>
+    <Formik
+      initialValues={{
+        logo: null,
+        products: [],
+        paymentInfo: {
+          accountName: '',
+          iban: '',
+          bank: '',
+        },
+        shippingInfo: {
+          courierType: 'self',
+          courierCompany: '',
+          averageDeliveryTime: '',
+          termsAccepted: false,
+        },
+      }}
+      validationSchema={StoreSetupSchema}
+      onSubmit={handleSubmit}
+    >
+      {(formik) => (
+        <Form className="space-y-8">
+          {/* Progress Bar */}
+          <div className="relative pt-4">
+            <div className="absolute top-8 left-0 right-0 h-0.5 bg-black/10">
+              <div
+                className="h-full bg-baby-blue transition-all duration-300"
+                style={{ width: `${(currentStep / (setupSteps.length - 1)) * 100}%` }}
+              />
             </div>
-          ))}
-        </div>
-      </div>
+            <div className="flex justify-between mb-4 relative">
+              {setupSteps.map((step, index) => (
+                <div
+                  key={step.id}
+                  className={`flex flex-col items-center w-40 relative ${
+                    index === currentStep ? 'text-baby-blue' : 
+                    step.isCompleted ? 'text-green-500' : 'text-black/50'
+                  }`}
+                >
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2
+                    ${index === currentStep ? 'border-baby-blue bg-baby-blue/20 text-baby-blue' : 
+                    step.isCompleted ? 'border-green-500 bg-green-500/20 text-green-500' : 'border-black/50 bg-black/10 text-black/50'}`}
+                  >
+                    {step.isCompleted ? '✓' : index + 1}
+                  </div>
+                  <p className="text-xs mt-2 text-center font-medium text-black">{step.title}</p>
+                </div>
+              ))}
+            </div>
+          </div>
 
-      {/* Current Step Content */}
-      <div className="bg-white rounded-2xl p-8 shadow-sm border border-black/10">
-        <h3 className="text-2xl font-bold mb-2 text-baby-blue">{setupSteps[currentStep].title}</h3>
-        <p className="text-black text-lg mb-6">{setupSteps[currentStep].description}</p>
-        {renderCurrentStep()}
-      </div>
+          {/* Current Step Content */}
+          <div className="bg-white rounded-2xl p-8 shadow-sm border border-black/10">
+            <h3 className="text-2xl font-bold mb-2 text-baby-blue">{setupSteps[currentStep].title}</h3>
+            <p className="text-black text-lg mb-6">{setupSteps[currentStep].description}</p>
+            {renderCurrentStep(formik)}
+          </div>
 
-      {/* Guide Popup */}
-      {showGuide && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="fixed bottom-8 right-8 bg-white shadow-lg p-6 rounded-2xl border border-black/10 max-w-md z-50"
-        >
-          <h4 className="text-lg font-semibold text-black mb-4">Welcome to Store Setup! 🎉</h4>
-          <p className="text-base text-black mb-4">
-            Let's set up your online store. We'll guide you through:
-            <ul className="list-disc ml-4 mt-2 space-y-2 text-black/80">
-              <li>Uploading your store logo</li>
-              <li>Adding your products (physical or digital)</li>
-              <li>Setting up payment information</li>
-              <li>Configuring shipping options</li>
-            </ul>
-          </p>
-          <Button
-            onClick={() => setShowGuide(false)}
-            variant="outline"
-            className="w-full border-2 hover:bg-white/5"
-          >
-            Got it!
-          </Button>
-        </motion.div>
+          {/* Navigation Buttons */}
+          <div className="flex justify-between gap-4">
+            <Button
+              type="button"
+              onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+              disabled={currentStep === 0}
+              variant="outline"
+              className="flex-1 border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/10"
+            >
+              Back
+            </Button>
+            <Button
+              type="button"
+              onClick={() => validateStep(formik)}
+              className="flex-1 !bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+            >
+              {currentStep === setupSteps.length - 1 ? 'Complete Setup' : 'Continue'}
+            </Button>
+          </div>
+
+          {/* Guide Popup */}
+          {showGuide && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="fixed bottom-8 right-8 bg-white shadow-lg p-6 rounded-2xl border border-black/10 max-w-md z-50"
+            >
+              <h4 className="text-lg font-semibold text-black mb-4">Welcome to Store Setup! 🎉</h4>
+              <p className="text-base text-black mb-4">
+                Let&apos;s set up your online store. We&apos;ll guide you through:
+                <ul className="list-disc ml-4 mt-2 space-y-2 text-black/80">
+                  <li>Uploading your store logo</li>
+                  <li>Adding your products (physical or digital)</li>
+                  <li>Setting up payment information</li>
+                  <li>Configuring shipping options</li>
+                </ul>
+              </p>
+              <Button
+                onClick={() => setShowGuide(false)}
+                variant="outline"
+                className="w-full border-2 hover:bg-white/5"
+              >
+                Got it!
+              </Button>
+            </motion.div>
+          )}
+        </Form>
       )}
-
-      {allStepsCompleted && (
-        <div className="text-center">
-          <Button
-            onClick={onComplete}
-            className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
-          >
-            Launch Store
-          </Button>
-        </div>
-      )}
-    </div>
+    </Formik>
   );
 };
 
