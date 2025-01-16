@@ -179,6 +179,21 @@ const StorePendingView = () => (
   </div>
 );
 
+const courierCompanies = [
+  'Aramex',
+  'Bosta',
+  'DHL Express',
+  'Egypt Post',
+  'EGEX',
+  'FedEx Express',
+  'Fetchr',
+  'J&T Express',
+  'Mylerz',
+  'Naqel Express',
+  'R2S',
+  'UPS',
+].sort();
+
 const StoreSetupSchema = Yup.object().shape({
   logo: Yup.mixed<FileWithPreview>()
     .required('Logo is required')
@@ -226,25 +241,41 @@ const StoreSetupSchema = Yup.object().shape({
       .required('Bank selection is required'),
   }),
   shippingInfo: Yup.object().shape({
+    deliveryOptions: Yup.array()
+      .min(1, 'Select at least one delivery option')
+      .required('Select at least one delivery option'),
     courierType: Yup.string()
-      .oneOf(['self', 'outsourced'], 'Invalid courier type')
-      .required('Delivery method is required'),
+      .when('deliveryOptions', {
+        is: (options: string[]) => options.includes('shipping'),
+        then: (schema) => schema
+          .oneOf(['self', 'outsourced'], 'Invalid courier type')
+          .required('Delivery method is required'),
+      }),
     courierCompany: Yup.string()
-      .when('courierType', {
-        is: 'outsourced',
+      .when(['deliveryOptions', 'courierType'], {
+        is: (options: string[], type: string) => options.includes('shipping') && type === 'outsourced',
         then: (schema) => schema.required('Courier company is required'),
       }),
     averageDeliveryTime: Yup.string()
-      .matches(/^\d+-\d+$/, 'Must be in format x-y')
-      .test('valid-range', 'First number must be less than second', (value) => {
-        if (!value) return false;
-        const [first, second] = value.split('-').map(Number);
-        return first < second;
-      })
-      .required('Delivery time is required'),
+      .when(['deliveryOptions', 'courierType'], {
+        is: (options: string[], type: string) => options.includes('shipping') && type === 'self',
+        then: (schema) => schema
+          .matches(/^\d+-\d+ business days$/, 'Must be in format x-y business days')
+          .test('valid-range', 'First number must be less than second', (value) => {
+            if (!value) return false;
+            const [range] = value.split(' business days');
+            const [first, second] = range.split('-').map(Number);
+            return first < second;
+          })
+          .required('Delivery time is required'),
+      }),
     termsAccepted: Yup.boolean()
-      .oneOf([true], 'You must accept the terms')
-      .required('You must accept the terms'),
+      .when('deliveryOptions', {
+        is: (options: string[]) => options.includes('shipping'),
+        then: (schema) => schema
+          .oneOf([true], 'You must accept the terms')
+          .required('You must accept the terms'),
+      }),
   }),
 });
 
@@ -654,25 +685,156 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
       case 3:
         return (
           <div className="space-y-6">
-                <div>
+            <div>
               <label className="block text-sm font-medium text-black/70 mb-1">
-                Delivery Method
+                Delivery Options
               </label>
-                  <select
-                name="shippingInfo.courierType"
-                value={formik.values.shippingInfo.courierType}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="w-full px-4 py-2 rounded-lg border border-black/10"
-              >
-                <option value="self">Self-Delivery</option>
-                    <option value="outsourced">Outsourced Courier</option>
-                  </select>
-              {formik.touched.shippingInfo?.courierType && formik.errors.shippingInfo?.courierType && (
-                <p className="text-red-500 text-sm mt-1">{formik.errors.shippingInfo.courierType}</p>
+              <div className="space-y-2">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={formik.values.shippingInfo.deliveryOptions?.includes('pickup')}
+                    onChange={(e) => {
+                      const currentOptions = formik.values.shippingInfo.deliveryOptions || [];
+                      const newOptions = e.target.checked 
+                        ? [...currentOptions, 'pickup']
+                        : currentOptions.filter((opt: string) => opt !== 'pickup');
+                      formik.setFieldValue('shippingInfo.deliveryOptions', newOptions);
+                    }}
+                    className="rounded border-black/10"
+                  />
+                  <span>Pickup at Location</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={formik.values.shippingInfo.deliveryOptions?.includes('shipping')}
+                    onChange={(e) => {
+                      const currentOptions = formik.values.shippingInfo.deliveryOptions || [];
+                      const newOptions = e.target.checked 
+                        ? [...currentOptions, 'shipping']
+                        : currentOptions.filter((opt: string) => opt !== 'shipping');
+                      formik.setFieldValue('shippingInfo.deliveryOptions', newOptions);
+                    }}
+                    className="rounded border-black/10"
+                  />
+                  <span>Delivery Service</span>
+                </label>
+              </div>
+              {formik.touched.shippingInfo?.deliveryOptions && formik.errors.shippingInfo?.deliveryOptions && (
+                <p className="text-red-500 text-sm mt-1">{formik.errors.shippingInfo.deliveryOptions}</p>
               )}
             </div>
-            {/* Add other shipping fields similarly */}
+
+            {formik.values.shippingInfo.deliveryOptions?.includes('shipping') && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-black/70 mb-1">
+                    Delivery Method
+                  </label>
+                  <select
+                    name="shippingInfo.courierType"
+                    value={formik.values.shippingInfo.courierType}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className="w-full px-4 py-2 rounded-lg border border-black/10"
+                  >
+                    <option value="self">Self-Delivery</option>
+                    <option value="outsourced">Outsourced Courier</option>
+                  </select>
+                  {formik.touched.shippingInfo?.courierType && formik.errors.shippingInfo?.courierType && (
+                    <p className="text-red-500 text-sm mt-1">{formik.errors.shippingInfo.courierType}</p>
+                  )}
+                </div>
+
+                {formik.values.shippingInfo.courierType === 'outsourced' ? (
+                  <div>
+                    <label className="block text-sm font-medium text-black/70 mb-1">
+                      Courier Company
+                    </label>
+                    <select
+                      name="shippingInfo.courierCompany"
+                      value={formik.values.shippingInfo.courierCompany}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="w-full px-4 py-2 rounded-lg border border-black/10"
+                    >
+                      <option value="">Select a courier company</option>
+                      {courierCompanies.map(company => (
+                        <option key={company} value={company}>{company}</option>
+                      ))}
+                    </select>
+                    {formik.touched.shippingInfo?.courierCompany && formik.errors.shippingInfo?.courierCompany && (
+                      <p className="text-red-500 text-sm mt-1">{formik.errors.shippingInfo.courierCompany}</p>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <label className="block text-sm font-medium text-black/70 mb-1">
+                      Average Delivery Time
+                    </label>
+                    <input
+                      type="text"
+                      name="shippingInfo.averageDeliveryTime"
+                      value={formik.values.shippingInfo.averageDeliveryTime}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        // Only allow numbers and a single hyphen
+                        if (value.split('-').length > 2) return;
+                        if (/^(\d*-?\d*)?$/.test(value.replace(' business days', ''))) {
+                          formik.setFieldValue('shippingInfo.averageDeliveryTime', value);
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const value = e.target.value.replace(' business days', '').trim();
+                        // Must have exactly two numbers separated by a hyphen
+                        const match = value.match(/^(\d+)-(\d+)$/);
+                        if (!match) {
+                          formik.setFieldValue('shippingInfo.averageDeliveryTime', '');
+                          return;
+                        }
+                        
+                        const [_, first, second] = match;
+                        const num1 = parseInt(first);
+                        const num2 = parseInt(second);
+                        
+                        if (!isNaN(num1) && !isNaN(num2) && num1 < num2) {
+                          formik.setFieldValue('shippingInfo.averageDeliveryTime', `${num1}-${num2} business days`);
+                        } else {
+                          formik.setFieldValue('shippingInfo.averageDeliveryTime', '');
+                        }
+                      }}
+                      className="w-full px-4 py-2 rounded-lg border border-black/10"
+                      placeholder="e.g., 2-3"
+                    />
+                    {formik.touched.shippingInfo?.averageDeliveryTime && formik.errors.shippingInfo?.averageDeliveryTime && (
+                      <p className="text-red-500 text-sm mt-1">{formik.errors.shippingInfo.averageDeliveryTime}</p>
+                    )}
+                  </div>
+                )}
+
+                <div className="p-4 bg-white/5 rounded-xl border border-black/10">
+                  <label className="flex items-start space-x-2">
+                    <input
+                      type="checkbox"
+                      name="shippingInfo.termsAccepted"
+                      checked={formik.values.shippingInfo.termsAccepted}
+                      onChange={formik.handleChange}
+                      className="mt-1 rounded border-black/10"
+                    />
+                    <span className="text-sm text-black/70">
+                      I acknowledge and agree that I am solely responsible for fulfilling all orders and delivering products to customers. 
+                      QMaster acts solely as an intermediary platform facilitating the transaction between my business and customers. 
+                      I understand that I am liable for ensuring timely delivery, product quality, and handling any shipping-related issues or returns. 
+                      QMaster is not responsible for any delivery delays, damages, or disputes arising from the shipping process.
+                    </span>
+                  </label>
+                  {formik.touched.shippingInfo?.termsAccepted && formik.errors.shippingInfo?.termsAccepted && (
+                    <p className="text-red-500 text-sm mt-1">{formik.errors.shippingInfo.termsAccepted}</p>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         );
 
@@ -692,6 +854,7 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
           bank: '',
         },
         shippingInfo: {
+          deliveryOptions: [],
           courierType: 'self',
           courierCompany: '',
           averageDeliveryTime: '',
