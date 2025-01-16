@@ -16,8 +16,10 @@ interface Product {
 interface ProductGridViewProps {
   products: Product[];
   mode: 'view' | 'manage';
-  onDelete?: (productId: number) => void;
+  onDelete: (productId: number) => void;
   onProductClick?: (product: Product) => void;
+  isDeleteMode?: boolean;
+  onCancelDelete?: () => void;
 }
 
 export default function ProductGridView({
@@ -25,9 +27,10 @@ export default function ProductGridView({
   mode,
   onDelete,
   onProductClick,
+  isDeleteMode = false,
+  onCancelDelete,
 }: ProductGridViewProps) {
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
-  const [isDeleteMode, setIsDeleteMode] = useState(false);
 
   const handleDeleteSelected = () => {
     if (onDelete && selectedProducts.length > 0) {
@@ -35,7 +38,7 @@ export default function ProductGridView({
         onDelete(productId);
       });
       setSelectedProducts([]);
-      setIsDeleteMode(false);
+      onCancelDelete?.();
     }
   };
 
@@ -62,10 +65,7 @@ export default function ProductGridView({
             <Button
               variant="outline"
               className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
-              onClick={() => {
-                setIsDeleteMode(false);
-                setSelectedProducts([]);
-              }}
+              onClick={onCancelDelete}
             >
               Cancel
             </Button>
@@ -85,23 +85,21 @@ export default function ProductGridView({
         {products.map((product) => (
           <motion.div
             key={product.id}
-            className={`relative border rounded-xl p-4 space-y-4 ${
-              mode === 'manage' ? 'cursor-pointer' : ''
-            }`}
+            className={`relative border rounded-xl p-4 space-y-4 cursor-pointer`}
             {...vibrationAnimation}
             onClick={() => {
-              if (mode === 'manage' && isDeleteMode) {
+              if (isDeleteMode) {
                 if (selectedProducts.includes(product.id)) {
                   setSelectedProducts(selectedProducts.filter(id => id !== product.id));
                 } else {
                   setSelectedProducts([...selectedProducts, product.id]);
                 }
-              } else if (onProductClick && !isDeleteMode) {
+              } else if (onProductClick) {
                 onProductClick(product);
               }
             }}
           >
-            {mode === 'manage' && isDeleteMode && (
+            {isDeleteMode && (
               <div className={`absolute inset-0 rounded-xl border-2 transition-colors ${
                 selectedProducts.includes(product.id) 
                   ? 'bg-red-500/10 border-red-500' 
@@ -132,20 +130,6 @@ export default function ProductGridView({
                     EGP {product.price}
                   </p>
                 </div>
-                {mode === 'manage' && !isDeleteMode && (
-                  <Button
-                    variant="ghost"
-                    className="!p-2 !min-w-0 text-red-500 hover:bg-red-500/5 hover:text-red-600"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (onDelete) {
-                        onDelete(product.id);
-                      }
-                    }}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                )}
               </div>
               <div className="flex items-center gap-2 mt-2">
                 <span

@@ -1248,55 +1248,34 @@ const StoreDashboardView = () => {
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-semibold">
-            {isManagingProducts ? 'Manage Products' : 'Store Products'}
-          </h2>
+          <h2 className="text-2xl font-semibold">Store Products</h2>
           <div className="flex gap-4">
-            {isManagingProducts ? (
-              <>
-                <Button
-                variant="outline"
-                className="border-2 border-red-500 text-red-500 hover:bg-red-500/5 bg-transparent"
-                onClick={() => setIsDeleteMode(true)}
-              >
-                <Trash2 className="w-4 h-4 mr-2" />
-                Delete Products
-              </Button>
-              <Button
-                variant="outline"
-                className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
-                onClick={() => {
-                  setIsManagingProducts(false);
-                  setShowProductGrid(false);
-                }}
-              >
-                Done
-              </Button>
-              <Button
-                className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
-                onClick={() => setShowProductManagement(true)}
-              >
-                Add Product
-              </Button>
-            </>
-            ) : (
-              <Button
-                variant="outline"
-                className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
-                onClick={() => setShowProductGrid(false)}
-              >
-                Back to Dashboard
-              </Button>
-            )}
+            <Button
+              variant="outline"
+              className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
+              onClick={() => setShowProductGrid(false)}
+            >
+              Back to Dashboard
+            </Button>
+            <Button
+              variant="outline"
+              className="border-2 border-red-500 text-red-500 hover:bg-red-500/5 bg-transparent"
+              onClick={() => setIsDeleteMode(!isDeleteMode)}
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              {isDeleteMode ? 'Cancel Delete' : 'Delete Products'}
+            </Button>
           </div>
         </div>
 
         <ProductGridView
           products={mockInventory}
-          mode={isManagingProducts ? 'manage' : 'view'}
+          mode="view"
           onDelete={handleDeleteProduct}
+          isDeleteMode={isDeleteMode}
+          onCancelDelete={() => setIsDeleteMode(false)}
           onProductClick={(product) => {
-            if (!isManagingProducts) {
+            if (!isDeleteMode) {
               setSelectedProduct(product);
               setShowProductPreview(true);
             }
