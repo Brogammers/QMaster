@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { Trash2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface Product {
   id: number;
@@ -34,11 +35,13 @@ export default function ProductGridView({
 
   const handleDeleteSelected = () => {
     if (onDelete && selectedProducts.length > 0) {
+      const count = selectedProducts.length;
       selectedProducts.forEach(productId => {
         onDelete(productId);
       });
       setSelectedProducts([]);
       onCancelDelete?.();
+      toast.success(`Successfully deleted ${count} product${count > 1 ? 's' : ''}`);
     }
   };
 

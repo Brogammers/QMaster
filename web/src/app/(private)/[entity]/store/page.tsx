@@ -1241,7 +1241,6 @@ const StoreDashboardView = () => {
   const handleDeleteProduct = (productId: number) => {
     // Here you would typically make an API call to delete the product
     console.log('Deleting product:', productId);
-    toast.success('Product deleted successfully!');
   };
 
   if (showProductGrid) {
