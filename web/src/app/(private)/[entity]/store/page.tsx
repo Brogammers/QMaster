@@ -1254,26 +1254,26 @@ const StoreDashboardView = () => {
             {isManagingProducts ? (
               <>
                 <Button
-                  variant="outline"
-                  className="border-2 hover:bg-white/5"
-                  onClick={() => {
-                    setIsManagingProducts(false);
-                    setShowProductGrid(false);
-                  }}
-                >
-                  Done
-                </Button>
-                <Button
-                  className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
-                  onClick={() => setShowProductManagement(true)}
-                >
-                  Add Product
-                </Button>
-              </>
+                variant="outline"
+                className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
+                onClick={() => {
+                  setIsManagingProducts(false);
+                  setShowProductGrid(false);
+                }}
+              >
+                Done
+              </Button>
+              <Button
+                className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+                onClick={() => setShowProductManagement(true)}
+              >
+                Add Product
+              </Button>
+            </>
             ) : (
               <Button
                 variant="outline"
-                className="border-2 hover:bg-white/5"
+                className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
                 onClick={() => setShowProductGrid(false)}
               >
                 Back to Dashboard
@@ -1293,6 +1293,32 @@ const StoreDashboardView = () => {
             }
           }}
         />
+
+        {/* Modals */}
+        <ProductManagementModal
+          isOpen={showProductManagement}
+          onClose={() => {
+            setShowProductManagement(false);
+            setSelectedProduct(null);
+          }}
+          product={selectedProduct}
+          mode={selectedProduct ? 'edit' : 'add'}
+          onSubmit={() => {
+            setShowProductManagement(false);
+            setSelectedProduct(null);
+          }}
+        />
+
+        {selectedProduct && (
+          <ProductPreviewModal
+            isOpen={showProductPreview}
+            onClose={() => {
+              setShowProductPreview(false);
+              setSelectedProduct(null);
+            }}
+            product={selectedProduct}
+          />
+        )}
       </div>
     );
   }
@@ -1551,14 +1577,17 @@ const StoreDashboardView = () => {
           )}
         </Droppable>
 
-        {/* Inventory Preview */}
+        {/* Quick Inventory Overview */}
         <div className="bg-white rounded-2xl shadow-sm border border-black/10 p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold">Inventory Overview</h2>
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h2 className="text-xl font-semibold mb-1">Quick Inventory Overview</h2>
+              <p className="text-sm text-black/60">Showing top 3 products</p>
+            </div>
             <div className="flex gap-2">
               <Button 
                 variant="outline" 
-                className="border-2 hover:bg-white/5"
+                className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
                 onClick={() => setShowExport(true)}
               >
                 Export
@@ -1572,37 +1601,76 @@ const StoreDashboardView = () => {
             </div>
           </div>
 
-          <ProductGridView
-            products={mockInventory.slice(0, 3)}
-            mode="view"
-            onProductClick={(product) => {
-              setSelectedProduct(product);
-              setShowProductPreview(true);
-            }}
-          />
-        </div>
+          <div className="relative h-[200px] mb-4">
+            {mockInventory.slice(0, 3).map((product, index) => (
+              <div
+                key={product.id}
+                className={`absolute w-[280px] transition-all duration-300 hover:z-10 hover:scale-105 cursor-pointer
+                  ${index === 0 ? 'left-0 rotate-[-5deg] z-[3]' : 
+                    index === 1 ? 'left-[20%] z-[2]' : 
+                    'left-[40%] rotate-[5deg] z-[1]'}`}
+                onClick={() => {
+                  setSelectedProduct(product);
+                  setShowProductPreview(true);
+                }}
+              >
+                <div className="bg-white rounded-xl border border-black/10 p-3 shadow-md">
+                  <div className="flex gap-3">
+                    <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium truncate text-sm">{product.name}</h3>
+                      <p className="text-base font-bold text-baby-blue">
+                        EGP {product.price}
+                      </p>
+                      <span
+                        className={`inline-block px-2 py-0.5 rounded-full text-xs mt-1 ${
+                          product.status === 'in_stock'
+                            ? 'bg-green-100 text-green-700'
+                            : product.status === 'low_stock'
+                            ? 'bg-yellow-100 text-yellow-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}
+                      >
+                        {product.status === 'in_stock'
+                          ? 'In Stock'
+                          : product.status === 'low_stock'
+                          ? 'Low Stock'
+                          : 'Out of Stock'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
 
-        {/* Action Buttons */}
-        <div className="flex justify-end gap-4">
-          <Button 
-            variant="outline" 
-            className="border-2 hover:bg-white/5"
-            onClick={() => {
-              setIsManagingProducts(true);
-              setShowProductGrid(true);
-            }}
-          >
-            Manage Products
-          </Button>
-          <Button 
-            className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
-            onClick={() => {
-              setIsManagingProducts(false);
-              setShowProductGrid(true);
-            }}
-          >
-            View Store
-          </Button>
+          <div className="flex justify-end gap-4">
+            <Button 
+              variant="outline" 
+              className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
+              onClick={() => {
+                setIsManagingProducts(true);
+                setShowProductGrid(true);
+              }}
+            >
+              Manage Products
+            </Button>
+            <Button 
+              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+              onClick={() => {
+                setIsManagingProducts(false);
+                setShowProductGrid(true);
+              }}
+            >
+              View All Products
+            </Button>
+          </div>
         </div>
 
         {/* Modals */}
@@ -1623,13 +1691,6 @@ const StoreDashboardView = () => {
         <ExportProductsModal
           isOpen={showExport}
           onClose={() => setShowExport(false)}
-        />
-
-        <StorePreviewModal
-          isOpen={showStorePreview}
-          onClose={() => setShowStorePreview(false)}
-          storeName="Your Store Name"
-          products={mockInventory}
         />
 
         {selectedProduct && (
