@@ -98,7 +98,7 @@ export default function ExportProductsModal({
               type="button"
               variant="outline"
               onClick={onClose}
-              className="border-2 hover:bg-white/5"
+              className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
             >
               Cancel
             </Button>

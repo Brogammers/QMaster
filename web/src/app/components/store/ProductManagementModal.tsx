@@ -139,7 +139,7 @@ export default function ProductManagementModal({
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-black/10"
+              className="w-full px-4 py-2 rounded-lg border border-black/10 text-black"
               placeholder="Enter product name"
             />
           </div>
@@ -152,7 +152,7 @@ export default function ProductManagementModal({
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-black/10 min-h-[100px]"
+              className="w-full px-4 py-2 rounded-lg border border-black/10 min-h-[100px] text-black"
               placeholder="Enter product description"
             />
           </div>
@@ -167,7 +167,7 @@ export default function ProductManagementModal({
                 type="number"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                className="w-full px-4 py-2 rounded-lg border border-black/10"
+                className="w-full px-4 py-2 rounded-lg border border-black/10 text-black"
                 placeholder="0.00"
                 min="0"
                 step="0.01"
@@ -184,7 +184,7 @@ export default function ProductManagementModal({
                   type="number"
                   value={formData.stock}
                   onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg border border-black/10"
+                  className="w-full px-4 py-2 rounded-lg border border-black/10 text-black"
                   placeholder="0"
                   min="0"
                 />
@@ -198,7 +198,7 @@ export default function ProductManagementModal({
               type="button"
               variant="outline"
               onClick={onClose}
-              className="border-2 hover:bg-white/5"
+              className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
             >
               Cancel
             </Button>

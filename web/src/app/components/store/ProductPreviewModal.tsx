@@ -77,7 +77,15 @@ export default function ProductPreviewModal({
 
             <div className="pt-4">
               <Button
-                className="w-full !bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent mr-4"
+              >
+                Cancel
+              </Button>
+              <Button
+                className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
                 disabled={product.stock === 0}
               >
                 <ShoppingCart className="w-4 h-4 mr-2" />
