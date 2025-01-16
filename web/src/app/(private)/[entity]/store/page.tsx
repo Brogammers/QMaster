@@ -1579,12 +1579,12 @@ const StoreDashboardView = () => {
 
         {/* Quick Inventory Overview */}
         <div className="bg-white rounded-2xl shadow-sm border border-black/10 p-6">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center">
             <div>
               <h2 className="text-xl font-semibold mb-1">Quick Inventory Overview</h2>
               <p className="text-sm text-black/60">Showing top 3 products</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-4">
               <Button 
                 variant="outline" 
                 className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
@@ -1598,10 +1598,19 @@ const StoreDashboardView = () => {
               >
                 Add Product
               </Button>
+              <Button 
+                className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+                onClick={() => {
+                  setIsManagingProducts(false);
+                  setShowProductGrid(true);
+                }}
+              >
+                View Store
+              </Button>
             </div>
           </div>
 
-          <div className="relative h-[200px] mb-4">
+          <div className="relative h-[200px] mt-8">
             {mockInventory.slice(0, 3).map((product, index) => (
               <div
                 key={product.id}
@@ -1648,28 +1657,6 @@ const StoreDashboardView = () => {
                 </div>
               </div>
             ))}
-          </div>
-
-          <div className="flex justify-end gap-4">
-            <Button 
-              variant="outline" 
-              className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
-              onClick={() => {
-                setIsManagingProducts(true);
-                setShowProductGrid(true);
-              }}
-            >
-              Manage Products
-            </Button>
-            <Button 
-              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
-              onClick={() => {
-                setIsManagingProducts(false);
-                setShowProductGrid(true);
-              }}
-            >
-              View All Products
-            </Button>
           </div>
         </div>
 
