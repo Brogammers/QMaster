@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, CheckCircle, XCircle } from "lucide-react";
 
-type StoreStatus = 'NOT_REQUESTED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+export type StoreStatus = 'NOT_REQUESTED' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
 export type StoreData = {
   id: string;
