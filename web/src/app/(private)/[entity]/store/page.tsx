@@ -954,65 +954,266 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
   );
 };
 
-const StoreDashboardView = () => (
-  <div className="space-y-8">
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div className="p-6 bg-white/5 rounded-2xl backdrop-blur-sm">
-        <div className="flex items-center gap-4">
-          <ShoppingBag className="h-10 w-10 text-baby-blue" />
-          <div>
-            <p className="text-sm text-muted-foreground">Total Orders</p>
-            <h3 className="text-2xl font-bold">142</h3>
+const StoreDashboardView = () => {
+  // Mock data for testing
+  const mockAnalytics = {
+    orders: {
+      total: 142,
+      change: 12.5, // percentage change
+      pending: 15,
+      completed: 120,
+      cancelled: 7
+    },
+    products: {
+      total: 45,
+      inStock: 38,
+      lowStock: 5,
+      outOfStock: 2,
+      change: 8.3
+    },
+    revenue: {
+      total: 12500,
+      change: -2.1,
+      thisMonth: 4200,
+      lastMonth: 4300
+    },
+    customers: {
+      total: 89,
+      change: 15.7,
+      returning: 45,
+      new: 44
+    }
+  };
+
+  const mockInventory = [
+    {
+      id: 1,
+      name: "Product 1",
+      price: 299.99,
+      stock: 15,
+      status: "in_stock",
+      image: "https://via.placeholder.com/150"
+    },
+    {
+      id: 2,
+      name: "Product 2",
+      price: 199.99,
+      stock: 3,
+      status: "low_stock",
+      image: "https://via.placeholder.com/150"
+    },
+    {
+      id: 3,
+      name: "Product 3",
+      price: 499.99,
+      stock: 0,
+      status: "out_of_stock",
+      image: "https://via.placeholder.com/150"
+    }
+  ];
+
+  return (
+    <div className="space-y-8">
+      {/* Analytics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="p-6 bg-white rounded-2xl shadow-sm border border-black/10">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <ShoppingBag className="h-10 w-10 text-baby-blue" />
+              <div>
+                <p className="text-sm text-black/70">Total Orders</p>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-2xl font-bold">{mockAnalytics.orders.total}</h3>
+                  <span className={`text-sm ${mockAnalytics.orders.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                    {mockAnalytics.orders.change >= 0 ? '↑' : '↓'} {Math.abs(mockAnalytics.orders.change)}%
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-2 text-center text-sm">
+            <div className="p-2 rounded-lg bg-green-50">
+              <p className="text-green-600 font-medium">{mockAnalytics.orders.completed}</p>
+              <p className="text-black/50">Completed</p>
+            </div>
+            <div className="p-2 rounded-lg bg-yellow-50">
+              <p className="text-yellow-600 font-medium">{mockAnalytics.orders.pending}</p>
+              <p className="text-black/50">Pending</p>
+            </div>
+            <div className="p-2 rounded-lg bg-red-50">
+              <p className="text-red-600 font-medium">{mockAnalytics.orders.cancelled}</p>
+              <p className="text-black/50">Cancelled</p>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div className="p-6 bg-white/5 rounded-2xl backdrop-blur-sm">
-        <div className="flex items-center gap-4">
-          <Package className="h-10 w-10 text-baby-blue" />
-          <div>
-            <p className="text-sm text-muted-foreground">Products</p>
-            <h3 className="text-2xl font-bold">45</h3>
+        
+        <div className="p-6 bg-white rounded-2xl shadow-sm border border-black/10">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <Package className="h-10 w-10 text-baby-blue" />
+              <div>
+                <p className="text-sm text-black/70">Products</p>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-2xl font-bold">{mockAnalytics.products.total}</h3>
+                  <span className={`text-sm ${mockAnalytics.products.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                    {mockAnalytics.products.change >= 0 ? '↑' : '↓'} {Math.abs(mockAnalytics.products.change)}%
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-2 text-center text-sm">
+            <div className="p-2 rounded-lg bg-green-50">
+              <p className="text-green-600 font-medium">{mockAnalytics.products.inStock}</p>
+              <p className="text-black/50">In Stock</p>
+            </div>
+            <div className="p-2 rounded-lg bg-yellow-50">
+              <p className="text-yellow-600 font-medium">{mockAnalytics.products.lowStock}</p>
+              <p className="text-black/50">Low Stock</p>
+            </div>
+            <div className="p-2 rounded-lg bg-red-50">
+              <p className="text-red-600 font-medium">{mockAnalytics.products.outOfStock}</p>
+              <p className="text-black/50">Out of Stock</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 bg-white rounded-2xl shadow-sm border border-black/10">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <DollarSign className="h-10 w-10 text-baby-blue" />
+              <div>
+                <p className="text-sm text-black/70">Revenue</p>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-2xl font-bold">EGP {mockAnalytics.revenue.total}</h3>
+                  <span className={`text-sm ${mockAnalytics.revenue.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                    {mockAnalytics.revenue.change >= 0 ? '↑' : '↓'} {Math.abs(mockAnalytics.revenue.change)}%
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-center text-sm">
+            <div className="p-2 rounded-lg bg-blue-50">
+              <p className="text-blue-600 font-medium">EGP {mockAnalytics.revenue.thisMonth}</p>
+              <p className="text-black/50">This Month</p>
+            </div>
+            <div className="p-2 rounded-lg bg-gray-50">
+              <p className="text-gray-600 font-medium">EGP {mockAnalytics.revenue.lastMonth}</p>
+              <p className="text-black/50">Last Month</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 bg-white rounded-2xl shadow-sm border border-black/10">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <Users className="h-10 w-10 text-baby-blue" />
+              <div>
+                <p className="text-sm text-black/70">Customers</p>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-2xl font-bold">{mockAnalytics.customers.total}</h3>
+                  <span className={`text-sm ${mockAnalytics.customers.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                    {mockAnalytics.customers.change >= 0 ? '↑' : '↓'} {Math.abs(mockAnalytics.customers.change)}%
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-center text-sm">
+            <div className="p-2 rounded-lg bg-purple-50">
+              <p className="text-purple-600 font-medium">{mockAnalytics.customers.returning}</p>
+              <p className="text-black/50">Returning</p>
+            </div>
+            <div className="p-2 rounded-lg bg-indigo-50">
+              <p className="text-indigo-600 font-medium">{mockAnalytics.customers.new}</p>
+              <p className="text-black/50">New</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="p-6 bg-white/5 rounded-2xl backdrop-blur-sm">
-        <div className="flex items-center gap-4">
-          <DollarSign className="h-10 w-10 text-baby-blue" />
-          <div>
-            <p className="text-sm text-muted-foreground">Revenue</p>
-            <h3 className="text-2xl font-bold">$12,500</h3>
+      {/* Inventory Preview */}
+      <div className="bg-white rounded-2xl shadow-sm border border-black/10 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-semibold">Inventory Overview</h2>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline"
+              className="border-2 hover:bg-white/5"
+            >
+              Export
+            </Button>
+            <Button
+              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+            >
+              Add Product
+            </Button>
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {mockInventory.map((product) => (
+            <div key={product.id} className="border rounded-xl p-4 space-y-4">
+              <div className="aspect-square rounded-lg overflow-hidden bg-gray-50">
+                <img 
+                  src={product.image} 
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="font-medium">{product.name}</h3>
+                <p className="text-black/70">EGP {product.price}</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className={`px-2 py-1 rounded-full text-xs ${
+                    product.status === 'in_stock' ? 'bg-green-100 text-green-700' :
+                    product.status === 'low_stock' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-red-100 text-red-700'
+                  }`}>
+                    {product.status === 'in_stock' ? 'In Stock' :
+                     product.status === 'low_stock' ? 'Low Stock' :
+                     'Out of Stock'
+                    }
+                  </span>
+                  <span className="text-sm text-black/50">{product.stock} units</span>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  className="flex-1 border-2 hover:bg-white/5"
+                >
+                  Edit
+                </Button>
+                <Button
+                  className="flex-1 !bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+                >
+                  Preview
+                </Button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="p-6 bg-white/5 rounded-2xl backdrop-blur-sm">
-        <div className="flex items-center gap-4">
-          <Users className="h-10 w-10 text-baby-blue" />
-          <div>
-            <p className="text-sm text-muted-foreground">Customers</p>
-            <h3 className="text-2xl font-bold">89</h3>
-          </div>
-        </div>
+      {/* Action Buttons */}
+      <div className="flex justify-end gap-4">
+        <Button 
+          variant="outline"
+          className="border-2 hover:bg-white/5"
+        >
+          Manage Products
+        </Button>
+        <Button
+          className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
+        >
+          View Store
+        </Button>
       </div>
     </div>
-
-    <div className="flex justify-end gap-4">
-      <Button 
-        variant="outline"
-        className="border-2 hover:bg-white/5"
-      >
-        Manage Products
-      </Button>
-      <Button
-        className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
-      >
-        View Store
-      </Button>
-    </div>
-  </div>
-);
+  );
+};
 
 export default function StorePage() {
   const [storeStatus, setStoreStatus] = useState<StoreStatus>(StoreStatus.NOT_REQUESTED);
