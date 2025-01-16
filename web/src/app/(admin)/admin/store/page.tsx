@@ -5,7 +5,7 @@ import { DataTable } from '@/components/ui/data-table';
 import { columns, type StoreData } from './columns';
 import { FaPlus } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
-import { FileText, CheckCircle, XCircle } from 'lucide-react';
+import { FileText, CheckCircle, XCircle, ChevronLeft, ChevronRight, ListFilter } from 'lucide-react';
 
 const initialData: StoreData[] = [
   {
@@ -69,6 +69,20 @@ const pendingRequests = [
 
 export default function StorePage() {
   const [isDarkMode] = useState(false);
+  const [currentRequestIndex, setCurrentRequestIndex] = useState(0);
+  const [showAllRequests, setShowAllRequests] = useState(false);
+
+  const currentRequest = pendingRequests[currentRequestIndex];
+
+  const handleNext = () => {
+    setCurrentRequestIndex((prev) => 
+      prev < pendingRequests.length - 1 ? prev + 1 : prev
+    );
+  };
+
+  const handlePrevious = () => {
+    setCurrentRequestIndex((prev) => prev > 0 ? prev - 1 : prev);
+  };
 
   return (
     <div className="space-y-8">
@@ -93,58 +107,96 @@ export default function StorePage() {
       </div>
 
       {/* Pending Requests Section */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="p-6 border-b">
-          <h2 className="text-xl font-semibold">Pending Store Requests</h2>
-          <p className="text-sm text-gray-500 mt-1">Review submitted documents and approve or reject store requests</p>
-        </div>
-        
-        <div className="divide-y">
-          {pendingRequests.map((request) => (
-            <div key={request.id} className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="text-lg font-medium">{request.partnerName}</h3>
-                  <div className="text-sm text-gray-500 space-y-1">
-                    <p>Category: {request.category}</p>
-                    <p>Submitted: {request.submissionDate}</p>
-                  </div>
-                </div>
+      <div className={`${isDarkMode ? 'bg-slate-900' : 'bg-white'} rounded-lg border border-slate-200`}>
+        <div className="p-6 border-b border-slate-200">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-xl font-semibold">Pending Store Requests</h2>
+              <p className="text-sm text-slate-500 mt-1">Review submitted documents and approve or reject store requests</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-sm text-slate-500">
+                <span>{currentRequestIndex + 1}</span>
+                <span>/</span>
+                <span>{pendingRequests.length}</span>
+              </div>
+              <div className="flex items-center gap-2">
                 <Button
-                  className="bg-baby-blue hover:bg-ocean-blue text-white"
-                  onClick={() => {
-                    // Handle document review
-                    console.log('Reviewing documents for:', request.partnerName);
-                  }}
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePrevious}
+                  disabled={currentRequestIndex === 0}
+                  className="border-slate-200"
                 >
-                  <FileText className="w-4 h-4 mr-2" />
-                  Review Documents
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleNext}
+                  disabled={currentRequestIndex === pendingRequests.length - 1}
+                  className="border-slate-200"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowAllRequests(true)}
+                  className="border-slate-200"
+                >
+                  <ListFilter className="w-4 h-4 mr-2" />
+                  View All Requests
                 </Button>
               </div>
-              
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                {request.documents.map((doc) => (
-                  <div
-                    key={doc.name}
-                    className="p-4 bg-gray-50 rounded-lg border border-gray-200"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <FileText className="w-4 h-4 text-gray-400" />
-                      {doc.status === 'approved' ? (
-                        <CheckCircle className="w-4 h-4 text-green-500" />
-                      ) : doc.status === 'rejected' ? (
-                        <XCircle className="w-4 h-4 text-red-500" />
-                      ) : (
-                        <div className="w-2 h-2 rounded-full bg-yellow-400" />
-                      )}
-                    </div>
-                    <p className="text-sm font-medium">{doc.name}</p>
-                    <p className="text-xs text-gray-500 capitalize">{doc.status}</p>
-                  </div>
-                ))}
+            </div>
+          </div>
+        </div>
+        
+        <div className="p-6">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h3 className="text-lg font-medium">{currentRequest.partnerName}</h3>
+              <div className="text-sm text-slate-500 space-y-1">
+                <p>Category: {currentRequest.category}</p>
+                <p>Submitted: {currentRequest.submissionDate}</p>
               </div>
             </div>
-          ))}
+            <Button
+              className="bg-crystal-blue hover:bg-opacity-90 text-black"
+              onClick={() => {
+                // Handle document review
+                console.log('Reviewing documents for:', currentRequest.partnerName);
+              }}
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Review Documents
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-5 gap-4">
+            {currentRequest.documents.map((doc) => (
+              <div
+                key={doc.name}
+                className={`p-4 rounded-lg border ${
+                  isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <FileText className="w-4 h-4 text-slate-400" />
+                  {doc.status === 'approved' ? (
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                  ) : doc.status === 'rejected' ? (
+                    <XCircle className="w-4 h-4 text-red-500" />
+                  ) : (
+                    <div className="w-2 h-2 rounded-full bg-yellow-400" />
+                  )}
+                </div>
+                <p className="text-sm font-medium">{doc.name}</p>
+                <p className="text-xs text-slate-500 capitalize">{doc.status}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
