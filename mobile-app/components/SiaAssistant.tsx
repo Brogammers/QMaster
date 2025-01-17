@@ -223,14 +223,20 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
           
           <View style={styles.contentContainer}>
             {/* Response Area */}
-            <ScrollView style={styles.responseArea}>
+            <ScrollView 
+              style={[
+                styles.responseArea,
+                { 
+                  marginTop: Platform.OS === 'ios' ? 100 : 80,
+                }
+              ]}
+            >
               {response && (
                 <View style={styles.responseContainer}>
                   <Text style={[styles.responseText, { 
-                    color: isDarkMode ? '#D9D9D9' : '#0C1824',
-                    textShadowColor: 'rgba(0, 255, 255, 0.3)',
-                    textShadowOffset: { width: 0, height: 1 },
-                    textShadowRadius: 2,
+                    color: isDarkMode ? '#FFFFFF' : '#000000',
+                    fontSize: 16,
+                    fontWeight: '500',
                   }]}>
                     {response.message}
                   </Text>
@@ -244,13 +250,13 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                           styles.suggestionButton, 
                           { 
                             backgroundColor: isDarkMode 
-                              ? 'rgba(0, 255, 255, 0.15)' 
-                              : 'rgba(12, 24, 36, 0.1)',
+                              ? 'rgba(255, 255, 255, 0.15)' 
+                              : 'rgba(0, 0, 0, 0.1)',
                           }
                         ]}
                         onPress={() => processCommand(suggestion)}
                       >
-                        <Text style={[styles.suggestionText, { color: isDarkMode ? '#00FFFF' : '#0C1824' }]}>
+                        <Text style={[styles.suggestionText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
                           {suggestion}
                         </Text>
                       </TouchableOpacity>
@@ -262,34 +268,35 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
 
             {/* Bottom Input Section */}
             <View style={[styles.bottomSection, { marginBottom: Platform.OS === 'ios' ? 60 : 40 }]}>
-              <Animated.View 
-                style={[
-                  styles.pulseContainer,
-                  { transform: [{ scale: pulseAnim }] }
-                ]}
-              >
-                <Image 
-                  source={require('../assets/images/Sia AI.png')}
-                  style={styles.bottomSiaIcon}
-                />
-              </Animated.View>
-              
               <View className='animate-pulse' style={styles.inputContainer}>
                 <View style={styles.inputWrapper}>
+                  <Animated.View 
+                    style={[
+                      styles.inputSiaIcon,
+                      { transform: [{ scale: pulseAnim }] }
+                    ]}
+                  >
+                    <Image 
+                      source={require('../assets/images/Sia AI.png')}
+                      style={styles.siaInputIcon}
+                    />
+                  </Animated.View>
+                  
                   <TextInput
                     style={[
                       styles.input,
                       {
-                        color: isDarkMode ? '#00FFFF' : '#0C1824',
+                        color: isDarkMode ? '#FFFFFF' : '#333333',
                         backgroundColor: isDarkMode 
-                          ? 'rgba(0, 255, 255, 0.08)' 
-                          : 'rgba(12, 24, 36, 0.08)',
-                        borderColor: isDarkMode ? '#00FFFF33' : '#0C182433',
+                          ? 'rgba(0, 0, 0, 0.5)' 
+                          : '#FFFFFF',
+                        borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.3)' : '#E5E7EB',
                         borderWidth: 1,
+                        paddingLeft: 45, // Make room for the Sia icon
                       }
                     ]}
                     placeholder="Ask Sia anything..."
-                    placeholderTextColor={isDarkMode ? '#00FFFF77' : '#0C182477'}
+                    placeholderTextColor={isDarkMode ? 'rgba(255, 255, 255, 0.5)' : '#9CA3AF'}
                     value={inputText}
                     onChangeText={setInputText}
                     onSubmitEditing={() => processCommand(inputText)}
@@ -444,5 +451,19 @@ const styles = StyleSheet.create({
     opacity: 0.25,
     left: -SCREEN_WIDTH / 2,
     top: -SCREEN_WIDTH / 2,
+  },
+  inputSiaIcon: {
+    position: 'absolute',
+    left: 8,
+    zIndex: 2,
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  siaInputIcon: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
   },
 }); 
