@@ -16,6 +16,7 @@ import {
 import { useTheme } from "@/ctx/ThemeContext";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import DeerMan from '@/shared/components/DeerMan';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -119,6 +120,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
   const [showModal, setShowModal] = useState(false);
   const [response, setResponse] = useState<SiaResponse | null>(null);
   const [inputText, setInputText] = useState('');
+  const [showDeer, setShowDeer] = useState(true);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const { isDarkMode } = useTheme();
 
@@ -146,6 +148,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
   }, []);
 
   const processCommand = async (command: string) => {
+    setShowDeer(false); // Hide deer when first command is processed
     setResponse({
       message: `You said: ${command}`,
       suggestions: ["What's the wait time?", "How busy is it?", "When should I arrive?"],
@@ -198,6 +201,13 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
             <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: 0, y: 0 }} />
             <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: -50, y: 50 }} />
           </View>
+
+          {/* DeerMan Animation */}
+          {showDeer && !response && (
+            <View style={[StyleSheet.absoluteFill, { zIndex: 2, justifyContent: 'center' }]}>
+              <DeerMan />
+            </View>
+          )}
 
           {/* Background Gradient */}
           {!isDarkMode && (
@@ -286,26 +296,35 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                     style={[
                       styles.input,
                       {
-                        color: isDarkMode ? '#FFFFFF' : '#333333',
+                        color: isDarkMode ? '#FFFFFF' : '#000000',
                         backgroundColor: isDarkMode 
-                          ? 'rgba(0, 0, 0, 0.5)' 
+                          ? 'rgba(29, 205, 254, 0.1)' 
                           : '#FFFFFF',
-                        borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.3)' : '#E5E7EB',
-                        borderWidth: 1,
-                        paddingLeft: 45, // Make room for the Sia icon
+                        borderColor: isDarkMode ? '#1DCDFE' : '#E5E7EB',
+                        borderWidth: isDarkMode ? 1.5 : 1,
+                        paddingLeft: 45,
+                        fontSize: 16,
+                        shadowColor: isDarkMode ? '#1DCDFE' : '#000000',
+                        shadowOffset: { width: 0, height: isDarkMode ? 4 : 2 },
+                        shadowOpacity: isDarkMode ? 0.3 : 0.15,
+                        shadowRadius: isDarkMode ? 8 : 3.84,
                       }
                     ]}
                     placeholder="Ask Sia anything..."
-                    placeholderTextColor={isDarkMode ? 'rgba(255, 255, 255, 0.5)' : '#9CA3AF'}
+                    placeholderTextColor={isDarkMode ? '#1DCDFE80' : '#00000080'}
                     value={inputText}
                     onChangeText={setInputText}
                     onSubmitEditing={() => processCommand(inputText)}
+                    autoCorrect={false}
+                    selectionColor={isDarkMode ? '#1DCDFE' : '#000000'}
                   />
                   <TouchableOpacity 
                     style={[
                       styles.sendButton,
                       {
-                        backgroundColor: isDarkMode ? 'rgba(0, 255, 255, 0.1)' : 'rgba(12, 24, 36, 0.1)',
+                        backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.15)' : 'rgba(12, 24, 36, 0.1)',
+                        borderWidth: isDarkMode ? 1 : 0,
+                        borderColor: '#1DCDFE',
                       }
                     ]}
                     onPress={() => processCommand(inputText)}
@@ -313,7 +332,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                     <FontAwesome5 
                       name="paper-plane" 
                       size={16} 
-                      color={isDarkMode ? '#00FFFF' : '#0C1824'} 
+                      color={isDarkMode ? '#1DCDFE' : '#0C1824'} 
                     />
                   </TouchableOpacity>
                 </View>
