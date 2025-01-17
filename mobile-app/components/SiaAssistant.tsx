@@ -329,7 +329,9 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                     style={[
                       styles.input,
                       {
-                        color: isDarkMode ? '#1DCDFE' : '#000000',
+                        color: inputText 
+                          ? (isDarkMode ? '#1DCDFE' : '#000000')
+                          : (isDarkMode ? '#1DCDFE50' : '#00000050'),
                         backgroundColor: 'transparent',
                         paddingLeft: 45,
                         paddingRight: 48,
@@ -342,7 +344,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                       }
                     ]}
                   >
-                    {inputText || ''}
+                    {inputText || 'Ask Sia anything...'}
                   </Text>
                   <TouchableOpacity 
                     style={[
