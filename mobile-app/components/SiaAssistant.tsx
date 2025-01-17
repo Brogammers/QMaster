@@ -308,7 +308,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                         paddingRight: 45,
                         paddingVertical: 24,
                         fontSize: 16,
-                        bottom: 0,
+                        bottom: -2,
                         height: 24,
                         lineHeight: 38,
                         textAlignVertical: 'center',
