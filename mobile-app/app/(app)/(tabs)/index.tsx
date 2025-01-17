@@ -156,6 +156,7 @@ export default function Index() {
       {/* Sia Button */}
       <SiaButton 
         style={styles.siaButtonPosition}
+        showText={false}
       />
     </SafeAreaView>
   );

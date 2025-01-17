@@ -17,7 +17,7 @@ export const SiaButton: React.FC<SiaButtonProps> = ({ showText = true, style }) 
     <TouchableOpacity
       style={[
         styles.button,
-        { backgroundColor: isDarkMode ? '#0C1824' : '#D9D9D9' },
+        { backgroundColor: 'transparent' },
         style
       ]}
       onPress={showSia}
@@ -26,12 +26,12 @@ export const SiaButton: React.FC<SiaButtonProps> = ({ showText = true, style }) 
       <FontAwesome5 
         name="robot" 
         size={20} 
-        color={isDarkMode ? '#D9D9D9' : '#0C1824'} 
+        color={isDarkMode ? '#00FFFF' : '#0C1824'} 
       />
       {showText && (
         <Text style={[
           styles.text,
-          { color: isDarkMode ? '#D9D9D9' : '#0C1824' }
+          { color: isDarkMode ? '#00FFFF' : '#0C1824' }
         ]}>
           Ask Sia
         </Text>
@@ -44,14 +44,9 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
-    borderRadius: 12,
+    padding: 10,
+    borderRadius: 20,
     gap: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   text: {
     fontSize: 16,
