@@ -331,7 +331,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                       {
                         color: inputText 
                           ? (isDarkMode ? '#1DCDFE' : '#000000')
-                          : (isDarkMode ? '#1DCDFE50' : '#00000050'),
+                          : (isDarkMode ? '#1DCDFE80' : '#00000050'),
                         backgroundColor: 'transparent',
                         paddingLeft: 45,
                         paddingRight: 48,
