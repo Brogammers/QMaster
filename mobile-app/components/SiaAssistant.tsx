@@ -279,11 +279,11 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
             {/* Bottom Input Section */}
             <View style={[styles.bottomSection, { marginBottom: Platform.OS === 'ios' ? 60 : 40 }]}>
               <View className='animate-pulse' style={styles.inputContainer}>
-                <View style={styles.inputWrapper}>
+                <View style={[styles.inputWrapper, { zIndex: 10 }]}>
                   <Animated.View 
                     style={[
                       styles.inputSiaIcon,
-                      { transform: [{ scale: pulseAnim }] }
+                      { transform: [{ scale: pulseAnim }], zIndex: 13 }
                     ]}
                   >
                     <Image 
@@ -296,35 +296,59 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                     style={[
                       styles.input,
                       {
-                        color: isDarkMode ? '#FFFFFF' : '#000000',
+                        position: 'absolute',
+                        width: '100%',
+                        color: 'transparent',
                         backgroundColor: isDarkMode 
-                          ? 'rgba(29, 205, 254, 0.1)' 
+                          ? 'rgba(0, 0, 0, 0.8)' 
                           : '#FFFFFF',
                         borderColor: isDarkMode ? '#1DCDFE' : '#E5E7EB',
                         borderWidth: isDarkMode ? 1.5 : 1,
                         paddingLeft: 45,
+                        paddingRight: 45,
                         fontSize: 16,
-                        shadowColor: isDarkMode ? '#1DCDFE' : '#000000',
-                        shadowOffset: { width: 0, height: isDarkMode ? 4 : 2 },
-                        shadowOpacity: isDarkMode ? 0.3 : 0.15,
-                        shadowRadius: isDarkMode ? 8 : 3.84,
+                        height: 38,
+                        lineHeight: 38,
+                        textAlignVertical: 'center',
+                        zIndex: 10,
                       }
                     ]}
                     placeholder="Ask Sia anything..."
-                    placeholderTextColor={isDarkMode ? '#1DCDFE80' : '#00000080'}
+                    placeholderTextColor={isDarkMode ? '#1DCDFE' : '#00000080'}
                     value={inputText}
                     onChangeText={setInputText}
                     onSubmitEditing={() => processCommand(inputText)}
                     autoCorrect={false}
                     selectionColor={isDarkMode ? '#1DCDFE' : '#000000'}
                   />
+                  {/* Visible Text Overlay */}
+                  <Text
+                    style={[
+                      styles.input,
+                      {
+                        color: isDarkMode ? '#1DCDFE' : '#000000',
+                        backgroundColor: 'transparent',
+                        paddingLeft: 45,
+                        paddingRight: 48,
+                        fontSize: 16,
+                        height: 10,
+                        lineHeight: 10,
+                        textAlignVertical: 'center',
+                        zIndex: 11,
+                        pointerEvents: 'none',
+                      }
+                    ]}
+                  >
+                    {inputText || ''}
+                  </Text>
                   <TouchableOpacity 
                     style={[
                       styles.sendButton,
                       {
-                        backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.15)' : 'rgba(12, 24, 36, 0.1)',
-                        borderWidth: isDarkMode ? 1 : 0,
+                        backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(12, 24, 36, 0.1)',
+                        borderWidth: isDarkMode ? 1.5 : 0,
                         borderColor: '#1DCDFE',
+                        zIndex: 12,
                       }
                     ]}
                     onPress={() => processCommand(inputText)}
