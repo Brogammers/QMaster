@@ -126,11 +126,21 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
   const [showModal, setShowModal] = useState(isVisible);
   const [inputText, setInputText] = useState('');
   const [response, setResponse] = useState<string | null>(null);
+  const [displayedResponse, setDisplayedResponse] = useState<string>('');
+  const [isTyping, setIsTyping] = useState(false);
   const pulseAnim = useRef(new Animated.Value(1)).current;
+  const typingOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     setShowModal(isVisible);
   }, [isVisible]);
+
+  const resetChat = () => {
+    setResponse(null);
+    setDisplayedResponse('');
+    setInputText('');
+    setIsTyping(false);
+  };
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -140,6 +150,44 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
   const handleCloseModal = () => {
     setShowModal(false);
     onClose();
+    resetChat();
+  };
+
+  const animateTypingDots = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(typingOpacity, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(typingOpacity, {
+          toValue: 0.3,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
+
+  const typeResponse = (fullResponse: string) => {
+    setIsTyping(true);
+    animateTypingDots();
+    
+    let currentIndex = 0;
+    const typingSpeed = 30; // milliseconds per character
+    
+    const typeChar = () => {
+      if (currentIndex < fullResponse.length) {
+        setDisplayedResponse(fullResponse.slice(0, currentIndex + 1));
+        currentIndex++;
+        setTimeout(typeChar, typingSpeed);
+      } else {
+        setIsTyping(false);
+      }
+    };
+
+    typeChar();
   };
 
   const getHardcodedResponse = (prompt: string): string => {
@@ -176,6 +224,8 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
     if (inputText.trim()) {
       const responseText = getHardcodedResponse(inputText);
       setResponse(responseText);
+      setDisplayedResponse('');
+      typeResponse(responseText);
       setInputText('');
     }
   };
@@ -183,6 +233,8 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
   const handleSuggestionTap = (suggestion: string) => {
     const responseText = getHardcodedResponse(suggestion);
     setResponse(responseText);
+    setDisplayedResponse('');
+    typeResponse(responseText);
     setInputText(suggestion);
   };
 
@@ -254,7 +306,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
               </Text>
             </View>
 
-            {response && (
+            {(response || isTyping) && (
               <View style={[
                 styles.responseContainer,
                 { 
@@ -266,12 +318,22 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                   styles.responseText,
                   { color: isDarkMode ? '#FFFFFF' : '#17222D' }
                 ]}>
-                  {response}
+                  {displayedResponse}
                 </Text>
+                {isTyping && (
+                  <Animated.View style={{ opacity: typingOpacity }}>
+                    <Text style={[
+                      styles.typingIndicator,
+                      { color: isDarkMode ? '#1DCDFE' : '#17222D' }
+                    ]}>
+                      •••
+                    </Text>
+                  </Animated.View>
+                )}
               </View>
             )}
 
-            {!response && (
+            {!response && !isTyping && (
               <View style={styles.suggestionsSection}>
                 {suggestionPrompts.map((prompt, index) => (
                   <TouchableOpacity
@@ -479,5 +541,10 @@ const styles = StyleSheet.create({
   responseText: {
     fontSize: 16,
     lineHeight: 24,
+  },
+  typingIndicator: {
+    fontSize: 24,
+    marginTop: 8,
+    letterSpacing: 2,
   },
 });
