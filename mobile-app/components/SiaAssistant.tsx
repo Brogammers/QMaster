@@ -126,18 +126,23 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
   useEffect(() => {
     const pulseSequence = Animated.sequence([
       Animated.timing(pulseAnim, {
-        toValue: 1.2,
-        duration: 1000,
+        toValue: 1.1,
+        duration: 2000,
         useNativeDriver: true,
       }),
       Animated.timing(pulseAnim, {
         toValue: 1,
-        duration: 1000,
+        duration: 2000,
         useNativeDriver: true,
       }),
     ]);
 
-    Animated.loop(pulseSequence).start();
+    Animated.loop(
+      Animated.sequence([
+        pulseSequence,
+        Animated.delay(1000), // Add a pause between pulses
+      ])
+    ).start();
   }, []);
 
   const processCommand = async (command: string) => {
@@ -270,24 +275,41 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
               </Animated.View>
               
               <View style={styles.inputContainer}>
-                <TextInput
-                  style={[
-                    styles.input,
-                    {
-                      color: isDarkMode ? '#00FFFF' : '#0C1824',
-                      backgroundColor: isDarkMode 
-                        ? 'rgba(0, 255, 255, 0.08)' 
-                        : 'rgba(12, 24, 36, 0.08)',
-                      borderColor: isDarkMode ? '#00FFFF33' : '#0C182433',
-                      borderWidth: 1,
-                    }
-                  ]}
-                  placeholder="Ask Sia anything..."
-                  placeholderTextColor={isDarkMode ? '#00FFFF77' : '#0C182477'}
-                  value={inputText}
-                  onChangeText={setInputText}
-                  onSubmitEditing={() => processCommand(inputText)}
-                />
+                <View style={styles.inputWrapper}>
+                  <TextInput
+                    style={[
+                      styles.input,
+                      {
+                        color: isDarkMode ? '#00FFFF' : '#0C1824',
+                        backgroundColor: isDarkMode 
+                          ? 'rgba(0, 255, 255, 0.08)' 
+                          : 'rgba(12, 24, 36, 0.08)',
+                        borderColor: isDarkMode ? '#00FFFF33' : '#0C182433',
+                        borderWidth: 1,
+                      }
+                    ]}
+                    placeholder="Ask Sia anything..."
+                    placeholderTextColor={isDarkMode ? '#00FFFF77' : '#0C182477'}
+                    value={inputText}
+                    onChangeText={setInputText}
+                    onSubmitEditing={() => processCommand(inputText)}
+                  />
+                  <TouchableOpacity 
+                    style={[
+                      styles.sendButton,
+                      {
+                        backgroundColor: isDarkMode ? 'rgba(0, 255, 255, 0.1)' : 'rgba(12, 24, 36, 0.1)',
+                      }
+                    ]}
+                    onPress={() => processCommand(inputText)}
+                  >
+                    <FontAwesome5 
+                      name="paper-plane" 
+                      size={16} 
+                      color={isDarkMode ? '#00FFFF' : '#0C1824'} 
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
@@ -375,16 +397,32 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto',
     paddingTop: 15,
   },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'relative',
+  },
   input: {
+    flex: 1,
     height: 42,
-    borderRadius: 21,
-    paddingHorizontal: 20,
+    borderRadius: 9999,
+    padding: 24,
+    paddingRight: 56, // Make room for the send button
     fontSize: 16,
     elevation: 3,
     shadowColor: '#00FFFF',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 3.84,
+  },
+  sendButton: {
+    position: 'absolute',
+    right: 4,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   closeButton: {
     position: 'absolute',
