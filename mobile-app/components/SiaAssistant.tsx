@@ -12,6 +12,7 @@ import {
   Image,
   StatusBar,
   Dimensions,
+  Easing,
 } from 'react-native';
 import { useTheme } from "@/ctx/ThemeContext";
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -123,6 +124,8 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
   const [showDeer, setShowDeer] = useState(true);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const { isDarkMode } = useTheme();
+  const inputAnimation = useRef(new Animated.Value(0)).current;
+  const messageAnimation = useRef(new Animated.Value(0)).current;
 
   // Pulse animation effect
   useEffect(() => {
@@ -147,8 +150,38 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
     ).start();
   }, []);
 
+  // Input field animation
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(inputAnimation, {
+          toValue: 1,
+          duration: 2000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(inputAnimation, {
+          toValue: 0,
+          duration: 2000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, []);
+
   const processCommand = async (command: string) => {
-    setShowDeer(false); // Hide deer when first command is processed
+    setShowDeer(false);
+    
+    // Reset and start message animation
+    messageAnimation.setValue(0);
+    Animated.spring(messageAnimation, {
+      toValue: 1,
+      friction: 8,
+      tension: 40,
+      useNativeDriver: true,
+    }).start();
+
     setResponse({
       message: `You said: ${command}`,
       suggestions: ["What's the wait time?", "How busy is it?", "When should I arrive?"],
@@ -242,7 +275,22 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
               ]}
             >
               {response && (
-                <View style={styles.responseContainer}>
+                <Animated.View 
+                  style={[
+                    styles.responseContainer,
+                    {
+                      transform: [
+                        {
+                          translateY: messageAnimation.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [50, 0],
+                          }),
+                        },
+                      ],
+                      opacity: messageAnimation,
+                    },
+                  ]}
+                >
                   <Text style={[styles.responseText, { 
                     color: isDarkMode ? '#FFFFFF' : '#000000',
                     fontSize: 16,
@@ -251,7 +299,6 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                     {response.message}
                   </Text>
                   
-                  {/* Suggestions */}
                   <View style={styles.suggestionsContainer}>
                     {response.suggestions.map((suggestion, index) => (
                       <TouchableOpacity
@@ -272,13 +319,27 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                       </TouchableOpacity>
                     ))}
                   </View>
-                </View>
+                </Animated.View>
               )}
             </ScrollView>
 
             {/* Bottom Input Section */}
             <View style={[styles.bottomSection, { marginBottom: Platform.OS === 'ios' ? 60 : 40 }]}>
-              <View className='animate-pulse' style={styles.inputContainer}>
+              <Animated.View 
+                style={[
+                  styles.inputContainer,
+                  {
+                    transform: [
+                      {
+                        translateY: inputAnimation.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [0, -3],
+                        }),
+                      },
+                    ],
+                  },
+                ]}
+              >
                 <View style={[styles.inputWrapper, { zIndex: 10 }]}>
                   <Animated.View 
                     style={[
@@ -367,7 +428,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                     />
                   </TouchableOpacity>
                 </View>
-              </View>
+              </Animated.View>
             </View>
           </View>
         </View>
