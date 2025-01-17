@@ -11,6 +11,7 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -191,8 +192,16 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
       >
         <View style={[
           styles.modalContainer,
-          { backgroundColor: isDarkMode ? 'rgba(12, 24, 36, 0.95)' : 'rgba(245, 245, 245, 0.95)' }
+          { backgroundColor: isDarkMode ? '#17222D' : '#F5F5F5' }
         ]}>
+          {!isDarkMode && (
+            <LinearGradient
+              colors={['rgba(0, 119, 182, 0.1)', 'rgba(255, 255, 255, 0)']}
+              style={{ position: 'absolute', top: 0, width: '100%', height: 250 }}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+            />
+          )}
           <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: 0, y: 0 }} />
           <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: 100, y: 100 }} />
 
@@ -200,13 +209,13 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
             <FontAwesome5 
               name="times" 
               size={20} 
-              color={isDarkMode ? '#FFF' : '#0C1824'} 
+              color={isDarkMode ? '#1DCDFE' : '#17222D'} 
             />
           </TouchableOpacity>
 
           <View style={styles.contentContainer}>
             <View style={styles.headerSection}>
-              <Text style={[styles.greeting, { color: isDarkMode ? '#FFF' : '#0C1824' }]}>
+              <Text style={[styles.greeting, { color: isDarkMode ? '#1DCDFE' : '#17222D' }]}>
                 Welcome back!
               </Text>
             </View>
@@ -219,14 +228,14 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                     styles.suggestionChip,
                     { 
                       backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : 'rgba(12, 24, 36, 0.1)',
-                      borderColor: isDarkMode ? '#1DCDFE' : '#0C1824',
+                      borderColor: isDarkMode ? '#1DCDFE' : '#17222D',
                     }
                   ]}
                   onPress={() => handleSuggestionTap(prompt)}
                 >
                   <Text style={[
                     styles.suggestionText,
-                    { color: isDarkMode ? '#1DCDFE' : '#0C1824' }
+                    { color: isDarkMode ? '#1DCDFE' : '#17222D' }
                   ]}>
                     {prompt}
                   </Text>
@@ -239,7 +248,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
             <View style={[
               styles.inputContainer,
               {
-                backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : '#FFFFFF',
+                backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.05)' : '#FFFFFF',
                 borderColor: isDarkMode ? '#1DCDFE' : '#E5E7EB',
               }
             ]}>
@@ -253,10 +262,10 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
               <TextInput
                 style={[
                   styles.input,
-                  { color: isDarkMode ? '#1DCDFE' : '#000000' }
+                  { color: isDarkMode ? '#1DCDFE' : '#17222D' }
                 ]}
                 placeholder="Ask Sia anything..."
-                placeholderTextColor={isDarkMode ? '#1DCDFE80' : '#00000080'}
+                placeholderTextColor={isDarkMode ? '#1DCDFE80' : '#17222D80'}
                 value={inputText}
                 onChangeText={setInputText}
                 onSubmitEditing={handleSend}
@@ -266,8 +275,8 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                 style={[
                   styles.sendButton,
                   {
-                    backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(12, 24, 36, 0.1)',
-                    borderColor: '#1DCDFE',
+                    backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : '#FFFFFF',
+                    borderColor: isDarkMode ? '#1DCDFE' : '#17222D',
                     opacity: inputText.trim() ? 1 : 0.5,
                   }
                 ]}
@@ -277,7 +286,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                 <FontAwesome5 
                   name="paper-plane" 
                   size={16} 
-                  color={isDarkMode ? '#1DCDFE' : '#0C1824'} 
+                  color={isDarkMode ? '#1DCDFE' : '#17222D'} 
                 />
               </TouchableOpacity>
             </View>
