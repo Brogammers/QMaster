@@ -192,7 +192,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
       >
         <View style={[
           styles.modalContainer,
-          { backgroundColor: isDarkMode ? '#17222D' : '#F5F5F5' }
+          { backgroundColor: isDarkMode ? '#0B1219' : '#F5F5F5' }
         ]}>
           {!isDarkMode && (
             <LinearGradient
@@ -215,7 +215,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
 
           <View style={styles.contentContainer}>
             <View style={styles.headerSection}>
-              <Text style={[styles.greeting, { color: isDarkMode ? '#1DCDFE' : '#17222D' }]}>
+              <Text style={[styles.greeting, { color: isDarkMode ? '#FFFFFF' : '#17222D' }]}>
                 Welcome back!
               </Text>
             </View>
@@ -227,7 +227,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                   style={[
                     styles.suggestionChip,
                     { 
-                      backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : 'rgba(12, 24, 36, 0.1)',
+                      backgroundColor: isDarkMode ? '#17222D' : 'rgba(12, 24, 36, 0.1)',
                       borderColor: isDarkMode ? '#1DCDFE' : '#17222D',
                     }
                   ]}
@@ -248,7 +248,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
             <View style={[
               styles.inputContainer,
               {
-                backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.05)' : '#FFFFFF',
+                backgroundColor: isDarkMode ? '#17222D' : '#FFFFFF',
                 borderColor: isDarkMode ? '#1DCDFE' : '#E5E7EB',
               }
             ]}>
@@ -262,7 +262,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
               <TextInput
                 style={[
                   styles.input,
-                  { color: isDarkMode ? '#1DCDFE' : '#17222D' }
+                  { color: isDarkMode ? '#FFFFFF' : '#17222D' }
                 ]}
                 placeholder="Ask Sia anything..."
                 placeholderTextColor={isDarkMode ? '#1DCDFE80' : '#17222D80'}
@@ -275,7 +275,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                 style={[
                   styles.sendButton,
                   {
-                    backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : '#FFFFFF',
+                    backgroundColor: isDarkMode ? '#17222D' : '#FFFFFF',
                     borderColor: isDarkMode ? '#1DCDFE' : '#17222D',
                     opacity: inputText.trim() ? 1 : 0.5,
                   }
