@@ -31,9 +31,9 @@ interface SiaAssistantProps {
 }
 
 const suggestionPrompts = [
-  "What's the latest in AI technology?",
-  "Help me write a business email",
-  "Explain quantum computing",
+  "How can QMaster help me save time?",
+  "What features does QMaster offer?",
+  "How do I find the best queue for me?",
 ];
 
 const AnimatedFlare: React.FC<AnimatedFlareProps> = ({ isDarkMode, initialPosition }) => {
@@ -125,6 +125,7 @@ const AnimatedFlare: React.FC<AnimatedFlareProps> = ({ isDarkMode, initialPositi
 export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, isDarkMode }) => {
   const [showModal, setShowModal] = useState(isVisible);
   const [inputText, setInputText] = useState('');
+  const [response, setResponse] = useState<string | null>(null);
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
@@ -141,14 +142,47 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
     onClose();
   };
 
+  const getHardcodedResponse = (prompt: string): string => {
+    switch (prompt) {
+      case "How can QMaster help me save time?":
+        return "QMaster helps you save time in several ways:\n\n" +
+               "• Real-time queue predictions to avoid long waits\n" +
+               "• Smart recommendations for the best time to visit\n" +
+               "• Virtual queuing so you can do other things while waiting\n" +
+               "• Instant notifications when it's your turn";
+      
+      case "What features does QMaster offer?":
+        return "QMaster offers several powerful features:\n\n" +
+               "• AI-powered wait time predictions\n" +
+               "• Virtual queue management\n" +
+               "• Smart notifications system\n" +
+               "• Location-based queue recommendations\n" +
+               "• Real-time updates and status tracking";
+      
+      case "How do I find the best queue for me?":
+        return "Finding the best queue is easy with QMaster:\n\n" +
+               "• Share your location or select an area\n" +
+               "• View real-time wait times for nearby queues\n" +
+               "• Check crowd levels and peak times\n" +
+               "• Get personalized recommendations based on your preferences\n" +
+               "• Compare different locations and their current status";
+      
+      default:
+        return "I'm here to help you with any questions about QMaster's features, queue management, and how to make the most of your time. Feel free to ask anything!";
+    }
+  };
+
   const handleSend = () => {
     if (inputText.trim()) {
-      console.log('Sending:', inputText);
+      const responseText = getHardcodedResponse(inputText);
+      setResponse(responseText);
       setInputText('');
     }
   };
 
   const handleSuggestionTap = (suggestion: string) => {
+    const responseText = getHardcodedResponse(suggestion);
+    setResponse(responseText);
     setInputText(suggestion);
   };
 
@@ -220,28 +254,47 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
               </Text>
             </View>
 
-            <View style={styles.suggestionsSection}>
-              {suggestionPrompts.map((prompt, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.suggestionChip,
-                    { 
-                      backgroundColor: isDarkMode ? '#17222D' : 'rgba(12, 24, 36, 0.1)',
-                      borderColor: isDarkMode ? '#1DCDFE' : '#17222D',
-                    }
-                  ]}
-                  onPress={() => handleSuggestionTap(prompt)}
-                >
-                  <Text style={[
-                    styles.suggestionText,
-                    { color: isDarkMode ? '#1DCDFE' : '#17222D' }
-                  ]}>
-                    {prompt}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            {response && (
+              <View style={[
+                styles.responseContainer,
+                { 
+                  backgroundColor: isDarkMode ? '#17222D' : '#FFFFFF',
+                  borderColor: isDarkMode ? '#1DCDFE' : '#E5E7EB',
+                }
+              ]}>
+                <Text style={[
+                  styles.responseText,
+                  { color: isDarkMode ? '#FFFFFF' : '#17222D' }
+                ]}>
+                  {response}
+                </Text>
+              </View>
+            )}
+
+            {!response && (
+              <View style={styles.suggestionsSection}>
+                {suggestionPrompts.map((prompt, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.suggestionChip,
+                      { 
+                        backgroundColor: isDarkMode ? '#17222D' : 'rgba(12, 24, 36, 0.1)',
+                        borderColor: isDarkMode ? '#1DCDFE' : '#17222D',
+                      }
+                    ]}
+                    onPress={() => handleSuggestionTap(prompt)}
+                  >
+                    <Text style={[
+                      styles.suggestionText,
+                      { color: isDarkMode ? '#1DCDFE' : '#17222D' }
+                    ]}>
+                      {prompt}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </View>
 
           <View style={styles.inputArea}>
@@ -415,5 +468,16 @@ const styles = StyleSheet.create({
     opacity: 0.25,
     left: -SCREEN_WIDTH / 2,
     top: -SCREEN_WIDTH / 2,
+  },
+  responseContainer: {
+    marginTop: 20,
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginHorizontal: 20,
+  },
+  responseText: {
+    fontSize: 16,
+    lineHeight: 24,
   },
 });
