@@ -13,6 +13,10 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/redux/store';
+import { getGreeting } from '@/utils';
+import { BlurView } from 'expo-blur';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -123,6 +127,7 @@ const AnimatedFlare: React.FC<AnimatedFlareProps> = ({ isDarkMode, initialPositi
 };
 
 export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, isDarkMode }) => {
+  const firstName = useSelector((state: RootState) => state.firstName?.firstName || undefined);
   const [showModal, setShowModal] = useState(isVisible);
   const [inputText, setInputText] = useState('');
   const [response, setResponse] = useState<string | null>(null);
@@ -276,14 +281,39 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
         transparent
         onRequestClose={handleCloseModal}
       >
+        <BlurView
+          intensity={20}
+          tint={isDarkMode ? 'dark' : 'light'}
+          style={StyleSheet.absoluteFill}
+        />
         <View style={[
           styles.modalContainer,
-          { backgroundColor: isDarkMode ? '#0B1219' : '#F5F5F5' }
+          { 
+            backgroundColor: isDarkMode 
+              ? 'rgba(11, 18, 25, 0.85)' 
+              : 'rgba(245, 245, 245, 0.85)',
+          }
         ]}>
           {!isDarkMode && (
             <LinearGradient
-              colors={['rgba(0, 119, 182, 0.1)', 'rgba(255, 255, 255, 0)']}
-              style={{ position: 'absolute', top: 0, width: '100%', height: 250 }}
+              colors={[
+                'rgba(0, 119, 182, 0.1)',
+                'rgba(255, 255, 255, 0.05)',
+                'rgba(255, 255, 255, 0)'
+              ]}
+              style={styles.lightModeGradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+            />
+          )}
+          {isDarkMode && (
+            <LinearGradient
+              colors={[
+                'rgba(29, 205, 254, 0.1)',
+                'rgba(29, 205, 254, 0.05)',
+                'rgba(11, 18, 25, 0)'
+              ]}
+              style={styles.darkModeGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 0, y: 1 }}
             />
@@ -302,7 +332,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
           <View style={styles.contentContainer}>
             <View style={styles.headerSection}>
               <Text style={[styles.greeting, { color: isDarkMode ? '#FFFFFF' : '#17222D' }]}>
-                Welcome back!
+                {getGreeting(firstName)}
               </Text>
             </View>
 
@@ -546,5 +576,19 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginTop: 8,
     letterSpacing: 2,
+  },
+  lightModeGradient: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: SCREEN_HEIGHT,
+    opacity: 0.7,
+  },
+  darkModeGradient: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: SCREEN_HEIGHT,
+    opacity: 0.3,
   },
 });
