@@ -248,7 +248,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
   };
 
   const handleSend = () => {
-    if (inputText.trim()) {
+    if (inputText.trim() && !isTyping) {
       const responseText = getHardcodedResponse(inputText);
       setResponse(responseText);
       setDisplayedResponse('');
@@ -417,6 +417,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
               {
                 backgroundColor: isDarkMode ? '#17222D' : '#FFFFFF',
                 borderColor: isDarkMode ? '#1DCDFE' : '#E5E7EB',
+                opacity: isTyping ? 0.7 : 1,
               }
             ]}>
               <View style={styles.inputSiaIcon}>
@@ -436,6 +437,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                 value={inputText}
                 onChangeText={setInputText}
                 onSubmitEditing={handleSend}
+                editable={!isTyping}
               />
 
               <TouchableOpacity 
@@ -444,11 +446,11 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                   {
                     backgroundColor: isDarkMode ? '#17222D' : '#FFFFFF',
                     borderColor: isDarkMode ? '#1DCDFE' : '#17222D',
-                    opacity: inputText.trim() ? 1 : 0.5,
+                    opacity: (!inputText.trim() || isTyping) ? 0.5 : 1,
                   }
                 ]}
                 onPress={handleSend}
-                disabled={!inputText.trim()}
+                disabled={!inputText.trim() || isTyping}
               >
                 <FontAwesome5 
                   name="paper-plane" 
