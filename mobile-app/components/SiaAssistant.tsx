@@ -196,6 +196,28 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
   };
 
   const getHardcodedResponse = (prompt: string): string => {
+    // Check for thank you variations
+    const thankYouPatterns = [
+      'thank', 'thanks', 'thx', 'tysm', 'thank u', 'thankyou',
+      'appreciate', 'grateful', 'gracias', 'merci'
+    ];
+
+    const isThankYou = thankYouPatterns.some(pattern => 
+      prompt.toLowerCase().includes(pattern.toLowerCase())
+    );
+
+    if (isThankYou) {
+      const responses = [
+        "You're very welcome! Always here to help you skip the Q! 😊",
+        "My pleasure! That's what I'm here Q-for! 🌟",
+        "Anytime! Let's keep your time in the Q to a minimum! ⏱️",
+        "Happy to help! Q-counting on you to come back if you need more assistance! 🎯",
+        "No problem at all! Q-nsider me your personal queue companion! 🤝",
+        "Glad I could help! Q-ep calm and queue on! ✨"
+      ];
+      return responses[Math.floor(Math.random() * responses.length)];
+    }
+
     switch (prompt) {
       case "How can QMaster help me save time?":
         return "QMaster helps you save time in several ways:\n\n" +
