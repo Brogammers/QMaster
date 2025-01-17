@@ -182,10 +182,29 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
       useNativeDriver: true,
     }).start();
 
-    setResponse({
-      message: `You said: ${command}`,
-      suggestions: ["What's the wait time?", "How busy is it?", "When should I arrive?"],
-    });
+    // Mock responses based on different prompts
+    const mockResponses: { [key: string]: SiaResponse } = {
+      "What's the wait time?": {
+        message: "Currently, the estimated wait time is about 25 minutes. This is based on real-time data from the venue. Would you like me to notify you when the wait time drops below 15 minutes?",
+        suggestions: ["Yes, notify me", "Show me peak hours", "Is this normal?"]
+      },
+      "How busy is it?": {
+        message: "The venue is moderately busy right now, operating at about 75% capacity. Based on historical data, it should start getting less crowded in about an hour. The bar area is less crowded than the main dining space.",
+        suggestions: ["Show me a graph", "Best time to come?", "Reserve a spot"]
+      },
+      "When should I arrive?": {
+        message: "Based on current trends, I recommend arriving around 8:30 PM. The crowd typically thins out by then, and you'll have a shorter wait time. Would you like me to check table availability for that time?",
+        suggestions: ["Check availability", "Show me other times", "Set a reminder"]
+      },
+      "default": {
+        message: `I understand you're asking about "${command}". I'm here to help with wait times, venue capacity, and scheduling. What specific information would you like to know?`,
+        suggestions: ["What's the wait time?", "How busy is it?", "When should I arrive?"]
+      }
+    };
+
+    // Get the appropriate response or use default
+    const response = mockResponses[command] || mockResponses.default;
+    setResponse(response);
     setInputText('');
   };
 
