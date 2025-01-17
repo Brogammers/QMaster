@@ -18,6 +18,7 @@ import { useTheme } from "@/ctx/ThemeContext";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DeerMan from '@/shared/components/DeerMan';
+import i18n from '@/i18n';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -119,13 +120,28 @@ interface SiaAssistantProps {
 
 export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }) => {
   const [showModal, setShowModal] = useState(false);
-  const [response, setResponse] = useState<SiaResponse | null>(null);
+  const [response, setResponse] = useState<SiaResponse | null>({
+    message: getTimeBasedGreeting(),
+    suggestions: [
+      i18n.t('suggestions.waitTime'),
+      i18n.t('suggestions.busyness'),
+      i18n.t('suggestions.arrival')
+    ]
+  });
   const [inputText, setInputText] = useState('');
   const [showDeer, setShowDeer] = useState(true);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const { isDarkMode } = useTheme();
   const inputAnimation = useRef(new Animated.Value(0)).current;
   const messageAnimation = useRef(new Animated.Value(0)).current;
+
+  function getTimeBasedGreeting() {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return i18n.t('greetings.morning');
+    if (hour >= 12 && hour < 17) return i18n.t('greetings.afternoon');
+    if (hour >= 17 && hour < 22) return i18n.t('greetings.evening');
+    return i18n.t('greetings.night');
+  }
 
   // Pulse animation effect
   useEffect(() => {
@@ -184,21 +200,25 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
 
     // Mock responses based on different prompts
     const mockResponses: { [key: string]: SiaResponse } = {
-      "What's the wait time?": {
+      [i18n.t('suggestions.waitTime')]: {
         message: "Currently, the estimated wait time is about 25 minutes. This is based on real-time data from the venue. Would you like me to notify you when the wait time drops below 15 minutes?",
         suggestions: ["Yes, notify me", "Show me peak hours", "Is this normal?"]
       },
-      "How busy is it?": {
+      [i18n.t('suggestions.busyness')]: {
         message: "The venue is moderately busy right now, operating at about 75% capacity. Based on historical data, it should start getting less crowded in about an hour. The bar area is less crowded than the main dining space.",
         suggestions: ["Show me a graph", "Best time to come?", "Reserve a spot"]
       },
-      "When should I arrive?": {
+      [i18n.t('suggestions.arrival')]: {
         message: "Based on current trends, I recommend arriving around 8:30 PM. The crowd typically thins out by then, and you'll have a shorter wait time. Would you like me to check table availability for that time?",
         suggestions: ["Check availability", "Show me other times", "Set a reminder"]
       },
       "default": {
         message: `I understand you're asking about "${command}". I'm here to help with wait times, venue capacity, and scheduling. What specific information would you like to know?`,
-        suggestions: ["What's the wait time?", "How busy is it?", "When should I arrive?"]
+        suggestions: [
+          i18n.t('suggestions.waitTime'),
+          i18n.t('suggestions.busyness'),
+          i18n.t('suggestions.arrival')
+        ]
       }
     };
 
@@ -207,6 +227,22 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
     setResponse(response);
     setInputText('');
   };
+
+  // Reset state when modal closes
+  useEffect(() => {
+    if (!showModal) {
+      setResponse({
+        message: getTimeBasedGreeting(),
+        suggestions: [
+          i18n.t('suggestions.waitTime'),
+          i18n.t('suggestions.busyness'),
+          i18n.t('suggestions.arrival')
+        ]
+      });
+      setInputText('');
+      setShowDeer(true);
+    }
+  }, [showModal]);
 
   return (
     <>
@@ -254,10 +290,55 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
             <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: -50, y: 50 }} />
           </View>
 
-          {/* DeerMan Animation */}
-          {showDeer && !response && (
-            <View style={[StyleSheet.absoluteFill, { zIndex: 2, justifyContent: 'center' }]}>
-              <DeerMan />
+          {/* Initial Greeting and Suggestions */}
+          {!response?.message.includes('"') && (
+            <View style={[StyleSheet.absoluteFill, { zIndex: 2, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }]}>
+              <Text style={{
+                color: isDarkMode ? '#FFFFFF' : '#000000',
+                fontSize: 32,
+                fontWeight: '700',
+                textAlign: 'center',
+                marginBottom: 40,
+              }}>
+                {getTimeBasedGreeting()}
+              </Text>
+              
+              <View style={{ alignItems: 'center', width: '100%', paddingHorizontal: 20 }}>
+                {[
+                  i18n.t('suggestions.waitTime'),
+                  i18n.t('suggestions.busyness'),
+                  i18n.t('suggestions.arrival')
+                ].map((suggestion, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.suggestionButton,
+                      {
+                        backgroundColor: 'rgba(142, 142, 147, 0.2)',
+                        paddingVertical: 12,
+                        paddingHorizontal: 20,
+                        borderRadius: 20,
+                        width: index === 2 ? '80%' : index === 1 ? '90%' : '100%',
+                        marginBottom: -8,
+                        alignSelf: index === 2 ? 'center' : index === 1 ? 'flex-end' : 'flex-start',
+                        zIndex: 3 - index,
+                      }
+                    ]}
+                    onPress={() => processCommand(suggestion)}
+                  >
+                    <Text style={[
+                      styles.suggestionText,
+                      {
+                        color: isDarkMode ? '#FFFFFF' : '#000000',
+                        fontSize: 16,
+                        textAlign: 'center',
+                      }
+                    ]}>
+                      {suggestion}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
           )}
 
@@ -314,6 +395,8 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                     color: isDarkMode ? '#FFFFFF' : '#000000',
                     fontSize: 16,
                     fontWeight: '500',
+                    textAlign: 'center',
+                    marginBottom: 20,
                   }]}>
                     {response.message}
                   </Text>
@@ -328,11 +411,18 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                             backgroundColor: isDarkMode 
                               ? 'rgba(255, 255, 255, 0.15)' 
                               : 'rgba(0, 0, 0, 0.1)',
+                            marginBottom: 10,
+                            paddingVertical: 10,
+                            paddingHorizontal: 15,
+                            borderRadius: 20,
                           }
                         ]}
                         onPress={() => processCommand(suggestion)}
                       >
-                        <Text style={[styles.suggestionText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
+                        <Text style={[styles.suggestionText, { 
+                          color: isDarkMode ? '#FFFFFF' : '#000000',
+                          fontSize: 14,
+                        }]}>
                           {suggestion}
                         </Text>
                       </TouchableOpacity>
