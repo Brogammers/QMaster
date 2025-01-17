@@ -308,14 +308,15 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                         paddingRight: 45,
                         paddingVertical: 24,
                         fontSize: 16,
-                        height: 38,
+                        bottom: 0,
+                        height: 24,
                         lineHeight: 38,
                         textAlignVertical: 'center',
                         includeFontPadding: false,
                         zIndex: 10,
                       }
                     ]}
-                    placeholder="Ask Sia anything..."
+                    // placeholder="Ask Sia anything..."
                     placeholderTextColor={isDarkMode ? '#1DCDFE' : '#00000080'}
                     value={inputText}
                     onChangeText={setInputText}
