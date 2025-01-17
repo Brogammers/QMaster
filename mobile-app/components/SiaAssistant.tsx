@@ -339,17 +339,28 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                     },
                   ]}
                 >
-                  <Text style={[styles.responseText, { 
-                    color: isDarkMode ? '#FFFFFF' : '#000000',
-                    fontSize: 16,
-                    fontWeight: '500',
-                    textAlign: 'center',
-                    marginBottom: 20,
-                  }]}>
+                  <Text style={[
+                    styles.responseText, 
+                    { 
+                      color: isDarkMode ? '#FFFFFF' : '#000000',
+                      fontSize: !response.message.includes('"') ? 38 : 16,
+                      fontWeight: !response.message.includes('"') ? '900' : '500',
+                      textAlign: 'center',
+                      marginBottom: !response.message.includes('"') ? 40 : 20,
+                    }
+                  ]}>
                     {response.message}
                   </Text>
                   
-                  <View style={styles.suggestionsContainer}>
+                  <View style={[
+                    styles.suggestionsContainer,
+                    {
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      justifyContent: 'center',
+                      gap: 10,
+                    }
+                  ]}>
                     {response.suggestions.map((suggestion, index) => (
                       <TouchableOpacity
                         key={index}
@@ -358,7 +369,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                           { 
                             backgroundColor: isDarkMode 
                               ? 'rgba(255, 255, 255, 0.15)' 
-                              : 'rgba(0, 0, 0, 0.1)',
+                              : 'rgba(142, 142, 147, 0.2)',
                             marginBottom: 10,
                             paddingVertical: 10,
                             paddingHorizontal: 15,
@@ -367,10 +378,14 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                         ]}
                         onPress={() => processCommand(suggestion)}
                       >
-                        <Text style={[styles.suggestionText, { 
-                          color: isDarkMode ? '#FFFFFF' : '#000000',
-                          fontSize: 14,
-                        }]}>
+                        <Text style={[
+                          styles.suggestionText, 
+                          { 
+                            color: isDarkMode ? '#FFFFFF' : '#000000',
+                            fontSize: 14,
+                            textAlign: 'center',
+                          }
+                        ]}>
                           {suggestion}
                         </Text>
                       </TouchableOpacity>
