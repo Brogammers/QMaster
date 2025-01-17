@@ -354,9 +354,11 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                         borderWidth: isDarkMode ? 1.5 : 0,
                         borderColor: '#1DCDFE',
                         zIndex: 12,
+                        opacity: inputText.trim() ? 1 : 0.5,
                       }
                     ]}
-                    onPress={() => processCommand(inputText)}
+                    onPress={() => inputText.trim() && processCommand(inputText)}
+                    disabled={!inputText.trim()}
                   >
                     <FontAwesome5 
                       name="paper-plane" 
