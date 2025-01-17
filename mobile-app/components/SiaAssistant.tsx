@@ -306,10 +306,12 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                         borderWidth: isDarkMode ? 1.5 : 1,
                         paddingLeft: 45,
                         paddingRight: 45,
+                        paddingVertical: 24,
                         fontSize: 16,
                         height: 38,
                         lineHeight: 38,
                         textAlignVertical: 'center',
+                        includeFontPadding: false,
                         zIndex: 10,
                       }
                     ]}
@@ -319,7 +321,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                     onChangeText={setInputText}
                     onSubmitEditing={() => processCommand(inputText)}
                     autoCorrect={false}
-                    selectionColor={isDarkMode ? '#1DCDFE' : '#000000'}
+                    selectionColor="#1DCDFE"
                   />
                   {/* Visible Text Overlay */}
                   <Text
