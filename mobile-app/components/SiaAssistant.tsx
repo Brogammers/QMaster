@@ -290,58 +290,6 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
             <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: -50, y: 50 }} />
           </View>
 
-          {/* Initial Greeting and Suggestions */}
-          {!response?.message.includes('"') && (
-            <View style={[StyleSheet.absoluteFill, { zIndex: 2, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }]}>
-              <Text style={{
-                color: isDarkMode ? '#FFFFFF' : '#000000',
-                fontSize: 32,
-                fontWeight: '700',
-                textAlign: 'center',
-                marginBottom: 40,
-              }}>
-                {getTimeBasedGreeting()}
-              </Text>
-              
-              <View style={{ alignItems: 'center', width: '100%', paddingHorizontal: 20 }}>
-                {[
-                  i18n.t('suggestions.waitTime'),
-                  i18n.t('suggestions.busyness'),
-                  i18n.t('suggestions.arrival')
-                ].map((suggestion, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={[
-                      styles.suggestionButton,
-                      {
-                        backgroundColor: 'rgba(142, 142, 147, 0.2)',
-                        paddingVertical: 12,
-                        paddingHorizontal: 20,
-                        borderRadius: 20,
-                        width: index === 2 ? '80%' : index === 1 ? '90%' : '100%',
-                        marginBottom: -8,
-                        alignSelf: index === 2 ? 'center' : index === 1 ? 'flex-end' : 'flex-start',
-                        zIndex: 3 - index,
-                      }
-                    ]}
-                    onPress={() => processCommand(suggestion)}
-                  >
-                    <Text style={[
-                      styles.suggestionText,
-                      {
-                        color: isDarkMode ? '#FFFFFF' : '#000000',
-                        fontSize: 16,
-                        textAlign: 'center',
-                      }
-                    ]}>
-                      {suggestion}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-          )}
-
           {/* Background Gradient */}
           {!isDarkMode && (
             <LinearGradient
