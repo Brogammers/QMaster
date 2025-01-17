@@ -23,7 +23,7 @@ const AnimatedFlare = ({ isDarkMode, initialPosition }: { isDarkMode: boolean; i
   const translateY = useRef(new Animated.Value(initialPosition?.y || 0)).current;
   const translateX = useRef(new Animated.Value(initialPosition?.x || 0)).current;
   const scale = useRef(new Animated.Value(1)).current;
-  const opacity = useRef(new Animated.Value(0.2)).current;
+  const opacity = useRef(new Animated.Value(0.3)).current;
 
   useEffect(() => {
     const createAnimation = () => {
@@ -31,48 +31,48 @@ const AnimatedFlare = ({ isDarkMode, initialPosition }: { isDarkMode: boolean; i
         Animated.sequence([
           Animated.timing(translateY, {
             toValue: -150,
-            duration: 25000,
+            duration: 20000,
             useNativeDriver: true,
           }),
           Animated.timing(translateY, {
             toValue: 150,
-            duration: 25000,
+            duration: 20000,
             useNativeDriver: true,
           }),
         ]),
         Animated.sequence([
           Animated.timing(translateX, {
             toValue: 150,
-            duration: 30000,
+            duration: 25000,
             useNativeDriver: true,
           }),
           Animated.timing(translateX, {
             toValue: -150,
-            duration: 30000,
+            duration: 25000,
             useNativeDriver: true,
           }),
         ]),
         Animated.sequence([
           Animated.timing(scale, {
             toValue: 1.8,
-            duration: 27000,
+            duration: 22000,
             useNativeDriver: true,
           }),
           Animated.timing(scale, {
             toValue: 1,
-            duration: 27000,
+            duration: 22000,
             useNativeDriver: true,
           }),
         ]),
         Animated.sequence([
           Animated.timing(opacity, {
-            toValue: 0.4,
-            duration: 15000,
+            toValue: 0.5,
+            duration: 12000,
             useNativeDriver: true,
           }),
           Animated.timing(opacity, {
-            toValue: 0.2,
-            duration: 15000,
+            toValue: 0.3,
+            duration: 12000,
             useNativeDriver: true,
           }),
         ]),
@@ -97,8 +97,8 @@ const AnimatedFlare = ({ isDarkMode, initialPosition }: { isDarkMode: boolean; i
           ],
           opacity,
           backgroundColor: isDarkMode 
-            ? Math.random() > 0.5 ? '#00FFFF10' : '#87CEEB10'
-            : Math.random() > 0.5 ? '#0077B610' : '#4682B410',
+            ? Math.random() > 0.45 ? '#00FFFF15' : '#87CEEB15'
+            : Math.random() > 0.45 ? '#0077B615' : '#4682B415',
         },
       ]}
     />
@@ -274,7 +274,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
                 />
               </Animated.View>
               
-              <View style={styles.inputContainer}>
+              <View className='animate-pulse' style={styles.inputContainer}>
                 <View style={styles.inputWrapper}>
                   <TextInput
                     style={[
@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
     height: 42,
     borderRadius: 9999,
     padding: 24,
-    paddingRight: 56, // Make room for the send button
+    paddingRight: 64,
     fontSize: 16,
     elevation: 3,
     shadowColor: '#00FFFF',
@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     position: 'absolute',
-    right: 4,
+    right: 8,
     width: 34,
     height: 34,
     borderRadius: 17,
@@ -441,7 +441,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
     height: SCREEN_WIDTH,
     borderRadius: SCREEN_WIDTH / 2,
-    opacity: 0.3,
+    opacity: 0.25,
     left: -SCREEN_WIDTH / 2,
     top: -SCREEN_WIDTH / 2,
   },
