@@ -233,6 +233,8 @@ The mobile app provides customers with easy access to queue services.
 
 ### Project Sia
 
+<img src="./mobile-app/assets/images/Sia AI.png" alt="Sia AI" width="64" height="64" style="border-radius: 50%; background: linear-gradient(45deg, #00F5A0, #00D9F5);" />
+
 > **CLASSIFIED - INTERNAL USE ONLY**
 > 
 > Project Sia represents our proprietary AI engine that powers QMaster's intelligent features. This is a restricted component with classified implementation details.
