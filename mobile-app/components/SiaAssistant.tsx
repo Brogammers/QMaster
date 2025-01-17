@@ -192,7 +192,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
           <StatusBar translucent barStyle={isDarkMode ? "light-content" : "dark-content"} />
           
           {/* Animated Flares */}
-          <View style={StyleSheet.absoluteFill}>
+          <View style={[StyleSheet.absoluteFill, { zIndex: 1 }]}>
             <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: -100, y: -100 }} />
             <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: 100, y: 100 }} />
             <AnimatedFlare isDarkMode={isDarkMode} initialPosition={{ x: 0, y: 0 }} />
@@ -203,7 +203,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
           {!isDarkMode && (
             <LinearGradient
               colors={['rgba(0, 119, 182, 0.1)', 'rgba(255, 255, 255, 0)']}
-              style={[StyleSheet.absoluteFill, { height: 250 }]}
+              style={[StyleSheet.absoluteFill, { height: 250, zIndex: 1 }]}
               start={{ x: 0, y: 0 }}
               end={{ x: 0, y: 1 }}
             />
@@ -211,7 +211,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
 
           {/* Close Button */}
           <TouchableOpacity 
-            style={styles.closeButton}
+            style={[styles.closeButton, { zIndex: 3 }]}
             onPress={() => setShowModal(false)}
           >
             <FontAwesome5 
@@ -221,7 +221,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose }
             />
           </TouchableOpacity>
           
-          <View style={styles.contentContainer}>
+          <View style={[styles.contentContainer, { zIndex: 2 }]}>
             {/* Response Area */}
             <ScrollView 
               style={[
@@ -352,6 +352,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
+    zIndex: 1,
   },
   contentContainer: {
     flex: 1,
@@ -361,9 +362,11 @@ const styles = StyleSheet.create({
   responseArea: {
     flex: 1,
     paddingHorizontal: 20,
+    zIndex: 2,
   },
   responseContainer: {
     marginBottom: 20,
+    zIndex: 2,
   },
   responseText: {
     fontSize: 16,
@@ -403,11 +406,13 @@ const styles = StyleSheet.create({
     maxWidth: 500,
     marginHorizontal: 'auto',
     paddingTop: 15,
+    zIndex: 2,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
+    zIndex: 2,
   },
   input: {
     flex: 1,
@@ -451,6 +456,7 @@ const styles = StyleSheet.create({
     opacity: 0.25,
     left: -SCREEN_WIDTH / 2,
     top: -SCREEN_WIDTH / 2,
+    zIndex: 1,
   },
   inputSiaIcon: {
     position: 'absolute',
