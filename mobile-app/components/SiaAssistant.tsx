@@ -135,6 +135,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
   const [isTyping, setIsTyping] = useState(false);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const typingOpacity = useRef(new Animated.Value(0)).current;
+  const [lastPrompt, setLastPrompt] = useState<string | null>(null);
 
   useEffect(() => {
     setShowModal(isVisible);
@@ -145,6 +146,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
     setDisplayedResponse('');
     setInputText('');
     setIsTyping(false);
+    setLastPrompt(null);
   };
 
   const handleOpenModal = () => {
@@ -180,7 +182,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
     animateTypingDots();
     
     let currentIndex = 0;
-    const typingSpeed = 30; // milliseconds per character
+    const typingSpeed = 15; // Reduced from 30 to 15 milliseconds per character
     
     const typeChar = () => {
       if (currentIndex < fullResponse.length) {
@@ -254,6 +256,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
       setDisplayedResponse('');
       typeResponse(responseText);
       setInputText('');
+      setLastPrompt(inputText);
     }
   };
 
@@ -263,6 +266,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
     setDisplayedResponse('');
     typeResponse(responseText);
     setInputText(suggestion);
+    setLastPrompt(suggestion);
   };
 
   useEffect(() => {
@@ -366,6 +370,13 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                   borderColor: isDarkMode ? '#1DCDFE' : '#E5E7EB',
                 }
               ]}>
+                <Text style={[
+                  styles.promptText,
+                  { color: isDarkMode ? '#1DCDFE' : '#0C1824' }
+                ]}>
+                  {inputText || lastPrompt}
+                </Text>
+                <View style={styles.promptDivider} />
                 <Text style={[
                   styles.responseText,
                   { color: isDarkMode ? '#FFFFFF' : '#17222D' }
@@ -592,6 +603,18 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     marginHorizontal: 20,
+  },
+  promptText: {
+    fontSize: 14,
+    fontWeight: '500',
+    fontStyle: 'italic',
+    marginBottom: 8,
+  },
+  promptDivider: {
+    height: 1,
+    backgroundColor: '#E5E7EB',
+    marginBottom: 12,
+    opacity: 0.5,
   },
   responseText: {
     fontSize: 16,
