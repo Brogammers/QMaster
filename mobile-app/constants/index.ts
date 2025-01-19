@@ -68,6 +68,7 @@ export const Categories: CategoryProps[] = [
   // {
   //   image: Grocery,
   //   title: i18n.t('groceries'),
+  //   name: "Groceries"
   // },
   {
     image: Bank,
@@ -101,6 +102,7 @@ export const AllCategories: CategoryProps[] = [
   // {
   //   image: Grocery,
   //   title: i18n.t('groceries'),
+  //   name: "Groceries"
   // },
   {
     image: Bank,
