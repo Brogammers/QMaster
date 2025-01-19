@@ -506,6 +506,7 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 32,
     fontWeight: '700',
+    textAlign: 'center',
   },
   suggestionsSection: {
     flexDirection: 'row',
