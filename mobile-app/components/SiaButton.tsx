@@ -1,6 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { TouchableOpacity, Text, StyleSheet, View, Image } from 'react-native';
 import { useTheme } from '@/ctx/ThemeContext';
 import { useSia } from '@/ctx/SiaContext';
 
@@ -23,10 +22,9 @@ export const SiaButton: React.FC<SiaButtonProps> = ({ showText = true, style }) 
       onPress={showSia}
       activeOpacity={0.8}
     >
-      <FontAwesome5 
-        name="robot" 
-        size={20} 
-        color={isDarkMode ? '#00FFFF' : '#0C1824'} 
+      <Image 
+        source={require('../assets/images/Sia AI.png')}
+        style={styles.siaIcon}
       />
       {showText && (
         <Text style={[
@@ -51,5 +49,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  siaIcon: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
   },
 }); 
