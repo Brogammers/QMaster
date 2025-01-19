@@ -43,6 +43,7 @@ export interface SearchFilterProps {
 export interface CategoryProps {
   image: React.FC<SvgProps> | ImageSourcePropType;
   title: string;
+  name: string;
   onPress?: any;
   spacing?: number;
   isDarkMode?: boolean;
