@@ -1,8 +1,7 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, ImageSourcePropType } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
 import i18n from '@/i18n';
-import { useLinkTo } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
+import React from 'react';
+import { Image, ImageSourcePropType, Text, TouchableOpacity, View } from 'react-native';
 
 interface QueueCardProps {
   name: string;
@@ -13,12 +12,8 @@ interface QueueCardProps {
   isDarkMode?: boolean;
 }
 
-export default function QueueCard({ name, image, time, people, isDarkMode }: QueueCardProps) {
-  const linkTo = useLinkTo();
-
-  const handlePress = () => {
-    linkTo('/Partner');
-  };
+export default function QueueCard({ name, image, time, people, isDarkMode, onPress }: QueueCardProps) {
+  const handlePress = onPress;
 
   return (
     <TouchableOpacity

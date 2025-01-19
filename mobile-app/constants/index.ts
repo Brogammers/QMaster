@@ -53,26 +53,32 @@ export const Categories: CategoryProps[] = [
   {
     image: Restaurant,
     title: i18n.t('restaurants'),
+    name: "Restaurants"
   },
   {
     image: Government,
     title: i18n.t('governments'),
+    name: "Governments"
   },
   {
     image: Clinic,
     title: i18n.t('clinics'),
+    name: "Clinics"
   },
-  {
-    image: Grocery,
-    title: i18n.t('groceries'),
-  },
+  // {
+  //   image: Grocery,
+  //   title: i18n.t('groceries'),
+  //   name: "Groceries"
+  // },
   {
     image: Bank,
     title: i18n.t('banks'),
+    name: "Banks"
   },
   {
     image: Other,
     title: i18n.t('others'),
+    name: "Others"
   },
 ];
 
@@ -81,168 +87,184 @@ export const AllCategories: CategoryProps[] = [
   {
     image: Restaurant,
     title: i18n.t('restaurants'),
+    name: "Restaurants"
   },
   {
     image: Government,
     title: i18n.t('governments'),
+    name: "Governments"
   },
   {
     image: Clinic,
     title: i18n.t('clinics'),
+    name: "Clinics"
   },
-  {
-    image: Grocery,
-    title: i18n.t('groceries'),
-  },
+  // {
+  //   image: Grocery,
+  //   title: i18n.t('groceries'),
+  //   name: "Groceries"
+  // },
   {
     image: Bank,
     title: i18n.t('banks'),
+    name: "Banks"
   },
   // Add new categories
   {
     image: Other,
     title: i18n.t('autoRepair'),
-  },
-  {
-    image: Other,
-    title: i18n.t('bikeRepair'),
+    name: "Auto Repair"
   },
   {
     image: Other,
     title: i18n.t('privateCatering'),
+    name: "Private Catering"
   },
   {
     image: Other,
     title: i18n.t('ceremonyHalls'),
+    name: "Ceremony Halls"
   },
   {
     image: Other,
     title: i18n.t('carDealerships'),
+    name: "Car Dealerships"
   },
   {
     image: Other,
-    title: i18n.t('education'),
+    title: i18n.t('motoDealerships'),
+    name: "Moto Dealerships"
   },
-  {
-    image: Other,
-    title: i18n.t('salons'),
-  },
-  {
-    image: Other,
-    title: i18n.t('spas'),
-  },
-  {
-    image: Other,
-    title: i18n.t('telecom'),
-  },
-  {
-    image: Other,
-    title: i18n.t('realEstate'),
-  },
-  {
-    image: Other,
-    title: i18n.t('insurance'),
-  },
-  {
-    image: Other,
-    title: i18n.t('petCare'),
-  },
-  {
-    image: Other,
-    title: i18n.t('fitness'),
-  },
-  {
-    image: Other,
-    title: i18n.t('entertainment'),
-  },
-  {
-    image: Other,
-    title: i18n.t('pharmacies'),
-  },
+  // {
+  //   image: Other,
+  //   title: i18n.t('education'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('salons'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('spas'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('telecom'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('realEstate'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('insurance'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('petCare'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('fitness'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('entertainment'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('pharmacies'),
+  // },
   {
     image: Other,
     title: i18n.t('hotels'),
+    name: "Hotels"
   },
   {
     image: Other,
-    title: i18n.t('laundry'),
+    title: i18n.t('flightTickets'),
+    name: "Flight Tickets"
   },
-  {
-    image: Other,
-    title: i18n.t('bookstores'),
-  },
-  {
-    image: Other,
-    title: i18n.t('toyStores'),
-  },
-  {
-    image: Other,
-    title: i18n.t('sportingGoods'),
-  },
-  {
-    image: Other,
-    title: i18n.t('furniture'),
-  },
-  {
-    image: Other,
-    title: i18n.t('electronics'),
-  },
-  {
-    image: Other,
-    title: i18n.t('jewelry'),
-  },
-  {
-    image: Other,
-    title: i18n.t('opticians'),
-  },
-  {
-    image: Other,
-    title: i18n.t('tailors'),
-  },
-  {
-    image: Other,
-    title: i18n.t('carWash'),
-  },
-  {
-    image: Other,
-    title: i18n.t('postOffices'),
-  },
-  {
-    image: Other,
-    title: i18n.t('libraries'),
-  },
-  {
-    image: Other,
-    title: i18n.t('museums'),
-  },
-  {
-    image: Other,
-    title: i18n.t('theaters'),
-  },
-  {
-    image: Other,
-    title: i18n.t('cinemas'),
-  },
-  {
-    image: Other,
-    title: i18n.t('artGalleries'),
-  },
-  {
-    image: Other,
-    title: i18n.t('computerRepair'),
-  },
-  {
-    image: Other,
-    title: i18n.t('phoneRepair'),
-  },
-  {
-    image: Other,
-    title: i18n.t('homeServices'),
-  },
-  {
-    image: Other,
-    title: i18n.t('travelAgencies'),
-  }
+  // {
+  //   image: Other,
+  //   title: i18n.t('laundry'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('bookstores'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('toyStores'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('sportingGoods'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('furniture'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('electronics'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('jewelry'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('opticians'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('tailors'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('carWash'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('postOffices'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('libraries'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('museums'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('theaters'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('cinemas'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('artGalleries'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('computerRepair'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('phoneRepair'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('homeServices'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('travelAgencies'),
+  // }
 ];
 
 //Current Queues

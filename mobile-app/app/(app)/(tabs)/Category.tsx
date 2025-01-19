@@ -1,35 +1,70 @@
-import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Current } from '@/constants';
-import i18n from '@/i18n';
-import QueueCard from '@/shared/components/QueueCard';
+import configConverter from '@/api/configConverter';
+import arabiata from '@/assets/images/arabiata.png';
 import { useTheme } from '@/ctx/ThemeContext';
+import QueueCard from '@/shared/components/QueueCard';
+import { CurrentQueuesProps } from '@/types';
+import { useLinkTo } from '@react-navigation/native';
+import axios from 'axios';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
+
+const page = 1;
+const perPage = 5;
 
 export default function Category() {
-  const { name } = useLocalSearchParams();
-  const categoryName = decodeURIComponent(String(name));
-  const router = useRouter();
+  const { name } = useLocalSearchParams<{ name: string }>();  
+  const categoryName = name; //i18n.t(name);
+  const linkTo = useLinkTo();
   const { isDarkMode } = useTheme();
+  const [current, setCurrent] = useState<CurrentQueuesProps[]>([]);
 
-  const handleBrandPress = (brand: any) => {
-    router.push({
-      pathname: "/(app)/(tabs)/Partner",
-      params: { 
-        brandName: brand.name,
-        image: brand.image
-      }
+  const handleBrandPress = (brand: any) => {    
+    linkTo('/Partner');
+    router.setParams({ 
+      brandName: brand.name, 
+      image: brand.image 
     });
   };
+
+  useEffect(() => {
+    const url = configConverter("EXPO_PUBLIC_API_BASE_URL_GET_BUSINESSES_BY_CATEGORY");
+
+    axios.get(`${url}?category=${name}&page=${page}&per-page=${perPage}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data;
+        } else {
+          throw new Error('Failed to fetch data');
+        }
+      })
+      .then((data) => { 
+          const businesses = data.businesses.content
+          const currentQueues = businesses.map((business: any) => {
+            return {
+              name: business.username,
+              image: arabiata,
+              time: 20,
+              people: 20
+            };
+          });
+
+          setCurrent(currentQueues);
+        }
+      )
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [name]);
 
   return (
     <View className={`flex-1 ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="p-4">
           <Text className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-ocean-blue'}`}>
-            {i18n.t(categoryName)}
+            {categoryName}
           </Text>
-          {Current.map((brand, index) => (
+          {current.map((brand, index) => (
             <QueueCard
               key={index}
               name={brand.name}

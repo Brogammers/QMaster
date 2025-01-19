@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.CacheControl;
 import org.springframework.lang.NonNull;
@@ -13,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import io.swagger.v3.oas.models.OpenAPI;
 
 @SpringBootApplication
-public class QueApplication implements WebMvcConfigurer {
+public class QueApplication extends SpringBootServletInitializer implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(QueApplication.class, args);
@@ -32,6 +34,11 @@ public class QueApplication implements WebMvcConfigurer {
 		return new OpenAPI().info(new io.swagger.v3.oas.models.info.Info().title("Queue Master API")
 				.description("This is a sample Spring Boot RESTful")
 				.version("v0.0.1"));
+	}
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(QueApplication.class);
 	}
 
 }

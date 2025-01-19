@@ -4,10 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.que.que.Security.PasswordEncoder;
 import com.que.que.Security.PasswordValidator;
-import com.que.que.User.BusinessUser.BusinessUser;
-import com.que.que.User.BusinessUser.BusinessUserRepository;
 
 import lombok.AllArgsConstructor;
 
