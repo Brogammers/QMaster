@@ -65,11 +65,10 @@ export const Categories: CategoryProps[] = [
     title: i18n.t('clinics'),
     name: "Clinics"
   },
-  {
-    image: Grocery,
-    title: i18n.t('groceries'),
-    name: "Groceries"
-  },
+  // {
+  //   image: Grocery,
+  //   title: i18n.t('groceries'),
+  // },
   {
     image: Bank,
     title: i18n.t('banks'),
@@ -99,11 +98,10 @@ export const AllCategories: CategoryProps[] = [
     title: i18n.t('clinics'),
     name: "Clinics"
   },
-  {
-    image: Grocery,
-    title: i18n.t('groceries'),
-    name: "Groceries"
-  },
+  // {
+  //   image: Grocery,
+  //   title: i18n.t('groceries'),
+  // },
   {
     image: Bank,
     title: i18n.t('banks'),
@@ -117,22 +115,24 @@ export const AllCategories: CategoryProps[] = [
   },
   {
     image: Other,
-    title: i18n.t('bikeRepair'),
-    name: "Bike Repair"
-  },
-  {
-    image: Other,
     title: i18n.t('privateCatering'),
     name: "Private Catering"
   },
-  // {
-  //   image: Other,
-  //   title: i18n.t('ceremonyHalls'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('carDealerships'),
-  // },
+  {
+    image: Other,
+    title: i18n.t('ceremonyHalls'),
+    name: "Ceremony Halls"
+  },
+  {
+    image: Other,
+    title: i18n.t('carDealerships'),
+    name: "Car Dealerships"
+  },
+  {
+    image: Other,
+    title: i18n.t('motoDealerships'),
+    name: "Moto Dealerships"
+  },
   // {
   //   image: Other,
   //   title: i18n.t('education'),
@@ -173,10 +173,16 @@ export const AllCategories: CategoryProps[] = [
   //   image: Other,
   //   title: i18n.t('pharmacies'),
   // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('hotels'),
-  // },
+  {
+    image: Other,
+    title: i18n.t('hotels'),
+    name: "Hotels"
+  },
+  {
+    image: Other,
+    title: i18n.t('flightTickets'),
+    name: "Flight Tickets"
+  },
   // {
   //   image: Other,
   //   title: i18n.t('laundry'),
