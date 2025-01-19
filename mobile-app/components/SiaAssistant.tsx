@@ -266,7 +266,6 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
     setResponse(responseText);
     setDisplayedResponse('');
     typeResponse(responseText);
-    setInputText(suggestion);
     setLastPrompt(suggestion);
   };
 
