@@ -11,12 +11,16 @@ public class StoreCreationRequest {
     private Long id;
     private String name;
     private String description;
-    private String location;
+    private String address;
+    private double latitude;
+    private double longitude;
 
-    public StoreCreationRequest(Long id, String name, String location) {
+    public StoreCreationRequest(Long id, String name, String address, double latitude, double longitude) {
         this.id = id;
         this.name = name;
-        this.location = location;
+        this.address = address;
         this.description = "";
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

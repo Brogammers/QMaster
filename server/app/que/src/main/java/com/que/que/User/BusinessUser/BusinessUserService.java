@@ -85,7 +85,9 @@ public class BusinessUserService implements UserDetailsService {
                 .findByName(category)
                 .orElseThrow(() -> new IllegalStateException("Category not found"));
 
-        return businessUserRepository.findAllByBusinessCategory(businessCategory.getId(), pageable);
+        Page<BusinessUser> businesses = businessUserRepository.findAllByBusinessCategory(businessCategory.getId(),
+                pageable);
+        return businesses;
     }
 
     public void addCategory(String category, long id) {

@@ -40,7 +40,13 @@ public class Store {
     private String description;
 
     @Column(nullable = false)
-    private String location;
+    private String address;
+
+    @Column(nullable = false)
+    private double latitude;
+
+    @Column(nullable = false)
+    private double longitude;
 
     @ManyToMany
     private Set<OpeningHours> openingHourss = new HashSet<>();
@@ -52,18 +58,23 @@ public class Store {
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "store")
     private List<Queues> queues = new ArrayList<>();
 
-    public Store(String name, String location, BusinessUser businessUser) {
+    public Store(String name, String address, BusinessUser businessUser, double latitude, double longitude) {
         this.name = name;
-        this.location = location;
+        this.address = address;
         this.description = "";
         this.businessUser = businessUser;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    public Store(String name, String location, String description, BusinessUser businessUser) {
+    public Store(String name, String address, String description, BusinessUser businessUser, double latitude,
+            double longitude) {
         this.name = name;
-        this.location = location;
+        this.address = address;
         this.description = description;
         this.businessUser = businessUser;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public void addOpeningHours(OpeningHours openingHours) {

@@ -6,14 +6,10 @@ import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import { SafeAreaView } from "react-native-safe-area-context";
-
-// Hardcoded data for development
-const hardcodedData = {
-  brandName: "Carrefour",
-  image: require('../../../assets/images/CarrefourLogo.png')
-};
+import { useLocalSearchParams } from "expo-router";
 
 export default function Partner() {
+  const { brandName, image } = useLocalSearchParams<{ brandName: string, image: any }>();
   const { isDarkMode } = useTheme();
 
   return (
@@ -29,7 +25,7 @@ export default function Partner() {
         )}
       </View>
 
-      <QueueInfoCard image={hardcodedData.image} name={hardcodedData.brandName} />
+      <QueueInfoCard image={image} name={brandName} />
       
       <SafeAreaView className="flex-1" edges={['bottom', 'left', 'right']}>
         <ScrollView 
@@ -47,7 +43,7 @@ export default function Partner() {
             }}
             className="w-full px-6"
           >
-            <JoinQueue />
+            <JoinQueue businessName={brandName}/>
           </MotiView>
         </ScrollView>
       </SafeAreaView>

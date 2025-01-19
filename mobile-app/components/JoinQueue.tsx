@@ -1,19 +1,60 @@
-import React, { useState } from "react";
-import { View, Dimensions, Text, ScrollView, Platform } from "react-native";
-import DropDownPicker from 'react-native-dropdown-picker';
-import { locations } from '@/constants/index';
-import QueueDetails from "./QueueDetails";
-import { useTheme } from '@/ctx/ThemeContext';
-import { MotiView } from 'moti';
+import configConverter from "@/api/configConverter";
 import Wandering from "@/assets/images/wandering.svg";
+import { useTheme } from '@/ctx/ThemeContext';
 import i18n from '@/i18n';
+import axios from "axios";
+import { MotiView } from 'moti';
+import React, { useEffect, useState } from "react";
+import { Dimensions, Platform, ScrollView, Text, View } from "react-native";
+import DropDownPicker from 'react-native-dropdown-picker';
+import QueueDetails from "./QueueDetails";
 
-export default function QueuePage() {
+interface QueuePageProps {
+  businessName: string;
+}
+
+export default function QueuePage(props: QueuePageProps) {
   const width = Dimensions.get('window').width * 0.85;
   const { isDarkMode } = useTheme();
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+  const [locationData, setLocationData] = useState([]);
+
+  const { businessName } = props;
+
+  useEffect(() => {
+    const url = configConverter(
+        "EXPO_PUBLIC_API_BASE_URL_GET_STORES_BY_BUSINESS"
+    );
+
+    axios.get(`${url}?businessName=${businessName}`)
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data.stores;
+      } else { 
+        console.log("Error: ", response);
+      }
+    })
+    .then((data) => {
+      const locationData = data.map((store: any, idx: number) => {
+        return {
+          label: store.name,
+          value: idx,
+          id: store.id,
+          address: store.address,
+          coordinates: { 
+            latitude: store.latitude,
+            longitude: store.longitude,
+          }
+        }
+      })
+      setLocationData(locationData);
+    })
+    .catch((error) => {
+      console.log("Error: ", error);
+    });
+  }, []);
 
   return (
     <View className="flex-1">
@@ -33,7 +74,7 @@ export default function QueuePage() {
             <DropDownPicker
               open={open}
               value={value}
-              items={locations}
+              items={locationData}
               setOpen={setOpen}
               setValue={setValue}
               style={{

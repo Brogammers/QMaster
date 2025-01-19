@@ -1,29 +1,29 @@
-import React, { useEffect } from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
-import { Current } from '@/constants';
-import i18n from '@/i18n';
-import QueueCard from '@/shared/components/QueueCard';
-import { useTheme } from '@/ctx/ThemeContext';
 import configConverter from '@/api/configConverter';
+import arabiata from '@/assets/images/arabiata.png';
+import { useTheme } from '@/ctx/ThemeContext';
+import QueueCard from '@/shared/components/QueueCard';
+import { CurrentQueuesProps } from '@/types';
+import { useLinkTo } from '@react-navigation/native';
 import axios from 'axios';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
 
 const page = 1;
 const perPage = 5;
 
 export default function Category() {
-  const { name } = useLocalSearchParams<{ name: string}>();  
+  const { name } = useLocalSearchParams<{ name: string }>();  
   const categoryName = name; //i18n.t(name);
-  const router = useRouter();
+  const linkTo = useLinkTo();
   const { isDarkMode } = useTheme();
+  const [current, setCurrent] = useState<CurrentQueuesProps[]>([]);
 
-  const handleBrandPress = (brand: any) => {
-    router.push({
-      pathname: "/(app)/(tabs)/Partner",
-      params: { 
-        brandName: brand.name,
-        image: brand.image
-      }
+  const handleBrandPress = (brand: any) => {    
+    linkTo('/Partner');
+    router.setParams({ 
+      brandName: brand.name, 
+      image: brand.image 
     });
   };
 
@@ -40,8 +40,16 @@ export default function Category() {
       })
       .then((data) => { 
           const businesses = data.businesses.content
-          console.log(businesses);
-          
+          const currentQueues = businesses.map((business: any) => {
+            return {
+              name: business.username,
+              image: arabiata,
+              time: 20,
+              people: 20
+            };
+          });
+
+          setCurrent(currentQueues);
         }
       )
       .catch((error) => {
@@ -56,7 +64,7 @@ export default function Category() {
           <Text className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-ocean-blue'}`}>
             {categoryName}
           </Text>
-          {Current.map((brand, index) => (
+          {current.map((brand, index) => (
             <QueueCard
               key={index}
               name={brand.name}
