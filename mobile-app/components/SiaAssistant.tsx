@@ -249,14 +249,15 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
     }
   };
 
-  const handleSend = () => {
-    if (inputText.trim() && !isTyping) {
-      const responseText = getHardcodedResponse(inputText);
+  const handleSend = (text?: string) => {
+    const messageText = text || inputText;
+    if (messageText.trim() && !isTyping) {
+      const responseText = getHardcodedResponse(messageText);
       setResponse(responseText);
       setDisplayedResponse('');
       typeResponse(responseText);
       setInputText('');
-      setLastPrompt(inputText);
+      setLastPrompt(messageText);
     }
   };
 
@@ -452,7 +453,13 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                 placeholderTextColor={isDarkMode ? '#1DCDFE80' : '#17222D80'}
                 value={inputText}
                 onChangeText={setInputText}
-                onSubmitEditing={handleSend}
+                onSubmitEditing={() => {
+                  const currentText = inputText;
+                  setInputText('');
+                  if (currentText.trim()) {
+                    handleSend(currentText);
+                  }
+                }}
                 editable={!isTyping}
               />
 
@@ -465,7 +472,13 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                     opacity: (!inputText.trim() || isTyping) ? 0.5 : 1,
                   }
                 ]}
-                onPress={handleSend}
+                onPress={() => {
+                  const currentText = inputText;
+                  setInputText('');
+                  if (currentText.trim()) {
+                    handleSend(currentText);
+                  }
+                }}
                 disabled={!inputText.trim() || isTyping}
               >
                 <FontAwesome5 
