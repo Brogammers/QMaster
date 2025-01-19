@@ -366,7 +366,9 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
               <View style={[
                 styles.responseContainer,
                 { 
-                  backgroundColor: isDarkMode ? '#17222D' : '#FFFFFF',
+                  backgroundColor: isDarkMode 
+                    ? 'rgba(23, 34, 45, 0.75)'  // Dark mode: semi-transparent dark blue
+                    : 'rgba(255, 255, 255, 0.75)', // Light mode: semi-transparent white
                   borderColor: isDarkMode ? '#1DCDFE' : '#E5E7EB',
                 }
               ]}>
@@ -376,7 +378,10 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({ isVisible, onClose, 
                 ]}>
                   {inputText || lastPrompt}
                 </Text>
-                <View style={styles.promptDivider} />
+                <View style={[
+                  styles.promptDivider,
+                  { backgroundColor: isDarkMode ? 'rgba(229, 231, 235, 0.2)' : 'rgba(12, 24, 36, 0.2)' }
+                ]} />
                 <Text style={[
                   styles.responseText,
                   { color: isDarkMode ? '#FFFFFF' : '#17222D' }
