@@ -58,6 +58,21 @@ export const EmailVerificationText = i18n.t('sitTight');
 //Categories
 export const Categories: CategoryProps[] = [
   {
+    image: AutoRepair,
+    title: i18n.t('autoRepair'),
+    name: "AutoRepair"
+  },
+  {
+    image: Bank,
+    title: i18n.t('banks'),
+    name: "Banks"
+  },
+  {
+    image: Clinic,
+    title: i18n.t('clinics'),
+    name: "Clinics"
+  },
+  {
     image: Restaurant,
     title: i18n.t('restaurants'),
     name: "Restaurants"
@@ -66,26 +81,6 @@ export const Categories: CategoryProps[] = [
     image: Government,
     title: i18n.t('governments'),
     name: "Governments"
-  },
-  {
-    image: Clinic,
-    title: i18n.t('clinics'),
-    name: "Clinics"
-  },
-  {
-    image: AutoRepair,
-    title: i18n.t('autoRepair'),
-    name: "AutoRepair"
-  },
-  // {
-  //   image: Grocery,
-  //   title: i18n.t('groceries'),
-  //   name: "Groceries"
-  // },
-  {
-    image: Bank,
-    title: i18n.t('banks'),
-    name: "Banks"
   },
   {
     image: Other,
@@ -95,47 +90,11 @@ export const Categories: CategoryProps[] = [
 ];
 
 export const AllCategories: CategoryProps[] = [
-  // Include original categories first
-  {
-    image: Restaurant,
-    title: i18n.t('restaurants'),
-    name: "Restaurants"
-  },
-  {
-    image: Government,
-    title: i18n.t('governments'),
-    name: "Governments"
-  },
-  {
-    image: Clinic,
-    title: i18n.t('clinics'),
-    name: "Clinics"
-  },
+  // Primary Categories (MVP Focus)
   {
     image: AutoRepair,
     title: i18n.t('autoRepair'),
     name: "AutoRepair"
-  },
-  // {
-  //   image: Grocery,
-  //   title: i18n.t('groceries'),
-  //   name: "Groceries"
-  // },
-  {
-    image: Bank,
-    title: i18n.t('banks'),
-    name: "Banks"
-  },
-  // Add new categories
-  {
-    image: PrivateCatering,
-    title: i18n.t('privateCatering'),
-    name: "Private Catering"
-  },
-  {
-    image: CeremonyHalls,
-    title: i18n.t('ceremonyHalls'),
-    name: "Ceremony Halls"
   },
   {
     image: CarDealerships,
@@ -147,136 +106,52 @@ export const AllCategories: CategoryProps[] = [
     title: i18n.t('motoDealerships'),
     name: "Moto Dealerships"
   },
-  // {
-  //   image: Other,
-  //   title: i18n.t('education'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('salons'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('spas'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('telecom'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('realEstate'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('insurance'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('petCare'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('fitness'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('entertainment'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('pharmacies'),
-  // },
+
+  // Food & Dining (Second Wave)
+  {
+    image: Restaurant,
+    title: i18n.t('restaurants'),
+    name: "Restaurants"
+  },
+  {
+    image: PrivateCatering,
+    title: i18n.t('privateCatering'),
+    name: "Private Catering"
+  },
+
+  // Essential Services
+  {
+    image: Bank,
+    title: i18n.t('banks'),
+    name: "Banks"
+  },
+  {
+    image: Government,
+    title: i18n.t('governments'),
+    name: "Governments"
+  },
+  {
+    image: Clinic,
+    title: i18n.t('clinics'),
+    name: "Clinics"
+  },
+
+  // Travel & Events
+  {
+    image: FlightTickets,
+    title: i18n.t('flightTickets'),
+    name: "Flight Tickets"
+  },
   {
     image: Hotels,
     title: i18n.t('hotels'),
     name: "Hotels"
   },
   {
-    image: FlightTickets,
-    title: i18n.t('flightTickets'),
-    name: "Flight Tickets"
-  },
-  // {
-  //   image: Other,
-  //   title: i18n.t('laundry'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('bookstores'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('toyStores'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('sportingGoods'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('furniture'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('electronics'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('jewelry'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('opticians'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('tailors'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('carWash'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('postOffices'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('libraries'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('museums'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('theaters'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('cinemas'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('artGalleries'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('computerRepair'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('phoneRepair'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('homeServices'),
-  // },
-  // {
-  //   image: Other,
-  //   title: i18n.t('travelAgencies'),
-  // }
+    image: CeremonyHalls,
+    title: i18n.t('ceremonyHalls'),
+    name: "Ceremony Halls"
+  }
 ];
 
 //Current Queues
