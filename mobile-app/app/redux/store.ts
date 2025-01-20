@@ -8,10 +8,11 @@ export const store = configureStore({
     tokenSetter: authSlice,
     username: userSlice,
     firstName: userSlice,
-    lastName: userSlice,  
+    lastName: userSlice,
     phoneCode: userSlice,
     phoneNumber: userSlice,
     userId: userSlice,
+    profileImage: userSlice,
   },
 })
 
