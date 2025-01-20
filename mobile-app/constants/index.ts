@@ -6,6 +6,13 @@ import Restaurant from '@/assets/images/Restaurant.png';
 import Government from '@/assets/images/Government.png';
 import Clinic from '@/assets/images/Medical.png';
 import Grocery from '@/assets/images/Grocery.png';
+import AutoRepair from '@/assets/images/AutoRepair.png';
+import PrivateCatering from '@/assets/images/PrivateCatering.png';
+import CeremonyHalls from '@/assets/images/CeremonyHalls.png';
+import CarDealerships from '@/assets/images/CarDealerships.png';
+import MotoDealerships from '@/assets/images/MotoDealerships.png';
+import Hotels from '@/assets/images/Hotels.png';
+import FlightTickets from '@/assets/images/FlightTickets.png';
 import Bank from '@/assets/images/Bank.png';
 import Other from '@/assets/images/Other.png';
 import carrefour from '@/assets/images/Carrefour.png';
@@ -65,6 +72,11 @@ export const Categories: CategoryProps[] = [
     title: i18n.t('clinics'),
     name: "Clinics"
   },
+  {
+    image: AutoRepair,
+    title: i18n.t('autoRepair'),
+    name: "AutoRepair"
+  },
   // {
   //   image: Grocery,
   //   title: i18n.t('groceries'),
@@ -99,6 +111,11 @@ export const AllCategories: CategoryProps[] = [
     title: i18n.t('clinics'),
     name: "Clinics"
   },
+  {
+    image: AutoRepair,
+    title: i18n.t('autoRepair'),
+    name: "AutoRepair"
+  },
   // {
   //   image: Grocery,
   //   title: i18n.t('groceries'),
@@ -111,27 +128,22 @@ export const AllCategories: CategoryProps[] = [
   },
   // Add new categories
   {
-    image: Other,
-    title: i18n.t('autoRepair'),
-    name: "Auto Repair"
-  },
-  {
-    image: Other,
+    image: PrivateCatering,
     title: i18n.t('privateCatering'),
     name: "Private Catering"
   },
   {
-    image: Other,
+    image: CeremonyHalls,
     title: i18n.t('ceremonyHalls'),
     name: "Ceremony Halls"
   },
   {
-    image: Other,
+    image: CarDealerships,
     title: i18n.t('carDealerships'),
     name: "Car Dealerships"
   },
   {
-    image: Other,
+    image: MotoDealerships,
     title: i18n.t('motoDealerships'),
     name: "Moto Dealerships"
   },
@@ -176,12 +188,12 @@ export const AllCategories: CategoryProps[] = [
   //   title: i18n.t('pharmacies'),
   // },
   {
-    image: Other,
+    image: Hotels,
     title: i18n.t('hotels'),
     name: "Hotels"
   },
   {
-    image: Other,
+    image: FlightTickets,
     title: i18n.t('flightTickets'),
     name: "Flight Tickets"
   },
