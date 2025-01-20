@@ -17,6 +17,8 @@ import com.que.que.QRcode.QRCodeService;
 import com.que.que.Store.Store;
 import com.que.que.Store.StoreRepository;
 import com.que.que.User.SubscriptionPlans;
+import com.que.que.User.User;
+import com.que.que.User.UserRepository;
 import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.AppUser.AppUserRepository;
 import com.que.que.User.BusinessUser.BusinessUser;
@@ -30,6 +32,7 @@ import lombok.AllArgsConstructor;
 public class QueueService {
 
   private final AppUserRepository appUserRepository;
+  private final UserRepository userRepository;
   private final StoreRepository storeRepository;
   private final BusinessUserRepository businessUserRepository;
   private final QueueRepository queueRepository;
@@ -339,6 +342,16 @@ public class QueueService {
 
   public boolean presentInQueue(Long appUser, Queue<Long> queue) {
     return queue.contains(appUser);
+  }
+
+  public boolean presentInQueue(String username, String queueName) {
+    AppUser appUser = (AppUser) userRepository.findByUsername(username)
+        .orElseThrow(() -> new IllegalStateException("Could not find user with such username"));
+
+    Queues queue = queueRepository.findByName(queueName)
+        .orElseThrow(() -> new IllegalStateException("Could not find queue with such name"));
+
+    return presentInQueue(appUser.getId(), queueSet.get(queue.getQueueSlot()).get(queue.getSpecificSlot()));
   }
 
   public int getWalkIns(Long appUserId, LocalDateTime from, LocalDateTime to) {

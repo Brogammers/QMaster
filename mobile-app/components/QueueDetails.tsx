@@ -15,6 +15,8 @@ import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import i18n from '@/i18n';
+import configConverter from "@/api/configConverter";
+import axios from "axios";
 
 export default function QueueDetails(props: QueueDetailsProps) {
   const width = Dimensions.get('window').width * 0.85;
@@ -32,6 +34,23 @@ export default function QueueDetails(props: QueueDetailsProps) {
       }, 1000);
       return () => clearTimeout(timer);
     }
+
+    const url = configConverter("EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE");
+    axios.get(`${url}?queueName=${branch}`)
+    .then((response) => {
+      if(response.status === 200) {
+        return response.data.isPresent;
+      } else { 
+        setLeave(false);
+      }
+    })
+    .then((data) => {
+      setLeave(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      setLeave(false);
+    });
   }, [leave]);
 
   const handleLeaveQueue = () => {

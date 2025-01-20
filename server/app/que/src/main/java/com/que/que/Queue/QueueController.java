@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.http.HttpHeaders;
+import com.que.que.Security.JwtUtil;
 import com.que.que.User.AppUser.AppUser;
 
 import lombok.AllArgsConstructor;
@@ -26,6 +29,7 @@ import lombok.AllArgsConstructor;
 public class QueueController {
 
     private final QueueService queueService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping
     @Secured("BUSINESS_OWNER")
@@ -103,6 +107,29 @@ public class QueueController {
             ArrayList<Queues> queues = queueService.currentQueuesOfUser(id);
             body.put("queues", queues);
             body.put("message", "Queues retrieved");
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+        }
+        return new ResponseEntity<Object>(body, statusCode);
+    }
+
+    @GetMapping(path = "/user")
+    @Secured("USER")
+    public ResponseEntity<Object> getIfInQueue(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestParam("queueName") String queueName) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+
+        try {
+            String username = jwtUtil.getUsername(token.substring(7));
+            boolean isPresent = queueService.presentInQueue(username, queueName);
+            if (isPresent) {
+                body.put("message", "User is in queue");
+                body.put("isPresent", isPresent);
+            } else {
+                body.put("message", "User is not in queue");
+                body.put("isPresent", isPresent);
+            }
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
         }
