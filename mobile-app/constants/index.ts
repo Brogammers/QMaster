@@ -79,8 +79,8 @@ export const Categories: CategoryProps[] = [
   },
   {
     image: Government,
-    title: i18n.t('governments'),
-    name: "Governments"
+    title: i18n.t('government'),
+    name: "Government"
   },
   {
     image: Other,
@@ -127,8 +127,8 @@ export const AllCategories: CategoryProps[] = [
   },
   {
     image: Government,
-    title: i18n.t('governments'),
-    name: "Governments"
+    title: i18n.t('government'),
+    name: "Government"
   },
   {
     image: Clinic,
