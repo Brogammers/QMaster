@@ -7,15 +7,17 @@ interface UserState {
   phoneNumber: string | null;
   firstName: string | null;
   lastName: string | null;
+  profileImage: string | null;
 }
 
 const initialState: UserState = {
   userId: null,
   username: null,
-  phoneCode: null, 
-  phoneNumber: null, 
+  phoneCode: null,
+  phoneNumber: null,
   firstName: null,
   lastName: null,
+  profileImage: null,
 }
 
 export const userSlice = createSlice({
@@ -40,9 +42,20 @@ export const userSlice = createSlice({
     setLastName: (state, action: PayloadAction<string>) => {
       state.lastName = action.payload;
     },
+    setProfileImage: (state, action: PayloadAction<string>) => {
+      state.profileImage = action.payload;
+    },
   },
 });
 
-export const { setUserId, setUsername, setFirstName, setLastName, setPhoneCode, setPhoneNumber } = userSlice.actions;
+export const {
+  setUserId,
+  setUsername,
+  setFirstName,
+  setLastName,
+  setPhoneCode,
+  setPhoneNumber,
+  setProfileImage
+} = userSlice.actions;
 
 export default userSlice.reducer;
