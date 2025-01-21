@@ -24,10 +24,13 @@ import Cart from "./Cart";
 import Payment from "./Payment";
 import Orders from "./Orders";
 import OrderDetails from "./OrderDetails";
+import SiaAssistant from "@/components/SiaAssistant";
+import { Image } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
 export default function AppEntry() {
+  const { isDarkMode } = useTheme();
 
   return (
     <NavigationContainer independent>
@@ -308,6 +311,23 @@ export default function AppEntry() {
               headerTitle: i18n.t("settings"),
               headerTintColor: "white",
               headerTitleAlign: "center",
+            }}
+          />
+          <Tab.Screen
+            name="Sia"
+            component={SiaAssistant}
+            initialParams={{ isDarkMode, isScreen: true }}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <Image
+                  source={require("@/assets/images/Sia AI.png")}
+                  style={{
+                    width: 24,
+                    height: 24,
+                    tintColor: focused ? "#00FFFF" : "#FAFAFA"
+                  }}
+                />
+              ),
             }}
           />
         </Tab.Navigator>
