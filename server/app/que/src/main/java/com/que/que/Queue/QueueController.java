@@ -49,11 +49,14 @@ public class QueueController {
 
     @PutMapping(path = "/user")
     @Secured("USER")
-    public ResponseEntity<Object> enqueue(@Param("userId") long userId, @Param("queueName") String queueName) {
+    public ResponseEntity<Object> enqueue(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @Param("queueName") String queueName) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+
         try {
-            queueService.enqueueUser(userId, queueName);
+            String email = jwtUtil.getEmail(token.substring(7));
+            queueService.enqueueUser(email, queueName);
             body.put("message", "Added user!");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
@@ -121,8 +124,8 @@ public class QueueController {
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
 
         try {
-            String username = jwtUtil.getUsername(token.substring(7));
-            boolean isPresent = queueService.presentInQueue(username, queueName);
+            String email = jwtUtil.getEmail(token.substring(7));
+            boolean isPresent = queueService.presentInQueue(email, queueName);
             if (isPresent) {
                 body.put("message", "User is in queue");
                 body.put("isPresent", isPresent);

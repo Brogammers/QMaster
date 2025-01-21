@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
@@ -17,8 +16,6 @@ import com.que.que.QRcode.QRCodeService;
 import com.que.que.Store.Store;
 import com.que.que.Store.StoreRepository;
 import com.que.que.User.SubscriptionPlans;
-import com.que.que.User.User;
-import com.que.que.User.UserRepository;
 import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.AppUser.AppUserRepository;
 import com.que.que.User.BusinessUser.BusinessUser;
@@ -32,7 +29,6 @@ import lombok.AllArgsConstructor;
 public class QueueService {
 
   private final AppUserRepository appUserRepository;
-  private final UserRepository userRepository;
   private final StoreRepository storeRepository;
   private final BusinessUserRepository businessUserRepository;
   private final QueueRepository queueRepository;
@@ -157,10 +153,10 @@ public class QueueService {
     return queueId;
   }
 
-  public void enqueueUser(@NonNull Long appUser, @NonNull String name) {
-    AppUser user = appUserRepository.findById(appUser)
+  public void enqueueUser(@NonNull String email, @NonNull String queueName) {
+    AppUser user = appUserRepository.findByEmail(email)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
-    Queues currentQueue = queueRepository.findByName(name)
+    Queues currentQueue = queueRepository.findByName(queueName)
         .orElseThrow(() -> new IllegalStateException("Could not find queue with such name"));
     int queueSlot = currentQueue.getCreator().getQueueId();
 
@@ -173,14 +169,14 @@ public class QueueService {
       Queue<Long> specificQueue = queueHolderQueues.get(currentQueue.getSpecificSlot());
 
       // Checking if person is present in queue or if queue is full
-      if (presentInQueue(appUser, specificQueue)) {
+      if (presentInQueue(user.getId(), specificQueue)) {
         throw new IllegalStateException("User already in queue");
       }
       if (specificQueue.size() >= currentQueue.getMaxQueueSize()) {
         throw new IllegalStateException(
             "Queue is full at the moment and is not accepting more people. Try again later");
       }
-      specificQueue.add(appUser);
+      specificQueue.add(user.getId());
       currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() + 1);
     } catch (Exception e) {
       throw new IllegalStateException("Could not add user to queue: " + e.getMessage());
@@ -344,8 +340,8 @@ public class QueueService {
     return queue.contains(appUser);
   }
 
-  public boolean presentInQueue(String username, String queueName) {
-    AppUser appUser = (AppUser) userRepository.findByUsername(username)
+  public boolean presentInQueue(String email, String queueName) {
+    AppUser appUser = appUserRepository.findByEmail(email)
         .orElseThrow(() -> new IllegalStateException("Could not find user with such username"));
 
     Queues queue = queueRepository.findByName(queueName)

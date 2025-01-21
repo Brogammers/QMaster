@@ -25,7 +25,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
   const [showDetails, setShowDetails] = useState(false);
   const { branch } = props;
   const { isDarkMode } = useTheme();
-
+  
   useEffect(() => {
     if (leave) {
       setShowDetails(false);
@@ -34,7 +34,9 @@ export default function QueueDetails(props: QueueDetailsProps) {
       }, 1000);
       return () => clearTimeout(timer);
     }
+  }, [leave]);
 
+  useEffect(() => {
     const url = configConverter("EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE");
     axios.get(`${url}?queueName=${branch}`)
     .then((response) => {
@@ -51,9 +53,32 @@ export default function QueueDetails(props: QueueDetailsProps) {
       console.error(error);
       setLeave(false);
     });
-  }, [leave]);
+  }, []);
+
+  const handleJoinQueue = () => {
+    const url = configConverter("EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE");
+    axios.put(`${url}?queueName=${branch}`)
+    .then((response) => {
+      if(response.status === 200) {
+        setLeave(true);
+      } else { 
+        setLeave(false);
+        throw new Error("Failed to join the queue");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      setLeave(false);
+    });
+  }
+
 
   const handleLeaveQueue = () => {
+
+    const handleLeaveRequest = () => {
+      setLeave(false);
+    };
+
     Alert.alert(
       i18n.t('common.queue.leaveConfirm.title'),
       i18n.t('common.queue.leaveConfirm.message'),
@@ -66,7 +91,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
         {
           text: i18n.t('common.queue.leaveConfirm.confirm'),
           style: "destructive",
-          onPress: () => setLeave(false),
+          onPress: () => handleLeaveRequest(),
         },
       ],
       {
@@ -168,7 +193,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
           
           <TouchableOpacity
             className="mt-8 w-full"
-            onPress={() => setLeave(true)}
+            onPress={() => handleJoinQueue()}
           >
             <View style={{ width: buttonWidth }} className="items-center">
               <LinearGradient
