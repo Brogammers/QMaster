@@ -1,3 +1,4 @@
+import { Href } from "expo-router";
 import {
   Animated,
   ImageSourcePropType,
@@ -33,15 +34,19 @@ export interface CurrentItem {
 }
 
 export interface SearchFilterProps {
-  data: any;
+  page: number;
+  perPage: number;
   input: string;
+  isDarkMode?: boolean;
 }
 
 export interface CategoryProps {
   image: React.FC<SvgProps> | ImageSourcePropType;
   title: string;
+  name: string;
   onPress?: any;
   spacing?: number;
+  isDarkMode?: boolean;
 }
 
 export interface CurrentQueuesProps {
@@ -49,10 +54,9 @@ export interface CurrentQueuesProps {
   name: string;
   people: number;
   time: number;
-  isJoin?: boolean;
   isLeave?: boolean;
   isCurrent?: boolean;
-  isPopular?: boolean;
+  isDarkMode?: boolean;
 }
 
 export interface PaginatorProps {
@@ -61,9 +65,11 @@ export interface PaginatorProps {
 }
 
 export interface ReturnButtonProps {
+  href: Href<string>;
   size: number;
   color: string;
   backgroundColor?: string;
+  title?: string;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -127,6 +133,7 @@ export interface HistoryComponentProps {
   isHistory?: boolean;
   isCategory?: boolean;
   isNotification?: boolean;
+  isDarkMode?: boolean;
 }
 
 export interface QueueInfoCardProps {
@@ -135,8 +142,12 @@ export interface QueueInfoCardProps {
 }
 
 export interface UserState {
-  firstName: string | null;
-  lastName: string | null;
+    userId: string | null;
+    username: string | null;
+    phoneCode: string | null;
+    phoneNumber: string | null;
+    firstName: string | null;
+    lastName: string | null;
 }
 
 export interface NavigationState {

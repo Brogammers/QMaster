@@ -53,33 +53,224 @@ export const Categories: CategoryProps[] = [
   {
     image: Restaurant,
     title: i18n.t('restaurants'),
+    name: "Restaurants"
   },
   {
     image: Government,
     title: i18n.t('governments'),
+    name: "Governments"
   },
   {
     image: Clinic,
     title: i18n.t('clinics'),
+    name: "Clinics"
   },
-  {
-    image: Grocery,
-    title: i18n.t('groceries'),
-  },
+  // {
+  //   image: Grocery,
+  //   title: i18n.t('groceries'),
+  //   name: "Groceries"
+  // },
   {
     image: Bank,
     title: i18n.t('banks'),
+    name: "Banks"
   },
   {
     image: Other,
     title: i18n.t('others'),
+    name: "Others"
   },
-]
+];
+
+export const AllCategories: CategoryProps[] = [
+  // Include original categories first
+  {
+    image: Restaurant,
+    title: i18n.t('restaurants'),
+    name: "Restaurants"
+  },
+  {
+    image: Government,
+    title: i18n.t('governments'),
+    name: "Governments"
+  },
+  {
+    image: Clinic,
+    title: i18n.t('clinics'),
+    name: "Clinics"
+  },
+  // {
+  //   image: Grocery,
+  //   title: i18n.t('groceries'),
+  //   name: "Groceries"
+  // },
+  {
+    image: Bank,
+    title: i18n.t('banks'),
+    name: "Banks"
+  },
+  // Add new categories
+  {
+    image: Other,
+    title: i18n.t('autoRepair'),
+    name: "Auto Repair"
+  },
+  {
+    image: Other,
+    title: i18n.t('privateCatering'),
+    name: "Private Catering"
+  },
+  {
+    image: Other,
+    title: i18n.t('ceremonyHalls'),
+    name: "Ceremony Halls"
+  },
+  {
+    image: Other,
+    title: i18n.t('carDealerships'),
+    name: "Car Dealerships"
+  },
+  {
+    image: Other,
+    title: i18n.t('motoDealerships'),
+    name: "Moto Dealerships"
+  },
+  // {
+  //   image: Other,
+  //   title: i18n.t('education'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('salons'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('spas'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('telecom'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('realEstate'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('insurance'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('petCare'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('fitness'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('entertainment'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('pharmacies'),
+  // },
+  {
+    image: Other,
+    title: i18n.t('hotels'),
+    name: "Hotels"
+  },
+  {
+    image: Other,
+    title: i18n.t('flightTickets'),
+    name: "Flight Tickets"
+  },
+  // {
+  //   image: Other,
+  //   title: i18n.t('laundry'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('bookstores'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('toyStores'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('sportingGoods'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('furniture'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('electronics'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('jewelry'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('opticians'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('tailors'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('carWash'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('postOffices'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('libraries'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('museums'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('theaters'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('cinemas'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('artGalleries'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('computerRepair'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('phoneRepair'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('homeServices'),
+  // },
+  // {
+  //   image: Other,
+  //   title: i18n.t('travelAgencies'),
+  // }
+];
 
 //Current Queues
 export const Current: CurrentQueuesProps[] = [
   {
-    image: carrefour,
+    image: CarrefourLogo,
     name: 'Carrefour',
     people: 5,
     time: 15,
@@ -121,15 +312,87 @@ export const AccountInfo: AccountInfoProps[] = [
 
 // Locations
 export const locations = [
-  { label: 'Madinaty', value: '1' },
-  { label: 'Maadi', value: '2' },
-  { label: 'Elshorouk', value: '3' },
-  { label: 'Al-rehab road', value: '4' },
-  { label: 'Tagamoa', value: '5' },
-  { label: 'Almaza', value: '6' },
-  { label: 'October', value: '7' },
-  { label: 'Arabella', value: '8' },
-]
+  {
+    label: 'Madinaty',
+    value: '1',
+    id: 1,
+    address: 'Madinaty, New Cairo',
+    coordinates: {
+      latitude: 30.0742,
+      longitude: 31.6470
+    }
+  },
+  {
+    label: 'Maadi',
+    value: '2',
+    id: 2,
+    address: 'Maadi, Cairo',
+    coordinates: {
+      latitude: 29.9602,
+      longitude: 31.2569
+    }
+  },
+  {
+    label: 'Elshorouk',
+    value: '3',
+    id: 3,
+    address: 'El Shorouk City',
+    coordinates: {
+      latitude: 30.1498,
+      longitude: 31.6278
+    }
+  },
+  {
+    label: 'Al-rehab road',
+    value: '4',
+    id: 4,
+    address: 'Al Rehab City, New Cairo',
+    coordinates: {
+      latitude: 30.0595,
+      longitude: 31.4922
+    }
+  },
+  {
+    label: 'Tagamoa',
+    value: '5',
+    id: 5,
+    address: 'Fifth Settlement, New Cairo',
+    coordinates: {
+      latitude: 30.0271,
+      longitude: 31.4620
+    }
+  },
+  {
+    label: 'Almaza',
+    value: '6',
+    id: 6,
+    address: 'Almaza, Heliopolis',
+    coordinates: {
+      latitude: 30.0911,
+      longitude: 31.3425
+    }
+  },
+  {
+    label: 'October',
+    value: '7',
+    id: 7,
+    address: '6th of October City',
+    coordinates: {
+      latitude: 29.9285,
+      longitude: 30.9188
+    }
+  },
+  {
+    label: 'Arabella',
+    value: '8',
+    id: 8,
+    address: 'Arabella Plaza, New Cairo',
+    coordinates: {
+      latitude: 30.0288,
+      longitude: 31.4597
+    }
+  }
+];
 
 //History
 export const HistoryList: HistoryComponentProps[] = [

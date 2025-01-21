@@ -1,24 +1,28 @@
 package com.que.que.Queue;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Stack;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+
 import com.que.que.QRcode.QRCodeService;
+import com.que.que.Store.Store;
+import com.que.que.Store.StoreRepository;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.AppUser.AppUserRepository;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Stack;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
 
 @Service
 @Configuration
@@ -26,6 +30,7 @@ import org.springframework.stereotype.Service;
 public class QueueService {
 
   private final AppUserRepository appUserRepository;
+  private final StoreRepository storeRepository;
   private final BusinessUserRepository businessUserRepository;
   private final QueueRepository queueRepository;
   private final QueueCreationRepository queueCreationRepository;
@@ -33,22 +38,24 @@ public class QueueService {
   private final QueueEnqueueRepository queueEnqueueRepository;
   private final QueueDeletionRepository queueDeletionRepository;
   private final QRCodeService qrCodeService;
-  private final ArrayList<ArrayList<Queue<Long>>> queueSet = queue();
-  private final Stack<Integer> queueSlots = stack();
+  private final ArrayList<ArrayList<Queue<Long>>> queueSet = initQueue();
+  private final Stack<Integer> queueSlots = initStack();
   public final int MAX_BASIC_QUEUES = 1;
   public final int MAX_PREMIUM_QUEUES = 10;
   public final int MAX_ENTERPRISE_QUEUES = 20;
   public final int MAX_QUEUE_SIZE = 100;
+  public final int MAX_QUEUE_SLOTS = 1000000;
 
   // Function called once upon server startup
   public void initializeQueueSlots(Stack<Integer> temp) {
-    for (int i = 1000000; i >= 0; i--) {
+    for (int i = this.MAX_QUEUE_SLOTS; i >= 0; i--) {
       temp.push(i);
     }
     print();
   }
 
-  public void createNewQueue(@NonNull Long queueHolderID, String name) {
+  public void createNewQueue(@NonNull Long queueHolderID, @NonNull Long storeId, String name, int maxQueueSize,
+      int averageServiceTime, boolean isActive) {
     BusinessUser appUser = businessUserRepository.findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find User"));
 
@@ -79,24 +86,32 @@ public class QueueService {
     } else {
       queueHolderQueue = queueSet.get(queueLocation);
     }
+
+    // Check if store exists
+    Store store = storeRepository.findById(storeId)
+        .orElseThrow(() -> new IllegalStateException("Could not find store"));
+
     try {
       // This currently has an error because the createQRCode method is not static
-      qrCodeService.createQRCode(
-          queueHolderID,
-          queueHolderQueue.size(),
-          String.format(
-              "http://localhost:8080/api/v1/queue/user?userId=%d&queueName=%s",
-              queueHolderID,
-              name));
+      // qrCodeService.createQRCode(
+      // queueHolderID,
+      // queueHolderQueue.size(),
+      // String.format(
+      // "http://localhost:8080/api/v1/queue/user?userId=%d&queueName=%s",
+      // queueHolderID,
+      // name));
     } catch (Exception e) {
       throw new IllegalStateException("Error while creating queue.");
     }
-
     Queues createdQueue = queueRepository.save(new Queues(
         name,
         appUser,
         queueLocation,
-        queueHolderQueue.size()));
+        queueHolderQueue.size(),
+        maxQueueSize,
+        store,
+        averageServiceTime,
+        isActive));
     queueCreationRepository.save(new QueueCreation(createdQueue));
     queueHolderQueue.add(new LinkedList<>());
     print();
@@ -240,21 +255,11 @@ public class QueueService {
   }
 
   public ArrayList<Queues> currentQueuesOfUser(long appUserId) {
-    ArrayList<Queues> currentQueues = new ArrayList<>();
-    for (int queueSlot = 0; queueSlot < queueSet.size(); queueSlot++) {
-      ArrayList<Queue<Long>> list = queueSet.get(queueSlot);
+    BusinessUser appUser = businessUserRepository.findById(appUserId)
+        .orElseThrow(() -> new IllegalStateException("Could not find user"));
 
-      // If slot is empty in memory
-      if (list.equals(null))
-        continue;
-      for (int specificSlot = 0; specificSlot < list.size(); specificSlot++) {
-        Queue<Long> tempQueue = list.get(specificSlot);
-        if (tempQueue.contains(appUserId)) {
-          ArrayList<Queues> queueToBeAdded = queueRepository.findByQueueSlotAndSpecificSlot(queueSlot, specificSlot);
-          currentQueues.add(queueToBeAdded.get(0));
-        }
-      }
-    }
+    ArrayList<Queues> currentQueues = queueRepository.findByCreator(appUser);
+
     return currentQueues;
   }
 
@@ -309,7 +314,7 @@ public class QueueService {
     return queueDequeues;
   }
 
-  public void print() {
+  private void print() {
     for (int i = 0; i < queueSet.size(); i++) {
       ArrayList<Queue<Long>> current = queueSet.get(i);
       for (int j = 0; j < current.size(); j++) {
@@ -318,11 +323,15 @@ public class QueueService {
     }
   }
 
-  public ArrayList<ArrayList<Queue<Long>>> queue() {
-    return new ArrayList<>();
+  private ArrayList<ArrayList<Queue<Long>>> initQueue() {
+    ArrayList<ArrayList<Queue<Long>>> temp = new ArrayList<>();
+    for (int i = 0; i < this.MAX_QUEUE_SLOTS; i++) {
+      temp.add(new ArrayList<>());
+    }
+    return temp;
   }
 
-  public Stack<Integer> stack() {
+  private Stack<Integer> initStack() {
     Stack<Integer> temp = new Stack<>();
     initializeQueueSlots(temp);
     return temp;

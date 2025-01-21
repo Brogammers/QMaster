@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, I18nManager } from "react-native";
+import { View, Text, Image, I18nManager, Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { Ionicons } from "@expo/vector-icons";
 import { AccountInfo } from "@/constants";
 import { Skeleton } from "moti/skeleton";
+import { LinearGradient } from "expo-linear-gradient";
+import { MotiView } from "moti";
+import { useLinkTo } from "@react-navigation/native";
+import _ from "lodash";
 
-export default function AccountPageProfile() {
+interface AccountPageProfileProps {
+  isDarkMode: boolean;
+}
+
+export default function AccountPageProfile({ isDarkMode }: AccountPageProfileProps) {
   const username = useSelector((state: RootState) => state.username.username);
+  const phoneCode = useSelector((state: RootState) => state.phoneCode.phoneCode);
+  const phoneNumber = useSelector((state: RootState) => state.phoneNumber.phoneNumber);
   const [isLoading, setIsLoading] = useState(true);
-  const colorMode: "light" | "dark" = "light";
+  const colorMode = isDarkMode ? "dark" : "light";
+  const linkTo = useLinkTo();
+
+  const handleSettingsPress = () => {
+    linkTo("/Settings");
+  };
 
   useEffect(() => {
     if (typeof username === "string") {
@@ -18,45 +33,79 @@ export default function AccountPageProfile() {
     }
   }, [username]);
 
+  const capitalizeFullName = (name: string) => {
+    return name.split(' ').map(word => _.capitalize(word)).join(' ');
+  };
+
   return (
-    <View className="flex-row items-center justify-between w-11/12 my-6 bg-ocean-blue rounded-3xl p-3.5 pr-6 self-center">
-      <TouchableOpacity className={`flex-row items-center gap-2`}>
-        {isLoading ?
-          <Image source={AccountInfo[0].image} /> 
-          : 
-          <Image source={AccountInfo[0].image} />
-        }
-        <View className="flex flex-col gap-2">
-          <Skeleton
-            colorMode={colorMode}
-            width={150} 
-            height={20}
-          >
-            {isLoading ? (
-              null
-            ) : (
-              <Text className={`text-base text-white ${I18nManager.isRTL ? "text-left" : "text-right"}`}>
-                {username && username.charAt(0).toUpperCase() + username.slice(1)}
-              </Text>
-            )}
-          </Skeleton>
-          <View className="my-1" />
-          <Skeleton
-            colorMode={colorMode} 
-            width={100} 
-            height={10}
-          >
-            {isLoading ? null : (
-              <Text className={`text-slate-grey text-xs ${I18nManager.isRTL ? "text-left" : "text-right"}`}>
-                {AccountInfo[0].number}
-              </Text>
-            )}
-          </Skeleton>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Ionicons name="settings-sharp" size={35} color="white" />
-      </TouchableOpacity>
+    <View className="w-11/12 my-6 self-center">
+      <LinearGradient
+        colors={['#17222D', '#13404D']}
+        className="rounded-3xl p-5 shadow-lg border border-baby-blue/10"
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      >
+        <MotiView 
+          from={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            mass: 0.8,
+            damping: 15,
+          }}
+          className="flex-row items-center justify-between"
+        >
+          <TouchableOpacity className="flex-row items-center space-x-4">
+            <View className="bg-concrete-turqouise/30 p-0.5 rounded-2xl border border-baby-blue/20">
+              {isLoading ? (
+                <Skeleton
+                  colorMode={colorMode}
+                  width={60}
+                  height={60}
+                  radius={16}
+                />
+              ) : (
+                <Image 
+                  source={AccountInfo[0].image} 
+                  className="w-[60px] h-[60px] rounded-2xl"
+                  resizeMode="cover"
+                />
+              )}
+            </View>
+            
+            <View className="flex-col gap-2">
+              <Skeleton
+                colorMode={colorMode}
+                width={150}
+                height={24}
+                radius={4}
+              >
+                {isLoading ? null : (
+                  <Text className={`text-lg font-bold text-baby-blue ${I18nManager.isRTL ? "text-left" : "text-left"}`}>
+                    {username && capitalizeFullName(username)}
+                  </Text>
+                )}
+              </Skeleton>
+              
+              <Skeleton
+                colorMode={colorMode}
+                width={100}
+                height={16}
+                radius={4}
+              >
+                {isLoading ? null : (
+                  <Text className="text-xs text-slight-slate-grey">
+                    {phoneCode && phoneNumber && `${phoneCode}${phoneNumber}`}
+                  </Text>
+                )}
+              </Skeleton>
+            </View>
+          </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => handleSettingsPress()}>
+              <Ionicons name="settings-outline" size={24} color="#1DCDFE" />
+            </TouchableOpacity>
+        </MotiView>
+      </LinearGradient>
     </View>
   );
 }

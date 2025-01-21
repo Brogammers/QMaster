@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import { Tab } from '@mui/material';
 import { TabPanel, TabList, TabContext } from '@mui/lab';
 import TicketNumber from '@/app/shared/TicketNumber';
-import Entity from '../page';
 import useWindowSize from '../../../../../hooks/useWindowSize';
 import TextButton from '@/app/shared/TextButton';
 import MissionAccomplished from "../../../../../public/mission-accomplished.svg";
@@ -174,228 +173,219 @@ export default function Counter() {
   };
 
   return (
-    <Entity>
-      {counterSetup ? (
-        <QueueModal title={`Setup ${businessTemplate.name} Space`}>
-          <div className="max-w-4xl mx-auto py-8">
-            <Formik
-              initialValues={initialValues}
-              onSubmit={handleSubmit}
-              validationSchema={validationSchema}
-              validateOnChange={true}
-              validateOnBlur={true}
-            >
-              {({ values, setFieldValue }) => (
-                <Form className="space-y-8">
-                  <div className="space-y-6">
-                    {values.services.map((service, index) => (
-                      <ServiceFactory
-                        key={index}
-                        service={service}
-                        onServiceUpdate={(updates) => {
-                          const updatedServices = [...values.services];
-                          updatedServices[index] = { ...service, ...updates };
-                          setFieldValue('services', updatedServices);
-                        }}
-                        onRemove={() => {
-                          const updatedServices = [...values.services];
-                          updatedServices.splice(index, 1);
-                          setFieldValue('services', updatedServices);
-                        }}
-                        canRemove={values.services.length > 1}
-                      />
-                    ))}
-                    {businessTemplate.allowCustomServices && (
-                      <Button
-                        onClick={() => setFieldValue('services', [
-                          ...values.services,
-                          { name: '', type: 'COUNTER', defaultCount: 1 }
-                        ])}
-                        className="!bg-ocean-blue/90 !text-white hover:!bg-ocean-blue border-0 rounded-xl w-full h-12 text-lg"
-                      >
-                        Add Custom Service
-                      </Button>
-                    )}
-                  </div>
-                  <Button
-                    htmlType="submit"
-                    className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white !border-0 !rounded-xl w-full !h-14 !text-lg !font-medium mt-4"
-                  >
-                    Create {businessTemplate.name} Space
-                  </Button>
-                </Form>
-              )}
-            </Formik>
-          </div>
-        </QueueModal>
-      ) : (
-        <div className="space-y-8">
-          <div>
-            <h2 className="text-2xl font-bold text-coal-black mb-4">
-              {businessTemplate.hasWaitingQueue ? 'Serving' : 'Active'}
-            </h2>
-            <div className="bg-white rounded-xl p-6 shadow-sm">
+      <div className="space-y-8">
+      <div>
+          <h2 className="text-2xl font-bold text-coal-black mb-4">
+              Counter
+          </h2>
+          <div className="bg-white rounded-xl p-6 shadow-sm">
               <TabContext value={activeTab1}>
-                <Box sx={{ borderBottom: 1, borderColor: 'rgba(0,0,0,0.1)' }}>
-                  <TabList 
-                    onChange={handleServingChange} 
-                    aria-label="serving tabs"
-                    sx={{ 
-                      '& .MuiTab-root': { 
-                        color: 'rgba(0,0,0,0.6)',
-                        '&.Mui-selected': { color: '#1DCDFE' }
-                      },
-                      '& .MuiTabs-indicator': { backgroundColor: '#1DCDFE' }
-                    }}
-                  >
-                    <Tab label={businessTemplate.hasWaitingQueue ? "All servings" : "All active"} value="0" />
-                    {formValues?.services?.map((service: ServiceTemplate) => (
-                      <Tab key={service.name} label={service.name} value={service.name} />
-                    ))}
-                  </TabList>
-                </Box>
-
-                <TabPanel className="px-0 py-6" value={activeTab1}>
-                  <div className={`counter__scrollbar flex gap-4 ${tickets1.length <= 0 && 'justify-center items-center'}`}>
-                    {tickets1.length <= 0 ? (
-                      <div className="flex items-center gap-16">
-                        <TextButton
-                          text={businessTemplate.hasWaitingQueue ? "Add to Queue" : "Add Booking"}
-                          textSize="sm"
-                          textColor="white"
-                          buttonColor="baby-blue"
-                          borderRadius="xl"
-                          width="16"
-                          minWidth="56"
-                          paddingX="4"
-                          paddingY="4"
-                          onPress={() => handleAddTicket()}
-                        />
-                        <ExceptionMessage
-                          image={MissionAccomplished}
-                          imageTitle="All Clear"
-                          orientation="row"
-                          width={185}
-                          message={businessTemplate.hasWaitingQueue ? "All served, no waiting!" : "No active bookings"}
-                        />
-                      </div>
-                    ) : (
-                      <>
-                        {filterTickets(tickets1, activeTab1).map((ticket, index) => (
-                          <TicketNumber 
-                            key={ticket.id} 
-                            active={index === parseInt(activeTab1)}
-                            bgColor="ocean-blue"
-                            textColor="white"
-                            fontSize="3xl"
-                            borderRadius="xl"
-                            width="6"
-                            maxWidth="16"
-                            queue={ticket.service}
-                            counterNum={ticket.counterNum}
-                            ticketNum={ticket.ticketNumber}
+                  <Box sx={{ borderBottom: 1, borderColor: "rgba(0,0,0,0.1)" }}>
+                      <TabList
+                          onChange={handleServingChange}
+                          aria-label="serving tabs"
+                          sx={{
+                              "& .MuiTab-root": {
+                                  color: "rgba(0,0,0,0.6)",
+                                  "&.Mui-selected": { color: "#1DCDFE" },
+                              },
+                              "& .MuiTabs-indicator": {
+                                  backgroundColor: "#1DCDFE",
+                              },
+                          }}
+                      >
+                          <Tab
+                              label={
+                                  businessTemplate.hasWaitingQueue
+                                      ? "All servings"
+                                      : "All active"
+                              }
+                              value="0"
                           />
-                        ))}
-                        <TextButton
-                          text="+"
-                          textSize="3xl"
-                          textColor="white"
-                          buttonColor="baby-blue"
-                          borderRadius="xl"
-                          width="32"
-                          minWidth="56"
-                          paddingX="8"
-                          paddingY="4"
-                          onPress={() => handleAddTicket()}
-                        />
-                      </>
-                    )}
-                  </div>
-                </TabPanel>
-              </TabContext>
-            </div>
-          </div>
-
-          {businessTemplate.hasWaitingQueue && (
-            <div>
-              <h2 className="text-2xl font-bold text-coal-black mb-4">In waiting line</h2>
-              <div className="bg-white rounded-xl p-6 shadow-sm">
-                <TabContext value={activeTab2}>
-                  <Box sx={{ borderBottom: 1, borderColor: 'rgba(0,0,0,0.1)' }}>
-                    <TabList 
-                      onChange={handleWaitingChange} 
-                      aria-label="waiting tabs"
-                      sx={{ 
-                        '& .MuiTab-root': { 
-                          color: 'rgba(0,0,0,0.6)',
-                          '&.Mui-selected': { color: '#1DCDFE' }
-                        },
-                        '& .MuiTabs-indicator': { backgroundColor: '#1DCDFE' }
-                      }}
-                    >
-                      <Tab label="All queues" value="0" />
-                      {formValues?.services?.map((service: ServiceTemplate) => (
-                        <Tab key={service.name} label={service.name} value={service.name} />
-                      ))}
-                    </TabList>
+                          {formValues?.services?.map(
+                              (service: ServiceTemplate) => (
+                                  <Tab
+                                      key={service.name}
+                                      label={service.name}
+                                      value={service.name}
+                                  />
+                              )
+                          )}
+                      </TabList>
                   </Box>
 
-                  <TabPanel className="px-0 py-6" value={activeTab2}>
-                    <div className={`counter__scrollbar flex gap-4 ${tickets2.length <= 0 && 'justify-center items-center'}`}>
-                      {tickets2.length <= 0 ? (
-                        <ExceptionMessage
-                          image={MissionAccomplished}
-                          imageTitle="Mission Accomplished"
-                          orientation="row"
-                          width={185}
-                          message="Celebrate! No waiting line!"
-                        />
-                      ) : (
-                        <>
-                          {filterTickets(tickets2, activeTab2).slice(0, MAX_TICKETS).map((ticket, index) => (
-                            <TicketNumber 
-                              key={ticket.id} 
-                              active={index === parseInt(activeTab2)}
-                              bgColor="ocean-blue"
-                              textColor="white"
-                              fontSize="3xl"
-                              borderRadius="xl"
-                              width="6"
-                              maxWidth="16"
-                              queue={ticket.service}
-                              ticketNum={ticket.ticketNumber}
-                            />
-                          ))}
-                          {tickets2.length > MAX_TICKETS && (
-                            <TicketNumber
-                              key="overflow"
-                              ticketNum={`${remainingCount2}+`}
-                              queue="others waiting in queue"
-                              bgColor="baby-blue"
-                              textColor="white"
-                              fontSize="3xl"
-                              borderRadius="xl"
-                              width="6"
-                              maxWidth="16"
-                              labelPadding="4"
-                            />
+                  <TabPanel className="px-0 py-6" value={activeTab1}>
+                      <div
+                          className={`counter__scrollbar flex gap-4 ${
+                              tickets1.length <= 0 &&
+                              "justify-center items-center"
+                          }`}
+                      >
+                          {tickets1.length <= 0 ? (
+                              <div className="flex items-center gap-16">
+                                  <TextButton
+                                      text={
+                                          businessTemplate.hasWaitingQueue
+                                              ? "Add to Queue"
+                                              : "Add Booking"
+                                      }
+                                      textSize="sm"
+                                      textColor="white"
+                                      buttonColor="baby-blue"
+                                      borderRadius="xl"
+                                      width="16"
+                                      minWidth="56"
+                                      paddingX="4"
+                                      paddingY="4"
+                                      onPress={() => handleAddTicket()}
+                                  />
+                                  <ExceptionMessage
+                                      image={MissionAccomplished}
+                                      imageTitle="All Clear"
+                                      orientation="row"
+                                      width={185}
+                                      message={
+                                          businessTemplate.hasWaitingQueue
+                                              ? "All served, no waiting!"
+                                              : "No active bookings"
+                                      }
+                                  />
+                              </div>
+                          ) : (
+                              <>
+                                  {filterTickets(tickets1, activeTab1).map(
+                                      (ticket, index) => (
+                                          <TicketNumber
+                                              key={ticket.id}
+                                              active={
+                                                  index === parseInt(activeTab1)
+                                              }
+                                              bgColor="ocean-blue"
+                                              textColor="white"
+                                              fontSize="3xl"
+                                              borderRadius="xl"
+                                              width="6"
+                                              maxWidth="16"
+                                              queue={ticket.service}
+                                              counterNum={ticket.counterNum}
+                                              ticketNum={ticket.ticketNumber}
+                                          />
+                                      )
+                                  )}
+                                  <TextButton
+                                      text="+"
+                                      textSize="3xl"
+                                      textColor="white"
+                                      buttonColor="baby-blue"
+                                      borderRadius="xl"
+                                      width="32"
+                                      minWidth="56"
+                                      paddingX="8"
+                                      paddingY="4"
+                                      onPress={() => handleAddTicket()}
+                                  />
+                              </>
                           )}
-                        </>
-                      )}
-                    </div>
+                      </div>
                   </TabPanel>
-                </TabContext>
+              </TabContext>
+          </div>
+      </div>
+
+      {businessTemplate.hasWaitingQueue && (
+          <div>
+              <h2 className="text-2xl font-bold text-coal-black mb-4">
+                  In waiting line
+              </h2>
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                  <TabContext value={activeTab2}>
+                      <Box
+                          sx={{ borderBottom: 1, borderColor: "rgba(0,0,0,0.1)" }}
+                      >
+                          <TabList
+                              onChange={handleWaitingChange}
+                              aria-label="waiting tabs"
+                              sx={{
+                                  "& .MuiTab-root": {
+                                      color: "rgba(0,0,0,0.6)",
+                                      "&.Mui-selected": { color: "#1DCDFE" },
+                                  },
+                                  "& .MuiTabs-indicator": {
+                                      backgroundColor: "#1DCDFE",
+                                  },
+                              }}
+                          >
+                              <Tab label="All queues" value="0" />
+                              {formValues?.services?.map(
+                                  (service: ServiceTemplate) => (
+                                      <Tab
+                                          key={service.name}
+                                          label={service.name}
+                                          value={service.name}
+                                      />
+                                  )
+                              )}
+                          </TabList>
+                      </Box>
+
+                      <TabPanel className="px-0 py-6" value={activeTab2}>
+                          <div
+                              className={`counter__scrollbar flex gap-4 ${
+                                  tickets2.length <= 0 &&
+                                  "justify-center items-center"
+                              }`}
+                          >
+                              {tickets2.length <= 0 ? (
+                                  <ExceptionMessage
+                                      image={MissionAccomplished}
+                                      imageTitle="Mission Accomplished"
+                                      orientation="row"
+                                      width={185}
+                                      message="Celebrate! No waiting line!"
+                                  />
+                              ) : (
+                                  <>
+                                      {filterTickets(tickets2, activeTab2)
+                                          .slice(0, MAX_TICKETS)
+                                          .map((ticket, index) => (
+                                              <TicketNumber
+                                                  key={ticket.id}
+                                                  active={
+                                                      index ===
+                                                      parseInt(activeTab2)
+                                                  }
+                                                  bgColor="ocean-blue"
+                                                  textColor="white"
+                                                  fontSize="3xl"
+                                                  borderRadius="xl"
+                                                  width="6"
+                                                  maxWidth="16"
+                                                  queue={ticket.service}
+                                                  ticketNum={ticket.ticketNumber}
+                                              />
+                                          ))}
+                                      {tickets2.length > MAX_TICKETS && (
+                                          <TicketNumber
+                                              key="overflow"
+                                              ticketNum={`${remainingCount2}+`}
+                                              queue="others waiting in queue"
+                                              bgColor="baby-blue"
+                                              textColor="white"
+                                              fontSize="3xl"
+                                              borderRadius="xl"
+                                              width="6"
+                                              maxWidth="16"
+                                              labelPadding="4"
+                                          />
+                                      )}
+                                  </>
+                              )}
+                          </div>
+                      </TabPanel>
+                  </TabContext>
               </div>
-            </div>
-          )}
-        </div>
+          </div>
       )}
-      <CustomModal 
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={handleModalConfirm}
-        counters={counters}
-      />
-    </Entity>
+    </div>
   );
 }

@@ -25,11 +25,12 @@ import { useAuth } from "@/ctx/AuthContext";
 import { useDispatch } from "react-redux";
 import { setEmail, setToken } from "../redux/authSlice";
 import { isEmpty } from "lodash";
-import { setUsername } from "../redux/userSlice";
+import { setFirstName, setLastName, setPhoneCode, setPhoneNumber, setUserId, setUsername } from "../redux/userSlice";
 import SplashScreen from "../SplashScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Config from "react-native-config";
 import i18n from "@/i18n";
+import configConverter from "@/api/configConverter";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email required"),
@@ -41,7 +42,7 @@ export default function Login() {
   const auth = useAuth();
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  
   const handleLogin = async (
     values: any,
     { setErrors }: { setErrors: Function }
@@ -52,15 +53,22 @@ export default function Login() {
     try {
       setIsLoading(true);
       // IOS Simulator
-      const response = await axios.post(
-        `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN || "http://localhost:8080/api/v1/login/user"}`,
-        values
-      );
-      // Android Emulator
       // const response = await axios.post(
-      //   "http://10.0.2.2:8080/api/v1/login",
+      //   `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN || "http://localhost:8080/api/v1/login/user"}`,
       //   values
       // );
+      // Android Emulator
+      // const response = await axios.post(
+      //   "http://10.0.2.2:8080/api/v1/login/user",
+      //   values
+      // );
+
+      axios.defaults.headers.common.Authorization = "";
+
+      const response = await axios.post(
+        configConverter("EXPO_PUBLIC_API_BASE_URL_LOGIN"),
+        values
+      );
 
       if (response.status === 200 || response.status === 201) {
         console.log("Login successful", values);
@@ -74,15 +82,19 @@ export default function Login() {
           );
           // Update the session state and wait for the update to complete
           await new Promise<void>(async (resolve) => {
-            dispatch(setEmail(response.data.email));
+            dispatch(setEmail(values.email));
             dispatch(setToken(response.data.token));
             dispatch(
               setUsername(
                 response.data.firstName + " " + response.data.lastName
               )
             );
-            console.log(response.data);
-            console.log(typeof response.data.email);
+            dispatch(setUserId(response.data.userID));
+            dispatch(setFirstName(response.data.firstName));
+            dispatch(setLastName(response.data.lastName));
+            dispatch(setPhoneCode(response.data.phoneCode));
+            dispatch(setPhoneNumber(response.data.phoneNumber));
+            console.log(response.data);            
 
             await AsyncStorage.setItem("token", response.data.token);
             const tokenCheck = await AsyncStorage.getItem("token");
@@ -110,7 +122,6 @@ export default function Login() {
               }
             );
 
-            console.log(axios.defaults.headers);
             resolve();
           });
 
@@ -122,10 +133,6 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Login error:", error);
-      Alert.alert(
-        i18n.t("loginPage.error"),
-        i18n.t("loginPage.errorMessage")
-      );
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ServerError>;
@@ -133,19 +140,50 @@ export default function Login() {
         if (axiosError.response) {
           console.error("Axios error status:", axiosError.response.status);
           console.error("Axios error data:", axiosError.response.data);
+          
+          // Map backend error messages to our translation keys
+          let errorMessage = axiosError.response.data.message;
+          if (errorMessage.includes("Invalid credentials")) {
+            errorMessage = i18n.t("loginPage.invalidCredentials");
+          } else if (errorMessage.includes("not verified")) {
+            errorMessage = i18n.t("loginPage.accountNotVerified");
+          } else if (errorMessage.includes("locked")) {
+            errorMessage = i18n.t("loginPage.accountLocked");
+          }
+          
+          Alert.alert(
+            i18n.t("loginPage.failed"),
+            errorMessage || i18n.t("loginPage.failedMessage")
+          );
+          
           setErrors({
-            server: axiosError.response.data.message,
+            server: errorMessage,
           });
         } else if (axiosError.request) {
           console.error("Axios error request:", axiosError.request);
+          Alert.alert(
+            i18n.t("loginPage.error"),
+            i18n.t("loginPage.networkError")
+          );
         } else {
           console.error("Axios error message:", axiosError.message);
+          Alert.alert(
+            i18n.t("loginPage.error"),
+            i18n.t("loginPage.errorMessage")
+          );
         }
       } else if (error instanceof Error) {
         setErrorMessage(error.message);
+        Alert.alert(
+          i18n.t("loginPage.error"),
+          i18n.t("loginPage.errorMessage")
+        );
       } else {
-        // Handle non-Axios errors
         console.error("Non-Axios error:", error);
+        Alert.alert(
+          i18n.t("loginPage.error"),
+          i18n.t("loginPage.errorMessage")
+        );
       }
     } finally {
       setTimeout(() => {
@@ -166,9 +204,7 @@ export default function Login() {
         <SplashScreen />
       ) : (
         <ImageBackground source={background} style={styles.container}>
-          <Link href="/Onboarding" style={styles.returnButton}>
-            <Return size={36} color="white" />
-          </Link>
+          <Return href="/Onboarding" size={36} color="white" />
           <StatusBar
             translucent
             backgroundColor="rgba(000, 000, 000, 0.5)"
@@ -270,7 +306,7 @@ export default function Login() {
                       onPress={handleSubmit}
                     />
                     <TextButton
-                      text={i18n.t("google")}
+                      text={i18n.t("googleLogin")}
                       icon={"google"}
                       buttonColor={"white"}
                       textColor={"#17222D"}

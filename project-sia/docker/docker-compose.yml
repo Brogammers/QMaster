@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  sia-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "9096:9096"
+    volumes:
+      - ../src:/app/src
+      - ../models:/app/models
+    environment:
+      - MYSQL_CONNECTION_STRING=${MYSQL_CONNECTION_STRING}
+      - MODEL_PATH=/app/models/best_model.pth
+      - ENVIRONMENT=development
+    depends_on:
+      - sia-training
+
+  sia-training:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: python src/training/train.py
+    volumes:
+      - ../src:/app/src
+      - ../models:/app/models
+    environment:
+      - MYSQL_CONNECTION_STRING=${MYSQL_CONNECTION_STRING}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

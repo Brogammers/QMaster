@@ -21,9 +21,7 @@ export default function VerificationSent() {
       source={background}
       className="justify-center flex-1 w-screen"
     >
-      <Link href="/Onboarding" style={styles.returnButton}>
-        <Return size={36} color="white" />
-      </Link>
+      <Return href="/Onboarding" size={36} color="white" />
       <StatusBar
         translucent
         backgroundColor="rgba(000, 000, 000, 0.5)"

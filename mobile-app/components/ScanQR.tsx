@@ -17,11 +17,15 @@ import i18n from '@/i18n';
 const { width, height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
 
-export default function ScanQR() {
+interface ScanQRProps {
+  isDarkMode?: boolean;
+}
+
+export default function ScanQR({ isDarkMode }: ScanQRProps) {
   const linkTo = useLinkTo();
   
   const handleNotificationsPress = () => {
-    linkTo('/Notifications'); // Navigate to the "Notifications" page
+    linkTo('/Notifications');
   };
   
   return (
@@ -37,10 +41,19 @@ export default function ScanQR() {
       <View className={`${I18nManager.isRTL ? `flex-row-reverse` : `flex-row`} items-center justify-between w-full px-5 h-max`}>
         <View className={`${I18nManager.isRTL ? `flex-row-reverse` : `flex-row`}`}>
           <Logo />
-          <Text className='ml-1 text-xl font-medium text-white'>QMaster</Text>
+          <Text className='ml-1 text-xl text-white' style={{ fontFamily: 'JostBold' }}>QMaster</Text>
         </View>
-        <TouchableOpacity onPress={handleNotificationsPress} >
-          <Ionicons name="notifications" size={25} color="white" />
+        <TouchableOpacity 
+          onPress={handleNotificationsPress}
+          className={`w-10 h-10 rounded-xl items-center justify-center ${
+            isDarkMode ? 'bg-slate-500/40' : 'bg-white/20'
+          }`}
+        >
+          <Ionicons 
+            name="notifications" 
+            size={22} 
+            color={isDarkMode ? "#1DCDFE" : "white"} 
+          />
         </TouchableOpacity>
       </View>
       <TouchableOpacity>

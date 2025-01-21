@@ -7,6 +7,11 @@ export const store = configureStore({
     emailSetter: authSlice,
     tokenSetter: authSlice,
     username: userSlice,
+    firstName: userSlice,
+    lastName: userSlice,  
+    phoneCode: userSlice,
+    phoneNumber: userSlice,
+    userId: userSlice,
   },
 })
 

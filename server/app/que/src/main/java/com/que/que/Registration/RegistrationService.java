@@ -1,24 +1,25 @@
 package com.que.que.Registration;
 
-import com.que.que.Email.EmailSender;
-import com.que.que.Registration.Token.ConfirmationToken;
-import com.que.que.Registration.Token.ConfirmationTokenService;
-import com.que.que.Security.PasswordValidator;
-import com.que.que.User.SubscriptionPlans;
-import com.que.que.User.AppUser.AppUser;
-import com.que.que.User.AppUser.AppUserRole;
-import com.que.que.User.AppUser.AppUserService;
-import com.que.que.User.BusinessUser.BusinessUser;
-import com.que.que.User.BusinessUser.BusinessUserService;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.que.que.Email.EmailSender;
+import com.que.que.Registration.Token.ConfirmationToken;
+import com.que.que.Registration.Token.ConfirmationTokenService;
+import com.que.que.Security.PasswordValidator;
+import com.que.que.User.SubscriptionPlans;
+import com.que.que.User.UserRole;
+import com.que.que.User.AppUser.AppUser;
+import com.que.que.User.AppUser.AppUserService;
+import com.que.que.User.BusinessUser.BusinessUser;
+import com.que.que.User.BusinessUser.BusinessUserService;
+
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -47,14 +48,14 @@ public class RegistrationService {
     if (!request.getPassword().equals(request.getConfirmPassword())) {
       throw new IllegalStateException("Password do not match");
     }
-    /*
-     * if (!phoneCodes.contains(request.getPhoneCode())) {
-     * throw new IllegalStateException("Phone code not found");
-     * }
-     */
+
+    if (!phoneCodes.contains(request.getPhoneCode())) {
+      throw new IllegalStateException("Phone code not found");
+    }
+
     String token = appUserService.signUpUser(
         new AppUser(
-            AppUserRole.USER,
+            UserRole.USER,
             request.getFirstName(),
             request.getLastName(),
             request.getUsername(),
@@ -65,9 +66,9 @@ public class RegistrationService {
             request.getEmail(),
             false,
             false,
-            "+20",
-            "1202250070",
-            "Egypt"));// request.getPhoneNumber(), request.getPhoneCode(),
+            request.getPhoneCode(),
+            request.getPhoneNumber(),
+            request.getCountryOfOrigin()));
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);
@@ -102,7 +103,7 @@ public class RegistrationService {
      */
     String token = businessUserService.signUpUser(
         new BusinessUser(
-            AppUserRole.USER,
+            UserRole.USER,
             request.getFirstName(),
             request.getLastName(),
             request.getUsername(),
@@ -113,9 +114,9 @@ public class RegistrationService {
             request.getEmail(),
             false,
             false,
-            "+20",
-            "1202250070",
-            "Egypt", SubscriptionPlans.BASIC));// request.getPhoneNumber(), request.getPhoneCode(),
+            request.getPhoneCode(),
+            request.getPhoneNumber(),
+            request.getCountryOfOrigin(), SubscriptionPlans.BASIC));// request.getPhoneNumber(), request.getPhoneCode(),
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);

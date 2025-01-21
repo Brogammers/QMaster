@@ -4,6 +4,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.que.que.Store.Store;
 import com.que.que.User.BusinessUser.BusinessUser;
 
 import jakarta.persistence.Column;
@@ -33,7 +34,7 @@ public class Queues {
     @Column(nullable = false, unique = true)
     private String name;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "app_user_id")
+    @JoinColumn(nullable = false, name = "business_user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private BusinessUser creator;
     @Column(nullable = false)
@@ -42,19 +43,30 @@ public class Queues {
     private int specificSlot;
     @Column(nullable = false)
     private int peopleInQueue;
+    private int averageServiceTime;
     private int rating;
     private int maxQueueSize = 100;
+    private boolean isActive = true;
 
-    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot) {
+    @ManyToOne
+    @JoinColumn(name = "store_id", nullable = false)
+    private Store store;
+
+    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, Store store,
+            int averageServiceTime, boolean isActive) {
         this.name = name;
         this.creator = creator;
         this.queueSlot = queueSlot;
         this.specificSlot = specificSlot;
         this.peopleInQueue = 0;
         this.rating = -1; // -1 if there are no ratings yet
+        this.store = store;
+        this.averageServiceTime = averageServiceTime;
+        this.isActive = isActive;
     }
 
-    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, int maxQueueSize) {
+    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, int maxQueueSize, Store store,
+            int averageServiceTime, boolean isActive) {
         this.name = name;
         this.creator = creator;
         this.queueSlot = queueSlot;
@@ -62,5 +74,8 @@ public class Queues {
         this.peopleInQueue = 0;
         this.rating = -1; // -1 if there are no ratings yet
         this.maxQueueSize = maxQueueSize;
+        this.store = store;
+        this.averageServiceTime = averageServiceTime;
+        this.isActive = isActive;
     }
 }

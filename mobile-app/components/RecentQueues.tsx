@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, Alert } from "react-native";
-import Category from "@/shared/components/Category";
+import Category from "@/shared/components/CategoryPop";
 import { Current } from "@/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import i18n from "@/i18n";
 
-export default function RecentQueues() {
+interface RecentQueuesProps {
+  isDarkMode?: boolean;
+}
+
+export default function RecentQueues({ isDarkMode }: RecentQueuesProps) {
   const [historyDataExists, setHistoryDataExists] = useState<boolean>(false);
 
   useEffect(() => {
@@ -13,8 +17,8 @@ export default function RecentQueues() {
       try {
         const historyData = await AsyncStorage.getItem("historyData");
         setHistoryDataExists(!!historyData);
-      } catch (error) {
-        Alert.alert("ERRR!", `Error checking history data. ${error}`);
+      } catch (error: any) {
+        Alert.alert("Error", error.response?.data?.message || "An error occurred while checking history data");
       }
     };
 
@@ -27,7 +31,7 @@ export default function RecentQueues() {
 
   return (
     <View>
-      <Text className="my-3 text-2xl font-bold">{i18n.t('recent')}</Text>
+      <Text className={`my-3 text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>{i18n.t('recent')}</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -35,7 +39,7 @@ export default function RecentQueues() {
       >
         {Current.map((recent, index) => (
           <View className="mr-2.5" key={index}>
-            <Category title={recent.name} image={recent.image} spacing={8} />
+            <Category name={recent.name} title={recent.name} image={recent.image} spacing={8} isDarkMode={isDarkMode} />
           </View>
         ))}
       </ScrollView>

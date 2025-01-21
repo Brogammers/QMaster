@@ -1,123 +1,243 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
   TouchableOpacity,
-  Alert
+  Alert,
+  ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Wandering from "@/assets/images/wandering.svg";
 import { FontAwesome } from "@expo/vector-icons";
 import { QueueDetailsProps } from "@/types";
 import { Entypo } from "@expo/vector-icons";
+import { useTheme } from '@/ctx/ThemeContext';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MotiView } from 'moti';
+import i18n from '@/i18n';
 
 export default function QueueDetails(props: QueueDetailsProps) {
+  const width = Dimensions.get('window').width * 0.85;
+  const buttonWidth = width * 0.7;
   const [leave, setLeave] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const { branch } = props;
+  const { isDarkMode } = useTheme();
+
+  useEffect(() => {
+    if (leave) {
+      setShowDetails(false);
+      const timer = setTimeout(() => {
+        setShowDetails(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [leave]);
 
   const handleLeaveQueue = () => {
     Alert.alert(
-      "Leave Queue?",
-      "Once you leave, your position in the queue wil be lost.",
+      i18n.t('common.queue.leaveConfirm.title'),
+      i18n.t('common.queue.leaveConfirm.message'),
       [
         {
-          text: "Cancel",
-          style: "cancel",
+          text: i18n.t('common.queue.leaveConfirm.cancel'),
+          style: "default",
+          isPreferred: true,
         },
         {
-          text: "Leave",
+          text: i18n.t('common.queue.leaveConfirm.confirm'),
+          style: "destructive",
           onPress: () => setLeave(false),
         },
-      ]
+      ],
+      {
+        cancelable: true,
+      }
     );
   };
 
-  // This is the loading that will be shown while the backend is looking for the queue, paste it wherever you want during the integration
-  // <>
-  //   <ActivityIndicator size={50} />
-  //   <Text className="mt-3.5">
-  //     Processing location...
-  //   </Text>
-  // </>
+  const CardWrapper = ({ children }: { children: React.ReactNode }) => (
+    <View style={{ width }} className="mt-6 self-center">
+      <LinearGradient
+        colors={
+          isDarkMode 
+            ? ['rgba(29, 205, 254, 0.1)', 'rgba(29, 205, 254, 0.05)']
+            : ['#FFFFFF', '#F8FAFC']
+        }
+        className="w-full p-6 items-center justify-center rounded-xl"
+        style={{
+          borderWidth: 1.5,
+          borderColor: isDarkMode ? 'rgba(29, 205, 254, 0.2)' : '#E5E7EB',
+          minHeight: 160,
+        }}
+      >
+        {children}
+      </LinearGradient>
+    </View>
+  );
+
+  const QueueJoinedAnimation = () => (
+    <MotiView
+      from={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 500 }}
+      className="items-center justify-center w-full"
+      style={{ height: 100 }}
+    >
+      <View 
+        className="flex-row items-center justify-center bg-opacity-10 rounded-full px-6 py-3"
+        style={{ 
+          backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : 'rgba(0, 119, 182, 0.1)',
+          width: buttonWidth 
+        }}
+      >
+        <View className="flex-row items-center justify-center">
+          <FontAwesome name="check-circle" size={24} color="#1DCDFE" />
+          <Text className="text-baby-blue text-xl font-bold ml-3">
+            {i18n.t('common.queue.joined')}
+          </Text>
+        </View>
+      </View>
+    </MotiView>
+  );
 
   return (
-    <View className="items-center justify-center w-11/12 mt-8 bg-white rounded-2xl h-1/2">
+    <CardWrapper>
       {branch == -1 ? (
-        <>
-          <Entypo name="location-pin" size={50} color="#B41818" />
-          <Text className="text-center text-lava-black mt-3.5">
-            Please insert location or allow the app to access your location from
-            settings.
-          </Text>
-        </>
-      ) : !leave ? (
-        <>
-          <View className="items-center">
-            <Text className="text-2xl font-medium">7 people in queue</Text>
-            <View className="flex-row items-center mt-1">
-              <MaterialCommunityIcons
-                name="timer-sand-complete"
-                size={20}
-                color="#444444"
+        <MotiView
+          from={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 300 }}
+          className="items-center w-full"
+        >
+          <View className="flex-row items-start justify-between w-full">
+            <View className="items-center flex-1">
+              <Entypo 
+                name="location-pin" 
+                size={40} 
+                color={isDarkMode ? "#1DCDFE" : "#B41818"} 
               />
-              <Text className="text-base text-lava-black">~18 min</Text>
+              <Text className={`text-center mt-2 text-sm ${isDarkMode ? 'text-baby-blue' : 'text-lava-black'}`}>
+                {i18n.t('common.locationAccess')}
+              </Text>
             </View>
           </View>
+        </MotiView>
+      ) : !leave ? (
+        <MotiView
+          from={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 300 }}
+          className="items-center"
+        >
+          <View className="items-center">
+            <Text className={`text-2xl font-bold ${isDarkMode ? 'text-baby-blue' : 'text-lava-black'}`}>
+              {i18n.t('common.queue.peopleCount', { count: 7 })}
+            </Text>
+            <View className="flex-row items-center mt-3 bg-opacity-10 rounded-full px-3 py-1.5" 
+              style={{ backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : 'rgba(0, 119, 182, 0.1)' }}>
+              <MaterialCommunityIcons
+                name="timer-sand"
+                size={18}
+                color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+              />
+              <Text className={`text-base ml-2 font-medium ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
+                {i18n.t('common.queue.waitTime', { minutes: 18 })}
+              </Text>
+            </View>
+          </View>
+          
           <TouchableOpacity
-            className="bg-baby-blue px-6 py-1 rounded-lg justify-center items-center mt-8"
+            className="mt-8 w-full"
             onPress={() => setLeave(true)}
           >
-            <Text className="text-2xl font-bold text-white">Join Queue</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <>
-          <View className="items-center">
-            <Text className="text-2xl font-medium">7 people in queue</Text>
-            <View className="flex-row items-center mt-1">
-              <MaterialCommunityIcons
-                name="timer-sand-complete"
-                size={20}
-                color="#444444"
-              />
-              <Text className="text-base text-lava-black">~18 min</Text>
-            </View>
-          </View>
-          <View className="items-center w-full mt-8">
-            <View className="flex-row items-center justify-center w-3/5 relative h-9 mb-2">
-              <View
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  zIndex: 100,
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  overflow: "hidden",
-                  backgroundColor: "white",
-                  alignItems: "flex-end",
-                }}
+            <View style={{ width: buttonWidth }} className="items-center">
+              <LinearGradient
+                colors={['#1DCDFE', '#0077B6']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                className="w-full py-3 rounded-lg items-center px-12"
               >
-                <FontAwesome name="check-circle" size={40} color="#1DCDFE" />
-              </View>
-
-              <View className="bg-off-white w-full rounded-full h-4/5 flex justify-center items-center">
-                <Text className="text-baby-blue text-base text-center">
-                  Queue Joined!
+                <Text className="text-lg font-bold text-white">
+                  {i18n.t('common.queue.join')}
                 </Text>
-              </View>
+              </LinearGradient>
             </View>
-            <TouchableOpacity
-              className="bg-lava-red px-6 py-1 rounded-lg justify-center items-center"
-              onPress={() => handleLeaveQueue()}
+          </TouchableOpacity>
+        </MotiView>
+      ) : (
+        <View className="items-center">
+          {!showDetails ? (
+            <QueueJoinedAnimation />
+          ) : (
+            <MotiView
+              from={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 300 }}
+              className="items-center"
             >
-              <Text className="text-2xl font-bold text-white">Leave Queue</Text>
-            </TouchableOpacity>
-          </View>
-        </>
+              <View className="items-center">
+                <Text className={`text-2xl font-bold ${isDarkMode ? 'text-baby-blue' : 'text-lava-black'}`}>
+                  {i18n.t('common.queue.peopleCount', { count: 7 })}
+                </Text>
+                <View className="flex-row items-center mt-3 bg-opacity-10 rounded-full px-3 py-1.5" 
+                  style={{ backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : 'rgba(0, 119, 182, 0.1)' }}>
+                  <MaterialCommunityIcons
+                    name="timer-sand"
+                    size={18}
+                    color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+                  />
+                  <Text className={`text-base ml-2 font-medium ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
+                    {i18n.t('common.queue.waitTime', { minutes: 18 })}
+                  </Text>
+                </View>
+              </View>
+              
+              <View className="items-center w-full mt-8">
+                <View className="flex-row items-center justify-center w-full relative h-9 mb-6">
+                  <LinearGradient
+                    colors={
+                      isDarkMode 
+                        ? ['rgba(29, 205, 254, 0.2)', 'rgba(29, 205, 254, 0.1)']
+                        : ['#F1F5F9', '#F8FAFC']
+                    }
+                    className="w-full rounded-full h-full flex-row items-center justify-center px-3"
+                    style={{
+                      borderWidth: 1.5,
+                      borderColor: isDarkMode ? 'rgba(29, 205, 254, 0.2)' : '#E5E7EB',
+                    }}
+                  >
+                    <View className="flex-row items-center">
+                      <FontAwesome name="check-circle" size={18} color="#1DCDFE" />
+                      <Text className="text-baby-blue text-base font-medium ml-2">
+                        {i18n.t('common.queue.joined')}
+                      </Text>
+                    </View>
+                  </LinearGradient>
+                </View>
+                
+                <View style={{ width: buttonWidth }} className="items-center">
+                  <TouchableOpacity
+                    onPress={() => handleLeaveQueue()}
+                    className="w-full"
+                  >
+                    <LinearGradient
+                      colors={['#EF4444', '#B91C1C']}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      className="py-3 rounded-lg items-center px-12"
+                    >
+                      <Text className="text-lg font-bold text-white">
+                        {i18n.t('common.queue.leave')}
+                      </Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </MotiView>
+          )}
+        </View>
       )}
-
-      <Wandering className="absolute bottom--50 right-8" />
-    </View>
+    </CardWrapper>
   );
 }

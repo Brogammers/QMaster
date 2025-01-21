@@ -24,6 +24,6 @@ public class BusinessUserSerializer extends StdSerializer<BusinessUser> {
         jgen.writeStringField("first-name", value.getFirstName());
         jgen.writeStringField("last-name", value.getLastName());
         jgen.writeStringField("username", value.getUsername());
-
+        jgen.writeObjectField("business-categories", value.getBusinessCategories());
     }
 }

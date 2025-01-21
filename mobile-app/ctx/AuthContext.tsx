@@ -6,7 +6,9 @@ import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/app/redux/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { setToken } from "@/app/redux/authSlice";
+import { setEmail, setToken } from "@/app/redux/authSlice";
+import axios from "axios";
+import { setFirstName, setLastName, setPhoneCode, setPhoneNumber, setUserId, setUsername } from "@/app/redux/userSlice";
 
 const AuthContext = React.createContext<{
   signIn: () => void;
@@ -129,9 +131,27 @@ export function SessionProvider({ children }: React.PropsWithChildren) {
     setUser("");
     setSession(null);
     dispatch(setToken(""));
+    dispatch(setEmail(""));
+    dispatch(setUsername(""));
+    dispatch(setUserId(""));
+    dispatch(setFirstName(""));
+    dispatch(setLastName(""));
+    dispatch(setPhoneCode(""));
+    dispatch(setPhoneNumber(""));
+
+    axios.defaults.headers.common["Authorization"] = "";
+     axios.interceptors.request.use(
+         (config) => {
+             config.headers["Authorization"] = "";
+             return config;
+         },
+         (error) => {
+             return Promise.reject(error);
+         }
+     );
 
     try {
-      await AsyncStorage.removeItem("TOKEN_KEY");
+      await AsyncStorage.removeItem("token");
     } catch (e) {
       console.error("Error removing token: ", e);
     } finally {

@@ -5,25 +5,45 @@ import Image from 'react-native-remote-svg';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { SearchItemProps } from '@/types';
 import { AntDesign } from '@expo/vector-icons';
+import { useLinkTo } from '@react-navigation/native';
 
-export default function SearchItem(props: SearchItemProps) {
-  const { image, title, isPopular, isAccount, icon, onPress } = props;
+interface ExtendedSearchItemProps extends SearchItemProps {
+  isDarkMode?: boolean;
+}
+
+export default function SearchItem(props: ExtendedSearchItemProps) {
+  const { image, title, isPopular, isAccount, icon, onPress, isDarkMode = true } = props;
+  const linkTo = useLinkTo();
+
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    } else if (!isAccount) {
+      linkTo(`/Partner?brandName=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}`);
+    }
+  };
+
+  const iconColor = isDarkMode ? "#1DCDFE" : "#17222D";
 
   return (
     <TouchableOpacity
-      className={`py-4 border-b-2 border-lite-grey w-full`}
-      onPress={(props.onPress)}
+      className={`w-full ${isAccount ? 'py-4 px-4' : 'py-2'} ${
+        isDarkMode ? 'border-baby-blue/20' : 'border-lite-grey'
+      } ${!isAccount && 'border-b-2'}`}
+      onPress={handlePress}
     >
       <View className={`flex-row items-center justify-between w-full`}>
         {isAccount ? (
           <View className="flex-row items-center">
             <FontAwesome6 
               name={icon} 
-              size={30} 
-              color="black" 
+              size={22} 
+              color={iconColor}
               className="rounded-sm w-7 h-7" 
             />
-            <Text className="ml-5 text-base font-medium text-ignite-black">{title}</Text>
+            <Text className={`ml-5 text-base font-medium ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
+              {title}
+            </Text>
           </View>
         ) : (
           <View className="flex-row items-center">
@@ -31,21 +51,23 @@ export default function SearchItem(props: SearchItemProps) {
               source={image} 
               className="rounded-sm w-7 h-7" 
             />
-            <Text className={`ml-5 text-${isAccount ? 'ignite-black' : 'concrete-turquoise'} text-${isAccount ? 'base font-medium' : 'sm'}`}>{title}</Text>
+            <Text className={`ml-5 text-sm ${isDarkMode ? 'text-baby-blue' : 'text-concrete-turquoise'}`}>
+              {title}
+            </Text>
           </View>
         )}
         {isAccount ? (
           <AntDesign 
             name={I18nManager.isRTL ? "caretleft" : "caretright"} 
-            size={22} 
-            color="#3E3E3E" 
+            size={18} 
+            color={iconColor}
           />
         ) : (
           isPopular && 
             <FontAwesome6 
               name="arrow-up-right-dots" 
               size={24} 
-              color="black" 
+              color={isDarkMode ? "#1DCDFE" : "#17222D"}
             />
         )}
       </View>

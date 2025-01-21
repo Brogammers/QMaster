@@ -1,5 +1,6 @@
 package com.que.que.Queue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,12 +28,13 @@ public class QueueController {
     private final QueueService queueService;
 
     @PostMapping
-    @Secured("USER")
+    @Secured("BUSINESS_OWNER")
     public ResponseEntity<Object> createNewQueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
         try {
-            queueService.createNewQueue(request.getId(), request.getName());
+            queueService.createNewQueue(request.getId(), request.getStoreId(), request.getName(),
+                    request.getMaxQueueSize(), request.getAverageServiceTime(), request.isActive());
             body.put("message", "Queue was successful");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
@@ -78,13 +81,28 @@ public class QueueController {
     }
 
     @DeleteMapping
-    @Secured("USER")
+    @Secured("BUSINESS_OWNER")
     public ResponseEntity<Object> deleteQueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
             queueService.deleteQueue(request.getName());
             body.put("message", "Queue delete successful");
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+        }
+        return new ResponseEntity<Object>(body, statusCode);
+    }
+
+    @GetMapping(path = "/business")
+    @Secured("BUSINESS_OWNER")
+    public ResponseEntity<Object> getBusinessQueues(@Param("id") long id) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+        try {
+            ArrayList<Queues> queues = queueService.currentQueuesOfUser(id);
+            body.put("queues", queues);
+            body.put("message", "Queues retrieved");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
         }

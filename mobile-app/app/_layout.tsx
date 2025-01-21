@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Slot } from 'expo-router';
-// import * as AuthContextHook from '@/ctx/AuthContext';
-import { SessionProvider, useAuth } from '@/ctx/AuthContext';
+import { SessionProvider } from '@/ctx/AuthContext';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import SplashScreen from './SplashScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-// import AppEntry from './(app)/(tabs)/_layout';
+import { ThemeProvider } from "@/ctx/ThemeContext";
+import { CartProvider } from '@/ctx/CartContext';
+import { SiaProvider } from '../ctx/SiaContext';
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -17,40 +18,34 @@ export default function RootLayout() {
     IstokBold: require('../assets/fonts/static/IstokWeb-Bold.ttf'),
   });
 
-  const { session } = useAuth();
   const [showLoading, setShowLoading] = useState(true);
 
   useEffect(() => {
     if (error) throw error;
 
-    if (session !== null && session !== undefined) {
+    const timer = setTimeout(() => {
       setShowLoading(false);
-    } else {
-      const timer = setTimeout(() => {
-        setShowLoading(false);
-      }, 5000);
+    }, 5000);
 
-      return () => clearTimeout(timer);
-    }
-  }, [error, session]);
+    return () => clearTimeout(timer);
+  }, [error]);
 
   if (showLoading || !loaded) {
     return <SplashScreen />;
   }
 
   return (
-    <RootLayoutNav />
-  );
-}
-
-
-function RootLayoutNav() {
-  return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
-        <SessionProvider>
-          <Slot />
-        </SessionProvider>
+        <ThemeProvider>
+          <CartProvider>
+            <SessionProvider>
+              <SiaProvider>
+                <Slot />
+              </SiaProvider>
+            </SessionProvider>
+          </CartProvider>
+        </ThemeProvider>
       </Provider>
     </GestureHandlerRootView>
   );

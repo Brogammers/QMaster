@@ -26,6 +26,7 @@ public class QueueEnqueueSerializer extends StdSerializer<QueueEnqueue> {
     jgen.writeNumberField("id", value.getId());
     jgen.writeStringField("name", value.getQueue().getName());
     jgen.writeObjectField("time", value.getActionDate());
+    jgen.writeStringField("location", value.getQueue().getStore().getAddress());
     jgen.writeStringField("notification", "You queued successfully!");
     jgen.writeEndObject();
   }
