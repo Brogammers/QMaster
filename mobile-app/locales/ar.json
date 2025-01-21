@@ -189,5 +189,16 @@
       "chooseBranch": "اختر الفرع",
       "searchBranches": "البحث عن الفروع..."
     }
+  },
+  "greetings": {
+    "morning": "صباح الخير",
+    "afternoon": "مساء الخير",
+    "evening": "مساء الخير",
+    "night": "مساء الخير"
+  },
+  "suggestions": {
+    "waitTime": "كم وقت الانتظار؟",
+    "busyness": "ما مدى الازدحام؟",
+    "arrival": "متى يجب أن أصل؟"
   }
 }

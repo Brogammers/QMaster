@@ -189,5 +189,16 @@
       "chooseBranch": "Choose Branch",
       "searchBranches": "Search branches..."
     }
+  },
+  "greetings": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening",
+    "night": "Good evening"
+  },
+  "suggestions": {
+    "waitTime": "What's the wait time?",
+    "busyness": "How busy is it?",
+    "arrival": "When should I arrive?"
   }
 }
