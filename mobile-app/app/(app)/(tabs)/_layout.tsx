@@ -84,6 +84,23 @@ export default function AppEntry() {
             }}
           />
           <Tab.Screen
+            name="Sia"
+            component={SiaAssistant}
+            initialParams={{ isDarkMode, isScreen: true }}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <Image
+                  source={require("@/assets/images/Sia AI.png")}
+                  style={{
+                    width: 24,
+                    height: 24,
+                    tintColor: focused ? "#00FFFF" : "#FAFAFA"
+                  }}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
             name={i18n.t("account")}
             component={Account}
             options={{
@@ -311,23 +328,6 @@ export default function AppEntry() {
               headerTitle: i18n.t("settings"),
               headerTintColor: "white",
               headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="Sia"
-            component={SiaAssistant}
-            initialParams={{ isDarkMode, isScreen: true }}
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <Image
-                  source={require("@/assets/images/Sia AI.png")}
-                  style={{
-                    width: 24,
-                    height: 24,
-                    tintColor: focused ? "#00FFFF" : "#FAFAFA"
-                  }}
-                />
-              ),
             }}
           />
         </Tab.Navigator>

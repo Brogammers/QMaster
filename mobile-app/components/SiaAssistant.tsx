@@ -10,7 +10,6 @@ import {
   Image,
   Platform,
   Dimensions,
-  RouteProp,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -19,6 +18,8 @@ import { RootState } from '@/app/redux/store';
 import { getGreeting } from '@/utils';
 import { BlurView } from 'expo-blur';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useRoute, useNavigationState } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -139,6 +140,21 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
   isDarkMode = false,
   isScreen = false 
 }) => {
+  // Safely get current route name
+  const getCurrentRouteName = () => {
+    try {
+      const currentRoute = useRoute();
+      return currentRoute?.name;
+    } catch {
+      return '';
+    }
+  };
+
+  const currentRouteName = getCurrentRouteName();
+  
+  // Hide floating button if we're on the Sia tab
+  const shouldShowFloatingButton = currentRouteName !== 'Sia';
+
   const firstName = useSelector((state: RootState) => state.firstName?.firstName || undefined);
   const [showModal, setShowModal] = useState(isVisible);
   const [inputText, setInputText] = useState('');
@@ -502,20 +518,23 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
     );
   }
 
+  // Only render floating button and modal if not in screen mode
   return (
     <>
-      <TouchableOpacity
-        style={styles.floatingButton}
-        onPress={handleOpenModal}
-        activeOpacity={0.7}
-      >
-        <Animated.View style={[styles.pulseContainer, { transform: [{ scale: pulseAnim }] }]}>
-          <Image 
-            source={require('../assets/images/Sia AI.png')}
-            style={styles.siaIcon}
-          />
-        </Animated.View>
-      </TouchableOpacity>
+      {shouldShowFloatingButton && (
+        <TouchableOpacity
+          style={styles.floatingButton}
+          onPress={handleOpenModal}
+          activeOpacity={0.7}
+        >
+          <Animated.View style={[styles.pulseContainer, { transform: [{ scale: pulseAnim }] }]}>
+            <Image 
+              source={require('../assets/images/Sia AI.png')}
+              style={styles.siaIcon}
+            />
+          </Animated.View>
+        </TouchableOpacity>
+      )}
 
       <Modal
         visible={showModal}
