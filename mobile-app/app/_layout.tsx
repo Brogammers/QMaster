@@ -8,6 +8,7 @@ import SplashScreen from './SplashScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeProvider } from "@/ctx/ThemeContext";
 import { CartProvider } from '@/ctx/CartContext';
+import { SiaProvider } from '../ctx/SiaContext';
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -39,7 +40,9 @@ export default function RootLayout() {
         <ThemeProvider>
           <CartProvider>
             <SessionProvider>
-              <Slot />
+              <SiaProvider>
+                <Slot />
+              </SiaProvider>
             </SessionProvider>
           </CartProvider>
         </ThemeProvider>

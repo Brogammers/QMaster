@@ -16,14 +16,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "This app needs access to microphone for voice commands",
+        "NSSpeechRecognitionUsageDescription": "This app needs access to speech recognition for voice commands"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.qmaster.myapp"
+      "package": "com.qmaster.myapp",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.INTERNET"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -33,7 +41,14 @@
     "plugins": [
       "expo-router",
       "expo-localization",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone for voice commands",
+          "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to access speech recognition for voice commands"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
