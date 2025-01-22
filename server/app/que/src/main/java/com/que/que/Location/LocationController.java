@@ -1,4 +1,4 @@
-package com.que.que.Store;
+package com.que.que.Location;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,21 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping(path = "api/v1/store")
+@RequestMapping(path = "api/v1/location")
 @AllArgsConstructor
-public class StoreController {
+public class LocationController {
 
-    private final StoreService storeService;
+    private final LocationService locationService;
 
     @PostMapping()
     @Secured("BUSINESS_OWNER")
-    public ResponseEntity<Object> createStore(@RequestBody StoreCreationRequest request) {
+    public ResponseEntity<Object> createLocation(@RequestBody LocationCreationRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
         try {
-            storeService.createStore(request.getId(), request.getName(), request.getDescription(),
+            locationService.createLocation(request.getId(), request.getName(), request.getDescription(),
                     request.getAddress(), request.getLatitude(), request.getLongitude());
-            body.put("message", "Store was successful");
+            body.put("message", "Location creation was successful");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
             statusCode = HttpStatusCode.valueOf(500);
@@ -39,11 +39,11 @@ public class StoreController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getStoresByBusinessName(@RequestParam("businessName") String businessName) {
+    public ResponseEntity<Object> getLocationsByBusinessName(@RequestParam("businessName") String businessName) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
-            body.put("stores", storeService.getStoresByBusinessName(businessName));
+            body.put("locations", locationService.getLocationsByBusinessName(businessName));
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
             statusCode = HttpStatusCode.valueOf(500);

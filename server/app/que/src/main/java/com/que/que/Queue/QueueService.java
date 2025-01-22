@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import com.que.que.Location.Location;
+import com.que.que.Location.LocationRepository;
 import com.que.que.QRcode.QRCodeService;
-import com.que.que.Store.Store;
-import com.que.que.Store.StoreRepository;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.AppUser.AppUserRepository;
@@ -29,7 +29,7 @@ import lombok.AllArgsConstructor;
 public class QueueService {
 
   private final AppUserRepository appUserRepository;
-  private final StoreRepository storeRepository;
+  private final LocationRepository locationRepository;
   private final BusinessUserRepository businessUserRepository;
   private final QueueRepository queueRepository;
   private final QueueCreationRepository queueCreationRepository;
@@ -53,7 +53,7 @@ public class QueueService {
     print();
   }
 
-  public void createNewQueue(@NonNull Long queueHolderID, @NonNull Long storeId, String name, int maxQueueSize,
+  public void createNewQueue(@NonNull Long queueHolderID, @NonNull Long locationId, String name, int maxQueueSize,
       int averageServiceTime, boolean isActive) {
     BusinessUser appUser = businessUserRepository.findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find User"));
@@ -86,9 +86,9 @@ public class QueueService {
       queueHolderQueue = queueSet.get(queueLocation);
     }
 
-    // Check if store exists
-    Store store = storeRepository.findById(storeId)
-        .orElseThrow(() -> new IllegalStateException("Could not find store"));
+    // Check if location exists
+    Location location = locationRepository.findById(locationId)
+        .orElseThrow(() -> new IllegalStateException("Could not find location"));
 
     try {
       // This currently has an error because the createQRCode method is not static
@@ -108,7 +108,7 @@ public class QueueService {
         queueLocation,
         queueHolderQueue.size(),
         maxQueueSize,
-        store,
+        location,
         averageServiceTime,
         isActive));
     queueCreationRepository.save(new QueueCreation(createdQueue));

@@ -1,4 +1,4 @@
-package com.que.que.Store;
+package com.que.que.Location;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoreCreationRequest {
+public class LocationCreationRequest {
     private Long id;
     private String name;
     private String description;
@@ -15,7 +15,7 @@ public class StoreCreationRequest {
     private double latitude;
     private double longitude;
 
-    public StoreCreationRequest(Long id, String name, String address, double latitude, double longitude) {
+    public LocationCreationRequest(Long id, String name, String address, double latitude, double longitude) {
         this.id = id;
         this.name = name;
         this.address = address;

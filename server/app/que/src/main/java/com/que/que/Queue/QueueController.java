@@ -37,7 +37,7 @@ public class QueueController {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
         try {
-            queueService.createNewQueue(request.getId(), request.getStoreId(), request.getName(),
+            queueService.createNewQueue(request.getId(), request.getLocationId(), request.getName(),
                     request.getMaxQueueSize(), request.getAverageServiceTime(), request.isActive());
             body.put("message", "Queue was successful");
         } catch (IllegalStateException e) {

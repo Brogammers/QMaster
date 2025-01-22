@@ -25,13 +25,13 @@ export default function QueuePage(props: QueuePageProps) {
 
   useEffect(() => {
     const url = configConverter(
-        "EXPO_PUBLIC_API_BASE_URL_GET_STORES_BY_BUSINESS"
+        "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
     );
 
     axios.get(`${url}?businessName=${businessName}`)
     .then((response) => {
       if (response.status === 200) {
-        return response.data.stores;
+        return response.data.locations;
       } else { 
         console.log("Error: ", response);
       }

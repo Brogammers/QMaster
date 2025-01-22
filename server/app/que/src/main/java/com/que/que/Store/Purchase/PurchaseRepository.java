@@ -1,9 +1,9 @@
-package com.que.que.Store;
+package com.que.que.Store.Purchase;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StoreRepository extends JpaRepository<Store, Long> {
+public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 
 }

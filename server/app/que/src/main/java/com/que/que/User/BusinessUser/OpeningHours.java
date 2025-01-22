@@ -4,7 +4,7 @@ import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.que.que.Store.Store;
+import com.que.que.Location.Location;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,7 +38,7 @@ public class OpeningHours {
     private Time closeTime;
 
     @ManyToMany
-    private Set<Store> store = new HashSet<>();
+    private Set<Location> location = new HashSet<>();
 
     public OpeningHours(String day, Time openTime, Time closeTime) {
         this.day = day;
@@ -46,7 +46,7 @@ public class OpeningHours {
         this.closeTime = closeTime;
     }
 
-    public void addStore(Store store) {
-        this.store.add(store);
+    public void addLocation(Location location) {
+        this.location.add(location);
     }
 }

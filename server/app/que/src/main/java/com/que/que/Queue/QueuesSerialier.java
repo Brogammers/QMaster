@@ -26,7 +26,7 @@ public class QueuesSerialier extends StdSerializer<Queues> {
     jgen.writeNumberField("averageServiceTime", value.getAverageServiceTime());
     jgen.writeNumberField("maxQueueSize", value.getMaxQueueSize());
     jgen.writeBooleanField("isActive", value.isActive());
-    jgen.writeNumberField("storeId", value.getStore().getId());
+    jgen.writeNumberField("locationId", value.getLocation().getId());
     jgen.writeEndObject();
   }
 

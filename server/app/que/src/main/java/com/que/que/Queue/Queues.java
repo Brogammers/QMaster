@@ -4,7 +4,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.que.que.Store.Store;
+import com.que.que.Location.Location;
 import com.que.que.User.BusinessUser.BusinessUser;
 
 import jakarta.persistence.Column;
@@ -49,10 +49,10 @@ public class Queues {
     private boolean isActive = true;
 
     @ManyToOne
-    @JoinColumn(name = "store_id", nullable = false)
-    private Store store;
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 
-    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, Store store,
+    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, Location location,
             int averageServiceTime, boolean isActive) {
         this.name = name;
         this.creator = creator;
@@ -60,12 +60,13 @@ public class Queues {
         this.specificSlot = specificSlot;
         this.peopleInQueue = 0;
         this.rating = -1; // -1 if there are no ratings yet
-        this.store = store;
+        this.location = location;
         this.averageServiceTime = averageServiceTime;
         this.isActive = isActive;
     }
 
-    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, int maxQueueSize, Store store,
+    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, int maxQueueSize,
+            Location location,
             int averageServiceTime, boolean isActive) {
         this.name = name;
         this.creator = creator;
@@ -74,7 +75,7 @@ public class Queues {
         this.peopleInQueue = 0;
         this.rating = -1; // -1 if there are no ratings yet
         this.maxQueueSize = maxQueueSize;
-        this.store = store;
+        this.location = location;
         this.averageServiceTime = averageServiceTime;
         this.isActive = isActive;
     }

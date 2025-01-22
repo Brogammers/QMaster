@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.que.que.Location.Location;
 import com.que.que.Store.Store;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.User;
@@ -18,7 +19,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.ManyToMany;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -41,10 +44,14 @@ public class BusinessUser extends User {
     private int queueId;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "businessUser")
-    private List<Store> stores = new ArrayList<>();
+    private List<Location> locations = new ArrayList<>();
 
     @ManyToMany
     private Set<BusinessCategory> businessCategories = new HashSet<>();
+
+    @OneToOne()
+    @JoinColumn(name = "store_id", referencedColumnName = "id")
+    private Store store;
 
     public BusinessUser(
             UserRole appUserRole,
@@ -67,6 +74,32 @@ public class BusinessUser extends User {
                 phoneCode, phoneNumber, location);
         this.subscriptionPlan = subscriptionPlan;
         this.queueId = -1;
+        this.store = null;
+    }
+
+    public BusinessUser(
+            UserRole appUserRole,
+            String firstName,
+            String lastName,
+            String username,
+            LocalDateTime dateOfRegistration,
+            LocalDate dateOfBirth,
+            String countryOfOrigin,
+            String password,
+            String email,
+            boolean locked,
+            boolean enabled,
+            String phoneCode,
+            String phoneNumber,
+            String location,
+            SubscriptionPlans subscriptionPlan,
+            Store store) {
+        super(appUserRole, firstName, lastName, username, dateOfRegistration,
+                dateOfBirth, countryOfOrigin, password, email, locked, enabled,
+                phoneCode, phoneNumber, location);
+        this.subscriptionPlan = subscriptionPlan;
+        this.queueId = -1;
+        this.store = store;
     }
 
     @Override
@@ -79,8 +112,8 @@ public class BusinessUser extends User {
         return true;
     }
 
-    public void addStore(Store store) {
-        this.stores.add(store);
+    public void addLocation(Location location) {
+        this.locations.add(location);
     }
 
     public void addBusinessCategory(BusinessCategory businessCategory) {

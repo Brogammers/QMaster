@@ -12,7 +12,7 @@ import lombok.ToString;
 public class QueueRequest {
     private String name;
     private Long id;
-    private Long storeId;
+    private Long locationId;
     private int maxQueueSize;
     private int averageServiceTime;
     private boolean isActive;

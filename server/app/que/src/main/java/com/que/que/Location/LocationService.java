@@ -1,4 +1,4 @@
-package com.que.que.Store;
+package com.que.que.Location;
 
 import java.util.List;
 
@@ -15,19 +15,20 @@ import lombok.AllArgsConstructor;
 @Service
 @Configuration
 @AllArgsConstructor
-public class StoreService {
-    private final StoreRepository storeRepository;
+public class LocationService {
+    private final LocationRepository locationRepository;
     private final BusinessUserRepository businessUserRepository;
     private final UserRepository userRepository;
 
-    public Store createStore(long businessUserId, String name, String description, String address, double latitude,
+    public Location createLocation(long businessUserId, String name, String description, String address,
+            double latitude,
             double longitude) {
         // TODO: Add validation
         BusinessUser businessUser = businessUserRepository.findById(businessUserId)
                 .orElseThrow(() -> new IllegalStateException("Business user with id " + businessUserId + " not found"));
 
-        return storeRepository.save(
-                new Store(
+        return locationRepository.save(
+                new Location(
                         name,
                         address,
                         description,
@@ -36,15 +37,15 @@ public class StoreService {
                         latitude));
     }
 
-    public List<Store> getStoresByBusinessName(String businessName) {
+    public List<Location> getLocationsByBusinessName(String businessName) {
         User businessUser = userRepository.findByUsername(businessName)
                 .orElseThrow(() -> new IllegalStateException("Business with name " + businessName + " not found"));
 
         if (!(businessUser instanceof BusinessUser)) {
             throw new IllegalStateException("Business with name " + businessName + " not found");
         }
-        List<Store> stores = storeRepository.findAllByBusinessUser((BusinessUser) businessUser);
+        List<Location> locations = locationRepository.findAllByBusinessUser((BusinessUser) businessUser);
 
-        return stores;
+        return locations;
     }
 }
