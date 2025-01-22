@@ -33,6 +33,16 @@ public class StoreService {
         }
 
         Store store = storeRepository.findByBusinessUserId(user.getId()).orElse(null);
-        return store != null;
+        return store != null && ((BusinessUser) user).getStatus() == StoreStatus.SETUP_COMPLETE;
+    }
+
+    public StoreStatus getStoreStatus(String email) {
+        BusinessUser user = businessUserRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("Business not found"));
+
+        storeRepository.findByBusinessUserId(user.getId())
+                .orElseThrow(() -> new IllegalStateException("Store not found"));
+
+        return user.getStatus();
     }
 }

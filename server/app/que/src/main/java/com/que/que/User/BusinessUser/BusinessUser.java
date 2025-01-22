@@ -10,6 +10,7 @@ import java.util.Set;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Location.Location;
 import com.que.que.Store.Store;
+import com.que.que.Store.StoreStatus;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.User;
 import com.que.que.User.UserRole;
@@ -52,6 +53,8 @@ public class BusinessUser extends User {
     @OneToOne()
     @JoinColumn(name = "store_id", referencedColumnName = "id")
     private Store store;
+
+    private StoreStatus status = StoreStatus.NOT_REQUESTED;
 
     public BusinessUser(
             UserRole appUserRole,

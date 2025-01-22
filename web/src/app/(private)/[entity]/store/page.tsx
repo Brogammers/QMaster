@@ -1,30 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import Entity from "../page";
+import ExportProductsModal from "@/app/components/store/ExportProductsModal";
+import ProductGridView from '@/app/components/store/ProductGridView';
+import ProductManagementModal from "@/app/components/store/ProductManagementModal";
+import ProductPreviewModal from "@/app/components/store/ProductPreviewModal";
 import QueueModal from "@/app/shared/QueueModal";
-import { Store, ShoppingBag, Package, DollarSign, Users, Trash2 } from "lucide-react";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
+import axios from "axios";
+import { Form, Formik } from "formik";
+import { motion } from "framer-motion";
+import { DollarSign, Package, ShoppingBag, Store, Trash2, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import toast from "react-hot-toast";
 import {
-  LineChart,
+  CartesianGrid,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
 } from "recharts";
-import ProductManagementModal from "@/app/components/store/ProductManagementModal";
-import ExportProductsModal from "@/app/components/store/ExportProductsModal";
-import StorePreviewModal from "@/app/components/store/StorePreviewModal";
-import ProductPreviewModal from "@/app/components/store/ProductPreviewModal";
-import ProductGridView from '@/app/components/store/ProductGridView';
+import * as Yup from "yup";
+import Entity from "../page";
 
 const StoreStatus = {
   NOT_REQUESTED: "NOT_REQUESTED",
@@ -1729,6 +1729,44 @@ export default function StorePage() {
       });
     }
   };
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_STORE_STATUS || "";
+
+    axios.get(url)
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data.status;
+      } else {
+        throw new Error('Failed to fetch store status');
+      }
+    })
+    .then((data) => {      
+      switch(data) {
+        case "NOT_REQUESTED":
+          setStoreStatus(StoreStatus.NOT_REQUESTED);
+          break;
+        case "DOCUMENTS_PENDING":
+          setStoreStatus(StoreStatus.DOCUMENTS_PENDING);
+          break;
+        case "PENDING":
+          setStoreStatus(StoreStatus.PENDING);
+          break;
+        case "SETUP_PENDING":
+          setStoreStatus(StoreStatus.SETUP_PENDING);
+          break;
+        case "SETUP_COMPLETED":
+          setStoreStatus(StoreStatus.SETUP_COMPLETED);
+          break;
+        default:
+          setStoreStatus(StoreStatus.NOT_REQUESTED);
+      }
+    })
+    .catch((error) => {
+      console.error('Failed to fetch store status:', error);
+      setStoreStatus(StoreStatus.NOT_REQUESTED);
+    })
+  }, []);
 
   return (
     <Entity>
