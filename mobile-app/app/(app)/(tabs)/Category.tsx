@@ -33,14 +33,13 @@ export default function Category() {
     axios.get(`${url}?category=${name}&page=${page}&per-page=${perPage}`)
       .then((response) => {
         if (response.status === 200) {
-          return response.data;
+          return response.data.businesses.content;
         } else {
           throw new Error('Failed to fetch data');
         }
       })
       .then((data) => { 
-          const businesses = data.businesses.content
-          const currentQueues = businesses.map((business: any) => {
+          const currentQueues = data.map((business: any) => {
             return {
               name: business.username,
               image: arabiata,

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Location.Location;
 import com.que.que.Store.Store;
 import com.que.que.Store.Product.Product;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
+@JsonSerialize(using = PurchaseSerializer.class)
 public class Purchase {
     @Id
     @SequenceGenerator(name = "purchase_sequence", sequenceName = "purchase_sequence", allocationSize = 1)

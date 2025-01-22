@@ -15,11 +15,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor
 public class Store {
     @Id
     @SequenceGenerator(name = "store_sequence", sequenceName = "store_sequence", allocationSize = 1)

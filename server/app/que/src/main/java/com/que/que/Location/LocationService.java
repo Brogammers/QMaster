@@ -2,7 +2,6 @@ package com.que.que.Location;
 
 import java.util.List;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import com.que.que.User.User;
@@ -13,7 +12,6 @@ import com.que.que.User.BusinessUser.BusinessUserRepository;
 import lombok.AllArgsConstructor;
 
 @Service
-@Configuration
 @AllArgsConstructor
 public class LocationService {
     private final LocationRepository locationRepository;

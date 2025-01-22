@@ -1,6 +1,11 @@
 package com.que.que.QRcode;
 
-import org.springframework.context.annotation.Configuration;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import org.springframework.stereotype.Service;
 
 import com.google.zxing.BarcodeFormat;
@@ -13,14 +18,7 @@ import com.que.que.Queue.Queues;
 
 import lombok.AllArgsConstructor;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 @Service
-@Configuration
 @AllArgsConstructor
 public class QRCodeService {
 

@@ -138,7 +138,7 @@ export interface HistoryComponentProps {
 
 export interface QueueInfoCardProps {
   image: any;
-  name: String;
+  name: string;
 }
 
 export interface UserState {

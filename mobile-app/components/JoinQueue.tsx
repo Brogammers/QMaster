@@ -27,10 +27,10 @@ export default function QueuePage(props: QueuePageProps) {
     const url = configConverter(
         "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
     );
-
+    
     axios.get(`${url}?businessName=${businessName}`)
     .then((response) => {
-      if (response.status === 200) {
+      if (response.status === 200) {        
         return response.data.locations;
       } else { 
         console.log("Error: ", response);

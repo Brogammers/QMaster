@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import QueueBackground from '@/assets/images/QueueBackground.png';
 import AccessTime from '@/assets/images/accessTime.svg';
@@ -8,6 +8,9 @@ import { MotiView } from 'moti';
 import { useTheme } from '@/ctx/ThemeContext';
 import { useLinkTo } from "@react-navigation/native";
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from "expo-router";
+import configConverter from "@/api/configConverter";
+import axios from "axios";
 
 const { height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
@@ -16,11 +19,33 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
   const { name, image } = props;
   const { isDarkMode } = useTheme();
   const linkTo = useLinkTo();
-  const [hasStore, setHasStore] = React.useState(true); // For demo purposes
+  const [hasStore, setHasStore] = useState(true); // For demo purposes
 
   const handleStorePress = () => {
     linkTo('/Store');
+    router.setParams({ 
+      brandName: name, 
+    });
   };
+
+  useEffect(() => {
+    const url = configConverter("EXPO_PUBLIC_API_BASE_URL_HAS_STORE");
+    axios.get(`${url}?businessName=${name}`)
+    .then((response) => {
+      if(response.status === 200) {
+        return response.data.access;
+      } else {
+        throw new Error("Error: ", response.data);
+      } 
+    })
+    .then((data: boolean) => {
+      setHasStore(data);
+    })
+    .catch((error) => {
+      console.error("Error: ", error);
+      setHasStore(false);
+    })
+  }, []);
 
   return (
     <View className="justify-end w-screen relative"

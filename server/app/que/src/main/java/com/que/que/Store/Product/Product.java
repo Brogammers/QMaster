@@ -3,6 +3,7 @@ package com.que.que.Store.Product;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Store.Store;
 import com.que.que.Store.Purchase.Purchase;
 
@@ -16,11 +17,14 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Setter
 @Getter
+@JsonSerialize(using = ProductSerializer.class)
+@NoArgsConstructor
 public class Product {
 
     @Id

@@ -1,6 +1,5 @@
 package com.que.que.User;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +8,6 @@ import com.que.que.Security.PasswordValidator;
 import lombok.AllArgsConstructor;
 
 @Service
-@Configuration
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;

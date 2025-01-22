@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,6 @@ import com.que.que.User.BusinessUser.BusinessUserRepository;
 import lombok.AllArgsConstructor;
 
 @Service
-@Configuration
 @AllArgsConstructor
 public class QueueService {
 
