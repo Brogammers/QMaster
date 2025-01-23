@@ -124,6 +124,7 @@ export default function Queues() {
     newQueue.counterConfig?.startNumber,
     newQueue.counterConfig?.increment,
     newQueue.counterConfig?.manualNames,
+    newQueue.counterConfig?.counters,
   ]);
 
   const handleCounterNameChange = (counterId: number, name: string) => {
