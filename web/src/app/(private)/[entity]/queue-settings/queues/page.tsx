@@ -72,7 +72,14 @@ export default function Queues() {
       [field]: value,
     };
 
-    if (!updatedConfig.manualNames) {
+    // Initialize or update counters when manual naming is toggled or when counters array is empty
+    if (
+      (field === "manualNames" && value === true) ||
+      (updatedConfig.manualNames &&
+        (!updatedConfig.counters || updatedConfig.counters.length === 0))
+    ) {
+      updatedConfig.counters = generateCounterNames(updatedConfig);
+    } else if (!updatedConfig.manualNames) {
       updatedConfig.counters = generateCounterNames(updatedConfig);
     }
 
@@ -81,6 +88,43 @@ export default function Queues() {
       counterConfig: updatedConfig,
     });
   };
+
+  // Add useEffect to handle counter names update
+  useEffect(() => {
+    if (newQueue.counterConfig?.manualNames) {
+      const currentCounters = newQueue.counterConfig.counters;
+      const targetCount = newQueue.counterConfig.numberOfCounters || 0;
+      let updatedCounters = [...currentCounters];
+
+      // If we need more counters, add them
+      if (currentCounters.length < targetCount) {
+        for (let i = currentCounters.length; i < targetCount; i++) {
+          updatedCounters.push({
+            id: i + 1,
+            name: `Counter ${
+              newQueue.counterConfig.startNumber +
+              i * newQueue.counterConfig.increment
+            }`,
+          });
+        }
+      }
+      // If we need fewer counters, remove them from the end
+      else if (currentCounters.length > targetCount) {
+        updatedCounters = currentCounters.slice(0, targetCount);
+      }
+
+      // Only update if there's a change
+      if (updatedCounters.length !== currentCounters.length) {
+        setNewQueue({
+          ...newQueue,
+          counterConfig: {
+            ...newQueue.counterConfig,
+            counters: updatedCounters,
+          },
+        });
+      }
+    }
+  }, [newQueue.counterConfig?.numberOfCounters]);
 
   const handleCounterNameChange = (counterId: number, name: string) => {
     const updatedCounters = newQueue.counterConfig!.counters.map((counter) =>
