@@ -4,12 +4,12 @@ import { motion } from 'framer-motion';
 import { Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-interface Product {
+export interface Product {
   id: number;
   name: string;
   description: string;
   price: number;
-  stock: number;
+  quantity: number;
   status: 'in_stock' | 'low_stock' | 'out_of_stock';
   image: string;
 }
@@ -151,7 +151,7 @@ export default function ProductGridView({
                     : 'Out of Stock'}
                 </span>
                 <span className="text-sm text-black/50">
-                  {product.stock} units
+                  {product.quantity} units
                 </span>
               </div>
             </div>

@@ -8,7 +8,7 @@ interface Product {
   name: string;
   description: string;
   price: number;
-  stock: number;
+  quantity: number;
   status: 'in_stock' | 'low_stock' | 'out_of_stock';
   image: string;
 }
@@ -91,13 +91,13 @@ export default function StorePreviewModal({
                         : 'Out of Stock'}
                     </span>
                     <span className="text-sm text-black/50">
-                      {product.stock} units
+                      {product.quantity} units
                     </span>
                   </div>
                 </div>
                 <Button
                   className="w-full !bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
-                  disabled={product.stock === 0}
+                  disabled={product.quantity === 0}
                 >
                   <ShoppingBag className="w-4 h-4 mr-2" />
                   Add to Cart

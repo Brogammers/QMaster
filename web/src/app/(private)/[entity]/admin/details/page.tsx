@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import Entity from "../../page";
 import QueueModal from "@/app/shared/QueueModal";
-import { Form, Input, TimePicker, Button, Tabs, Select } from 'antd';
-import { motion } from 'framer-motion';
-import { FaEdit, FaPhone, FaMapMarkerAlt, FaGlobe, FaClock } from 'react-icons/fa';
-import toast from 'react-hot-toast';
+import { Button, Form, Input, Select, Tabs, TimePicker } from 'antd';
+import axios from "axios";
 import dayjs from 'dayjs';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import toast from 'react-hot-toast';
+import { FaClock, FaEdit, FaGlobe, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
+import Entity from "../../page";
 
 const { TextArea } = Input;
 const { TabPane } = Tabs;
@@ -27,14 +28,17 @@ interface BusinessDetails {
   category: string;
 }
 
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const DAYS = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+];
 
-export default function Details() {
-  const [form] = Form.useForm();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeTab, setActiveTab] = useState('1');
-
-  // This would typically come from your API
+// This would typically come from your API
   const initialValues: BusinessDetails = {
     name: "Sample Business",
     phone: "+1234567890",
@@ -47,6 +51,14 @@ export default function Details() {
     }), {}),
     category: "RETAIL"
   };
+
+
+export default function Details() {
+  const [form] = Form.useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeTab, setActiveTab] = useState('1');
+
+  const [businessDetails, setBusinessDetails] = useState<BusinessDetails>(initialValues);
 
   const handleModificationRequest = async (values: Partial<BusinessDetails>) => {
     setIsSubmitting(true);
@@ -71,6 +83,40 @@ export default function Details() {
     }
   };
 
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_DATA || '';
+
+    axios.get(url)
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data.info;
+      } else { 
+        throw new Error('Failed to fetch business data');
+      }
+    })
+    .then((data) => {      
+      const businessDetails = {
+        name: data.username,
+        phone: initialValues.phone,
+        address: initialValues.address,
+        website: initialValues.website,
+        description: initialValues.description,
+        openingHours: initialValues.openingHours,
+        category: data['business-categories'][0].name
+      };      
+      setBusinessDetails(businessDetails);
+    })
+    .catch((error) => {
+      console.error(error);
+      toast.error('Failed to fetch business data', {
+        style: {
+          background: '#ef4444',
+          color: '#fff',
+        },
+      });
+    })
+  }, []);
+
   return (
     <Entity>
       <QueueModal title="Business Details">
@@ -85,7 +131,7 @@ export default function Details() {
                 <Form
                   form={form}
                   layout="vertical"
-                  initialValues={initialValues}
+                  initialValues={businessDetails}
                   className="space-y-6"
                 >
                   <div className="grid grid-cols-2 gap-6">
@@ -222,21 +268,21 @@ export default function Details() {
                         <TimePicker
                           disabled
                           format="HH:mm"
-                          value={dayjs(initialValues.openingHours[day].open, 'HH:mm')}
+                          value={dayjs(businessDetails.openingHours[day].open, 'HH:mm')}
                           className="cursor-not-allowed"
                         />
                         <span>to</span>
                         <TimePicker
                           disabled
                           format="HH:mm"
-                          value={dayjs(initialValues.openingHours[day].close, 'HH:mm')}
+                          value={dayjs(businessDetails.openingHours[day].close, 'HH:mm')}
                           className="cursor-not-allowed"
                         />
                       </div>
                       <Button
                         onClick={() => handleModificationRequest({ 
                           openingHours: { 
-                            [day]: initialValues.openingHours[day] 
+                            [day]: businessDetails.openingHours[day] 
                           } 
                         })}
                         className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity

@@ -101,4 +101,10 @@ public class BusinessUserService implements UserDetailsService {
         businessUser.addBusinessCategory(businessCategory);
         businessUserRepository.save(businessUser);
     }
+
+    public BusinessUser getBusinessUserByEmail(String email) {
+        return businessUserRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+
+    }
 }

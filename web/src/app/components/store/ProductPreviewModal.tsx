@@ -7,7 +7,7 @@ interface Product {
   name: string;
   description: string;
   price: number;
-  stock: number;
+  quantity: number;
   status: 'in_stock' | 'low_stock' | 'out_of_stock';
   image: string;
 }
@@ -72,7 +72,7 @@ export default function ProductPreviewModal({
                   ? 'Low Stock'
                   : 'Out of Stock'}
               </span>
-              <span className="text-sm text-black/50">{product.stock} units</span>
+              <span className="text-sm text-black/50">{product.quantity} units</span>
             </div>
 
             <div className="pt-4">

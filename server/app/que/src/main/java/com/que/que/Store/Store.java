@@ -38,6 +38,10 @@ public class Store {
     @OneToMany(mappedBy = "store")
     private List<Purchase> purchases;
 
+    private String accountName;
+    private String iban;
+    private String bank;
+
     public Store(BusinessUser businessUser) {
         this.businessUser = businessUser;
     }

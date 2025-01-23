@@ -17,12 +17,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Setter
 @Getter
 @JsonSerialize(using = QueueDequeueSerializer.class)
+@NoArgsConstructor
 public class QueueDequeue {
     @Id
     @SequenceGenerator(name = "queue_dequeue_sequence", sequenceName = "queue_dequeue_sequence", allocationSize = 1)
@@ -31,33 +33,39 @@ public class QueueDequeue {
     @ManyToOne
     @JoinColumn(nullable = false, name = "app_user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private final AppUser appUser;
+    private AppUser appUser;
     @ManyToOne
     @JoinColumn(nullable = false, name = "queue_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private final Queues queue;
-    @Column(nullable = false)
-    private final LocalDateTime actionDate;
-    private final QueueDequeueStatus queueDequeueStatus;
-    private final String comment;
+    private Queues queue;
 
-    public QueueDequeue(AppUser appUser, Queues queue, QueueDequeueStatus queueDequeueStatus) {
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "queue_counter_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private QueueCounter queueCounter;
+
+    @Column(nullable = false)
+    private LocalDateTime actionDate;
+    private QueueDequeueStatus queueDequeueStatus;
+    private String comment;
+
+    public QueueDequeue(AppUser appUser, Queues queue, QueueDequeueStatus queueDequeueStatus,
+            QueueCounter queueCounter) {
         this.appUser = appUser;
         this.queue = queue;
         this.queueDequeueStatus = queueDequeueStatus;
         this.comment = "";
         this.actionDate = LocalDateTime.now();
+        this.queueCounter = queueCounter;
     }
 
-    public QueueDequeue(AppUser appUser, Queues queue, QueueDequeueStatus queueDequeueStatus, String comment) {
+    public QueueDequeue(AppUser appUser, Queues queue, QueueDequeueStatus queueDequeueStatus, String comment,
+            QueueCounter queueCounter) {
         this.appUser = appUser;
         this.queue = queue;
         this.queueDequeueStatus = queueDequeueStatus;
         this.comment = comment;
         this.actionDate = LocalDateTime.now();
-    }
-
-    public QueueDequeue() {
-        this(null, null, null);
+        this.queueCounter = queueCounter;
     }
 }

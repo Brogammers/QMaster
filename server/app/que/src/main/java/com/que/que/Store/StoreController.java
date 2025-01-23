@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.que.que.Security.JwtUtil;
 import com.que.que.Store.Product.Product;
-import com.que.que.Store.Product.ProductRequest;
+import com.que.que.Store.Product.ProductCreationRequest;
+import com.que.que.Store.Product.ProductDeleteRequest;
 import com.que.que.Store.Product.ProductService;
 
 import lombok.AllArgsConstructor;
@@ -31,17 +33,54 @@ public class StoreController {
     private final StoreService storeService;
     private final JwtUtil jwtUtil;
 
+    @DeleteMapping("/product")
+    @Secured("BUSINESS_OWNER")
+    public ResponseEntity<Object> deleteProduct(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody ProductDeleteRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+        try {
+            String email = jwtUtil.getEmail(token.substring(7));
+            productService.deleteProduct(request.getId(), email);
+            body.put("message", "Product deleted");
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+            statusCode = HttpStatusCode.valueOf(500);
+        }
+        return new ResponseEntity<Object>(body, statusCode);
+    }
+
     @PostMapping("/product")
     @Secured("BUSINESS_OWNER")
-    public ResponseEntity<Object> addProduct(@RequestBody ProductRequest request) {
+    public ResponseEntity<Object> addProduct(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody ProductCreationRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
         try {
+            String email = jwtUtil.getEmail(token.substring(7));
             Product product = productService.createProduct(request.getName(), request.getDescription(),
                     request.getPrice(),
-                    request.getQuantity(), request.getStoreName());
+                    request.getQuantity(), email, request.getType());
             body.put("message", "Product created");
             body.put("product", product);
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+            statusCode = HttpStatusCode.valueOf(500);
+        }
+        return new ResponseEntity<Object>(body, statusCode);
+    }
+
+    @PostMapping("/setup")
+    @Secured("BUSINESS_OWNER")
+    public ResponseEntity<Object> setupStore(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody StoreSetupRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
+        try {
+            String email = jwtUtil.getEmail(token.substring(7));
+            storeService.setupStore(email, request.getProducts(), request.getPaymentInfo().getAccountName(),
+                    request.getPaymentInfo().getIban(), request.getPaymentInfo().getBank());
+            body.put("message", "Store setup");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
             statusCode = HttpStatusCode.valueOf(500);
@@ -66,12 +105,14 @@ public class StoreController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<Object> getProductsByStoreName(@RequestParam("businessName") String businessName,
+    public ResponseEntity<Object> getProductsByStoreName(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestParam(value = "businessName", required = false) String businessName,
             @RequestParam("page") int page, @RequestParam("per-page") int perPage) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
-            Page<Product> res = productService.getProductsByStoreName(businessName, page, perPage);
+            String email = jwtUtil.getEmail(token.substring(7));
+            Page<Product> res = productService.getProductsByStoreName(businessName, page, perPage, email);
             body.put("products", res);
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());

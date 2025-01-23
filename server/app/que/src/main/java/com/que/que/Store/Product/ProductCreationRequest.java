@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ProductRequest {
+public class ProductCreationRequest {
     private final String name;
     private final String description;
     private final double price;
     private final int quantity;
-    private final String storeName;
+    private final String type;
 }

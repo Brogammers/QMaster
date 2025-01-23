@@ -34,6 +34,7 @@ public class QueueService {
   private final QueueDequeueRepository queueDequeueRepository;
   private final QueueEnqueueRepository queueEnqueueRepository;
   private final QueueDeletionRepository queueDeletionRepository;
+  private final QueueCounterRepository queueCounterRepository;
   private final QRCodeService qrCodeService;
   private final ArrayList<ArrayList<Queue<Long>>> queueSet = initQueue();
   private final Stack<Integer> queueSlots = initStack();
@@ -187,7 +188,7 @@ public class QueueService {
     print();
   }
 
-  public AppUser dequeueUser(@NonNull String name) {
+  public AppUser dequeueUser(@NonNull String name, long counterId) {
     Queues currentQueue = queueRepository.findByName(name)
         .orElseThrow(() -> new IllegalStateException("Could not find queue"));
     int queueSlot = currentQueue.getQueueSlot();
@@ -217,8 +218,11 @@ public class QueueService {
       queueEnqueue.setQueueEnqueueStatus(QueueEnqueueStatus.BEING_SERVED);
       queueEnqueueRepository.save(queueEnqueue);
 
+      QueueCounter queueCounter = queueCounterRepository.findById(counterId)
+          .orElseThrow(() -> new IllegalStateException("Could not find counter"));
+
       queueDequeueRepository
-          .save(new QueueDequeue(nextUser, currentQueue, QueueDequeueStatus.SERVED));
+          .save(new QueueDequeue(nextUser, currentQueue, QueueDequeueStatus.SERVED, queueCounter));
       return nextUser;
     } catch (Exception e) {
       print();

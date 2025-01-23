@@ -1,5 +1,8 @@
 package com.que.que.Queue;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -13,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.EqualsAndHashCode;
@@ -51,6 +55,9 @@ public class Queues {
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
+
+    @ManyToMany
+    private Set<QueueCounter> queueCounters = new HashSet<>();
 
     public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, Location location,
             int averageServiceTime, boolean isActive) {

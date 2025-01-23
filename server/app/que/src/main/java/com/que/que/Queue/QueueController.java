@@ -72,7 +72,7 @@ public class QueueController {
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         AppUser user = null;
         try {
-            user = queueService.dequeueUser(request.getName());
+            user = queueService.dequeueUser(request.getName(), request.getCounterId());
             if (user != null) {
                 body.put("message", "User was dequeued!");
                 body.put("user", user);

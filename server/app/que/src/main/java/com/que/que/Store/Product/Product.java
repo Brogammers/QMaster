@@ -47,20 +47,24 @@ public class Product {
     @ManyToMany
     private Set<Purchase> purchases = new HashSet<>();
 
-    public Product(String name, double price, int quantity, Store store) {
+    private ProductType type;
+
+    public Product(String name, double price, int quantity, Store store, ProductType type) {
         this.name = name;
         this.description = "";
         this.price = price;
         this.quantity = quantity;
         this.store = store;
+        this.type = type;
     }
 
-    public Product(String name, String description, double price, int quantity, Store store) {
+    public Product(String name, String description, double price, int quantity, Store store, ProductType type) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
         this.store = store;
+        this.type = type;
     }
 
     public void addPurchase(Purchase purchase) {

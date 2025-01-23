@@ -16,4 +16,5 @@ public class QueueRequest {
     private int maxQueueSize;
     private int averageServiceTime;
     private boolean isActive;
+    private Long counterId;
 }
