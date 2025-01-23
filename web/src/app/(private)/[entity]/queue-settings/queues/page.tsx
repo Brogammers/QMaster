@@ -89,42 +89,42 @@ export default function Queues() {
     });
   };
 
-  // Add useEffect to handle counter names update
   useEffect(() => {
-    if (newQueue.counterConfig?.manualNames) {
-      const currentCounters = newQueue.counterConfig.counters;
-      const targetCount = newQueue.counterConfig.numberOfCounters || 0;
-      let updatedCounters = [...currentCounters];
+    if (!newQueue.counterConfig?.manualNames) return;
 
-      // If we need more counters, add them
-      if (currentCounters.length < targetCount) {
-        for (let i = currentCounters.length; i < targetCount; i++) {
-          updatedCounters.push({
-            id: i + 1,
-            name: `Counter ${
-              newQueue.counterConfig.startNumber +
-              i * newQueue.counterConfig.increment
-            }`,
-          });
-        }
-      }
-      // If we need fewer counters, remove them from the end
-      else if (currentCounters.length > targetCount) {
-        updatedCounters = currentCounters.slice(0, targetCount);
-      }
+    const currentCounters = newQueue.counterConfig.counters;
+    const targetCount = newQueue.counterConfig.numberOfCounters || 0;
+    let updatedCounters = [...currentCounters];
 
-      // Only update if there's a change
-      if (updatedCounters.length !== currentCounters.length) {
-        setNewQueue({
-          ...newQueue,
-          counterConfig: {
-            ...newQueue.counterConfig,
-            counters: updatedCounters,
-          },
+    if (currentCounters.length < targetCount) {
+      for (let i = currentCounters.length; i < targetCount; i++) {
+        updatedCounters.push({
+          id: i + 1,
+          name: `Counter ${
+            newQueue.counterConfig.startNumber +
+            i * newQueue.counterConfig.increment
+          }`,
         });
       }
+    } else if (currentCounters.length > targetCount) {
+      updatedCounters = currentCounters.slice(0, targetCount);
     }
-  }, [newQueue.counterConfig?.numberOfCounters]);
+
+    if (updatedCounters.length !== currentCounters.length) {
+      setNewQueue((prevQueue) => ({
+        ...prevQueue,
+        counterConfig: {
+          ...prevQueue.counterConfig!,
+          counters: updatedCounters,
+        },
+      }));
+    }
+  }, [
+    newQueue.counterConfig?.numberOfCounters,
+    newQueue.counterConfig?.startNumber,
+    newQueue.counterConfig?.increment,
+    newQueue.counterConfig?.manualNames,
+  ]);
 
   const handleCounterNameChange = (counterId: number, name: string) => {
     const updatedCounters = newQueue.counterConfig!.counters.map((counter) =>
@@ -245,7 +245,7 @@ export default function Queues() {
       },
       error: "Failed to load queues",
     });
-  }, []);
+  }, [userId]);
 
   return (
     <Entity>
