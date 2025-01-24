@@ -50,6 +50,16 @@ export default function Entity({ children }: QueueModalProps) {
             </>
           )}
         </h2>
+        <Select defaultValue={MOCK_LOCATIONS[0].id} style={{ width: 200 }}>
+          {MOCK_LOCATIONS.map((location) => (
+            <Option key={location.id} value={location.id}>
+              {location.branchName}
+              <div className="text-xs text-gray-500">
+                {location.name} - {location.city}, {location.country}
+              </div>
+            </Option>
+          ))}
+        </Select>
       </div>
       {children}
     </div>
