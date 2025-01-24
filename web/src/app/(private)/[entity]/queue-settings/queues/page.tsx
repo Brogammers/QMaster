@@ -28,7 +28,7 @@ interface QueueConfig {
   maxQueueSize: number;
   isActive: boolean;
   averageServiceTime: number;
-  storeId: number;
+  locationId: number;
   counterConfig: CounterConfig;
 }
 
@@ -145,7 +145,7 @@ export default function Queues() {
     if (newQueue.name && newQueue.maxQueueSize) {
       const queueBody = {
         id: userId,
-        storeId: 7,
+        locationId: 7,
         name: newQueue.name,
         maxQueueSize: newQueue.maxQueueSize,
         isActive: newQueue.isActive,
@@ -223,9 +223,7 @@ export default function Queues() {
   };
 
   useEffect(() => {
-    const url =
-      `${process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_QUEUES}?id=${userId}` ||
-      "";
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_QUEUES || "";
 
     toast.promise(axios.get(url), {
       loading: "Loading queues...",

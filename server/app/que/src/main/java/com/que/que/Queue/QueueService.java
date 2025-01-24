@@ -255,8 +255,17 @@ public class QueueService {
     print();
   }
 
-  public ArrayList<Queues> currentQueuesOfUser(long appUserId) {
-    BusinessUser appUser = businessUserRepository.findById(appUserId)
+  public ArrayList<Queues> currentQueuesOfUser(String email) {
+    BusinessUser appUser = businessUserRepository.findByEmail(email)
+        .orElseThrow(() -> new IllegalStateException("Could not find user"));
+
+    ArrayList<Queues> currentQueues = queueRepository.findByCreator(appUser);
+
+    return currentQueues;
+  }
+
+  public ArrayList<Queues> currentQueuesOfUser(long id) {
+    BusinessUser appUser = businessUserRepository.findById(id)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
 
     ArrayList<Queues> currentQueues = queueRepository.findByCreator(appUser);

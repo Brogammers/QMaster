@@ -103,11 +103,12 @@ public class QueueController {
 
     @GetMapping(path = "/business")
     @Secured({ "BUSINESS_OWNER", "BUSINESS_MANAGER", "BUSINESS_ADMIN", "ADMIN" })
-    public ResponseEntity<Object> getBusinessQueues(@Param("id") long id) {
+    public ResponseEntity<Object> getBusinessQueues(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
-            ArrayList<Queues> queues = queueService.currentQueuesOfUser(id);
+            String email = jwtUtil.getEmail(token.substring(7));
+            ArrayList<Queues> queues = queueService.currentQueuesOfUser(email);
             body.put("queues", queues);
             body.put("message", "Queues retrieved");
         } catch (IllegalStateException e) {
