@@ -25,14 +25,15 @@ public class LocationService {
         BusinessUser businessUser = businessUserRepository.findById(businessUserId)
                 .orElseThrow(() -> new IllegalStateException("Business user with id " + businessUserId + " not found"));
 
-        return locationRepository.save(
-                new Location(
-                        name,
-                        address,
-                        description,
-                        businessUser,
-                        longitude,
-                        latitude));
+        Location location = new Location(
+                name,
+                address,
+                description,
+                longitude,
+                latitude);
+
+        location.addBusinessUser(businessUser);
+        return locationRepository.save(location);
     }
 
     public List<Location> getLocationsByBusinessName(String businessName) {

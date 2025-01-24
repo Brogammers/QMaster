@@ -47,7 +47,7 @@ public class ProductService {
         Location location = locationRepository.findById(locationId)
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
 
-        if (location.getBusinessUser().getId() != businessUser.getId()) {
+        if (!location.getBusinessUsers().contains(businessUser)) {
             throw new IllegalStateException("Location does not belong to business user");
         }
 
@@ -67,7 +67,7 @@ public class ProductService {
         Location location = locationRepository.findById(locationId)
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
 
-        if (location.getBusinessUser().getId() != businessUser.getId()) {
+        if (!location.getBusinessUsers().contains(businessUser)) {
             throw new IllegalStateException("Location does not belong to business user");
         }
 
@@ -86,7 +86,7 @@ public class ProductService {
         Location location = locationRepository.findById(locationId)
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
 
-        if (location.getBusinessUser().getId() != businessUser.getId()) {
+        if (!location.getBusinessUsers().contains(businessUser)) {
             throw new IllegalStateException("Location does not belong to business user");
         }
 

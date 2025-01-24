@@ -27,13 +27,13 @@ public class StoreService {
     private final LocationRepository locationRepository;
 
     private Location getAndCheckLocation(long businessUserId, long locationId) {
-        businessUserRepository.findById(businessUserId)
+        BusinessUser businessUser = businessUserRepository.findById(businessUserId)
                 .orElseThrow(() -> new IllegalStateException("Business user not found"));
 
         Location location = locationRepository.findById(locationId)
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
 
-        if (location.getBusinessUser().getId() != businessUserId) {
+        if (location.getBusinessUsers().contains(businessUser)) {
             throw new IllegalStateException("Location does not belong to business user");
         }
 

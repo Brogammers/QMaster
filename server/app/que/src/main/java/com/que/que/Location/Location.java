@@ -21,7 +21,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
@@ -56,10 +55,9 @@ public class Location {
     @ManyToMany
     private Set<OpeningHours> openingHourss = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "business_user_id", nullable = false)
+    @ManyToMany
     @JsonIgnore
-    private BusinessUser businessUser;
+    private Set<BusinessUser> businessUsers = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "location")
     @JsonIgnore
@@ -74,21 +72,19 @@ public class Location {
 
     private StoreStatus storeStatus = StoreStatus.NOT_REQUESTED;
 
-    public Location(String name, String address, BusinessUser businessUser, double latitude, double longitude) {
+    public Location(String name, String address, double latitude, double longitude) {
         this.name = name;
         this.address = address;
         this.description = "";
-        this.businessUser = businessUser;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public Location(String name, String address, String description, BusinessUser businessUser, double latitude,
+    public Location(String name, String address, String description, double latitude,
             double longitude) {
         this.name = name;
         this.address = address;
         this.description = description;
-        this.businessUser = businessUser;
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -103,5 +99,9 @@ public class Location {
 
     public void addPurchase(Purchase purchase) {
         this.purchases.add(purchase);
+    }
+
+    public void addBusinessUser(BusinessUser businessUser) {
+        this.businessUsers.add(businessUser);
     }
 }

@@ -48,7 +48,7 @@ const MOCK_LOCATIONS: PartnerLocation[] = [
 export function LocationProvider({ children }: { children: React.ReactNode }) {
   const [selectedLocation, setSelectedLocation] =
     useState<PartnerLocation | null>(null);
-  const [locations] = useState<PartnerLocation[]>(MOCK_LOCATIONS);
+  const [locations, setLocations] = useState<PartnerLocation[]>(MOCK_LOCATIONS);
 
   useEffect(() => {
     // Set default location as first alphabetically sorted location
