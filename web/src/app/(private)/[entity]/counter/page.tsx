@@ -17,6 +17,7 @@ import CustomModal from '@/app/components/CustomModal';
 import toast from 'react-hot-toast';
 import { BusinessCategory, ServiceTemplate, businessTemplates } from '@/types/business';
 import ServiceFactory from '@/components/service/ServiceFactory';
+import Entity from '../page';
 
 interface CounterSetupForm {
   services: ServiceTemplate[];
@@ -173,219 +174,221 @@ export default function Counter() {
   };
 
   return (
+    <Entity>
       <div className="space-y-8">
-      <div>
-          <h2 className="text-2xl font-bold text-coal-black mb-4">
-              Counter
-          </h2>
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-              <TabContext value={activeTab1}>
-                  <Box sx={{ borderBottom: 1, borderColor: "rgba(0,0,0,0.1)" }}>
-                      <TabList
-                          onChange={handleServingChange}
-                          aria-label="serving tabs"
-                          sx={{
-                              "& .MuiTab-root": {
-                                  color: "rgba(0,0,0,0.6)",
-                                  "&.Mui-selected": { color: "#1DCDFE" },
-                              },
-                              "& .MuiTabs-indicator": {
-                                  backgroundColor: "#1DCDFE",
-                              },
-                          }}
-                      >
-                          <Tab
-                              label={
-                                  businessTemplate.hasWaitingQueue
-                                      ? "All servings"
-                                      : "All active"
-                              }
-                              value="0"
-                          />
-                          {formValues?.services?.map(
-                              (service: ServiceTemplate) => (
-                                  <Tab
-                                      key={service.name}
-                                      label={service.name}
-                                      value={service.name}
-                                  />
-                              )
-                          )}
-                      </TabList>
-                  </Box>
+        <div>
+            <h2 className="text-2xl font-bold text-coal-black mb-4">
+                Counter
+            </h2>
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+                <TabContext value={activeTab1}>
+                    <Box sx={{ borderBottom: 1, borderColor: "rgba(0,0,0,0.1)" }}>
+                        <TabList
+                            onChange={handleServingChange}
+                            aria-label="serving tabs"
+                            sx={{
+                                "& .MuiTab-root": {
+                                    color: "rgba(0,0,0,0.6)",
+                                    "&.Mui-selected": { color: "#1DCDFE" },
+                                },
+                                "& .MuiTabs-indicator": {
+                                    backgroundColor: "#1DCDFE",
+                                },
+                            }}
+                        >
+                            <Tab
+                                label={
+                                    businessTemplate.hasWaitingQueue
+                                        ? "All servings"
+                                        : "All active"
+                                }
+                                value="0"
+                            />
+                            {formValues?.services?.map(
+                                (service: ServiceTemplate) => (
+                                    <Tab
+                                        key={service.name}
+                                        label={service.name}
+                                        value={service.name}
+                                    />
+                                )
+                            )}
+                        </TabList>
+                    </Box>
 
-                  <TabPanel className="px-0 py-6" value={activeTab1}>
-                      <div
-                          className={`counter__scrollbar flex gap-4 ${
-                              tickets1.length <= 0 &&
-                              "justify-center items-center"
-                          }`}
-                      >
-                          {tickets1.length <= 0 ? (
-                              <div className="flex items-center gap-16">
-                                  <TextButton
-                                      text={
-                                          businessTemplate.hasWaitingQueue
-                                              ? "Add to Queue"
-                                              : "Add Booking"
-                                      }
-                                      textSize="sm"
-                                      textColor="white"
-                                      buttonColor="baby-blue"
-                                      borderRadius="xl"
-                                      width="16"
-                                      minWidth="56"
-                                      paddingX="4"
-                                      paddingY="4"
-                                      onPress={() => handleAddTicket()}
-                                  />
-                                  <ExceptionMessage
-                                      image={MissionAccomplished}
-                                      imageTitle="All Clear"
-                                      orientation="row"
-                                      width={185}
-                                      message={
-                                          businessTemplate.hasWaitingQueue
-                                              ? "All served, no waiting!"
-                                              : "No active bookings"
-                                      }
-                                  />
-                              </div>
-                          ) : (
-                              <>
-                                  {filterTickets(tickets1, activeTab1).map(
-                                      (ticket, index) => (
-                                          <TicketNumber
-                                              key={ticket.id}
-                                              active={
-                                                  index === parseInt(activeTab1)
-                                              }
-                                              bgColor="ocean-blue"
-                                              textColor="white"
-                                              fontSize="3xl"
-                                              borderRadius="xl"
-                                              width="6"
-                                              maxWidth="16"
-                                              queue={ticket.service}
-                                              counterNum={ticket.counterNum}
-                                              ticketNum={ticket.ticketNumber}
-                                          />
-                                      )
-                                  )}
-                                  <TextButton
-                                      text="+"
-                                      textSize="3xl"
-                                      textColor="white"
-                                      buttonColor="baby-blue"
-                                      borderRadius="xl"
-                                      width="32"
-                                      minWidth="56"
-                                      paddingX="8"
-                                      paddingY="4"
-                                      onPress={() => handleAddTicket()}
-                                  />
-                              </>
-                          )}
-                      </div>
-                  </TabPanel>
-              </TabContext>
-          </div>
+                    <TabPanel className="px-0 py-6" value={activeTab1}>
+                        <div
+                            className={`counter__scrollbar flex gap-4 ${
+                                tickets1.length <= 0 &&
+                                "justify-center items-center"
+                            }`}
+                        >
+                            {tickets1.length <= 0 ? (
+                                <div className="flex items-center gap-16">
+                                    <TextButton
+                                        text={
+                                            businessTemplate.hasWaitingQueue
+                                                ? "Add to Queue"
+                                                : "Add Booking"
+                                        }
+                                        textSize="sm"
+                                        textColor="white"
+                                        buttonColor="baby-blue"
+                                        borderRadius="xl"
+                                        width="16"
+                                        minWidth="56"
+                                        paddingX="4"
+                                        paddingY="4"
+                                        onPress={() => handleAddTicket()}
+                                    />
+                                    <ExceptionMessage
+                                        image={MissionAccomplished}
+                                        imageTitle="All Clear"
+                                        orientation="row"
+                                        width={185}
+                                        message={
+                                            businessTemplate.hasWaitingQueue
+                                                ? "All served, no waiting!"
+                                                : "No active bookings"
+                                        }
+                                    />
+                                </div>
+                            ) : (
+                                <>
+                                    {filterTickets(tickets1, activeTab1).map(
+                                        (ticket, index) => (
+                                            <TicketNumber
+                                                key={ticket.id}
+                                                active={
+                                                    index === parseInt(activeTab1)
+                                                }
+                                                bgColor="ocean-blue"
+                                                textColor="white"
+                                                fontSize="3xl"
+                                                borderRadius="xl"
+                                                width="6"
+                                                maxWidth="16"
+                                                queue={ticket.service}
+                                                counterNum={ticket.counterNum}
+                                                ticketNum={ticket.ticketNumber}
+                                            />
+                                        )
+                                    )}
+                                    <TextButton
+                                        text="+"
+                                        textSize="3xl"
+                                        textColor="white"
+                                        buttonColor="baby-blue"
+                                        borderRadius="xl"
+                                        width="32"
+                                        minWidth="56"
+                                        paddingX="8"
+                                        paddingY="4"
+                                        onPress={() => handleAddTicket()}
+                                    />
+                                </>
+                            )}
+                        </div>
+                    </TabPanel>
+                </TabContext>
+            </div>
+        </div>
+
+        {businessTemplate.hasWaitingQueue && (
+            <div>
+                <h2 className="text-2xl font-bold text-coal-black mb-4">
+                    In waiting line
+                </h2>
+                <div className="bg-white rounded-xl p-6 shadow-sm">
+                    <TabContext value={activeTab2}>
+                        <Box
+                            sx={{ borderBottom: 1, borderColor: "rgba(0,0,0,0.1)" }}
+                        >
+                            <TabList
+                                onChange={handleWaitingChange}
+                                aria-label="waiting tabs"
+                                sx={{
+                                    "& .MuiTab-root": {
+                                        color: "rgba(0,0,0,0.6)",
+                                        "&.Mui-selected": { color: "#1DCDFE" },
+                                    },
+                                    "& .MuiTabs-indicator": {
+                                        backgroundColor: "#1DCDFE",
+                                    },
+                                }}
+                            >
+                                <Tab label="All queues" value="0" />
+                                {formValues?.services?.map(
+                                    (service: ServiceTemplate) => (
+                                        <Tab
+                                            key={service.name}
+                                            label={service.name}
+                                            value={service.name}
+                                        />
+                                    )
+                                )}
+                            </TabList>
+                        </Box>
+
+                        <TabPanel className="px-0 py-6" value={activeTab2}>
+                            <div
+                                className={`counter__scrollbar flex gap-4 ${
+                                    tickets2.length <= 0 &&
+                                    "justify-center items-center"
+                                }`}
+                            >
+                                {tickets2.length <= 0 ? (
+                                    <ExceptionMessage
+                                        image={MissionAccomplished}
+                                        imageTitle="Mission Accomplished"
+                                        orientation="row"
+                                        width={185}
+                                        message="Celebrate! No waiting line!"
+                                    />
+                                ) : (
+                                    <>
+                                        {filterTickets(tickets2, activeTab2)
+                                            .slice(0, MAX_TICKETS)
+                                            .map((ticket, index) => (
+                                                <TicketNumber
+                                                    key={ticket.id}
+                                                    active={
+                                                        index ===
+                                                        parseInt(activeTab2)
+                                                    }
+                                                    bgColor="ocean-blue"
+                                                    textColor="white"
+                                                    fontSize="3xl"
+                                                    borderRadius="xl"
+                                                    width="6"
+                                                    maxWidth="16"
+                                                    queue={ticket.service}
+                                                    ticketNum={ticket.ticketNumber}
+                                                />
+                                            ))}
+                                        {tickets2.length > MAX_TICKETS && (
+                                            <TicketNumber
+                                                key="overflow"
+                                                ticketNum={`${remainingCount2}+`}
+                                                queue="others waiting in queue"
+                                                bgColor="baby-blue"
+                                                textColor="white"
+                                                fontSize="3xl"
+                                                borderRadius="xl"
+                                                width="6"
+                                                maxWidth="16"
+                                                labelPadding="4"
+                                            />
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                        </TabPanel>
+                    </TabContext>
+                </div>
+            </div>
+        )}
       </div>
-
-      {businessTemplate.hasWaitingQueue && (
-          <div>
-              <h2 className="text-2xl font-bold text-coal-black mb-4">
-                  In waiting line
-              </h2>
-              <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <TabContext value={activeTab2}>
-                      <Box
-                          sx={{ borderBottom: 1, borderColor: "rgba(0,0,0,0.1)" }}
-                      >
-                          <TabList
-                              onChange={handleWaitingChange}
-                              aria-label="waiting tabs"
-                              sx={{
-                                  "& .MuiTab-root": {
-                                      color: "rgba(0,0,0,0.6)",
-                                      "&.Mui-selected": { color: "#1DCDFE" },
-                                  },
-                                  "& .MuiTabs-indicator": {
-                                      backgroundColor: "#1DCDFE",
-                                  },
-                              }}
-                          >
-                              <Tab label="All queues" value="0" />
-                              {formValues?.services?.map(
-                                  (service: ServiceTemplate) => (
-                                      <Tab
-                                          key={service.name}
-                                          label={service.name}
-                                          value={service.name}
-                                      />
-                                  )
-                              )}
-                          </TabList>
-                      </Box>
-
-                      <TabPanel className="px-0 py-6" value={activeTab2}>
-                          <div
-                              className={`counter__scrollbar flex gap-4 ${
-                                  tickets2.length <= 0 &&
-                                  "justify-center items-center"
-                              }`}
-                          >
-                              {tickets2.length <= 0 ? (
-                                  <ExceptionMessage
-                                      image={MissionAccomplished}
-                                      imageTitle="Mission Accomplished"
-                                      orientation="row"
-                                      width={185}
-                                      message="Celebrate! No waiting line!"
-                                  />
-                              ) : (
-                                  <>
-                                      {filterTickets(tickets2, activeTab2)
-                                          .slice(0, MAX_TICKETS)
-                                          .map((ticket, index) => (
-                                              <TicketNumber
-                                                  key={ticket.id}
-                                                  active={
-                                                      index ===
-                                                      parseInt(activeTab2)
-                                                  }
-                                                  bgColor="ocean-blue"
-                                                  textColor="white"
-                                                  fontSize="3xl"
-                                                  borderRadius="xl"
-                                                  width="6"
-                                                  maxWidth="16"
-                                                  queue={ticket.service}
-                                                  ticketNum={ticket.ticketNumber}
-                                              />
-                                          ))}
-                                      {tickets2.length > MAX_TICKETS && (
-                                          <TicketNumber
-                                              key="overflow"
-                                              ticketNum={`${remainingCount2}+`}
-                                              queue="others waiting in queue"
-                                              bgColor="baby-blue"
-                                              textColor="white"
-                                              fontSize="3xl"
-                                              borderRadius="xl"
-                                              width="6"
-                                              maxWidth="16"
-                                              labelPadding="4"
-                                          />
-                                      )}
-                                  </>
-                              )}
-                          </div>
-                      </TabPanel>
-                  </TabContext>
-              </div>
-          </div>
-      )}
-    </div>
+    </Entity>
   );
 }
