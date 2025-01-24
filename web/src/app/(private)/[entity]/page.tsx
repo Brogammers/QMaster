@@ -6,6 +6,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setEntity } from "@/store/features/entitySlice";
 import { RootState } from "@/store/store";
 import { useEffect } from 'react';
+import { Select } from "antd";
+const { Option } = Select;
+
+const MOCK_LOCATIONS = [
+  {
+    id: "1",
+    name: "Arabiata Restaurant",
+    branchName: "Maadi Branch",
+    city: "Cairo",
+    country: "Egypt",
+  },
+  {
+    id: "2",
+    name: "Arabiata Restaurant",
+    branchName: "Nasr City Branch",
+    city: "Cairo",
+    country: "Egypt",
+  },
+  {
+    id: "3",
+    name: "Arabiata Restaurant",
+    branchName: "Zamalek Branch",
+    city: "Cairo",
+    country: "Egypt",
+  },
+].sort((a, b) => a.branchName.localeCompare(b.branchName));
 
 export default function Entity({ children }: QueueModalProps) {
   const pathname = usePathname();
