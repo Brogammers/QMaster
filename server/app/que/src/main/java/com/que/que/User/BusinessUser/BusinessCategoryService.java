@@ -21,4 +21,8 @@ public class BusinessCategoryService {
         Pageable pageable = PageRequest.of(page - 1, perPage);
         return businessCategoryRepository.findAll(pageable);
     }
+
+    public void deleteCategory(Long id) {
+        businessCategoryRepository.deleteById(id);
+    }
 }

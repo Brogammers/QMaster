@@ -109,32 +109,56 @@ export default function CategoriesPage() {
     const categoryToDelete = categories.find(cat => cat.id === categoryId);
     if (!categoryToDelete) return;
 
-    setCategories(prev => prev.filter(cat => cat.id !== categoryId));
+    var shouldHandleRemove = true;
 
+    setCategories((prev) => prev.filter((cat) => cat.id !== categoryId));
     toast.success(
-      (t) => (
-        <div className="flex items-center gap-2">
-          <span>Category deleted</span>
-          <button
-            onClick={() => {
-              setCategories(prev => [...prev, categoryToDelete]);
-              toast.dismiss(t.id);
-            }}
-            className="px-2 py-1 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition-colors flex items-center gap-1"
-          >
-            <FaUndo />
-            <span>Undo</span>
-          </button>
-        </div>
-      ),
-      {
-        duration: 5000,
-        style: {
-          background: '#1e293b',
-          color: '#fff',
+        (t) => (
+          <div className="flex items-center gap-2">
+              <span>Deletion in progress</span>
+              <button
+                  onClick={() => {
+                      setCategories((prev) => [...prev, categoryToDelete]);
+                      toast.dismiss(t.id);
+                      shouldHandleRemove = false;
+                  }}
+                  className="px-2 py-1 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition-colors flex items-center gap-1"
+              >
+                  <FaUndo />
+                  <span>Undo</span>
+              </button>
+          </div>
+        ),
+        {
+          duration: 5000,
+          style: {
+              background: "#1e293b",
+              color: "#fff",
+          },
         }
-      }
     );
+      
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_CATEGORIES || "";
+    setTimeout(() => {
+      if (!shouldHandleRemove) return;
+
+      axios.delete(url, { data:  { id: categoryId, name: categoryToDelete.name } })
+      .then((response) => {
+        if (response.status !== 204) {
+          throw new Error('Failed to delete category');
+        }
+      })
+      .catch(() => {
+        setCategories((prev) => [...prev, categoryToDelete]);
+        toast.error("Failed to delete category", {
+          duration: 3000,
+          style: {
+            background: '#1e293b',
+            color: '#fff',
+          }
+        });
+      });
+    }, 6000);
   };
 
 

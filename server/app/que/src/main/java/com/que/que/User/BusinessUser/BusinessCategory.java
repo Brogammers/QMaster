@@ -44,7 +44,7 @@ public class BusinessCategory {
     public BusinessCategory(String name, String description, String status) {
         this.name = name;
         this.description = description;
-        if (status.equals("active") || status.equals("inactive"))
+        if (status != null && (status.equals("active") || status.equals("inactive")))
             this.status = status;
         else
             throw new IllegalStateException("Invalid status");

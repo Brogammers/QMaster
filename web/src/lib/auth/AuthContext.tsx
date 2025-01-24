@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     }).then((data) => {
       if (data) {
-        const adminData = { email: data.email, name: data.firstName };
+        const adminData = { email: data.email, name: data.firstName[0].toUpperCase() + data.firstName.slice(1) };
         setAdmin(adminData);
         // Set both cookie and localStorage
         Cookies.set('qmaster-auth', 'true', { expires: 7 }); // 7 days expiry
