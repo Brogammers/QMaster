@@ -1,10 +1,11 @@
-"use client" 
+"use client";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { StoreProvider } from "@/store/StoreProvider";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
+import { LocationProvider } from "@/ctx/LocationContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,8 +18,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <StoreProvider>
-          {children}
-          <Toaster position="bottom-right" />
+          <LocationProvider>
+            {children}
+            <Toaster position="bottom-right" />
+          </LocationProvider>
         </StoreProvider>
       </body>
     </html>
