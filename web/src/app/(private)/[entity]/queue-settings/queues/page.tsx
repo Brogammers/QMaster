@@ -179,7 +179,13 @@ export default function Queues() {
 
   const handleEditQueue = (queue: QueueConfig) => {
     setIsEditingQueue(queue.id!);
-    setNewQueue(queue);
+    setNewQueue({
+      ...queue,
+      counterConfig: {
+        ...queue.counterConfig,
+        counters: [...queue.counterConfig.counters],
+      },
+    });
     setIsAddingQueue(true);
   };
 
