@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.que.que.Queue.Queues;
 import com.que.que.Store.Store;
 import com.que.que.Store.StoreStatus;
@@ -57,9 +58,11 @@ public class Location {
 
     @ManyToOne
     @JoinColumn(name = "business_user_id", nullable = false)
+    @JsonIgnore
     private BusinessUser businessUser;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "location")
+    @JsonIgnore
     private List<Queues> queues = new ArrayList<>();
 
     @OneToMany(mappedBy = "location")

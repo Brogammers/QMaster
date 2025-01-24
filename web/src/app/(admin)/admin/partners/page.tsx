@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaBuilding, FaPlus, FaSearch, FaChevronDown, FaChevronUp, FaMapMarkerAlt } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import AddPartnerModal from '@/components/admin/AddPartnerModal';
 import axios from 'axios';
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from '../../layout';
 import toast from 'react-hot-toast';
+import { PartnerContext as PartnersContext } from '../../context';
 
 export interface Location {
   id: number;
@@ -26,31 +27,7 @@ export interface Partner {
 }
 
 export default function PartnersPage() {
-  const [partners, setPartners] = useState<Partner[]>([
-    {
-      id: 1,
-      name: 'City Hospital',
-      category: 'Healthcare',
-      status: 'active',
-      joinedDate: '2024-01-15',
-      locations: [
-        {
-          id: 1,
-          city: 'Manhattan',
-          stateOrProvince: 'New York',
-          country: 'USA',
-          googleMapsUrl: 'https://maps.google.com/?q=CityHospital+Manhattan'
-        },
-        {
-          id: 2,
-          city: 'Brooklyn',
-          stateOrProvince: 'New York',
-          country: 'USA',
-          googleMapsUrl: 'https://maps.google.com/?q=CityHospital+Brooklyn'
-        }
-      ]
-    },
-  ]);
+  const { partners, setPartners } = useContext(PartnersContext);
   const [isDarkMode] = useState(false);
   const [expandedPartnerId, setExpandedPartnerId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,7 +47,7 @@ export default function PartnersPage() {
         id: index + 1
       }))
     };
-    setPartners(prev => [...prev, newPartner]);
+    setPartners((prev: Partner[]) => [...prev, newPartner]);
   };
 
   const handleAddLocation = (partnerId: number, locationData: Omit<Location, 'id'>) => {
@@ -121,7 +98,22 @@ export default function PartnersPage() {
         }
       })
       .then((data) => {
-        console.log(data);
+        const partners = data.map((partner: any) => ({
+          id: partner.id,
+          name: partner.username,
+          category: partner.businessCategories[0].name ? partner.businessCategories[0].name : null,
+          status: partner.status ? "active" : "inactive",
+          joinedDate: new Date(partner.createdAt).toLocaleDateString(),
+          locations: partner.locations.map((location: any) => ({
+            id: location.id,
+            city: "city",
+            stateOrProvince: "state",
+            country: "country",
+            googleMapsUrl: "url"
+          }))
+        }));
+
+        setPartners(partners); 
       })
       .catch((error) => {
         console.error('Error fetching partners:', error);

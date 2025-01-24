@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { 
   FaStore, FaHospital, FaUniversity, FaLandmark, FaShoppingBag, 
@@ -9,12 +9,15 @@ import {
   FaPlus, FaSearch, FaEdit, FaTrash, FaUndo 
 } from 'react-icons/fa';
 import AddCategoryModal from '@/components/admin/AddCategoryModal';
+import { CategoriesContext } from '../../context';
+import axios from 'axios';
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from '../../layout';
 
 export interface Category {
   id: number;
   name: string;
   description: string;
-  icon: string;
+  icon: any;
   partnersCount: number;
   status: 'active' | 'inactive';
 }
@@ -41,40 +44,51 @@ export default function CategoriesPage() {
   const [isDarkMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [categories, setCategories] = useState<Category[]>([
-    {
-      id: 1,
-      name: 'Healthcare',
-      description: 'Medical facilities and healthcare services',
-      icon: 'hospital',
-      partnersCount: 45,
-      status: 'active',
-    },
-    {
-      id: 2,
-      name: 'Education',
-      description: 'Educational institutions and services',
-      icon: 'university',
-      partnersCount: 32,
-      status: 'active',
-    },
-    {
-      id: 3,
-      name: 'Technology',
-      description: 'Software and technology companies',
-      icon: 'code',
-      partnersCount: 28,
-      status: 'active',
-    }
-  ]);
+  
+  const { categories, setCategories } = useContext(CategoriesContext);
 
   const handleAddCategory = (categoryData: Omit<Category, 'id' | 'partnersCount'>) => {
-    const newCategory: Category = {
-      ...categoryData,
-      id: categories.length + 1,
-      partnersCount: 0 // New categories start with 0 partners
-    };
-    setCategories(prev => [...prev, newCategory]);
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_CATEGORIES || "";    
+    axios.post(url, {
+      name: categoryData.name,
+      description: categoryData.description,
+      status: categoryData.status
+    })
+    .then((response) => {
+      if (response.status === 201) {
+        return response.data.category;
+      } else { 
+        throw new Error('Failed to create category');
+      }
+    })
+    .then((data) => {
+      const newCategory: Category = {
+        id: data.id,
+        name: data.name,
+        description: data.description,
+        icon: FaSearch,
+        partnersCount: data.partnersCount,
+        status: data.status
+      };
+      setCategories(prev => [...prev, newCategory]);
+
+      toast.success("Category added successfully", {
+        duration: 5000,
+        style: {
+          background: '#1e293b',
+          color: '#fff',
+        }
+      });
+    })
+    .catch(() => {
+      toast.error("Failed to add category", {
+        duration: 5000,
+        style: {
+          background: '#1e293b',
+          color: '#fff',
+        }
+      });
+    })
   };
 
   const handleEditCategory = (category: Category) => {
@@ -122,6 +136,41 @@ export default function CategoriesPage() {
       }
     );
   };
+
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_CATEGORIES || "";
+
+    axios.get(`${url}?page=${DEFAULT_PAGE}&per-page=${DEFAULT_PER_PAGE}`)
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data.categories.content;
+      } else { 
+        throw new Error('Failed to fetch categories');
+      }
+    })
+    .then((data) => {
+      const categories = data.map((category: any) => ({
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        icon: FaSearch,
+        partnersCount: category.partnersCount,
+        status: category.status
+      }));
+
+      setCategories(categories);
+    })
+    .catch((error) => {
+      toast.error(error.message, {
+        duration: 5000,
+        style: {
+          background: '#1e293b',
+          color: '#fff',
+        }
+      });
+    });
+  }, []);
 
   return (
     <div className="space-y-6">

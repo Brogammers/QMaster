@@ -21,8 +21,8 @@ public class AppUserSerializer extends StdSerializer<AppUser> {
       AppUser value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
 
     jgen.writeStartObject();
-    jgen.writeStringField("first-name", value.getFirstName());
-    jgen.writeStringField("last-name", value.getLastName());
+    jgen.writeStringField("firstName", value.getFirstName());
+    jgen.writeStringField("lastName", value.getLastName());
     jgen.writeStringField("username", value.getUsername());
 
   }

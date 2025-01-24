@@ -1,20 +1,20 @@
-import { createContext } from "react";
+import React, { createContext } from "react";
 import { Partner } from "./admin/partners/page";
 import { Category } from "./admin/categories/page";
 
 export const PartnerContext = createContext<{
     partners: Partner[];
-    setPartners: (partners: Partner[]) => void;
+    setPartners: React.Dispatch<React.SetStateAction<Partner[]>>;
     getNextPartnerPage: (page: number, perPage: number) => void;
 }>({
     partners: [],
-    setPartners: (partners: Partner[]) => {},
+    setPartners: (partners) => {},
     getNextPartnerPage: (page: number, perPage: number) => {},
 });
 
 export const CategoriesContext = createContext<{
     categories: Category[];
-    setCategories: (categories: Category[]) => void;
+    setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
     getNextCategoryPage: (page: number, perPage: number) => void;
 }>({
     categories: [],

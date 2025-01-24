@@ -3,6 +3,9 @@ package com.que.que.User.BusinessUser;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +20,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
+@JsonSerialize(using = BusinessCategorySerializer.class)
 public class BusinessCategory {
 
     @Id
@@ -24,8 +28,10 @@ public class BusinessCategory {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "business_category_generator_sequence")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
     private String description;
+    private String status = "active";
 
     @ManyToMany
     private Set<BusinessUser> businessUsers = new HashSet<>();
@@ -35,9 +41,13 @@ public class BusinessCategory {
         this.description = "";
     }
 
-    public BusinessCategory(String name, String description) {
+    public BusinessCategory(String name, String description, String status) {
         this.name = name;
         this.description = description;
+        if (status.equals("active") || status.equals("inactive"))
+            this.status = status;
+        else
+            throw new IllegalStateException("Invalid status");
     }
 
     public void addBusinessUser(BusinessUser businessUser) {
