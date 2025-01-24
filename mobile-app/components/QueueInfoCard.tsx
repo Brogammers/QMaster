@@ -20,7 +20,7 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
   const { name, image } = props;
   const { isDarkMode } = useTheme();
   const linkTo = useLinkTo();
-  const [hasStore, setHasStore] = useState(true); // For demo purposes
+  const [hasStore, setHasStore] = useState(false); // For demo purposes
 
   const { currentLocation } = useContext(LocationContext);
 
@@ -31,10 +31,12 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
     });
   };
 
-  useEffect(() => {
+  useEffect(() => {    
+    if (currentLocation != null) return;
+
     const url = configConverter("EXPO_PUBLIC_API_BASE_URL_HAS_STORE");
     // @ts-ignore
-    axios.get(`${url}?businessName=${name}&locationId=${currentLocation ? currentLocation.id : ""}`)
+    axios.get(`${url}?businessName=${name}&locationId=${currentLocation}`)
     .then((response) => {
       if(response.status === 200) {
         return response.data.access;

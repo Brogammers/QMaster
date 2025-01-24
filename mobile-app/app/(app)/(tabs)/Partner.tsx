@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { View, ScrollView } from 'react-native';
 import QueueInfoCard from "@/components/QueueInfoCard";
 import JoinQueue from '@/components/JoinQueue';
@@ -7,6 +7,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
+import configConverter from "@/api/configConverter";
+import axios from "axios";
 
 export const LocationContext = createContext({
   locationData: [],
@@ -21,6 +23,39 @@ export default function Partner() {
   
   const [locationData, setLocationData] = useState([]);
   const [value, setValue] = useState(null);
+
+  useEffect(() => {
+    const url = configConverter(
+        "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
+    );
+    
+    axios.get(`${url}?businessName=${brandName}`)
+    .then((response) => {
+      if (response.status === 200) {        
+        return response.data.locations;
+      } else { 
+        console.log("Error: ", response);
+      }
+    })
+    .then((data) => {
+      const locationData = data.map((store: any, idx: number) => {
+        return {
+          label: store.name,
+          value: idx,
+          id: store.id,
+          address: store.address,
+          coordinates: { 
+            latitude: store.latitude,
+            longitude: store.longitude,
+          }
+        }
+      })
+      setLocationData(locationData);
+    })
+    .catch((error) => {
+      console.log("Error: ", error);
+    });
+  }, []);
 
   return (
     <View className="flex-1">
@@ -58,7 +93,7 @@ export default function Partner() {
               }}
               className="w-full px-6"
             >
-              <JoinQueue businessName={brandName}/>
+              <JoinQueue />
             </MotiView>
           </ScrollView>
         </SafeAreaView>

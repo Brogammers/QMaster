@@ -10,53 +10,14 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import QueueDetails from "./QueueDetails";
 import { LocationContext } from "@/app/(app)/(tabs)/Partner";
 
-interface QueuePageProps {
-  businessName: string;
-}
 
-export default function QueuePage(props: QueuePageProps) {
+export default function QueuePage() {
   const width = Dimensions.get('window').width * 0.85;
   const { isDarkMode } = useTheme();
 
   const [open, setOpen] = useState(false);
-
-  const { businessName } = props;
-
-  const { locationData, setLocationData, currentLocation, setCurrentLocation } = useContext(LocationContext);
-
-  useEffect(() => {
-    const url = configConverter(
-        "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
-    );
-    
-    axios.get(`${url}?businessName=${businessName}`)
-    .then((response) => {
-      if (response.status === 200) {        
-        return response.data.locations;
-      } else { 
-        console.log("Error: ", response);
-      }
-    })
-    .then((data) => {
-      const locationData = data.map((store: any, idx: number) => {
-        return {
-          label: store.name,
-          value: idx,
-          id: store.id,
-          address: store.address,
-          coordinates: { 
-            latitude: store.latitude,
-            longitude: store.longitude,
-          }
-        }
-      })
-      setLocationData(locationData);
-    })
-    .catch((error) => {
-      console.log("Error: ", error);
-    });
-  }, []);
-
+  const { locationData, currentLocation, setCurrentLocation } = useContext(LocationContext);
+  
   return (
     <View className="flex-1">
       <ScrollView 
