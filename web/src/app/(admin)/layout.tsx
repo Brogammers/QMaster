@@ -1,23 +1,21 @@
 'use client'
 
-import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { useAuth, AuthProvider } from '@/lib/auth/AuthContext';
 import AdminSidebar from '@/app/components/admin/AdminSidebar';
 import SplashScreen from '@/app/shared/SplashScreen';
-import { CategoriesContext, PartnerContext, StoresContext, UsersContext } from './context';
-import { Partner } from './admin/partners/page';
+import { AuthProvider, useAuth } from '@/lib/auth/AuthContext';
+import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Category } from './admin/categories/page';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { Partner } from './admin/partners/page';
+import { CategoriesContext, PartnerContext, StoresContext, UsersContext } from './context';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-const DEFAULT_PAGE = 1;
-const DEFAULT_PER_PAGE = 10;
+export const DEFAULT_PAGE = 1;
+export const DEFAULT_PER_PAGE = 10;
 
 function AdminLayoutContent({ children }: AdminLayoutProps) {
   const pathname = usePathname();
@@ -32,34 +30,6 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     const savedDarkMode = localStorage.getItem('qmaster-dark-mode');
     setIsDarkMode(savedDarkMode === 'true');
   }, []);
-
-  // Get partners
-  useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_GET_BUSINESSES;
-    axios.get(`${url}?page=${DEFAULT_PAGE}&perPage=${DEFAULT_PER_PAGE}`)
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data.businesses;
-      } else { 
-        throw new Error('Error fetching partners');
-      }
-    })
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error('Error fetching partners:', error);
-      toast.error('Error fetching partners');
-    });
-  }, []);
-
-  useEffect(() => {
-
-  }, []);
-
-  useEffect(() => {
-
-  });
 
   // If we're on the login page, just render the children
   if (pathname === '/admin/login') {

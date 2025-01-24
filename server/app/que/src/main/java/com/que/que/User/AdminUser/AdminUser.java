@@ -8,11 +8,13 @@ import com.que.que.User.UserRole;
 
 import jakarta.persistence.Entity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor
 public class AdminUser extends User {
     public AdminUser(
             String firstName,

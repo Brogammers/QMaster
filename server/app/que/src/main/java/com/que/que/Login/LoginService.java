@@ -2,6 +2,8 @@ package com.que.que.Login;
 
 import com.que.que.Registration.EmailValidator;
 import com.que.que.Security.JwtUtil;
+import com.que.que.User.AdminUser.AdminUser;
+import com.que.que.User.AdminUser.AdminUserRepository;
 import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.AppUser.AppUserRepository;
 import com.que.que.User.BusinessUser.BusinessUser;
@@ -21,6 +23,7 @@ public class LoginService {
 
   private final AppUserRepository appUserRepository;
   private final BusinessUserRepository businessUserRepository;
+  private final AdminUserRepository adminUserRepository;
   private final EmailValidator emailValidator;
   private final LoginRepository loginRepository;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -84,12 +87,46 @@ public class LoginService {
     }
   }
 
+  public Map<String, Object> loginAdminUser(String email, String password) {
+    AdminUser user = checkIfValidAdminUser(email, password);
+    if (user != null) {
+      LoginEntry loginEntry = new LoginEntry(user);
+      loginRepository.save(loginEntry);
+      System.out.println("Logged in!");
+      Map<String, Object> object = new HashMap<>();
+      object.put("email", email);
+      object.put("username", user.getUsername());
+      object.put("userID", user.getId());
+      object.put("firstName", user.getFirstName());
+      object.put("lastName", user.getLastName());
+      object.put("token", JwtUtil.generateToken(user.getEmail()));
+      return object;
+    } else {
+      throw new IllegalStateException("User not found");
+    }
+  }
+
   private BusinessUser checkIfValidBusinessUser(String email, String password) {
     boolean isValidEmail = emailValidator.test(email);
     if (!isValidEmail) {
       throw new IllegalStateException(INVALID_LOGIN_MSG);
     }
     BusinessUser user = businessUserRepository
+        .findByEmail(email).orElseThrow(() -> new IllegalStateException(INVALID_LOGIN_MSG));
+    if (bCryptPasswordEncoder.matches(password, user.getPassword()) && user.isEnabled()) {
+      return user;
+    } else {
+      new IllegalStateException(INVALID_LOGIN_MSG);
+      return null;
+    }
+  }
+
+  private AdminUser checkIfValidAdminUser(String email, String password) {
+    boolean isValidEmail = emailValidator.test(email);
+    if (!isValidEmail) {
+      throw new IllegalStateException(INVALID_LOGIN_MSG);
+    }
+    AdminUser user = adminUserRepository
         .findByEmail(email).orElseThrow(() -> new IllegalStateException(INVALID_LOGIN_MSG));
     if (bCryptPasswordEncoder.matches(password, user.getPassword()) && user.isEnabled()) {
       return user;

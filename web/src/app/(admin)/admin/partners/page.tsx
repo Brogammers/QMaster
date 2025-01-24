@@ -1,9 +1,12 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaBuilding, FaPlus, FaSearch, FaChevronDown, FaChevronUp, FaMapMarkerAlt } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import AddPartnerModal from '@/components/admin/AddPartnerModal';
+import axios from 'axios';
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from '../../layout';
+import toast from 'react-hot-toast';
 
 export interface Location {
   id: number;
@@ -106,6 +109,27 @@ export default function PartnersPage() {
     );
   });
 
+  // Get partners
+    useEffect(() => {
+      const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_GET_BUSINESSES;
+      axios.get(`${url}?page=${DEFAULT_PAGE}&per-page=${DEFAULT_PER_PAGE}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data.businesses.content;
+        } else { 
+          throw new Error('Error fetching partners');
+        }
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching partners:', error);
+        toast.error('Error fetching partners');
+      });
+    }, []);
+  
+   
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">

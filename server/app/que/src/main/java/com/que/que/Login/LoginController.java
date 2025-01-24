@@ -33,6 +33,19 @@ public class LoginController {
         return new ResponseEntity<Object>(body, statusCode);
     }
 
+    @PostMapping(path = "/admin")
+    public ResponseEntity<Object> loginAdmin(@RequestBody LoginRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+        try {
+            body = loginService.loginAdminUser(request.getEmail(), request.getPassword());
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+            statusCode = HttpStatusCode.valueOf(500);
+        }
+        return new ResponseEntity<Object>(body, statusCode);
+    }
+
     @PostMapping(path = "/business")
     public ResponseEntity<Object> loginBusiness(@RequestBody LoginRequest request) {
         Map<String, Object> body = new HashMap<>();
@@ -45,4 +58,5 @@ public class LoginController {
         }
         return new ResponseEntity<Object>(body, statusCode);
     }
+
 }
