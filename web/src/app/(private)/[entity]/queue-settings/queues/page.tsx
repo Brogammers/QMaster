@@ -318,7 +318,7 @@ export default function Queues() {
                     onChange={(e) =>
                       setNewQueue({ ...newQueue, name: e.target.value })
                     }
-                    className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
+                    className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-3"
                   />
                 </div>
                 <div>
