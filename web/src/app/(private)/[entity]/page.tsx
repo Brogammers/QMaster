@@ -7,30 +7,7 @@ import { setEntity } from "@/store/features/entitySlice";
 import { RootState } from "@/store/store";
 import { useEffect, useState, useRef } from "react";
 import { FiChevronDown } from "react-icons/fi";
-
-const MOCK_LOCATIONS = [
-  {
-    id: "1",
-    name: "Arabiata Restaurant",
-    branchName: "German University in Cairo Branch",
-    city: "Cairo",
-    country: "Egypt",
-  },
-  {
-    id: "2",
-    name: "Arabiata Restaurant",
-    branchName: "Korba Branch",
-    city: "Cairo",
-    country: "Egypt",
-  },
-  {
-    id: "3",
-    name: "Arabiata Restaurant",
-    branchName: "Zamalek Branch",
-    city: "Cairo",
-    country: "Egypt",
-  },
-].sort((a, b) => a.branchName.localeCompare(b.branchName));
+import { useLocation } from "@/ctx/LocationContext";
 
 export default function Entity({ children }: QueueModalProps) {
   const pathname = usePathname();
@@ -39,8 +16,8 @@ export default function Entity({ children }: QueueModalProps) {
   const dispatch = useDispatch();
   const entityName = useSelector((state: RootState) => state.entity.name);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState(MOCK_LOCATIONS[0]);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const { selectedLocation, locations, setSelectedLocation } = useLocation();
 
   const formatPageName = (name: string) => {
     const formattedName = name.replace(/[^\w\s]/gi, " ");
@@ -87,11 +64,11 @@ export default function Entity({ children }: QueueModalProps) {
           >
             <div className="flex-1 min-w-0">
               <div className="truncate text-base font-medium">
-                {selectedLocation.branchName}
+                {selectedLocation?.branchName}
               </div>
               <div className="truncate text-xs text-gray-500">
-                {selectedLocation.name} - {selectedLocation.city},{" "}
-                {selectedLocation.country}
+                {selectedLocation?.name} - {selectedLocation?.city},{" "}
+                {selectedLocation?.country}
               </div>
             </div>
             <FiChevronDown
@@ -103,7 +80,7 @@ export default function Entity({ children }: QueueModalProps) {
 
           {isOpen && (
             <div className="absolute z-10 w-full mt-2 bg-white rounded-2xl shadow-lg border border-gray-200 py-2">
-              {MOCK_LOCATIONS.map((location) => (
+              {locations.map((location) => (
                 <button
                   key={location.id}
                   onClick={() => {
