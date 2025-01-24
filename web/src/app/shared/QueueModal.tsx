@@ -17,7 +17,6 @@ export default function QueueModal({
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
           <h1 className="text-2xl font-bold">{title}</h1>
-          <LocationDropdown />
         </div>
       </div>
       <p className="mb-8">{description}</p>
