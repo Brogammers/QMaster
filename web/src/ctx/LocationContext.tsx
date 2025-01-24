@@ -20,21 +20,21 @@ interface LocationContextType {
 const MOCK_LOCATIONS: PartnerLocation[] = [
     {
         id: "1",
-        name: "Arabiata Restaurant",
-        branchName: "Maadi Branch",
+        name: "Arabiata",
+        branchName: "German University in Cairo Branch",
         city: "Cairo",
         country: "Egypt",
     },
     {
         id: "2",
-        name: "Arabiata Restaurant",
+        name: "Arabiata",
         branchName: "Nasr City Branch",
         city: "Cairo",
         country: "Egypt",
     },
     {
         id: "3",
-        name: "Arabiata Restaurant",
+        name: "Arabiata",
         branchName: "Zamalek Branch",
         city: "Cairo",
         country: "Egypt",
