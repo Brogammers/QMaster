@@ -58,7 +58,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
         if (!selectedLocation && locations.length > 0) {
             setSelectedLocation(locations[0]);
         }
-    }, []);
+    }, [locations, selectedLocation]);
 
     return (
         <LocationContext.Provider
