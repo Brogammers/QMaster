@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.que.que.Queue.Queues;
+import com.que.que.Store.Store;
+import com.que.que.Store.StoreStatus;
 import com.que.que.Store.Purchase.Purchase;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.OpeningHours;
@@ -20,6 +22,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,6 +64,12 @@ public class Location {
 
     @OneToMany(mappedBy = "location")
     private List<Purchase> purchases = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "store_id", referencedColumnName = "id")
+    private Store store = null;
+
+    private StoreStatus storeStatus = StoreStatus.NOT_REQUESTED;
 
     public Location(String name, String address, BusinessUser businessUser, double latitude, double longitude) {
         this.name = name;

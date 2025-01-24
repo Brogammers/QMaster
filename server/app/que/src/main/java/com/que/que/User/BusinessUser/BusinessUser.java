@@ -9,8 +9,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Location.Location;
-import com.que.que.Store.Store;
-import com.que.que.Store.StoreStatus;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.User;
 import com.que.que.User.UserRole;
@@ -20,10 +18,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,12 +46,6 @@ public class BusinessUser extends User {
     @ManyToMany
     private Set<BusinessCategory> businessCategories = new HashSet<>();
 
-    @OneToOne()
-    @JoinColumn(name = "store_id", referencedColumnName = "id")
-    private Store store;
-
-    private StoreStatus status = StoreStatus.NOT_REQUESTED;
-
     public BusinessUser(
             UserRole appUserRole,
             String firstName,
@@ -77,32 +67,6 @@ public class BusinessUser extends User {
                 phoneCode, phoneNumber, location);
         this.subscriptionPlan = subscriptionPlan;
         this.queueId = -1;
-        this.store = null;
-    }
-
-    public BusinessUser(
-            UserRole appUserRole,
-            String firstName,
-            String lastName,
-            String username,
-            LocalDateTime dateOfRegistration,
-            LocalDate dateOfBirth,
-            String countryOfOrigin,
-            String password,
-            String email,
-            boolean locked,
-            boolean enabled,
-            String phoneCode,
-            String phoneNumber,
-            String location,
-            SubscriptionPlans subscriptionPlan,
-            Store store) {
-        super(appUserRole, firstName, lastName, username, dateOfRegistration,
-                dateOfBirth, countryOfOrigin, password, email, locked, enabled,
-                phoneCode, phoneNumber, location);
-        this.subscriptionPlan = subscriptionPlan;
-        this.queueId = -1;
-        this.store = store;
     }
 
     @Override

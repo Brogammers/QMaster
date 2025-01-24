@@ -5,6 +5,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.que.que.Location.Location;
+import com.que.que.Location.LocationRepository;
 import com.que.que.Store.Store;
 import com.que.que.Store.StoreRepository;
 import com.que.que.User.User;
@@ -21,8 +23,10 @@ public class ProductService {
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
     private final BusinessUserRepository businessUserRepository;
+    private final LocationRepository locationRepository;
 
-    public Page<Product> getProductsByStoreName(String storeName, int pageNumber, int perPage, String email) {
+    public Page<Product> getProductsByStoreName(String storeName, int pageNumber, int perPage, String email,
+            long locationId) {
         if (storeName == null && email.isBlank()) {
             throw new IllegalStateException("Store name or email must be provided");
         }
@@ -40,7 +44,14 @@ public class ProductService {
             throw new IllegalStateException("User is not a business");
         }
 
-        Store store = storeRepository.findByBusinessUserId(businessUser.getId())
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new IllegalStateException("Location not found"));
+
+        if (location.getBusinessUser().getId() != businessUser.getId()) {
+            throw new IllegalStateException("Location does not belong to business user");
+        }
+
+        Store store = storeRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new IllegalStateException("Store not found"));
 
         Pageable page = PageRequest.of(pageNumber - 1, perPage);
@@ -48,11 +59,17 @@ public class ProductService {
     }
 
     public Product createProduct(String name, String description, double price, int quantity, String email,
-            String type) {
+            String type, long locationId) {
         BusinessUser businessUser = businessUserRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("Business not found"));
-        Store store = storeRepository.findByBusinessUserId(businessUser.getId())
+        Store store = storeRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new IllegalStateException("Store not found"));
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new IllegalStateException("Location not found"));
+
+        if (location.getBusinessUser().getId() != businessUser.getId()) {
+            throw new IllegalStateException("Location does not belong to business user");
+        }
 
         ProductType productType = ProductType.valueOf(type);
         Product product = new Product(name, description, price, quantity, store, productType);
@@ -61,11 +78,17 @@ public class ProductService {
         return product;
     }
 
-    public void deleteProduct(long productId, String email) {
+    public void deleteProduct(long productId, String email, long locationId) {
         BusinessUser businessUser = businessUserRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("Business not found"));
-        Store store = storeRepository.findByBusinessUserId(businessUser.getId())
+        Store store = storeRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new IllegalStateException("Store not found"));
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new IllegalStateException("Location not found"));
+
+        if (location.getBusinessUser().getId() != businessUser.getId()) {
+            throw new IllegalStateException("Location does not belong to business user");
+        }
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalStateException("Product not found"));

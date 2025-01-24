@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import QueueBackground from '@/assets/images/QueueBackground.png';
 import AccessTime from '@/assets/images/accessTime.svg';
@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router } from "expo-router";
 import configConverter from "@/api/configConverter";
 import axios from "axios";
+import { LocationContext } from "@/app/(app)/(tabs)/Partner";
 
 const { height } = Dimensions.get('window')
 const twoFifth = height * 38 / 100
@@ -21,6 +22,8 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
   const linkTo = useLinkTo();
   const [hasStore, setHasStore] = useState(true); // For demo purposes
 
+  const { currentLocation } = useContext(LocationContext);
+
   const handleStorePress = () => {
     linkTo('/Store');
     router.setParams({ 
@@ -30,7 +33,8 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
 
   useEffect(() => {
     const url = configConverter("EXPO_PUBLIC_API_BASE_URL_HAS_STORE");
-    axios.get(`${url}?businessName=${name}`)
+    // @ts-ignore
+    axios.get(`${url}?businessName=${name}&locationId=${currentLocation ? currentLocation.id : ""}`)
     .then((response) => {
       if(response.status === 200) {
         return response.data.access;

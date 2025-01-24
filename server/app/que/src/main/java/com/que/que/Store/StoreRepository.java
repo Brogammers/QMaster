@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
-    Optional<Store> findByBusinessUserId(Long businessUserId);
+    Optional<Store> findByLocationId(Long locationId);
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext, useState } from "react";
 import { View, ScrollView } from 'react-native';
 import QueueInfoCard from "@/components/QueueInfoCard";
 import JoinQueue from '@/components/JoinQueue';
@@ -8,9 +8,19 @@ import { MotiView } from 'moti';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 
+export const LocationContext = createContext({
+  locationData: [],
+  setLocationData: (data: any) => {},
+  currentLocation: null,
+  setCurrentLocation: (data: any) => {}
+});
+
 export default function Partner() {
   const { brandName, image } = useLocalSearchParams<{ brandName: string, image: any }>();
   const { isDarkMode } = useTheme();
+  
+  const [locationData, setLocationData] = useState([]);
+  const [value, setValue] = useState(null);
 
   return (
     <View className="flex-1">
@@ -24,29 +34,36 @@ export default function Partner() {
           />
         )}
       </View>
-
-      <QueueInfoCard image={image} name={brandName} />
-      
-      <SafeAreaView className="flex-1" edges={['bottom', 'left', 'right']}>
-        <ScrollView 
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 40 }}
-          className="flex-1"
-        >
-          <MotiView
-            from={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              mass: 0.8,
-              damping: 15,
-              delay: 200
-            }}
-            className="w-full px-6"
+      <LocationContext.Provider value={{
+        locationData: locationData,
+        setLocationData: setLocationData,
+        currentLocation: value,
+        setCurrentLocation: setValue
+      }}>
+        <QueueInfoCard image={image} name={brandName} />
+        
+        <SafeAreaView className="flex-1" edges={['bottom', 'left', 'right']}>
+          <ScrollView 
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 40 }}
+            className="flex-1"
           >
-            <JoinQueue businessName={brandName}/>
-          </MotiView>
-        </ScrollView>
-      </SafeAreaView>
+            <MotiView
+              from={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                mass: 0.8,
+                damping: 15,
+                delay: 200
+              }}
+              className="w-full px-6"
+            >
+              <JoinQueue businessName={brandName}/>
+            </MotiView>
+          </ScrollView>
+        </SafeAreaView>
+      </LocationContext.Provider>
     </View>
+
   );
 }

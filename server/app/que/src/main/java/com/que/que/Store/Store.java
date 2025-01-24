@@ -2,9 +2,9 @@ package com.que.que.Store;
 
 import java.util.List;
 
+import com.que.que.Location.Location;
 import com.que.que.Store.Product.Product;
 import com.que.que.Store.Purchase.Purchase;
-import com.que.que.User.BusinessUser.BusinessUser;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,8 +32,8 @@ public class Store {
     private List<Product> products;
 
     @OneToOne()
-    @JoinColumn(name = "business_user_id", referencedColumnName = "id")
-    private BusinessUser businessUser;
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
 
     @OneToMany(mappedBy = "store")
     private List<Purchase> purchases;
@@ -42,8 +42,8 @@ public class Store {
     private String iban;
     private String bank;
 
-    public Store(BusinessUser businessUser) {
-        this.businessUser = businessUser;
+    public Store(Location location) {
+        this.location = location;
     }
 
     public void addProduct(Product product) {

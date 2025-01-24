@@ -41,7 +41,7 @@ public class StoreController {
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
             String email = jwtUtil.getEmail(token.substring(7));
-            productService.deleteProduct(request.getId(), email);
+            productService.deleteProduct(request.getProductId(), email, request.getLocationId());
             body.put("message", "Product deleted");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
@@ -60,7 +60,7 @@ public class StoreController {
             String email = jwtUtil.getEmail(token.substring(7));
             Product product = productService.createProduct(request.getName(), request.getDescription(),
                     request.getPrice(),
-                    request.getQuantity(), email, request.getType());
+                    request.getQuantity(), email, request.getType(), request.getLocationId());
             body.put("message", "Product created");
             body.put("product", product);
         } catch (IllegalStateException e) {
@@ -79,7 +79,7 @@ public class StoreController {
         try {
             String email = jwtUtil.getEmail(token.substring(7));
             storeService.setupStore(email, request.getProducts(), request.getPaymentInfo().getAccountName(),
-                    request.getPaymentInfo().getIban(), request.getPaymentInfo().getBank());
+                    request.getPaymentInfo().getIban(), request.getPaymentInfo().getBank(), request.getLocationId());
             body.put("message", "Store setup");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
@@ -94,7 +94,7 @@ public class StoreController {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
         try {
-            Store store = storeService.createStore(request.getId());
+            Store store = storeService.createStore(request.getBusinessUserId(), request.getLocationId());
             body.put("message", "Store created");
             body.put("store", store);
         } catch (IllegalStateException e) {
@@ -107,12 +107,13 @@ public class StoreController {
     @GetMapping("/products")
     public ResponseEntity<Object> getProductsByStoreName(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestParam(value = "businessName", required = false) String businessName,
-            @RequestParam("page") int page, @RequestParam("per-page") int perPage) {
+            @RequestParam("page") int page, @RequestParam("per-page") int perPage,
+            @RequestParam("locationId") long locationId) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
             String email = jwtUtil.getEmail(token.substring(7));
-            Page<Product> res = productService.getProductsByStoreName(businessName, page, perPage, email);
+            Page<Product> res = productService.getProductsByStoreName(businessName, page, perPage, email, locationId);
             body.put("products", res);
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
@@ -122,11 +123,12 @@ public class StoreController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getIfHasStore(@RequestParam("businessName") String businessName) {
+    public ResponseEntity<Object> getIfHasStore(@RequestParam("businessName") String businessName,
+            @RequestParam("locationId") long locationId) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
-            boolean res = storeService.hasStore(businessName);
+            boolean res = storeService.hasStore(businessName, locationId);
             body.put("access", res);
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
@@ -136,12 +138,13 @@ public class StoreController {
     }
 
     @GetMapping("/status")
-    public ResponseEntity<Object> getStoreStatus(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Object> getStoreStatus(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody long locationId) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
             String email = jwtUtil.getEmail(token.substring(7));
-            StoreStatus res = storeService.getStoreStatus(email);
+            StoreStatus res = storeService.getStoreStatus(email, locationId);
             body.put("status", res);
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());

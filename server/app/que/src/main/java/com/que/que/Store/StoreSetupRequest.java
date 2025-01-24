@@ -20,4 +20,5 @@ class PaymentInfoRequest {
 public class StoreSetupRequest {
     private final List<ProductCreationRequest> products;
     private final PaymentInfoRequest paymentInfo;
+    private final long locationId;
 }

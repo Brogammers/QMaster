@@ -4,10 +4,11 @@ import { useTheme } from '@/ctx/ThemeContext';
 import i18n from '@/i18n';
 import axios from "axios";
 import { MotiView } from 'moti';
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Dimensions, Platform, ScrollView, Text, View } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import QueueDetails from "./QueueDetails";
+import { LocationContext } from "@/app/(app)/(tabs)/Partner";
 
 interface QueuePageProps {
   businessName: string;
@@ -18,10 +19,10 @@ export default function QueuePage(props: QueuePageProps) {
   const { isDarkMode } = useTheme();
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [locationData, setLocationData] = useState([]);
 
   const { businessName } = props;
+
+  const { locationData, setLocationData, currentLocation, setCurrentLocation } = useContext(LocationContext);
 
   useEffect(() => {
     const url = configConverter(
@@ -73,10 +74,10 @@ export default function QueuePage(props: QueuePageProps) {
           }}>
             <DropDownPicker
               open={open}
-              value={value}
+              value={currentLocation}
               items={locationData}
               setOpen={setOpen}
-              setValue={setValue}
+              setValue={setCurrentLocation}
               style={{
                 width: width,
                 alignSelf: "center",
@@ -171,8 +172,8 @@ export default function QueuePage(props: QueuePageProps) {
               elevation: Platform.OS === 'android' ? 1 : undefined,
             }}
           >
-            <QueueDetails branch={value == null ? -1 : value} />
-            {value == null && (
+            <QueueDetails branch={currentLocation == null ? -1 : currentLocation} />
+            {currentLocation == null && (
               <View style={{ 
                 position: 'absolute',
                 bottom: -25,

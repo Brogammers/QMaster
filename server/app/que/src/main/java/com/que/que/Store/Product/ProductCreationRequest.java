@@ -11,4 +11,5 @@ public class ProductCreationRequest {
     private final double price;
     private final int quantity;
     private final String type;
+    private final long locationId;
 }
