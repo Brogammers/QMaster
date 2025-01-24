@@ -33,7 +33,7 @@ public class RegistrationService {
   private final EmailSender emailSender;
   private final HashSet<String> phoneCodes;
 
-  public String register(AppUserRegistrationRequest request) {
+  public String registarAppUser(AppUserRegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
     boolean isValidPassword = passwordValidator.test(request.getPassword());
     if (phoneCodes.isEmpty()) {
@@ -55,7 +55,6 @@ public class RegistrationService {
 
     String token = appUserService.signUpUser(
         new AppUser(
-            UserRole.USER,
             request.getFirstName(),
             request.getLastName(),
             request.getUsername(),
@@ -81,7 +80,7 @@ public class RegistrationService {
     return token;
   }
 
-  public String register(BusinessUserRegistrationRequest request) {
+  public String registerBusinessUser(BusinessUserRegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
     boolean isValidPassword = passwordValidator.test(request.getPassword());
     if (phoneCodes.isEmpty()) {
@@ -120,6 +119,51 @@ public class RegistrationService {
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);
+    // TODO: Activate later
+    /*
+     * emailSender.send(request.getEmail(),
+     * "src/main/resources/templates/Activation.html",
+     * "Confirm Email", context);
+     */
+    return token;
+  }
+
+  public String registerAdminUser(AdminUserRegistrationRequest request) {
+    boolean isValidEmail = emailValidator.test(request.getEmail());
+    boolean isValidPassword = passwordValidator.test(request.getPassword());
+    if (!isValidPassword) {
+      throw new IllegalStateException("Password does not meet requirements");
+    }
+    if (!isValidEmail) {
+      throw new IllegalStateException("Email invalid");
+    }
+    if (!request.getPassword().equals(request.getConfirmPassword())) {
+      throw new IllegalStateException("Password do not match");
+    }
+
+    if (!phoneCodes.contains(request.getPhoneCode())) {
+      throw new IllegalStateException("Phone code not found");
+    }
+
+    String token = appUserService.signUpUser(
+        new AppUser(
+            request.getFirstName(),
+            request.getLastName(),
+            request.getUsername(),
+            LocalDateTime.now(),
+            request.getDateOfBirth(),
+            request.getCountryOfOrigin(),
+            request.getPassword(),
+            request.getEmail(),
+            false,
+            false,
+            request.getPhoneCode(),
+            request.getPhoneNumber(),
+            request.getCountryOfOrigin()));
+    Map<String, String> context = new HashMap<>();
+    context.put("name", request.getFirstName());
+    context.put("token", token);
+
     // TODO: Activate later
     /*
      * emailSender.send(request.getEmail(),

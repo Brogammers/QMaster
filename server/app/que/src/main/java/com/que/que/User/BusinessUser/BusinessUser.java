@@ -3,6 +3,7 @@ package com.que.que.User.BusinessUser;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,6 +66,13 @@ public class BusinessUser extends User {
         super(appUserRole, firstName, lastName, username, dateOfRegistration,
                 dateOfBirth, countryOfOrigin, password, email, locked, enabled,
                 phoneCode, phoneNumber, location);
+
+        UserRole[] roles = { UserRole.BUSINESS_ADMIN, UserRole.BUSINESS_EMPLOYEE, UserRole.BUSINESS_MANAGER,
+                UserRole.BUSINESS_OWNER };
+        if (Arrays.stream(roles).noneMatch(role -> role.equals(appUserRole))) {
+            throw new IllegalArgumentException("Invalid user role for business user");
+        }
+
         this.subscriptionPlan = subscriptionPlan;
         this.queueId = -1;
     }

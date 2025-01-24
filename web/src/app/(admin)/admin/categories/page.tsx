@@ -10,7 +10,7 @@ import {
 } from 'react-icons/fa';
 import AddCategoryModal from '@/components/admin/AddCategoryModal';
 
-interface Category {
+export interface Category {
   id: number;
   name: string;
   description: string;

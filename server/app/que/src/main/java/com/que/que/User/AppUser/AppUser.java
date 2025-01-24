@@ -29,7 +29,6 @@ public class AppUser extends User {
   private List<Purchase> purchases = new ArrayList<>();
 
   public AppUser(
-      UserRole appUserRole,
       String firstName,
       String lastName,
       String username,
@@ -44,7 +43,7 @@ public class AppUser extends User {
       String phoneNumber,
       String location) {
     super(
-        appUserRole, firstName, lastName, username, dateOfRegistration, dateOfBirth, countryOfOrigin, password, email,
+        UserRole.USER, firstName, lastName, username, dateOfRegistration, dateOfBirth, countryOfOrigin, password, email,
         locked, enabled, phoneCode, phoneNumber, location);
   }
 

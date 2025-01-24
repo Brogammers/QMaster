@@ -5,7 +5,7 @@ import { FaBuilding, FaPlus, FaSearch, FaChevronDown, FaChevronUp, FaMapMarkerAl
 import { motion, AnimatePresence } from 'framer-motion';
 import AddPartnerModal from '@/components/admin/AddPartnerModal';
 
-interface Location {
+export interface Location {
   id: number;
   city: string;
   stateOrProvince: string;
@@ -13,7 +13,7 @@ interface Location {
   googleMapsUrl: string;
 }
 
-interface Partner {
+export interface Partner {
   id: number;
   name: string;
   category: string;
@@ -47,7 +47,6 @@ export default function PartnersPage() {
         }
       ]
     },
-    // Add more partner data
   ]);
   const [isDarkMode] = useState(false);
   const [expandedPartnerId, setExpandedPartnerId] = useState<number | null>(null);

@@ -1,7 +1,5 @@
 package com.que.que.Registration;
 
-import lombok.AllArgsConstructor;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.AllArgsConstructor;
 
 @RestController
 // This endpoint is not set yet. It was used in the example and will be changed
@@ -29,7 +29,7 @@ public class RegistrationController {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
     try {
-      String token = registrationService.register(request);
+      String token = registrationService.registarAppUser(request);
       body.put("confirmation-token", token);
       body.put("message", "Registered!");
     } catch (IllegalStateException e) {
@@ -44,7 +44,22 @@ public class RegistrationController {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
     try {
-      String token = registrationService.register(request);
+      String token = registrationService.registerBusinessUser(request);
+      body.put("confirmation-token", token);
+      body.put("message", "Registered!");
+    } catch (IllegalStateException e) {
+      body.put("message", e.getMessage());
+      statusCode = HttpStatusCode.valueOf(500);
+    }
+    return new ResponseEntity<Object>(body, statusCode);
+  }
+
+  @PostMapping("/admin")
+  public ResponseEntity<Object> register(@RequestBody AdminUserRegistrationRequest request) {
+    Map<String, Object> body = new HashMap<>();
+    HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
+    try {
+      String token = registrationService.registerAdminUser(request);
       body.put("confirmation-token", token);
       body.put("message", "Registered!");
     } catch (IllegalStateException e) {

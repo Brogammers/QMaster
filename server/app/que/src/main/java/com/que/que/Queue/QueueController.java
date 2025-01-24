@@ -32,7 +32,7 @@ public class QueueController {
     private final JwtUtil jwtUtil;
 
     @PostMapping
-    @Secured("BUSINESS_OWNER")
+    @Secured({ "BUSINESS_OWNER", "BUSINESS_MANAGER", "BUSINESS_ADMIN", "ADMIN" })
     public ResponseEntity<Object> createNewQueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
@@ -48,7 +48,7 @@ public class QueueController {
     }
 
     @PutMapping(path = "/user")
-    @Secured("USER")
+    @Secured({ "USER", "ADMIN" })
     public ResponseEntity<Object> enqueue(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @Param("queueName") String queueName) {
         Map<String, Object> body = new HashMap<>();
@@ -66,7 +66,7 @@ public class QueueController {
     }
 
     @PutMapping(path = "/holder")
-    @Secured("USER")
+    @Secured({ "BUSINESS_OWNER", "BUSINESS_MANAGER", "BUSINESS_ADMIN", "BUSINESS_EMPLOYEE", "ADMIN" })
     public ResponseEntity<Object> dequeue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
@@ -88,7 +88,7 @@ public class QueueController {
     }
 
     @DeleteMapping
-    @Secured("BUSINESS_OWNER")
+    @Secured({ "BUSINESS_OWNER", "BUSINESS_MANAGER", "BUSINESS_ADMIN", "ADMIN" })
     public ResponseEntity<Object> deleteQueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
@@ -102,7 +102,7 @@ public class QueueController {
     }
 
     @GetMapping(path = "/business")
-    @Secured("BUSINESS_OWNER")
+    @Secured({ "BUSINESS_OWNER", "BUSINESS_MANAGER", "BUSINESS_ADMIN", "ADMIN" })
     public ResponseEntity<Object> getBusinessQueues(@Param("id") long id) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
@@ -117,7 +117,7 @@ public class QueueController {
     }
 
     @GetMapping(path = "/user")
-    @Secured("USER")
+    @Secured({ "USER", "ADMIN" })
     public ResponseEntity<Object> getIfInQueue(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestParam("queueName") String queueName) {
         Map<String, Object> body = new HashMap<>();

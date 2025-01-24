@@ -5,9 +5,9 @@ import java.time.LocalDate;
 import lombok.Getter;
 
 @Getter
-public class BusinessUserRegistrationRequest extends AppUserRegistrationRequest {
+public class AdminUserRegistrationRequest extends AppUserRegistrationRequest {
 
-    public BusinessUserRegistrationRequest(
+    public AdminUserRegistrationRequest(
             String firstName,
             String lastName,
             LocalDate dateOfBirth,
@@ -21,5 +21,4 @@ public class BusinessUserRegistrationRequest extends AppUserRegistrationRequest 
         super(firstName, lastName, dateOfBirth, countryOfOrigin, password, email, username, confirmPassword, phoneCode,
                 phoneNumber);
     }
-
 }

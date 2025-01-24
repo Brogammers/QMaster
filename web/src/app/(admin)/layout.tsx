@@ -6,20 +6,60 @@ import { motion } from 'framer-motion';
 import { useAuth, AuthProvider } from '@/lib/auth/AuthContext';
 import AdminSidebar from '@/app/components/admin/AdminSidebar';
 import SplashScreen from '@/app/shared/SplashScreen';
+import { CategoriesContext, PartnerContext, StoresContext, UsersContext } from './context';
+import { Partner } from './admin/partners/page';
+import { Category } from './admin/categories/page';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
+const DEFAULT_PAGE = 1;
+const DEFAULT_PER_PAGE = 10;
+
 function AdminLayoutContent({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const { admin, isLoading } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [users, setUsers] = useState([]);
+  const [stores, setStores] = useState([]);
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('qmaster-dark-mode');
     setIsDarkMode(savedDarkMode === 'true');
   }, []);
+
+  // Get partners
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_GET_BUSINESSES;
+    axios.get(`${url}?page=${DEFAULT_PAGE}&perPage=${DEFAULT_PER_PAGE}`)
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data.businesses;
+      } else { 
+        throw new Error('Error fetching partners');
+      }
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching partners:', error);
+      toast.error('Error fetching partners');
+    });
+  }, []);
+
+  useEffect(() => {
+
+  }, []);
+
+  useEffect(() => {
+
+  });
 
   // If we're on the login page, just render the children
   if (pathname === '/admin/login') {
@@ -36,6 +76,18 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     localStorage.setItem('qmaster-dark-mode', value.toString());
     // Dispatch a custom event for other components to listen to
     window.dispatchEvent(new CustomEvent('darkModeChange', { detail: value }));
+  };
+
+  const getNextPartnerPage = (page: number, perPage: number) => {
+  };
+
+  const getNextCategoryPage = (page: number, perPage: number) => {
+  };
+
+  const getNextUserPage = (page: number, perPage: number) => {
+  };
+
+  const getNextStorePage = (page: number, perPage: number) => {
   };
 
   return (
@@ -90,7 +142,15 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
             </motion.div>
           )}
           <div className="space-y-6">
-            {children}
+            <PartnerContext.Provider value={{ partners, setPartners, getNextPartnerPage }}>
+              <UsersContext.Provider value={{ users, setUsers, getNextUserPage }}>
+                <CategoriesContext.Provider value={{ categories, setCategories, getNextCategoryPage }}> 
+                  <StoresContext.Provider value={{ stores, setStores, getNextStorePage }}>  
+                    {children}
+                  </StoresContext.Provider> 
+                </CategoriesContext.Provider>                 
+              </UsersContext.Provider>
+            </PartnerContext.Provider>
           </div>
         </div>
       </motion.main>
