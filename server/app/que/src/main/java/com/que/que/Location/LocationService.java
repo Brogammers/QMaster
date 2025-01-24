@@ -1,5 +1,6 @@
 package com.que.que.Location;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -43,7 +44,11 @@ public class LocationService {
         if (!(businessUser instanceof BusinessUser)) {
             throw new IllegalStateException("Business with name " + businessName + " not found");
         }
-        List<Location> locations = locationRepository.findAllByBusinessUser((BusinessUser) businessUser);
+
+        ArrayList<Location> locations = new ArrayList<>();
+        for (Location location : ((BusinessUser) businessUser).getLocations()) {
+            locations.add(location);
+        }
 
         return locations;
     }

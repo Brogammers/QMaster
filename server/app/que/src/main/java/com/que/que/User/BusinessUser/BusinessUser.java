@@ -2,10 +2,8 @@ package com.que.que.User.BusinessUser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -14,13 +12,11 @@ import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.User;
 import com.que.que.User.UserRole;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,8 +37,8 @@ public class BusinessUser extends User {
     @Column(nullable = false, columnDefinition = "integer default -1")
     private int queueId;
 
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "businessUser")
-    private List<Location> locations = new ArrayList<>();
+    @ManyToMany
+    private Set<Location> locations = new HashSet<>();
 
     @ManyToMany
     private Set<BusinessCategory> businessCategories = new HashSet<>();
