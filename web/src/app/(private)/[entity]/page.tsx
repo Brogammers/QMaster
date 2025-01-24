@@ -5,33 +5,12 @@ import { useParams, usePathname } from "next/navigation";
 import { useDispatch, useSelector } from 'react-redux';
 import { setEntity } from "@/store/features/entitySlice";
 import { RootState } from "@/store/store";
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { Select } from "antd";
+import { LocationContext } from "@/ctx/LocationContext";
 const { Option } = Select;
 
-const MOCK_LOCATIONS = [
-  {
-    id: "1",
-    name: "Arabiata Restaurant",
-    branchName: "Maadi Branch",
-    city: "Cairo",
-    country: "Egypt",
-  },
-  {
-    id: "2",
-    name: "Arabiata Restaurant",
-    branchName: "Nasr City Branch",
-    city: "Cairo",
-    country: "Egypt",
-  },
-  {
-    id: "3",
-    name: "Arabiata Restaurant",
-    branchName: "Zamalek Branch",
-    city: "Cairo",
-    country: "Egypt",
-  },
-].sort((a, b) => a.branchName.localeCompare(b.branchName));
+
 
 export default function Entity({ children }: QueueModalProps) {
   const pathname = usePathname();
@@ -39,6 +18,7 @@ export default function Entity({ children }: QueueModalProps) {
   let page: string | undefined = "";
   const dispatch = useDispatch();
   const entityName = useSelector((state: RootState) => state.entity.name);
+  const { locations } = useContext(LocationContext);
 
   const formatPageName = (name: string) => {
     const formattedName = name.replace(/[^\w\s]/gi, " ");
@@ -76,8 +56,8 @@ export default function Entity({ children }: QueueModalProps) {
             </>
           )}
         </h2>
-        <Select defaultValue={MOCK_LOCATIONS[0].id} style={{ width: 200 }}>
-          {MOCK_LOCATIONS.map((location) => (
+        <Select defaultValue={locations[0].id} style={{ width: 200 }}>
+          {locations.map((location) => (
             <Option key={location.id} value={location.id}>
               {location.branchName}
               <div className="text-xs text-gray-500">

@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-import LocationDropdown from "@/components/LocationDropdown";
 import { QueueModalProps } from "../../../types";
 
 export default function QueueModal({
