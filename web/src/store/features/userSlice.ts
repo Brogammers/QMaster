@@ -38,7 +38,7 @@ const initialState: UserState = {
       id: 2,
       name: 'Fam Awad',
       email: 'fam@awadlouis.com',
-      role: 'Backend Developer',
+      role: 'Admin',
       lastActive: '5 minutes ago',
       status: 'online',
       permissions: {
