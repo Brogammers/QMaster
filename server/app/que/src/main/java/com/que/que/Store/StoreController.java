@@ -139,7 +139,7 @@ public class StoreController {
 
     @GetMapping("/status")
     public ResponseEntity<Object> getStoreStatus(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody long locationId) {
+            @RequestParam("id") long locationId) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {

@@ -252,7 +252,7 @@ export default function Queues() {
       },
       error: "Failed to load queues",
     });
-  }, [userId]);
+  }, [userId, selectedLocation]);
 
   return (
     <Entity>

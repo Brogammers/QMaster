@@ -10,7 +10,6 @@ import com.que.que.Store.Product.Product;
 import com.que.que.Store.Product.ProductCreationRequest;
 import com.que.que.Store.Product.ProductRepository;
 import com.que.que.Store.Product.ProductType;
-import com.que.que.User.UserRepository;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserRepository;
 
@@ -21,7 +20,6 @@ import lombok.AllArgsConstructor;
 public class StoreService {
     private final StoreRepository storeRepository;
     private final BusinessUserRepository businessUserRepository;
-    private final UserRepository userRepository;
     private final ProductRepository repository;
     private final LocationRepository locationRepository;
 
@@ -29,13 +27,10 @@ public class StoreService {
         BusinessUser businessUser = businessUserRepository.findById(businessUserId)
                 .orElseThrow(() -> new IllegalStateException("Business user not found"));
 
-        Location location = locationRepository.findById(locationId)
+        Location location = locationRepository.findByIdAndBusinessUser(locationId, businessUser)
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
 
-        if (location.getBusinessUsers().contains(businessUser)) {
-            throw new IllegalStateException("Location does not belong to business user");
-        }
-
+       
         return location;
     }
 

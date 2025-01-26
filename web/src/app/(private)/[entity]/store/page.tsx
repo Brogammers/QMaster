@@ -6,6 +6,7 @@ import ProductManagementModal from "@/app/components/store/ProductManagementModa
 import ProductPreviewModal from "@/app/components/store/ProductPreviewModal";
 import QueueModal from "@/app/shared/QueueModal";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "@/ctx/LocationContext";
 import axios from "axios";
 import { Form, Formik } from "formik";
 import { motion } from "framer-motion";
@@ -1192,6 +1193,7 @@ const StoreDashboardView = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
+  const { selectedLocation } = useLocation();
 
   // Mock data for testing
   const mockAnalytics = {
@@ -1227,7 +1229,10 @@ const StoreDashboardView = () => {
   const handleDeleteProduct = (productId: number) => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_PRODUCT || "";
     axios.delete(url, {
-      data: productId
+      data: {
+        productId: productId, 
+        locationId: selectedLocation?.id
+      }
     })
     .then((response) => {
       if (response.status === 200) {
@@ -1237,33 +1242,22 @@ const StoreDashboardView = () => {
       }
     })
     .then(() => {
-      toast.success("Product deleted successfully!", {
-        style: {
-          background: "#10B981",
-          color: "#fff",
-        },
-        duration: 4000,
-      });
-
-      const updatedProducts = products.filter((product) => product.id !== productId);
-      setProducts(updatedProducts);
+      setProducts(prev => prev.filter((product) => product.id !== productId));
     })
     .catch((error) => {
       console.error("Error: ", error);
-      toast.error("Failed to delete product. Please try again.", {
-        style: {
-          background: "#EF4444",
-          color: "#fff",
-        },
-        duration: 4000,
-      });
     });
   };
 
   const handleAddOnSubmit = (formData: Product) => {    
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_PRODUCT || "";
 
-    axios.post(url, formData)
+    const data = {
+      ...formData,
+      locationId: selectedLocation?.id
+    }
+
+    axios.post(url, data)
     .then((response) => {
       if (response.status === 201) {
         return response.data.product;
@@ -1311,7 +1305,7 @@ const StoreDashboardView = () => {
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_PRODUCT_LIST;
 
-    axios.get(`${url}?page=${page}&per-page=${perPage}`)
+    axios.get(`${url}?page=${page}&per-page=${perPage}&locationId=${selectedLocation?.id}`)
     .then((response) => {
       if(response.status === 200) {
         return response.data.products.content;
@@ -1337,7 +1331,7 @@ const StoreDashboardView = () => {
     .catch((error) => {
       console.error("Error: ", error);
     })
-  }, []);
+  }, [selectedLocation, page, perPage]);
 
 
   if (showProductGrid) {
@@ -1777,6 +1771,7 @@ export default function StorePage() {
   const [storeStatus, setStoreStatus] = useState<StoreStatus>(
     StoreStatus.NOT_REQUESTED
   );
+  const { selectedLocation } = useLocation();
 
   const handleStoreRequest = () => {
     // TODO: Send request to backend
@@ -1825,7 +1820,7 @@ export default function StorePage() {
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_STORE_STATUS || "";
 
-    axios.get(url)
+    axios.get(`${url}?id=${selectedLocation?.id}`)
     .then((response) => {
       if (response.status === 200) {
         return response.data.status;
@@ -1858,7 +1853,7 @@ export default function StorePage() {
       console.error('Failed to fetch store status:', error);
       setStoreStatus(StoreStatus.NOT_REQUESTED);
     })
-  }, []);
+  }, [selectedLocation]);
 
   return (
     <Entity>
