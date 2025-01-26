@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 public interface BusinessUserRepository extends JpaRepository<BusinessUser, Long> {
     Optional<BusinessUser> findByEmail(String email);
 
+    Optional<BusinessUser> findByUsername(String username);
+
     @Query("SELECT b FROM BusinessUser b JOIN b.businessCategories bc WHERE bc.id = :category")
     Page<BusinessUser> findAllByBusinessCategory(@Param("category") long category,
             Pageable pageable);

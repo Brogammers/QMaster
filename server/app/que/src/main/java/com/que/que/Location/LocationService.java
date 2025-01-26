@@ -1,12 +1,9 @@
 package com.que.que.Location;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.que.que.User.User;
-import com.que.que.User.UserRepository;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserRepository;
 
@@ -17,7 +14,6 @@ import lombok.AllArgsConstructor;
 public class LocationService {
     private final LocationRepository locationRepository;
     private final BusinessUserRepository businessUserRepository;
-    private final UserRepository userRepository;
 
     public Location createLocation(long businessUserId, String name, String description, String address,
             double latitude,
@@ -37,18 +33,20 @@ public class LocationService {
         return locationRepository.save(location);
     }
 
-    public List<Location> getLocationsByBusinessName(String businessName) {
-        User businessUser = userRepository.findByUsername(businessName)
-                .orElseThrow(() -> new IllegalStateException("Business with name " + businessName + " not found"));
-
-        if (!(businessUser instanceof BusinessUser)) {
-            throw new IllegalStateException("Business with name " + businessName + " not found");
+    public List<Location> getLocationsByBusinessName(String businessName, String email) {
+        if (businessName == null && email == null) {
+            throw new IllegalStateException("Business name or email must be provided");
         }
 
-        ArrayList<Location> locations = new ArrayList<>();
-        for (Location location : ((BusinessUser) businessUser).getLocations()) {
-            locations.add(location);
-        }
+        BusinessUser businessUser;
+        if (businessName != null)
+            businessUser = businessUserRepository.findByUsername(businessName)
+                    .orElseThrow(() -> new IllegalStateException("Business with name " + businessName + " not found"));
+        else
+            businessUser = businessUserRepository.findByEmail(email)
+                    .orElseThrow(() -> new IllegalStateException("Business with email " + email + " not found"));
+
+        List<Location> locations = locationRepository.findByBusinessUser(businessUser);
 
         return locations;
     }

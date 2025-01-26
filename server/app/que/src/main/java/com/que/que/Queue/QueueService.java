@@ -255,11 +255,14 @@ public class QueueService {
     print();
   }
 
-  public ArrayList<Queues> currentQueuesOfUser(String email) {
+  public ArrayList<Queues> currentQueuesOfUser(String email, long locationId) {
     BusinessUser appUser = businessUserRepository.findByEmail(email)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
 
-    ArrayList<Queues> currentQueues = queueRepository.findByCreator(appUser);
+    Location location = locationRepository.findByIdAndBusinessUser(locationId, appUser)
+        .orElseThrow(() -> new IllegalStateException("Could not find location"));
+
+    ArrayList<Queues> currentQueues = queueRepository.findByLocation(location);
 
     return currentQueues;
   }

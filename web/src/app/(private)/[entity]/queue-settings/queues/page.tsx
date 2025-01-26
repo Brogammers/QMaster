@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Entity from "../../page";
 import QueueModal from "@/app/shared/QueueModal";
-import { Button, Input, Switch, InputNumber } from "antd";
-import { FaPlus, FaClock, FaUsers, FaEdit } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { useLocation } from "@/ctx/LocationContext";
+import { Button, Input, InputNumber, Switch } from "antd";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FaClock, FaEdit, FaPlus, FaUsers } from "react-icons/fa";
+import Entity from "../../page";
 
 interface Counter {
   id: number;
@@ -50,6 +51,7 @@ export default function Queues() {
       counters: [],
     },
   });
+  const { selectedLocation } = useLocation();
 
   const generateCounterNames = (config: CounterConfig) => {
     const counters: Counter[] = [];
@@ -145,7 +147,7 @@ export default function Queues() {
     if (newQueue.name && newQueue.maxQueueSize) {
       const queueBody = {
         id: userId,
-        locationId: 7,
+        locationId: selectedLocation?.id || -1,
         name: newQueue.name,
         maxQueueSize: newQueue.maxQueueSize,
         isActive: newQueue.isActive,
@@ -225,7 +227,7 @@ export default function Queues() {
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_QUEUES || "";
 
-    toast.promise(axios.get(url), {
+    toast.promise(axios.get(`${url}?locationId=${selectedLocation?.id}`), {
       loading: "Loading queues...",
       success: (res) => {
         const modifiedData: QueueConfig[] = res.data.queues.map(

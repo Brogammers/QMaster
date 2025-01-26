@@ -1,11 +1,11 @@
 "use client";
 
+import axios from "axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface PartnerLocation {
     id: string;
     name: string;
-    branchName: string;
     city: string;
     country: string;
 }
@@ -17,29 +17,7 @@ interface LocationContextType {
 }
 
 // Mock data - replace with API call later
-const MOCK_LOCATIONS: PartnerLocation[] = [
-    {
-        id: "1",
-        name: "Arabiata",
-        branchName: "German University in Cairo Branch",
-        city: "Cairo",
-        country: "Egypt",
-    },
-    {
-        id: "2",
-        name: "Arabiata",
-        branchName: "Nasr City Branch",
-        city: "Cairo",
-        country: "Egypt",
-    },
-    {
-        id: "3",
-        name: "Arabiata",
-        branchName: "Zamalek Branch",
-        city: "Cairo",
-        country: "Egypt",
-    },
-].sort((a, b) => a.branchName.localeCompare(b.branchName));
+const MOCK_LOCATIONS: PartnerLocation[] = [];
 
 export const LocationContext = createContext<LocationContextType>({
     selectedLocation: null,
@@ -52,6 +30,35 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
         useState<PartnerLocation | null>(null);
     const [locations, setLocations] =
         useState<PartnerLocation[]>(MOCK_LOCATIONS);
+
+
+    useEffect(() => {
+        const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_LOCATIONS || "";
+
+        axios.get(url)
+        .then((response) => {
+            if (response.status === 200) { 
+                return response.data.locations;
+            } else{ 
+                throw new Error("Failed to fetch locations");
+            }
+        })
+        .then((data) => {
+            const locationData = data.map((location: any) => {
+                return {
+                    id: location.id,
+                    name: location.name,
+                    city: "Cairo",
+                    country: "Egypt",
+                };
+            });
+
+            setLocations(locationData);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }, []);
 
     useEffect(() => {
         // Set default location as first alphabetically sorted location

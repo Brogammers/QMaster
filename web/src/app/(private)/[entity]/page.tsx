@@ -64,10 +64,10 @@ export default function Entity({ children }: QueueModalProps) {
           >
             <div className="flex-1 min-w-0">
               <div className="truncate text-base font-medium">
-                {selectedLocation?.branchName}
+                {selectedLocation?.name}
               </div>
               <div className="truncate text-xs text-gray-500">
-                {selectedLocation?.name} - {selectedLocation?.city},{" "}
+                {selectedLocation?.city},{" "}
                 {selectedLocation?.country}
               </div>
             </div>
@@ -91,10 +91,10 @@ export default function Entity({ children }: QueueModalProps) {
                 >
                   <div className="min-w-0">
                     <div className="truncate text-base font-medium">
-                      {location.branchName}
+                      {location.name}
                     </div>
                     <div className="truncate text-xs text-gray-500">
-                      {location.name} - {location.city}, {location.country}
+                     {location.city}, {location.country}
                     </div>
                   </div>
                 </button>

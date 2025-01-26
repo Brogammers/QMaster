@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
+import com.que.que.Location.Location;
 import com.que.que.User.BusinessUser.BusinessUser;
 
 @Repository
@@ -19,6 +20,8 @@ public interface QueueRepository extends JpaRepository<Queues, Long> {
         Optional<Queues> findByName(String name);
 
         ArrayList<Queues> findByCreator(BusinessUser creator);
+
+        ArrayList<Queues> findByLocation(Location location);
 
         ArrayList<Queues> findByQueueSlotAndSpecificSlot(int queueSlot, int specificSlot);
 

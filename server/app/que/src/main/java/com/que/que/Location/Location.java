@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Queue.Queues;
 import com.que.que.Store.Store;
 import com.que.que.Store.StoreStatus;
@@ -32,6 +33,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
+@JsonSerialize(using = LocationSerializer.class)
 public class Location {
 
     @Id

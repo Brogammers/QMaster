@@ -10,7 +10,6 @@ import com.que.que.Store.Product.Product;
 import com.que.que.Store.Product.ProductCreationRequest;
 import com.que.que.Store.Product.ProductRepository;
 import com.que.que.Store.Product.ProductType;
-import com.que.que.User.User;
 import com.que.que.User.UserRepository;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserRepository;
@@ -50,12 +49,8 @@ public class StoreService {
     }
 
     public boolean hasStore(String businessName, long locationId) {
-        User user = userRepository.findByUsername(businessName)
+        BusinessUser user = businessUserRepository.findByUsername(businessName)
                 .orElseThrow(() -> new IllegalStateException("Business not found"));
-
-        if (!(user instanceof BusinessUser)) {
-            throw new IllegalStateException("Business not found");
-        }
 
         Location location = getAndCheckLocation(user.getId(), locationId);
 

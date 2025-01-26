@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.HttpHeaders;
+
 import com.que.que.Security.JwtUtil;
 import com.que.que.User.AppUser.AppUser;
 
@@ -103,12 +104,13 @@ public class QueueController {
 
     @GetMapping(path = "/business")
     @Secured({ "BUSINESS_OWNER", "BUSINESS_MANAGER", "BUSINESS_ADMIN", "ADMIN" })
-    public ResponseEntity<Object> getBusinessQueues(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Object> getBusinessQueues(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestParam("locationId") long locationId) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
             String email = jwtUtil.getEmail(token.substring(7));
-            ArrayList<Queues> queues = queueService.currentQueuesOfUser(email);
+            ArrayList<Queues> queues = queueService.currentQueuesOfUser(email, locationId);
             body.put("queues", queues);
             body.put("message", "Queues retrieved");
         } catch (IllegalStateException e) {
