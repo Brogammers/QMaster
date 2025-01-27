@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Location.Location;
+import com.que.que.Partner.Partner;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.User;
 import com.que.que.User.UserRole;
@@ -16,7 +17,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,14 +37,15 @@ public class BusinessUser extends User {
     @Column(nullable = false)
     private SubscriptionPlans subscriptionPlan;
 
-    @Column(nullable = false, columnDefinition = "integer default -1")
-    private int queueId;
-
     @ManyToMany
     private Set<Location> locations = new HashSet<>();
 
     @ManyToMany
     private Set<BusinessCategory> businessCategories = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "partner_id")
+    private Partner partner;
 
     public BusinessUser(
             UserRole appUserRole,
@@ -58,7 +62,8 @@ public class BusinessUser extends User {
             String phoneCode,
             String phoneNumber,
             String location,
-            SubscriptionPlans subscriptionPlan) {
+            SubscriptionPlans subscriptionPlan,
+            Partner partner) {
         super(appUserRole, firstName, lastName, username, dateOfRegistration,
                 dateOfBirth, countryOfOrigin, password, email, locked, enabled,
                 phoneCode, phoneNumber, location);
@@ -70,7 +75,7 @@ public class BusinessUser extends User {
         }
 
         this.subscriptionPlan = subscriptionPlan;
-        this.queueId = -1;
+        this.partner = partner;
     }
 
     @Override

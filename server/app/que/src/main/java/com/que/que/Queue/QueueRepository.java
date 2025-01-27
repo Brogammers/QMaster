@@ -12,14 +12,14 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import com.que.que.Location.Location;
-import com.que.que.User.BusinessUser.BusinessUser;
+import com.que.que.Partner.Partner;
 
 @Repository
 public interface QueueRepository extends JpaRepository<Queues, Long> {
 
         Optional<Queues> findByName(String name);
 
-        ArrayList<Queues> findByCreator(BusinessUser creator);
+        ArrayList<Queues> findByPartner(Partner partner);
 
         ArrayList<Queues> findByLocation(Location location);
 

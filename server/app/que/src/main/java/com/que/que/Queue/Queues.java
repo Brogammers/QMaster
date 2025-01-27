@@ -3,12 +3,9 @@ package com.que.que.Queue;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Location.Location;
-import com.que.que.User.BusinessUser.BusinessUser;
+import com.que.que.Partner.Partner;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,18 +32,23 @@ public class Queues {
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     private Long id;
+
     @Column(nullable = false, unique = true)
     private String name;
+
     @ManyToOne
-    @JoinColumn(nullable = false, name = "business_user_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private BusinessUser creator;
+    @JoinColumn(nullable = false, name = "partner_id")
+    private Partner partner;
+
     @Column(nullable = false)
     private int queueSlot;
+
     @Column(nullable = false)
     private int specificSlot;
+
     @Column(nullable = false)
     private int peopleInQueue;
+
     private int averageServiceTime;
     private int rating;
     private int maxQueueSize = 100;
@@ -59,10 +61,10 @@ public class Queues {
     @ManyToMany
     private Set<QueueCounter> queueCounters = new HashSet<>();
 
-    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, Location location,
+    public Queues(String name, Partner partner, int queueSlot, int specificSlot, Location location,
             int averageServiceTime, boolean isActive) {
         this.name = name;
-        this.creator = creator;
+        this.partner = partner;
         this.queueSlot = queueSlot;
         this.specificSlot = specificSlot;
         this.peopleInQueue = 0;
@@ -72,11 +74,11 @@ public class Queues {
         this.isActive = isActive;
     }
 
-    public Queues(String name, BusinessUser creator, int queueSlot, int specificSlot, int maxQueueSize,
+    public Queues(String name, Partner partner, int queueSlot, int specificSlot, int maxQueueSize,
             Location location,
             int averageServiceTime, boolean isActive) {
         this.name = name;
-        this.creator = creator;
+        this.partner = partner;
         this.queueSlot = queueSlot;
         this.specificSlot = specificSlot;
         this.peopleInQueue = 0;

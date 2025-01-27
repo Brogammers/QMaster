@@ -48,7 +48,7 @@ public class QRCodeService {
 
         File file = new File(
                 String.format(
-                        QR_CODE_IMAGE_PATH, queue.getCreator().getId(),
+                        QR_CODE_IMAGE_PATH, queue.getPartner().getId(),
                         queue.getSpecificSlot()));
 
         if (!file.exists()) {
@@ -56,7 +56,7 @@ public class QRCodeService {
         }
 
         return String.format(
-                "http://localhost:8080/images/QRS/%d-%d.png", queue.getCreator().getId(),
+                "http://localhost:8080/images/QRS/%d-%d.png", queue.getPartner().getId(),
                 queue.getSpecificSlot());
 
     }

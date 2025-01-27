@@ -51,8 +51,6 @@ public class LoginService {
       loginRepository.save(loginEntry);
       String jwtToken = JwtUtil.generateToken(user.getEmail());
 
-      System.out.println("Logged in!");
-
       Map<String, Object> object = new HashMap<>();
       object.put("email", email);
       object.put("username", user.getUsername());
@@ -73,7 +71,6 @@ public class LoginService {
     if (user != null) {
       LoginEntry loginEntry = new LoginEntry(user);
       loginRepository.save(loginEntry);
-      System.out.println("Logged in!");
       Map<String, Object> object = new HashMap<>();
       object.put("email", email);
       object.put("username", user.getUsername());
@@ -92,7 +89,6 @@ public class LoginService {
     if (user != null) {
       LoginEntry loginEntry = new LoginEntry(user);
       loginRepository.save(loginEntry);
-      System.out.println("Logged in!");
       Map<String, Object> object = new HashMap<>();
       object.put("email", email);
       object.put("username", user.getUsername());

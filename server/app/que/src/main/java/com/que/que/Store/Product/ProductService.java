@@ -36,7 +36,7 @@ public class ProductService {
                     .orElseThrow(() -> new IllegalStateException("Business not found"));
         }
 
-        locationRepository.findByIdAndBusinessUser(locationId, businessUser)
+        locationRepository.findByIdAndPartner(locationId, businessUser.getPartner())
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
 
         Store store = storeRepository.findByLocationId(locationId)
@@ -52,7 +52,7 @@ public class ProductService {
                 .orElseThrow(() -> new IllegalStateException("Business not found"));
         Store store = storeRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new IllegalStateException("Store not found"));
-        locationRepository.findByIdAndBusinessUser(locationId, businessUser)
+        locationRepository.findByIdAndPartner(locationId, businessUser.getPartner())
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
         Product existingProduct = productRepository.findByNameAndStoreId(name, store.getId()).orElse(null);
 
@@ -72,7 +72,7 @@ public class ProductService {
                 .orElseThrow(() -> new IllegalStateException("Business not found"));
         Store store = storeRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new IllegalStateException("Store not found"));
-        locationRepository.findByIdAndBusinessUser(locationId, businessUser)
+        locationRepository.findByIdAndPartner(locationId, businessUser.getPartner())
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
 
         Product product = productRepository.findById(productId)

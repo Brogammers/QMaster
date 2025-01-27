@@ -7,6 +7,8 @@ import lombok.Getter;
 @Getter
 public class BusinessUserRegistrationRequest extends AppUserRegistrationRequest {
 
+    private String partnerName;
+
     public BusinessUserRegistrationRequest(
             String firstName,
             String lastName,
@@ -17,9 +19,11 @@ public class BusinessUserRegistrationRequest extends AppUserRegistrationRequest 
             String username,
             String confirmPassword,
             String phoneCode,
-            String phoneNumber) {
+            String phoneNumber,
+            String partnerName) {
         super(firstName, lastName, dateOfBirth, countryOfOrigin, password, email, username, confirmPassword, phoneCode,
                 phoneNumber);
+        this.partnerName = partnerName;
     }
 
 }

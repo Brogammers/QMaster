@@ -27,7 +27,7 @@ public class StoreService {
         BusinessUser businessUser = businessUserRepository.findById(businessUserId)
                 .orElseThrow(() -> new IllegalStateException("Business user not found"));
 
-        Location location = locationRepository.findByIdAndBusinessUser(locationId, businessUser)
+        Location location = locationRepository.findByIdAndPartner(locationId, businessUser.getPartner())
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
 
        
@@ -50,7 +50,7 @@ public class StoreService {
         Location location = getAndCheckLocation(user.getId(), locationId);
 
         Store store = storeRepository.findByLocationId(location.getId())
-                .orElseThrow(() -> new IllegalStateException("Store not found"));
+                .orElse(null);
         return store != null && location.getStoreStatus() == StoreStatus.SETUP_COMPLETE;
     }
 

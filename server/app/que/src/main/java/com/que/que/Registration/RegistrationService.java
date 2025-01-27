@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.que.que.Email.EmailSender;
+import com.que.que.Partner.Partner;
+import com.que.que.Partner.PartnerRepository;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.Security.PasswordValidator;
@@ -21,6 +23,7 @@ import com.que.que.User.AppUser.AppUserService;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserService;
 
+import kotlin.NotImplementedError;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -31,6 +34,7 @@ public class RegistrationService {
   private final BusinessUserService businessUserService;
   private final EmailValidator emailValidator;
   private final ConfirmationTokenService confirmationTokenService;
+  private final PartnerRepository partnerRepository;
   private final AdminUserService adminUserService;
   private final PasswordValidator passwordValidator;
   private final EmailSender emailSender;
@@ -103,9 +107,13 @@ public class RegistrationService {
      * throw new IllegalStateException("Phone code not found");
      * }
      */
+
+    Partner partner = partnerRepository.findByName(request.getPartnerName())
+        .orElseThrow(() -> new IllegalStateException("Partner not found"));
+
     String token = businessUserService.signUpUser(
         new BusinessUser(
-            UserRole.USER,
+            UserRole.BUSINESS_OWNER,
             request.getFirstName(),
             request.getLastName(),
             request.getUsername(),
@@ -118,7 +126,8 @@ public class RegistrationService {
             false,
             request.getPhoneCode(),
             request.getPhoneNumber(),
-            request.getCountryOfOrigin(), SubscriptionPlans.BASIC));// request.getPhoneNumber(), request.getPhoneCode(),
+            request.getCountryOfOrigin(), SubscriptionPlans.BASIC,
+            partner));// request.getPhoneNumber(), request.getPhoneCode(),
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);
@@ -129,6 +138,10 @@ public class RegistrationService {
      * "Confirm Email", context);
      */
     return token;
+  }
+
+  public void registerPartner(PartnerRegisterRequest request) {
+    throw new NotImplementedError("Not implemented");
   }
 
   public String registerAdminUser(AdminUserRegistrationRequest request) {

@@ -38,6 +38,8 @@ export default function PartnersPage() {
   };
 
   const handleAddPartner = (partnerData: Omit<Partner, 'id' | 'joinedDate'>) => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_REGISTER_BUSINESS || "";
+
     const newPartner: Partner = {
       ...partnerData,
       id: partners.length + 1,
@@ -98,10 +100,12 @@ export default function PartnersPage() {
         }
       })
       .then((data) => {
+        console.log(data);
+        
         const partners = data.map((partner: any) => ({
           id: partner.id,
           name: partner.username,
-          category: partner.businessCategories[0].name ? partner.businessCategories[0].name : null,
+          category: partner.businessCategories[0] ? partner.businessCategories[0].name : null,
           status: partner.status ? "active" : "inactive",
           joinedDate: new Date(partner.createdAt).toLocaleDateString(),
           locations: partner.locations.map((location: any) => ({

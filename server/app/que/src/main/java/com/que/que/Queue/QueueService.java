@@ -3,7 +3,6 @@ package com.que.que.Queue;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
@@ -13,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.que.que.Location.Location;
 import com.que.que.Location.LocationRepository;
+import com.que.que.Partner.Partner;
+import com.que.que.Partner.PartnerRepository;
 import com.que.que.QRcode.QRCodeService;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.AppUser.AppUser;
@@ -35,6 +36,7 @@ public class QueueService {
   private final QueueEnqueueRepository queueEnqueueRepository;
   private final QueueDeletionRepository queueDeletionRepository;
   private final QueueCounterRepository queueCounterRepository;
+  private final PartnerRepository partnerRepository;
   private final QRCodeService qrCodeService;
   private final ArrayList<ArrayList<Queue<Long>>> queueSet = initQueue();
   private final Stack<Integer> queueSlots = initStack();
@@ -79,7 +81,7 @@ public class QueueService {
         queueSet.add(new ArrayList<Queue<Long>>());
         queueHolderQueue = queueSet.get(currentSlot);
       }
-      appUser.setQueueId(currentSlot);
+      appUser.getPartner().setQueueId(currentSlot);
       queueLocation = currentSlot;
     } else {
       queueHolderQueue = queueSet.get(queueLocation);
@@ -103,7 +105,7 @@ public class QueueService {
     }
     Queues createdQueue = queueRepository.save(new Queues(
         name,
-        appUser,
+        appUser.getPartner(),
         queueLocation,
         queueHolderQueue.size(),
         maxQueueSize,
@@ -111,7 +113,8 @@ public class QueueService {
         averageServiceTime,
         isActive));
     queueCreationRepository.save(new QueueCreation(createdQueue));
-    queueHolderQueue.add(new LinkedList<>());
+    // queueHolderQueue.add(new LinkedList<>());
+    partnerRepository.save(appUser.getPartner());
     print();
   }
 
@@ -119,7 +122,7 @@ public class QueueService {
     BusinessUser appUserFromDB = businessUserRepository
         .findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
-    int queueId = appUserFromDB.getQueueId();
+    int queueId = appUserFromDB.getPartner().getQueueId();
     SubscriptionPlans subscriptionPlan = appUserFromDB.getSubscriptionPlan();
     int max = 1;
 
@@ -148,7 +151,7 @@ public class QueueService {
     BusinessUser appUserFromDB = businessUserRepository
         .findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
-    int queueId = appUserFromDB.getQueueId();
+    int queueId = appUserFromDB.getPartner().getQueueId();
     return queueId;
   }
 
@@ -157,7 +160,7 @@ public class QueueService {
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
     Queues currentQueue = queueRepository.findByName(queueName)
         .orElseThrow(() -> new IllegalStateException("Could not find queue with such name"));
-    int queueSlot = currentQueue.getCreator().getQueueId();
+    int queueSlot = currentQueue.getPartner().getQueueId();
 
     // Checking if user has slot in memory
     if (queueSlot == -1) {
@@ -244,9 +247,10 @@ public class QueueService {
       throw new IllegalStateException("User does not have specific queue");
     }
     if (queueHolderQueues.size() == 0) {
-      BusinessUser appUser = currentQueue.getCreator();
-      appUser.setQueueId(-1);
+      Partner partner = currentQueue.getPartner();
+      partner.setQueueId(-1);
       queueSlots.push(queueSlot);
+      partnerRepository.save(partner);
     }
 
     queueDeletionRepository.save(
@@ -259,7 +263,8 @@ public class QueueService {
     BusinessUser appUser = businessUserRepository.findByEmail(email)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
 
-    Location location = locationRepository.findByIdAndBusinessUser(locationId, appUser)
+    Location location = locationRepository.findByIdAndPartner(
+        locationId, appUser.getPartner())
         .orElseThrow(() -> new IllegalStateException("Could not find location"));
 
     ArrayList<Queues> currentQueues = queueRepository.findByLocation(location);
@@ -271,7 +276,7 @@ public class QueueService {
     BusinessUser appUser = businessUserRepository.findById(id)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
 
-    ArrayList<Queues> currentQueues = queueRepository.findByCreator(appUser);
+    ArrayList<Queues> currentQueues = queueRepository.findByPartner(appUser.getPartner());
 
     return currentQueues;
   }
@@ -376,7 +381,7 @@ public class QueueService {
     // Get app user and queue slot
     BusinessUser user = businessUserRepository.findById(appUserId)
         .orElseThrow(() -> new IllegalStateException("Could not find user with such id"));
-    int queueSlot = user.getQueueId();
+    int queueSlot = user.getPartner().getQueueId();
     ArrayList<Queue<Long>> queuesToQuery = queueSet.get(queueSlot);
     ArrayList<Integer> queuesThatCouldNotBeFound = new ArrayList<>();
     // Get all specific queues

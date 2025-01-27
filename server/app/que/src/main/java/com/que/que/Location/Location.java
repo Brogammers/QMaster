@@ -7,11 +7,11 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.que.que.Partner.Partner;
 import com.que.que.Queue.Queues;
 import com.que.que.Store.Store;
 import com.que.que.Store.StoreStatus;
 import com.que.que.Store.Purchase.Purchase;
-import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.OpeningHours;
 
 import jakarta.persistence.CascadeType;
@@ -22,6 +22,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
@@ -57,9 +58,9 @@ public class Location {
     @ManyToMany
     private Set<OpeningHours> openingHourss = new HashSet<>();
 
-    @ManyToMany
-    @JsonIgnore
-    private Set<BusinessUser> businessUsers = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "partner_id", referencedColumnName = "id")
+    private Partner partner;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "location")
     @JsonIgnore
@@ -74,21 +75,23 @@ public class Location {
 
     private StoreStatus storeStatus = StoreStatus.NOT_REQUESTED;
 
-    public Location(String name, String address, double latitude, double longitude) {
+    public Location(String name, String address, double latitude, double longitude, Partner partner) {
         this.name = name;
         this.address = address;
         this.description = "";
         this.latitude = latitude;
         this.longitude = longitude;
+        this.partner = partner;
     }
 
     public Location(String name, String address, String description, double latitude,
-            double longitude) {
+            double longitude, Partner partner) {
         this.name = name;
         this.address = address;
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.partner = partner;
     }
 
     public void addOpeningHours(OpeningHours openingHours) {
@@ -101,9 +104,5 @@ public class Location {
 
     public void addPurchase(Purchase purchase) {
         this.purchases.add(purchase);
-    }
-
-    public void addBusinessUser(BusinessUser businessUser) {
-        this.businessUsers.add(businessUser);
     }
 }

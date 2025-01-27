@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.que.que.Partner.Partner;
+import com.que.que.Partner.PartnerRepository;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserRepository;
 
@@ -14,22 +16,24 @@ import lombok.AllArgsConstructor;
 public class LocationService {
     private final LocationRepository locationRepository;
     private final BusinessUserRepository businessUserRepository;
+    private final PartnerRepository partnerRepository;
 
-    public Location createLocation(long businessUserId, String name, String description, String address,
+    public Location createLocation(long partnerId, String name, String description, String address,
             double latitude,
             double longitude) {
-        // TODO: Add validation
-        BusinessUser businessUser = businessUserRepository.findById(businessUserId)
-                .orElseThrow(() -> new IllegalStateException("Business user with id " + businessUserId + " not found"));
+        Partner partner = partnerRepository.findById(partnerId)
+                .orElseThrow(() -> new IllegalStateException("Business with id " + partnerId + " not found"));
 
         Location location = new Location(
                 name,
                 address,
                 description,
                 longitude,
-                latitude);
+                latitude,
+                partner);
 
-        location.addBusinessUser(businessUser);
+        partner.addLocation(location);
+        partnerRepository.save(partner);
         return locationRepository.save(location);
     }
 
@@ -46,7 +50,7 @@ public class LocationService {
             businessUser = businessUserRepository.findByEmail(email)
                     .orElseThrow(() -> new IllegalStateException("Business with email " + email + " not found"));
 
-        List<Location> locations = locationRepository.findByBusinessUser(businessUser);
+        List<Location> locations = locationRepository.findByPartner(businessUser.getPartner());
 
         return locations;
     }
