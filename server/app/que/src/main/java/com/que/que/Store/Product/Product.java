@@ -23,8 +23,8 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@JsonSerialize(using = ProductSerializer.class)
 @NoArgsConstructor
+@JsonSerialize(using = ProductSerializer.class)
 public class Product {
 
     @Id

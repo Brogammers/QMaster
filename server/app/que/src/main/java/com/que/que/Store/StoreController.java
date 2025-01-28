@@ -130,8 +130,9 @@ public class StoreController {
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
             String email = jwtUtil.getEmail(token.substring(7));
-            Page<Product> res = productService.getProductsByStoreName(businessName, page, perPage, email, locationId);
-            body.put("products", res);
+            Page<Product> products = productService.getProductsByStoreName(businessName, page, perPage, email,
+                    locationId);
+            body.put("products", products);
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
             statusCode = HttpStatusCode.valueOf(500);

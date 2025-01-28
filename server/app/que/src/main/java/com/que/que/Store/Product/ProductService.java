@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.que.que.Location.LocationRepository;
+import com.que.que.Partner.Partner;
+import com.que.que.Partner.PartnerRepository;
 import com.que.que.Store.Store;
 import com.que.que.Store.StoreRepository;
 import com.que.que.User.BusinessUser.BusinessUser;
@@ -19,24 +21,25 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final StoreRepository storeRepository;
     private final BusinessUserRepository businessUserRepository;
+    private final PartnerRepository partnerRepository;
     private final LocationRepository locationRepository;
 
     public Page<Product> getProductsByStoreName(String storeName, int pageNumber, int perPage, String email,
             long locationId) {
-        if (storeName == null && email.isBlank()) {
+        if (storeName == null && email == null) {
             throw new IllegalStateException("Store name or email must be provided");
         }
 
-        BusinessUser businessUser;
+        Partner partner;
         if (storeName != null) {
-            businessUser = businessUserRepository.findByUsername(storeName)
+            partner = partnerRepository.findByName(storeName)
                     .orElseThrow(() -> new IllegalStateException("Business not found"));
         } else {
-            businessUser = businessUserRepository.findByEmail(email)
-                    .orElseThrow(() -> new IllegalStateException("Business not found"));
+            partner = businessUserRepository.findByEmail(email)
+                    .orElseThrow(() -> new IllegalStateException("Business not found")).getPartner();
         }
 
-        locationRepository.findByIdAndPartner(locationId, businessUser.getPartner())
+        locationRepository.findByIdAndPartner(locationId, partner)
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
 
         Store store = storeRepository.findByLocationId(locationId)

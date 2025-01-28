@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.que.que.Location.Location;
 import com.que.que.Location.LocationRepository;
+import com.que.que.Partner.Partner;
+import com.que.que.Partner.PartnerRepository;
 import com.que.que.Store.Product.Product;
 import com.que.que.Store.Product.ProductCreationRequest;
 import com.que.que.Store.Product.ProductRepository;
@@ -23,13 +25,14 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final BusinessUserRepository businessUserRepository;
     private final ProductRepository repository;
+    private final PartnerRepository partnerRepository;
     private final LocationRepository locationRepository;
 
-    private Location getAndCheckLocation(long businessUserId, long locationId) {
-        BusinessUser businessUser = businessUserRepository.findById(businessUserId)
+    private Location getAndCheckLocation(long partnerId, long locationId) {
+        Partner partner = partnerRepository.findById(partnerId)
                 .orElseThrow(() -> new IllegalStateException("Business user not found"));
 
-        Location location = locationRepository.findByIdAndPartner(locationId, businessUser.getPartner())
+        Location location = locationRepository.findByIdAndPartner(locationId, partner)
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
 
         return location;
@@ -39,7 +42,7 @@ public class StoreService {
         BusinessUser user = businessUserRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("Business not found"));
 
-        Location location = getAndCheckLocation(user.getId(), locationId);
+        Location location = getAndCheckLocation(user.getPartner().getId(), locationId);
 
         if (location.getStoreStatus() != StoreStatus.NOT_REQUESTED) {
             throw new IllegalStateException("Invalid store status");
@@ -54,7 +57,9 @@ public class StoreService {
     }
 
     public Store createStore(long businessUserId, long locationId) {
-        Location location = getAndCheckLocation(businessUserId, locationId);
+        BusinessUser user = businessUserRepository.findById(businessUserId)
+                .orElseThrow(() -> new IllegalStateException("Business user not found"));
+        Location location = getAndCheckLocation(user.getPartner().getId(), locationId);
 
         // Check that there isnt a store already for this user
         boolean check = storeRepository.findByLocationId(location.getId())
@@ -98,10 +103,10 @@ public class StoreService {
     }
 
     public boolean hasStore(String businessName, long locationId) {
-        BusinessUser user = businessUserRepository.findByUsername(businessName)
-                .orElseThrow(() -> new IllegalStateException("Business not found"));
+        Partner partner = partnerRepository.findByName(businessName)
+                .orElseThrow(() -> new IllegalStateException("Partner not found"));
 
-        Location location = getAndCheckLocation(user.getId(), locationId);
+        Location location = getAndCheckLocation(partner.getId(), locationId);
 
         Store store = storeRepository.findByLocationId(location.getId())
                 .orElse(null);
@@ -112,7 +117,7 @@ public class StoreService {
         BusinessUser user = businessUserRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("Business not found"));
 
-        Location location = getAndCheckLocation(user.getId(), locationId);
+        Location location = getAndCheckLocation(user.getPartner().getId(), locationId);
 
         return location.getStoreStatus();
     }
@@ -127,7 +132,7 @@ public class StoreService {
         BusinessUser user = businessUserRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("Business not found"));
 
-        Location location = getAndCheckLocation(user.getId(), locationId);
+        Location location = getAndCheckLocation(user.getPartner().getId(), locationId);
 
         Store store = storeRepository.findByLocationId(location.getId())
                 .orElseThrow(() -> new IllegalStateException("Store not found"));

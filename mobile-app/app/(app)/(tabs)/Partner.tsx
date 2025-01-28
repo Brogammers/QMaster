@@ -41,7 +41,7 @@ export default function Partner() {
       const locationData = data.map((store: any, idx: number) => {
         return {
           label: store.name,
-          value: idx,
+          value: store.id,
           id: store.id,
           address: store.address,
           coordinates: { 

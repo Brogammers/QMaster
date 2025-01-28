@@ -41,7 +41,8 @@ export default function Category() {
       .then((data) => { 
           const currentQueues = data.map((business: any) => {
             return {
-              name: business.username,
+              id: business.id,
+              name: business.name,
               image: arabiata,
               time: 20,
               people: 20

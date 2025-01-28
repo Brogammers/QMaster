@@ -28,12 +28,12 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
     linkTo('/Store');
     router.setParams({ 
       brandName: name, 
+      currentLocation: currentLocation,
     });
   };
 
   useEffect(() => {    
-    if (currentLocation != null) return;
-
+    if (currentLocation == null) return;    
     const url = configConverter("EXPO_PUBLIC_API_BASE_URL_HAS_STORE");
     // @ts-ignore
     axios.get(`${url}?businessName=${name}&locationId=${currentLocation}`)
@@ -51,7 +51,7 @@ export default function QueueInfoCard(props: QueueInfoCardProps) {
       console.error("Error: ", error);
       setHasStore(false);
     })
-  }, []);
+  }, [currentLocation]);
 
   return (
     <View className="justify-end w-screen relative"

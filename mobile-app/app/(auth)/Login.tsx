@@ -64,6 +64,15 @@ export default function Login() {
       // );
 
       axios.defaults.headers.common.Authorization = "";
+      axios.interceptors.request.use(
+         (config) => {
+             config.headers["Authorization"] = "";
+             return config;
+         },
+         (error) => {
+             return Promise.reject(error);
+         }
+     );
 
       const response = await axios.post(
         configConverter("EXPO_PUBLIC_API_BASE_URL_LOGIN"),

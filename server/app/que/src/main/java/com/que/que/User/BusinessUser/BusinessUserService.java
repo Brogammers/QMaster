@@ -82,13 +82,13 @@ public class BusinessUserService implements UserDetailsService {
     }
 
     public Page<Partner> getBusinessesWithCategory(String category, int page, int perPage) {
-        Pageable pageable = PageRequest.of(page, perPage);
+        Pageable pageable = PageRequest.of(page - 1, perPage);
 
         BusinessCategory businessCategory = businessCategoryRepository.findByName(category)
                 .orElseThrow(() -> new IllegalStateException("Category not found"));
 
         Page<Partner> businesses = partnerRepository.findByBusinessCategory(businessCategory, pageable);
-    
+
         return businesses;
     }
 

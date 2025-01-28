@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import configConverter from '@/api/configConverter';
+import { useCart } from '@/ctx/CartContext';
 import { useTheme } from '@/ctx/ThemeContext';
-import { LinearGradient } from 'expo-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useCart } from '@/ctx/CartContext';
-import configConverter from '@/api/configConverter';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
+import React, { useContext, useEffect, useState } from 'react';
+import { ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LocationContext } from './Partner';
 
 type RootStackParamList = {
   Partner: undefined;
@@ -34,7 +35,7 @@ const perPage = 10;
 export default function Store() {
   const { isDarkMode } = useTheme();
   const navigation = useNavigation<NavigationProp>();
-  const { brandName } = useLocalSearchParams();
+  const { brandName, currentLocation } = useLocalSearchParams();
   const { items } = useCart();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [products, setProducts] = useState<Product[]>([]);
@@ -45,7 +46,7 @@ export default function Store() {
   useEffect(() => {
     const url = configConverter("EXPO_PUBLIC_API_BASE_URL_GET_PRODUCTS_BY_BUSINESS");
 
-    axios.get(`${url}?businessName=${brandName}&page=${page}&per-page=${perPage}`)
+    axios.get(`${url}?businessName=${brandName}&page=${page}&per-page=${perPage}&locationId=${currentLocation}`)
     .then((response) => {
       if(response.status === 200){
         return response.data.products.content;
@@ -70,7 +71,7 @@ export default function Store() {
     .catch((error) => {
       console.error("Error: ", error);
     })
-  }, []);
+  }, [currentLocation]);
 
   const handleProductClick = (product: Product) => {
     navigation.navigate("Product");
