@@ -88,9 +88,26 @@ public class StoreController {
         return new ResponseEntity<Object>(body, statusCode);
     }
 
+    @PostMapping("/documents")
+    @Secured("BUSINESS_OWNER")
+    public ResponseEntity<Object> requestStore(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody StoreRequestRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
+        try {
+            String email = jwtUtil.getEmail(token.substring(7));
+            storeService.requestStore(email, request.getDocuments(), request.getLocationId());
+            body.put("message", "Store requested");
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+            statusCode = HttpStatusCode.valueOf(500);
+        }
+        return new ResponseEntity<Object>(body, statusCode);
+    }
+
     @PostMapping
     @Secured("BUSINESS_OWNER")
-    public ResponseEntity<Object> createStore(@RequestBody StoreRequest request) {
+    public ResponseEntity<Object> createStore(@RequestBody StoreCreationRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
         try {

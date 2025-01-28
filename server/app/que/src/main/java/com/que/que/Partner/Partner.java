@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Location.Location;
+import com.que.que.User.BusinessUser.BusinessCategory;
 import com.que.que.User.BusinessUser.BusinessUser;
 
 import jakarta.persistence.Column;
@@ -12,6 +13,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
@@ -41,8 +44,13 @@ public class Partner {
 
     private int queueId = -1;
 
-    public Partner(String name) {
+    @ManyToOne
+    @JoinColumn(name = "business_category_id")
+    private BusinessCategory businessCategory;
+
+    public Partner(String name, BusinessCategory businessCategory) {
         this.name = name;
+        this.businessCategory = businessCategory;
     }
 
     public void addBusinessUser(BusinessUser businessUser) {

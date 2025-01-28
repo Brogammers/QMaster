@@ -3,11 +3,8 @@ package com.que.que.User.BusinessUser;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.que.que.Location.Location;
 import com.que.que.Partner.Partner;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.User;
@@ -18,7 +15,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,12 +32,6 @@ public class BusinessUser extends User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SubscriptionPlans subscriptionPlan;
-
-    @ManyToMany
-    private Set<Location> locations = new HashSet<>();
-
-    @ManyToMany
-    private Set<BusinessCategory> businessCategories = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "partner_id")
@@ -86,13 +76,5 @@ public class BusinessUser extends User {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
-    }
-
-    public void addLocation(Location location) {
-        this.locations.add(location);
-    }
-
-    public void addBusinessCategory(BusinessCategory businessCategory) {
-        this.businessCategories.add(businessCategory);
     }
 }

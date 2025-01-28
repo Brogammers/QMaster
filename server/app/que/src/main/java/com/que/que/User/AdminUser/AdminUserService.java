@@ -53,6 +53,7 @@ public class AdminUserService implements UserDetailsService {
                 null,
                 adminUser);
 
+        adminUserRepository.save(adminUser);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
         Map<String, String> context = new HashMap<>();
         context.put("name", adminUser.getFirstName());
@@ -63,7 +64,6 @@ public class AdminUserService implements UserDetailsService {
          * Send email
          */
 
-        adminUserRepository.save(adminUser);
         return confirmationToken.toString();
     }
 

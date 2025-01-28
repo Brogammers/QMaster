@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.que.que.Partner.Partner;
+import com.que.que.Partner.PartnerRepository;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 
@@ -24,6 +26,7 @@ import lombok.AllArgsConstructor;
 public class BusinessUserService implements UserDetailsService {
 
     private final BusinessUserRepository businessUserRepository;
+    private final PartnerRepository partnerRepository;
     private final BusinessCategoryRepository businessCategoryRepository;
     private static final String USER_NOT_FOUND_MSG = "User with email %s was not found in the database";
     private final ConfirmationTokenService confirmationTokenService;
@@ -78,30 +81,15 @@ public class BusinessUserService implements UserDetailsService {
         appUser.setEnabled(true);
     }
 
-    public Page<BusinessUser> getBusinessesWithCategory(String category, int page, int perPage) {
-        Pageable pageable = PageRequest.of(page - 1, perPage);
+    public Page<Partner> getBusinessesWithCategory(String category, int page, int perPage) {
+        Pageable pageable = PageRequest.of(page, perPage);
 
-        BusinessCategory businessCategory = businessCategoryRepository
-                .findByName(category)
+        BusinessCategory businessCategory = businessCategoryRepository.findByName(category)
                 .orElseThrow(() -> new IllegalStateException("Category not found"));
 
-        Page<BusinessUser> businesses = businessUserRepository.findAllByBusinessCategory(businessCategory.getId(),
-                pageable);
+        Page<Partner> businesses = partnerRepository.findByBusinessCategory(businessCategory, pageable);
+    
         return businesses;
-    }
-
-    public void addCategory(String category, long id) {
-        BusinessCategory businessCategory = businessCategoryRepository
-                .findByName(category)
-                .orElseThrow(() -> new IllegalStateException("Category not found"));
-
-        BusinessUser businessUser = businessUserRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("User not found"));
-
-        businessUser.addBusinessCategory(businessCategory);
-        businessCategory.addBusinessUser(businessUser);
-        businessUserRepository.save(businessUser);
-        businessCategoryRepository.save(businessCategory);
     }
 
     public BusinessUser getBusinessUserByEmail(String email) {

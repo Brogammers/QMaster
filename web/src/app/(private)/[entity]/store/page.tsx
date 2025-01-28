@@ -356,6 +356,7 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [showGuide, setShowGuide] = useState(true);
+  const { selectedLocation } = useLocation();
 
   const setupSteps = [
     {
@@ -434,7 +435,7 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
     try {
       const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETUP_STORE || "";
 
-      axios.post(url, values)
+      axios.post(url, {...values, locationId: selectedLocation?.id})
       .then((response) => {
           if (response.status === 201) {
             return response.data;
@@ -1779,18 +1780,35 @@ export default function StorePage() {
   };
 
   const handleDocumentSubmit = async (documents: Document[]) => {
-    setStoreStatus(StoreStatus.PENDING);
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_SUBMIT_DOCUMENTS || "";
+
+    axios.post(url, {
+      locationId: selectedLocation?.id,
+      // documents: documents
+    })
+    .then((response) => {
+      if (response.status === 201) {
+        return response.data;
+      } else {  
+        throw new Error('Failed to submit documents');
+      }
+    })
+    .then((data) => {
+      setStoreStatus(StoreStatus.PENDING);
+    })
+
+    // setStoreStatus(StoreStatus.PENDING);
     // Simulate approval after 2 seconds
-    setTimeout(() => {
-      setStoreStatus(StoreStatus.SETUP_PENDING);
-      toast.success("Your store has been approved! Let&apos;s set it up.", {
-        style: {
-          background: "#10B981",
-          color: "#fff",
-        },
-        duration: 4000,
-      });
-    }, 2000);
+    // setTimeout(() => {
+    //   setStoreStatus(StoreStatus.SETUP_PENDING);
+    //   toast.success("Your store has been approved! Let&apos;s set it up.", {
+    //     style: {
+    //       background: "#10B981",
+    //       color: "#fff",
+    //     },
+    //     duration: 4000,
+    //   });
+    // }, 2000);
   };
 
   const handleSetupComplete = async () => {

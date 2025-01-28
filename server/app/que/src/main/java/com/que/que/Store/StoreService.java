@@ -2,6 +2,8 @@ package com.que.que.Store;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.que.que.Location.Location;
@@ -30,17 +32,69 @@ public class StoreService {
         Location location = locationRepository.findByIdAndPartner(locationId, businessUser.getPartner())
                 .orElseThrow(() -> new IllegalStateException("Location not found"));
 
-       
         return location;
     }
 
-    public Store createStore(long businessUserId, long locationId) {
+    public void requestStore(String email, DocumentRequest[] documents, long locationId) {
+        BusinessUser user = businessUserRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("Business not found"));
 
+        Location location = getAndCheckLocation(user.getId(), locationId);
+
+        if (location.getStoreStatus() != StoreStatus.NOT_REQUESTED) {
+            throw new IllegalStateException("Invalid store status");
+        }
+
+        location.setStoreStatus(StoreStatus.PENDING);
+        locationRepository.save(location);
+    }
+
+    public List<Location> getPendingStores() {
+        return locationRepository.findByStoreStatus(StoreStatus.PENDING);
+    }
+
+    public Store createStore(long businessUserId, long locationId) {
         Location location = getAndCheckLocation(businessUserId, locationId);
+
+        // Check that there isnt a store already for this user
+        boolean check = storeRepository.findByLocationId(location.getId())
+                .isEmpty();
+        if (!check) {
+            throw new IllegalStateException("Store already exists");
+        }
 
         Store store = new Store(location);
         storeRepository.save(store);
         return store;
+    }
+
+    private Store createStore(long locationId) {
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new IllegalStateException("Location not found"));
+
+        // Check that there isnt a store already for this user
+        boolean check = storeRepository.findByLocationId(location.getId())
+                .isEmpty();
+        if (!check) {
+            throw new IllegalStateException("Store already exists");
+        }
+
+        Store store = new Store(location);
+        storeRepository.save(store);
+        return store;
+    }
+
+    public Store approveStore(long locationId) {
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new IllegalStateException("Location not found"));
+
+        if (location.getStoreStatus() != StoreStatus.PENDING) {
+            throw new IllegalStateException("Invalid store status");
+        }
+
+        location.setStoreStatus(StoreStatus.SETUP_PENDING);
+        locationRepository.save(location);
+        return createStore(locationId);
     }
 
     public boolean hasStore(String businessName, long locationId) {
@@ -59,9 +113,6 @@ public class StoreService {
                 .orElseThrow(() -> new IllegalStateException("Business not found"));
 
         Location location = getAndCheckLocation(user.getId(), locationId);
-
-        storeRepository.findByLocationId(location.getId())
-                .orElseThrow(() -> new IllegalStateException("Store not found"));
 
         return location.getStoreStatus();
     }
@@ -101,5 +152,9 @@ public class StoreService {
         location.setStoreStatus(StoreStatus.SETUP_COMPLETE);
         locationRepository.save(location);
         storeRepository.save(store);
+    }
+
+    public Page<Store> getStores(int page, int perPage) {
+        return storeRepository.findAll(PageRequest.of(page - 1, perPage));
     }
 }

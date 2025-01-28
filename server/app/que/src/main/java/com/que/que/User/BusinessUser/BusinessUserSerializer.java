@@ -23,8 +23,8 @@ public class BusinessUserSerializer extends StdSerializer<BusinessUser> {
         jgen.writeStartObject();
         jgen.writeNumberField("id", value.getId());
         jgen.writeStringField("username", value.getUsername());
-        jgen.writeObjectField("businessCategories", value.getBusinessCategories());
-        jgen.writeObjectField("locations", value.getLocations());
+        jgen.writeObjectField("businessCategory", value.getPartner().getBusinessCategory());
+        jgen.writeObjectField("locations", value.getPartner().getLocations());
         jgen.writeObjectField("createdAt", value.getDateOfRegistration());
         jgen.writeBooleanField("status",
                 value.isEnabled() && value.isAccountNonLocked() && value.isAccountNonExpired());

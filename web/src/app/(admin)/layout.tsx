@@ -9,6 +9,9 @@ import { useEffect, useState } from 'react';
 import { Category } from './admin/categories/page';
 import { Partner } from './admin/partners/page';
 import { CategoriesContext, PartnerContext, StoresContext, UsersContext } from './context';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
+import { StoreData } from './admin/store/columns';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -24,7 +27,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   const [partners, setPartners] = useState<Partner[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [users, setUsers] = useState([]);
-  const [stores, setStores] = useState([]);
+  const [stores, setStores] = useState<StoreData[]>([]);
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('qmaster-dark-mode');
@@ -115,8 +118,8 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
             <PartnerContext.Provider value={{ partners, setPartners, getNextPartnerPage }}>
               <UsersContext.Provider value={{ users, setUsers, getNextUserPage }}>
                 <CategoriesContext.Provider value={{ categories, setCategories, getNextCategoryPage }}> 
-                  <StoresContext.Provider value={{ stores, setStores, getNextStorePage }}>  
-                    {children}
+                  <StoresContext.Provider value={{ stores, setStores, getNextStorePage }}> 
+                    {children} 
                   </StoresContext.Provider> 
                 </CategoriesContext.Provider>                 
               </UsersContext.Provider>

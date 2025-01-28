@@ -23,7 +23,7 @@ public class BusinessCategorySerializer extends StdSerializer<BusinessCategory> 
         gen.writeNumberField("id", value.getId());
         gen.writeStringField("name", value.getName());
         gen.writeStringField("description", value.getDescription());
-        gen.writeNumberField("partnersCount", value.getBusinessUsers().size());
+        gen.writeNumberField("partnersCount", value.getPartners().size());
         gen.writeStringField("status", value.getStatus());
         gen.writeEndObject();
     }

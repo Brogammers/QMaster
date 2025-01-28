@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class StoreRequest {
+public class StoreCreationRequest {
     private final long businessUserId;
     private final long locationId;
 }

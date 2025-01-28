@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.que.que.Location.LocationRepository;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserRepository;
 
@@ -25,7 +24,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AdminUserController {
     private final BusinessUserRepository businessUserRepository;
-    private final LocationRepository locationRepository;
 
     @GetMapping(path = "/businesses")
     @Secured("ADMIN")

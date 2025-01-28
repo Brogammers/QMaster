@@ -1,6 +1,7 @@
 import React, { createContext } from "react";
 import { Partner } from "./admin/partners/page";
 import { Category } from "./admin/categories/page";
+import { StoreData } from "./admin/store/columns";
 
 export const PartnerContext = createContext<{
     partners: Partner[];
@@ -28,8 +29,12 @@ export const UsersContext = createContext({
     getNextUserPage: (page: number, perPage: number) => {},
 });
 
-export const StoresContext = createContext({
-    stores: {},
+export const StoresContext = createContext<{
+    stores: StoreData[];
+    setStores: React.Dispatch<React.SetStateAction<StoreData[]>>;
+    getNextStorePage: (page: number, perPage: number) => void;
+}>({
+    stores: [],
     setStores: (stores) => {},
     getNextStorePage: (page: number, perPage: number) => {},
 });

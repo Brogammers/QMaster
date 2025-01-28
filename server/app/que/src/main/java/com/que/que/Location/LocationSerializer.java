@@ -21,10 +21,11 @@ public class LocationSerializer extends StdSerializer<Location> {
         gen.writeStartObject();
         gen.writeNumberField("id", value.getId());
         gen.writeStringField("address", value.getAddress());
-        gen.writeStringField("name", value.getName());
+        gen.writeStringField("name", value.getPartner().getName() + " - " + value.getName());
         gen.writeNumberField("longtitude", value.getLongitude());
         gen.writeNumberField("latitude", value.getLatitude());
         gen.writeStringField("description", value.getDescription());
+        gen.writeStringField("category", value.getPartner().getBusinessCategory().getName());
         gen.writeEndObject();
     }
 

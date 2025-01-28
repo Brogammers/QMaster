@@ -7,4 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PartnerRequest {
     private String name;
+    private String businessCategoryName;
 }

@@ -24,7 +24,8 @@ public class PartnerController {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
-            Partner partner = partnerService.createPartner(partnerRequest.getName());
+            Partner partner = partnerService.createPartner(partnerRequest.getName(),
+                    partnerRequest.getBusinessCategoryName());
             body.put("partner", partner);
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());

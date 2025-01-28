@@ -105,7 +105,7 @@ export default function PartnersPage() {
         const partners = data.map((partner: any) => ({
           id: partner.id,
           name: partner.username,
-          category: partner.businessCategories[0] ? partner.businessCategories[0].name : null,
+          category: partner.businessCategory.name,
           status: partner.status ? "active" : "inactive",
           joinedDate: new Date(partner.createdAt).toLocaleDateString(),
           locations: partner.locations.map((location: any) => ({
