@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import Image from "next/image";
 
 // Define validation schema
@@ -192,20 +193,19 @@ export default function LoginForm({ setIsLoading }: any) {
             {/* Google Sign In */}
             <button
               type="button"
-              className="w-full py-3 px-4 border border-gray-300 rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-50 transition-colors"
+              className="w-full py-3 px-4 border border-gray-300 rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-50 group transition-colors"
               onClick={() => {
                 // Handle Google sign in
                 console.log("Google sign in clicked");
               }}
             >
-              <Image
-                src="/google.svg"
-                alt="Google"
-                width={20}
-                height={20}
-                className="w-5 h-5"
+              <FontAwesomeIcon
+                icon={faGoogle}
+                className="w-5 h-5 text-gray-600 group-hover:text-lava-black transition-colors"
               />
-              <span>Continue with Google</span>
+              <span className="text-gray-600 group-hover:text-lava-black transition-colors">
+                Continue with Google
+              </span>
             </button>
 
             {/* Footer Links */}
