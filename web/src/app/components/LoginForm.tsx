@@ -119,7 +119,7 @@ export default function LoginForm({ setIsLoading }: any) {
                 onBlur={handleBlur}
                 value={values.email}
                 placeholder="Email address"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-baby-blue focus:ring-1 focus:ring-baby-blue"
+                className="w-full text-ignite-black px-4 py-3 rounded-lg border border-gray-300 focus:border-baby-blue focus:ring-1 focus:ring-baby-blue"
               />
               {errors.email && touched.email && (
                 <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -136,7 +136,7 @@ export default function LoginForm({ setIsLoading }: any) {
                   onBlur={handleBlur}
                   value={values.password}
                   placeholder="Password"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-baby-blue focus:ring-1 focus:ring-baby-blue"
+                  className="w-full text-ignite-black px-4 py-3 rounded-lg border border-gray-300 focus:border-baby-blue focus:ring-1 focus:ring-baby-blue"
                 />
                 <button
                   type="button"
@@ -201,22 +201,22 @@ export default function LoginForm({ setIsLoading }: any) {
             >
               <FontAwesomeIcon
                 icon={faGoogle}
-                className="w-5 h-5 text-gray-600 group-hover:text-lava-black transition-colors"
+                className="w-5 h-5 text-white group-hover:text-ignite-black transition-colors"
               />
-              <span className="text-gray-600 group-hover:text-lava-black transition-colors">
+              <span className="text-white group-hover:text-ignite-black transition-colors">
                 Continue with Google
               </span>
             </button>
 
             {/* Footer Links */}
-            <div className="mt-6 text-center space-y-2">
-              <p className="text-sm text-gray-600">
+            <div className="mt-0 text-center space-y-2">
+              <p className="text-sm text-white">
                 Don&apos;t have an account?{" "}
                 <Link href="/signup" className="text-baby-blue hover:underline">
                   Create account
                 </Link>
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-white">
                 Looking for work?{" "}
                 <Link
                   href="/worker-app"
