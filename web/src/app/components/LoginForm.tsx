@@ -144,12 +144,13 @@ export default function LoginForm({ setIsLoading }: any) {
                 <button
                   type="button"
                   onClick={handlePasswordVisibility}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center justify-center w-10"
                 >
                   <FontAwesomeIcon
-                    size="sm"
-                    color="#7D7D7D"
+                    size="lg"
+                    className="w-[16px] h-[16px] text-gray-400"
                     icon={isPasswordVisible ? faEyeSlash : faEye}
+                    fixedWidth
                   />
                 </button>
               </div>
