@@ -37,7 +37,7 @@ export default function Login() {
 
         {/* Login Form Container */}
         <div className="max-w-md w-full mx-auto mt-8">
-          <h2 className="text-2xl font-bold mb-8 text-white">
+          <h2 className="text-2xl text-center font-bold mb-8 text-white">
             Log in to your Business Account
           </h2>
           <LoginForm setIsLoading={setIsLoading} />

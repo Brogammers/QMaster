@@ -95,7 +95,7 @@ export default function LoginForm({ setIsLoading }: any) {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full h-full flex flex-col">
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}
@@ -109,7 +109,10 @@ export default function LoginForm({ setIsLoading }: any) {
           touched,
           errors,
         }) => (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form
+            onSubmit={handleSubmit}
+            className="flex-1 flex flex-col justify-center space-y-4"
+          >
             {/* Email Input */}
             <div>
               <input
@@ -168,7 +171,7 @@ export default function LoginForm({ setIsLoading }: any) {
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-baby-blue text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors"
+              className="w-full px-4 py-3 bg-baby-blue text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors"
             >
               Log in
             </button>
@@ -181,19 +184,16 @@ export default function LoginForm({ setIsLoading }: any) {
             )}
 
             {/* Divider */}
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">OR</span>
-              </div>
+            <div className="relative flex items-center py-4">
+              <div className="flex-grow border-t border-shark-grey"></div>
+              <span className="flex-shrink-0 mx-4 text-white">OR</span>
+              <div className="flex-grow border-t border-shark-grey"></div>
             </div>
 
             {/* Google Sign In */}
             <button
               type="button"
-              className="w-full py-3 px-4 border border-gray-300 rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-50 group transition-colors"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-50 group transition-colors"
               onClick={() => {
                 // Handle Google sign in
                 console.log("Google sign in clicked");
@@ -209,7 +209,7 @@ export default function LoginForm({ setIsLoading }: any) {
             </button>
 
             {/* Footer Links */}
-            <div className="mt-0 text-center space-y-2">
+            <div className="pt-4 text-center space-y-2">
               <p className="text-sm text-white">
                 Don&apos;t have an account?{" "}
                 <Link href="/signup" className="text-baby-blue hover:underline">
@@ -217,18 +217,24 @@ export default function LoginForm({ setIsLoading }: any) {
                 </Link>
               </p>
               <p className="text-sm text-white">
-                Looking for work?{" "}
+                Looking to join queues?{" "}
                 <Link
-                  href="/worker-app"
+                  href="/customer-app"
                   className="text-baby-blue hover:underline"
                 >
-                  Download our worker app
+                  Download our customer app
                 </Link>
               </p>
             </div>
           </form>
         )}
       </Formik>
+
+      {/* Tagline - Absolute positioned at bottom */}
+      <p className="absolute bottom-4 text-xs text-white/80 text-center">
+        Join millions of customers managing their queues and discovering stores
+        all in one place
+      </p>
     </div>
   );
 }
