@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 
 // Define validation schema
 const LoginSchema = Yup.object().shape({
@@ -93,11 +94,11 @@ export default function LoginForm({ setIsLoading }: any) {
   };
 
   return (
-    <div className="w-1/2 my-8 flex justify-center items-center">
+    <div className="w-full">
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}
-        onSubmit={handleLogin} // handleLogin
+        onSubmit={handleLogin}
       >
         {({
           handleChange,
@@ -107,64 +108,124 @@ export default function LoginForm({ setIsLoading }: any) {
           touched,
           errors,
         }) => (
-          <form
-            className="flex flex-col items-center justify-center w-full max-w-lg gap-4"
-            onSubmit={handleSubmit}
-          >
-            <input
-              type="email"
-              name="email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-              placeholder="Enter your email"
-              className="w-full rounded-full mb-2 px-4 py-3 sm:px-8 sm:py-4 bg-white text-gray-700 font-normal text-sm sm:text-lg outline-none border-none"
-            />
-            {errors.email && touched.email && (
-              <span className="text-red-600 font-normal text-lg mb-2">
-                {errors.email}
-              </span>
-            )}
-            <div className="bg-white rounded-full mb-4 px-4 py-3 sm:px-8 sm:py-4 w-full flex justify-between items-center">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email Input */}
+            <div>
               <input
-                type={isPasswordVisible ? "text" : "password"}
-                name="password"
+                type="email"
+                name="email"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.password}
-                placeholder="Enter your password"
-                className="w-full rounded-full bg-white text-gray-700 font-normal text-sm sm:text-lg outline-none border-none"
+                value={values.email}
+                placeholder="Email address"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-baby-blue focus:ring-1 focus:ring-baby-blue"
               />
-              <button
-                onClick={handlePasswordVisibility}
-                type="button"
-                className="w-11 ml-2 flex justify-center items-center"
-                >
-                <FontAwesomeIcon size="lg" color="#7D7D7D" icon={isPasswordVisible ? faEyeSlash : faEye} />
-              </button>
+              {errors.email && touched.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              )}
             </div>
-            {errors.password && touched.password && (
-              <span className="text-red-600 font-normal text-lg mb-2">
-                {errors.password}
-              </span>
-            )}
-            <Link
-              href="mailto:hatemthedev@gmail.com"
-              className="text-xs sm:text-md text-baby-blue underline mb-4"
-            >
-              Forgot Password
-            </Link>
+
+            {/* Password Input */}
+            <div>
+              <div className="relative">
+                <input
+                  type={isPasswordVisible ? "text" : "password"}
+                  name="password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                  placeholder="Password"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-baby-blue focus:ring-1 focus:ring-baby-blue"
+                />
+                <button
+                  type="button"
+                  onClick={handlePasswordVisibility}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                >
+                  <FontAwesomeIcon
+                    size="sm"
+                    color="#7D7D7D"
+                    icon={isPasswordVisible ? faEyeSlash : faEye}
+                  />
+                </button>
+              </div>
+              {errors.password && touched.password && (
+                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+              )}
+            </div>
+
+            {/* Forgot Password Link */}
+            <div className="text-right">
+              <Link
+                href="mailto:support@qmaster.com"
+                className="text-sm text-baby-blue hover:underline"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+
+            {/* Login Button */}
             <button
               type="submit"
-              className="rounded-xl bg-baby-blue text-white text-md sm:text-xl font-semibold w-full px-4 py-3 sm:px-8 sm:py-4 mt-2"
+              className="w-full py-3 px-4 bg-baby-blue text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors"
             >
-              Submit
+              Log in
             </button>
+
+            {/* Error Message */}
             {errorMessage && (
-              <span className="text-red-600 font-normal text-md mt-4 text-center">
+              <p className="mt-2 text-sm text-center text-red-600">
                 {errorMessage}
-              </span>
+              </p>
             )}
+
+            {/* Divider */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">OR</span>
+              </div>
+            </div>
+
+            {/* Google Sign In */}
+            <button
+              type="button"
+              className="w-full py-3 px-4 border border-gray-300 rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-50 transition-colors"
+              onClick={() => {
+                // Handle Google sign in
+                console.log("Google sign in clicked");
+              }}
+            >
+              <Image
+                src="/google.svg"
+                alt="Google"
+                width={20}
+                height={20}
+                className="w-5 h-5"
+              />
+              <span>Continue with Google</span>
+            </button>
+
+            {/* Footer Links */}
+            <div className="mt-6 text-center space-y-2">
+              <p className="text-sm text-gray-600">
+                Don&apos;t have an account?{" "}
+                <Link href="/signup" className="text-baby-blue hover:underline">
+                  Create account
+                </Link>
+              </p>
+              <p className="text-sm text-gray-600">
+                Looking for work?{" "}
+                <Link
+                  href="/worker-app"
+                  className="text-baby-blue hover:underline"
+                >
+                  Download our worker app
+                </Link>
+              </p>
+            </div>
           </form>
         )}
       </Formik>
