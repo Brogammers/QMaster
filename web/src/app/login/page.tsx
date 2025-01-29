@@ -4,6 +4,7 @@ import { useState } from "react";
 import LoginForm from "../components/LoginForm";
 import SplashScreen from "../shared/SplashScreen";
 import Image from "next/image";
+import Link from "next/link";
 import NavLogo from "../../../public/NavigationLogo.svg";
 
 export default function Login() {
@@ -23,9 +24,9 @@ export default function Login() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.1),transparent)]" />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col p-8 relative">
+      <div className="flex-1 flex flex-col px-8 py-4 relative">
         {/* Logo */}
-        <div className="mb-8">
+        <Link href="/" className="mb-8">
           <Image
             src={NavLogo}
             alt="QMaster Logo"
@@ -33,7 +34,7 @@ export default function Login() {
             height={40}
             className="w-auto h-auto"
           />
-        </div>
+        </Link>
 
         {/* Login Form Container */}
         <div className="max-w-md w-full mx-auto mt-8">
@@ -45,7 +46,7 @@ export default function Login() {
       </div>
 
       {/* Testimonial Section */}
-      <div className="hidden lg:flex lg:w-1/3 bg-[#F9FAFB] p-8 relative z-10">
+      <div className="hidden lg:flex lg:w-1/3 bg-[#f9fafbe7] p-8 relative z-10">
         <div className="w-full max-w-sm mx-auto mt-16">
           <div className="rounded-lg bg-white p-6 shadow-sm">
             <div className="mb-4">
