@@ -126,11 +126,11 @@ export default function AppUsersPage() {
               >
                 Why Use QMaster?
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              <div className="w-full flex flex-wrap justify-between max-w-5xl mx-auto">
                 <div
                   data-aos="fade-up"
                   data-aos-delay="100"
-                  className="flex gap-4"
+                  className="w-1/3 px-4 flex gap-4"
                 >
                   <div className="w-12 h-12 bg-baby-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
                     <FaMapMarkerAlt className="w-6 h-6 text-baby-blue" />
@@ -146,7 +146,7 @@ export default function AppUsersPage() {
                 <div
                   data-aos="fade-up"
                   data-aos-delay="200"
-                  className="flex gap-4"
+                  className="w-1/3 px-4 flex gap-4"
                 >
                   <div className="w-12 h-12 bg-baby-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
                     <FaStar className="w-6 h-6 text-baby-blue" />
@@ -162,7 +162,7 @@ export default function AppUsersPage() {
                 <div
                   data-aos="fade-up"
                   data-aos-delay="300"
-                  className="flex gap-4"
+                  className="w-1/3 px-4 flex gap-4"
                 >
                   <div className="w-12 h-12 bg-baby-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
                     <FaHistory className="w-6 h-6 text-baby-blue" />
