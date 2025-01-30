@@ -30,7 +30,7 @@ export default function AppUsersPage() {
       <Nav />
       <main className="w-full">
         {/* Hero Section */}
-        <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-ocean-blue to-baby-blue relative overflow-hidden">
+        <section className="min-h-screen my-0 flex items-center justify-center bg-gradient-to-b from-ocean-blue to-baby-blue relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
           <div className="container">
             <div className="row">
@@ -57,7 +57,7 @@ export default function AppUsersPage() {
         </section>
 
         {/* App Features */}
-        <section className="py-24">
+        <section className="my-0 py-24">
           <div className="container">
             <div className="row">
               <h2
@@ -117,7 +117,7 @@ export default function AppUsersPage() {
         </section>
 
         {/* Benefits Section */}
-        <section className="py-24 bg-gradient-to-b from-white to-sky-50">
+        <section className="my-0 py-24 bg-gradient-to-b from-white to-sky-50">
           <div className="container">
             <div className="row">
               <h2
@@ -181,7 +181,7 @@ export default function AppUsersPage() {
         </section>
 
         {/* Download CTA */}
-        <section className="py-24 bg-gradient-to-b from-ocean-blue to-baby-blue relative overflow-hidden">
+        <section className="mt-0 mb-24 py-24 bg-gradient-to-b from-ocean-blue to-baby-blue relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
           <div className="container relative z-10">
             <div className="row">

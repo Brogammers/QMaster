@@ -4,13 +4,20 @@ import Image from "next/image";
 import HeroQueueImg from "../../../public/HeroQueue.svg";
 import HeroManagementImg from "../../../public/HeroManagement.svg";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Hero() {
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const handleSlideChange = (index: number) => {
+    setActiveSlide(index);
+  };
+
   return (
     <div className="container h-screen">
       <div className="row">
         <header className="mt-4 xsm:m-0">
-          <Carousel>
+          <Carousel onSlideChange={handleSlideChange}>
             <div className="py-4 text-center flex flex-col items-center gap-16">
               <h1 className="text-4xl xsm:text-6xl xl:text-8xl font-bold">
                 Wait Less.
@@ -25,13 +32,21 @@ export default function Hero() {
               <div className="flex gap-4">
                 <Link
                   href="/business"
-                  className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none"
+                  className={`${
+                    activeSlide === 1
+                      ? "double__color--btn"
+                      : "border-2 border-white hover:bg-white/10"
+                  } px-8 py-4 text-white font-bold text-lg rounded-full outline-none transition-colors`}
                 >
                   For Businesses
                 </Link>
                 <Link
                   href="/app-users"
-                  className="border-2 border-white px-8 py-4 text-white font-bold text-lg rounded-full outline-none hover:bg-white/10 transition-colors"
+                  className={`${
+                    activeSlide === 0
+                      ? "double__color--btn"
+                      : "border-2 border-white hover:bg-white/10"
+                  } px-8 py-4 text-white font-bold text-lg rounded-full outline-none transition-colors`}
                 >
                   For App Users
                 </Link>
@@ -54,13 +69,21 @@ export default function Hero() {
               <div className="flex gap-4">
                 <Link
                   href="/business"
-                  className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none"
+                  className={`${
+                    activeSlide === 1
+                      ? "double__color--btn"
+                      : "border-2 border-white hover:bg-white/10"
+                  } px-8 py-4 text-white font-bold text-lg rounded-full outline-none transition-colors`}
                 >
                   For Businesses
                 </Link>
                 <Link
                   href="/app-users"
-                  className="border-2 border-white px-8 py-4 text-white font-bold text-lg rounded-full outline-none hover:bg-white/10 transition-colors"
+                  className={`${
+                    activeSlide === 0
+                      ? "double__color--btn"
+                      : "border-2 border-white hover:bg-white/10"
+                  } px-8 py-4 text-white font-bold text-lg rounded-full outline-none transition-colors`}
                 >
                   For App Users
                 </Link>
