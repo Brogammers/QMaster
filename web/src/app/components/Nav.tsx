@@ -23,21 +23,21 @@ export default function Nav() {
                 className="block sm:hidden"
               />
             </figure>
-            <ul className="flex justify-between items-center sm:gap-20">
+            <ul className="flex justify-between items-center sm:gap-8">
               <li>
                 <Link 
-                  href="" 
-                  className="download__btn py-3 px-6 rounded-full sm:p-0 sm:rounded-none text-white text-md font-bold"
+                  href="/login" 
+                  className="hidden sm:block border-2 border-white text-white text-md font-bold rounded-full py-3 px-6"
                 >
-                  Download
+                  Business Sign In
                 </Link>
               </li>
               <li>
                 <Link 
-                  href="/login" 
+                  href="" 
                   className="hidden sm:block double__color--btn text-white text-md font-bold rounded-full py-3 px-6"
                 >
-                  Login
+                  Download the App
                 </Link>
               </li>
             </ul>
