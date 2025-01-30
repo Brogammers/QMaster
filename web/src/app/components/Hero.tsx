@@ -18,16 +18,26 @@ export default function Hero() {
                 Live More.
               </h1>
               <h2 className="text-lg xsm:text-2xl">
-                Effortlessly <span className="font-bold">manage</span> and <span className="font-bold">optimize</span> <span className="double__color--text">wait times</span>
+                Effortlessly <span className="font-bold">manage</span> and{" "}
+                <span className="font-bold">optimize</span>{" "}
+                <span className="double__color--text">wait times</span>
               </h2>
-              <Link href="/app-users" className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none">
-                For App Users
-              </Link>
+              <div className="flex gap-4">
+                <Link
+                  href="/business"
+                  className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none"
+                >
+                  For Businesses
+                </Link>
+                <Link
+                  href="/app-users"
+                  className="border-2 border-white px-8 py-4 text-white font-bold text-lg rounded-full outline-none hover:bg-white/10 transition-colors"
+                >
+                  For App Users
+                </Link>
+              </div>
               <figure className="w-1/2 max-h-52 flex justify-center items-center">
-                <Image 
-                  src={HeroQueueImg}
-                  alt="Queue Image"
-                />
+                <Image src={HeroQueueImg} alt="Queue Image" />
               </figure>
             </div>
             <div className="py-4 text-center flex flex-col items-center gap-16">
@@ -37,16 +47,26 @@ export default function Hero() {
                 Boost Efficiency
               </h1>
               <h2 className="text-lg xsm:text-2xl">
-                Enhance <span className="font-bold">customer satisfaction</span> with seamless queue <span className="double__color--text">integration</span>
+                Enhance <span className="font-bold">customer satisfaction</span>{" "}
+                with seamless queue{" "}
+                <span className="double__color--text">integration</span>
               </h2>
-              <Link href="/business" className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none">
-                For Businesses
-              </Link>
+              <div className="flex gap-4">
+                <Link
+                  href="/business"
+                  className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none"
+                >
+                  For Businesses
+                </Link>
+                <Link
+                  href="/app-users"
+                  className="border-2 border-white px-8 py-4 text-white font-bold text-lg rounded-full outline-none hover:bg-white/10 transition-colors"
+                >
+                  For App Users
+                </Link>
+              </div>
               <figure className="w-1/2 max-h-52 flex justify-center items-center">
-                <Image 
-                  src={HeroManagementImg}
-                  alt="Managament Image"
-                />
+                <Image src={HeroManagementImg} alt="Management Image" />
               </figure>
             </div>
           </Carousel>
@@ -59,4 +79,4 @@ export default function Hero() {
       </div>
     </div>
   );
-};
+}

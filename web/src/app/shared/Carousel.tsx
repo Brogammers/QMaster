@@ -76,5 +76,5 @@ export default function Carousel({ children }: CarouselProps) {
         ))}
       </div>
     </div>
-  ); 
-};
+  );
+}

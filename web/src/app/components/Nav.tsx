@@ -25,16 +25,16 @@ export default function Nav() {
             </figure>
             <ul className="flex justify-between items-center sm:gap-8">
               <li>
-                <Link 
-                  href="/login" 
+                <Link
+                  href="/login"
                   className="hidden sm:block border-2 border-white text-white text-md font-bold rounded-full py-3 px-6"
                 >
                   Business Sign In
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="" 
+                <Link
+                  href=""
                   className="hidden sm:block double__color--btn text-white text-md font-bold rounded-full py-3 px-6"
                 >
                   Download the App
@@ -46,4 +46,4 @@ export default function Nav() {
       </div>
     </nav>
   );
-};
+}
