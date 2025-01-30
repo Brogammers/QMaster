@@ -47,7 +47,7 @@ export default function BusinessPage() {
                 </p>
                 <Link
                   href="/login"
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-ocean-blue bg-white rounded-full hover:bg-opacity-90 transition-colors"
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-ocean-blue bg-white rounded-full hover:bg-opacity-90 transition-colors"
                 >
                   Get Started
                 </Link>
@@ -76,7 +76,7 @@ export default function BusinessPage() {
                     <FaChartLine className="w-6 h-6 text-baby-blue" />
                   </div>
                   <h3 className="text-xl font-bold mb-4">Smart Analytics</h3>
-                  <p className="text-gray-600">
+                  <p className="text-coal-black">
                     Real-time insights into queue performance, wait times, and
                     customer flow to optimize your operations.
                   </p>
@@ -92,7 +92,7 @@ export default function BusinessPage() {
                   <h3 className="text-xl font-bold mb-4">
                     Automated Notifications
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-coal-black">
                     Keep customers informed with automated updates about their
                     queue status and estimated wait times.
                   </p>
@@ -108,7 +108,7 @@ export default function BusinessPage() {
                   <h3 className="text-xl font-bold mb-4">
                     Capacity Management
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-coal-black">
                     Optimize your space and staff allocation with real-time
                     capacity tracking and forecasting.
                   </p>
@@ -137,7 +137,7 @@ export default function BusinessPage() {
                   <h3 className="text-5xl font-bold text-baby-blue mb-4">
                     +40%
                   </h3>
-                  <p className="text-lg text-gray-600">Customer Satisfaction</p>
+                  <p className="text-lg text-coal-black">Customer Satisfaction</p>
                 </div>
                 <div
                   data-aos="fade-up"
@@ -147,7 +147,7 @@ export default function BusinessPage() {
                   <h3 className="text-5xl font-bold text-baby-blue mb-4">
                     -65%
                   </h3>
-                  <p className="text-lg text-gray-600">Wait Time Reduction</p>
+                  <p className="text-lg text-coal-black">Wait Time Reduction</p>
                 </div>
                 <div
                   data-aos="fade-up"
@@ -157,7 +157,7 @@ export default function BusinessPage() {
                   <h3 className="text-5xl font-bold text-baby-blue mb-4">
                     2.5x
                   </h3>
-                  <p className="text-lg text-gray-600">
+                  <p className="text-lg text-coal-black">
                     Operational Efficiency
                   </p>
                 </div>
@@ -186,7 +186,7 @@ export default function BusinessPage() {
                     1
                   </div>
                   <h3 className="text-xl font-bold mb-2">Sign Up</h3>
-                  <p className="text-gray-600">
+                  <p className="text-coal-black">
                     Create your business account and customize your settings
                   </p>
                 </div>
@@ -199,7 +199,7 @@ export default function BusinessPage() {
                     2
                   </div>
                   <h3 className="text-xl font-bold mb-2">Configure</h3>
-                  <p className="text-gray-600">
+                  <p className="text-coal-black">
                     Set up your services and notification preferences
                   </p>
                 </div>
@@ -212,7 +212,7 @@ export default function BusinessPage() {
                     3
                   </div>
                   <h3 className="text-xl font-bold mb-2">Launch</h3>
-                  <p className="text-gray-600">
+                  <p className="text-coal-black">
                     Start managing queues and delighting customers
                   </p>
                 </div>
@@ -236,7 +236,7 @@ export default function BusinessPage() {
                 </p>
                 <Link
                   href="/login"
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-ocean-blue bg-white rounded-full hover:bg-opacity-90 transition-colors"
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-ocean-blue bg-white rounded-full hover:bg-opacity-90 transition-colors"
                 >
                   Get Started Now
                 </Link>

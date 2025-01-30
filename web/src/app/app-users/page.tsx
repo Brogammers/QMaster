@@ -47,7 +47,7 @@ export default function AppUsersPage() {
                 </p>
                 <Link
                   href="/customer-app"
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-ocean-blue bg-white rounded-full hover:bg-opacity-90 transition-colors"
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-ocean-blue bg-white rounded-full hover:bg-opacity-90 transition-colors"
                 >
                   Download Now
                 </Link>
@@ -76,7 +76,7 @@ export default function AppUsersPage() {
                     <FaMobile className="w-6 h-6 text-baby-blue" />
                   </div>
                   <h3 className="text-xl font-bold mb-4">Virtual Queuing</h3>
-                  <p className="text-gray-600">
+                  <p className="text-coal-black">
                     Join queues from anywhere using your smartphone. No more
                     standing in physical lines.
                   </p>
@@ -90,7 +90,7 @@ export default function AppUsersPage() {
                     <FaBell className="w-6 h-6 text-baby-blue" />
                   </div>
                   <h3 className="text-xl font-bold mb-4">Real-time Updates</h3>
-                  <p className="text-gray-600">
+                  <p className="text-coal-black">
                     Receive notifications about your queue status and when
                     it&apos;s almost your turn.
                   </p>
@@ -106,7 +106,7 @@ export default function AppUsersPage() {
                   <h3 className="text-xl font-bold mb-4">
                     Wait Time Estimates
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-coal-black">
                     See accurate wait time predictions and plan your visit
                     accordingly.
                   </p>
@@ -126,7 +126,7 @@ export default function AppUsersPage() {
               >
                 Why Use QMaster?
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 <div
                   data-aos="fade-up"
                   data-aos-delay="100"
@@ -136,8 +136,8 @@ export default function AppUsersPage() {
                     <FaMapMarkerAlt className="w-6 h-6 text-baby-blue" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Discover Places</h3>
-                    <p className="text-gray-600">
+                    <h3 className="text-xl text-ocean-blue font-bold mb-2">Discover Places</h3>
+                    <p className="text-coal-black">
                       Find and explore businesses near you that offer virtual
                       queuing through QMaster.
                     </p>
@@ -152,8 +152,8 @@ export default function AppUsersPage() {
                     <FaStar className="w-6 h-6 text-baby-blue" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Rate Experiences</h3>
-                    <p className="text-gray-600">
+                    <h3 className="text-xl text-coal-black font-bold mb-2">Rate Experiences</h3>
+                    <p className="text-coal-black">
                       Share your feedback and help improve service quality for
                       everyone.
                     </p>
@@ -168,8 +168,8 @@ export default function AppUsersPage() {
                     <FaHistory className="w-6 h-6 text-baby-blue" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Queue History</h3>
-                    <p className="text-gray-600">
+                    <h3 className="text-xl text-coal-black font-bold mb-2">Queue History</h3>
+                    <p className="text-coal-black">
                       Access your complete queue history and favorite places for
                       quick access.
                     </p>
@@ -195,7 +195,7 @@ export default function AppUsersPage() {
                 </p>
                 <Link
                   href="/customer-app"
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-ocean-blue bg-white rounded-full hover:bg-opacity-90 transition-colors"
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-ocean-blue bg-white rounded-full hover:bg-opacity-90 transition-colors"
                 >
                   Download the App
                 </Link>
