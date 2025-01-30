@@ -2,13 +2,19 @@ import Image from "next/image";
 import NavLogo from "../../../public/NavigationLogo.svg";
 import MobileNavLogo from "../../../public/MobileNavLogo.svg";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Nav() {
+  const pathname = usePathname();
+  const isTransparent = pathname === "/business" || pathname === "/app-users";
+
   return (
-    <nav id="nav">
+    <nav
+      className={`${isTransparent ? "absolute top-0 left-0 right-0 z-50" : ""}`}
+    >
       <div className="container">
         <div className="row">
-          <div className="w-full flex justify-between items-center">
+          <div className="w-full flex justify-between items-center py-4">
             <Link href="/">
               <figure>
                 <Image
