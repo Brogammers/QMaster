@@ -3,6 +3,7 @@ import Carousel from "../shared/Carousel";
 import Image from "next/image";
 import HeroQueueImg from "../../../public/HeroQueue.svg";
 import HeroManagementImg from "../../../public/HeroManagement.svg";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -19,9 +20,9 @@ export default function Hero() {
               <h2 className="text-lg xsm:text-2xl">
                 Effortlessly <span className="font-bold">manage</span> and <span className="font-bold">optimize</span> <span className="double__color--text">wait times</span>
               </h2>
-              <button className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none">
-                Download Now
-              </button>
+              <Link href="/app-users" className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none">
+                For App Users
+              </Link>
               <figure className="w-1/2 max-h-52 flex justify-center items-center">
                 <Image 
                   src={HeroQueueImg}
@@ -38,9 +39,9 @@ export default function Hero() {
               <h2 className="text-lg xsm:text-2xl">
                 Enhance <span className="font-bold">customer satisfaction</span> with seamless queue <span className="double__color--text">integration</span>
               </h2>
-              <button className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none">
-                Get Started
-              </button>
+              <Link href="/business" className="double__color--btn px-8 py-4 text-white font-bold text-lg rounded-full outline-none">
+                For Businesses
+              </Link>
               <figure className="w-1/2 max-h-52 flex justify-center items-center">
                 <Image 
                   src={HeroManagementImg}
