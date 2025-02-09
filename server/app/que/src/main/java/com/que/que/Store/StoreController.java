@@ -170,4 +170,19 @@ public class StoreController {
         }
         return new ResponseEntity<Object>(body, statusCode);
     }
+
+    @GetMapping("/info")
+    public ResponseEntity<Object> getBusinessInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestParam("locationId") long locationId) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+        try {
+            String email = jwtUtil.getEmail(token.substring(7));
+            body.put("info", storeService.getStoreInfo(email, locationId));
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+            statusCode = HttpStatusCode.valueOf(500);
+        }
+        return new ResponseEntity<Object>(body, statusCode);
+    }
 }

@@ -45,10 +45,11 @@ public class QRCodeController {
     }
 
     @GetMapping("/partner")
-    public ResponseEntity<Object> requestPartnerQRCode(@RequestParam("partnerName") String partnerName) {
+    public ResponseEntity<Object> requestPartnerQRCode(@RequestParam("partnerName") String partnerName,
+            @RequestParam("locationId") Long locationId) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
-        File file = qrCodeService.getPartnerQRCode(partnerName);
+        File file = qrCodeService.getPartnerQRCode(partnerName, locationId);
 
         if (file == null) {
             body.put("message", "QR Code not found");

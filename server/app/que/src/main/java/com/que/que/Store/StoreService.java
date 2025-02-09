@@ -1,6 +1,8 @@
 package com.que.que.Store;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.que.que.Location.Location;
 import com.que.que.Location.LocationRepository;
+import com.que.que.Location.OpeningHours.OpeningHours;
 import com.que.que.Partner.Partner;
 import com.que.que.Partner.PartnerRepository;
 import com.que.que.Store.Product.Product;
@@ -161,5 +164,29 @@ public class StoreService {
 
     public Page<Store> getStores(int page, int perPage) {
         return storeRepository.findAll(PageRequest.of(page - 1, perPage));
+    }
+
+    public Map<String, Object> getStoreInfo(String email, long locationId) {
+        BusinessUser user = businessUserRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("Business not found"));
+
+        Partner partner = user.getPartner();
+        Location location = getAndCheckLocation(partner.getId(), locationId);
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("businessName", partner.getName());
+        body.put("phoneNumber", user.getPhoneCode() + user.getPhoneNumber());
+        body.put("address", location.getAddress());
+        body.put("businessCategory", partner.getBusinessCategory().getName());
+        Map<String, Object> openingHours = new HashMap<>();
+        for (OpeningHours hours : location.getOpeningHourss()) {
+            Map<String, String> times = new HashMap<>();
+            times.put("open", hours.getOpenTime());
+            times.put("close", hours.getCloseTime());
+            openingHours.put(hours.getDay(), times);
+        }
+        body.put("openingHours", openingHours);
+        body.put("description", location.getDescription());
+        return body;
     }
 }

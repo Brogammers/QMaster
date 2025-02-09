@@ -26,14 +26,14 @@ public class QRCodeService {
 
     private final QueueRepository queueRepository;
     private final PartnerRepository partnerRepository;
-    private final String QUEUE_QR_CODE_IMAGE_PATH = "src/main/webapp/WEB-INF/QRS/%d/%d.png";
-    private final String PARTNER_QR_CODE_IMAGE_PATH = "src/main/webapp/WEB-INF/QRS/%d/partner.png";
+    private final String QUEUE_QR_CODE_IMAGE_PATH = "src/main/webapp/WEB-INF/QRS/%d/%d-%d.png";
+    private final String PARTNER_QR_CODE_IMAGE_PATH = "src/main/webapp/WEB-INF/QRS/%d/%d-partner.png";
 
-    public void createQRCode(Long partnerId, String qrCodeText) throws IOException, WriterException {
+    public void createQRCode(Long partnerId, String qrCodeText, Long locationId) throws IOException, WriterException {
         QRCodeWriter writer = new QRCodeWriter();
         BitMatrix bitMatrix = writer.encode(qrCodeText, BarcodeFormat.QR_CODE, 300, 150);
         BufferedImage img = MatrixToImageWriter.toBufferedImage(bitMatrix);
-        File output = new File(String.format(PARTNER_QR_CODE_IMAGE_PATH, partnerId));
+        File output = new File(String.format(PARTNER_QR_CODE_IMAGE_PATH, partnerId, locationId));
         output.getParentFile().mkdirs();
         output.createNewFile();
         ImageIO.write(img, "png", output);
@@ -73,7 +73,7 @@ public class QRCodeService {
         return file;
     }
 
-    public File getPartnerQRCode(String partnerName) {
+    public File getPartnerQRCode(String partnerName, long locationId) {
         Partner partner = partnerRepository.findByName(partnerName)
                 .orElse(null);
 
@@ -83,7 +83,7 @@ public class QRCodeService {
 
         File file = new File(
                 String.format(
-                        PARTNER_QR_CODE_IMAGE_PATH, partner.getId()));
+                        PARTNER_QR_CODE_IMAGE_PATH, partner.getId(), locationId));
 
         if (!file.exists()) {
             return null;

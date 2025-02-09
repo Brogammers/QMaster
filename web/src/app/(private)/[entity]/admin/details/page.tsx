@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import toast from 'react-hot-toast';
 import { FaClock, FaEdit, FaGlobe, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
 import Entity from "../../page";
+import { useLocation } from "@/ctx/LocationContext";
 
 const { TextArea } = Input;
 const { TabPane } = Tabs;
@@ -40,16 +41,16 @@ const DAYS = [
 
 // This would typically come from your API
   const initialValues: BusinessDetails = {
-    name: "Sample Business",
-    phone: "+1234567890",
-    address: "123 Business St, City",
-    website: "www.business.com",
-    description: "A sample business description",
+    name: "",
+    phone: "",
+    address: "",
+    website: "",
+    description: "",
     openingHours: DAYS.reduce((acc, day) => ({
       ...acc,
       [day]: { open: "09:00", close: "17:00" }
     }), {}),
-    category: "RETAIL"
+    category: ""
   };
 
 
@@ -57,8 +58,8 @@ export default function Details() {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState('1');
-
   const [businessDetails, setBusinessDetails] = useState<BusinessDetails>(initialValues);
+  const { selectedLocation } = useLocation();
 
   const handleModificationRequest = async (values: Partial<BusinessDetails>) => {
     setIsSubmitting(true);
@@ -86,7 +87,7 @@ export default function Details() {
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_DATA || '';
 
-    axios.get(url)
+    axios.get(`${url}?locationId=${selectedLocation?.id}`)
     .then((response) => {
       if (response.status === 200) {
         return response.data.info;
@@ -96,15 +97,16 @@ export default function Details() {
     })
     .then((data) => {      
       const businessDetails = {
-        name: data.username,
-        phone: initialValues.phone,
-        address: initialValues.address,
+        name: data.businessName,
+        phone: data.phoneNumber,
+        address: data.address,
         website: initialValues.website,
-        description: initialValues.description,
-        openingHours: initialValues.openingHours,
-        category: data['business-categories'][0].name
-      };      
+        description: data.description,
+        openingHours: data.openingHours,
+        category: data.businessCategory,
+      };     
       setBusinessDetails(businessDetails);
+      form.setFieldsValue(businessDetails);
     })
     .catch((error) => {
       console.error(error);
@@ -115,8 +117,8 @@ export default function Details() {
         },
       });
     })
-  }, []);
-
+  }, [selectedLocation]);
+  
   return (
     <Entity>
       <QueueModal title="Business Details">
@@ -152,8 +154,8 @@ export default function Details() {
                       </Form.Item>
                       <Button
                         onClick={() => handleModificationRequest({ name: form.getFieldValue('name') })}
-                        className="absolute right-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity
-                          !bg-ocean-blue/90 !text-white hover:!bg-ocean-blue !border-0 !rounded-xl"
+                        className="absolute right-0 top-0 opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
+                        transition-all pb-0.5 !text-black hover:!text-blue-500"
                       >
                         Request Change
                       </Button>
@@ -177,8 +179,8 @@ export default function Details() {
                       </Form.Item>
                       <Button
                         onClick={() => handleModificationRequest({ phone: form.getFieldValue('phone') })}
-                        className="absolute right-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity
-                          !bg-ocean-blue/90 !text-white hover:!bg-ocean-blue !border-0 !rounded-xl"
+                        className="absolute right-0 top-0 opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
+                        transition-all pb-0.5 !text-black hover:!text-blue-500"
                       >
                         Request Change
                       </Button>
@@ -204,8 +206,8 @@ export default function Details() {
                     </Form.Item>
                     <Button
                       onClick={() => handleModificationRequest({ address: form.getFieldValue('address') })}
-                      className="absolute right-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity
-                        !bg-ocean-blue/90 !text-white hover:!bg-ocean-blue !border-0 !rounded-xl"
+                      className="absolute right-0 top-0 opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
+                        transition-all pb-0.5 !text-black hover:!text-blue-500"
                     >
                       Request Change
                     </Button>
@@ -230,8 +232,8 @@ export default function Details() {
                       </Form.Item>
                       <Button
                         onClick={() => handleModificationRequest({ website: form.getFieldValue('website') })}
-                        className="absolute right-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity
-                          !bg-ocean-blue/90 !text-white hover:!bg-ocean-blue !border-0 !rounded-xl"
+                        className="absolute right-0 top-0 opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
+                        transition-all pb-0.5 !text-black hover:!text-blue-500"
                       >
                         Request Change
                       </Button>
@@ -285,8 +287,8 @@ export default function Details() {
                             [day]: businessDetails.openingHours[day] 
                           } 
                         })}
-                        className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity
-                          !bg-ocean-blue/90 !text-white hover:!bg-ocean-blue !border-0 !rounded-xl"
+                        className="ml h-fit w-fit border-0 shadow-none group-hover:opacity-100 
+                        transition-all pb-0.5 !text-black hover:!text-blue-500"
                       >
                         Request Change
                       </Button>
