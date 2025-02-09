@@ -18,6 +18,11 @@ import i18n from '@/i18n';
 import configConverter from "@/api/configConverter";
 import axios from "axios";
 
+interface QueueDetailsProps {
+  branch: number;
+  serviceType?: number;
+}
+
 export default function QueueDetails(props: QueueDetailsProps) {
   const width = Dimensions.get('window').width * 0.85;
   const buttonWidth = width * 0.7;
