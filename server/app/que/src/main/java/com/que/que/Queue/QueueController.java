@@ -33,7 +33,7 @@ public class QueueController {
     private final JwtUtil jwtUtil;
 
     @PostMapping
-    @Secured({ "BUSINESS_OWNER", "BUSINESS_MANAGER", "BUSINESS_ADMIN", "ADMIN" })
+    // @Secured({ "BUSINESS_OWNER", "BUSINESS_MANAGER", "BUSINESS_ADMIN", "ADMIN" })
     public ResponseEntity<Object> createNewQueue(@RequestBody QueueRequest request) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);

@@ -3,6 +3,8 @@ package com.que.que.Queue;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
@@ -40,6 +42,7 @@ public class QueueService {
   private final QRCodeService qrCodeService;
   private final ArrayList<ArrayList<Queue<Long>>> queueSet = initQueue();
   private final Stack<Integer> queueSlots = initStack();
+  private final ArrayList<Boolean> firstOperation = new ArrayList<Boolean>();
   public final int MAX_BASIC_QUEUES = 1;
   public final int MAX_PREMIUM_QUEUES = 10;
   public final int MAX_ENTERPRISE_QUEUES = 20;
@@ -49,13 +52,17 @@ public class QueueService {
   // Function called once upon server startup
   public void initializeQueueSlots(Stack<Integer> temp) {
     for (int i = this.MAX_QUEUE_SLOTS; i >= 0; i--) {
-      temp.push(i);
+      if (i >= queueSet.size() || queueSet.get(i).size() == 0)
+        temp.push(i);
     }
+
     print();
   }
 
   public void createNewQueue(@NonNull Long queueHolderID, @NonNull Long locationId, String name, int maxQueueSize,
       int averageServiceTime, boolean isActive) {
+    checkIfFirstOperation();
+
     BusinessUser appUser = businessUserRepository.findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find User"));
 
@@ -93,13 +100,13 @@ public class QueueService {
 
     try {
       // This currently has an error because the createQRCode method is not static
-      // qrCodeService.createQRCode(
-      // queueHolderID,
-      // queueHolderQueue.size(),
-      // String.format(
-      // "http://localhost:8080/api/v1/queue/user?userId=%d&queueName=%s",
-      // queueHolderID,
-      // name));
+      qrCodeService.createQRCode(
+          appUser.getPartner().getId(),
+          queueHolderQueue.size(),
+          String.format(
+              "api/v1/queue/user?partnerId=%d&queueName=%s",
+              appUser.getPartner().getId(),
+              name));
     } catch (Exception e) {
       throw new IllegalStateException("Error while creating queue.");
     }
@@ -156,6 +163,8 @@ public class QueueService {
   }
 
   public void enqueueUser(@NonNull String email, @NonNull String queueName) {
+    checkIfFirstOperation();
+
     AppUser user = appUserRepository.findByEmail(email)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
     Queues currentQueue = queueRepository.findByName(queueName)
@@ -192,6 +201,8 @@ public class QueueService {
   }
 
   public AppUser dequeueUser(@NonNull String name, long counterId) {
+    checkIfFirstOperation();
+
     Queues currentQueue = queueRepository.findByName(name)
         .orElseThrow(() -> new IllegalStateException("Could not find queue"));
     int queueSlot = currentQueue.getQueueSlot();
@@ -234,6 +245,8 @@ public class QueueService {
   }
 
   public void deleteQueue(@NonNull String name) {
+    checkIfFirstOperation();
+
     Queues currentQueue = queueRepository.findByName(name)
         .orElseThrow(() -> new IllegalStateException("Could not find queue"));
     int queueSlot = currentQueue.getQueueSlot();
@@ -260,6 +273,8 @@ public class QueueService {
   }
 
   public ArrayList<Queues> currentQueuesOfUser(String email, long locationId) {
+    checkIfFirstOperation();
+
     BusinessUser appUser = businessUserRepository.findByEmail(email)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
 
@@ -273,6 +288,8 @@ public class QueueService {
   }
 
   public ArrayList<Queues> currentQueuesOfUser(long id) {
+    checkIfFirstOperation();
+
     BusinessUser appUser = businessUserRepository.findById(id)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
 
@@ -282,6 +299,8 @@ public class QueueService {
   }
 
   public ArrayList<AppUser> getBeingServed(long appUserId) {
+    checkIfFirstOperation();
+
     ArrayList<AppUser> appUsers = new ArrayList<>();
     int slot = getQueueSlot(appUserId);
     if (slot == -1) {
@@ -299,6 +318,8 @@ public class QueueService {
   }
 
   public ArrayList<QueueDequeue> getServedUsers(long appUserId, LocalDateTime to, LocalDateTime from) {
+    checkIfFirstOperation();
+
     ArrayList<QueueDequeue> queueDequeues = new ArrayList<>();
     int slot = getQueueSlot(appUserId);
     if (slot == -1) {
@@ -316,6 +337,8 @@ public class QueueService {
   }
 
   public ArrayList<QueueDequeue> getCancelledUsers(long appUserId, LocalDateTime to, LocalDateTime from) {
+    checkIfFirstOperation();
+
     ArrayList<QueueDequeue> queueDequeues = new ArrayList<>();
     int slot = getQueueSlot(appUserId);
     if (slot == -1) {
@@ -356,10 +379,14 @@ public class QueueService {
   }
 
   public boolean presentInQueue(Long appUser, Queue<Long> queue) {
+    checkIfFirstOperation();
+
     return queue.contains(appUser);
   }
 
   public boolean presentInQueue(String email, String queueName) {
+    checkIfFirstOperation();
+
     AppUser appUser = appUserRepository.findByEmail(email)
         .orElseThrow(() -> new IllegalStateException("Could not find user with such username"));
 
@@ -370,12 +397,16 @@ public class QueueService {
   }
 
   public int getWalkIns(Long appUserId, LocalDateTime from, LocalDateTime to) {
+    checkIfFirstOperation();
+
     ArrayList<QueueEnqueue> walkIns = queueEnqueueRepository.findByActionDateBetweenAndAppUserId(from, to, appUserId);
     return walkIns.size();
   }
 
   public ArrayList<Map<String, ArrayList<AppUser>>> getWaitingInSpecificQueue(Long appUserId, int[] specificQueueIds,
       int maxToShow) {
+    checkIfFirstOperation();
+
     ArrayList<Map<String, ArrayList<AppUser>>> waitingInSpecificQueues = new ArrayList<>();
 
     // Get app user and queue slot
@@ -407,5 +438,42 @@ public class QueueService {
       }
     }
     return null;
+  }
+
+  private void checkIfFirstOperation() {
+    if (firstOperation.size() != 0)
+      return;
+    firstOperation.add(true);
+    List<Queues> activeQueues = queueRepository.findAll();
+
+    for (Queues queue : activeQueues) {
+      if (!queue.isActive())
+        continue;
+
+      int queueSlot = queue.getQueueSlot();
+      ArrayList<Queue<Long>> queueHolderQueue;
+      try {
+        queueHolderQueue = queueSet.get(queueSlot);
+      } catch (Exception e) {
+        for (int i = queueSet.size(); i < queueSlot; i++) {
+          queueSet.add(new ArrayList<Queue<Long>>());
+        }
+        queueHolderQueue = queueSet.get(queueSlot);
+      }
+
+      for (int i = queueHolderQueue.size(); i < queue.getSpecificSlot(); i++) {
+        queueHolderQueue.add(new LinkedList<>());
+      }
+    }
+
+    Stack<Integer> temp = new Stack<>();
+
+    for (int i = this.MAX_QUEUE_SLOTS; i >= 0; i--) {
+      if (i >= queueSet.size() || queueSet.get(i).size() == 0)
+        temp.push(i);
+    }
+
+    queueSlots.empty();
+    queueSlots.addAll(temp);
   }
 }
