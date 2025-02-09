@@ -10,6 +10,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface BusinessUserRepository extends JpaRepository<BusinessUser, Long> {
     Optional<BusinessUser> findByEmail(String email);
-
-    Optional<BusinessUser> findByUsername(String username);
 }
