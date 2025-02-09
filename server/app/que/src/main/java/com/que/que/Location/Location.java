@@ -1,18 +1,16 @@
 package com.que.que.Location;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.que.que.Location.OpeningHours.OpeningHours;
 import com.que.que.Partner.Partner;
 import com.que.que.Queue.Queues;
 import com.que.que.Store.Store;
 import com.que.que.Store.StoreStatus;
 import com.que.que.Store.Purchase.Purchase;
-import com.que.que.User.BusinessUser.OpeningHours;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,7 +19,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -55,8 +52,8 @@ public class Location {
     @Column(nullable = false)
     private double longitude;
 
-    @ManyToMany
-    private Set<OpeningHours> openingHourss = new HashSet<>();
+    @OneToMany(mappedBy = "location")
+    private List<OpeningHours> openingHourss = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "partner_id", referencedColumnName = "id")
