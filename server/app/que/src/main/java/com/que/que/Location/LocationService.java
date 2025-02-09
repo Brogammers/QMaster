@@ -53,10 +53,11 @@ public class LocationService {
 
         OpeningHours[] openingHours = new OpeningHours[daysOfTheWeek.length];
 
+        locationRepository.save(location);
+
         for (int i = 0; i < daysOfTheWeek.length; i++) {
             String day = daysOfTheWeek[i];
             openingHours[i] = openingHoursService.createOpeningHours(location, day, "09:00", "17:00", true);
-            openingHoursRepository.save(openingHours[i]);
         }
 
         for (OpeningHours openingHour : openingHours)
