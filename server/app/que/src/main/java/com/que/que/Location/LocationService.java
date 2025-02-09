@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.que.que.Partner.Partner;
 import com.que.que.Partner.PartnerRepository;
-import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserRepository;
 
 import lombok.AllArgsConstructor;
@@ -42,15 +41,16 @@ public class LocationService {
             throw new IllegalStateException("Business name or email must be provided");
         }
 
-        BusinessUser businessUser;
+        Partner partner;
         if (businessName != null)
-            businessUser = businessUserRepository.findByUsername(businessName)
+            partner = partnerRepository.findByName(businessName)
                     .orElseThrow(() -> new IllegalStateException("Business with name " + businessName + " not found"));
         else
-            businessUser = businessUserRepository.findByEmail(email)
-                    .orElseThrow(() -> new IllegalStateException("Business with email " + email + " not found"));
+            partner = businessUserRepository.findByEmail(email)
+                    .orElseThrow(() -> new IllegalStateException("Business with email " + email + " not found"))
+                    .getPartner();
 
-        List<Location> locations = locationRepository.findByPartner(businessUser.getPartner());
+        List<Location> locations = locationRepository.findByPartner(partner);
 
         return locations;
     }

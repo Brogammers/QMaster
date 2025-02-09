@@ -50,7 +50,7 @@ public class LocationController {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
-            String email = jwtUtil.getEmail(token.substring(7));
+            String email = token.length() > 7 ? jwtUtil.getEmail(token.substring(7)) : token;
             body.put("locations", locationService.getLocationsByBusinessName(businessName, email));
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());

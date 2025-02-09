@@ -45,7 +45,6 @@ export default function Store() {
 
   useEffect(() => {
     const url = configConverter("EXPO_PUBLIC_API_BASE_URL_GET_PRODUCTS_BY_BUSINESS");
-
     axios.get(`${url}?businessName=${brandName}&page=${page}&per-page=${perPage}&locationId=${currentLocation}`)
     .then((response) => {
       if(response.status === 200){
@@ -69,7 +68,7 @@ export default function Store() {
       setProducts(productsData);
     })
     .catch((error) => {
-      console.error("Error: ", error);
+      console.error("Error: ", error.response.data);
     })
   }, [currentLocation]);
 

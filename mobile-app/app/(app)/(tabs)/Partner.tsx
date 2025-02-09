@@ -8,7 +8,7 @@ import { MotiView } from 'moti';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import configConverter from "@/api/configConverter";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export const LocationContext = createContext({
   locationData: [],
@@ -30,11 +30,11 @@ export default function Partner() {
     );
     
     axios.get(`${url}?businessName=${brandName}`)
-    .then((response) => {
+    .then((response) => {     
       if (response.status === 200) {        
         return response.data.locations;
       } else { 
-        console.log("Error: ", response);
+        throw new Error("Error");
       }
     })
     .then((data) => {
@@ -53,7 +53,7 @@ export default function Partner() {
       setLocationData(locationData);
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      console.log("Error: ", (error as AxiosError).response?.data);
     });
   }, []);
 

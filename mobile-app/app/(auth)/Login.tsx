@@ -28,7 +28,6 @@ import { isEmpty } from "lodash";
 import { setFirstName, setLastName, setPhoneCode, setPhoneNumber, setUserId, setUsername } from "../redux/userSlice";
 import SplashScreen from "../SplashScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Config from "react-native-config";
 import i18n from "@/i18n";
 import configConverter from "@/api/configConverter";
 
@@ -63,16 +62,16 @@ export default function Login() {
       //   values
       // );
 
-      axios.defaults.headers.common.Authorization = "";
-      axios.interceptors.request.use(
-         (config) => {
-             config.headers["Authorization"] = "";
-             return config;
-         },
-         (error) => {
-             return Promise.reject(error);
-         }
-     );
+    //   axios.defaults.headers.common.Authorization = "";
+    //   axios.interceptors.request.use(
+    //      (config) => {
+    //          config.headers["Authorization"] = "";
+    //          return config;
+    //      },
+    //      (error) => {
+    //          return Promise.reject(error);
+    //      }
+    //  );
 
       const response = await axios.post(
         configConverter("EXPO_PUBLIC_API_BASE_URL_LOGIN"),
@@ -103,11 +102,8 @@ export default function Login() {
             dispatch(setLastName(response.data.lastName));
             dispatch(setPhoneCode(response.data.phoneCode));
             dispatch(setPhoneNumber(response.data.phoneNumber));
-            console.log(response.data);            
 
             await AsyncStorage.setItem("token", response.data.token);
-            const tokenCheck = await AsyncStorage.getItem("token");
-            console.log("JWT token stored? ", tokenCheck);
             // creating an Axios instance
             // iOS Simulator
 
@@ -118,7 +114,7 @@ export default function Login() {
               "Authorization"
             ] = `Bearer ${response.data.token}`;
             axios.defaults.headers.common["Content-Type"] = "application/json";
-
+            
             axios.interceptors.request.use(
               (config) => {
                 config.headers[
