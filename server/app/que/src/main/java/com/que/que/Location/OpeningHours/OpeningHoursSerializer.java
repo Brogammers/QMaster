@@ -22,6 +22,7 @@ public class OpeningHoursSerializer extends StdSerializer<OpeningHours> {
         gen.writeStringField("day", value.getDay());
         gen.writeStringField("open", value.getOpenTime());
         gen.writeStringField("close", value.getCloseTime());
+        gen.writeBooleanField("isOpen", value.isOpen());
         gen.writeEndObject();
     }
 

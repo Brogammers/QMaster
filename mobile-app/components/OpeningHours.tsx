@@ -32,7 +32,11 @@ export default function OpeningHours({ hours }: OpeningHoursProps) {
   };
 
   const getTodayStatus = () => {
-    const todayHours = hours[days[today].toLowerCase()];
+    const todayHours = hours[days[today]] || {
+      open: "00:00",
+      close: "00:00",
+      isClosed: true,
+    };
     if (todayHours.isClosed) return "Closed today";
     return `Open today: ${formatTime(todayHours.open)}-${formatTime(
       todayHours.close
@@ -78,7 +82,11 @@ export default function OpeningHours({ hours }: OpeningHoursProps) {
         {expanded && (
           <View style={styles.weekContainer}>
             {days.map((day, index) => {
-              const dayHours = hours[day.toLowerCase()];
+              const dayHours = hours[day] || {
+                open: "00:00",
+                close: "00:00",
+                isClosed: true,
+              };
               return (
                 <View key={day} style={styles.dayRow}>
                   <Text

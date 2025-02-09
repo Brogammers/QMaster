@@ -46,6 +46,83 @@ export default function Partner() {
   >([]);
   const [value, setValue] = useState<number | null>(null);
 
+  const [hours, setHours] = useState<{
+    [key: string]: {
+      open: string;
+      close: string;
+      isClosed?: boolean;
+    };
+  }>(
+    {
+      "Monday": {
+        open: "08:00",
+        close: "17:00",
+        isClosed: false,
+      },
+      "Tuesday": {
+        open: "08:00",
+        close: "17:00",
+        isClosed: false,
+      },
+      "Wednesday": {
+        open: "08:00",
+        close: "17:00",
+        isClosed: false,
+      },
+      "Thursday": {
+        open: "08:00",
+        close: "17:00",
+        isClosed: false,
+      },
+      "Friday": {
+        open: "08:00",
+        close: "17:00",
+        isClosed: false,
+      },
+      "Saturday": {
+        open: "08:00",
+        close: "17:00",
+        isClosed: false,
+      },
+      "Sunday": {
+        open: "08:00",
+        close: "17:00",
+        isClosed: false,
+      },
+    }
+  );
+
+  useEffect(() => {
+    if(!value) return;
+
+    const url = configConverter(
+      "EXPO_PUBLIC_API_BASE_URL_GET_OPENING_HOURS_BY_BUSINESS"
+    );
+    
+    axios
+      .get(`${url}?businessName=${brandName}&locationId=${value!}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data.hours;
+        } else {
+          throw new Error("Error");
+        }
+      })
+      .then((data) => {
+        const hoursData = data.map((hour: any) => ({
+          [hour.day]: {
+            open: hour.open,
+            close: hour.close,
+            isClosed: !hour.isOpen,
+          },
+        }));
+        setHours(Object.assign({}, ...hoursData));
+      })
+      .catch((error) => {
+        console.log("Error: ", (error as AxiosError).response?.data);
+      });
+  }, [brandName, value]);
+
   useEffect(() => {
     const url = configConverter(
       "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
@@ -76,17 +153,7 @@ export default function Partner() {
       .catch((error) => {
         console.log("Error: ", (error as AxiosError).response?.data);
       });
-  }, [brandName]);
-
-  const sampleHours = {
-    monday: { open: "09:00", close: "22:00" },
-    tuesday: { open: "09:00", close: "22:00" },
-    wednesday: { open: "09:00", close: "22:00" },
-    thursday: { open: "09:00", close: "22:00" },
-    friday: { open: "09:00", close: "22:00" },
-    saturday: { open: "10:00", close: "23:00" },
-    sunday: { open: "10:00", close: "21:00" },
-  };
+  }, [brandName])
 
   return (
     <View className="flex-1">
@@ -116,7 +183,7 @@ export default function Partner() {
 
         {value && (
           <>
-            <OpeningHours hours={sampleHours} />
+            <OpeningHours hours={hours} />
             <ServiceTypeGrid onSelectService={() => {}} />
           </>
         )}

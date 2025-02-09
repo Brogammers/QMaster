@@ -92,4 +92,19 @@ public class LocationService {
 
         return locations;
     }
+
+    public List<OpeningHours> getOpeningHours(String businessName, long locationId) {
+        Partner partner = partnerRepository.findByName(businessName)
+                .orElseThrow(() -> new IllegalStateException("Business with name " + businessName + " not found"));
+
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new IllegalStateException("Location with id " + locationId + " not found"));
+
+        if (!location.getPartner().equals(partner)) {
+            throw new IllegalStateException(
+                    "Location with id " + locationId + " does not belong to business with name " + businessName);
+        }
+
+        return openingHoursRepository.findByLocation(location);
+    }
 }

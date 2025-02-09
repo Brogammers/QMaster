@@ -58,4 +58,19 @@ public class LocationController {
         }
         return new ResponseEntity<Object>(body, statusCode);
     }
+
+    @GetMapping("/opening-hours")
+    public ResponseEntity<Object> getMethodName(@RequestParam("businessName") String businessName,
+            @RequestParam("locationId") long locationId) {
+        Map<String, Object> body = new HashMap<>();
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
+        try {
+            body.put("hours", locationService.getOpeningHours(businessName, locationId));
+        } catch (IllegalStateException e) {
+            body.put("message", e.getMessage());
+            statusCode = HttpStatusCode.valueOf(500);
+        }
+        return new ResponseEntity<Object>(body, statusCode);
+    }
+
 }

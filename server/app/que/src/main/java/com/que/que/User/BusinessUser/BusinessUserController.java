@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.que.que.Partner.Partner;
-import com.que.que.Security.JwtUtil;
 
 import lombok.AllArgsConstructor;
 
@@ -22,7 +21,6 @@ import lombok.AllArgsConstructor;
 public class BusinessUserController {
 
     private final BusinessUserService businessUserService;
-    private final JwtUtil jwtUtil;
 
     @GetMapping
     public ResponseEntity<Object> getBusinessesWithCategory(@RequestParam("category") String category,
