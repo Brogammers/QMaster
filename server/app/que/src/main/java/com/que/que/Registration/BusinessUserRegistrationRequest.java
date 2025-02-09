@@ -16,12 +16,11 @@ public class BusinessUserRegistrationRequest extends AppUserRegistrationRequest 
             String countryOfOrigin,
             String password,
             String email,
-            String username,
             String confirmPassword,
             String phoneCode,
             String phoneNumber,
             String partnerName) {
-        super(firstName, lastName, dateOfBirth, countryOfOrigin, password, email, username, confirmPassword, phoneCode,
+        super(firstName, lastName, dateOfBirth, countryOfOrigin, password, email, confirmPassword, phoneCode,
                 phoneNumber);
         this.partnerName = partnerName;
     }

@@ -1,6 +1,7 @@
 package com.que.que.Partner;
 
 import java.util.List;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -48,9 +49,12 @@ public class Partner {
     @JoinColumn(name = "business_category_id")
     private BusinessCategory businessCategory;
 
+    private Date createdAt;
+
     public Partner(String name, BusinessCategory businessCategory) {
         this.name = name;
         this.businessCategory = businessCategory;
+        this.createdAt = new Date(System.currentTimeMillis());
     }
 
     public void addBusinessUser(BusinessUser businessUser) {

@@ -94,7 +94,7 @@ export default function PartnersPage() {
       axios.get(`${url}?page=${DEFAULT_PAGE}&per-page=${DEFAULT_PER_PAGE}`)
       .then((response) => {
         if (response.status === 200) {
-          return response.data.businesses.content;
+          return response.data.partners.content;
         } else { 
           throw new Error('Error fetching partners');
         }
@@ -104,8 +104,8 @@ export default function PartnersPage() {
         
         const partners = data.map((partner: any) => ({
           id: partner.id,
-          name: partner.username,
-          category: partner.businessCategory.name,
+          name: partner.name,
+          category: partner.businessCategory,
           status: partner.status ? "active" : "inactive",
           joinedDate: new Date(partner.createdAt).toLocaleDateString(),
           locations: partner.locations.map((location: any) => ({

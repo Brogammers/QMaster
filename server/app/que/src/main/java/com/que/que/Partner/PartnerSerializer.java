@@ -23,6 +23,9 @@ public class PartnerSerializer extends StdSerializer<Partner> {
         jsonGenerator.writeStringField("name", partner.getName());
         jsonGenerator.writeNumberField("queueId", partner.getQueueId());
         jsonGenerator.writeObjectField("locations", partner.getLocations());
+        jsonGenerator.writeStringField("businessCategory", partner.getBusinessCategory().getName());
+        jsonGenerator.writeBooleanField("status", true);
+        jsonGenerator.writeStringField("createdAt", partner.getCreatedAt().toString());
         jsonGenerator.writeEndObject();
     }
 }

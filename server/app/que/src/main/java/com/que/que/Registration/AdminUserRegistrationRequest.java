@@ -14,11 +14,10 @@ public class AdminUserRegistrationRequest extends AppUserRegistrationRequest {
             String countryOfOrigin,
             String password,
             String email,
-            String username,
             String confirmPassword,
             String phoneCode,
             String phoneNumber) {
-        super(firstName, lastName, dateOfBirth, countryOfOrigin, password, email, username, confirmPassword, phoneCode,
+        super(firstName, lastName, dateOfBirth, countryOfOrigin, password, email, confirmPassword, phoneCode,
                 phoneNumber);
     }
 }

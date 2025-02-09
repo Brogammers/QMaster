@@ -19,7 +19,6 @@ public class AdminUser extends User {
     public AdminUser(
             String firstName,
             String lastName,
-            String username,
             LocalDateTime dateOfRegistration,
             LocalDate dateOfBirth,
             String countryOfOrigin,
@@ -31,7 +30,7 @@ public class AdminUser extends User {
             String phoneNumber,
             String location) {
         super(
-                UserRole.ADMIN, firstName, lastName, username, dateOfRegistration, dateOfBirth, countryOfOrigin,
+                UserRole.ADMIN, firstName, lastName, dateOfRegistration, dateOfBirth, countryOfOrigin,
                 password,
                 email,
                 locked, enabled, phoneCode, phoneNumber, location);

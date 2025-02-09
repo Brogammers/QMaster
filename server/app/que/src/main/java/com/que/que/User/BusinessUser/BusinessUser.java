@@ -41,7 +41,6 @@ public class BusinessUser extends User {
             UserRole appUserRole,
             String firstName,
             String lastName,
-            String username,
             LocalDateTime dateOfRegistration,
             LocalDate dateOfBirth,
             String countryOfOrigin,
@@ -54,7 +53,7 @@ public class BusinessUser extends User {
             String location,
             SubscriptionPlans subscriptionPlan,
             Partner partner) {
-        super(appUserRole, firstName, lastName, username, dateOfRegistration,
+        super(appUserRole, firstName, lastName, dateOfRegistration,
                 dateOfBirth, countryOfOrigin, password, email, locked, enabled,
                 phoneCode, phoneNumber, location);
 

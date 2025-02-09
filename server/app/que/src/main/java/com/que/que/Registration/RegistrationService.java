@@ -64,7 +64,6 @@ public class RegistrationService {
         new AppUser(
             request.getFirstName(),
             request.getLastName(),
-            request.getUsername(),
             LocalDateTime.now(),
             request.getDateOfBirth(),
             request.getCountryOfOrigin(),
@@ -116,7 +115,6 @@ public class RegistrationService {
             UserRole.BUSINESS_OWNER,
             request.getFirstName(),
             request.getLastName(),
-            request.getUsername(),
             LocalDateTime.now(),
             request.getDateOfBirth(),
             request.getCountryOfOrigin(),
@@ -165,7 +163,6 @@ public class RegistrationService {
         new AdminUser(
             request.getFirstName(),
             request.getLastName(),
-            request.getUsername(),
             LocalDateTime.now(),
             request.getDateOfBirth(),
             request.getCountryOfOrigin(),

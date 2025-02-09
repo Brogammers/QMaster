@@ -31,7 +31,6 @@ public class AppUser extends User {
   public AppUser(
       String firstName,
       String lastName,
-      String username,
       LocalDateTime dateOfRegistration,
       LocalDate dateOfBirth,
       String countryOfOrigin,
@@ -43,7 +42,7 @@ public class AppUser extends User {
       String phoneNumber,
       String location) {
     super(
-        UserRole.USER, firstName, lastName, username, dateOfRegistration, dateOfBirth, countryOfOrigin, password, email,
+        UserRole.USER, firstName, lastName, dateOfRegistration, dateOfBirth, countryOfOrigin, password, email,
         locked, enabled, phoneCode, phoneNumber, location);
   }
 

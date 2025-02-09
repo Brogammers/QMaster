@@ -53,7 +53,6 @@ public class LoginService {
 
       Map<String, Object> object = new HashMap<>();
       object.put("email", email);
-      object.put("username", user.getUsername());
       object.put("phoneCode", user.getPhoneCode());
       object.put("phoneNumber", user.getPhoneNumber());
       object.put("userID", user.getId());
@@ -73,7 +72,7 @@ public class LoginService {
       loginRepository.save(loginEntry);
       Map<String, Object> object = new HashMap<>();
       object.put("email", email);
-      object.put("username", user.getUsername());
+      object.put("partnerName", user.getPartner().getName());
       object.put("userID", user.getId());
       object.put("firstName", user.getFirstName());
       object.put("lastName", user.getLastName());
@@ -91,7 +90,6 @@ public class LoginService {
       loginRepository.save(loginEntry);
       Map<String, Object> object = new HashMap<>();
       object.put("email", email);
-      object.put("username", user.getUsername());
       object.put("userID", user.getId());
       object.put("firstName", user.getFirstName());
       object.put("lastName", user.getLastName());

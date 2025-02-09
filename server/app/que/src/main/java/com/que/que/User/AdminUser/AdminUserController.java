@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.que.que.User.BusinessUser.BusinessUser;
-import com.que.que.User.BusinessUser.BusinessUserRepository;
+import com.que.que.Partner.Partner;
+import com.que.que.Partner.PartnerRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -23,7 +23,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping(path = "api/v1/admin")
 @AllArgsConstructor
 public class AdminUserController {
-    private final BusinessUserRepository businessUserRepository;
+    private final PartnerRepository partnerRepository;
 
     @GetMapping(path = "/businesses")
     @Secured("ADMIN")
@@ -32,8 +32,8 @@ public class AdminUserController {
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
             Pageable pageable = PageRequest.of(page - 1, perPage);
-            Page<BusinessUser> businesses = businessUserRepository.findAll(pageable);
-            body.put("businesses", businesses);
+            Page<Partner> partners = partnerRepository.findAll(pageable);
+            body.put("partners", partners);
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
             statusCode = HttpStatusCode.valueOf(500);

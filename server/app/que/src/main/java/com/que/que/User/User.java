@@ -36,7 +36,6 @@ public class User implements UserDetails {
     private UserRole userRole;
 
     private String lastName;
-    private String username;
 
     @Column(nullable = false)
     private String phoneCode;
@@ -64,7 +63,6 @@ public class User implements UserDetails {
             UserRole userRole,
             String firstName,
             String lastName,
-            String username,
             LocalDateTime dateOfRegistration,
             LocalDate dateOfBirth,
             String countryOfOrigin,
@@ -78,7 +76,6 @@ public class User implements UserDetails {
         this.userRole = userRole;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = username;
         this.dateOfRegistration = dateOfRegistration;
         this.dateOfBirth = dateOfBirth;
         this.countryOfOrigin = countryOfOrigin;
@@ -105,7 +102,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.username;
+        return this.email;
     }
 
     @Override
