@@ -107,6 +107,12 @@ export interface AccountInfoProps {
 
 export interface QueueDetailsProps {
   branch: number;
+  serviceType?: number;
+}
+
+export interface ServiceProps {
+  id: number;
+  name: string;
 }
 
 export interface ServerError {

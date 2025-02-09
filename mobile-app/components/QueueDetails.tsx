@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { QueueDetailsProps } from "@/types";
+import { QueueDetailsProps } from "@/types"; // Ensure this import is correct
 import { Entypo } from "@expo/vector-icons";
 import { useTheme } from '@/ctx/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -23,7 +23,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
   const buttonWidth = width * 0.7;
   const [leave, setLeave] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const { branch } = props;
+  const { branch, serviceType } = props; // Destructure serviceType from props
   const { isDarkMode } = useTheme();
   
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
 
   useEffect(() => {
     const url = configConverter("EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE");
-    axios.get(`${url}?queueName=${branch}`)
+    axios.get(`${url}?queueName=${branch}&serviceType=${serviceType}`) // Include serviceType in the API call
     .then((response) => {
       if(response.status === 200) {
         return response.data.isPresent;
@@ -53,11 +53,11 @@ export default function QueueDetails(props: QueueDetailsProps) {
       console.error(error);
       setLeave(false);
     });
-  }, []);
+  }, [branch, serviceType]); // Add serviceType to the dependency array
 
   const handleJoinQueue = () => {
     const url = configConverter("EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE");
-    axios.put(`${url}?queueName=${branch}`)
+    axios.put(`${url}?queueName=${branch}&serviceType=${serviceType}`) // Include serviceType in the API call
     .then((response) => {
       if(response.status === 200) {
         setLeave(true);
@@ -72,9 +72,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
     });
   }
 
-
   const handleLeaveQueue = () => {
-
     const handleLeaveRequest = () => {
       setLeave(false);
     };

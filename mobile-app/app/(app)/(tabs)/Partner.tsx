@@ -1,84 +1,111 @@
 import React, { createContext, useEffect, useState } from "react";
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView } from "react-native";
 import QueueInfoCard from "@/components/QueueInfoCard";
-import JoinQueue from '@/components/JoinQueue';
-import { useTheme } from '@/ctx/ThemeContext';
-import { LinearGradient } from 'expo-linear-gradient';
-import { MotiView } from 'moti';
+import JoinQueue from "@/components/JoinQueue";
+import { useTheme } from "@/ctx/ThemeContext";
+import { LinearGradient } from "expo-linear-gradient";
+import { MotiView } from "moti";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
-import configConverter from "@/api/configConverter";
-import axios, { AxiosError } from "axios";
+// import configConverter from "@/api/configConverter";
+// import axios, { AxiosError } from "axios";
 
 export const LocationContext = createContext({
   locationData: [],
   setLocationData: (data: any) => {},
   currentLocation: null,
-  setCurrentLocation: (data: any) => {}
+  setCurrentLocation: (data: any) => {},
 });
 
 export default function Partner() {
-  const { brandName, image } = useLocalSearchParams<{ brandName: string, image: any }>();
+  const { brandName, image } = useLocalSearchParams<{
+    brandName: string;
+    image: any;
+  }>();
   const { isDarkMode } = useTheme();
-  
-  const [locationData, setLocationData] = useState([]);
+
+  const [locationData, setLocationData] = useState<
+    Array<{
+      label: string;
+      value: number;
+      id: number;
+      address: string;
+    }>
+  >([]);
   const [value, setValue] = useState(null);
 
   useEffect(() => {
+    // Mock data for testing
+    const mockLocations = [
+      { label: "Downtown Branch", value: 1, id: 1, address: "123 Main St" },
+      { label: "West Side Branch", value: 2, id: 2, address: "456 West Ave" },
+      { label: "East Side Branch", value: 3, id: 3, address: "789 East Blvd" },
+      { label: "North Branch", value: 4, id: 4, address: "321 North St" },
+    ];
+    setLocationData(mockLocations);
+
+    // Comment out actual API integration for now
+    /*
     const url = configConverter(
-        "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
+      "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
     );
-    
-    axios.get(`${url}?businessName=${brandName}`)
-    .then((response) => {     
-      if (response.status === 200) {        
-        return response.data.locations;
-      } else { 
-        throw new Error("Error");
-      }
-    })
-    .then((data) => {
-      const locationData = data.map((store: any, idx: number) => {
-        return {
+
+    axios
+      .get(`${url}?businessName=${brandName}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data.locations;
+        } else {
+          throw new Error("Error");
+        }
+      })
+      .then((data) => {
+        const locationData = data.map((store: any, idx: number) => ({
           label: store.name,
           value: store.id,
           id: store.id,
           address: store.address,
-          coordinates: { 
+          coordinates: {
             latitude: store.latitude,
             longitude: store.longitude,
-          }
-        }
+          },
+        }));
+        setLocationData(locationData);
       })
-      setLocationData(locationData);
-    })
-    .catch((error) => {
-      console.log("Error: ", (error as AxiosError).response?.data);
-    });
+      .catch((error) => {
+        console.log("Error: ", (error as AxiosError).response?.data);
+      });
+    */
   }, []);
 
   return (
     <View className="flex-1">
-      <View className={`absolute top-0 left-0 right-0 bottom-0 ${isDarkMode ? 'bg-ocean-blue' : 'bg-off-white'}`}>
+      <View
+        className={`absolute top-0 left-0 right-0 bottom-0 ${
+          isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+        }`}
+      >
         {!isDarkMode && (
           <LinearGradient
-            colors={['rgba(0, 119, 182, 0.1)', 'rgba(255, 255, 255, 0)']}
+            colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
             className="absolute top-0 w-full h-64"
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
           />
         )}
       </View>
-      <LocationContext.Provider value={{
-        locationData: locationData,
-        setLocationData: setLocationData,
-        currentLocation: value,
-        setCurrentLocation: setValue
-      }}>
+      <LocationContext.Provider
+        value={{
+          locationData: locationData,
+          setLocationData: setLocationData,
+          currentLocation: value,
+          setCurrentLocation: setValue,
+        }}
+      >
         <QueueInfoCard image={image} name={brandName} />
-        
-        <SafeAreaView className="flex-1" edges={['bottom', 'left', 'right']}>
-          <ScrollView 
+
+        <SafeAreaView className="flex-1" edges={["bottom", "left", "right"]}>
+          <ScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 40 }}
             className="flex-1"
@@ -89,7 +116,7 @@ export default function Partner() {
               transition={{
                 mass: 0.8,
                 damping: 15,
-                delay: 200
+                delay: 200,
               }}
               className="w-full px-6"
             >
@@ -99,6 +126,5 @@ export default function Partner() {
         </SafeAreaView>
       </LocationContext.Provider>
     </View>
-
   );
 }
