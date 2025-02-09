@@ -272,19 +272,28 @@ public class QueueService {
     print();
   }
 
-  public ArrayList<Queues> currentQueuesOfUser(String email, long locationId) {
+  public ArrayList<Queues> currentQueuesOfUser(String email, long locationId, String businessName) {
     checkIfFirstOperation();
 
-    BusinessUser appUser = businessUserRepository.findByEmail(email)
-        .orElseThrow(() -> new IllegalStateException("Could not find user"));
+    if (businessName != null) {
+      Partner partner = partnerRepository.findByName(businessName)
+          .orElseThrow(() -> new IllegalStateException("Could not find partner"));
 
-    Location location = locationRepository.findByIdAndPartner(
-        locationId, appUser.getPartner())
-        .orElseThrow(() -> new IllegalStateException("Could not find location"));
+      ArrayList<Queues> currentQueues = queueRepository.findByPartner(partner);
 
-    ArrayList<Queues> currentQueues = queueRepository.findByLocation(location);
+      return currentQueues;
+    } else {
+      BusinessUser appUser = businessUserRepository.findByEmail(email)
+          .orElseThrow(() -> new IllegalStateException("Could not find user"));
 
-    return currentQueues;
+      Location location = locationRepository.findByIdAndPartner(
+          locationId, appUser.getPartner())
+          .orElseThrow(() -> new IllegalStateException("Could not find location"));
+
+      ArrayList<Queues> currentQueues = queueRepository.findByLocation(location);
+
+      return currentQueues;
+    }
   }
 
   public ArrayList<Queues> currentQueuesOfUser(long id) {
