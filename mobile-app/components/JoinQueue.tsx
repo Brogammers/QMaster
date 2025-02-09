@@ -1,36 +1,17 @@
-<<<<<<< HEAD
 import React, { useState, useContext } from "react";
 import { View, ScrollView, Platform, Dimensions, Text } from "react-native";
 import { useTheme } from "@/ctx/ThemeContext";
-=======
-import configConverter from "@/api/configConverter";
-import Wandering from "@/assets/images/wandering.svg";
-import { useTheme } from "@/ctx/ThemeContext";
-import i18n from "@/i18n";
-import axios from "axios";
-import { MotiView } from "moti";
-import React, { useContext, useEffect, useState } from "react";
-import { Dimensions, Platform, ScrollView, Text, View } from "react-native";
->>>>>>> 6bf980dc6a5e6a3beb03a7cc2652d2e6f1987987
 import DropDownPicker from "react-native-dropdown-picker";
 import QueueDetails from "./QueueDetails";
 import ServiceTypeGrid from "./ServiceTypeGrid";
 import { LocationContext } from "@/app/(app)/(tabs)/Partner";
-<<<<<<< HEAD
 import i18n from "@/i18n";
 import { ServiceProps } from "@/types";
 
 export default function JoinQueue() {
-=======
-import ServiceTypeGrid, { ServiceType } from "./ServiceTypeGrid";
-
-export default function QueuePage() {
-  const width = Dimensions.get("window").width * 0.85;
->>>>>>> 6bf980dc6a5e6a3beb03a7cc2652d2e6f1987987
   const { isDarkMode } = useTheme();
   const width = Dimensions.get("window").width * 0.85;
   const [open, setOpen] = useState(false);
-<<<<<<< HEAD
   const [selectedService, setSelectedService] = useState<ServiceProps | null>(null);
   const { locationData, currentLocation, setCurrentLocation } =
     useContext(LocationContext);
@@ -38,62 +19,6 @@ export default function QueuePage() {
   const handleSelectService = (service: ServiceProps) => {
     setSelectedService(service);
   };
-=======
-  const { locationData, currentLocation, setCurrentLocation } =
-    useContext(LocationContext);
-  const [selectedService, setSelectedService] = useState<ServiceType | null>(
-    null
-  );
-
-  // Example services - you'll want to fetch these from your API based on the selected branch
-  const [services, setServices] = useState<ServiceType[]>([]);
-
-  useEffect(() => {
-    if (currentLocation) {
-      // Reset selected service when branch changes
-      setSelectedService(null);
-
-      // Fetch services for the selected branch
-      // This is an example - implement your actual API call
-      const fetchServices = async () => {
-        try {
-          // const response = await axios.get(`/api/branches/${currentLocation}/services`);
-          // setServices(response.data);
-
-          // Example data
-          setServices([
-            {
-              id: 1,
-              name: i18n.t("common.queue.services.cashier"),
-              estimatedWaitTime: 15,
-            },
-            {
-              id: 2,
-              name: i18n.t("common.queue.services.returns"),
-              estimatedWaitTime: 10,
-            },
-            {
-              id: 3,
-              name: i18n.t("common.queue.services.pickup"),
-              estimatedWaitTime: 5,
-            },
-            {
-              id: 4,
-              name: i18n.t("common.queue.services.support"),
-              estimatedWaitTime: 20,
-            },
-          ]);
-        } catch (error) {
-          console.error("Error fetching services:", error);
-        }
-      };
-
-      fetchServices();
-    } else {
-      setServices([]);
-    }
-  }, [currentLocation]);
->>>>>>> 6bf980dc6a5e6a3beb03a7cc2652d2e6f1987987
 
   return (
     <View className="flex-1">
@@ -193,7 +118,6 @@ export default function QueuePage() {
               searchable
               searchPlaceholder={i18n.t("common.queue.searchBranches")}
               ArrowUpIconComponent={() => (
-<<<<<<< HEAD
                 <View
                   style={{
                     justifyContent: "center",
@@ -226,26 +150,6 @@ export default function QueuePage() {
                     ▼
                   </Text>
                 </View>
-=======
-                <Text
-                  style={{
-                    color: isDarkMode ? "#1DCDFE" : "#17222D",
-                    fontSize: 18,
-                  }}
-                >
-                  ▲
-                </Text>
-              )}
-              ArrowDownIconComponent={() => (
-                <Text
-                  style={{
-                    color: isDarkMode ? "#1DCDFE" : "#17222D",
-                    fontSize: 18,
-                  }}
-                >
-                  ▼
-                </Text>
->>>>>>> 6bf980dc6a5e6a3beb03a7cc2652d2e6f1987987
               )}
               listMode="SCROLLVIEW"
               scrollViewProps={{
@@ -258,7 +162,6 @@ export default function QueuePage() {
             />
           </View>
 
-<<<<<<< HEAD
           {currentLocation && !selectedService && (
             <ServiceTypeGrid onSelectService={handleSelectService} />
           )}
@@ -269,46 +172,6 @@ export default function QueuePage() {
               serviceType={selectedService.id}
             />
           )}
-=======
-          <MotiView
-            from={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 150 }}
-            className="w-full"
-            style={{
-              marginTop: 20,
-              zIndex: Platform.OS === "ios" ? -1 : undefined,
-              elevation: Platform.OS === "android" ? 1 : undefined,
-            }}
-          >
-            {currentLocation != null && (
-              <ServiceTypeGrid
-                services={services}
-                onSelect={setSelectedService}
-                selectedService={selectedService}
-              />
-            )}
-
-            <QueueDetails
-              branch={currentLocation == null ? -1 : currentLocation}
-              serviceType={selectedService?.id}
-            />
-
-            {currentLocation == null && (
-              <View
-                style={{
-                  position: "absolute",
-                  bottom: -25,
-                  right: 20,
-                  zIndex: Platform.OS === "ios" ? 2 : undefined,
-                  elevation: Platform.OS === "android" ? 2 : undefined,
-                }}
-              >
-                <Wandering width={70} height={70} />
-              </View>
-            )}
-          </MotiView>
->>>>>>> 6bf980dc6a5e6a3beb03a7cc2652d2e6f1987987
         </View>
       </ScrollView>
     </View>

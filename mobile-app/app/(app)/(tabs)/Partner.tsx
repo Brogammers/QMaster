@@ -7,14 +7,24 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
-// import configConverter from "@/api/configConverter";
-// import axios, { AxiosError } from "axios";
+import configConverter from "@/api/configConverter";
+import axios, { AxiosError } from "axios";
 
-export const LocationContext = createContext({
+export const LocationContext = createContext<{
+  locationData: Array<{
+    label: string;
+    value: number;
+    id: number;
+    address: string;
+  }>;
+  setLocationData: React.Dispatch<React.SetStateAction<any>>;
+  currentLocation: number | null;
+  setCurrentLocation: React.Dispatch<React.SetStateAction<number | null>>;
+}>({
   locationData: [],
-  setLocationData: (data: any) => {},
+  setLocationData: () => {},
   currentLocation: null,
-  setCurrentLocation: (data: any) => {},
+  setCurrentLocation: () => {},
 });
 
 export default function Partner() {
@@ -32,20 +42,9 @@ export default function Partner() {
       address: string;
     }>
   >([]);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState<number | null>(null);
 
   useEffect(() => {
-    // Mock data for testing
-    const mockLocations = [
-      { label: "Downtown Branch", value: 1, id: 1, address: "123 Main St" },
-      { label: "West Side Branch", value: 2, id: 2, address: "456 West Ave" },
-      { label: "East Side Branch", value: 3, id: 3, address: "789 East Blvd" },
-      { label: "North Branch", value: 4, id: 4, address: "321 North St" },
-    ];
-    setLocationData(mockLocations);
-
-    // Comment out actual API integration for now
-    /*
     const url = configConverter(
       "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
     );
@@ -60,7 +59,7 @@ export default function Partner() {
         }
       })
       .then((data) => {
-        const locationData = data.map((store: any, idx: number) => ({
+        const locationData = data.map((store: any) => ({
           label: store.name,
           value: store.id,
           id: store.id,
@@ -75,8 +74,7 @@ export default function Partner() {
       .catch((error) => {
         console.log("Error: ", (error as AxiosError).response?.data);
       });
-    */
-  }, []);
+  }, [brandName]);
 
   return (
     <View className="flex-1">
