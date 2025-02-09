@@ -103,7 +103,7 @@ public class QueueController {
     }
 
     @GetMapping(path = "/business")
-    @Secured({ "BUSINESS_OWNER", "BUSINESS_MANAGER", "BUSINESS_ADMIN", "ADMIN" })
+    // @Secured({ "BUSINESS_OWNER", "BUSINESS_MANAGER", "BUSINESS_ADMIN", "ADMIN" })
     public ResponseEntity<Object> getBusinessQueues(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestParam(value = "businessName", required = false) String businessName,
             @RequestParam("locationId") long locationId) {
