@@ -98,18 +98,18 @@ public class QueueService {
     Location location = locationRepository.findById(locationId)
         .orElseThrow(() -> new IllegalStateException("Could not find location"));
 
-    try {
-      // This currently has an error because the createQRCode method is not static
-      qrCodeService.createQRCode(
-          appUser.getPartner().getId(),
-          queueHolderQueue.size(),
-          String.format(
-              "api/v1/queue/user?partnerId=%d&queueName=%s",
-              appUser.getPartner().getId(),
-              name));
-    } catch (Exception e) {
-      throw new IllegalStateException("Error while creating queue.");
-    }
+    // try {
+    //   // This currently has an error because the createQRCode method is not static
+    //   qrCodeService.createQRCode(
+    //       appUser.getPartner().getId(),
+    //       queueHolderQueue.size(),
+    //       String.format(
+    //           "api/v1/queue/user?partnerId=%d&queueName=%s",
+    //           appUser.getPartner().getId(),
+    //           name));
+    // } catch (Exception e) {
+    //   throw new IllegalStateException("Error while creating queue.");
+    // }
     Queues createdQueue = queueRepository.save(new Queues(
         name,
         appUser.getPartner(),
