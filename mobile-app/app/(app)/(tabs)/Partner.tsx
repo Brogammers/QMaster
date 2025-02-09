@@ -9,6 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import configConverter from "@/api/configConverter";
 import axios, { AxiosError } from "axios";
+import OpeningHours from "@/components/OpeningHours";
 
 export const LocationContext = createContext<{
   locationData: Array<{
@@ -76,6 +77,16 @@ export default function Partner() {
       });
   }, [brandName]);
 
+  const sampleHours = {
+    monday: { open: "09:00", close: "22:00" },
+    tuesday: { open: "09:00", close: "22:00" },
+    wednesday: { open: "09:00", close: "22:00" },
+    thursday: { open: "09:00", close: "22:00" },
+    friday: { open: "09:00", close: "22:00" },
+    saturday: { open: "10:00", close: "23:00" },
+    sunday: { open: "10:00", close: "21:00" },
+  };
+
   return (
     <View className="flex-1">
       <View
@@ -101,6 +112,8 @@ export default function Partner() {
         }}
       >
         <QueueInfoCard image={image} name={brandName} />
+
+        <OpeningHours hours={sampleHours} />
 
         <SafeAreaView className="flex-1" edges={["bottom", "left", "right"]}>
           <ScrollView
