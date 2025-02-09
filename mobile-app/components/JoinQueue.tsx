@@ -1,38 +1,93 @@
 import configConverter from "@/api/configConverter";
 import Wandering from "@/assets/images/wandering.svg";
-import { useTheme } from '@/ctx/ThemeContext';
-import i18n from '@/i18n';
+import { useTheme } from "@/ctx/ThemeContext";
+import i18n from "@/i18n";
 import axios from "axios";
-import { MotiView } from 'moti';
+import { MotiView } from "moti";
 import React, { useContext, useEffect, useState } from "react";
 import { Dimensions, Platform, ScrollView, Text, View } from "react-native";
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownPicker from "react-native-dropdown-picker";
 import QueueDetails from "./QueueDetails";
 import { LocationContext } from "@/app/(app)/(tabs)/Partner";
-
+import ServiceTypeGrid, { ServiceType } from "./ServiceTypeGrid";
 
 export default function QueuePage() {
-  const width = Dimensions.get('window').width * 0.85;
+  const width = Dimensions.get("window").width * 0.85;
   const { isDarkMode } = useTheme();
 
   const [open, setOpen] = useState(false);
-  const { locationData, currentLocation, setCurrentLocation } = useContext(LocationContext);
-  
+  const { locationData, currentLocation, setCurrentLocation } =
+    useContext(LocationContext);
+  const [selectedService, setSelectedService] = useState<ServiceType | null>(
+    null
+  );
+
+  // Example services - you'll want to fetch these from your API based on the selected branch
+  const [services, setServices] = useState<ServiceType[]>([]);
+
+  useEffect(() => {
+    if (currentLocation) {
+      // Reset selected service when branch changes
+      setSelectedService(null);
+
+      // Fetch services for the selected branch
+      // This is an example - implement your actual API call
+      const fetchServices = async () => {
+        try {
+          // const response = await axios.get(`/api/branches/${currentLocation}/services`);
+          // setServices(response.data);
+
+          // Example data
+          setServices([
+            {
+              id: 1,
+              name: i18n.t("common.queue.services.cashier"),
+              estimatedWaitTime: 15,
+            },
+            {
+              id: 2,
+              name: i18n.t("common.queue.services.returns"),
+              estimatedWaitTime: 10,
+            },
+            {
+              id: 3,
+              name: i18n.t("common.queue.services.pickup"),
+              estimatedWaitTime: 5,
+            },
+            {
+              id: 4,
+              name: i18n.t("common.queue.services.support"),
+              estimatedWaitTime: 20,
+            },
+          ]);
+        } catch (error) {
+          console.error("Error fetching services:", error);
+        }
+      };
+
+      fetchServices();
+    } else {
+      setServices([]);
+    }
+  }, [currentLocation]);
+
   return (
     <View className="flex-1">
-      <ScrollView 
+      <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 40 }}
       >
         <View className="items-center w-full px-6">
-          <View style={{ 
-            zIndex: Platform.OS === 'ios' ? 999 : undefined,
-            elevation: Platform.OS === 'android' ? 999 : undefined,
-            width: '100%',
-            alignItems: 'center',
-            marginBottom: open ? 150 : 0,
-          }}>
+          <View
+            style={{
+              zIndex: Platform.OS === "ios" ? 999 : undefined,
+              elevation: Platform.OS === "android" ? 999 : undefined,
+              width: "100%",
+              alignItems: "center",
+              marginBottom: open ? 150 : 0,
+            }}
+          >
             <DropDownPicker
               open={open}
               value={currentLocation}
@@ -45,30 +100,32 @@ export default function QueuePage() {
                 borderRadius: 12,
                 marginTop: 20,
                 borderWidth: 1.5,
-                backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : 'white',
-                borderColor: isDarkMode ? 'rgba(29, 205, 254, 0.2)' : '#E5E7EB',
+                backgroundColor: isDarkMode
+                  ? "rgba(29, 205, 254, 0.1)"
+                  : "white",
+                borderColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5E7EB",
                 minHeight: 50,
               }}
               containerStyle={{
-                position: 'relative',
+                position: "relative",
                 width: width,
               }}
               labelStyle={{
                 fontSize: 16,
-                color: isDarkMode ? '#1DCDFE' : '#17222D',
+                color: isDarkMode ? "#1DCDFE" : "#17222D",
               }}
               textStyle={{
                 fontSize: 16,
-                color: isDarkMode ? '#1DCDFE' : '#17222D',
+                color: isDarkMode ? "#1DCDFE" : "#17222D",
               }}
               dropDownContainerStyle={{
                 width: width,
-                position: 'absolute',
+                position: "absolute",
                 top: 72,
                 borderRadius: 12,
                 borderWidth: 1.5,
-                backgroundColor: isDarkMode ? '#0B1218' : 'white',
-                borderColor: isDarkMode ? 'rgba(29, 205, 254, 0.2)' : '#E5E7EB',
+                backgroundColor: isDarkMode ? "#0B1218" : "white",
+                borderColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5E7EB",
                 shadowColor: "#000",
                 shadowOffset: {
                   width: 0,
@@ -76,40 +133,60 @@ export default function QueuePage() {
                 },
                 shadowOpacity: 0.25,
                 shadowRadius: 3.84,
-                elevation: Platform.OS === 'android' ? 5 : undefined,
-                overflow: 'visible'
+                elevation: Platform.OS === "android" ? 5 : undefined,
+                overflow: "visible",
               }}
               listItemContainerStyle={{
                 borderBottomWidth: 1,
-                borderBottomColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : '#F1F5F9',
+                borderBottomColor: isDarkMode
+                  ? "rgba(29, 205, 254, 0.1)"
+                  : "#F1F5F9",
                 padding: 12,
               }}
               listItemLabelStyle={{
-                color: isDarkMode ? '#1DCDFE' : '#17222D',
+                color: isDarkMode ? "#1DCDFE" : "#17222D",
               }}
               searchContainerStyle={{
                 borderBottomWidth: 1,
-                borderBottomColor: isDarkMode ? 'rgba(29, 205, 254, 0.2)' : '#E5E7EB',
+                borderBottomColor: isDarkMode
+                  ? "rgba(29, 205, 254, 0.2)"
+                  : "#E5E7EB",
                 padding: 12,
                 marginBottom: 4,
               }}
               searchTextInputStyle={{
-                color: isDarkMode ? '#1DCDFE' : '#17222D',
-                backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.05)' : '#F8FAFC',
+                color: isDarkMode ? "#1DCDFE" : "#17222D",
+                backgroundColor: isDarkMode
+                  ? "rgba(29, 205, 254, 0.05)"
+                  : "#F8FAFC",
                 borderRadius: 8,
                 borderWidth: 1,
-                borderColor: isDarkMode ? 'rgba(29, 205, 254, 0.2)' : '#E5E7EB',
+                borderColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5E7EB",
                 height: 40,
                 paddingHorizontal: 12,
               }}
-              placeholder={i18n.t('common.queue.chooseBranch')}
+              placeholder={i18n.t("common.queue.chooseBranch")}
               searchable
-              searchPlaceholder={i18n.t('common.queue.searchBranches')}
+              searchPlaceholder={i18n.t("common.queue.searchBranches")}
               ArrowUpIconComponent={() => (
-                <Text style={{ color: isDarkMode ? '#1DCDFE' : '#17222D', fontSize: 18 }}>▲</Text>
+                <Text
+                  style={{
+                    color: isDarkMode ? "#1DCDFE" : "#17222D",
+                    fontSize: 18,
+                  }}
+                >
+                  ▲
+                </Text>
               )}
               ArrowDownIconComponent={() => (
-                <Text style={{ color: isDarkMode ? '#1DCDFE' : '#17222D', fontSize: 18 }}>▼</Text>
+                <Text
+                  style={{
+                    color: isDarkMode ? "#1DCDFE" : "#17222D",
+                    fontSize: 18,
+                  }}
+                >
+                  ▼
+                </Text>
               )}
               listMode="SCROLLVIEW"
               scrollViewProps={{
@@ -127,21 +204,35 @@ export default function QueuePage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 150 }}
             className="w-full"
-            style={{ 
+            style={{
               marginTop: 20,
-              zIndex: Platform.OS === 'ios' ? -1 : undefined,
-              elevation: Platform.OS === 'android' ? 1 : undefined,
+              zIndex: Platform.OS === "ios" ? -1 : undefined,
+              elevation: Platform.OS === "android" ? 1 : undefined,
             }}
           >
-            <QueueDetails branch={currentLocation == null ? -1 : currentLocation} />
+            {currentLocation != null && (
+              <ServiceTypeGrid
+                services={services}
+                onSelect={setSelectedService}
+                selectedService={selectedService}
+              />
+            )}
+
+            <QueueDetails
+              branch={currentLocation == null ? -1 : currentLocation}
+              serviceType={selectedService?.id}
+            />
+
             {currentLocation == null && (
-              <View style={{ 
-                position: 'absolute',
-                bottom: -25,
-                right: 20,
-                zIndex: Platform.OS === 'ios' ? 2 : undefined,
-                elevation: Platform.OS === 'android' ? 2 : undefined,
-              }}>
+              <View
+                style={{
+                  position: "absolute",
+                  bottom: -25,
+                  right: 20,
+                  zIndex: Platform.OS === "ios" ? 2 : undefined,
+                  elevation: Platform.OS === "android" ? 2 : undefined,
+                }}
+              >
                 <Wandering width={70} height={70} />
               </View>
             )}
