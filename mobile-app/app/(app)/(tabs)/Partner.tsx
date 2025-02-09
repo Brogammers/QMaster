@@ -10,6 +10,7 @@ import { useLocalSearchParams } from "expo-router";
 import configConverter from "@/api/configConverter";
 import axios, { AxiosError } from "axios";
 import OpeningHours from "@/components/OpeningHours";
+import ServiceTypeGrid from "@/components/ServiceTypeGrid";
 
 export const LocationContext = createContext<{
   locationData: Array<{
@@ -113,7 +114,12 @@ export default function Partner() {
       >
         <QueueInfoCard image={image} name={brandName} />
 
-        <OpeningHours hours={sampleHours} />
+        {value && (
+          <>
+            <OpeningHours hours={sampleHours} />
+            <ServiceTypeGrid onSelectService={() => {}} />
+          </>
+        )}
 
         <SafeAreaView className="flex-1" edges={["bottom", "left", "right"]}>
           <ScrollView
