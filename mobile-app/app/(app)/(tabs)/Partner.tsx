@@ -52,53 +52,51 @@ export default function Partner() {
       close: string;
       isClosed?: boolean;
     };
-  }>(
-    {
-      "Monday": {
-        open: "08:00",
-        close: "17:00",
-        isClosed: false,
-      },
-      "Tuesday": {
-        open: "08:00",
-        close: "17:00",
-        isClosed: false,
-      },
-      "Wednesday": {
-        open: "08:00",
-        close: "17:00",
-        isClosed: false,
-      },
-      "Thursday": {
-        open: "08:00",
-        close: "17:00",
-        isClosed: false,
-      },
-      "Friday": {
-        open: "08:00",
-        close: "17:00",
-        isClosed: false,
-      },
-      "Saturday": {
-        open: "08:00",
-        close: "17:00",
-        isClosed: false,
-      },
-      "Sunday": {
-        open: "08:00",
-        close: "17:00",
-        isClosed: false,
-      },
-    }
-  );
+  }>({
+    Monday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Tuesday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Wednesday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Thursday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Friday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Saturday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Sunday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+  });
 
   useEffect(() => {
-    if(!value) return;
+    if (!value) return;
 
     const url = configConverter(
       "EXPO_PUBLIC_API_BASE_URL_GET_OPENING_HOURS_BY_BUSINESS"
     );
-    
+
     axios
       .get(`${url}?businessName=${brandName}&locationId=${value!}`)
       .then((response) => {
@@ -153,7 +151,7 @@ export default function Partner() {
       .catch((error) => {
         console.log("Error: ", (error as AxiosError).response?.data);
       });
-  }, [brandName])
+  }, [brandName]);
 
   return (
     <View className="flex-1">
@@ -184,7 +182,14 @@ export default function Partner() {
         {value && (
           <>
             <OpeningHours hours={hours} />
-            <ServiceTypeGrid onSelectService={() => {}} />
+            <ServiceTypeGrid
+              businessName={brandName}
+              locationId={value}
+              onSelectService={(service) => {
+                // Handle service selection
+                // This will trigger the QueueDetails component
+              }}
+            />
           </>
         )}
 

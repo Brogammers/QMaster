@@ -1,54 +1,121 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { useTheme } from "@/ctx/ThemeContext";
 import { MotiView } from "moti";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import configConverter from "@/api/configConverter";
+import axios from "axios";
 
-const services = [
-  { id: 1, name: "Cashier", estimatedWaitTime: 15 },
-  { id: 2, name: "Returns & Exchange", estimatedWaitTime: 10 },
-  { id: 3, name: "Order Pickup", estimatedWaitTime: 5 },
-  { id: 4, name: "Customer Support", estimatedWaitTime: 20 },
-];
+interface Queue {
+  id: number;
+  name: string;
+  averageServiceTime: number;
+  currentQueueSize: number;
+}
 
 interface ServiceTypeGridProps {
-  onSelectService: (service: { id: number; name: string }) => void;
+  onSelectService: (service: Queue) => void;
+  businessName: string;
+  locationId: number;
 }
 
 export default function ServiceTypeGrid({
   onSelectService,
+  businessName,
+  locationId,
 }: ServiceTypeGridProps) {
   const { isDarkMode } = useTheme();
+  const [queues, setQueues] = useState<Queue[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const renderItem = ({ item }: { item: { id: number; name: string } }) => (
-    <TouchableOpacity onPress={() => onSelectService(item)}>
-      <MotiView
-        from={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 300 }}
-        style={[
-          styles.serviceItem,
-          isDarkMode ? styles.darkServiceItem : styles.lightServiceItem,
-        ]}
-      >
-        <Text style={isDarkMode ? styles.darkText : styles.lightText}>
-          {item.name}
-        </Text>
-      </MotiView>
-    </TouchableOpacity>
-  );
+  useEffect(() => {
+    const fetchQueues = async () => {
+      try {
+        const url = configConverter("EXPO_PUBLIC_API_BASE_URL_GET_QUEUES");
+        const response = await axios.get(
+          `${url}?businessName=${businessName}&locationId=${locationId}`
+        );
+
+        if (response.status === 200) {
+          setQueues(response.data.queues);
+        }
+      } catch (error) {
+        console.error("Error fetching queues:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (businessName && locationId) {
+      fetchQueues();
+    }
+  }, [businessName, locationId]);
+
+  const renderItem = ({ item }: { item: Queue }) => {
+    const estimatedWaitTime = item.averageServiceTime * item.currentQueueSize;
+
+    return (
+      <TouchableOpacity onPress={() => onSelectService(item)}>
+        <MotiView
+          from={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 300 }}
+          style={[
+            styles.serviceItem,
+            isDarkMode ? styles.darkServiceItem : styles.lightServiceItem,
+          ]}
+        >
+          <View style={styles.serviceContent}>
+            <Text
+              style={[
+                styles.serviceName,
+                isDarkMode ? styles.darkText : styles.lightText,
+              ]}
+            >
+              {item.name}
+            </Text>
+
+            <View style={styles.waitTimeContainer}>
+              <MaterialCommunityIcons
+                name="timer-sand"
+                size={18}
+                color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+              />
+              <Text
+                style={[
+                  styles.waitTimeText,
+                  isDarkMode ? styles.darkWaitTime : styles.lightWaitTime,
+                ]}
+              >
+                ~{estimatedWaitTime} min
+              </Text>
+            </View>
+          </View>
+        </MotiView>
+      </TouchableOpacity>
+    );
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#1DCDFE" />
+      </View>
+    );
+  }
 
   return (
     <FlatList
-      data={services}
+      data={queues}
       renderItem={renderItem}
       keyExtractor={(item) => item.id.toString()}
-      numColumns={2}
       contentContainerStyle={styles.container}
     />
   );
@@ -57,14 +124,24 @@ export default function ServiceTypeGrid({
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    width: "100%",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
   },
   serviceItem: {
-    flex: 1,
-    margin: 8,
+    width: "100%",
+    marginBottom: 12,
     padding: 16,
     borderRadius: 12,
+  },
+  serviceContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    justifyContent: "center",
   },
   lightServiceItem: {
     backgroundColor: "#FFFFFF",
@@ -76,10 +153,33 @@ const styles = StyleSheet.create({
     borderColor: "rgba(29, 205, 254, 0.2)",
     borderWidth: 1.5,
   },
+  serviceName: {
+    fontSize: 16,
+    fontWeight: "500",
+  },
   lightText: {
     color: "#17222D",
   },
   darkText: {
     color: "#1DCDFE",
+  },
+  waitTimeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 119, 182, 0.1)",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  waitTimeText: {
+    marginLeft: 6,
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  darkWaitTime: {
+    color: "#1DCDFE",
+  },
+  lightWaitTime: {
+    color: "#0077B6",
   },
 });
