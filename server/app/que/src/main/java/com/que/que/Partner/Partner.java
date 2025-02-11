@@ -6,11 +6,14 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Location.Location;
+import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.BusinessUser.BusinessCategory;
 import com.que.que.User.BusinessUser.BusinessUser;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -49,12 +52,17 @@ public class Partner {
     @JoinColumn(name = "business_category_id")
     private BusinessCategory businessCategory;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SubscriptionPlans subscriptionPlan;
+
     private Date createdAt;
 
-    public Partner(String name, BusinessCategory businessCategory) {
+    public Partner(String name, BusinessCategory businessCategory, SubscriptionPlans subscriptionPlan) {
         this.name = name;
         this.businessCategory = businessCategory;
         this.createdAt = new Date(System.currentTimeMillis());
+        this.subscriptionPlan = subscriptionPlan;
     }
 
     public void addBusinessUser(BusinessUser businessUser) {

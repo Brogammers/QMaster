@@ -11,6 +11,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LocationContext } from './Partner';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type RootStackParamList = {
   Partner: undefined;
@@ -44,32 +45,40 @@ export default function Store() {
   const categories = ['All', 'Food', 'Drinks', 'Snacks', 'Essentials'];
 
   useEffect(() => {
-    const url = configConverter("EXPO_PUBLIC_API_BASE_URL_GET_PRODUCTS_BY_BUSINESS");
-    axios.get(`${url}?businessName=${brandName}&page=${page}&per-page=${perPage}&locationId=${currentLocation}`)
-    .then((response) => {
-      if(response.status === 200){
-        return response.data.products.content;
-      } else {
-        throw new Error("Error: ", response.data);
-      }
-    })
-    .then((data) => {
-      const productsData = data.map((product: Product) => {
-        return {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          description: product.description,
-          quantity: product.quantity,
-          storeId: product.storeId,
+    AsyncStorage.getItem("TOKEN_KEY").then((token) => {
+      const url = configConverter("EXPO_PUBLIC_API_BASE_URL_GET_PRODUCTS_BY_BUSINESS");
+      axios.get(`${url}?businessName=${brandName}&page=${page}&per-page=${perPage}&locationId=${currentLocation}`,
+        {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          }
+        }
+      )
+      .then((response) => {
+        if(response.status === 200){
+          return response.data.products.content;
+        } else {
+          throw new Error("Error: ", response.data);
         }
       })
+      .then((data) => {
+        const productsData = data.map((product: Product) => {
+          return {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            description: product.description,
+            quantity: product.quantity,
+            storeId: product.storeId,
+          }
+        })
 
-      setProducts(productsData);
-    })
-    .catch((error) => {
-      console.error("Error: ", error.response.data);
-    })
+        setProducts(productsData);
+      })
+      .catch((error) => {
+        console.error("Error: ", error.response.data);
+      })
+    });
   }, [currentLocation]);
 
   const handleProductClick = (product: Product) => {

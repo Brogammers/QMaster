@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,13 +12,8 @@ import { MotiView } from "moti";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import configConverter from "@/api/configConverter";
 import axios from "axios";
-
-interface Queue {
-  id: number;
-  name: string;
-  averageServiceTime: number;
-  currentQueueSize: number;
-}
+import { Queue, QueuesContext } from "./JoinQueue";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface ServiceTypeGridProps {
   onSelectService: (service: Queue) => void;
@@ -32,19 +27,30 @@ export default function ServiceTypeGrid({
   locationId,
 }: ServiceTypeGridProps) {
   const { isDarkMode } = useTheme();
-  const [queues, setQueues] = useState<Queue[]>([]);
   const [loading, setLoading] = useState(true);
+  const { queues, setQueues } = useContext(QueuesContext);
 
   useEffect(() => {
     const fetchQueues = async () => {
       try {
+        const token = await AsyncStorage.getItem("TOKEN_KEY");
         const url = configConverter("EXPO_PUBLIC_API_BASE_URL_GET_QUEUES");
         const response = await axios.get(
           `${url}?businessName=${businessName}&locationId=${locationId}`
-        );
+        , {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (response.status === 200) {
-          setQueues(response.data.queues);
+          const queueData = response.data.queues.map((queue: any) => ({
+            id: queue.id,
+            name: queue.name,
+            averageServiceTime: queue.averageServiceTime,
+            currentQueueSize: queue.people,
+          }));
+          setQueues(queueData);
         }
       } catch (error) {
         console.error("Error fetching queues:", error);
@@ -94,7 +100,7 @@ export default function ServiceTypeGrid({
                   isDarkMode ? styles.darkWaitTime : styles.lightWaitTime,
                 ]}
               >
-                ~{estimatedWaitTime} min
+                ~ {estimatedWaitTime} min
               </Text>
             </View>
           </View>
@@ -123,7 +129,7 @@ export default function ServiceTypeGrid({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    // padding: 16,
     width: "100%",
   },
   loadingContainer: {
@@ -133,12 +139,17 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   serviceItem: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     width: "100%",
-    marginBottom: 12,
-    padding: 16,
+    padding: 13,
+    marginVertical: 3,
     borderRadius: 12,
   },
   serviceContent: {
+    width: "85%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -166,13 +177,13 @@ const styles = StyleSheet.create({
   waitTimeContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(0, 119, 182, 0.1)",
-    paddingHorizontal: 12,
+    // backgroundColor: "rgba(0, 119, 182, 0.1)",
+    // paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
   },
   waitTimeText: {
-    marginLeft: 6,
+    marginLeft: 2,
     fontSize: 14,
     fontWeight: "500",
   },

@@ -174,7 +174,7 @@
     "locationAccess": "Choose location to join the queue",
     "queue": {
       "peopleCount": "{{count}} people in queue",
-      "waitTime": "~{{minutes}} min",
+      "waitTime": "~ {{minutes}} min",
       "joined": "Queue Joined!",
       "leave": "Leave Queue",
       "join": "Join Queue",

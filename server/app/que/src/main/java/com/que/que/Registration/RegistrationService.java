@@ -14,7 +14,6 @@ import com.que.que.Partner.PartnerRepository;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.Security.PasswordValidator;
-import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.UserRole;
 import com.que.que.User.AdminUser.AdminUser;
 import com.que.que.User.AdminUser.AdminUserService;
@@ -124,7 +123,7 @@ public class RegistrationService {
             false,
             request.getPhoneCode(),
             request.getPhoneNumber(),
-            request.getCountryOfOrigin(), SubscriptionPlans.BASIC,
+            request.getCountryOfOrigin(),
             partner));// request.getPhoneNumber(), request.getPhoneCode(),
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());

@@ -1,16 +1,15 @@
-import React, { createContext, useEffect, useState } from "react";
-import { View, ScrollView } from "react-native";
-import QueueInfoCard from "@/components/QueueInfoCard";
-import JoinQueue from "@/components/JoinQueue";
-import { useTheme } from "@/ctx/ThemeContext";
-import { LinearGradient } from "expo-linear-gradient";
-import { MotiView } from "moti";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useLocalSearchParams } from "expo-router";
 import configConverter from "@/api/configConverter";
+import JoinQueue from "@/components/JoinQueue";
+import QueueInfoCard from "@/components/QueueInfoCard";
+import { useTheme } from "@/ctx/ThemeContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { AxiosError } from "axios";
-import OpeningHours from "@/components/OpeningHours";
-import ServiceTypeGrid from "@/components/ServiceTypeGrid";
+import { LinearGradient } from "expo-linear-gradient";
+import { useLocalSearchParams } from "expo-router";
+import { MotiView } from "moti";
+import React, { createContext, useEffect, useState } from "react";
+import { ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export const LocationContext = createContext<{
   locationData: Array<{
@@ -46,111 +45,44 @@ export default function Partner() {
   >([]);
   const [value, setValue] = useState<number | null>(null);
 
-  const [hours, setHours] = useState<{
-    [key: string]: {
-      open: string;
-      close: string;
-      isClosed?: boolean;
-    };
-  }>({
-    Monday: {
-      open: "08:00",
-      close: "17:00",
-      isClosed: false,
-    },
-    Tuesday: {
-      open: "08:00",
-      close: "17:00",
-      isClosed: false,
-    },
-    Wednesday: {
-      open: "08:00",
-      close: "17:00",
-      isClosed: false,
-    },
-    Thursday: {
-      open: "08:00",
-      close: "17:00",
-      isClosed: false,
-    },
-    Friday: {
-      open: "08:00",
-      close: "17:00",
-      isClosed: false,
-    },
-    Saturday: {
-      open: "08:00",
-      close: "17:00",
-      isClosed: false,
-    },
-    Sunday: {
-      open: "08:00",
-      close: "17:00",
-      isClosed: false,
-    },
-  });
-
   useEffect(() => {
-    if (!value) return;
 
-    const url = configConverter(
-      "EXPO_PUBLIC_API_BASE_URL_GET_OPENING_HOURS_BY_BUSINESS"
-    );
+    AsyncStorage.getItem("TOKEN_KEY")
+    .then((token) => {
+      const url = configConverter(
+        "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
+      );
 
-    axios
-      .get(`${url}?businessName=${brandName}&locationId=${value!}`)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.data.hours;
-        } else {
-          throw new Error("Error");
-        }
-      })
-      .then((data) => {
-        const hoursData = data.map((hour: any) => ({
-          [hour.day]: {
-            open: hour.open,
-            close: hour.close,
-            isClosed: !hour.isOpen,
+      axios
+        .get(`${url}?businessName=${brandName}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        }));
-        setHours(Object.assign({}, ...hoursData));
-      })
-      .catch((error) => {
-        console.log("Error: ", (error as AxiosError).response?.data);
-      });
-  }, [brandName, value]);
-
-  useEffect(() => {
-    const url = configConverter(
-      "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
-    );
-
-    axios
-      .get(`${url}?businessName=${brandName}`)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.data.locations;
-        } else {
-          throw new Error("Error");
-        }
-      })
-      .then((data) => {
-        const locationData = data.map((store: any) => ({
-          label: store.name,
-          value: store.id,
-          id: store.id,
-          address: store.address,
-          coordinates: {
-            latitude: store.latitude,
-            longitude: store.longitude,
-          },
-        }));
-        setLocationData(locationData);
-      })
-      .catch((error) => {
-        console.log("Error: ", (error as AxiosError).response?.data);
-      });
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.data.locations;
+          } else {
+            throw new Error("Error");
+          }
+        })
+        .then((data) => {
+          const locationData = data.map((store: any) => ({
+            label: store.name,
+            value: store.id,
+            id: store.id,
+            address: store.address,
+            coordinates: {
+              latitude: store.latitude,
+              longitude: store.longitude,
+            },
+          }));
+          setLocationData(locationData);
+        })
+        .catch((error) => {
+          console.log("Error: ", (error as AxiosError).response?.data);
+        });
+    });
   }, [brandName]);
 
   return (
@@ -178,21 +110,6 @@ export default function Partner() {
         }}
       >
         <QueueInfoCard image={image} name={brandName} />
-
-        {value && (
-          <>
-            <OpeningHours hours={hours} />
-            <ServiceTypeGrid
-              businessName={brandName}
-              locationId={value}
-              onSelectService={(service) => {
-                // Handle service selection
-                // This will trigger the QueueDetails component
-              }}
-            />
-          </>
-        )}
-
         <SafeAreaView className="flex-1" edges={["bottom", "left", "right"]}>
           <ScrollView
             showsVerticalScrollIndicator={false}

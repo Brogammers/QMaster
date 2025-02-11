@@ -1,26 +1,24 @@
-import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-  Dimensions,
-} from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { QueueDetailsProps } from "@/types"; // Ensure this import is correct
-import { Entypo } from "@expo/vector-icons";
+import configConverter from "@/api/configConverter";
 import { useTheme } from '@/ctx/ThemeContext';
+import i18n from '@/i18n';
+import { Entypo, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
-import i18n from '@/i18n';
-import configConverter from "@/api/configConverter";
-import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Alert,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
+import { QueuesContext } from "./JoinQueue";
 
 interface QueueDetailsProps {
   branch: number;
-  serviceType?: number;
+  serviceType: string;
 }
 
 export default function QueueDetails(props: QueueDetailsProps) {
@@ -30,6 +28,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
   const [showDetails, setShowDetails] = useState(false);
   const { branch, serviceType } = props; // Destructure serviceType from props
   const { isDarkMode } = useTheme();
+  const { selectedQueue, setSelectedQueue } = useContext(QueuesContext);
   
   useEffect(() => {
     if (leave) {
@@ -42,27 +41,38 @@ export default function QueueDetails(props: QueueDetailsProps) {
   }, [leave]);
 
   useEffect(() => {
-    const url = configConverter("EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE");
-    axios.get(`${url}?queueName=${branch}&serviceType=${serviceType}`) // Include serviceType in the API call
-    .then((response) => {
-      if(response.status === 200) {
-        return response.data.isPresent;
-      } else { 
+    AsyncStorage.getItem("TOKEN_KEY").then((token) => {
+      const url = configConverter("EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE");
+      axios.get(`${url}?queueName=${serviceType}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      })
+      .then((response) => {        
+        if(response.status === 200) {          
+          return response.data.isPresent;
+        } else { 
+          throw new Error("Failed to check if user is in the queue");
+        }
+      })
+      .then((data) => {
+        setLeave(data);
+      })
+      .catch((error) => {
+        console.error(error);
         setLeave(false);
-      }
-    })
-    .then((data) => {
-      setLeave(data);
-    })
-    .catch((error) => {
-      console.error(error);
-      setLeave(false);
+      });
     });
-  }, [branch, serviceType]); // Add serviceType to the dependency array
+  }, [branch, serviceType]);
 
-  const handleJoinQueue = () => {
+  const handleJoinQueue = async () => {
+    const session = await AsyncStorage.getItem("TOKEN_KEY");    
     const url = configConverter("EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE");
-    axios.put(`${url}?queueName=${branch}&serviceType=${serviceType}`) // Include serviceType in the API call
+    axios.put(`${url}?queueName=${serviceType}`, {}, {
+      headers: {
+        Authorization: `Bearer ${session}`,
+      }
+    })  
     .then((response) => {
       if(response.status === 200) {
         setLeave(true);
@@ -71,15 +81,44 @@ export default function QueueDetails(props: QueueDetailsProps) {
         throw new Error("Failed to join the queue");
       }
     })
+    .then(() => {
+      setSelectedQueue((prev) => {
+        if (!prev) return prev;
+        return { ...prev, currentQueueSize: prev.currentQueueSize + 1 };
+      });
+    })
     .catch((error) => {
       console.error(error);
       setLeave(false);
     });
   }
 
-  const handleLeaveQueue = () => {
-    const handleLeaveRequest = () => {
-      setLeave(false);
+  const handleLeaveQueue =  () => {
+    const handleLeaveRequest = async () => {
+      const session = await AsyncStorage.getItem("TOKEN_KEY");    
+      const url = configConverter("EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE");
+      axios.put(`${url}?queueName=${serviceType}&leave=true`, {}, {
+        headers: {
+          Authorization: `Bearer ${session}`,
+        }
+      })  
+      .then((response) => {
+        if(response.status === 200) {
+          setLeave(false);
+        } else { 
+          throw new Error("Failed to leave the queue");
+        }
+      })
+      .then(() => {
+        setSelectedQueue((prev) => {
+            if (!prev) return prev;
+            return { ...prev, currentQueueSize: prev.currentQueueSize - 1 };
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        setLeave(true);
+      });
     };
 
     Alert.alert(
@@ -94,7 +133,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
         {
           text: i18n.t('common.queue.leaveConfirm.confirm'),
           style: "destructive",
-          onPress: () => handleLeaveRequest(),
+          onPress: handleLeaveRequest,
         },
       ],
       {
@@ -179,7 +218,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
         >
           <View className="items-center">
             <Text className={`text-2xl font-bold ${isDarkMode ? 'text-baby-blue' : 'text-lava-black'}`}>
-              {i18n.t('common.queue.peopleCount', { count: 7 })}
+              {i18n.t('common.queue.peopleCount', { count: selectedQueue!?.currentQueueSize })}
             </Text>
             <View className="flex-row items-center mt-3 bg-opacity-10 rounded-full px-3 py-1.5" 
               style={{ backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : 'rgba(0, 119, 182, 0.1)' }}>
@@ -189,14 +228,14 @@ export default function QueueDetails(props: QueueDetailsProps) {
                 color={isDarkMode ? "#1DCDFE" : "#0077B6"}
               />
               <Text className={`text-base ml-2 font-medium ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
-                {i18n.t('common.queue.waitTime', { minutes: 18 })}
+                {i18n.t('common.queue.waitTime', { minutes: selectedQueue!?.averageServiceTime * selectedQueue!?.currentQueueSize })}
               </Text>
             </View>
           </View>
           
           <TouchableOpacity
             className="mt-8 w-full"
-            onPress={() => handleJoinQueue()}
+            onPress={handleJoinQueue}
           >
             <View style={{ width: buttonWidth }} className="items-center">
               <LinearGradient
@@ -225,7 +264,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
             >
               <View className="items-center">
                 <Text className={`text-2xl font-bold ${isDarkMode ? 'text-baby-blue' : 'text-lava-black'}`}>
-                  {i18n.t('common.queue.peopleCount', { count: 7 })}
+                  {i18n.t('common.queue.peopleCount', { count: selectedQueue!?.currentQueueSize })}
                 </Text>
                 <View className="flex-row items-center mt-3 bg-opacity-10 rounded-full px-3 py-1.5" 
                   style={{ backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.1)' : 'rgba(0, 119, 182, 0.1)' }}>
@@ -235,7 +274,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
                     color={isDarkMode ? "#1DCDFE" : "#0077B6"}
                   />
                   <Text className={`text-base ml-2 font-medium ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
-                    {i18n.t('common.queue.waitTime', { minutes: 18 })}
+                    {i18n.t('common.queue.waitTime', { minutes: selectedQueue!?.averageServiceTime * selectedQueue!?.currentQueueSize })}
                   </Text>
                 </View>
               </View>

@@ -129,7 +129,7 @@ public class StoreController {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
-            String email = token.length() > 7 ? jwtUtil.getEmail(token.substring(7)) : token;
+            String email = jwtUtil.getEmail(token.substring(7));
             Page<Product> products = productService.getProductsByStoreName(businessName, page, perPage, email,
                     locationId);
             body.put("products", products);

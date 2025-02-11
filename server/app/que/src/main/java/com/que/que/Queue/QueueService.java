@@ -77,6 +77,10 @@ public class QueueService {
       throw new IllegalStateException("Queue name already used");
     }
 
+    // Check if location exists
+    Location location = locationRepository.findById(locationId)
+        .orElseThrow(() -> new IllegalStateException("Could not find location"));
+
     // Checking if user already has a slot in memory if not assign one
     int queueLocation = getQueueSlot(queueHolderID);
     ArrayList<Queue<Long>> queueHolderQueue;
@@ -85,7 +89,8 @@ public class QueueService {
       try {
         queueHolderQueue = queueSet.get(currentSlot);
       } catch (Exception e) {
-        queueSet.add(new ArrayList<Queue<Long>>());
+        for (int i = queueSet.size(); i < currentSlot + 1; i++)
+          queueSet.add(new ArrayList<Queue<Long>>());
         queueHolderQueue = queueSet.get(currentSlot);
       }
       appUser.getPartner().setQueueId(currentSlot);
@@ -94,21 +99,17 @@ public class QueueService {
       queueHolderQueue = queueSet.get(queueLocation);
     }
 
-    // Check if location exists
-    Location location = locationRepository.findById(locationId)
-        .orElseThrow(() -> new IllegalStateException("Could not find location"));
-
     // try {
-    //   // This currently has an error because the createQRCode method is not static
-    //   qrCodeService.createQRCode(
-    //       appUser.getPartner().getId(),
-    //       queueHolderQueue.size(),
-    //       String.format(
-    //           "api/v1/queue/user?partnerId=%d&queueName=%s",
-    //           appUser.getPartner().getId(),
-    //           name));
+    // // This currently has an error because the createQRCode method is not static
+    // qrCodeService.createQRCode(
+    // appUser.getPartner().getId(),
+    // queueHolderQueue.size(),
+    // String.format(
+    // "api/v1/queue/user?partnerId=%d&queueName=%s",
+    // appUser.getPartner().getId(),
+    // name));
     // } catch (Exception e) {
-    //   throw new IllegalStateException("Error while creating queue.");
+    // throw new IllegalStateException("Error while creating queue.");
     // }
     Queues createdQueue = queueRepository.save(new Queues(
         name,
@@ -120,7 +121,7 @@ public class QueueService {
         averageServiceTime,
         isActive));
     queueCreationRepository.save(new QueueCreation(createdQueue));
-    // queueHolderQueue.add(new LinkedList<>());
+    queueHolderQueue.add(new LinkedList<>());
     partnerRepository.save(appUser.getPartner());
     print();
   }
@@ -130,7 +131,7 @@ public class QueueService {
         .findById(queueHolderID)
         .orElseThrow(() -> new IllegalStateException("Could not find user"));
     int queueId = appUserFromDB.getPartner().getQueueId();
-    SubscriptionPlans subscriptionPlan = appUserFromDB.getSubscriptionPlan();
+    SubscriptionPlans subscriptionPlan = appUserFromDB.getPartner().getSubscriptionPlan();
     int max = 1;
 
     // Current as placeholder
@@ -190,7 +191,7 @@ public class QueueService {
       specificQueue.add(user.getId());
       currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() + 1);
     } catch (Exception e) {
-      throw new IllegalStateException("Could not add user to queue: " + e.getMessage());
+      throw new IllegalStateException(e.getMessage());
     }
     queueEnqueueRepository.save(
         new QueueEnqueue(
@@ -244,6 +245,38 @@ public class QueueService {
     }
   }
 
+  public void dequeueUser(String email, @NonNull String name) {
+    checkIfFirstOperation();
+
+    Queues currentQueue = queueRepository.findByName(name)
+        .orElseThrow(() -> new IllegalStateException("Could not find queue"));
+    int queueSlot = currentQueue.getQueueSlot();
+
+    // Checking if user has slot in memory
+    if (queueSlot == -1) {
+      throw new IllegalStateException("User does not have a queue setup");
+    }
+    ArrayList<Queue<Long>> queueHolderQueues = queueSet.get(queueSlot);
+    try {
+
+      // Attempting to find queue requested and fetching user from it
+      Queue<Long> specificQueue = queueHolderQueues.get(currentQueue.getSpecificSlot());
+      if (specificQueue.isEmpty()) {
+        return;
+      }
+
+      AppUser user = appUserRepository.findByEmail(email)
+          .orElseThrow(() -> new IllegalStateException("Could not find user"));
+      specificQueue.removeIf(id -> user.getId() == id);
+      print();
+      currentQueue.setPeopleInQueue(currentQueue.getPeopleInQueue() - 1);
+      queueRepository.save(currentQueue);
+    } catch (Exception e) {
+      print();
+      throw new IllegalStateException("Could not remove first user from queue");
+    }
+  }
+
   public void deleteQueue(@NonNull String name) {
     checkIfFirstOperation();
 
@@ -279,7 +312,11 @@ public class QueueService {
       Partner partner = partnerRepository.findByName(businessName)
           .orElseThrow(() -> new IllegalStateException("Could not find partner"));
 
-      ArrayList<Queues> currentQueues = queueRepository.findByPartner(partner);
+      Location location = locationRepository.findByIdAndPartner(
+          locationId, partner)
+          .orElseThrow(() -> new IllegalStateException("Could not find location"));
+
+      ArrayList<Queues> currentQueues = queueRepository.findByLocation(location);
 
       return currentQueues;
     } else {
@@ -464,13 +501,13 @@ public class QueueService {
       try {
         queueHolderQueue = queueSet.get(queueSlot);
       } catch (Exception e) {
-        for (int i = queueSet.size(); i < queueSlot; i++) {
+        for (int i = queueSet.size(); i < queueSlot + 1; i++) {
           queueSet.add(new ArrayList<Queue<Long>>());
         }
         queueHolderQueue = queueSet.get(queueSlot);
       }
 
-      for (int i = queueHolderQueue.size(); i < queue.getSpecificSlot(); i++) {
+      for (int i = queueHolderQueue.size(); i < queue.getSpecificSlot() + 1; i++) {
         queueHolderQueue.add(new LinkedList<>());
       }
     }
@@ -484,5 +521,6 @@ public class QueueService {
 
     queueSlots.empty();
     queueSlots.addAll(temp);
+    print();
   }
 }

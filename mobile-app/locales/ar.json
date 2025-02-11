@@ -174,7 +174,7 @@
     "locationAccess": "اختر الموقع للانضمام إلى الطابور",
     "queue": {
       "peopleCount": "{{count}} شخص في الطابور",
-      "waitTime": "~{{minutes}} دقيقة",
+      "waitTime": "~ {{minutes}} دقيقة",
       "joined": "تم الانضمام للطابور!",
       "leave": "مغادرة الطابور",
       "join": "انضم للطابور",

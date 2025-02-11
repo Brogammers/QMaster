@@ -49,16 +49,21 @@ public class QueueController {
     }
 
     @PutMapping(path = "/user")
-    @Secured({ "USER", "ADMIN" })
     public ResponseEntity<Object> enqueue(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @Param("queueName") String queueName) {
+            @Param("queueName") String queueName,
+            @RequestParam(value = "leave", required = false, defaultValue = "false") String leave) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
 
         try {
             String email = jwtUtil.getEmail(token.substring(7));
-            queueService.enqueueUser(email, queueName);
-            body.put("message", "Added user!");
+            if (leave.equals("true")) {
+                queueService.dequeueUser(email, queueName);
+                body.put("message", "User left queue");
+            } else {
+                queueService.enqueueUser(email, queueName);
+                body.put("message", "Added user!");
+            }
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
             statusCode = HttpStatusCode.valueOf(500);
@@ -110,7 +115,7 @@ public class QueueController {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
         try {
-            String email = token.length() > 7 ? jwtUtil.getEmail(token.substring(7)) : token;
+            String email = jwtUtil.getEmail(token.substring(7));
             ArrayList<Queues> queues = queueService.currentQueuesOfUser(email, locationId, businessName);
             body.put("queues", queues);
             body.put("message", "Queues retrieved");

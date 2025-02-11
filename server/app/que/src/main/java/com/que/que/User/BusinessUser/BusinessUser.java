@@ -6,14 +6,10 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Partner.Partner;
-import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.User;
 import com.que.que.User.UserRole;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
@@ -28,10 +24,6 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = true)
 @JsonSerialize(using = BusinessUserSerializer.class)
 public class BusinessUser extends User {
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private SubscriptionPlans subscriptionPlan;
 
     @ManyToOne
     @JoinColumn(name = "partner_id")
@@ -51,7 +43,6 @@ public class BusinessUser extends User {
             String phoneCode,
             String phoneNumber,
             String location,
-            SubscriptionPlans subscriptionPlan,
             Partner partner) {
         super(appUserRole, firstName, lastName, dateOfRegistration,
                 dateOfBirth, countryOfOrigin, password, email, locked, enabled,
@@ -63,7 +54,6 @@ public class BusinessUser extends User {
             throw new IllegalArgumentException("Invalid user role for business user");
         }
 
-        this.subscriptionPlan = subscriptionPlan;
         this.partner = partner;
     }
 

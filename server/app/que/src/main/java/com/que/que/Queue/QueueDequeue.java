@@ -40,7 +40,7 @@ public class QueueDequeue {
     private Queues queue;
 
     @ManyToOne
-    @JoinColumn(nullable = false, name = "queue_counter_id")
+    @JoinColumn(name = "queue_counter_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private QueueCounter queueCounter;
 

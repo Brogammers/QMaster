@@ -122,7 +122,7 @@ export default function OpeningHours({ hours }: OpeningHoursProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     width: "100%",
     marginVertical: 16,
   },

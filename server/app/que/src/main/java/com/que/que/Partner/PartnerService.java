@@ -2,6 +2,7 @@ package com.que.que.Partner;
 
 import org.springframework.stereotype.Service;
 
+import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.BusinessUser.BusinessCategory;
 import com.que.que.User.BusinessUser.BusinessCategoryRepository;
 
@@ -19,7 +20,7 @@ public class PartnerService {
                 .orElseThrow(() -> new IllegalStateException(
                         "Business category with name " + businessCategoryName + " not found"));
 
-        Partner partner = new Partner(name, businessCategory);
+        Partner partner = new Partner(name, businessCategory, SubscriptionPlans.BASIC);
 
         partnerRepository.save(partner);
 
