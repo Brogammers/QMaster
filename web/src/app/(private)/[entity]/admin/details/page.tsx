@@ -1,13 +1,19 @@
 "use client";
 
 import QueueModal from "@/app/shared/QueueModal";
-import { Button, Form, Input, Select, Tabs, TimePicker } from 'antd';
+import { Button, Form, Input, Select, Tabs, TimePicker } from "antd";
 import axios from "axios";
-import dayjs from 'dayjs';
-import { motion } from 'framer-motion';
+import dayjs from "dayjs";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import toast from 'react-hot-toast';
-import { FaClock, FaEdit, FaGlobe, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
+import toast from "react-hot-toast";
+import {
+  FaClock,
+  FaEdit,
+  FaGlobe,
+  FaMapMarkerAlt,
+  FaPhone,
+} from "react-icons/fa";
 import Entity from "../../page";
 import { useLocation } from "@/ctx/LocationContext";
 
@@ -30,53 +36,58 @@ interface BusinessDetails {
 }
 
 const DAYS = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
 ];
 
 // This would typically come from your API
-  const initialValues: BusinessDetails = {
-    name: "",
-    phone: "",
-    address: "",
-    website: "",
-    description: "",
-    openingHours: DAYS.reduce((acc, day) => ({
+const initialValues: BusinessDetails = {
+  name: "",
+  phone: "",
+  address: "",
+  website: "",
+  description: "",
+  openingHours: DAYS.reduce(
+    (acc, day) => ({
       ...acc,
-      [day]: { open: "09:00", close: "17:00" }
-    }), {}),
-    category: ""
-  };
-
+      [day]: { open: "09:00", close: "17:00" },
+    }),
+    {}
+  ),
+  category: "",
+};
 
 export default function Details() {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeTab, setActiveTab] = useState('1');
-  const [businessDetails, setBusinessDetails] = useState<BusinessDetails>(initialValues);
+  const [activeTab, setActiveTab] = useState("1");
+  const [businessDetails, setBusinessDetails] =
+    useState<BusinessDetails>(initialValues);
   const { selectedLocation } = useLocation();
 
-  const handleModificationRequest = async (values: Partial<BusinessDetails>) => {
+  const handleModificationRequest = async (
+    values: Partial<BusinessDetails>
+  ) => {
     setIsSubmitting(true);
     try {
       // Here you would typically send this to your API
-      console.log('Modification requested:', values);
-      toast.success('Modification request submitted successfully', {
+      console.log("Modification requested:", values);
+      toast.success("Modification request submitted successfully", {
         style: {
-          background: '#10B981',
-          color: '#fff',
+          background: "#10B981",
+          color: "#fff",
         },
       });
     } catch (error) {
-      toast.error('Failed to submit modification request', {
+      toast.error("Failed to submit modification request", {
         style: {
-          background: '#ef4444',
-          color: '#fff',
+          background: "#ef4444",
+          color: "#fff",
         },
       });
     } finally {
@@ -85,40 +96,41 @@ export default function Details() {
   };
 
   useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_DATA || '';
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_DATA || "";
 
-    axios.get(`${url}?locationId=${selectedLocation?.id}`)
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data.info;
-      } else { 
-        throw new Error('Failed to fetch business data');
-      }
-    })
-    .then((data) => {      
-      const businessDetails = {
-        name: data.businessName,
-        phone: data.phoneNumber,
-        address: data.address,
-        website: initialValues.website,
-        description: data.description,
-        openingHours: data.openingHours,
-        category: data.businessCategory,
-      };     
-      setBusinessDetails(businessDetails);
-      form.setFieldsValue(businessDetails);
-    })
-    .catch((error) => {
-      console.error(error);
-      toast.error('Failed to fetch business data', {
-        style: {
-          background: '#ef4444',
-          color: '#fff',
-        },
+    axios
+      .get(`${url}?locationId=${selectedLocation?.id}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data.info;
+        } else {
+          throw new Error("Failed to fetch business data");
+        }
+      })
+      .then((data) => {
+        const businessDetails = {
+          name: data.businessName,
+          phone: data.phoneNumber,
+          address: data.address,
+          website: initialValues.website,
+          description: data.description,
+          openingHours: data.openingHours,
+          category: data.businessCategory,
+        };
+        setBusinessDetails(businessDetails);
+        form.setFieldsValue(businessDetails);
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Failed to fetch business data", {
+          style: {
+            background: "#ef4444",
+            color: "#fff",
+          },
+        });
       });
-    })
   }, [selectedLocation]);
-  
+
   return (
     <Entity>
       <QueueModal title="Business Details">
@@ -153,7 +165,11 @@ export default function Details() {
                         />
                       </Form.Item>
                       <Button
-                        onClick={() => handleModificationRequest({ name: form.getFieldValue('name') })}
+                        onClick={() =>
+                          handleModificationRequest({
+                            name: form.getFieldValue("name"),
+                          })
+                        }
                         className="absolute right-0 top-0 opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
                         transition-all pb-0.5 !text-black hover:!text-blue-500"
                       >
@@ -178,7 +194,11 @@ export default function Details() {
                         />
                       </Form.Item>
                       <Button
-                        onClick={() => handleModificationRequest({ phone: form.getFieldValue('phone') })}
+                        onClick={() =>
+                          handleModificationRequest({
+                            phone: form.getFieldValue("phone"),
+                          })
+                        }
                         className="absolute right-0 top-0 opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
                         transition-all pb-0.5 !text-black hover:!text-blue-500"
                       >
@@ -205,7 +225,11 @@ export default function Details() {
                       />
                     </Form.Item>
                     <Button
-                      onClick={() => handleModificationRequest({ address: form.getFieldValue('address') })}
+                      onClick={() =>
+                        handleModificationRequest({
+                          address: form.getFieldValue("address"),
+                        })
+                      }
                       className="absolute right-0 top-0 opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
                         transition-all pb-0.5 !text-black hover:!text-blue-500"
                     >
@@ -231,7 +255,11 @@ export default function Details() {
                         />
                       </Form.Item>
                       <Button
-                        onClick={() => handleModificationRequest({ website: form.getFieldValue('website') })}
+                        onClick={() =>
+                          handleModificationRequest({
+                            website: form.getFieldValue("website"),
+                          })
+                        }
                         className="absolute right-0 top-0 opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
                         transition-all pb-0.5 !text-black hover:!text-blue-500"
                       >
@@ -241,18 +269,24 @@ export default function Details() {
 
                     <div className="relative group">
                       <Form.Item
-                        label="Business Category"
+                        label={
+                          <div className="flex items-center gap-2">
+                            <span>Business Category</span>
+                          </div>
+                        }
                         name="category"
                       >
                         <Select
                           disabled
                           options={[
-                            { value: 'RETAIL', label: 'Retail' },
-                            { value: 'HEALTHCARE', label: 'Healthcare' },
-                            { value: 'BANKING', label: 'Banking' },
-                            { value: 'RESTAURANT', label: 'Restaurant' },
+                            { value: "RETAIL", label: "Retail" },
+                            { value: "HEALTHCARE", label: "Healthcare" },
+                            { value: "BANKING", label: "Banking" },
+                            { value: "RESTAURANT", label: "Restaurant" },
                           ]}
-                          className="cursor-not-allowed"
+                          className="cursor-not-allowed [&_.ant-select-selector]:!border-ocean-blue [&_.ant-select-selector]:!border-4 
+                          [&_.ant-select-selector]:!bg-white/50 [&_.ant-select-selector]:!rounded-xl [&_.ant-select-selector]:!px-4 
+                          [&_.ant-select-selector]:!h-[52px] [&_.ant-select-selection-item]:!leading-[44px]"
                         />
                       </Form.Item>
                     </div>
@@ -263,30 +297,41 @@ export default function Details() {
               <TabPane tab="Opening Hours" key="2">
                 <div className="space-y-4">
                   {DAYS.map((day) => (
-                    <div key={day} className="relative group flex items-center gap-4 p-4 bg-white/5 rounded-xl">
+                    <div
+                      key={day}
+                      className="relative group flex items-center gap-4 p-4 bg-white/5 rounded-xl"
+                    >
                       <FaClock className="w-4 h-4" />
                       <span className="w-32">{day}</span>
                       <div className="flex items-center gap-4">
                         <TimePicker
                           disabled
                           format="HH:mm"
-                          value={dayjs(businessDetails.openingHours[day].open, 'HH:mm')}
+                          value={dayjs(
+                            businessDetails.openingHours[day].open,
+                            "HH:mm"
+                          )}
                           className="cursor-not-allowed"
                         />
                         <span>to</span>
                         <TimePicker
                           disabled
                           format="HH:mm"
-                          value={dayjs(businessDetails.openingHours[day].close, 'HH:mm')}
+                          value={dayjs(
+                            businessDetails.openingHours[day].close,
+                            "HH:mm"
+                          )}
                           className="cursor-not-allowed"
                         />
                       </div>
                       <Button
-                        onClick={() => handleModificationRequest({ 
-                          openingHours: { 
-                            [day]: businessDetails.openingHours[day] 
-                          } 
-                        })}
+                        onClick={() =>
+                          handleModificationRequest({
+                            openingHours: {
+                              [day]: businessDetails.openingHours[day],
+                            },
+                          })
+                        }
                         className="ml h-fit w-fit border-0 shadow-none group-hover:opacity-100 
                         transition-all pb-0.5 !text-black hover:!text-blue-500"
                       >
