@@ -96,7 +96,7 @@ export default function Counter() {
   const calculateVisibleTickets = useCallback((containerWidth: number) => {
     const availableWidth = containerWidth - TICKET_DIMENSIONS.indicatorWidth; // Reserve space for indicator
     const ticketTotalWidth = TICKET_DIMENSIONS.width + TICKET_DIMENSIONS.gap;
-    return Math.max(1, Math.floor(availableWidth / ticketTotalWidth));
+    return Math.max(2, Math.floor(availableWidth / ticketTotalWidth) + 1);
   }, []);
 
   useEffect(() => {
