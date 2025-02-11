@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCart } from '@/ctx/CartContext';
 import Animated, { useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { useLocalSearchParams } from 'expo-router';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -24,6 +25,7 @@ export default function Product() {
   const navigation = useNavigation<NavigationProp>();
   const { addToCart, updateQuantity, items } = useCart();
   const [isAnimating, setIsAnimating] = React.useState(false);
+  const { id, name, price, description, quantity, storeId } = useLocalSearchParams();
   
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -36,21 +38,18 @@ export default function Product() {
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  // Sample product data - in real app, this would come from props or API
-  const product = {
-    id: 1,
-    name: 'Sample Product',
-    price: 19.99
-  };
-
-  const cartItem = items.find(item => item.id === product.id);
+  const cartItem = items.find(item => item.id === parseInt(id as string));
   const cartQuantity = cartItem?.quantity || 0;
 
   const handleAddToCart = () => {
     if (cartQuantity === 0) {
       setIsAnimating(true);
       setTimeout(() => {
-        addToCart(product, 1);
+        addToCart({
+          id: parseInt(id as string),
+          name: name as string,
+          price: parseFloat(price as string),
+        }, 1);
         setIsAnimating(false);
       }, 500);
     }
@@ -131,15 +130,15 @@ export default function Product() {
           </View>
 
           <Text className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
-            Sample Product
+            {name}
           </Text>
           
           <Text className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
-            $19.99
+            {price}
           </Text>
 
           <Text className={`text-base mb-6 ${isDarkMode ? 'text-white/70' : 'text-slate-grey'}`}>
-            Experience the finest quality with our carefully selected products. This item represents our commitment to excellence and customer satisfaction.
+              {description}
           </Text>
 
           {cartQuantity === 0 ? (
@@ -157,7 +156,7 @@ export default function Product() {
               <View className="flex-row items-center justify-between bg-slate-grey/10 rounded-xl p-2">
                 <TouchableOpacity 
                   className={`w-14 h-14 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}
-                  onPress={() => updateQuantity(product.id, Math.max(0, cartQuantity - 1))}
+                  onPress={() => updateQuantity(parseInt(id as string), Math.max(0, cartQuantity - 1))}
                 >
                   <Text className="text-white text-center font-bold text-2xl">−</Text>
                 </TouchableOpacity>
@@ -171,7 +170,7 @@ export default function Product() {
                 </View>
                 <TouchableOpacity 
                   className={`w-14 h-14 rounded-xl ${isDarkMode ? 'bg-baby-blue' : 'bg-ocean-blue'} items-center justify-center`}
-                  onPress={() => updateQuantity(product.id, cartQuantity + 1)}
+                  onPress={() => updateQuantity(parseInt(id as string), cartQuantity + 1)}
                 >
                   <Text className="text-white text-center font-bold text-2xl">+</Text>
                 </TouchableOpacity>

@@ -22,8 +22,8 @@ export default function ProductManagementModal({
     name: product?.name || '',
     description: product?.description || '',
     price: product?.price || '',
-    stock: product?.stock || '',
-    type: product?.type || 'physical',
+    quantity: product?.quantity || '',
+    type: product?.type || 'PHYSICAL',
     image: null as File | null,
   });
 
@@ -93,18 +93,18 @@ export default function ProductManagementModal({
           <div className="grid grid-cols-2 gap-4">
             <button
               type="button"
-              onClick={() => setFormData({ ...formData, type: 'physical' })}
+              onClick={() => setFormData({ ...formData, type: 'PHYSICAL' })}
               className={`p-4 rounded-lg border-2 transition-colors ${
-                formData.type === 'physical'
+                formData.type === 'PHYSICAL'
                   ? 'border-baby-blue bg-baby-blue/5'
                   : 'border-black/10 hover:border-baby-blue/50'
               }`}
             >
               <Package className={`w-8 h-8 mx-auto mb-2 ${
-                formData.type === 'physical' ? 'text-baby-blue' : 'text-black/50'
+                formData.type === 'PHYSICAL' ? 'text-baby-blue' : 'text-black/50'
               }`} />
               <p className={`text-sm font-medium ${
-                formData.type === 'physical' ? 'text-baby-blue' : 'text-black/70'
+                formData.type === 'PHYSICAL' ? 'text-baby-blue' : 'text-black/70'
               }`}>
                 Physical Product
               </p>
@@ -112,18 +112,18 @@ export default function ProductManagementModal({
 
             <button
               type="button"
-              onClick={() => setFormData({ ...formData, type: 'digital' })}
+              onClick={() => setFormData({ ...formData, type: 'DIGITAL' })}
               className={`p-4 rounded-lg border-2 transition-colors ${
-                formData.type === 'digital'
+                formData.type === 'DIGITAL'
                   ? 'border-baby-blue bg-baby-blue/5'
                   : 'border-black/10 hover:border-baby-blue/50'
               }`}
             >
               <Package className={`w-8 h-8 mx-auto mb-2 ${
-                formData.type === 'digital' ? 'text-baby-blue' : 'text-black/50'
+                formData.type === 'DIGITAL' ? 'text-baby-blue' : 'text-black/50'
               }`} />
               <p className={`text-sm font-medium ${
-                formData.type === 'digital' ? 'text-baby-blue' : 'text-black/70'
+                formData.type === 'DIGITAL' ? 'text-baby-blue' : 'text-black/70'
               }`}>
                 Digital Product
               </p>
@@ -174,16 +174,16 @@ export default function ProductManagementModal({
               />
             </div>
 
-            {/* Stock (only for physical products) */}
-            {formData.type === 'physical' && (
+            {/* Stock (only for PHYSICAL products) */}
+            {formData.type === 'PHYSICAL' && (
               <div>
                 <label className="block text-sm font-medium text-black/70 mb-1">
                   Stock
                 </label>
                 <input
                   type="number"
-                  value={formData.stock}
-                  onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                  value={formData.quantity}
+                  onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
                   className="w-full px-4 py-2 rounded-lg border border-black/10 text-black"
                   placeholder="0"
                   min="0"

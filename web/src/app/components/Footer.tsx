@@ -57,7 +57,7 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-          <h6 className="text-sm text-center xsm:text-start">All rights reserved &ndash; 2024 &copy; QMaster</h6>
+          <h6 className="text-sm text-center xsm:text-start">All rights reserved &ndash; {new Date().getFullYear()} &copy; QMaster</h6>
         </div>
       </div>
     </footer>

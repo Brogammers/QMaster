@@ -1,20 +1,33 @@
 'use client'
 
-import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { useAuth, AuthProvider } from '@/lib/auth/AuthContext';
 import AdminSidebar from '@/app/components/admin/AdminSidebar';
 import SplashScreen from '@/app/shared/SplashScreen';
+import { AuthProvider, useAuth } from '@/lib/auth/AuthContext';
+import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Category } from './admin/categories/page';
+import { Partner } from './admin/partners/page';
+import { CategoriesContext, PartnerContext, StoresContext, UsersContext } from './context';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
+import { StoreData } from './admin/store/columns';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
+export const DEFAULT_PAGE = 1;
+export const DEFAULT_PER_PAGE = 10;
+
 function AdminLayoutContent({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const { admin, isLoading } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [users, setUsers] = useState([]);
+  const [stores, setStores] = useState<StoreData[]>([]);
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('qmaster-dark-mode');
@@ -36,6 +49,18 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     localStorage.setItem('qmaster-dark-mode', value.toString());
     // Dispatch a custom event for other components to listen to
     window.dispatchEvent(new CustomEvent('darkModeChange', { detail: value }));
+  };
+
+  const getNextPartnerPage = (page: number, perPage: number) => {
+  };
+
+  const getNextCategoryPage = (page: number, perPage: number) => {
+  };
+
+  const getNextUserPage = (page: number, perPage: number) => {
+  };
+
+  const getNextStorePage = (page: number, perPage: number) => {
   };
 
   return (
@@ -90,7 +115,15 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
             </motion.div>
           )}
           <div className="space-y-6">
-            {children}
+            <PartnerContext.Provider value={{ partners, setPartners, getNextPartnerPage }}>
+              <UsersContext.Provider value={{ users, setUsers, getNextUserPage }}>
+                <CategoriesContext.Provider value={{ categories, setCategories, getNextCategoryPage }}> 
+                  <StoresContext.Provider value={{ stores, setStores, getNextStorePage }}> 
+                    {children} 
+                  </StoresContext.Provider> 
+                </CategoriesContext.Provider>                 
+              </UsersContext.Provider>
+            </PartnerContext.Provider>
           </div>
         </div>
       </motion.main>

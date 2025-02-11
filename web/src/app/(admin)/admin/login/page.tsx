@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/AuthContext';
-import { FaEnvelope, FaLock } from 'react-icons/fa';
+import { FaEnvelope, FaEye, FaEyeSlash, FaLock } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import SplashScreen from '@/app/shared/SplashScreen';
 
@@ -12,6 +12,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
 
@@ -70,13 +71,24 @@ export default function LoginPage() {
             <div className="relative">
               <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50" />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-white/[0.02] border border-white/10 rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-crystal-blue"
                 placeholder="Enter your password"
                 required
               />
+              {showPassword ? (
+                <FaEyeSlash 
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 cursor-pointer"
+                  onClick={() => setShowPassword(false)}
+                />
+              ) : (
+                <FaEye
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 cursor-pointer"
+                  onClick={() => setShowPassword(true)} 
+                />
+              )}
             </div>
           </div>
           {error && (

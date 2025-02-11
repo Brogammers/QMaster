@@ -1,17 +1,15 @@
-package com.que.que.User.BusinessUser;
+package com.que.que.Location.OpeningHours;
 
-import java.sql.Time;
-import java.util.HashSet;
-import java.util.Set;
-
-import com.que.que.Store.Store;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.que.que.Location.Location;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +19,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
+@JsonSerialize(using = OpeningHoursSerializer.class)
 public class OpeningHours {
 
     @Id
@@ -32,21 +31,24 @@ public class OpeningHours {
     private String day;
 
     @Column(nullable = false)
-    private Time openTime;
+    private String openTime;
 
     @Column(nullable = false)
-    private Time closeTime;
+    private String closeTime;
 
-    @ManyToMany
-    private Set<Store> store = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
 
-    public OpeningHours(String day, Time openTime, Time closeTime) {
+    @Column(nullable = false)
+    private boolean isOpen;
+
+    public OpeningHours(String day, String openTime, String closeTime, Location location, boolean isOpen) {
         this.day = day;
         this.openTime = openTime;
         this.closeTime = closeTime;
+        this.location = location;
+        this.isOpen = isOpen;
     }
 
-    public void addStore(Store store) {
-        this.store.add(store);
-    }
 }

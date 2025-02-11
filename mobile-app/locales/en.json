@@ -174,7 +174,7 @@
     "locationAccess": "Choose location to join the queue",
     "queue": {
       "peopleCount": "{{count}} people in queue",
-      "waitTime": "~{{minutes}} min",
+      "waitTime": "~ {{minutes}} min",
       "joined": "Queue Joined!",
       "leave": "Leave Queue",
       "join": "Join Queue",
@@ -187,7 +187,15 @@
       "fast": "Fast",
       "ratings": "({{count}} ratings)",
       "chooseBranch": "Choose Branch",
-      "searchBranches": "Search branches..."
+      "searchBranches": "Search branches...",
+      "chooseService": "Choose Service Type",
+      "minutes": "min",
+      "services": {
+        "cashier": "Cashier",
+        "returns": "Returns & Exchange",
+        "pickup": "Order Pickup",
+        "support": "Customer Support"
+      }
     }
   },
   "greetings": {

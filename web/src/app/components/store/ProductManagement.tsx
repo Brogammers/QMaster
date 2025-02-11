@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import { Package, Plus, Search, Download, Edit, Eye, Trash } from 'lucide-react';
 import ProductManagementModal from './ProductManagementModal';
 import ProductPreviewModal from './ProductPreviewModal';
 import ExportProductsModal from './ExportProductsModal';
 import StorePreviewModal from './StorePreviewModal';
+import axios from 'axios';
 
 interface Product {
   id: number;
   name: string;
   description: string;
   price: number;
-  stock: number;
+  quantity: number;
   status: 'in_stock' | 'low_stock' | 'out_of_stock';
   image: string;
 }
@@ -29,17 +30,7 @@ export default function ProductManagement() {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Mock data - replace with real data from your backend
-  const [products, setProducts] = useState<Product[]>([
-    {
-      id: 1,
-      name: 'Sample Product',
-      description: 'This is a sample product description',
-      price: 299.99,
-      stock: 15,
-      status: 'in_stock',
-      image: 'https://via.placeholder.com/150',
-    },
-  ]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -188,7 +179,7 @@ export default function ProductManagement() {
                   <span className="font-medium">EGP {product.price}</span>
                 </td>
                 <td className="py-4 px-4">
-                  <span className="text-black/70">{product.stock} units</span>
+                  <span className="text-black/70">{product.quantity} units</span>
                 </td>
                 <td className="py-4 px-4">
                   <span

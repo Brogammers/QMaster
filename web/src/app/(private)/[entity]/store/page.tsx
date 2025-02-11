@@ -1,30 +1,31 @@
 "use client";
 
-import { useState } from "react";
-import Entity from "../page";
+import ExportProductsModal from "@/app/components/store/ExportProductsModal";
+import ProductGridView, { Product } from '@/app/components/store/ProductGridView';
+import ProductManagementModal from "@/app/components/store/ProductManagementModal";
+import ProductPreviewModal from "@/app/components/store/ProductPreviewModal";
 import QueueModal from "@/app/shared/QueueModal";
-import { Store, ShoppingBag, Package, DollarSign, Users, Trash2 } from "lucide-react";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
+import { useLocation } from "@/ctx/LocationContext";
+import axios from "axios";
+import { Form, Formik } from "formik";
+import { motion } from "framer-motion";
+import { DollarSign, Package, ShoppingBag, Store, Trash2, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import toast from "react-hot-toast";
 import {
-  LineChart,
+  CartesianGrid,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
 } from "recharts";
-import ProductManagementModal from "@/app/components/store/ProductManagementModal";
-import ExportProductsModal from "@/app/components/store/ExportProductsModal";
-import StorePreviewModal from "@/app/components/store/StorePreviewModal";
-import ProductPreviewModal from "@/app/components/store/ProductPreviewModal";
-import ProductGridView from '@/app/components/store/ProductGridView';
+import * as Yup from "yup";
+import Entity from "../page";
 
 const StoreStatus = {
   NOT_REQUESTED: "NOT_REQUESTED",
@@ -256,10 +257,10 @@ const StoreSetupSchema = Yup.object().shape({
           .min(0.01, "Price must be greater than 0")
           .required("Price is required"),
         type: Yup.string()
-          .oneOf(["physical", "digital"], "Invalid product type")
+          .oneOf(["PHYSICAL", "DIGITAL"], "Invalid product type")
           .required("Product type is required"),
-        stock: Yup.number().when("type", {
-          is: "physical",
+        quantity: Yup.number().when("type", {
+          is: "PHYSICAL",
           then: (schema) =>
             schema.min(1, "Stock must be greater than 0 for physical products"),
           otherwise: (schema) => schema.min(0),
@@ -355,6 +356,7 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [showGuide, setShowGuide] = useState(true);
+  const { selectedLocation } = useLocation();
 
   const setupSteps = [
     {
@@ -431,20 +433,31 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
 
   const handleSubmit = async (values: any) => {
     try {
-      // Here you would typically send the data to your backend
-      console.log('Submitting store setup:', values);
-      
-      // Show success message
-      toast.success("Store setup completed successfully!", {
-        style: {
-          background: "#10B981",
-          color: "#fff",
-        },
-        duration: 4000,
-      });
+      const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETUP_STORE || "";
 
-      // Call the onComplete callback to update the store status
-      await onComplete();
+      axios.post(url, {...values, locationId: selectedLocation?.id})
+      .then((response) => {
+          if (response.status === 201) {
+            return response.data;
+          } else {
+            throw new Error("Failed to complete store setup");
+          }
+      })
+      .then(async (data) => {
+          console.log(data);
+          
+          // Show success message
+          toast.success("Store setup completed successfully!", {
+              style: {
+                  background: "#10B981",
+                  color: "#fff",
+              },
+              duration: 4000,
+          });
+
+          // Call the onComplete callback to update the store status
+          await onComplete();
+      })
     } catch (error) {
       console.error('Failed to complete store setup:', error);
       toast.error("Failed to complete store setup. Please try again.", {
@@ -593,32 +606,32 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                       onBlur={formik.handleBlur}
                       className="w-full px-4 py-2 rounded-lg border border-black/10"
                     >
-                      <option value="physical">Physical Product</option>
-                      <option value="digital">Digital Product</option>
+                      <option value="PHYSICAL">Physical Product</option>
+                      <option value="DIGITAL">Digital Product</option>
                     </select>
                   </div>
                 </div>
 
-                {product.type === "physical" && (
+                {product.type === "PHYSICAL" && (
                   <div>
                     <label className="block text-sm font-medium text-black/70 mb-1">
                       Stock Quantity
                     </label>
                     <input
                       type="text"
-                      name={`products.${index}.stock`}
-                      value={product.stock}
+                      name={`products.${index}.quantity`}
+                      value={product.quantity}
                       onChange={(e) => {
                         const value = e.target.value.replace(/[^0-9]/g, "");
-                        formik.setFieldValue(`products.${index}.stock`, value);
+                        formik.setFieldValue(`products.${index}.quantity`, value);
                       }}
                       onBlur={formik.handleBlur}
                       className="w-full px-4 py-2 rounded-lg border border-black/10"
                     />
-                    {formik.touched.products?.[index]?.stock &&
-                      formik.errors.products?.[index]?.stock && (
+                    {formik.touched.products?.[index]?.quantity &&
+                      formik.errors.products?.[index]?.quantity && (
                         <p className="text-red-500 text-sm mt-1">
-                          {formik.errors.products[index].stock}
+                          {formik.errors.products[index].quantity}
                         </p>
                       )}
                   </div>
@@ -702,8 +715,8 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                     name: "",
                     description: "",
                     price: "",
-                    type: "physical",
-                    stock: "",
+                    type: "PHYSICAL",
+                    quantity: "",
                     images: [],
                   },
                 ]);
@@ -1167,6 +1180,7 @@ const mockGraphData = {
   ],
 };
 
+
 const StoreDashboardView = () => {
   // Add state for modals and views
   const [showProductManagement, setShowProductManagement] = useState(false);
@@ -1177,6 +1191,10 @@ const StoreDashboardView = () => {
   const [isManagingProducts, setIsManagingProducts] = useState(false);
   const [showProductGrid, setShowProductGrid] = useState(false);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const { selectedLocation } = useLocation();
 
   // Mock data for testing
   const mockAnalytics = {
@@ -1208,40 +1226,114 @@ const StoreDashboardView = () => {
     },
   };
 
-  const mockInventory = [
-    {
-      id: 1,
-      name: "Product 1",
-      description: "A high-quality product with amazing features",
-      price: 299.99,
-      stock: 15,
-      status: "in_stock" as const,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      description: "Premium product with exceptional quality",
-      price: 199.99,
-      stock: 3,
-      status: "low_stock" as const,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      description: "Exclusive product with unique characteristics",
-      price: 499.99,
-      stock: 0,
-      status: "out_of_stock" as const,
-      image: "https://via.placeholder.com/150",
-    },
-  ];
 
   const handleDeleteProduct = (productId: number) => {
-    // Here you would typically make an API call to delete the product
-    console.log('Deleting product:', productId);
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_PRODUCT || "";
+    axios.delete(url, {
+      data: {
+        productId: productId, 
+        locationId: selectedLocation?.id
+      }
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        return;
+      } else { 
+        throw new Error("Failed to delete product");
+      }
+    })
+    .then(() => {
+      setProducts(prev => prev.filter((product) => product.id !== productId));
+    })
+    .catch((error) => {
+      console.error("Error: ", error);
+    });
   };
+
+  const handleAddOnSubmit = (formData: Product) => {    
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_PRODUCT || "";
+
+    const data = {
+      ...formData,
+      locationId: selectedLocation?.id
+    }
+
+    axios.post(url, data)
+    .then((response) => {
+      if (response.status === 201) {
+        return response.data.product;
+      } else { 
+        throw new Error("Failed to add product");
+      }
+    })
+    .then((data) => {
+      const product = {
+          ...data,
+          status:
+              data.quantity > 10
+                  ? "in_stock"
+                  : data.quantity > 0
+                  ? "low_stock"
+                  : "out_of_stock",
+      };
+      setSelectedProduct(null);
+      setProducts([...products, product]);
+      toast.success("Product added successfully!", {
+          style: {
+            background: "#10B981",
+            color: "#fff",
+          },
+          duration: 4000,
+      });
+    })
+    .catch(() => {
+      toast.error("Failed to add product. Please try again.", {
+          style: {
+              background: "#EF4444",
+              color: "#fff",
+          },
+          duration: 4000,
+      });
+    });
+
+    setShowProductManagement(false);
+  }
+
+  const handleEditOnSubmit = () => {
+
+  }
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_PRODUCT_LIST;
+
+    axios.get(`${url}?page=${page}&per-page=${perPage}&locationId=${selectedLocation?.id}`)
+    .then((response) => {
+      if(response.status === 200) {
+        return response.data.products.content;
+      } else { 
+        throw new Error("Failed to fetch product data");
+      }
+    })
+    .then((data) => {      
+      const productsData: Product[] = data.map((product: any) => {
+          return {
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              description: product.description,
+              quantity: product.quantity,
+              status: product.quantity > 10 ? 'in_stock' : product.quantity > 0 ? 'low_stock' : 'out_of_stock',
+              image: null
+          };
+      });
+
+      setProducts(productsData);
+    })
+    .catch((error) => {
+      console.error("Error: ", error);
+    })
+  }, [selectedLocation, page, perPage]);
+
 
   if (showProductGrid) {
     return (
@@ -1268,7 +1360,7 @@ const StoreDashboardView = () => {
         </div>
 
         <ProductGridView
-          products={mockInventory}
+          products={products}
           mode="view"
           onDelete={handleDeleteProduct}
           isDeleteMode={isDeleteMode}
@@ -1290,10 +1382,7 @@ const StoreDashboardView = () => {
           }}
           product={selectedProduct}
           mode={selectedProduct ? 'edit' : 'add'}
-          onSubmit={() => {
-            setShowProductManagement(false);
-            setSelectedProduct(null);
-          }}
+          onSubmit={selectedProduct ? handleEditOnSubmit : handleAddOnSubmit}
         />
 
         {selectedProduct && (
@@ -1598,7 +1687,7 @@ const StoreDashboardView = () => {
           </div>
 
           <div className="relative h-[200px] mt-8">
-            {mockInventory.slice(0, 3).map((product, index) => (
+            {products.slice(0, 3).map((product, index) => (
               <div
                 key={product.id}
                 className={`absolute w-[280px] transition-all duration-300 hover:z-10 hover:scale-105 cursor-pointer
@@ -1656,10 +1745,7 @@ const StoreDashboardView = () => {
           }}
           product={selectedProduct}
           mode={selectedProduct ? 'edit' : 'add'}
-          onSubmit={() => {
-            setShowProductManagement(false);
-            setSelectedProduct(null);
-          }}
+          onSubmit={selectedProduct ? handleEditOnSubmit : handleAddOnSubmit}
         />
 
         <ExportProductsModal
@@ -1686,24 +1772,43 @@ export default function StorePage() {
   const [storeStatus, setStoreStatus] = useState<StoreStatus>(
     StoreStatus.NOT_REQUESTED
   );
+  const { selectedLocation } = useLocation();
 
   const handleStoreRequest = () => {
+    // TODO: Send request to backend
     setStoreStatus(StoreStatus.DOCUMENTS_PENDING);
   };
 
   const handleDocumentSubmit = async (documents: Document[]) => {
-    setStoreStatus(StoreStatus.PENDING);
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_SUBMIT_DOCUMENTS || "";
+
+    axios.post(url, {
+      locationId: selectedLocation?.id,
+      // documents: documents
+    })
+    .then((response) => {
+      if (response.status === 201) {
+        return response.data;
+      } else {  
+        throw new Error('Failed to submit documents');
+      }
+    })
+    .then((data) => {
+      setStoreStatus(StoreStatus.PENDING);
+    })
+
+    // setStoreStatus(StoreStatus.PENDING);
     // Simulate approval after 2 seconds
-    setTimeout(() => {
-      setStoreStatus(StoreStatus.SETUP_PENDING);
-      toast.success("Your store has been approved! Let&apos;s set it up.", {
-        style: {
-          background: "#10B981",
-          color: "#fff",
-        },
-        duration: 4000,
-      });
-    }, 2000);
+    // setTimeout(() => {
+    //   setStoreStatus(StoreStatus.SETUP_PENDING);
+    //   toast.success("Your store has been approved! Let&apos;s set it up.", {
+    //     style: {
+    //       background: "#10B981",
+    //       color: "#fff",
+    //     },
+    //     duration: 4000,
+    //   });
+    // }, 2000);
   };
 
   const handleSetupComplete = async () => {
@@ -1729,6 +1834,44 @@ export default function StorePage() {
       });
     }
   };
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_STORE_STATUS || "";
+
+    axios.get(`${url}?id=${selectedLocation?.id}`)
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data.status;
+      } else {
+        throw new Error('Failed to fetch store status');
+      }
+    })
+    .then((data) => {            
+      switch(data) {
+        case "NOT_REQUESTED":
+          setStoreStatus(StoreStatus.NOT_REQUESTED);
+          break;
+        case "DOCUMENTS_PENDING":
+          setStoreStatus(StoreStatus.DOCUMENTS_PENDING);
+          break;
+        case "PENDING":
+          setStoreStatus(StoreStatus.PENDING);
+          break;
+        case "SETUP_PENDING":
+          setStoreStatus(StoreStatus.SETUP_PENDING);
+          break;
+        case "SETUP_COMPLETE":
+          setStoreStatus(StoreStatus.SETUP_COMPLETED);
+          break;
+        default:
+          setStoreStatus(StoreStatus.NOT_REQUESTED);
+      }
+    })
+    .catch((error) => {
+      console.error('Failed to fetch store status:', error);
+      setStoreStatus(StoreStatus.NOT_REQUESTED);
+    })
+  }, [selectedLocation]);
 
   return (
     <Entity>

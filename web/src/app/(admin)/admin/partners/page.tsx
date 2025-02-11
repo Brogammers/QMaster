@@ -1,11 +1,15 @@
 'use client'
 
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaBuilding, FaPlus, FaSearch, FaChevronDown, FaChevronUp, FaMapMarkerAlt } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import AddPartnerModal from '@/components/admin/AddPartnerModal';
+import axios from 'axios';
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from '../../layout';
+import toast from 'react-hot-toast';
+import { PartnerContext as PartnersContext } from '../../context';
 
-interface Location {
+export interface Location {
   id: number;
   city: string;
   stateOrProvince: string;
@@ -13,7 +17,7 @@ interface Location {
   googleMapsUrl: string;
 }
 
-interface Partner {
+export interface Partner {
   id: number;
   name: string;
   category: string;
@@ -23,32 +27,7 @@ interface Partner {
 }
 
 export default function PartnersPage() {
-  const [partners, setPartners] = useState<Partner[]>([
-    {
-      id: 1,
-      name: 'City Hospital',
-      category: 'Healthcare',
-      status: 'active',
-      joinedDate: '2024-01-15',
-      locations: [
-        {
-          id: 1,
-          city: 'Manhattan',
-          stateOrProvince: 'New York',
-          country: 'USA',
-          googleMapsUrl: 'https://maps.google.com/?q=CityHospital+Manhattan'
-        },
-        {
-          id: 2,
-          city: 'Brooklyn',
-          stateOrProvince: 'New York',
-          country: 'USA',
-          googleMapsUrl: 'https://maps.google.com/?q=CityHospital+Brooklyn'
-        }
-      ]
-    },
-    // Add more partner data
-  ]);
+  const { partners, setPartners } = useContext(PartnersContext);
   const [isDarkMode] = useState(false);
   const [expandedPartnerId, setExpandedPartnerId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,6 +38,8 @@ export default function PartnersPage() {
   };
 
   const handleAddPartner = (partnerData: Omit<Partner, 'id' | 'joinedDate'>) => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_REGISTER_BUSINESS || "";
+
     const newPartner: Partner = {
       ...partnerData,
       id: partners.length + 1,
@@ -68,7 +49,7 @@ export default function PartnersPage() {
         id: index + 1
       }))
     };
-    setPartners(prev => [...prev, newPartner]);
+    setPartners((prev: Partner[]) => [...prev, newPartner]);
   };
 
   const handleAddLocation = (partnerId: number, locationData: Omit<Location, 'id'>) => {
@@ -107,6 +88,44 @@ export default function PartnersPage() {
     );
   });
 
+  // Get partners
+    useEffect(() => {
+      const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_GET_BUSINESSES;
+      axios.get(`${url}?page=${DEFAULT_PAGE}&per-page=${DEFAULT_PER_PAGE}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data.partners.content;
+        } else { 
+          throw new Error('Error fetching partners');
+        }
+      })
+      .then((data) => {
+        console.log(data);
+        
+        const partners = data.map((partner: any) => ({
+          id: partner.id,
+          name: partner.name,
+          category: partner.businessCategory,
+          status: partner.status ? "active" : "inactive",
+          joinedDate: new Date(partner.createdAt).toLocaleDateString(),
+          locations: partner.locations.map((location: any) => ({
+            id: location.id,
+            city: "city",
+            stateOrProvince: "state",
+            country: "country",
+            googleMapsUrl: "url"
+          }))
+        }));
+
+        setPartners(partners); 
+      })
+      .catch((error) => {
+        console.error('Error fetching partners:', error);
+        toast.error('Error fetching partners');
+      });
+    }, []);
+  
+   
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">

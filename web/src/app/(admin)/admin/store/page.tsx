@@ -1,73 +1,15 @@
 'use client'
 
-import { useState } from 'react';
-import { DataTable } from '@/components/ui/data-table';
-import { columns, type StoreData, type StoreStatus } from './columns';
-import { FaPlus } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
+import { DataTable } from '@/components/ui/data-table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { FileText, CheckCircle, XCircle, ChevronLeft, ChevronRight, ListFilter, Download, Eye } from 'lucide-react';
+import { CheckCircle, ChevronLeft, ChevronRight, Download, Eye, FileText, ListFilter, XCircle } from 'lucide-react';
+import { useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-
-const mockInitialData: StoreData[] = [
-  {
-    id: '1',
-    name: 'ELFADY Motors',
-    category: 'Auto & Motorcycles',
-    storeStatus: 'APPROVED' as const,
-    requestDate: '2024-01-10',
-    productsCount: 45,
-    monthlyRevenue: '$12,500',
-  },
-  {
-    id: '2',
-    name: 'Cairo Bikes',
-    category: 'Auto & Motorcycles',
-    storeStatus: 'PENDING' as const,
-    requestDate: '2024-01-13',
-    productsCount: 0,
-    monthlyRevenue: '$0',
-  },
-  {
-    id: '3',
-    name: 'Alexandria Parts',
-    category: 'Auto Parts',
-    storeStatus: 'NOT_REQUESTED' as const,
-    requestDate: '-',
-    productsCount: 0,
-    monthlyRevenue: '$0',
-  },
-];
-
-// Mock pending requests data with document URLs
-const pendingRequests: PendingRequest[] = [
-  {
-    id: '1',
-    partnerName: 'Cairo Bikes',
-    category: 'Auto & Motorcycles',
-    submissionDate: '2024-01-13',
-    documents: [
-      { name: 'Commercial Registration', status: 'pending' as const, url: '/mock-docs/cr.pdf' },
-      { name: 'Tax Card', status: 'pending' as const, url: '/mock-docs/tax.pdf' },
-      { name: 'VAT Registration', status: 'pending' as const, url: '/mock-docs/vat.pdf' },
-      { name: 'National ID', status: 'pending' as const, url: '/mock-docs/id.pdf' },
-      { name: 'Bank Account', status: 'pending' as const, url: '/mock-docs/bank.pdf' },
-    ],
-  },
-  {
-    id: '2',
-    partnerName: 'Delta Electronics',
-    category: 'Electronics',
-    submissionDate: '2024-01-14',
-    documents: [
-      { name: 'Commercial Registration', status: 'pending' as const, url: '/mock-docs/cr2.pdf' },
-      { name: 'Tax Card', status: 'pending' as const, url: '/mock-docs/tax2.pdf' },
-      { name: 'VAT Registration', status: 'pending' as const, url: '/mock-docs/vat2.pdf' },
-      { name: 'National ID', status: 'pending' as const, url: '/mock-docs/id2.pdf' },
-      { name: 'Bank Account', status: 'pending' as const, url: '/mock-docs/bank2.pdf' },
-    ],
-  },
-];
+import { FaPlus } from 'react-icons/fa';
+import { StoresContext } from '../../context';
+import { columns, type StoreData } from './columns';
+import axios from 'axios';
 
 interface Document {
   name: string;
@@ -84,19 +26,19 @@ interface PendingRequest {
 }
 
 export default function StorePage() {
+  const { stores, setStores } = useContext(StoresContext);
   const [isDarkMode] = useState(false);
   const [currentRequestIndex, setCurrentRequestIndex] = useState(0);
   const [showAllRequests, setShowAllRequests] = useState(false);
   const [showDocumentPreview, setShowDocumentPreview] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
-  const [storeData, setStoreData] = useState<StoreData[]>(mockInitialData);
-  const [pendingRequestsState, setPendingRequests] = useState<PendingRequest[]>(pendingRequests);
+  const [pendingRequestsState, setPendingRequests] = useState<PendingRequest[]>([]);
 
   const currentRequest = pendingRequestsState[currentRequestIndex];
 
   const handleNext = () => {
     setCurrentRequestIndex((prev) => 
-      prev < pendingRequests.length - 1 ? prev + 1 : prev
+      prev < pendingRequestsState.length - 1 ? prev + 1 : prev
     );
   };
 
@@ -106,9 +48,8 @@ export default function StorePage() {
 
   const handleDocumentAction = (action: 'approve' | 'reject') => {
     if (!selectedDocument || !currentRequest) return;
-
     // Update the document status
-    const updatedRequests = pendingRequestsState.map(request => {
+    setPendingRequests(prev => prev.map(request => {
       if (request.id === currentRequest.id) {
         return {
           ...request,
@@ -125,51 +66,145 @@ export default function StorePage() {
         };
       }
       return request;
+    }));
+    setShowDocumentPreview(false);
+  };
+
+  const handleDownloadAll = (request: typeof pendingRequestsState[0]) => {
+    // Here you would typically handle the batch download of all documents
+    console.log('Downloading all documents for:', request.partnerName);
+    toast.success('Downloading all documents...');
+  };
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_STORES || "";
+    axios.get(`${url}?page=1&per-page=10`)
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data.stores.content;
+      } else {
+        throw new Error("Failed to fetch stores data");
+      }
+    })
+    .then((data) => {
+      const storeData = data.map((store: any) => ({
+        id: store.id,
+        name: store.name,
+        category: store.category,
+        storeStatus: store.storeStatus,
+        productsCount: store.productsCount,
+        monthlyRevenue: store.monthlyRevenue,
+      }));
+
+      setStores(storeData);
+    })
+    .catch((error) => {
+      console.error(error);
+      toast.error("Failed to fetch stores data", {
+        duration: 5000,
+        style: {
+          backgroundColor: '#F87171',
+          color: '#1E293B',
+        },
+      });
+    })
+  }, []);
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_STORES + "/pending" || "";
+
+    axios.get(url)
+    .then((response) => {
+      if (response.status === 200) { 
+        return response.data.stores;
+      } else { 
+        throw new Error("Failed to fetch pending requests data");
+      }
+    })
+    .then((data) => {
+      const pendingRequests = data.map((request: any) => ({
+        id: request.id,
+        partnerName: request.name,
+        category: request.category,
+        submissionDate: "2022-01-01",
+        documents: [1, 2, 3].map((doc: any, idx: number) => ({ // request.documents
+          name: "Document" + idx,
+          status: "pending",
+          url: "https://example.com/document.pdf",
+        })),
+      }));
+
+      setPendingRequests(pendingRequests);
+    })
+    .catch((error) => {
+      console.error(error);
+      toast.error("Failed to fetch pending requests data", {
+        duration: 5000,
+        style: {
+          backgroundColor: '#F87171',
+          color: '#1E293B',
+        },
+      });
     });
+  }, []);
+
+  useEffect(() => {
+    if(!currentRequest) return;
 
     // Check if all documents are reviewed (either approved or rejected)
     const allDocumentsReviewed = currentRequest.documents.every(
       doc => doc.status === 'approved' || doc.status === 'rejected'
     );
 
+    const allDocumentsApproved = currentRequest.documents.every((doc) => doc.status === "approved");
+
     // If all documents are reviewed, update the store status in the table
-    if (allDocumentsReviewed) {
-      const allDocumentsApproved = currentRequest.documents.every(
-        doc => doc.status === 'approved'
-      );
+    if (allDocumentsReviewed && allDocumentsApproved) {
+      const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_STORES + "/approve" || "";
 
-      const updatedData = storeData.map(store => {
-        if (store.name === currentRequest.partnerName) {
-          return {
-            ...store,
-            storeStatus: allDocumentsApproved ? 'APPROVED' : 'REJECTED'
-          } as StoreData;
+      axios.post(`${url}?id=${currentRequest.id}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data.store;
+        } else {
+          throw new Error("Failed to approve store request");
         }
-        return store;
+      })
+      .then((data) => {; 
+        setStores(prev => [...prev, {
+          id: data.id,
+          name: data.name,
+          category: data.category,
+          storeStatus: data.storeStatus,
+          productsCount: data.productsCount,
+          monthlyRevenue: data.monthlyRevenue,
+        }]);
+
+          // Update the requests state
+        setPendingRequests(prev => prev.filter((request) => request.id !== currentRequest.id));
+        setCurrentRequestIndex(0);
+
+        toast.success("Store request approved successfully", {
+          duration: 5000,
+          style: {
+            backgroundColor: '#34D399',
+            color: '#1E293B',
+          },
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Failed to approve store request", {
+          duration: 5000,
+          style: {
+            backgroundColor: '#F87171',
+            color: '#1E293B',
+          },
+        });
       });
-
-      // Update the table data
-      setStoreData(updatedData);
-
-      // Show success message
-      toast.success(
-        `Store request ${allDocumentsApproved ? 'approved' : 'rejected'} successfully`
-      );
-    } else {
-      // Show document review message
-      toast.success(`Document ${action === 'approve' ? 'approved' : 'rejected'} successfully`);
     }
+  }, [currentRequest]);
 
-    // Update the requests state
-    setPendingRequests(updatedRequests);
-    setShowDocumentPreview(false);
-  };
-
-  const handleDownloadAll = (request: typeof pendingRequests[0]) => {
-    // Here you would typically handle the batch download of all documents
-    console.log('Downloading all documents for:', request.partnerName);
-    toast.success('Downloading all documents...');
-  };
 
   return (
     <div className="space-y-8">
@@ -187,127 +222,128 @@ export default function StorePage() {
       <div className={`${isDarkMode ? 'border-y border-white/[0.05]' : 'border-y border-slate-300'} overflow-hidden backdrop-blur-sm`}>
         <DataTable
           columns={columns}
-          data={storeData}
+          data={stores}
           searchKey="name"
           searchPlaceholder="Search stores..."
         />
       </div>
-
       {/* Pending Requests Section */}
-      <div className={`${isDarkMode ? 'bg-slate-900' : 'bg-white'} rounded-lg border border-slate-200`}>
-        <div className="p-6 border-b border-slate-200">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-xl font-semibold">Pending Store Requests</h2>
-              <p className="text-sm text-slate-500 mt-1">Review submitted documents and approve or reject store requests</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                <span>{currentRequestIndex + 1}</span>
-                <span>/</span>
-                <span>{pendingRequests.length}</span>
+      { currentRequest &&
+        <div className={`${isDarkMode ? 'bg-slate-900' : 'bg-white'} rounded-lg border border-slate-200`}>
+          <div className="p-6 border-b border-slate-200">
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-semibold">Pending Store Requests</h2>
+                <p className="text-sm text-slate-500 mt-1">Review submitted documents and approve or reject store requests</p>
               </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handlePrevious}
-                  disabled={currentRequestIndex === 0}
-                  className="border-slate-200"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleNext}
-                  disabled={currentRequestIndex === pendingRequests.length - 1}
-                  className="border-slate-200"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowAllRequests(true)}
-                  className="border-slate-200"
-                >
-                  <ListFilter className="w-4 h-4 mr-2" />
-                  View All Requests
-                </Button>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-sm text-slate-500">
+                  <span>{currentRequestIndex + 1}</span>
+                  <span>/</span>
+                  <span>{pendingRequestsState.length}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handlePrevious}
+                    disabled={currentRequestIndex === 0}
+                    className="border-slate-200"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleNext}
+                    disabled={currentRequestIndex === pendingRequestsState.length - 1}
+                    className="border-slate-200"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowAllRequests(true)}
+                    className="border-slate-200"
+                  >
+                    <ListFilter className="w-4 h-4 mr-2" />
+                    View All Requests
+                  </Button>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="p-6">
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h3 className="text-lg font-medium">{currentRequest.partnerName}</h3>
-              <div className="text-sm text-slate-500 space-y-1">
-                <p>Category: {currentRequest.category}</p>
-                <p>Submitted: {currentRequest.submissionDate}</p>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="border-slate-200"
-                onClick={() => handleDownloadAll(currentRequest)}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download All
-              </Button>
-              <Button
-                className="bg-crystal-blue hover:bg-opacity-90 text-black"
-                onClick={() => {
-                  setSelectedDocument(currentRequest.documents[0]);
-                  setShowDocumentPreview(true);
-                }}
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                Review Documents
-              </Button>
             </div>
           </div>
           
-          <div className="grid grid-cols-5 gap-4">
-            {currentRequest.documents.map((doc) => (
-              <div
-                key={doc.name}
-                className={`p-4 rounded-lg border ${
-                  isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'
-                } cursor-pointer hover:border-crystal-blue transition-colors`}
-                onClick={() => {
-                  setSelectedDocument(doc);
-                  setShowDocumentPreview(true);
-                }}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <FileText className="w-4 h-4 text-slate-400" />
-                  {doc.status === 'approved' ? (
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                  ) : doc.status === 'rejected' ? (
-                    <XCircle className="w-4 h-4 text-red-500" />
-                  ) : (
-                    <div className="w-2 h-2 rounded-full bg-yellow-400" />
-                  )}
+          <div className="p-6">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <h3 className="text-lg font-medium">{currentRequest.partnerName}</h3>
+                <div className="text-sm text-slate-500 space-y-1">
+                  <p>Category: {currentRequest.category}</p>
+                  <p>Submitted: {currentRequest.submissionDate}</p>
                 </div>
-                <p className="text-sm font-medium">{doc.name}</p>
-                <p className="text-xs text-slate-500 capitalize">{doc.status}</p>
+              </div>
+              <div className="flex gap-2">
                 <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full mt-2 h-8"
+                  variant="outline"
+                  className="border-slate-200"
+                  onClick={() => handleDownloadAll(currentRequest)}
                 >
-                  <Eye className="w-4 h-4 mr-2" />
-                  Preview
+                  <Download className="w-4 h-4 mr-2" />
+                  Download All
+                </Button>
+                <Button
+                  className="bg-crystal-blue hover:bg-opacity-90 text-black"
+                  onClick={() => {
+                    setSelectedDocument(currentRequest.documents[0]);
+                    setShowDocumentPreview(true);
+                  }}
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Review Documents
                 </Button>
               </div>
-            ))}
+            </div>
+            
+            <div className="grid grid-cols-5 gap-4">
+              {currentRequest.documents.map((doc) => (
+                <div
+                  key={doc.name}
+                  className={`p-4 rounded-lg border ${
+                    isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'
+                  } cursor-pointer hover:border-crystal-blue transition-colors`}
+                  onClick={() => {
+                    setSelectedDocument(doc);
+                    setShowDocumentPreview(true);
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <FileText className="w-4 h-4 text-slate-400" />
+                    {doc.status === 'approved' ? (
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                    ) : doc.status === 'rejected' ? (
+                      <XCircle className="w-4 h-4 text-red-500" />
+                    ) : (
+                      <div className="w-2 h-2 rounded-full bg-yellow-400" />
+                    )}
+                  </div>
+                  <p className="text-sm font-medium">{doc.name}</p>
+                  <p className="text-xs text-slate-500 capitalize">{doc.status}</p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full mt-2 h-8"
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    Preview
+                  </Button>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        </div> 
+      }
 
       {/* View All Requests Modal */}
       <Dialog open={showAllRequests} onOpenChange={setShowAllRequests}>
@@ -316,7 +352,7 @@ export default function StorePage() {
             <DialogTitle>All Pending Store Requests</DialogTitle>
           </DialogHeader>
           <div className="grid gap-6">
-            {pendingRequests.map((request) => (
+            {pendingRequestsState.map((request) => (
               <div
                 key={request.id}
                 className="p-6 border border-slate-200 rounded-lg hover:border-crystal-blue transition-colors"
@@ -341,7 +377,7 @@ export default function StorePage() {
                     <Button
                       className="bg-crystal-blue hover:bg-opacity-90 text-black"
                       onClick={() => {
-                        setCurrentRequestIndex(pendingRequests.indexOf(request));
+                        setCurrentRequestIndex(pendingRequestsState.indexOf(request));
                         setShowAllRequests(false);
                       }}
                     >

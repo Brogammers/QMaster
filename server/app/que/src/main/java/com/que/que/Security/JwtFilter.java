@@ -47,7 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = header.split(" ")[1].trim();
-        BusinessUser businessUser = businessUserRepository.findByEmail(jwtUtil.getUsername(token)).orElse(null);
+        BusinessUser businessUser = businessUserRepository.findByEmail(jwtUtil.getEmail(token)).orElse(null);
         if (businessUser != null && !jwtUtil.validateToken(token, businessUser)) {
             try {
                 filterChain.doFilter(request, response);
@@ -56,7 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             return;
         }
-        AppUser user = appUserRepository.findByEmail(jwtUtil.getUsername(token)).orElse(null);
+        AppUser user = appUserRepository.findByEmail(jwtUtil.getEmail(token)).orElse(null);
         if (user != null && !jwtUtil.validateToken(token, user)) {
             try {
                 filterChain.doFilter(request, response);
