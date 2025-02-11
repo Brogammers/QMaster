@@ -178,7 +178,7 @@ export default function CustomerFeedback() {
                 <Form.Item
                   label="Suggestion"
                   name="suggestion"
-                  rules={[{ required: true, message: 'Please provide a suggestion' }]}
+                  rules={[{ required: false, message: 'Please provide a suggestion' }]}
                 >
                   <TextArea
                     rows={4}
