@@ -285,8 +285,8 @@ export default function Details() {
                             { value: "RESTAURANT", label: "Restaurant" },
                           ]}
                           className="cursor-not-allowed [&_.ant-select-selector]:!border-ocean-blue [&_.ant-select-selector]:!border-4 
-                          [&_.ant-select-selector]:!bg-white/50 [&_.ant-select-selector]:!rounded-xl [&_.ant-select-selector]:!px-4 
-                          [&_.ant-select-selector]:!h-[52px] [&_.ant-select-selection-item]:!leading-[44px]"
+                          [&_.ant-select-selector]:!bg-white/50 [&_.ant-select-selector]:!rounded-xl [&_.ant-select-selector]:!px-4 mt-[0.15rem] 
+                          [&_.ant-select-selector]:!h-[47px] [&_.ant-select-selection-item]:!leading-[44px]"
                         />
                       </Form.Item>
                     </div>
