@@ -1,4 +1,4 @@
- # QMaster - Enterprise Queue Management System
+# QMaster - Enterprise Queue Management System
 
 ![QMaster Logo](/web/public/FooterLogo.svg)
 
@@ -14,6 +14,7 @@
   * [Web Portal](#web-portal)
   * [Server](#server)
   * [Mobile App](#mobile-app)
+  * [Project Sia](#project-sia)
 * [Getting Started](#getting-started)
 * [Development](#development)
 * [API Documentation](#api-documentation)
@@ -229,6 +230,34 @@ The mobile app provides customers with easy access to queue services.
 * Push notifications
 * Service ratings
 * Booking management
+
+### Project Sia
+
+<img src="./mobile-app/assets/images/Sia AI.png" alt="Sia AI" width="64" height="64" style="border-radius: 50%; background: linear-gradient(45deg, #00F5A0, #00D9F5);" />
+
+> **CLASSIFIED - INTERNAL USE ONLY**
+> 
+> Project Sia represents our proprietary AI engine that powers QMaster's intelligent features. This is a restricted component with classified implementation details.
+
+#### Overview
+
+Project Sia is QMaster's cutting-edge AI system that enables intelligent queue management and predictive analytics. Built on our proprietary NanoLLM Strategy, it provides enterprise-grade AI capabilities with minimal computational overhead.
+
+#### Key Components
+
+* **SiaCore**: Lightweight AI engine
+* **Intent Classification System**: For natural language understanding
+* **Predictive Analytics Engine**: For queue time predictions
+* **Resource Optimization System**: For staff and service allocation
+
+#### Technical Specifications
+
+* Memory Footprint: < 100MB
+* Response Time: < 100ms
+* Concurrent Users: 1000+ per server
+* Deployment: Edge-ready
+
+> **Note**: The implementation details, architecture, and source code of Project Sia are classified. Access is restricted to authorized team members only.
 
 ## 🚀 Getting Started
 

@@ -2,12 +2,16 @@ package com.que.que.User.AppUser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.que.que.Store.Purchase.Purchase;
 import com.que.que.User.User;
 import com.que.que.User.UserRole;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +25,12 @@ import lombok.Setter;
 @JsonSerialize(using = AppUserSerializer.class)
 public class AppUser extends User {
 
+  @OneToMany(mappedBy = "user")
+  private List<Purchase> purchases = new ArrayList<>();
+
   public AppUser(
-      UserRole appUserRole,
       String firstName,
       String lastName,
-      String username,
       LocalDateTime dateOfRegistration,
       LocalDate dateOfBirth,
       String countryOfOrigin,
@@ -37,7 +42,7 @@ public class AppUser extends User {
       String phoneNumber,
       String location) {
     super(
-        appUserRole, firstName, lastName, username, dateOfRegistration, dateOfBirth, countryOfOrigin, password, email,
+        UserRole.USER, firstName, lastName, dateOfRegistration, dateOfBirth, countryOfOrigin, password, email,
         locked, enabled, phoneCode, phoneNumber, location);
   }
 

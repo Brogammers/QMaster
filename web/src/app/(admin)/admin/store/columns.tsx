@@ -12,14 +12,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, CheckCircle, XCircle } from "lucide-react";
 
-type StoreStatus = 'NOT_REQUESTED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+export type StoreStatus = 'NOT_REQUESTED' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
 export type StoreData = {
   id: string;
   name: string;
   category: string;
   storeStatus: StoreStatus;
-  requestDate: string;
   productsCount: number;
   monthlyRevenue: string;
 };
@@ -27,7 +26,7 @@ export type StoreData = {
 export const columns: ColumnDef<StoreData>[] = [
   {
     accessorKey: "name",
-    header: "Partner Name",
+    header: "Location Name",
   },
   {
     accessorKey: "category",
@@ -35,7 +34,7 @@ export const columns: ColumnDef<StoreData>[] = [
   },
   {
     accessorKey: "storeStatus",
-    header: "Status",
+    header: "Store Status",
     cell: ({ row }) => {
       const status = row.getValue("storeStatus") as string;
       return (
@@ -54,10 +53,6 @@ export const columns: ColumnDef<StoreData>[] = [
         </Badge>
       );
     },
-  },
-  {
-    accessorKey: "requestDate",
-    header: "Request Date",
   },
   {
     accessorKey: "productsCount",

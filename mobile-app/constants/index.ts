@@ -6,6 +6,13 @@ import Restaurant from '@/assets/images/Restaurant.png';
 import Government from '@/assets/images/Government.png';
 import Clinic from '@/assets/images/Medical.png';
 import Grocery from '@/assets/images/Grocery.png';
+import AutoRepair from '@/assets/images/AutoRepair.png';
+import PrivateCatering from '@/assets/images/PrivateCatering.png';
+import CeremonyHalls from '@/assets/images/CeremonyHalls.png';
+import CarDealerships from '@/assets/images/CarDealerships.png';
+import MotoDealerships from '@/assets/images/MotoDealerships.png';
+import Hotels from '@/assets/images/Hotels.png';
+import FlightTickets from '@/assets/images/FlightTickets.png';
 import Bank from '@/assets/images/Bank.png';
 import Other from '@/assets/images/Other.png';
 import carrefour from '@/assets/images/Carrefour.png';
@@ -51,197 +58,99 @@ export const EmailVerificationText = i18n.t('sitTight');
 //Categories
 export const Categories: CategoryProps[] = [
   {
-    image: Restaurant,
-    title: i18n.t('restaurants'),
-  },
-  {
-    image: Government,
-    title: i18n.t('governments'),
-  },
-  {
-    image: Clinic,
-    title: i18n.t('clinics'),
-  },
-  {
-    image: Grocery,
-    title: i18n.t('groceries'),
+    image: AutoRepair,
+    title: i18n.t('autoRepair'),
+    name: "AutoRepair"
   },
   {
     image: Bank,
     title: i18n.t('banks'),
+    name: "Banks"
+  },
+  {
+    image: Clinic,
+    title: i18n.t('clinics'),
+    name: "Clinics"
+  },
+  {
+    image: Restaurant,
+    title: i18n.t('restaurants'),
+    name: "Restaurants"
+  },
+  {
+    image: Government,
+    title: i18n.t('government'),
+    name: "Government"
   },
   {
     image: Other,
     title: i18n.t('others'),
+    name: "Others"
   },
 ];
 
 export const AllCategories: CategoryProps[] = [
-  // Include original categories first
+  // Primary Categories (MVP Focus)
+  {
+    image: AutoRepair,
+    title: i18n.t('autoRepair'),
+    name: "AutoRepair"
+  },
+  {
+    image: CarDealerships,
+    title: i18n.t('carDealerships'),
+    name: "Car Dealerships"
+  },
+  {
+    image: MotoDealerships,
+    title: i18n.t('motoDealerships'),
+    name: "Moto Dealerships"
+  },
+
+  // Food & Dining (Second Wave)
   {
     image: Restaurant,
     title: i18n.t('restaurants'),
+    name: "Restaurants"
+  },
+  {
+    image: PrivateCatering,
+    title: i18n.t('privateCatering'),
+    name: "Private Catering"
+  },
+
+  // Essential Services
+  {
+    image: Bank,
+    title: i18n.t('banks'),
+    name: "Banks"
   },
   {
     image: Government,
-    title: i18n.t('governments'),
+    title: i18n.t('government'),
+    name: "Government"
   },
   {
     image: Clinic,
     title: i18n.t('clinics'),
+    name: "Clinics"
+  },
+
+  // Travel & Events
+  {
+    image: FlightTickets,
+    title: i18n.t('flightTickets'),
+    name: "Flight Tickets"
   },
   {
-    image: Grocery,
-    title: i18n.t('groceries'),
-  },
-  {
-    image: Bank,
-    title: i18n.t('banks'),
-  },
-  // Add new categories
-  {
-    image: Other,
-    title: i18n.t('autoRepair'),
-  },
-  {
-    image: Other,
-    title: i18n.t('bikeRepair'),
-  },
-  {
-    image: Other,
-    title: i18n.t('privateCatering'),
-  },
-  {
-    image: Other,
-    title: i18n.t('ceremonyHalls'),
-  },
-  {
-    image: Other,
-    title: i18n.t('carDealerships'),
-  },
-  {
-    image: Other,
-    title: i18n.t('education'),
-  },
-  {
-    image: Other,
-    title: i18n.t('salons'),
-  },
-  {
-    image: Other,
-    title: i18n.t('spas'),
-  },
-  {
-    image: Other,
-    title: i18n.t('telecom'),
-  },
-  {
-    image: Other,
-    title: i18n.t('realEstate'),
-  },
-  {
-    image: Other,
-    title: i18n.t('insurance'),
-  },
-  {
-    image: Other,
-    title: i18n.t('petCare'),
-  },
-  {
-    image: Other,
-    title: i18n.t('fitness'),
-  },
-  {
-    image: Other,
-    title: i18n.t('entertainment'),
-  },
-  {
-    image: Other,
-    title: i18n.t('pharmacies'),
-  },
-  {
-    image: Other,
+    image: Hotels,
     title: i18n.t('hotels'),
+    name: "Hotels"
   },
   {
-    image: Other,
-    title: i18n.t('laundry'),
-  },
-  {
-    image: Other,
-    title: i18n.t('bookstores'),
-  },
-  {
-    image: Other,
-    title: i18n.t('toyStores'),
-  },
-  {
-    image: Other,
-    title: i18n.t('sportingGoods'),
-  },
-  {
-    image: Other,
-    title: i18n.t('furniture'),
-  },
-  {
-    image: Other,
-    title: i18n.t('electronics'),
-  },
-  {
-    image: Other,
-    title: i18n.t('jewelry'),
-  },
-  {
-    image: Other,
-    title: i18n.t('opticians'),
-  },
-  {
-    image: Other,
-    title: i18n.t('tailors'),
-  },
-  {
-    image: Other,
-    title: i18n.t('carWash'),
-  },
-  {
-    image: Other,
-    title: i18n.t('postOffices'),
-  },
-  {
-    image: Other,
-    title: i18n.t('libraries'),
-  },
-  {
-    image: Other,
-    title: i18n.t('museums'),
-  },
-  {
-    image: Other,
-    title: i18n.t('theaters'),
-  },
-  {
-    image: Other,
-    title: i18n.t('cinemas'),
-  },
-  {
-    image: Other,
-    title: i18n.t('artGalleries'),
-  },
-  {
-    image: Other,
-    title: i18n.t('computerRepair'),
-  },
-  {
-    image: Other,
-    title: i18n.t('phoneRepair'),
-  },
-  {
-    image: Other,
-    title: i18n.t('homeServices'),
-  },
-  {
-    image: Other,
-    title: i18n.t('travelAgencies'),
+    image: CeremonyHalls,
+    title: i18n.t('ceremonyHalls'),
+    name: "Ceremony Halls"
   }
 ];
 

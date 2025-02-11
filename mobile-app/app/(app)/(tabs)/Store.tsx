@@ -1,12 +1,17 @@
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import configConverter from '@/api/configConverter';
+import { useCart } from '@/ctx/CartContext';
 import { useTheme } from '@/ctx/ThemeContext';
-import { LinearGradient } from 'expo-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useCart } from '@/ctx/CartContext';
+import axios, { AxiosError } from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useContext, useEffect, useState } from 'react';
+import { ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LocationContext } from './Partner';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type RootStackParamList = {
   Partner: undefined;
@@ -14,17 +19,74 @@ type RootStackParamList = {
   Product: undefined;
 };
 
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  quantity: number;
+  storeId: string;
+}
+
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
+const page = 1;
+const perPage = 10;
 
 export default function Store() {
   const { isDarkMode } = useTheme();
   const navigation = useNavigation<NavigationProp>();
+  const { brandName, currentLocation } = useLocalSearchParams();
   const { items } = useCart();
-  const [selectedCategory, setSelectedCategory] = React.useState('All');
-
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [products, setProducts] = useState<Product[]>([]);
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   const categories = ['All', 'Food', 'Drinks', 'Snacks', 'Essentials'];
+
+  useEffect(() => {
+    AsyncStorage.getItem("TOKEN_KEY").then((token) => {
+      const url = configConverter("EXPO_PUBLIC_API_BASE_URL_GET_PRODUCTS_BY_BUSINESS");
+      axios.get(`${url}?businessName=${brandName}&page=${page}&per-page=${perPage}&locationId=${currentLocation}`,
+        {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          }
+        }
+      )
+      .then((response) => {
+        if(response.status === 200){
+          return response.data.products.content;
+        } else {
+          throw new Error("Error: ", response.data);
+        }
+      })
+      .then((data) => {
+        const productsData = data.map((product: Product) => {
+          return {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            description: product.description,
+            quantity: product.quantity,
+            storeId: product.storeId,
+          }
+        })
+
+        setProducts(productsData);
+      })
+      .catch((error) => {
+        console.error("Error: ", error.response.data);
+      })
+    });
+  }, [currentLocation]);
+
+  const handleProductClick = (product: Product) => {
+    navigation.navigate("Product");
+    router.setParams({
+      ...product
+    });
+  };
 
   return (
     <View className="flex-1">
@@ -103,20 +165,20 @@ export default function Store() {
 
           {/* Product Grid */}
           <View className="flex-row flex-wrap justify-between mt-4">
-            {[1, 2, 3, 4].map((item) => (
+            {products.map((item) => (
               <TouchableOpacity 
-                key={item}
-                onPress={() => navigation.navigate('Product')}
+                key={item.id}
+                onPress={() => handleProductClick(item)}
                 className={`w-[48%] aspect-square rounded-xl mb-4 p-3 ${
                   isDarkMode ? 'bg-slate-grey' : 'bg-slate-grey/10'
                 }`}
               >
                 <View className="mt-auto">
                   <Text className={`text-sm ${isDarkMode ? 'text-white' : 'text-coal-black'}`} numberOfLines={2}>
-                    Product {item}
+                    {item.name}
                   </Text>
                   <Text className={`text-base font-semibold mt-1 ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
-                    ${(item * 9.99).toFixed(2)}
+                    {item.price}
                   </Text>
                 </View>
               </TouchableOpacity>

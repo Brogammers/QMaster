@@ -43,6 +43,7 @@ export interface SearchFilterProps {
 export interface CategoryProps {
   image: React.FC<SvgProps> | ImageSourcePropType;
   title: string;
+  name: string;
   onPress?: any;
   spacing?: number;
   isDarkMode?: boolean;
@@ -106,6 +107,12 @@ export interface AccountInfoProps {
 
 export interface QueueDetailsProps {
   branch: number;
+  serviceType?: number;
+}
+
+export interface ServiceProps {
+  id: number;
+  name: string;
 }
 
 export interface ServerError {
@@ -137,7 +144,7 @@ export interface HistoryComponentProps {
 
 export interface QueueInfoCardProps {
   image: any;
-  name: String;
+  name: string;
 }
 
 export interface UserState {

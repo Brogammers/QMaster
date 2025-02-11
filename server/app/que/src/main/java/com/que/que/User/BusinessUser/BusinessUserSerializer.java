@@ -21,9 +21,13 @@ public class BusinessUserSerializer extends StdSerializer<BusinessUser> {
             BusinessUser value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
 
         jgen.writeStartObject();
-        jgen.writeStringField("first-name", value.getFirstName());
-        jgen.writeStringField("last-name", value.getLastName());
+        jgen.writeNumberField("id", value.getId());
         jgen.writeStringField("username", value.getUsername());
-        jgen.writeObjectField("business-categories", value.getBusinessCategories());
+        jgen.writeObjectField("businessCategory", value.getPartner().getBusinessCategory());
+        jgen.writeObjectField("locations", value.getPartner().getLocations());
+        jgen.writeObjectField("createdAt", value.getDateOfRegistration());
+        jgen.writeBooleanField("status",
+                value.isEnabled() && value.isAccountNonLocked() && value.isAccountNonExpired());
+        jgen.writeEndObject();
     }
 }

@@ -8,6 +8,7 @@ import { useTheme } from '@/ctx/ThemeContext';
 interface CategoryProps {
   title: string;
   image: any;
+  name: string;
 }
 
 export default function AllCategories() {
@@ -15,7 +16,7 @@ export default function AllCategories() {
   const { isDarkMode } = useTheme();
 
   const handleCategoryPress = (category: CategoryProps) => {
-    linkTo(`/Category/${encodeURIComponent(category.title)}`);
+    linkTo(`/Category?name=${category.name}`);
   };
 
   return (
@@ -26,6 +27,7 @@ export default function AllCategories() {
             {CategoryList.map((category: CategoryProps, index: number) => (
               <View key={index} className="mb-4">
                 <Category
+                  name={category.name}
                   title={category.title}
                   image={category.image}
                   onPress={() => handleCategoryPress(category)}

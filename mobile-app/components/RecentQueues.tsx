@@ -39,7 +39,7 @@ export default function RecentQueues({ isDarkMode }: RecentQueuesProps) {
       >
         {Current.map((recent, index) => (
           <View className="mr-2.5" key={index}>
-            <Category title={recent.name} image={recent.image} spacing={8} isDarkMode={isDarkMode} />
+            <Category name={recent.name} title={recent.name} image={recent.image} spacing={8} isDarkMode={isDarkMode} />
           </View>
         ))}
       </ScrollView>

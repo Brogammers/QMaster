@@ -5,14 +5,15 @@ import { Formik, Field, Form } from "formik";
 import QueueModal from "@/app/shared/QueueModal";
 import Entity from "../../page";
 import jsPDF from "jspdf";
-import axios from "axios";
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from "@/app/redux/store";
+import { useLocation } from "@/ctx/LocationContext";
+import { useParams } from "next/navigation";
 // import QRCode from "qrcode.react";
 
 export default function SharingInfo() {
+  const { selectedLocation } = useLocation();
+  const { entity } = useParams();
   const [url, setUrl] = useState<string>("");
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
+ const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
   const qrCodeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -107,12 +108,23 @@ export default function SharingInfo() {
     generateQrCode();
   }, [url]);
 
+  useEffect(() => {
+    setQrCodeDataUrl(`${process.env.NEXT_PUBLIC_API_BASE_URL_PARTNER_QR_CODE}?partnerName=${entity}&locationId=${selectedLocation?.id}`);
+  }, [selectedLocation]);
+
   return (
     <Entity>
       <QueueModal
         title="Sharing Info"
         description="This QR-code is automatically generated for this Place"
       >
+        {
+          qrCodeDataUrl &&
+            <div className="absolute top-28 right-14 hidden xl:block">
+              <h2 className="text-lg font-bold text-center w-full">Here's your QR!</h2>
+              <img src={qrCodeDataUrl} alt="QR code" className="pt-2 pb-2"/>
+            </div>
+        }
         <Formik
           initialValues={{ url: url }}
           onSubmit={async (values) => {

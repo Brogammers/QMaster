@@ -8,7 +8,11 @@ import SplashScreen from './SplashScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeProvider } from "@/ctx/ThemeContext";
 import { CartProvider } from '@/ctx/CartContext';
+<<<<<<< HEAD
 import { GoogleAuthProvider } from '@/ctx/GoogleAuthContext';
+=======
+import { SiaProvider } from '../ctx/SiaContext';
+>>>>>>> origin/main
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -37,6 +41,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
+<<<<<<< HEAD
         <SessionProvider>
           <GoogleAuthProvider>
             <ThemeProvider>
@@ -46,6 +51,17 @@ export default function RootLayout() {
             </ThemeProvider>
           </GoogleAuthProvider>
         </SessionProvider>
+=======
+        <ThemeProvider>
+          <CartProvider>
+            <SessionProvider>
+              <SiaProvider>
+                <Slot />
+              </SiaProvider>
+            </SessionProvider>
+          </CartProvider>
+        </ThemeProvider>
+>>>>>>> origin/main
       </Provider>
     </GestureHandlerRootView>
   );

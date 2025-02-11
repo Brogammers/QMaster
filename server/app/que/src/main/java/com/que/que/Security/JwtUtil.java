@@ -51,7 +51,7 @@ public class JwtUtil {
     return key;
   }
 
-  public String getUsername(String token) {
+  public String getEmail(String token) {
     return getClaimFromToken(token, Claims::getId);
   }
 
@@ -74,12 +74,12 @@ public class JwtUtil {
   }
 
   public boolean validateToken(String token, AppUser userDetails) {
-    String email = getUsername(token);
+    String email = getEmail(token);
     return (email.equals(userDetails.getEmail()) && !isTokenExpired(token));
   }
 
   public boolean validateToken(String token, BusinessUser userDetails) {
-    String email = getUsername(token);
+    String email = getEmail(token);
     return (email.equals(userDetails.getEmail()) && !isTokenExpired(token));
   }
 }

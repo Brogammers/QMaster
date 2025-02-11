@@ -15,7 +15,7 @@
   "search queue": "Search Queue",
   "categories": "Categories",
   "restaurants": "Restaurants",
-  "governments": "Governments",
+  "government": "Government",
   "clinics": "Clinics",
   "groceries": "Groceries",
   "banks": "Banks",
@@ -26,6 +26,8 @@
   "privateCatering": "Private Catering",
   "ceremonyHalls": "Ceremony Halls",
   "carDealerships": "Car Dealerships",
+  "motoDealerships": "Moto Dealerships",
+  "flightTickets": "Flight Tickets",
   "education": "Education",
   "salons": "Salons",
   "spas": "Spas",
@@ -172,7 +174,7 @@
     "locationAccess": "Choose location to join the queue",
     "queue": {
       "peopleCount": "{{count}} people in queue",
-      "waitTime": "~{{minutes}} min",
+      "waitTime": "~ {{minutes}} min",
       "joined": "Queue Joined!",
       "leave": "Leave Queue",
       "join": "Join Queue",
@@ -185,7 +187,26 @@
       "fast": "Fast",
       "ratings": "({{count}} ratings)",
       "chooseBranch": "Choose Branch",
-      "searchBranches": "Search branches..."
+      "searchBranches": "Search branches...",
+      "chooseService": "Choose Service Type",
+      "minutes": "min",
+      "services": {
+        "cashier": "Cashier",
+        "returns": "Returns & Exchange",
+        "pickup": "Order Pickup",
+        "support": "Customer Support"
+      }
     }
+  },
+  "greetings": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening",
+    "night": "Good evening"
+  },
+  "suggestions": {
+    "waitTime": "What's the wait time?",
+    "busyness": "How busy is it?",
+    "arrival": "When should I arrive?"
   }
 }

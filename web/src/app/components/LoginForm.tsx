@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import Image from "next/image";
 
 // Define validation schema
 const LoginSchema = Yup.object().shape({
@@ -41,7 +43,7 @@ export default function LoginForm({ setIsLoading }: any) {
       .then((response) => {
         if (response.status === 200 && response.data.token) {
           console.log("Login successful:", response.data);
-          router.push(`/${response.data.username}/counter`);
+          router.push(`/${response.data.partnerName}/counter`);
 
           // Necessary CORS headers to allow requests from localhost:3000
           document.cookie = `userId=${response.data.userID}; SameSite=None; Secure;`;
@@ -93,11 +95,11 @@ export default function LoginForm({ setIsLoading }: any) {
   };
 
   return (
-    <div className="w-1/2 my-8 flex justify-center items-center">
+    <div className="w-full flex flex-col">
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}
-        onSubmit={handleLogin} // handleLogin
+        onSubmit={handleLogin}
       >
         {({
           handleChange,
@@ -108,63 +110,123 @@ export default function LoginForm({ setIsLoading }: any) {
           errors,
         }) => (
           <form
-            className="flex flex-col items-center justify-center w-full max-w-lg gap-4"
             onSubmit={handleSubmit}
+            className="flex-1 flex flex-col justify-center space-y-4"
           >
-            <input
-              type="email"
-              name="email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-              placeholder="Enter your email"
-              className="w-full rounded-full mb-2 px-4 py-3 sm:px-8 sm:py-4 bg-white text-gray-700 font-normal text-sm sm:text-lg outline-none border-none"
-            />
-            {errors.email && touched.email && (
-              <span className="text-red-600 font-normal text-lg mb-2">
-                {errors.email}
-              </span>
-            )}
-            <div className="bg-white rounded-full mb-4 px-4 py-3 sm:px-8 sm:py-4 w-full flex justify-between items-center">
+            {/* Email Input */}
+            <div>
               <input
-                type={isPasswordVisible ? "text" : "password"}
-                name="password"
+                type="email"
+                name="email"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.password}
-                placeholder="Enter your password"
-                className="w-full rounded-full bg-white text-gray-700 font-normal text-sm sm:text-lg outline-none border-none"
+                value={values.email}
+                placeholder="Email address"
+                className="w-full text-ignite-black px-4 py-3 rounded-lg border border-gray-300 focus:border-baby-blue focus:ring-1 focus:ring-baby-blue"
               />
-              <button
-                onClick={handlePasswordVisibility}
-                type="button"
-                className="w-11 ml-2 flex justify-center items-center"
-                >
-                <FontAwesomeIcon size="lg" color="#7D7D7D" icon={isPasswordVisible ? faEyeSlash : faEye} />
-              </button>
+              {errors.email && touched.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              )}
             </div>
-            {errors.password && touched.password && (
-              <span className="text-red-600 font-normal text-lg mb-2">
-                {errors.password}
-              </span>
-            )}
-            <Link
-              href="mailto:hatemthedev@gmail.com"
-              className="text-xs sm:text-md text-baby-blue underline mb-4"
-            >
-              Forgot Password
-            </Link>
+
+            {/* Password Input */}
+            <div>
+              <div className="relative">
+                <input
+                  type={isPasswordVisible ? "text" : "password"}
+                  name="password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                  placeholder="Password"
+                  className="w-full text-ignite-black px-4 py-3 rounded-lg border border-gray-300 focus:border-baby-blue focus:ring-1 focus:ring-baby-blue"
+                />
+                <button
+                  type="button"
+                  onClick={handlePasswordVisibility}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center justify-center w-10"
+                >
+                  <FontAwesomeIcon
+                    size="lg"
+                    className="w-[16px] h-[16px] text-gray-400"
+                    icon={isPasswordVisible ? faEyeSlash : faEye}
+                    fixedWidth
+                  />
+                </button>
+              </div>
+              {errors.password && touched.password && (
+                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+              )}
+            </div>
+
+            {/* Forgot Password Link */}
+            <div className="text-right">
+              <Link
+                href="mailto:support@qmaster.com"
+                className="text-sm text-baby-blue hover:underline"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+
+            {/* Login Button */}
             <button
               type="submit"
-              className="rounded-xl bg-baby-blue text-white text-md sm:text-xl font-semibold w-full px-4 py-3 sm:px-8 sm:py-4 mt-2"
+              className="w-full px-4 py-3 bg-baby-blue text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors"
             >
-              Submit
+              Log in
             </button>
+
+            {/* Error Message */}
             {errorMessage && (
-              <span className="text-red-600 font-normal text-md mt-4 text-center">
+              <p className="mt-2 text-sm text-center text-red-600">
                 {errorMessage}
-              </span>
+              </p>
             )}
+
+            {/* Divider */}
+            <div className="relative flex items-center py-4">
+              <div className="flex-grow border-t border-shark-grey"></div>
+              <span className="flex-shrink-0 mx-4 text-white">OR</span>
+              <div className="flex-grow border-t border-shark-grey"></div>
+            </div>
+
+            {/* Google Sign In */}
+            <button
+              type="button"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-50 group transition-colors"
+              onClick={() => {
+                // Handle Google sign in
+                console.log("Google sign in clicked");
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faGoogle}
+                className="w-5 h-5 text-white group-hover:text-ignite-black transition-colors"
+              />
+              <span className="text-white group-hover:text-ignite-black transition-colors">
+                Continue with Google
+              </span>
+            </button>
+
+            {/* Footer Links */}
+            <div className="pt-4 text-center space-y-2">
+              <p className="text-sm text-white">
+                Don&apos;t have an account?{" "}
+                <Link href="/signup" className="text-baby-blue hover:underline">
+                  Create account
+                </Link>
+              </p>
+              <p className="text-sm text-white">
+                Looking to join queues?{" "}
+                <Link
+                  href="/customer-app"
+                  className="text-baby-blue hover:underline"
+                >
+                  Download our customer app
+                </Link>
+              </p>
+            </div>
           </form>
         )}
       </Formik>

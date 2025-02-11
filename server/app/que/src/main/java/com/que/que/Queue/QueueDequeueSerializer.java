@@ -26,7 +26,7 @@ public class QueueDequeueSerializer extends StdSerializer<QueueDequeue> {
     jgen.writeNumberField("id", value.getId());
     jgen.writeStringField("name", value.getQueue().getName());
     jgen.writeObjectField("time", value.getActionDate());
-    jgen.writeStringField("location", value.getQueue().getStore().getLocation());
+    jgen.writeStringField("location", value.getQueue().getLocation().getAddress());
     jgen.writeStringField("notification", "You were dequeued successfully!");
     jgen.writeEndObject();
   }

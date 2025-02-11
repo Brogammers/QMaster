@@ -2,24 +2,16 @@ package com.que.que.User.BusinessUser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Arrays;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.que.que.Store.Store;
-import com.que.que.User.SubscriptionPlans;
+import com.que.que.Partner.Partner;
 import com.que.que.User.User;
 import com.que.que.User.UserRole;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,24 +25,14 @@ import lombok.Setter;
 @JsonSerialize(using = BusinessUserSerializer.class)
 public class BusinessUser extends User {
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private SubscriptionPlans subscriptionPlan;
-
-    @Column(nullable = false, columnDefinition = "integer default -1")
-    private int queueId;
-
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "businessUser")
-    private List<Store> stores = new ArrayList<>();
-
-    @ManyToMany
-    private Set<BusinessCategory> businessCategories = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "partner_id")
+    private Partner partner;
 
     public BusinessUser(
             UserRole appUserRole,
             String firstName,
             String lastName,
-            String username,
             LocalDateTime dateOfRegistration,
             LocalDate dateOfBirth,
             String countryOfOrigin,
@@ -61,12 +43,18 @@ public class BusinessUser extends User {
             String phoneCode,
             String phoneNumber,
             String location,
-            SubscriptionPlans subscriptionPlan) {
-        super(appUserRole, firstName, lastName, username, dateOfRegistration,
+            Partner partner) {
+        super(appUserRole, firstName, lastName, dateOfRegistration,
                 dateOfBirth, countryOfOrigin, password, email, locked, enabled,
                 phoneCode, phoneNumber, location);
-        this.subscriptionPlan = subscriptionPlan;
-        this.queueId = -1;
+
+        UserRole[] roles = { UserRole.BUSINESS_ADMIN, UserRole.BUSINESS_EMPLOYEE, UserRole.BUSINESS_MANAGER,
+                UserRole.BUSINESS_OWNER };
+        if (Arrays.stream(roles).noneMatch(role -> role.equals(appUserRole))) {
+            throw new IllegalArgumentException("Invalid user role for business user");
+        }
+
+        this.partner = partner;
     }
 
     @Override
@@ -77,13 +65,5 @@ public class BusinessUser extends User {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
-    }
-
-    public void addStore(Store store) {
-        this.stores.add(store);
-    }
-
-    public void addBusinessCategory(BusinessCategory businessCategory) {
-        this.businessCategories.add(businessCategory);
     }
 }

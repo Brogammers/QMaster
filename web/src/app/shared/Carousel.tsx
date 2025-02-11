@@ -1,55 +1,65 @@
 import { useState, useEffect } from "react";
-import { CarouselProps } from "../../../types";
+import React from "react";
 import "./styles/Carousel.css";
 
-export default function Carousel({ children }: CarouselProps) {
+interface CarouselProps {
+  children: React.ReactNode;
+  onSlideChange?: (index: number) => void;
+}
+
+export default function Carousel({ children, onSlideChange }: CarouselProps) {
   const [counter, setCounter] = useState<number>(1);
   const [pause, setPause] = useState<boolean>(false);
-  const content = children;
+  const childrenArray = React.Children.toArray(children);
 
   const handleNext = () => {
-    if (counter !== content.length) {
+    if (counter !== childrenArray.length) {
       setCounter(counter + 1);
+      onSlideChange?.(counter);
     } else {
       setCounter(1);
+      onSlideChange?.(0);
     }
   };
 
-  const handlePre = () => {
+  const handlePrev = () => {
     if (counter !== 1) {
       setCounter(counter - 1);
+      onSlideChange?.(counter - 2);
     } else {
-      setCounter(content.length);
+      setCounter(childrenArray.length);
+      onSlideChange?.(childrenArray.length - 1);
     }
   };
 
   const handlePage = (page: number) => {
     setCounter(page);
-  };
-
-  const handleMouse = () => {
-    setPause(!pause);
+    onSlideChange?.(page - 1);
   };
 
   useEffect(() => {
     let interval = setInterval(() => {
       if (!pause) {
-        handleNext();
-      } else {
-        clearInterval(interval);
+        if (counter !== childrenArray.length) {
+          setCounter(counter + 1);
+          onSlideChange?.(counter);
+        } else {
+          setCounter(1);
+          onSlideChange?.(0);
+        }
       }
     }, 6000);
     return () => clearInterval(interval);
-  });
+  }, [counter, pause, childrenArray.length, onSlideChange]);
 
   return (
     <div className="App">
       <div
         className="slide"
-        onMouseEnter={handleMouse}
-        onMouseLeave={handleMouse}
+        onMouseEnter={() => setPause(true)}
+        onMouseLeave={() => setPause(false)}
       >
-        {content.map((item, index) => (
+        {childrenArray.map((item, index) => (
           <div
             className={counter - 1 === index ? "show" : "not-show"}
             key={index}
@@ -58,7 +68,7 @@ export default function Carousel({ children }: CarouselProps) {
           </div>
         ))}
 
-        <button className="prev text-white text-4xl" onClick={handlePre}>
+        <button className="prev text-white text-4xl" onClick={handlePrev}>
           &#10094;
         </button>
         <button className="next text-white text-4xl" onClick={handleNext}>
@@ -67,7 +77,7 @@ export default function Carousel({ children }: CarouselProps) {
       </div>
 
       <div className="page">
-        {content.map((item, index) => (
+        {childrenArray.map((item, index) => (
           <span
             key={index}
             className={counter - 1 === index ? "dot active" : "dot"}
@@ -76,5 +86,5 @@ export default function Carousel({ children }: CarouselProps) {
         ))}
       </div>
     </div>
-  ); 
-};
+  );
+}

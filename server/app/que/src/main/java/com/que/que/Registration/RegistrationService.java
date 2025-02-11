@@ -9,16 +9,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.que.que.Email.EmailSender;
+import com.que.que.Partner.Partner;
+import com.que.que.Partner.PartnerRepository;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.Security.PasswordValidator;
-import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.UserRole;
+import com.que.que.User.AdminUser.AdminUser;
+import com.que.que.User.AdminUser.AdminUserService;
 import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.AppUser.AppUserService;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserService;
 
+import kotlin.NotImplementedError;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -29,11 +33,13 @@ public class RegistrationService {
   private final BusinessUserService businessUserService;
   private final EmailValidator emailValidator;
   private final ConfirmationTokenService confirmationTokenService;
+  private final PartnerRepository partnerRepository;
+  private final AdminUserService adminUserService;
   private final PasswordValidator passwordValidator;
   private final EmailSender emailSender;
   private final HashSet<String> phoneCodes;
 
-  public String register(AppUserRegistrationRequest request) {
+  public String registarAppUser(AppUserRegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
     boolean isValidPassword = passwordValidator.test(request.getPassword());
     if (phoneCodes.isEmpty()) {
@@ -55,10 +61,8 @@ public class RegistrationService {
 
     String token = appUserService.signUpUser(
         new AppUser(
-            UserRole.USER,
             request.getFirstName(),
             request.getLastName(),
-            request.getUsername(),
             LocalDateTime.now(),
             request.getDateOfBirth(),
             request.getCountryOfOrigin(),
@@ -81,7 +85,7 @@ public class RegistrationService {
     return token;
   }
 
-  public String register(BusinessUserRegistrationRequest request) {
+  public String registerBusinessUser(BusinessUserRegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
     boolean isValidPassword = passwordValidator.test(request.getPassword());
     if (phoneCodes.isEmpty()) {
@@ -101,12 +105,15 @@ public class RegistrationService {
      * throw new IllegalStateException("Phone code not found");
      * }
      */
+
+    Partner partner = partnerRepository.findByName(request.getPartnerName())
+        .orElseThrow(() -> new IllegalStateException("Partner not found"));
+
     String token = businessUserService.signUpUser(
         new BusinessUser(
-            UserRole.USER,
+            UserRole.BUSINESS_OWNER,
             request.getFirstName(),
             request.getLastName(),
-            request.getUsername(),
             LocalDateTime.now(),
             request.getDateOfBirth(),
             request.getCountryOfOrigin(),
@@ -116,10 +123,59 @@ public class RegistrationService {
             false,
             request.getPhoneCode(),
             request.getPhoneNumber(),
-            request.getCountryOfOrigin(), SubscriptionPlans.BASIC));// request.getPhoneNumber(), request.getPhoneCode(),
+            request.getCountryOfOrigin(),
+            partner));// request.getPhoneNumber(), request.getPhoneCode(),
     Map<String, String> context = new HashMap<>();
     context.put("name", request.getFirstName());
     context.put("token", token);
+    // TODO: Activate later
+    /*
+     * emailSender.send(request.getEmail(),
+     * "src/main/resources/templates/Activation.html",
+     * "Confirm Email", context);
+     */
+    return token;
+  }
+
+  public void registerPartner(PartnerRegisterRequest request) {
+    throw new NotImplementedError("Not implemented");
+  }
+
+  public String registerAdminUser(AdminUserRegistrationRequest request) {
+    boolean isValidEmail = emailValidator.test(request.getEmail());
+    boolean isValidPassword = passwordValidator.test(request.getPassword());
+    if (!isValidPassword) {
+      throw new IllegalStateException("Password does not meet requirements");
+    }
+    if (!isValidEmail) {
+      throw new IllegalStateException("Email invalid");
+    }
+    if (!request.getPassword().equals(request.getConfirmPassword())) {
+      throw new IllegalStateException("Password do not match");
+    }
+
+    // if (!phoneCodes.contains(request.getPhoneCode())) {
+    // throw new IllegalStateException("Phone code not found");
+    // }
+
+    String token = adminUserService.signUpUser(
+        new AdminUser(
+            request.getFirstName(),
+            request.getLastName(),
+            LocalDateTime.now(),
+            request.getDateOfBirth(),
+            request.getCountryOfOrigin(),
+            request.getPassword(),
+            request.getEmail(),
+            false,
+            false,
+            request.getPhoneCode(),
+            request.getPhoneNumber(),
+            request.getCountryOfOrigin()));
+    Map<String, String> context = new HashMap<>();
+    context.put("name", request.getFirstName());
+    context.put("token", token);
+
     // TODO: Activate later
     /*
      * emailSender.send(request.getEmail(),
@@ -148,8 +204,10 @@ public class RegistrationService {
 
     if (confirmationToken.getAppUser() instanceof BusinessUser)
       businessUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
-    else
+    else if (confirmationToken.getAppUser() instanceof AppUser)
       appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
+    else
+      adminUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
   }
 
   public void renderCountryCodes() {

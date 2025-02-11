@@ -6,7 +6,9 @@ import {
   Platform,
   View,
   ScrollView, 
-  useWindowDimensions
+  useWindowDimensions,
+  Text,
+  TouchableOpacity
 } from "react-native";
 import ScanQr from "@/components/ScanQR";
 import SearchBar from "@/components/SearchBar";
@@ -19,6 +21,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Skeleton } from "moti/skeleton";
 import { useTheme } from "@/ctx/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useSia } from "@/ctx/SiaContext";
+import { SiaButton } from "@/components/SiaButton";
 
 export default function Index() {
   const { isDarkMode } = useTheme();
@@ -30,6 +35,7 @@ export default function Index() {
   const [currentQueues, setCurrentQueues] = useState<number>(0);
   const [recentQueues, setRecentQueues] = useState<number>(0);
   const windowWidth = useWindowDimensions().width;
+  const { showSia } = useSia();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -146,6 +152,12 @@ export default function Index() {
           </View>
         </View>
       </ScrollView>
+      
+      {/* Sia Button */}
+      <SiaButton 
+        style={styles.siaButtonPosition}
+        showText={false}
+      />
     </SafeAreaView>
   );
 }
@@ -159,5 +171,29 @@ const styles = StyleSheet.create({
           ? StatusBar.currentHeight - 1
           : 0
         : 0,
+  },
+  siaButtonPosition: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+  },
+  siaButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    borderRadius: 12,
+    gap: 10,
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  siaText: {
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

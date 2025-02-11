@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 interface Admin {
   email: string;
@@ -53,19 +54,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [pathname, router]);
 
   const login = async (email: string, password: string) => {
-    const adminMatch = ADMIN_CREDENTIALS.find(
-      cred => cred.email === email && cred.password === password
-    );
-
-    if (adminMatch) {
-      const adminData = { email: adminMatch.email, name: adminMatch.name };
-      setAdmin(adminData);
-      // Set both cookie and localStorage
-      Cookies.set('qmaster-auth', 'true', { expires: 7 }); // 7 days expiry
-      localStorage.setItem('qmaster-admin', JSON.stringify(adminData));
-      return true;
-    }
-    return false;
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_LOGIN || "";
+    return axios.post(url, { email, password })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data;
+      } else { 
+        return false;
+      }
+    }).then((data) => {
+      if (data) {
+        const adminData = { email: data.email, name: data.firstName[0].toUpperCase() + data.firstName.slice(1) };
+        setAdmin(adminData);
+        // Set both cookie and localStorage
+        Cookies.set('qmaster-auth', 'true', { expires: 7 }); // 7 days expiry
+        localStorage.setItem('qmaster-admin', JSON.stringify(adminData));
+      } 
+      return !!data;
+    });
   };
 
   const logout = () => {

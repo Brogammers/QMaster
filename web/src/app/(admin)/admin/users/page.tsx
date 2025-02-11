@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useContext } from 'react';
 import { useAuth } from '@/lib/auth/AuthContext';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { FaUsers, FaSearch, FaFilter, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
@@ -8,6 +8,7 @@ import { deleteUser, restoreUser } from '@/store/features/userSlice';
 import { toast } from 'react-hot-toast';
 import AddUserModal from '@/components/admin/AddUserModal';
 import type { RootState } from '@/store/store';
+import { UsersContext } from '../../context';
 
 interface User {
   id: number;
@@ -25,6 +26,7 @@ interface User {
 
 export default function UsersPage() {
   const { admin } = useAuth();
+  const { users: allUsers, setUsers } = useContext(UsersContext);
   const dispatch = useAppDispatch();
   const users = useAppSelector((state: RootState) => state.users.users);
   const [isDarkMode] = useState(false);
