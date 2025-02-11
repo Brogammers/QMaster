@@ -95,7 +95,7 @@ export default function LoginForm({ setIsLoading }: any) {
   };
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full flex flex-col">
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}
@@ -230,12 +230,6 @@ export default function LoginForm({ setIsLoading }: any) {
           </form>
         )}
       </Formik>
-
-      {/* Tagline - Absolute positioned at bottom */}
-      <p className="absolute bottom-4 text-xs text-white/80 text-center">
-        Join millions of customers managing their queues and discovering stores
-        all in one place
-      </p>
     </div>
   );
 }

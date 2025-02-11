@@ -15,38 +15,48 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-concrete-turqouise via-ocean-blue to-baby-blue relative">
+    <div className="min-h-screen flex bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-concrete-turqouise via-ocean-blue to-baby-blue">
       {/* Noise texture overlay */}
-      <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
+      <div className="fixed inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
 
       {/* Subtle gradient overlays */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#6366f1,#0ea5e9)] opacity-[0.03]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.1),transparent)]" />
+      <div className="fixed inset-0 bg-[linear-gradient(to_right,#6366f1,#0ea5e9)] opacity-[0.03]" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.1),transparent)]" />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col px-8 py-4 relative">
-        {/* Logo */}
-        <Link href="/" className="mb-8">
-          <Image
-            src={NavLogo}
-            alt="QMaster Logo"
-            width={120}
-            height={40}
-            className="w-auto h-auto"
-          />
-        </Link>
+      <div className="flex-1 flex flex-col h-screen overflow-auto">
+        <div className="flex-1 flex flex-col px-8 py-4 relative">
+          {/* Logo */}
+          <Link href="/" className="mb-8">
+            <Image
+              src={NavLogo}
+              alt="QMaster Logo"
+              width={120}
+              height={40}
+              className="w-auto h-auto"
+            />
+          </Link>
 
-        {/* Login Form Container */}
-        <div className="max-w-md w-full mx-auto mt-8">
-          <h2 className="text-2xl text-center font-bold mb-8 text-white">
-            Log in to your Business Account
-          </h2>
-          <LoginForm setIsLoading={setIsLoading} />
+          {/* Login Form Container */}
+          <div className="flex-1 flex flex-col">
+            <div className="max-w-md w-full mx-auto mt-8">
+              <h2 className="text-2xl text-center font-bold mb-8 text-white">
+                Log in to your Business Account
+              </h2>
+              <LoginForm setIsLoading={setIsLoading} />
+            </div>
+          </div>
+
+          {/* Bottom Text - Smaller version */}
+          <div className="w-full text-center text-white/80 py-4 text-xs">
+            Join millions of customers managing their queues and discovering
+            stores all in one place
+          </div>
         </div>
       </div>
 
       {/* Testimonial Section */}
-      <div className="hidden lg:flex lg:w-1/3 bg-[#f9fafbe7] p-8 relative z-10">
+      <div className="hidden lg:flex lg:w-1/3 bg-[#f9fafbe7] p-8 relative z-10 overflow-auto">
         <div className="w-full max-w-sm mx-auto mt-16">
           <div className="rounded-lg bg-white p-6 shadow-sm">
             <div className="mb-4">
