@@ -28,7 +28,7 @@ export default function ServiceTypeGrid({
 }: ServiceTypeGridProps) {
   const { isDarkMode } = useTheme();
   const [loading, setLoading] = useState(true);
-  const { queues, setQueues } = useContext(QueuesContext);
+  const { queues, setQueues, setSelectedQueue } = useContext(QueuesContext);
 
   useEffect(() => {
     const fetchQueues = async () => {
@@ -51,6 +51,10 @@ export default function ServiceTypeGrid({
             currentQueueSize: queue.people,
           }));
           setQueues(queueData);
+
+          if (queueData.length === 1) {
+            setSelectedQueue(queueData[0]);
+          }
         }
       } catch (error) {
         console.error("Error fetching queues:", error);

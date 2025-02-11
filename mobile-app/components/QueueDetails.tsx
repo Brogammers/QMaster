@@ -29,16 +29,6 @@ export default function QueueDetails(props: QueueDetailsProps) {
   const { branch, serviceType } = props; // Destructure serviceType from props
   const { isDarkMode } = useTheme();
   const { selectedQueue, setSelectedQueue } = useContext(QueuesContext);
-  
-  useEffect(() => {
-    if (leave) {
-      setShowDetails(false);
-      const timer = setTimeout(() => {
-        setShowDetails(true);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [leave]);
 
   useEffect(() => {
     AsyncStorage.getItem("TOKEN_KEY").then((token) => {
@@ -56,6 +46,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
         }
       })
       .then((data) => {
+        setShowDetails(true);
         setLeave(data);
       })
       .catch((error) => {
@@ -75,17 +66,22 @@ export default function QueueDetails(props: QueueDetailsProps) {
     })  
     .then((response) => {
       if(response.status === 200) {
-        setLeave(true);
+        return true;
       } else { 
         setLeave(false);
         throw new Error("Failed to join the queue");
       }
     })
     .then(() => {
-      setSelectedQueue((prev) => {
-        if (!prev) return prev;
-        return { ...prev, currentQueueSize: prev.currentQueueSize + 1 };
-      });
+      setLeave(true);
+      setShowDetails(false);
+      setTimeout(() => {
+          setShowDetails(true);
+          setSelectedQueue((prev) => {
+              if (!prev) return prev;
+              return { ...prev, currentQueueSize: prev.currentQueueSize + 1 };
+          });
+      }, 1000);
     })
     .catch((error) => {
       console.error(error);

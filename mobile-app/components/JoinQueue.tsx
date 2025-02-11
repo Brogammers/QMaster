@@ -266,7 +266,7 @@ export default function JoinQueue() {
             </View>
           </View>
           <View className="items-center w-full">
-            {currentLocation && !selectedQueue && (
+            {currentLocation && (
               <View
                 style={{
                   zIndex: Platform.OS === "ios" ? 999 : undefined,
@@ -277,11 +277,11 @@ export default function JoinQueue() {
                 }}
               >
                 <OpeningHours hours={hours} />
-                <ServiceTypeGrid
+                {!selectedQueue && <ServiceTypeGrid
                   businessName={brandName}
                   locationId={currentLocation}
                   onSelectService={handleSelectService}
-                />
+                />}
               </View>
             )}
             <View
