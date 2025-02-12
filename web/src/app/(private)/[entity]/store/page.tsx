@@ -124,18 +124,10 @@ const DocumentUploadView = ({
       // Here you would typically upload the files to your server
       await onSubmit(documents);
       toast.success("Documents submitted successfully!", {
-        style: {
-          background: "#10B981",
-          color: "#fff",
-        },
         duration: 4000,
       });
     } catch (error) {
       toast.error("Error submitting documents. Please try again.", {
-        style: {
-          background: "#EF4444",
-          color: "#fff",
-        },
         duration: 4000,
       });
     } finally {
@@ -448,10 +440,6 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
           
           // Show success message
           toast.success("Store setup completed successfully!", {
-              style: {
-                  background: "#10B981",
-                  color: "#fff",
-              },
               duration: 4000,
           });
 
@@ -461,10 +449,6 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
     } catch (error) {
       console.error('Failed to complete store setup:', error);
       toast.error("Failed to complete store setup. Please try again.", {
-        style: {
-          background: "#EF4444",
-          color: "#fff",
-        },
         duration: 4000,
       });
     }
@@ -1279,19 +1263,11 @@ const StoreDashboardView = () => {
       setSelectedProduct(null);
       setProducts([...products, product]);
       toast.success("Product added successfully!", {
-          style: {
-            background: "#10B981",
-            color: "#fff",
-          },
           duration: 4000,
       });
     })
     .catch(() => {
       toast.error("Failed to add product. Please try again.", {
-          style: {
-              background: "#EF4444",
-              color: "#fff",
-          },
           duration: 4000,
       });
     });
@@ -1817,19 +1793,11 @@ export default function StorePage() {
       setStoreStatus(StoreStatus.SETUP_COMPLETED);
       
       toast.success("Congratulations! Your store is now live.", {
-        style: {
-          background: "#10B981",
-          color: "#fff",
-        },
         duration: 4000,
       });
     } catch (error) {
       console.error('Failed to complete setup:', error);
       toast.error("Failed to complete setup. Please try again.", {
-        style: {
-          background: "#EF4444",
-          color: "#fff",
-        },
         duration: 4000,
       });
     }
