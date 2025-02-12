@@ -21,7 +21,7 @@ interface FeedbackForm {
   suggestion: string;
   issueUrgency: "LOW" | "MEDIUM" | "HIGH";
   businessImpact: "LOW" | "MEDIUM" | "HIGH";
-  // customerImpact: "INDIVIDUAL" | "GROUP" | "ALL_CUSTOMERS";
+  customerImpact: "INDIVIDUAL" | "GROUP" | "ALL_CUSTOMERS";
   isRegularCustomer: boolean;
   calculatedPriority?: string;
 }
