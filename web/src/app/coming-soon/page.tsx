@@ -11,6 +11,7 @@ export default function ComingSoonPage() {
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -52,6 +53,15 @@ export default function ComingSoonPage() {
     },
     disabled: {
       opacity: 0.5,
+      rotate: [0, -10, 10, -10, 10, 0],
+      transition: {
+        rotate: {
+          duration: 1.5,
+          repeat: Infinity,
+          repeatDelay: 2,
+          ease: "easeInOut",
+        },
+      },
     },
     enabled: {
       opacity: 1,
@@ -144,6 +154,8 @@ export default function ComingSoonPage() {
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                          onFocus={() => setIsFocused(true)}
+                          onBlur={() => setIsFocused(false)}
                           placeholder="Enter your email"
                           className="w-full px-6 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-baby-blue"
                         />
@@ -152,7 +164,7 @@ export default function ComingSoonPage() {
                           whileTap={isValidEmail ? { scale: 0.95 } : {}}
                           animate={[
                             isShaking ? "shake" : "",
-                            isValidEmail ? "enabled" : "disabled",
+                            !isValidEmail && isFocused ? "disabled" : "enabled",
                           ]}
                           variants={bellVariants}
                           type="submit"
@@ -187,13 +199,13 @@ export default function ComingSoonPage() {
                         href="/login"
                         className="double__color--btn inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-full hover:opacity-90 transition-all"
                       >
-                        Business Sign In
+                        Business Sign Up
                       </Link>
                       <Link
                         href="/customer-app"
                         className="bg-white inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-ocean-blue rounded-full hover:bg-opacity-90 transition-colors"
                       >
-                        Download App
+                        Presave App
                       </Link>
                     </div>
                   </motion.div>
