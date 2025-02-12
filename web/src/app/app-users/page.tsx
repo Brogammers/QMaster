@@ -56,6 +56,7 @@ export default function AppUsersPage() {
                   href="/customer-app"
                   data-aos="fade-up"
                   data-aos-delay="200"
+                  data-aos-offset="0"
                   className="double__color--btn inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-full hover:opacity-90 transition-all"
                 >
                   Download Now
