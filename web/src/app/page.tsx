@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect } from "react";
 import Nav from "./components/Nav";
@@ -18,7 +18,7 @@ export default function LandingPage() {
     AOS.init({
       duration: 600, // Animation duration
       offset: 200,
-      easing: 'ease-in-out',
+      easing: "ease-in-out",
     });
   }, []);
 
@@ -28,10 +28,15 @@ export default function LandingPage() {
       <Hero />
       <main className="w-full">
         <Perks />
-        <h5 data-aos="fade-up" className="text-coal-black text-md xsm:text-lg text-center py-48 leading-loose">
+        <h5
+          data-aos="fade-up"
+          className="text-coal-black text-md xsm:text-lg text-center py-48 leading-loose"
+        >
           {t("Join QMaster with just a few clicks")}
           <br />
-          {t("and enjoy")} <span className="font-bold underline">{t("wait-free")}</span> {t("customer experiences")}
+          {t("and enjoy")}{" "}
+          <span className="font-bold underline">{t("wait-free")}</span>{" "}
+          {t("customer experiences")}
         </h5>
         <Features />
         <Support />
