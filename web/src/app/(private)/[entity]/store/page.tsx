@@ -1,7 +1,9 @@
 "use client";
 
 import ExportProductsModal from "@/app/components/store/ExportProductsModal";
-import ProductGridView, { Product } from '@/app/components/store/ProductGridView';
+import ProductGridView, {
+  Product,
+} from "@/app/components/store/ProductGridView";
 import ProductManagementModal from "@/app/components/store/ProductManagementModal";
 import ProductPreviewModal from "@/app/components/store/ProductPreviewModal";
 import QueueModal from "@/app/shared/QueueModal";
@@ -10,7 +12,14 @@ import { useLocation } from "@/ctx/LocationContext";
 import axios from "axios";
 import { Form, Formik } from "formik";
 import { motion } from "framer-motion";
-import { DollarSign, Package, ShoppingBag, Store, Trash2, Users } from "lucide-react";
+import {
+  DollarSign,
+  Package,
+  ShoppingBag,
+  Store,
+  Trash2,
+  Users,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -26,6 +35,7 @@ import {
 } from "recharts";
 import * as Yup from "yup";
 import Entity from "../page";
+import Image from "next/image";
 
 const StoreStatus = {
   NOT_REQUESTED: "NOT_REQUESTED",
@@ -386,11 +396,12 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
         3: ["shippingInfo"],
       } as const;
 
-      const currentStepFields = stepFields[currentStep as keyof typeof stepFields];
-      
+      const currentStepFields =
+        stepFields[currentStep as keyof typeof stepFields];
+
       // Validate the entire form
       const errors = await formik.validateForm();
-      
+
       // Special handling for products step
       if (currentStep === 1 && formik.values.products.length === 0) {
         toast.error("Please add at least one product");
@@ -427,27 +438,28 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
     try {
       const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETUP_STORE || "";
 
-      axios.post(url, {...values, locationId: selectedLocation?.id})
-      .then((response) => {
+      axios
+        .post(url, { ...values, locationId: selectedLocation?.id })
+        .then((response) => {
           if (response.status === 201) {
             return response.data;
           } else {
             throw new Error("Failed to complete store setup");
           }
-      })
-      .then(async (data) => {
+        })
+        .then(async (data) => {
           console.log(data);
-          
+
           // Show success message
           toast.success("Store setup completed successfully!", {
-              duration: 4000,
+            duration: 4000,
           });
 
           // Call the onComplete callback to update the store status
           await onComplete();
-      })
+        });
     } catch (error) {
-      console.error('Failed to complete store setup:', error);
+      console.error("Failed to complete store setup:", error);
       toast.error("Failed to complete store setup. Please try again.", {
         duration: 4000,
       });
@@ -463,10 +475,12 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
               <div className="relative w-full h-full flex items-center justify-center border-2 border-dashed border-black/10 rounded-xl bg-white/5">
                 {formik.values.logo ? (
                   <div className="relative w-full h-full">
-                    <img
+                    <Image
                       src={URL.createObjectURL(formik.values.logo)}
                       alt="Store logo"
+                      fill
                       className="w-full h-full object-contain rounded-lg"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     <Button
                       onClick={() => formik.setFieldValue("logo", null)}
@@ -607,7 +621,10 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                       value={product.quantity}
                       onChange={(e) => {
                         const value = e.target.value.replace(/[^0-9]/g, "");
-                        formik.setFieldValue(`products.${index}.quantity`, value);
+                        formik.setFieldValue(
+                          `products.${index}.quantity`,
+                          value
+                        );
                       }}
                       onBlur={formik.handleBlur}
                       className="w-full px-4 py-2 rounded-lg border border-black/10"
@@ -628,10 +645,12 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                   <div className="flex items-center space-x-4">
                     {product.images?.length > 0 ? (
                       <div className="relative">
-                        <img
+                        <Image
                           src={URL.createObjectURL(product.images[0])}
                           alt={`Product ${index + 1}`}
+                          fill
                           className="w-24 h-24 object-cover rounded-lg"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                         <Button
                           type="button"
@@ -1028,7 +1047,7 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
           setSubmitting(true);
           await handleSubmit(values);
         } catch (error) {
-          console.error('Form submission error:', error);
+          console.error("Form submission error:", error);
         } finally {
           setSubmitting(false);
         }
@@ -1122,7 +1141,8 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                 Welcome to Store Setup! 🎉
               </h4>
               <p className="text-sm text-black/70 mb-4">
-                Let&apos;s set up your online store. We&apos;ll guide you through:
+                Let&apos;s set up your online store. We&apos;ll guide you
+                through:
               </p>
               <ul className="list-disc ml-4 mb-4 space-y-1 text-sm text-black/60">
                 <li>Uploading your store logo</li>
@@ -1163,7 +1183,6 @@ const mockGraphData = {
     { name: "Jun", value: 60 },
   ],
 };
-
 
 const StoreDashboardView = () => {
   // Add state for modals and views
@@ -1210,106 +1229,114 @@ const StoreDashboardView = () => {
     },
   };
 
-
   const handleDeleteProduct = (productId: number) => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_PRODUCT || "";
-    axios.delete(url, {
-      data: {
-        productId: productId, 
-        locationId: selectedLocation?.id
-      }
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        return;
-      } else { 
-        throw new Error("Failed to delete product");
-      }
-    })
-    .then(() => {
-      setProducts(prev => prev.filter((product) => product.id !== productId));
-    })
-    .catch((error) => {
-      console.error("Error: ", error);
-    });
+    axios
+      .delete(url, {
+        data: {
+          productId: productId,
+          locationId: selectedLocation?.id,
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          return;
+        } else {
+          throw new Error("Failed to delete product");
+        }
+      })
+      .then(() => {
+        setProducts((prev) =>
+          prev.filter((product) => product.id !== productId)
+        );
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
   };
 
-  const handleAddOnSubmit = (formData: Product) => {    
+  const handleAddOnSubmit = (formData: Product) => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_PRODUCT || "";
 
     const data = {
       ...formData,
-      locationId: selectedLocation?.id
-    }
+      locationId: selectedLocation?.id,
+    };
 
-    axios.post(url, data)
-    .then((response) => {
-      if (response.status === 201) {
-        return response.data.product;
-      } else { 
-        throw new Error("Failed to add product");
-      }
-    })
-    .then((data) => {
-      const product = {
+    axios
+      .post(url, data)
+      .then((response) => {
+        if (response.status === 201) {
+          return response.data.product;
+        } else {
+          throw new Error("Failed to add product");
+        }
+      })
+      .then((data) => {
+        const product = {
           ...data,
           status:
-              data.quantity > 10
-                  ? "in_stock"
-                  : data.quantity > 0
-                  ? "low_stock"
-                  : "out_of_stock",
-      };
-      setSelectedProduct(null);
-      setProducts([...products, product]);
-      toast.success("Product added successfully!", {
+            data.quantity > 10
+              ? "in_stock"
+              : data.quantity > 0
+              ? "low_stock"
+              : "out_of_stock",
+        };
+        setSelectedProduct(null);
+        setProducts([...products, product]);
+        toast.success("Product added successfully!", {
           duration: 4000,
-      });
-    })
-    .catch(() => {
-      toast.error("Failed to add product. Please try again.", {
+        });
+      })
+      .catch(() => {
+        toast.error("Failed to add product. Please try again.", {
           duration: 4000,
+        });
       });
-    });
 
     setShowProductManagement(false);
-  }
+  };
 
-  const handleEditOnSubmit = () => {
-
-  }
+  const handleEditOnSubmit = () => {};
 
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_PRODUCT_LIST;
 
-    axios.get(`${url}?page=${page}&per-page=${perPage}&locationId=${selectedLocation?.id}`)
-    .then((response) => {
-      if(response.status === 200) {
-        return response.data.products.content;
-      } else { 
-        throw new Error("Failed to fetch product data");
-      }
-    })
-    .then((data) => {      
-      const productsData: Product[] = data.map((product: any) => {
+    axios
+      .get(
+        `${url}?page=${page}&per-page=${perPage}&locationId=${selectedLocation?.id}`
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data.products.content;
+        } else {
+          throw new Error("Failed to fetch product data");
+        }
+      })
+      .then((data) => {
+        const productsData: Product[] = data.map((product: any) => {
           return {
-              id: product.id,
-              name: product.name,
-              price: product.price,
-              description: product.description,
-              quantity: product.quantity,
-              status: product.quantity > 10 ? 'in_stock' : product.quantity > 0 ? 'low_stock' : 'out_of_stock',
-              image: null
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            description: product.description,
+            quantity: product.quantity,
+            status:
+              product.quantity > 10
+                ? "in_stock"
+                : product.quantity > 0
+                ? "low_stock"
+                : "out_of_stock",
+            image: null,
           };
+        });
+
+        setProducts(productsData);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
       });
-
-      setProducts(productsData);
-    })
-    .catch((error) => {
-      console.error("Error: ", error);
-    })
   }, [selectedLocation, page, perPage]);
-
 
   if (showProductGrid) {
     return (
@@ -1330,7 +1357,7 @@ const StoreDashboardView = () => {
               onClick={() => setIsDeleteMode(!isDeleteMode)}
             >
               <Trash2 className="w-4 h-4 mr-2" />
-              {isDeleteMode ? 'Cancel Delete' : 'Delete Products'}
+              {isDeleteMode ? "Cancel Delete" : "Delete Products"}
             </Button>
           </div>
         </div>
@@ -1357,7 +1384,7 @@ const StoreDashboardView = () => {
             setSelectedProduct(null);
           }}
           product={selectedProduct}
-          mode={selectedProduct ? 'edit' : 'add'}
+          mode={selectedProduct ? "edit" : "add"}
           onSubmit={selectedProduct ? handleEditOnSubmit : handleAddOnSubmit}
         />
 
@@ -1633,24 +1660,26 @@ const StoreDashboardView = () => {
         <div className="bg-white rounded-2xl shadow-sm border border-black/10 p-6">
           <div className="flex justify-between items-center">
             <div>
-              <h2 className="text-xl font-semibold mb-1">Quick Inventory Overview</h2>
+              <h2 className="text-xl font-semibold mb-1">
+                Quick Inventory Overview
+              </h2>
               <p className="text-sm text-black/60">Showing top 3 products</p>
             </div>
             <div className="flex gap-4">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="border-2 border-baby-blue text-baby-blue hover:bg-baby-blue/5 bg-transparent"
                 onClick={() => setShowExport(true)}
               >
                 Export
               </Button>
-              <Button 
+              <Button
                 className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
                 onClick={() => setShowProductManagement(true)}
               >
                 Add Product
               </Button>
-              <Button 
+              <Button
                 className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white"
                 onClick={() => {
                   setIsManagingProducts(false);
@@ -1667,9 +1696,13 @@ const StoreDashboardView = () => {
               <div
                 key={product.id}
                 className={`absolute w-[280px] transition-all duration-300 hover:z-10 hover:scale-105 cursor-pointer
-                  ${index === 0 ? 'left-0 rotate-[-5deg] z-[3]' : 
-                    index === 1 ? 'left-[20%] z-[2]' : 
-                    'left-[40%] rotate-[5deg] z-[1]'}`}
+                  ${
+                    index === 0
+                      ? "left-0 rotate-[-5deg] z-[3]"
+                      : index === 1
+                      ? "left-[20%] z-[2]"
+                      : "left-[40%] rotate-[5deg] z-[1]"
+                  }`}
                 onClick={() => {
                   setSelectedProduct(product);
                   setShowProductPreview(true);
@@ -1678,31 +1711,35 @@ const StoreDashboardView = () => {
                 <div className="bg-white rounded-xl border border-black/10 p-3 shadow-md">
                   <div className="flex gap-3">
                     <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0">
-                      <img
+                      <Image
                         src={product.image}
                         alt={product.name}
+                        fill
                         className="w-full h-full object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium truncate text-sm">{product.name}</h3>
+                      <h3 className="font-medium truncate text-sm">
+                        {product.name}
+                      </h3>
                       <p className="text-base font-bold text-baby-blue">
                         EGP {product.price}
                       </p>
                       <span
                         className={`inline-block px-2 py-0.5 rounded-full text-xs mt-1 ${
-                          product.status === 'in_stock'
-                            ? 'bg-green-100 text-green-700'
-                            : product.status === 'low_stock'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-red-100 text-red-700'
+                          product.status === "in_stock"
+                            ? "bg-green-100 text-green-700"
+                            : product.status === "low_stock"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-red-100 text-red-700"
                         }`}
                       >
-                        {product.status === 'in_stock'
-                          ? 'In Stock'
-                          : product.status === 'low_stock'
-                          ? 'Low Stock'
-                          : 'Out of Stock'}
+                        {product.status === "in_stock"
+                          ? "In Stock"
+                          : product.status === "low_stock"
+                          ? "Low Stock"
+                          : "Out of Stock"}
                       </span>
                     </div>
                   </div>
@@ -1720,7 +1757,7 @@ const StoreDashboardView = () => {
             setSelectedProduct(null);
           }}
           product={selectedProduct}
-          mode={selectedProduct ? 'edit' : 'add'}
+          mode={selectedProduct ? "edit" : "add"}
           onSubmit={selectedProduct ? handleEditOnSubmit : handleAddOnSubmit}
         />
 
@@ -1758,20 +1795,21 @@ export default function StorePage() {
   const handleDocumentSubmit = async (documents: Document[]) => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_SUBMIT_DOCUMENTS || "";
 
-    axios.post(url, {
-      locationId: selectedLocation?.id,
-      // documents: documents
-    })
-    .then((response) => {
-      if (response.status === 201) {
-        return response.data;
-      } else {  
-        throw new Error('Failed to submit documents');
-      }
-    })
-    .then((data) => {
-      setStoreStatus(StoreStatus.PENDING);
-    })
+    axios
+      .post(url, {
+        locationId: selectedLocation?.id,
+        // documents: documents
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          return response.data;
+        } else {
+          throw new Error("Failed to submit documents");
+        }
+      })
+      .then((data) => {
+        setStoreStatus(StoreStatus.PENDING);
+      });
 
     // setStoreStatus(StoreStatus.PENDING);
     // Simulate approval after 2 seconds
@@ -1791,12 +1829,12 @@ export default function StorePage() {
     try {
       // Here you would typically make an API call to update the store status
       setStoreStatus(StoreStatus.SETUP_COMPLETED);
-      
+
       toast.success("Congratulations! Your store is now live.", {
         duration: 4000,
       });
     } catch (error) {
-      console.error('Failed to complete setup:', error);
+      console.error("Failed to complete setup:", error);
       toast.error("Failed to complete setup. Please try again.", {
         duration: 4000,
       });
@@ -1806,39 +1844,40 @@ export default function StorePage() {
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_STORE_STATUS || "";
 
-    axios.get(`${url}?id=${selectedLocation?.id}`)
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data.status;
-      } else {
-        throw new Error('Failed to fetch store status');
-      }
-    })
-    .then((data) => {            
-      switch(data) {
-        case "NOT_REQUESTED":
-          setStoreStatus(StoreStatus.NOT_REQUESTED);
-          break;
-        case "DOCUMENTS_PENDING":
-          setStoreStatus(StoreStatus.DOCUMENTS_PENDING);
-          break;
-        case "PENDING":
-          setStoreStatus(StoreStatus.PENDING);
-          break;
-        case "SETUP_PENDING":
-          setStoreStatus(StoreStatus.SETUP_PENDING);
-          break;
-        case "SETUP_COMPLETE":
-          setStoreStatus(StoreStatus.SETUP_COMPLETED);
-          break;
-        default:
-          setStoreStatus(StoreStatus.NOT_REQUESTED);
-      }
-    })
-    .catch((error) => {
-      console.error('Failed to fetch store status:', error);
-      setStoreStatus(StoreStatus.NOT_REQUESTED);
-    })
+    axios
+      .get(`${url}?id=${selectedLocation?.id}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data.status;
+        } else {
+          throw new Error("Failed to fetch store status");
+        }
+      })
+      .then((data) => {
+        switch (data) {
+          case "NOT_REQUESTED":
+            setStoreStatus(StoreStatus.NOT_REQUESTED);
+            break;
+          case "DOCUMENTS_PENDING":
+            setStoreStatus(StoreStatus.DOCUMENTS_PENDING);
+            break;
+          case "PENDING":
+            setStoreStatus(StoreStatus.PENDING);
+            break;
+          case "SETUP_PENDING":
+            setStoreStatus(StoreStatus.SETUP_PENDING);
+            break;
+          case "SETUP_COMPLETE":
+            setStoreStatus(StoreStatus.SETUP_COMPLETED);
+            break;
+          default:
+            setStoreStatus(StoreStatus.NOT_REQUESTED);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to fetch store status:", error);
+        setStoreStatus(StoreStatus.NOT_REQUESTED);
+      });
   }, [selectedLocation]);
 
   return (
@@ -1879,4 +1918,3 @@ export default function StorePage() {
     </Entity>
   );
 }
-
