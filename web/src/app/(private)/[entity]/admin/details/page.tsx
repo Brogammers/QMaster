@@ -129,7 +129,7 @@ export default function Details() {
           },
         });
       });
-  }, [selectedLocation]);
+  }, [selectedLocation, form]);
 
   return (
     <Entity>
