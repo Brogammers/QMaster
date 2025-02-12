@@ -123,7 +123,7 @@ export default function ComingSoonPage() {
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           type="submit"
-                          className="absolute right-2 top-2 px-4 py-2 bg-baby-blue text-ocean-blue rounded-full hover:opacity-90 transition-all"
+                          className="absolute right-2 top-2 p-4 bg-baby-blue text-ocean-blue rounded-full hover:opacity-90 transition-all"
                         >
                           <FaBell className="w-4 h-4" />
                         </motion.button>

@@ -1,15 +1,23 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import FooterLogo from "../../../public/FooterLogo.svg";
 import { footerLinks, StoreBadges } from "../../../constants";
 import Link from "next/link";
 
 export default function Footer() {
+  const pathname = usePathname();
+  const isSpecialPage = pathname === "/coming-soon" || pathname === "/maintenance";
+
+  const textColorClass = isSpecialPage ? "text-white" : "text-coal-black";
+
   const isExternalLink = (url: string) => {
     return url.startsWith("http") || url.startsWith("https");
   };
 
   return (
-    <footer className="text-coal-black">
+    <footer className={textColorClass}>
       <div className="container">
         <div className="row">
           <div className="mb-24 flex flex-col gap-16 items-start xsm:items-center sm:gap-0 sm:flex-row justify-between sm:items-start">
@@ -34,10 +42,6 @@ export default function Footer() {
                           "cursor-not-allowed"
                         }`}
                         {...(isExternalLink(link.url) && { target: "_blank" })}
-                        // onClick={(e) => {
-                        //   e.preventDefault();
-                        //   handleLinkClick(link);
-                        // }}
                       >
                         {link.title}
                       </Link>
