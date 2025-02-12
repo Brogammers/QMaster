@@ -77,19 +77,9 @@ export default function Details() {
     try {
       // Here you would typically send this to your API
       console.log("Modification requested:", values);
-      toast.success("Modification request submitted successfully", {
-        style: {
-          background: "#10B981",
-          color: "#fff",
-        },
-      });
+      toast.success("Modification request submitted successfully");
     } catch (error) {
-      toast.error("Failed to submit modification request", {
-        style: {
-          background: "#ef4444",
-          color: "#fff",
-        },
-      });
+      toast.error("Failed to submit modification request");
     } finally {
       setIsSubmitting(false);
     }

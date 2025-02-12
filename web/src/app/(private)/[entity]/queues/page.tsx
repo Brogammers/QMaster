@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaClock, FaEdit, FaPlus, FaUsers } from "react-icons/fa";
-import Entity from "../../page";
+import Entity from "../page";
 
 interface Counter {
   id: number;

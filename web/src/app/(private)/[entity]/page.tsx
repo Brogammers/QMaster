@@ -72,9 +72,8 @@ export default function Entity({ children }: QueueModalProps) {
               </div>
             </div>
             <FiChevronDown
-              className={`w-5 h-5 flex-shrink-0 transition-transform ${
-                isOpen ? "rotate-180" : ""
-              }`}
+              className={`w-5 h-5 flex-shrink-0 transition-transform ${isOpen ? "rotate-180" : ""
+                }`}
             />
           </button>
 
@@ -94,7 +93,7 @@ export default function Entity({ children }: QueueModalProps) {
                       {location.name}
                     </div>
                     <div className="truncate text-xs text-gray-500">
-                     {location.city}, {location.country}
+                      {location.city}, {location.country}
                     </div>
                   </div>
                 </button>

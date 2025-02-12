@@ -42,7 +42,7 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
       children: adminMenuItems,
     },
     { 
-      path: `/${entity}/queue-settings/queues`, 
+      path: `/${entity}/queues`, 
       label: 'Queues', 
       icon: FaPeopleArrows, 
     },
