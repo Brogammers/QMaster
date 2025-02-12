@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import animatedLogo from "../../../public/splash.json";
 import Lottie from "lottie-react";

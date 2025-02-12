@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 export default function LoadingScreen() {
   return (
@@ -9,4 +9,4 @@ export default function LoadingScreen() {
       </div>
     </div>
   );
-} 
+}

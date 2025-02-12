@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import { FaUsers, FaBuilding, FaChartLine, FaClock } from 'react-icons/fa';
-import DashboardCard from '@/app/components/admin/DashboardCard';
-import DashboardChart from '@/app/components/admin/DashboardChart';
-import RecentPartners from '@/app/components/admin/RecentPartners';
+import { FaUsers, FaBuilding, FaChartLine, FaClock } from "react-icons/fa";
+import DashboardCard from "@/app/components/admin/DashboardCard";
+import DashboardChart from "@/app/components/admin/DashboardChart";
+import RecentPartners from "@/app/components/admin/RecentPartners";
 
 export default function AdminDashboard() {
   return (
@@ -45,4 +45,4 @@ export default function AdminDashboard() {
       </div>
     </div>
   );
-} 
+}

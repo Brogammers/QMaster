@@ -1,15 +1,11 @@
-'use client'
+"use client";
 
-import { ReactNode } from 'react'
+import { ReactNode } from "react";
 
 interface EntityProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export default function Entity({ children }: EntityProps) {
-  return (
-    <div className="flex-1">
-      {children}
-    </div>
-  )
-} 
+  return <div className="flex-1">{children}</div>;
+}
