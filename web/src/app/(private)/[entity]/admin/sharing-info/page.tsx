@@ -127,6 +127,8 @@ export default function SharingInfo() {
               src={qrCodeDataUrl} 
               alt="QR code" 
               className="pt-2 pb-2" 
+              width={200}
+              height={200}
             />
           </div>
         }
