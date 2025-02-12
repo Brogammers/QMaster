@@ -8,7 +8,7 @@ export default function PrivacyPage() {
   return (
     <div className="body-secondary w-full leading-loose scroll-smooth overflow-x-hidden overflow-y-visible">
       <Nav />
-      <main className="w-full">
+      <main className="w-full py-24">
         <div className="container">
           <div className="row">
             <motion.div
@@ -16,43 +16,47 @@ export default function PrivacyPage() {
               animate={{ opacity: 1, y: 0 }}
               className="w-full"
             >
-              <h1 className="text-4xl md:text-5xl font-bold double__color--text mb-8">
+              <h1 className="text-4xl md:text-5xl font-bold double__color--text mb-16">
                 Privacy Policy
               </h1>
 
-              <div className="space-y-8 text-gray-700 bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-lg p-8">
-                <section className="!mt-0">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-4">
+              <div className="text-coal-black bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-lg p-12">
+                <section className="mt-0 space-y-6">
+                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
                     1. Information We Collect
                   </h2>
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-medium text-gray-800">
-                      1.1 Business Users
-                    </h3>
-                    <ul className="list-disc pl-6 space-y-2">
-                      <li>Business registration information</li>
-                      <li>Contact details and addresses</li>
-                      <li>Payment and banking information</li>
-                      <li>Business operation data</li>
-                      <li>Employee information</li>
-                      <li>Service usage statistics</li>
-                    </ul>
+                  <div className="space-y-8">
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-medium text-coal-black">
+                        1.1 Business Users
+                      </h3>
+                      <ul className="list-disc pl-6 space-y-2">
+                        <li>Business registration information</li>
+                        <li>Contact details and addresses</li>
+                        <li>Payment and banking information</li>
+                        <li>Business operation data</li>
+                        <li>Employee information</li>
+                        <li>Service usage statistics</li>
+                      </ul>
+                    </div>
 
-                    <h3 className="text-xl font-medium text-gray-800">
-                      1.2 End Users
-                    </h3>
-                    <ul className="list-disc pl-6 space-y-2">
-                      <li>Name and contact information</li>
-                      <li>Queue and appointment history</li>
-                      <li>Service preferences</li>
-                      <li>Feedback and ratings</li>
-                      <li>Device and location data</li>
-                    </ul>
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-medium text-coal-black">
+                        1.2 End Users
+                      </h3>
+                      <ul className="list-disc pl-6 space-y-2">
+                        <li>Name and contact information</li>
+                        <li>Queue and appointment history</li>
+                        <li>Service preferences</li>
+                        <li>Feedback and ratings</li>
+                        <li>Device and location data</li>
+                      </ul>
+                    </div>
                   </div>
                 </section>
 
-                <section className="!mt-0">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-4">
+                <section className="space-y-6">
+                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
                     2. How We Use Your Information
                   </h2>
                   <div className="space-y-4">
@@ -70,8 +74,8 @@ export default function PrivacyPage() {
                   </div>
                 </section>
 
-                <section className="!mt-0">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-4">
+                <section className="space-y-6">
+                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
                     3. Data Protection
                   </h2>
                   <p className="leading-relaxed">
@@ -87,8 +91,8 @@ export default function PrivacyPage() {
                   </ul>
                 </section>
 
-                <section className="!mt-0">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-4">
+                <section className="space-y-6">
+                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
                     4. Data Sharing
                   </h2>
                   <p className="leading-relaxed">
@@ -102,8 +106,8 @@ export default function PrivacyPage() {
                   </ul>
                 </section>
 
-                <section className="!mt-0">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-4">
+                <section className="space-y-6">
+                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
                     5. Your Rights
                   </h2>
                   <p className="leading-relaxed">You have the right to:</p>
@@ -117,8 +121,8 @@ export default function PrivacyPage() {
                   </ul>
                 </section>
 
-                <section className="!mt-0">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-4">
+                <section className="space-y-6">
+                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
                     6. Cookies and Tracking
                   </h2>
                   <p className="leading-relaxed">
@@ -128,8 +132,8 @@ export default function PrivacyPage() {
                   </p>
                 </section>
 
-                <section className="!mt-0">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-4">
+                <section className="space-y-6">
+                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
                     7. Children&apos;s Privacy
                   </h2>
                   <p className="leading-relaxed">
@@ -139,8 +143,8 @@ export default function PrivacyPage() {
                   </p>
                 </section>
 
-                <section className="!mt-0">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-4">
+                <section className="space-y-6">
+                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
                     8. International Data Transfers
                   </h2>
                   <p className="leading-relaxed">
@@ -149,8 +153,8 @@ export default function PrivacyPage() {
                   </p>
                 </section>
 
-                <section className="!mt-0">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-4">
+                <section className="space-y-6">
+                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
                     9. Changes to Privacy Policy
                   </h2>
                   <p className="leading-relaxed">
@@ -159,8 +163,8 @@ export default function PrivacyPage() {
                   </p>
                 </section>
 
-                <section className="!mt-0">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-4">
+                <section className="mb-0 space-y-6">
+                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
                     10. Contact Us
                   </h2>
                   <p className="leading-relaxed">

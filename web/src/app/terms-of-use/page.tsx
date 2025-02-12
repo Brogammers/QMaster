@@ -8,7 +8,7 @@ export default function TermsPage() {
   return (
     <div className="body-secondary w-full leading-loose scroll-smooth overflow-x-hidden overflow-y-visible">
       <Nav />
-      <main className="w-full">
+      <main className="w-full py-24">
         <div className="container">
           <div className="row">
             <motion.div
@@ -16,12 +16,12 @@ export default function TermsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="w-full"
             >
-              <h1 className="text-4xl md:text-5xl font-bold double__color--text mb-8">
+              <h1 className="text-4xl md:text-5xl font-bold double__color--text mb-16">
                 Terms of Use
               </h1>
 
-              <div className="space-y-8 text-gray-700 bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-lg p-8">
-                <section className="!mt-0">
+              <div className="text-coal-black bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-lg p-12">
+                <section className="mt-0 space-y-6">
                   <h2 className="text-2xl font-semibold text-baby-blue mb-4">
                     1. Agreement to Terms
                   </h2>
@@ -34,7 +34,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="!mt-0">
+                <section className="space-y-6">
                   <h2 className="text-2xl font-semibold text-baby-blue mb-4">
                     2. Service Description
                   </h2>
@@ -53,37 +53,41 @@ export default function TermsPage() {
                   </div>
                 </section>
 
-                <section className="!mt-0">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-4">
+                <section className="space-y-8">
+                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
                     3. User Categories and Obligations
                   </h2>
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-medium text-gray-800">
-                      3.1 Business Users
-                    </h3>
-                    <p className="leading-relaxed">Business users must:</p>
-                    <ul className="list-disc pl-6 space-y-2">
-                      <li>Provide accurate business information</li>
-                      <li>Maintain confidentiality of account credentials</li>
-                      <li>Comply with local business regulations</li>
-                      <li>Properly handle customer data and privacy</li>
-                      <li>Ensure accurate queue and service management</li>
-                    </ul>
+                  <div className="space-y-8">
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-medium text-coal-black">
+                        3.1 Business Users
+                      </h3>
+                      <p className="leading-relaxed">Business users must:</p>
+                      <ul className="list-disc pl-6 space-y-2">
+                        <li>Provide accurate business information</li>
+                        <li>Maintain confidentiality of account credentials</li>
+                        <li>Comply with local business regulations</li>
+                        <li>Properly handle customer data and privacy</li>
+                        <li>Ensure accurate queue and service management</li>
+                      </ul>
+                    </div>
 
-                    <h3 className="text-xl font-medium text-gray-800">
-                      3.2 End Users (Customers)
-                    </h3>
-                    <p className="leading-relaxed">End users must:</p>
-                    <ul className="list-disc pl-6 space-y-2">
-                      <li>Provide accurate personal information</li>
-                      <li>Use the service responsibly</li>
-                      <li>Respect queue positions and business policies</li>
-                      <li>Not manipulate or abuse the queuing system</li>
-                    </ul>
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-medium text-coal-black">
+                        3.2 End Users (Customers)
+                      </h3>
+                      <p className="leading-relaxed">End users must:</p>
+                      <ul className="list-disc pl-6 space-y-2">
+                        <li>Provide accurate personal information</li>
+                        <li>Use the service responsibly</li>
+                        <li>Respect queue positions and business policies</li>
+                        <li>Not manipulate or abuse the queuing system</li>
+                      </ul>
+                    </div>
                   </div>
                 </section>
 
-                <section className="!mt-0">
+                <section className="space-y-6">
                   <h2 className="text-2xl font-semibold text-baby-blue mb-4">
                     4. E-commerce Terms
                   </h2>
@@ -104,7 +108,7 @@ export default function TermsPage() {
                   </div>
                 </section>
 
-                <section className="!mt-0">
+                <section className="space-y-6">
                   <h2 className="text-2xl font-semibold text-baby-blue mb-4">
                     5. Data Usage and Privacy
                   </h2>
@@ -116,7 +120,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="!mt-0">
+                <section className="space-y-6">
                   <h2 className="text-2xl font-semibold text-baby-blue mb-4">
                     6. Intellectual Property
                   </h2>
@@ -127,7 +131,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="!mt-0">
+                <section className="space-y-6">
                   <h2 className="text-2xl font-semibold text-baby-blue mb-4">
                     7. Limitation of Liability
                   </h2>
@@ -138,7 +142,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="!mt-0">
+                <section className="space-y-6">
                   <h2 className="text-2xl font-semibold text-baby-blue mb-4">
                     8. Termination
                   </h2>
@@ -149,7 +153,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="!mt-0">
+                <section className="space-y-6">
                   <h2 className="text-2xl font-semibold text-baby-blue mb-4">
                     9. Changes to Terms
                   </h2>
@@ -160,7 +164,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="!mt-0">
+                <section className="mb-0 space-y-6">
                   <h2 className="text-2xl font-semibold text-baby-blue mb-4">
                     10. Contact Information
                   </h2>
