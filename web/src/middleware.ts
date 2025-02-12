@@ -1,9 +1,13 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
+    const url =
+        process.env.NEXT_PUBLIC_API_BASE_URL! +
+        process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS!;
+    const response = await axios.get(url);
+
     const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
     const isAdminLoginPage = request.nextUrl.pathname === "/admin/login";
     const isPartnerRoute = request.nextUrl.pathname.includes("/[entity]/");
@@ -13,15 +17,8 @@ export async function middleware(request: NextRequest) {
     let isMaintenanceEnabled = false;
     let isComingSoonEnabled = false;
 
-    // try {
-    //     const response = await axios.get(
-    //         "http://localhost:8020/backend/settings"
-    //     );
-    //     isMaintenanceEnabled = response.data.isMaintenanceEnabled;
-    //     isComingSoonEnabled = response.data.isComingSoonEnabled;
-    // } catch (error) {
-    //     console.error("Error fetching settings:", error);
-    // }
+    isMaintenanceEnabled = response.data.isMaintenanceMode;
+    isComingSoonEnabled = response.data.isComingSoonMode;
 
     // Skip redirects for maintenance and coming-soon pages themselves
     if (
