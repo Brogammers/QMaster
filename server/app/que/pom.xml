@@ -12,8 +12,7 @@
 	<artifactId>que</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>que</name>
-	<packaging>war</packaging>
-	<description>Demo project for Spring Boot</description>
+	<description>Queue master server application</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
@@ -175,7 +174,7 @@
 
 	<build>
 		<plugins>
-			<plugin>
+			<plugin>	
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
