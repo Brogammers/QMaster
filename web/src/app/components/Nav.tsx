@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 export default function Nav() {
   const pathname = usePathname();
   const isTransparent = pathname === "/business" || pathname === "/app-users";
-
+  const isComingSoon = pathname === "/coming-soon";
   return (
     <nav
       className={`${isTransparent ? "absolute top-0 left-0 right-0 z-50" : ""}`}
@@ -37,7 +37,7 @@ export default function Nav() {
                   href="/login"
                   className="hidden sm:block border-2 border-white text-white text-md font-bold rounded-full py-3 px-6"
                 >
-                  Business Sign In
+                  {isComingSoon ? "Business Sign Up" : "Business Sign In"}
                 </Link>
               </li>
               <li>
@@ -45,7 +45,7 @@ export default function Nav() {
                   href=""
                   className="hidden sm:block double__color--btn text-white text-md font-bold rounded-full py-3 px-6"
                 >
-                  Download the App
+                  {isComingSoon ? "Presave App" : "Download the App"}
                 </Link>
               </li>
             </ul>
