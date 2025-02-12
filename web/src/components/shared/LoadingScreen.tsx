@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion';
-import Image from 'next/image';
+import { motion } from "framer-motion";
+import Image from "next/image";
 import QMasterLogo from "../../../public/qmaster-logo.svg";
 
 export default function LoadingScreen() {
@@ -10,21 +10,21 @@ export default function LoadingScreen() {
       {/* Background effects */}
       <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-concrete-turqouise/5 via-transparent to-transparent" />
-      
-      <motion.div 
+
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="text-center"
       >
         <motion.div
-          animate={{ 
+          animate={{
             scale: [1, 1.1, 1],
-            opacity: [1, 0.8, 1]
+            opacity: [1, 0.8, 1],
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
           className="mb-6"
         >
@@ -56,7 +56,7 @@ export default function LoadingScreen() {
                   duration: 1,
                   repeat: Infinity,
                   delay: i * 0.2,
-                  ease: "easeInOut"
+                  ease: "easeInOut",
                 }}
               />
             ))}
@@ -65,4 +65,4 @@ export default function LoadingScreen() {
       </motion.div>
     </div>
   );
-} 
+}

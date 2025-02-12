@@ -29,25 +29,37 @@ export default function BusinessPage() {
     <div className="body w-full leading-loose scroll-smooth overflow-x-hidden overflow-y-visible">
       <Nav />
       <main className="w-full">
-        {/* Hero Section */}
-        <section className="min-h-screen my-0 flex items-center justify-center bg-gradient-to-b from-ocean-blue to-baby-blue relative overflow-hidden">
+        {/* Hero Section - Updated to match main landing page style */}
+        <section className="min-h-screen my-0 flex items-center justify-center bg-gradient-to-b from-ocean-blue via-concrete-turqouise to-coal-black relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
           <div className="container">
             <div className="row">
-              <div className="max-w-4xl mx-auto text-center">
-                <h1 className="text-4xl xsm:text-6xl xl:text-8xl font-bold text-white mb-8">
+              <div className="z-[1000px] max-w-4xl mx-auto text-center">
+                <h1
+                  data-aos="fade-up"
+                  className="text-4xl xsm:text-6xl xl:text-8xl font-bold text-white mb-8"
+                >
                   Effortless Queue Management.
                   <br />
-                  Redefining What&apos;s Possible.
+                  <span className="double__color--text">
+                    Redefining What&apos;s Possible.
+                  </span>
                 </h1>
-                <p className="text-xl text-white/90 mb-12">
+                <p
+                  data-aos="fade-up"
+                  data-aos-delay="100"
+                  className="text-xl text-white/90 mb-12"
+                >
                   QMaster transforms customer flow with smart queue management,
                   powered by advanced technology and hands-on support, ensuring
                   efficiency, control, and full transparency.
                 </p>
                 <Link
                   href="/login"
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-ocean-blue bg-white rounded-full hover:bg-opacity-90 transition-colors"
+                  data-aos="fade-up"
+                  data-aos-delay="200"
+                  data-aos-offset="0"
+                  className="double__color--btn inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-full hover:opacity-90 transition-all"
                 >
                   Get Started
                 </Link>
@@ -56,8 +68,8 @@ export default function BusinessPage() {
           </div>
         </section>
 
-        {/* Features Grid */}
-        <section className="my-0 py-24">
+        {/* Features Grid - Updated with consistent spacing */}
+        <section>
           <div className="container">
             <div className="row">
               <h2
@@ -118,8 +130,8 @@ export default function BusinessPage() {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="my-0 py-24 bg-gradient-to-b from-white to-sky-50">
+        {/* Stats Section - Updated with gradient */}
+        <section className="bg-gradient-to-b from-white to-gray-50">
           <div className="container">
             <div className="row">
               <h2
@@ -137,7 +149,9 @@ export default function BusinessPage() {
                   <h3 className="text-5xl font-bold text-baby-blue mb-4">
                     +40%
                   </h3>
-                  <p className="text-lg text-coal-black">Customer Satisfaction</p>
+                  <p className="text-lg text-coal-black">
+                    Customer Satisfaction
+                  </p>
                 </div>
                 <div
                   data-aos="fade-up"
@@ -166,8 +180,8 @@ export default function BusinessPage() {
           </div>
         </section>
 
-        {/* Integration Steps */}
-        <section className="my-0 py-24">
+        {/* Integration Steps - Updated spacing */}
+        <section>
           <div className="container">
             <div className="row">
               <h2
@@ -221,22 +235,31 @@ export default function BusinessPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="mt-0 mb-24 py-24 bg-gradient-to-b from-ocean-blue to-baby-blue relative overflow-hidden">
+        {/* CTA Section - Updated to match main landing page */}
+        <section className="mt-0 mb-24 py-24 bg-gradient-to-b from-ocean-blue via-concrete-turqouise to-coal-black relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
           <div className="container relative z-10">
             <div className="row">
               <div className="max-w-3xl mx-auto text-center">
-                <h2 className="text-4xl font-bold text-white mb-8">
+                <h2
+                  data-aos="fade-up"
+                  className="text-4xl font-bold text-white mb-8"
+                >
                   Ready to Transform Your Queue Management?
                 </h2>
-                <p className="text-xl text-white/90 mb-12">
+                <p
+                  data-aos="fade-up"
+                  data-aos-delay="100"
+                  className="text-xl text-white/90 mb-12"
+                >
                   Join thousands of businesses already using QMaster to optimize
                   their operations and delight customers.
                 </p>
                 <Link
                   href="/login"
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-ocean-blue bg-white rounded-full hover:bg-opacity-90 transition-colors"
+                  data-aos="fade-up"
+                  data-aos-delay="200"
+                  className="double__color--btn inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-full hover:opacity-90 transition-all"
                 >
                   Get Started Now
                 </Link>

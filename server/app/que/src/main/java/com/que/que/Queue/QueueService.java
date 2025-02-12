@@ -136,13 +136,13 @@ public class QueueService {
 
     // Current as placeholder
     switch (subscriptionPlan) {
-      case SubscriptionPlans.BASIC:
+      case BASIC:
         max = MAX_BASIC_QUEUES;
         break;
-      case SubscriptionPlans.PREMIUM:
+      case PREMIUM:
         max = MAX_PREMIUM_QUEUES;
         break;
-      case SubscriptionPlans.ENTERPRISE:
+      case ENTERPRISE:
         max = MAX_ENTERPRISE_QUEUES;
         break;
     }

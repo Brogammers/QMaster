@@ -52,6 +52,36 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .rtl {
+    direction: rtl;
+    text-align: right;
+  }
+
+  .ltr {
+    direction: ltr;
+    text-align: left;
+  }
+
+  /* Use logical properties for RTL support */
+  .rtl .start {
+    margin-inline-start: auto;
+  }
+
+  .rtl .end {
+    margin-inline-end: auto;
+  }
+
+  /* RTL specific margins and paddings */
+  .rtl .ml-auto {
+    margin-left: unset;
+    margin-right: auto;
+  }
+
+  .rtl .mr-auto {
+    margin-right: unset;
+    margin-left: auto;
+  }
 }
 
 nav {
@@ -102,6 +132,32 @@ LANDING PAGE
     to bottom,
     #17222D 0%,
     #13404D 9%,
+    #2F2E41 14%,
+    #E6E6E6 32%,
+    #FFFFFF 34%,
+    #FFFFFF 100%
+  );
+  /* background-color: black; */
+}
+
+.body-secondary {
+  background: linear-gradient(
+    to bottom,
+    #17222D 0%,
+    #13404D 4%,
+    #2F2E41 8%,
+    #E6E6E6 9%,
+    #FFFFFF 12%,
+    #FFFFFF 100%
+  );
+  /* background-color: black; */
+}
+
+.body-tertiary {
+  background: linear-gradient(
+    to bottom,
+    #17222D 0%,
+    #1DCDFE 9%,
     #2F2E41 14%,
     #E6E6E6 32%,
     #FFFFFF 34%,
