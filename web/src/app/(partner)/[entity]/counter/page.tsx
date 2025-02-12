@@ -169,9 +169,10 @@ export default function Counter() {
       setModalOpen(true);
     } else {
       toast.success("Celebrate! No waiting line!", {
+        duration: 5000,
         style: {
-          background: "#10B981",
-          color: "#fff",
+          background: "#17222D",
+          color: "#FFF",
         },
       });
     }

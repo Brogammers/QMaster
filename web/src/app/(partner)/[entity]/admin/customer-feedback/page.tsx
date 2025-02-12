@@ -76,10 +76,22 @@ export default function CustomerFeedback() {
       const calculatedPriority = calculatePriority(values);
       const finalValues = { ...values, calculatedPriority };
       console.log("Feedback submitted:", finalValues);
-      toast.success("Feedback submitted successfully");
+      toast.success("Feedback submitted successfully", {
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
+      });
       form.resetFields();
     } catch (error) {
-      toast.error("Failed to submit feedback");
+      toast.error("Failed to submit feedback", {
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
+      });
     } finally {
       setIsSubmitting(false);
     }

@@ -94,7 +94,13 @@ export default function StorePage() {
   const handleDownloadAll = (request: (typeof pendingRequestsState)[0]) => {
     // Here you would typically handle the batch download of all documents
     console.log("Downloading all documents for:", request.partnerName);
-    toast.success("Downloading all documents...");
+    toast.success("Downloading all documents...", {
+      duration: 5000,
+      style: {
+        background: "#17222D",
+        color: "#FFF",
+      },
+    });
   };
 
   useEffect(() => {
@@ -125,8 +131,8 @@ export default function StorePage() {
         toast.error("Failed to fetch stores data", {
           duration: 5000,
           style: {
-            backgroundColor: "#F87171",
-            color: "#1E293B",
+            background: "#17222D",
+            color: "#FFF",
           },
         });
       });
@@ -166,8 +172,8 @@ export default function StorePage() {
         toast.error("Failed to fetch pending requests data", {
           duration: 5000,
           style: {
-            backgroundColor: "#F87171",
-            color: "#1E293B",
+            background: "#17222D",
+            color: "#FFF",
           },
         });
       });
@@ -221,8 +227,8 @@ export default function StorePage() {
           toast.success("Store request approved successfully", {
             duration: 5000,
             style: {
-              backgroundColor: "#34D399",
-              color: "#1E293B",
+              background: "#17222D",
+              color: "#FFF",
             },
           });
         })
@@ -231,8 +237,8 @@ export default function StorePage() {
           toast.error("Failed to approve store request", {
             duration: 5000,
             style: {
-              backgroundColor: "#F87171",
-              color: "#1E293B",
+              background: "#17222D",
+              color: "#FFF",
             },
           });
         });

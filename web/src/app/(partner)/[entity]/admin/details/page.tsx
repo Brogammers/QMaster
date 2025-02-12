@@ -77,9 +77,21 @@ export default function Details() {
     try {
       // Here you would typically send this to your API
       console.log("Modification requested:", values);
-      toast.success("Modification request submitted successfully");
+      toast.success("Modification request submitted successfully", {
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
+      });
     } catch (error) {
-      toast.error("Failed to submit modification request");
+      toast.error("Failed to submit modification request", {
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -113,9 +125,10 @@ export default function Details() {
       .catch((error) => {
         console.error(error);
         toast.error("Failed to fetch business data", {
+          duration: 5000,
           style: {
-            background: "#ef4444",
-            color: "#fff",
+            background: "#17222D",
+            color: "#FFF",
           },
         });
       });

@@ -41,7 +41,13 @@ export default function ProductGridView({
       });
       setSelectedProducts([]);
       onCancelDelete?.();
-      toast.success(`Successfully deleted ${count} product${count > 1 ? 's' : ''}`);
+      toast.success(`Successfully deleted ${count} product${count > 1 ? 's' : ''}`, {
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
+      });
     }
   };
 

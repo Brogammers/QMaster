@@ -94,8 +94,8 @@ export default function CategoriesPage() {
         toast.success("Category added successfully", {
           duration: 5000,
           style: {
-            background: "#1e293b",
-            color: "#fff",
+            background: "#17222D",
+            color: "#FFF",
           },
         });
       })
@@ -103,8 +103,8 @@ export default function CategoriesPage() {
         toast.error("Failed to add category", {
           duration: 5000,
           style: {
-            background: "#1e293b",
-            color: "#fff",
+            background: "#17222D",
+            color: "#FFF",
           },
         });
       });
@@ -173,10 +173,10 @@ export default function CategoriesPage() {
         .catch(() => {
           setCategories((prev) => [...prev, categoryToDelete]);
           toast.error("Failed to delete category", {
-            duration: 3000,
+            duration: 5000,
             style: {
-              background: "#1e293b",
-              color: "#fff",
+              background: "#17222D",
+              color: "#FFF",
             },
           });
         });
@@ -211,8 +211,8 @@ export default function CategoriesPage() {
         toast.error(error.message, {
           duration: 5000,
           style: {
-            background: "#1e293b",
-            color: "#fff",
+            background: "#17222D",
+            color: "#FFF",
           },
         });
       });

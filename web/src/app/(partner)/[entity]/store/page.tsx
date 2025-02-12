@@ -134,11 +134,19 @@ const DocumentUploadView = ({
       // Here you would typically upload the files to your server
       await onSubmit(documents);
       toast.success("Documents submitted successfully!", {
-        duration: 4000,
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
       });
     } catch (error) {
       toast.error("Error submitting documents. Please try again.", {
-        duration: 4000,
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
       });
     } finally {
       setIsSubmitting(false);
@@ -404,7 +412,13 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
 
       // Special handling for products step
       if (currentStep === 1 && formik.values.products.length === 0) {
-        toast.error("Please add at least one product");
+        toast.error("Please add at least one product", {
+          duration: 5000,
+          style: {
+            background: "#17222D",
+            color: "#FFF",
+          },
+        });
         return;
       }
 
@@ -422,15 +436,33 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
           if (isValid) {
             await formik.submitForm();
           } else {
-            toast.error("Please fill in all required fields correctly");
+            toast.error("Please fill in all required fields correctly", {
+              duration: 5000,
+              style: {
+                background: "#17222D",
+                color: "#FFF",
+              },
+            });
           }
         }
       } else {
-        toast.error("Please fill in all required fields correctly");
+        toast.error("Please fill in all required fields correctly", {
+          duration: 5000,
+          style: {
+            background: "#17222D",
+            color: "#FFF",
+          },
+        });
       }
     } catch (error) {
       console.error("Validation error:", error);
-      toast.error("Please fix the validation errors before continuing");
+      toast.error("Please fix the validation errors before continuing", {
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
+      });
     }
   };
 
@@ -452,7 +484,11 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
 
           // Show success message
           toast.success("Store setup completed successfully!", {
-            duration: 4000,
+            duration: 5000,
+            style: {
+              background: "#17222D",
+              color: "#FFF",
+            },
           });
 
           // Call the onComplete callback to update the store status
@@ -461,7 +497,11 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
     } catch (error) {
       console.error("Failed to complete store setup:", error);
       toast.error("Failed to complete store setup. Please try again.", {
-        duration: 4000,
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
       });
     }
   };
@@ -1285,12 +1325,20 @@ const StoreDashboardView = () => {
         setSelectedProduct(null);
         setProducts([...products, product]);
         toast.success("Product added successfully!", {
-          duration: 4000,
+          duration: 5000,
+          style: {
+            background: "#17222D",
+            color: "#FFF",
+          },
         });
       })
       .catch(() => {
         toast.error("Failed to add product. Please try again.", {
-          duration: 4000,
+          duration: 5000,
+          style: {
+            background: "#17222D",
+            color: "#FFF",
+          },
         });
       });
 
@@ -1816,10 +1864,11 @@ export default function StorePage() {
     // setTimeout(() => {
     //   setStoreStatus(StoreStatus.SETUP_PENDING);
     //   toast.success("Your store has been approved! Let&apos;s set it up.", {
-    //     style: {
-    //       background: "#10B981",
-    //       color: "#fff",
-    //     },
+    //     duration: 5000,
+        // style: {
+        //   background: "#17222D",
+        //   color: "#FFF",
+        // },
     //     duration: 4000,
     //   });
     // }, 2000);
@@ -1831,12 +1880,20 @@ export default function StorePage() {
       setStoreStatus(StoreStatus.SETUP_COMPLETED);
 
       toast.success("Congratulations! Your store is now live.", {
-        duration: 4000,
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
       });
     } catch (error) {
       console.error("Failed to complete setup:", error);
       toast.error("Failed to complete setup. Please try again.", {
-        duration: 4000,
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
       });
     }
   };

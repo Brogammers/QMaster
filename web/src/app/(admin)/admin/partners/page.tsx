@@ -143,7 +143,13 @@ export default function PartnersPage() {
       })
       .catch((error) => {
         console.error("Error fetching partners:", error);
-        toast.error("Error fetching partners");
+        toast.error("Error fetching partners", {
+          duration: 5000,
+          style: {
+            background: "#17222D",
+            color: "#FFF",
+          },
+        });
       });
   }, []);
 
