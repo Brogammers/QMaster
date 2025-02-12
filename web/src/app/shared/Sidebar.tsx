@@ -21,6 +21,7 @@ import QMasterLogo from "../../../public/qmaster.svg";
 import { Menu, Layout } from "antd";
 import { SettingOutlined, DesktopOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons'; // Import required icons
 import Tag from "./Tag";
+import { useBusinessAuth } from "@/lib/auth/AuthContext";
 
 const { Sider } = Layout;
 
@@ -32,6 +33,7 @@ export default function Sidebar() {
   const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { logout } = useBusinessAuth();
 
   const toggleCollapsed = () => {
     setIsCollapsed(!isCollapsed);
@@ -50,7 +52,7 @@ export default function Sidebar() {
     setIsLoading(true);
     setTimeout(async () => {
       setIsLoading(false)
-      await router.replace('/login');
+      logout();
     }, 2000);
   }
 

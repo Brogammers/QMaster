@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
@@ -9,7 +9,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import Image from "next/image";
+import { useBusinessAuth } from "../../lib/auth/AuthContext";
 
 // Define validation schema
 const LoginSchema = Yup.object().shape({
@@ -21,6 +21,7 @@ export default function LoginForm({ setIsLoading }: any) {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const router = useRouter();
+  const { login } = useBusinessAuth();
 
   const handlePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -43,24 +44,24 @@ export default function LoginForm({ setIsLoading }: any) {
       .then((response) => {
         if (response.status === 200 && response.data.token) {
           console.log("Login successful:", response.data);
+          login(values.email, response.data.partnerName);          
           router.push(`/${response.data.partnerName}/counter`);
-
           // Necessary CORS headers to allow requests from localhost:3000
           document.cookie = `userId=${response.data.userID}; SameSite=None; Secure;`;
           axios.defaults.headers.common[
-            "Authorization"
+              "Authorization"
           ] = `Bearer ${response.data.token}`;
           axios.defaults.headers.common["Content-Type"] = "application/json";
 
-          axios.interceptors.request.use(
-            (config) => {
-              config.headers["Authorization"] = `Bearer ${response.data.token}`;
-              return config;
-            },
-            (error) => {
-              return Promise.reject(error);
-            }
-          );
+          // axios.interceptors.request.use(
+          //   (config) => {
+          //     config.headers["Authorization"] = `Bearer ${response.data.token}`;
+          //     return config;
+          //   },
+          //   (error) => {
+          //     return Promise.reject(error);
+          //   }
+          // );
         } else {
           // Handle case where the response is not as expected
           setErrorMessage("Invalid login credentials");

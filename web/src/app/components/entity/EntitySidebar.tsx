@@ -15,6 +15,7 @@ import {
   FaStore
 } from 'react-icons/fa';
 import QMasterLogo from "../../../../public/qmaster-logo.svg";
+import { useBusinessAuth } from '@/lib/auth/AuthContext';
 
 interface EntitySidebarProps {
   isDarkMode: boolean;
@@ -23,6 +24,7 @@ interface EntitySidebarProps {
 export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { logout } = useBusinessAuth();
   const { entity } = useParams();
   const [isAdminOpen, setIsAdminOpen] = useState(() => pathname.includes('/admin'));
   const [isQueueManagementOpen, setIsQueueManagementOpen] = useState(() => pathname.includes('/queues'));
@@ -52,7 +54,7 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
   ];
 
   const handleLogout = () => {
-    router.replace('/login');
+    logout();
     axios.defaults.headers.common['Authorization'] = '';
     document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
