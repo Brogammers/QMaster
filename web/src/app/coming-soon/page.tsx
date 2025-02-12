@@ -10,6 +10,7 @@ import { useState } from "react";
 export default function ComingSoonPage() {
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -41,12 +42,39 @@ export default function ComingSoonPage() {
     },
   };
 
+  const bellVariants = {
+    shake: {
+      rotate: [0, -15, 15, -15, 15, 0],
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+      },
+    },
+    disabled: {
+      opacity: 0.5,
+    },
+    enabled: {
+      opacity: 1,
+    },
+  };
+
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!email.trim()) {
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
+      return;
+    }
+
     // Add your subscription logic here
     setIsSubscribed(true);
     setTimeout(() => setIsSubscribed(false), 3000);
   };
+
+  // Validate email format
+  const isValidEmail =
+    email.trim() !== "" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   return (
     <div className="w-full leading-loose scroll-smooth overflow-x-hidden overflow-y-visible relative min-h-screen bg-gradient-to-b from-ocean-blue via-concrete-turqouise to-coal-black">
@@ -120,10 +148,20 @@ export default function ComingSoonPage() {
                           className="w-full px-6 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-baby-blue"
                         />
                         <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                          whileHover={isValidEmail ? { scale: 1.05 } : {}}
+                          whileTap={isValidEmail ? { scale: 0.95 } : {}}
+                          animate={[
+                            isShaking ? "shake" : "",
+                            isValidEmail ? "enabled" : "disabled",
+                          ]}
+                          variants={bellVariants}
                           type="submit"
-                          className="absolute right-2 top-2 p-4 bg-baby-blue text-ocean-blue rounded-full hover:opacity-90 transition-all"
+                          disabled={!isValidEmail}
+                          className={`absolute right-2 top-2 p-4 rounded-full transition-all ${
+                            isValidEmail
+                              ? "bg-baby-blue text-ocean-blue hover:opacity-90 cursor-pointer"
+                              : "bg-gray-400 text-gray-600 cursor-not-allowed"
+                          }`}
                         >
                           <FaBell className="w-4 h-4" />
                         </motion.button>
