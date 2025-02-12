@@ -52,6 +52,36 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .rtl {
+    direction: rtl;
+    text-align: right;
+  }
+
+  .ltr {
+    direction: ltr;
+    text-align: left;
+  }
+
+  /* Use logical properties for RTL support */
+  .rtl .start {
+    margin-inline-start: auto;
+  }
+
+  .rtl .end {
+    margin-inline-end: auto;
+  }
+
+  /* RTL specific margins and paddings */
+  .rtl .ml-auto {
+    margin-left: unset;
+    margin-right: auto;
+  }
+
+  .rtl .mr-auto {
+    margin-right: unset;
+    margin-left: auto;
+  }
 }
 
 nav {

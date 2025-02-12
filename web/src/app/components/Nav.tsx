@@ -3,11 +3,20 @@ import NavLogo from "../../../public/NavigationLogo.svg";
 import MobileNavLogo from "../../../public/MobileNavLogo.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "@/hooks/useTranslation";
+import { FaGlobe } from "react-icons/fa";
 
 export default function Nav() {
   const pathname = usePathname();
   const isTransparent = pathname === "/business" || pathname === "/app-users";
   const isComingSoon = pathname === "/coming-soon";
+  const { currentLanguage, changeLanguage } = useTranslation();
+
+  const toggleLanguage = () => {
+    const newLang = currentLanguage === "ar" ? "en" : "ar";
+    changeLanguage(newLang);
+  };
+
   return (
     <nav
       className={`${isTransparent ? "absolute top-0 left-0 right-0 z-50" : ""}`}
@@ -47,6 +56,17 @@ export default function Nav() {
                 >
                   {isComingSoon ? "Presave App" : "Download the App"}
                 </Link>
+              </li>
+              <li>
+                <button
+                  onClick={toggleLanguage}
+                  className="flex items-center gap-2 px-4 py-2 text-white hover:text-baby-blue transition-colors"
+                >
+                  <FaGlobe className="w-4 h-4" />
+                  <span className="font-medium">
+                    {currentLanguage === "ar" ? "EN" : "عربي"}
+                  </span>
+                </button>
               </li>
             </ul>
           </div>

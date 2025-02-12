@@ -6,8 +6,10 @@ import Footer from "../components/Footer";
 import Link from "next/link";
 import { FaRocket, FaBell, FaEnvelope } from "react-icons/fa";
 import { useState } from "react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function ComingSoonPage() {
+  const { t, isRTL } = useTranslation();
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
@@ -87,7 +89,11 @@ export default function ComingSoonPage() {
     email.trim() !== "" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   return (
-    <div className="w-full leading-loose scroll-smooth overflow-x-hidden overflow-y-visible relative min-h-screen bg-gradient-to-b from-ocean-blue via-concrete-turqouise to-coal-black">
+    <div
+      className={`w-full leading-loose scroll-smooth overflow-x-hidden overflow-y-visible relative min-h-screen bg-gradient-to-b from-ocean-blue via-concrete-turqouise to-coal-black ${
+        isRTL ? "rtl" : "ltr"
+      }`}
+    >
       {/* Animated background dots - moved to cover entire page */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -126,18 +132,20 @@ export default function ComingSoonPage() {
                     className="text-4xl xsm:text-6xl xl:text-8xl font-bold text-white mb-8"
                     variants={itemVariants}
                   >
-                    Something Amazing is
+                    {t("Something Amazing is")}
                     <br />
-                    <span className="double__color--text">Coming Soon</span>
+                    <span className="double__color--text">
+                      {t("Coming Soon")}
+                    </span>
                   </motion.h1>
 
                   <motion.p
                     className="text-xl text-white/90 mb-12"
                     variants={itemVariants}
                   >
-                    We&apos;re crafting something special for you.
+                    {t("We're crafting something special for you.")}
                     <br />
-                    Be the first to know when we launch!
+                    {t("Be the first to know when we launch!")}
                   </motion.p>
 
                   <motion.div
@@ -190,7 +198,7 @@ export default function ComingSoonPage() {
                       className="flex items-center gap-2 text-baby-blue"
                     >
                       <FaEnvelope className="w-4 h-4" />
-                      <span>We&apos;ll notify you when we launch!</span>
+                      <span>{t("We'll notify you when we launch!")}</span>
                     </motion.div>
 
                     {/* Action Buttons */}
@@ -199,13 +207,13 @@ export default function ComingSoonPage() {
                         href="/login"
                         className="double__color--btn inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-full hover:opacity-90 transition-all"
                       >
-                        Business Sign Up
+                        {t("Business Sign Up")}
                       </Link>
                       <Link
                         href="/customer-app"
                         className="bg-white inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-ocean-blue rounded-full hover:bg-opacity-90 transition-colors"
                       >
-                        Presave App
+                        {t("Presave App")}
                       </Link>
                     </div>
                   </motion.div>
