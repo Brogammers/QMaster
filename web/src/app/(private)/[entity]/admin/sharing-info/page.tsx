@@ -7,13 +7,14 @@ import Entity from "../../page";
 import jsPDF from "jspdf";
 import { useLocation } from "@/ctx/LocationContext";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 // import QRCode from "qrcode.react";
 
 export default function SharingInfo() {
   const { selectedLocation } = useLocation();
   const { entity } = useParams();
   const [url, setUrl] = useState<string>("");
- const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
   const qrCodeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -110,7 +111,7 @@ export default function SharingInfo() {
 
   useEffect(() => {
     setQrCodeDataUrl(`${process.env.NEXT_PUBLIC_API_BASE_URL_PARTNER_QR_CODE}?partnerName=${entity}&locationId=${selectedLocation?.id}`);
-  }, [selectedLocation]);
+  }, [selectedLocation, entity]);
 
   return (
     <Entity>
@@ -120,10 +121,14 @@ export default function SharingInfo() {
       >
         {
           qrCodeDataUrl &&
-            <div className="absolute top-28 right-14 hidden xl:block">
-              <h2 className="text-lg font-bold text-center w-full">Here's your QR!</h2>
-              <img src={qrCodeDataUrl} alt="QR code" className="pt-2 pb-2"/>
-            </div>
+          <div className="absolute top-28 right-14 hidden xl:block">
+            <h2 className="text-lg font-bold text-center w-full">Here&apos;s your QR!</h2>
+            <Image 
+              src={qrCodeDataUrl} 
+              alt="QR code" 
+              className="pt-2 pb-2" 
+            />
+          </div>
         }
         <Formik
           initialValues={{ url: url }}
