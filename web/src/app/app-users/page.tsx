@@ -29,25 +29,34 @@ export default function AppUsersPage() {
     <div className="body w-full leading-loose scroll-smooth overflow-x-hidden overflow-y-visible">
       <Nav />
       <main className="w-full">
-        {/* Hero Section */}
-        <section className="min-h-screen my-0 flex items-center justify-center bg-gradient-to-b from-ocean-blue to-baby-blue relative overflow-hidden">
+        {/* Hero Section - Updated to match main landing page */}
+        <section className="min-h-screen my-0 flex items-center justify-center bg-gradient-to-b from-ocean-blue via-concrete-turqouise to-coal-black relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
           <div className="container">
             <div className="row">
-              <div className="max-w-4xl mx-auto text-center">
-                <h1 className="text-4xl xsm:text-6xl xl:text-8xl font-bold text-white mb-8">
+              <div className="z-[1000px] max-w-4xl mx-auto text-center">
+                <h1
+                  data-aos="fade-up"
+                  className="text-4xl xsm:text-6xl xl:text-8xl font-bold text-white mb-8"
+                >
                   Your Time Matters.
                   <br />
-                  Queue Smarter.
+                  <span className="double__color--text">Queue Smarter.</span>
                 </h1>
-                <p className="text-xl text-white/90 mb-12">
+                <p
+                  data-aos="fade-up"
+                  data-aos-delay="100"
+                  className="text-xl text-white/90 mb-12"
+                >
                   Join millions of users who have transformed their waiting
                   experience. Queue virtually, get real-time updates, and make
                   the most of your time.
                 </p>
                 <Link
                   href="/customer-app"
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-ocean-blue bg-white rounded-full hover:bg-opacity-90 transition-colors"
+                  data-aos="fade-up"
+                  data-aos-delay="200"
+                  className="double__color--btn inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-full hover:opacity-90 transition-all"
                 >
                   Download Now
                 </Link>
@@ -56,7 +65,7 @@ export default function AppUsersPage() {
           </div>
         </section>
 
-        {/* App Features */}
+        {/* App Features - Updated with consistent spacing */}
         <section className="my-0 py-24">
           <div className="container">
             <div className="row">
@@ -116,8 +125,8 @@ export default function AppUsersPage() {
           </div>
         </section>
 
-        {/* Benefits Section */}
-        <section className="my-0 py-24 bg-gradient-to-b from-white to-sky-50">
+        {/* Benefits Section - Updated with gradient */}
+        <section className="bg-gradient-to-b from-white to-gray-50">
           <div className="container">
             <div className="row">
               <h2
@@ -136,7 +145,9 @@ export default function AppUsersPage() {
                     <FaMapMarkerAlt className="w-6 h-6 text-baby-blue" />
                   </div>
                   <div>
-                    <h3 className="text-xl text-ocean-blue font-bold mb-2">Discover Places</h3>
+                    <h3 className="text-xl text-ocean-blue font-bold mb-2">
+                      Discover Places
+                    </h3>
                     <p className="text-coal-black">
                       Find and explore businesses near you that offer virtual
                       queuing through QMaster.
@@ -152,7 +163,9 @@ export default function AppUsersPage() {
                     <FaStar className="w-6 h-6 text-baby-blue" />
                   </div>
                   <div>
-                    <h3 className="text-xl text-coal-black font-bold mb-2">Rate Experiences</h3>
+                    <h3 className="text-xl text-coal-black font-bold mb-2">
+                      Rate Experiences
+                    </h3>
                     <p className="text-coal-black">
                       Share your feedback and help improve service quality for
                       everyone.
@@ -168,7 +181,9 @@ export default function AppUsersPage() {
                     <FaHistory className="w-6 h-6 text-baby-blue" />
                   </div>
                   <div>
-                    <h3 className="text-xl text-coal-black font-bold mb-2">Queue History</h3>
+                    <h3 className="text-xl text-coal-black font-bold mb-2">
+                      Queue History
+                    </h3>
                     <p className="text-coal-black">
                       Access your complete queue history and favorite places for
                       quick access.
@@ -180,8 +195,8 @@ export default function AppUsersPage() {
           </div>
         </section>
 
-        {/* Download CTA */}
-        <section className="mt-0 mb-24 py-24 bg-gradient-to-b from-ocean-blue to-baby-blue relative overflow-hidden">
+        {/* Download CTA - Updated to match main landing page */}
+        <section className="mt-0 mb-24 py-24 bg-gradient-to-b from-ocean-blue via-concrete-turqouise to-coal-black relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
           <div className="container relative z-10">
             <div className="row">

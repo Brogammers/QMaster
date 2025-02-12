@@ -123,6 +123,19 @@ LANDING PAGE
   /* background-color: black; */
 }
 
+.body-tertiary {
+  background: linear-gradient(
+    to bottom,
+    #17222D 0%,
+    #1DCDFE 9%,
+    #2F2E41 14%,
+    #E6E6E6 32%,
+    #FFFFFF 34%,
+    #FFFFFF 100%
+  );
+  /* background-color: black; */
+}
+
 .double__color--btn {
   background: linear-gradient(
     to right,
