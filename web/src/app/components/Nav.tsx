@@ -60,7 +60,7 @@ export default function Nav() {
               <li>
                 <button
                   onClick={toggleLanguage}
-                  className="flex items-center gap-2 px-4 py-2 text-white hover:text-baby-blue transition-colors"
+                  className="border-2 border-baby-blue flex items-center gap-2 px-4 py-2 bg-transparent rounded-full text-baby-blue hover:bg-white hover:text-baby-blue transition-colors"
                 >
                   <FaGlobe className="w-4 h-4" />
                   <span className="font-medium">

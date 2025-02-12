@@ -9,8 +9,10 @@ import Support from "./components/Support";
 import Features from "./components/Features";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function LandingPage() {
+  const { t } = useTranslation();
 
   useEffect(() => {
     AOS.init({
@@ -27,9 +29,9 @@ export default function LandingPage() {
       <main className="w-full">
         <Perks />
         <h5 data-aos="fade-up" className="text-coal-black text-md xsm:text-lg text-center py-48 leading-loose">
-          Join QMaster with just a few clicks
+          {t("Join QMaster with just a few clicks")}
           <br />
-          and enjoy <span className="font-bold underline">wait-free</span> customer experiences
+          {t("and enjoy")} <span className="font-bold underline">{t("wait-free")}</span> {t("customer experiences")}
         </h5>
         <Features />
         <Support />
