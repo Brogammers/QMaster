@@ -143,8 +143,8 @@ export default function Details() {
             animate={{ opacity: 1, y: 0 }}
             className="p-3 sm:p-4 lg:p-6 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-white/20 shadow-lg"
           >
-            <Tabs 
-              activeKey={activeTab} 
+            <Tabs
+              activeKey={activeTab}
               onChange={setActiveTab}
               className="!text-sm sm:!text-base"
             >
@@ -161,24 +161,43 @@ export default function Details() {
                         label={
                           <div className="flex items-center gap-2 text-sm sm:text-base">
                             <span>Business Name</span>
-                            <FaEdit className="w-3 h-3 sm:w-4 sm:h-4 text-ocean-blue opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <FaEdit className="w-3 h-3 sm:w-4 sm:h-4 text-ocean-blue opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block" />
                           </div>
                         }
                         name="name"
                         className="mb-1"
                       >
-                        <Input
-                          readOnly
-                          className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 cursor-not-allowed text-sm sm:text-base"
-                        />
+                        <div className="relative">
+                          <Input
+                            readOnly
+                            className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 cursor-not-allowed text-sm sm:text-base"
+                          />
+                          {/* Mobile Request Change Button */}
+                          <Button
+                            onClick={() =>
+                              handleModificationRequest({
+                                name: form.getFieldValue("name"),
+                              })
+                            }
+                            className="sm:hidden absolute right-2 top-1/2 -translate-y-1/2 text-xs h-fit w-fit border-0 shadow-none
+                            pb-0.5 !text-black hover:!text-blue-500"
+                          >
+                            Edit
+                          </Button>
+                          {/* Desktop Request Change Button */}
+                          <Button
+                            onClick={() =>
+                              handleModificationRequest({
+                                name: form.getFieldValue("name"),
+                              })
+                            }
+                            className="hidden sm:block absolute right-0 -top-7 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
+                            transition-all pb-0.5 !text-black hover:!text-blue-500"
+                          >
+                            Request Change
+                          </Button>
+                        </div>
                       </Form.Item>
-                      <Button
-                        onClick={() => handleModificationRequest({ name: form.getFieldValue("name") })}
-                        className="absolute right-0 -top-1 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
-                        transition-all pb-0.5 !text-black hover:!text-blue-500"
-                      >
-                        Request Change
-                      </Button>
                     </div>
 
                     <div className="relative group">
@@ -187,24 +206,43 @@ export default function Details() {
                           <div className="flex items-center gap-2 text-sm sm:text-base">
                             <FaPhone className="w-3 h-3 sm:w-4 sm:h-4" />
                             <span>Phone Number</span>
-                            <FaEdit className="w-3 h-3 sm:w-4 sm:h-4 text-ocean-blue opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <FaEdit className="w-3 h-3 sm:w-4 sm:h-4 text-ocean-blue opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block" />
                           </div>
                         }
                         name="phone"
                         className="mb-1"
                       >
-                        <Input
-                          readOnly
-                          className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 cursor-not-allowed text-sm sm:text-base"
-                        />
+                        <div className="relative">
+                          <Input
+                            readOnly
+                            className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 cursor-not-allowed text-sm sm:text-base"
+                          />
+                          {/* Mobile Request Change Button */}
+                          <Button
+                            onClick={() =>
+                              handleModificationRequest({
+                                phone: form.getFieldValue("phone"),
+                              })
+                            }
+                            className="sm:hidden absolute right-2 top-1/2 -translate-y-1/2 text-xs h-fit w-fit border-0 shadow-none
+                            pb-0.5 !text-black hover:!text-blue-500"
+                          >
+                            Edit
+                          </Button>
+                          {/* Desktop Request Change Button */}
+                          <Button
+                            onClick={() =>
+                              handleModificationRequest({
+                                phone: form.getFieldValue("phone"),
+                              })
+                            }
+                            className="hidden sm:block absolute right-0 -top-7 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
+                            transition-all pb-0.5 !text-black hover:!text-blue-500"
+                          >
+                            Request Change
+                          </Button>
+                        </div>
                       </Form.Item>
-                      <Button
-                        onClick={() => handleModificationRequest({ phone: form.getFieldValue("phone") })}
-                        className="absolute right-0 -top-1 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
-                        transition-all pb-0.5 !text-black hover:!text-blue-500"
-                      >
-                        Request Change
-                      </Button>
                     </div>
                   </div>
 
@@ -214,25 +252,44 @@ export default function Details() {
                         <div className="flex items-center gap-2 text-sm sm:text-base">
                           <FaMapMarkerAlt className="w-3 h-3 sm:w-4 sm:h-4" />
                           <span>Address</span>
-                          <FaEdit className="w-3 h-3 sm:w-4 sm:h-4 text-ocean-blue opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <FaEdit className="w-3 h-3 sm:w-4 sm:h-4 text-ocean-blue opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block" />
                         </div>
                       }
                       name="address"
                       className="mb-1"
                     >
-                      <TextArea
-                        readOnly
-                        rows={2}
-                        className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 cursor-not-allowed text-sm sm:text-base"
-                      />
+                      <div className="relative">
+                        <TextArea
+                          readOnly
+                          rows={2}
+                          className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 cursor-not-allowed text-sm sm:text-base"
+                        />
+                        {/* Mobile Request Change Button */}
+                        <Button
+                          onClick={() =>
+                            handleModificationRequest({
+                              address: form.getFieldValue("address"),
+                            })
+                          }
+                          className="sm:hidden absolute right-2 top-4 text-xs h-fit w-fit border-0 shadow-none
+                          pb-0.5 !text-black hover:!text-blue-500"
+                        >
+                          Edit
+                        </Button>
+                        {/* Desktop Request Change Button */}
+                        <Button
+                          onClick={() =>
+                            handleModificationRequest({
+                              address: form.getFieldValue("address"),
+                            })
+                          }
+                          className="hidden sm:block absolute right-0 -top-7 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
+                          transition-all pb-0.5 !text-black hover:!text-blue-500"
+                        >
+                          Request Change
+                        </Button>
+                      </div>
                     </Form.Item>
-                    <Button
-                      onClick={() => handleModificationRequest({ address: form.getFieldValue("address") })}
-                      className="absolute right-0 -top-1 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
-                        transition-all pb-0.5 !text-black hover:!text-blue-500"
-                    >
-                      Request Change
-                    </Button>
                   </div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
@@ -242,24 +299,43 @@ export default function Details() {
                           <div className="flex items-center gap-2 text-sm sm:text-base">
                             <FaGlobe className="w-3 h-3 sm:w-4 sm:h-4" />
                             <span>Website</span>
-                            <FaEdit className="w-3 h-3 sm:w-4 sm:h-4 text-ocean-blue opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <FaEdit className="w-3 h-3 sm:w-4 sm:h-4 text-ocean-blue opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block" />
                           </div>
                         }
                         name="website"
                         className="mb-1"
                       >
-                        <Input
-                          readOnly
-                          className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 cursor-not-allowed text-sm sm:text-base"
-                        />
+                        <div className="relative">
+                          <Input
+                            readOnly
+                            className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 cursor-not-allowed text-sm sm:text-base"
+                          />
+                          {/* Mobile Request Change Button */}
+                          <Button
+                            onClick={() =>
+                              handleModificationRequest({
+                                website: form.getFieldValue("website"),
+                              })
+                            }
+                            className="sm:hidden absolute right-2 top-1/2 -translate-y-1/2 text-xs h-fit w-fit border-0 shadow-none
+                            pb-0.5 !text-black hover:!text-blue-500"
+                          >
+                            Edit
+                          </Button>
+                          {/* Desktop Request Change Button */}
+                          <Button
+                            onClick={() =>
+                              handleModificationRequest({
+                                website: form.getFieldValue("website"),
+                              })
+                            }
+                            className="hidden sm:block absolute right-0 -top-7 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
+                            transition-all pb-0.5 !text-black hover:!text-blue-500"
+                          >
+                            Request Change
+                          </Button>
+                        </div>
                       </Form.Item>
-                      <Button
-                        onClick={() => handleModificationRequest({ website: form.getFieldValue("website") })}
-                        className="absolute right-0 -top-1 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
-                        transition-all pb-0.5 !text-black hover:!text-blue-500"
-                      >
-                        Request Change
-                      </Button>
                     </div>
 
                     <div className="relative group">
@@ -298,28 +374,40 @@ export default function Details() {
                       <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4">
                         <div className="flex items-center gap-2 min-w-[100px]">
                           <FaClock className="w-3 h-3 sm:w-4 sm:h-4" />
-                          <span className="text-sm sm:text-base font-medium">{day}</span>
+                          <span className="text-sm sm:text-base font-medium">
+                            {day}
+                          </span>
                         </div>
-                        
+
                         <div className="flex flex-wrap items-center gap-2 lg:gap-4">
                           <TimePicker
                             disabled
                             format="HH:mm"
-                            value={dayjs(businessDetails.openingHours[day].open, "HH:mm")}
+                            value={dayjs(
+                              businessDetails.openingHours[day].open,
+                              "HH:mm"
+                            )}
                             className="!w-24 sm:!w-28 text-sm sm:text-base cursor-not-allowed"
                           />
                           <span className="text-sm sm:text-base">to</span>
                           <TimePicker
                             disabled
                             format="HH:mm"
-                            value={dayjs(businessDetails.openingHours[day].close, "HH:mm")}
+                            value={dayjs(
+                              businessDetails.openingHours[day].close,
+                              "HH:mm"
+                            )}
                             className="!w-24 sm:!w-28 text-sm sm:text-base cursor-not-allowed"
                           />
-                          
+
                           <Button
-                            onClick={() => handleModificationRequest({
-                              openingHours: { [day]: businessDetails.openingHours[day] }
-                            })}
+                            onClick={() =>
+                              handleModificationRequest({
+                                openingHours: {
+                                  [day]: businessDetails.openingHours[day],
+                                },
+                              })
+                            }
                             className="text-xs sm:text-sm ml-auto h-fit w-fit border-0 shadow-none 
                               opacity-100 lg:opacity-0 group-hover:opacity-100 transition-all 
                               pb-0.5 !text-black hover:!text-blue-500"
