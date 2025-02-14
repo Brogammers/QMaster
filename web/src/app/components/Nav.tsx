@@ -66,7 +66,7 @@ export default function Nav() {
             </Link>
 
             {/* Desktop Menu */}
-            <ul className="hidden sm:flex justify-between items-center sm:gap-8">
+            <ul className="hidden lg:flex justify-between items-center sm:gap-8">
               <li>
                 <Link
                   href="/login"
@@ -99,7 +99,7 @@ export default function Nav() {
             {/* Hamburger Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="sm:hidden z-50 relative w-8 h-8 flex flex-col justify-center items-center"
+              className="lg:hidden z-50 relative w-8 h-8 flex flex-col justify-center items-center"
             >
               <span
                 className={`w-6 h-0.5 bg-white rounded-full transition-all duration-300 ${
