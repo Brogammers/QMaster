@@ -101,8 +101,13 @@ export default function Display() {
       ) : (
         <Entity>
           <QueueModal width="w-full">
-            <div className="px-56 text-center flex flex-col justify-center items-center gap-8">
-              <Image src={DisplayImg} alt="Display Image" width={200} />
+            <div className="px-4 md:px-8 lg:px-56 text-center flex flex-col justify-center items-center gap-8">
+              <Image
+                src={DisplayImg}
+                alt="Display Image"
+                width={200}
+                className="w-32 lg:w-auto"
+              />
               <h1 className="text-3xl font-bold">Display View</h1>
               <p className="text-lg hidden lg:block">
                 You have the option to set up a display screen to present the
@@ -110,15 +115,15 @@ export default function Display() {
                 using the computer connected to the display screen and activate
                 fullscreen mode by clicking the designated button.
               </p>
-              <div className="flex flex-col gap-4 items-center">
+              <div className="flex flex-col gap-4 items-center w-full">
                 <button
                   onClick={handleFullscreen}
                   className="hidden lg:block bg-baby-blue px-4 py-2 rounded-lg text-white text-lg font-bold hover:bg-opacity-90 transition-colors"
                 >
                   Fullscreen
                 </button>
-                <div className="lg:hidden flex flex-col items-center gap-4">
-                  <div className="bg-lava-red/10 border-2 border-lava-red rounded-lg p-6 max-w-md">
+                <div className="lg:hidden flex flex-col items-center gap-4 w-full px-4">
+                  <div className="bg-lava-red/10 border-2 border-lava-red rounded-lg p-4 lg:p-6 w-full max-w-md">
                     <p className="text-lava-red font-bold text-xl mb-2">
                       ⚠️ Screen Size Alert
                     </p>
