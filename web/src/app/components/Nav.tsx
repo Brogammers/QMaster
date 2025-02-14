@@ -120,7 +120,7 @@ export default function Nav() {
 
             {/* Mobile Menu Overlay */}
             <div
-              className={`fixed inset-0 w-screen h-screen touch-none bg-black/95 z-40 transition-all duration-300 sm:hidden ${
+              className={`fixed inset-0 w-screen h-screen touch-none bg-black/95 z-40 transition-all duration-300 lg:hidden ${
                 isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
               }`}
             >
