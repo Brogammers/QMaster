@@ -30,14 +30,14 @@ export default function BusinessPage() {
       <Nav />
       <main className="w-full">
         {/* Hero Section - Updated to match main landing page style */}
-        <section className="min-h-screen my-0 flex items-center justify-center bg-gradient-to-b from-ocean-blue via-concrete-turqouise to-coal-black relative overflow-hidden">
+        <section className="min-h-screen my-0 pt-20 flex items-center justify-center bg-gradient-to-b from-ocean-blue via-concrete-turqouise to-coal-black relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
           <div className="container">
             <div className="row">
-              <div className="z-[1000px] max-w-4xl mx-auto text-center">
+              <div className="z-[1000px] max-w-4xl mx-auto text-center px-4">
                 <h1
                   data-aos="fade-up"
-                  className="text-4xl xsm:text-6xl xl:text-8xl font-bold text-white mb-8"
+                  className="text-4xl md:text-4xl xsm:text-6xl xl:text-8xl font-bold text-white mb-6 md:mb-8"
                 >
                   Effortless Queue Management.
                   <br />
@@ -48,7 +48,7 @@ export default function BusinessPage() {
                 <p
                   data-aos="fade-up"
                   data-aos-delay="100"
-                  className="text-xl text-white/90 mb-12"
+                  className="text-base md:text-xl text-white/90 mb-8 md:mb-12"
                 >
                   QMaster transforms customer flow with smart queue management,
                   powered by advanced technology and hands-on support, ensuring
@@ -74,7 +74,7 @@ export default function BusinessPage() {
             <div className="row">
               <h2
                 data-aos="fade-up"
-                className="text-4xl font-bold text-center text-coal-black mb-16"
+                className="text-4xl font-bold text-center text-white sm:text-coal-black mb-16"
               >
                 Smart Features for Modern Businesses
               </h2>
