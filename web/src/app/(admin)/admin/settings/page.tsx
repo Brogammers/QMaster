@@ -320,13 +320,15 @@ export default function SettingsPage() {
                     onChange={(checked) => handleToggle("comingSoon", checked)}
                     className={`${
                       isComingSoonEnabled ? "bg-crystal-blue" : "bg-gray-200"
-                    } relative inline-flex w-[42px] h-[28px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                    } relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
                   >
                     <span className="sr-only">Enable coming soon mode</span>
                     <span
                       className={`${
-                        isComingSoonEnabled ? "translate-x-[22px]" : "translate-x-[2px]"
-                      } pointer-events-none inline-block h-[18px] w-[18px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                        isComingSoonEnabled
+                          ? "translate-x-[16px]"
+                          : "translate-x-[2px]"
+                      } pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                     />
                   </Switch>
                 </div>
@@ -343,13 +345,15 @@ export default function SettingsPage() {
                     onChange={(checked) => handleToggle("maintenance", checked)}
                     className={`${
                       isMaintenanceEnabled ? "bg-crystal-blue" : "bg-gray-200"
-                    } relative inline-flex w-[52px] h-[32px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                    } relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
                   >
                     <span className="sr-only">Enable maintenance mode</span>
                     <span
                       className={`${
-                        isMaintenanceEnabled ? "translate-x-[22px]" : "translate-x-[2px]"
-                      } pointer-events-none inline-block h-[28px] w-[28px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                        isMaintenanceEnabled
+                          ? "translate-x-[16px]"
+                          : "translate-x-[2px]"
+                      } pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                     />
                   </Switch>
                 </div>
