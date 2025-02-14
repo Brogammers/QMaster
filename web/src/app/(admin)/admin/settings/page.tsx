@@ -80,13 +80,15 @@ export default function SettingsPage() {
 
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
-    axios.get(url).then((response) => {
-      setIsMaintenanceEnabled(response.data.isMaintenanceMode);
-      setIsComingSoonEnabled(response.data.isComingSoonMode);
-    })
-    .catch((error) => {
-      console.error("Failed to fetch settings:", error);
-    });
+    axios
+      .get(url)
+      .then((response) => {
+        setIsMaintenanceEnabled(response.data.isMaintenanceMode);
+        setIsComingSoonEnabled(response.data.isComingSoonMode);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch settings:", error);
+      });
   }, []);
 
   const handleBiometricAuth = async () => {
@@ -120,7 +122,9 @@ export default function SettingsPage() {
 
       if (response.status === 200) {
         handleSuccessfulAuth();
-        axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data.token}`;
       } else {
         setAuthError("Incorrect password");
       }
@@ -133,36 +137,44 @@ export default function SettingsPage() {
     if (pendingAction) {
       if (pendingAction.type === "maintenance") {
         const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
-        axios.put(url, {
-          isMaintenanceMode: pendingAction.value,
-          isComingSoonMode: isComingSoonEnabled,
-        }).then((response) => {
-          if (response.status === 200) {
-            return response.data;
-          } else { 
-            throw new Error("Failed to update maintenance mode");
-          }
-        }).then((data) => {
-          setIsMaintenanceEnabled(data.isMaintenanceMode);
-        }).catch((error) => {
-          console.error("Failed to update maintenance mode:", error);
-        })
+        axios
+          .put(url, {
+            isMaintenanceMode: pendingAction.value,
+            isComingSoonMode: isComingSoonEnabled,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              return response.data;
+            } else {
+              throw new Error("Failed to update maintenance mode");
+            }
+          })
+          .then((data) => {
+            setIsMaintenanceEnabled(data.isMaintenanceMode);
+          })
+          .catch((error) => {
+            console.error("Failed to update maintenance mode:", error);
+          });
       } else {
-       const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
-        axios.put(url, {
-          isMaintenanceMode: isMaintenanceEnabled,
-          isComingSoonMode: pendingAction.value,
-        }).then((response) => {
-          if (response.status === 200) {
-            return response.data;
-          } else { 
-            throw new Error("Failed to update maintenance mode");
-          }
-        }).then((data) => {
-          setIsComingSoonEnabled(data.isComingSoonMode);
-        }).catch((error) => {
-          console.error("Failed to update maintenance mode:", error);
-        })
+        const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
+        axios
+          .put(url, {
+            isMaintenanceMode: isMaintenanceEnabled,
+            isComingSoonMode: pendingAction.value,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              return response.data;
+            } else {
+              throw new Error("Failed to update maintenance mode");
+            }
+          })
+          .then((data) => {
+            setIsComingSoonEnabled(data.isComingSoonMode);
+          })
+          .catch((error) => {
+            console.error("Failed to update maintenance mode:", error);
+          });
       }
       setPendingAction(null);
       setIsAuthModalOpen(false);
@@ -274,10 +286,7 @@ export default function SettingsPage() {
                     className="px-4 py-2 rounded-lg border border-white/10 bg-white/20 cursor-not-allowed text-coal-black font-medium"
                     value={deviceTimezone}
                   >
-                    <option
-                      value={deviceTimezone}
-                      className="text-coal-black"
-                    >
+                    <option value={deviceTimezone} className="text-coal-black">
                       {deviceTimezone.replace("_", " ")}
                     </option>
                   </select>
@@ -302,18 +311,14 @@ export default function SettingsPage() {
                   </div>
                   <Switch
                     checked={isComingSoonEnabled}
-                    onChange={(checked) =>
-                      handleToggle("comingSoon", checked)
-                    }
+                    onChange={(checked) => handleToggle("comingSoon", checked)}
                     className={`${
                       isComingSoonEnabled ? "bg-crystal-blue" : "bg-gray-200"
                     } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
                   >
                     <span
                       className={`${
-                        isComingSoonEnabled
-                          ? "translate-x-6"
-                          : "translate-x-1"
+                        isComingSoonEnabled ? "translate-x-6" : "translate-x-1"
                       } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                     />
                   </Switch>
@@ -328,18 +333,14 @@ export default function SettingsPage() {
                   </div>
                   <Switch
                     checked={isMaintenanceEnabled}
-                    onChange={(checked) =>
-                      handleToggle("maintenance", checked)
-                    }
+                    onChange={(checked) => handleToggle("maintenance", checked)}
                     className={`${
                       isMaintenanceEnabled ? "bg-crystal-blue" : "bg-gray-200"
                     } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
                   >
                     <span
                       className={`${
-                        isMaintenanceEnabled
-                          ? "translate-x-6"
-                          : "translate-x-1"
+                        isMaintenanceEnabled ? "translate-x-6" : "translate-x-1"
                       } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                     />
                   </Switch>
@@ -400,22 +401,24 @@ export default function SettingsPage() {
                     <div className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-gray-300" />
                     </div>
-                    <div className="relative bg-white px-4 text-sm text-gray-500">or</div>
+                    <div className="relative bg-white px-4 text-sm text-gray-500">
+                      or
+                    </div>
                   </div>
                   <form onSubmit={handleAuth} className="space-y-4">
                     <div>
                       <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full text-coal-black px-3 py-2 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue"
-                        placeholder="Enter your password"
-                      />
-                    </div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="w-full text-coal-black px-3 py-2 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue"
+                          placeholder="Enter your password"
+                        />
+                      </div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Password
                       </label>
@@ -427,7 +430,6 @@ export default function SettingsPage() {
                         placeholder="Enter your password"
                       />
                     </div>
-
 
                     {authError && (
                       <p className="text-red-500 text-sm">{authError}</p>
