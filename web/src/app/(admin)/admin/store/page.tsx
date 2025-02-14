@@ -136,7 +136,7 @@ export default function StorePage() {
           },
         });
       });
-  }, []);
+  }, [setStores]);
 
   useEffect(() => {
     const url =
