@@ -13,6 +13,7 @@ interface UserProfile {
 }
 
 export default function SettingsPage() {
+  const [isDarkMode] = useState(false);
   const [activeTab, setActiveTab] = useState("general");
   const [isComingSoonEnabled, setIsComingSoonEnabled] = useState(false);
   const [isMaintenanceEnabled, setIsMaintenanceEnabled] = useState(false);
@@ -190,14 +191,19 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-2xl lg:text-3xl font-bold hidden lg:block">
+    <div className="space-y-4 lg:space-y-6">
+      {/* Header Section */}
+      <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4">
+        <h1
+          className={`text-center sm:text-left text-3xl font-bold ${
+            isDarkMode ? "text-white" : "text-slate-900"
+          }`}
+        >
           Settings
         </h1>
       </div>
 
-      {/* Tabs */}
+      {/* Tabs Container */}
       <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
         <div className="flex space-x-1 bg-white/[0.02] rounded-lg p-1 w-fit min-w-full sm:min-w-0">
           {["general", "notifications", "security", "integrations"].map(
@@ -205,10 +211,10 @@ export default function SettingsPage() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap
+                className={`text-black px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap
                   ${
                     activeTab === tab
-                      ? "bg-crystal-blue"
+                      ? "bg-crystal-blue text-black"
                       : "hover:bg-white/[0.05]"
                   }`}
               >
@@ -220,7 +226,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Content */}
-      <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 sm:p-6">
+      <div className="bg-transparent border border-white/[0.05] rounded-xl p-4 sm:p-6">
         {activeTab === "general" && (
           <div className="space-y-6">
             <div className="space-y-4">
