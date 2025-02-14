@@ -57,7 +57,11 @@ export default function AdminSidebar({
 
       {/* Logo area */}
       <div className="relative p-6 border-b border-crystal-blue/20 backdrop-blur-sm flex items-center justify-between">
-        <Link href="/admin/dashboard" className="flex items-center gap-3" onClick={onClose}>
+        <Link
+          href="/admin/dashboard"
+          className="flex items-center gap-3"
+          onClick={onClose}
+        >
           <Image
             src={QMasterLogo}
             alt="QMaster Logo"
@@ -90,7 +94,11 @@ export default function AdminSidebar({
                 className={`
                   flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer
                   transition-all duration-200 group relative
-                  ${isActive ? "text-crystal-blue" : "text-off-white hover:text-crystal-blue"}
+                  ${
+                    isActive
+                      ? "text-crystal-blue"
+                      : "text-off-white hover:text-crystal-blue"
+                  }
                 `}
                 whileHover={{ x: 4 }}
                 transition={{ type: "spring", stiffness: 300 }}
@@ -111,7 +119,11 @@ export default function AdminSidebar({
                     className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110
                     ${isActive ? "text-crystal-blue" : ""}`}
                   />
-                  <span className={`font-medium ${isActive ? "text-crystal-blue" : ""}`}>
+                  <span
+                    className={`font-medium ${
+                      isActive ? "text-crystal-blue" : ""
+                    }`}
+                  >
                     {item.label}
                   </span>
                 </div>
