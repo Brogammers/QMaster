@@ -5,6 +5,7 @@ import { FaCog, FaBell, FaLock, FaGlobe, FaFingerprint } from "react-icons/fa";
 import { Switch } from "@headlessui/react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import axios from "axios";
 
 interface UserProfile {
   name: string;
@@ -23,6 +24,7 @@ export default function SettingsPage() {
   const [deviceTimezone, setDeviceTimezone] = useState("");
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [authError, setAuthError] = useState("");
   const [pendingAction, setPendingAction] = useState<{
     type: "maintenance" | "comingSoon";
@@ -76,6 +78,17 @@ export default function SettingsPage() {
     checkBiometricAvailability();
   }, []);
 
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
+    axios.get(url).then((response) => {
+      setIsMaintenanceEnabled(response.data.isMaintenanceMode);
+      setIsComingSoonEnabled(response.data.isComingSoonMode);
+    })
+    .catch((error) => {
+      console.error("Failed to fetch settings:", error);
+    });
+  }, []);
+
   const handleBiometricAuth = async () => {
     try {
       const credential = await navigator.credentials.get({
@@ -96,17 +109,18 @@ export default function SettingsPage() {
     }
   };
 
-  const handlePasswordAuth = async (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/admin/verify-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+      const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_LOGIN || "";
+      const response = await axios.post(url, {
+        email,
+        password,
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         handleSuccessfulAuth();
+        axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
       } else {
         setAuthError("Incorrect password");
       }
@@ -118,16 +132,43 @@ export default function SettingsPage() {
   const handleSuccessfulAuth = () => {
     if (pendingAction) {
       if (pendingAction.type === "maintenance") {
-        setIsMaintenanceEnabled(pendingAction.value);
-        // Make API call to update maintenance mode
+        const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
+        axios.put(url, {
+          isMaintenanceMode: pendingAction.value,
+          isComingSoonMode: isComingSoonEnabled,
+        }).then((response) => {
+          if (response.status === 200) {
+            return response.data;
+          } else { 
+            throw new Error("Failed to update maintenance mode");
+          }
+        }).then((data) => {
+          setIsMaintenanceEnabled(data.isMaintenanceMode);
+        }).catch((error) => {
+          console.error("Failed to update maintenance mode:", error);
+        })
       } else {
-        setIsComingSoonEnabled(pendingAction.value);
-        // Make API call to update coming soon mode
+       const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
+        axios.put(url, {
+          isMaintenanceMode: isMaintenanceEnabled,
+          isComingSoonMode: pendingAction.value,
+        }).then((response) => {
+          if (response.status === 200) {
+            return response.data;
+          } else { 
+            throw new Error("Failed to update maintenance mode");
+          }
+        }).then((data) => {
+          setIsComingSoonEnabled(data.isComingSoonMode);
+        }).catch((error) => {
+          console.error("Failed to update maintenance mode:", error);
+        })
       }
       setPendingAction(null);
       setIsAuthModalOpen(false);
       setPassword("");
       setAuthError("");
+      setEmail("");
     }
   };
 
@@ -348,9 +389,26 @@ export default function SettingsPage() {
                       <span>Use Biometric Authentication</span>
                     </button>
                   )}
-
-                  <form onSubmit={handlePasswordAuth} className="space-y-4">
+                  <div className="relative flex items-center justify-center my-4">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-300" />
+                    </div>
+                    <div className="relative bg-white px-4 text-sm text-gray-500">or</div>
+                  </div>
+                  <form onSubmit={handleAuth} className="space-y-4">
                     <div>
+                      <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full text-coal-black px-3 py-2 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue"
+                        placeholder="Enter your password"
+                      />
+                    </div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Password
                       </label>
@@ -358,10 +416,11 @@ export default function SettingsPage() {
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue"
+                        className="w-full text-coal-black px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue"
                         placeholder="Enter your password"
                       />
                     </div>
+
 
                     {authError && (
                       <p className="text-red-500 text-sm">{authError}</p>
