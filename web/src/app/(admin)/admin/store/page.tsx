@@ -243,7 +243,7 @@ export default function StorePage() {
           });
         });
     }
-  }, [currentRequest]);
+  }, [currentRequest, setStores, setPendingRequests]);
 
   return (
     <div className="space-y-4 lg:space-y-6">
