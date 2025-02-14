@@ -98,44 +98,46 @@ export default function Nav() {
 
             {/* Mobile Menu Overlay */}
             <div
-              className={`fixed inset-0 bg-black/95 z-40 transition-all duration-300 sm:hidden ${
+              className={`fixed inset-0 w-screen h-screen overflow-hidden bg-black/95 z-40 transition-all duration-300 sm:hidden ${
                 isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
               }`}
             >
-              <ul className="flex flex-col items-center justify-center h-full gap-8">
-                <li>
-                  <Link
-                    href="/login"
-                    className="text-white text-xl font-bold"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {isComingSoon ? "Business Sign Up" : "Business Sign In"}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href=""
-                    className="text-white text-xl font-bold"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {isComingSoon ? "Presave App" : "Download the App"}
-                  </Link>
-                </li>
-                <li>
-                  <button
-                    onClick={() => {
-                      toggleLanguage();
-                      setIsMenuOpen(false);
-                    }}
-                    className="border-2 border-baby-blue flex items-center gap-2 px-4 py-2 bg-transparent rounded-full text-baby-blue hover:bg-white hover:text-baby-blue transition-colors"
-                  >
-                    <FaGlobe className="w-4 h-4" />
-                    <span className="font-medium">
-                      {currentLanguage === "ar" ? "EN" : "عربي"}
-                    </span>
-                  </button>
-                </li>
-              </ul>
+              <div className="flex items-center justify-center w-full h-full px-4">
+                <ul className="flex flex-col items-center justify-center gap-8 w-full max-w-sm">
+                  <li className="w-full text-center">
+                    <Link
+                      href="/login"
+                      className="inline-block w-full text-white text-xl font-bold"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {isComingSoon ? "Business Sign Up" : "Business Sign In"}
+                    </Link>
+                  </li>
+                  <li className="w-full text-center">
+                    <Link
+                      href=""
+                      className="inline-block w-full text-white text-xl font-bold"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {isComingSoon ? "Presave App" : "Download the App"}
+                    </Link>
+                  </li>
+                  <li className="w-full flex justify-center">
+                    <button
+                      onClick={() => {
+                        toggleLanguage();
+                        setIsMenuOpen(false);
+                      }}
+                      className="border-2 border-baby-blue flex items-center gap-2 px-4 py-2 bg-transparent rounded-full text-baby-blue hover:bg-white hover:text-baby-blue transition-colors"
+                    >
+                      <FaGlobe className="w-4 h-4" />
+                      <span className="font-medium">
+                        {currentLanguage === "ar" ? "EN" : "عربي"}
+                      </span>
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
