@@ -320,13 +320,13 @@ export default function SettingsPage() {
                     onChange={(checked) => handleToggle("comingSoon", checked)}
                     className={`${
                       isComingSoonEnabled ? "bg-crystal-blue" : "bg-gray-200"
-                    } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-crystal-blue focus-visible:ring-opacity-75`}
+                    } relative inline-flex w-[42px] h-[28px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
                   >
                     <span className="sr-only">Enable coming soon mode</span>
                     <span
                       className={`${
-                        isComingSoonEnabled ? "translate-x-6" : "translate-x-1"
-                      } inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition-transform`}
+                        isComingSoonEnabled ? "translate-x-[22px]" : "translate-x-[2px]"
+                      } pointer-events-none inline-block h-[18px] w-[18px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                     />
                   </Switch>
                 </div>
@@ -343,12 +343,13 @@ export default function SettingsPage() {
                     onChange={(checked) => handleToggle("maintenance", checked)}
                     className={`${
                       isMaintenanceEnabled ? "bg-crystal-blue" : "bg-gray-200"
-                    } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
+                    } relative inline-flex w-[52px] h-[32px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
                   >
+                    <span className="sr-only">Enable maintenance mode</span>
                     <span
                       className={`${
-                        isMaintenanceEnabled ? "translate-x-6" : "translate-x-1"
-                      } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                        isMaintenanceEnabled ? "translate-x-[22px]" : "translate-x-[2px]"
+                      } pointer-events-none inline-block h-[28px] w-[28px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                     />
                   </Switch>
                 </div>
