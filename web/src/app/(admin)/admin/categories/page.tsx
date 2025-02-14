@@ -219,10 +219,10 @@ export default function CategoriesPage() {
   }, []);
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-4 lg:space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1
-          className={`text-3xl font-bold ${
+          className={`text-2xl lg:text-3xl font-bold ${
             isDarkMode ? "text-white" : "text-slate-900"
           }`}
         >
@@ -233,13 +233,13 @@ export default function CategoriesPage() {
             setEditingCategory(null);
             setIsModalOpen(true);
           }}
-          className="flex items-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90"
         >
           <FaPlus /> Add Category
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
         {categories.map((category) => {
           const IconComponent =
             ICON_MAP[category.icon as keyof typeof ICON_MAP] || FaStore;
@@ -251,7 +251,7 @@ export default function CategoriesPage() {
                   ? "bg-white/[0.02] border-white/[0.05]"
                   : "bg-white border-slate-200"
               } 
-                border rounded-xl p-6 hover:bg-opacity-[0.04] hover:border-opacity-80 transition-all`}
+                border rounded-xl p-4 lg:p-6 hover:bg-opacity-[0.04] hover:border-opacity-80 transition-all`}
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center gap-3">
