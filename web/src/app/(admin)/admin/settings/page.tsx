@@ -307,7 +307,7 @@ export default function SettingsPage() {
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Site Status</h3>
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-white/[0.02] rounded-lg">
+                <div className="flex items-center justify-between p-1 md:p-4 bg-white/[0.02] rounded-lg">
                   <div>
                     <h4 className="font-medium">Coming Soon Mode</h4>
                     <p className="text-sm text-slate-700">
@@ -320,17 +320,18 @@ export default function SettingsPage() {
                     onChange={(checked) => handleToggle("comingSoon", checked)}
                     className={`${
                       isComingSoonEnabled ? "bg-crystal-blue" : "bg-gray-200"
-                    } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
+                    } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-crystal-blue focus-visible:ring-opacity-75`}
                   >
+                    <span className="sr-only">Enable coming soon mode</span>
                     <span
                       className={`${
                         isComingSoonEnabled ? "translate-x-6" : "translate-x-1"
-                      } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                      } inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition-transform`}
                     />
                   </Switch>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-white/[0.02] rounded-lg">
+                <div className="flex items-center justify-between p-1 md:p-4 bg-white/[0.02] rounded-lg">
                   <div>
                     <h4 className="font-medium">Maintenance Mode</h4>
                     <p className="text-sm text-slate-700">
