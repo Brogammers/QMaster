@@ -155,7 +155,7 @@ export default function PartnersPage() {
 
   return (
     <div className="space-y-4 lg:space-y-6">
-      <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
         <h1
           className={`text-3xl font-bold ${
             isDarkMode ? "text-white" : "text-slate-900"
@@ -165,7 +165,7 @@ export default function PartnersPage() {
         </h1>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="w-full text-center sm:w-auto flex items-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90"
         >
           <FaPlus /> Add Partner
         </button>

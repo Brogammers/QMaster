@@ -248,9 +248,9 @@ export default function StorePage() {
   return (
     <div className="space-y-4 lg:space-y-6">
       {/* Header Section */}
-      <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
         <h1
-          className={`text-center sm:text-left text-3xl font-bold ${
+          className={`text-3xl font-bold ${
             isDarkMode ? "text-white" : "text-slate-900"
           }`}
         >

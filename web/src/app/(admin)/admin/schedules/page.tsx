@@ -193,7 +193,7 @@ export default function SchedulesPage() {
 
   return (
     <div className="space-y-4 lg:space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
         <h1
           className={`text-3xl font-bold ${
             isDarkMode ? "text-white" : "text-slate-900"
@@ -203,7 +203,7 @@ export default function SchedulesPage() {
         </h1>
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90"
         >
           <FaPlus /> Add Schedule
         </button>
