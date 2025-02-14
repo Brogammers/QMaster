@@ -246,7 +246,7 @@ export default function StorePage() {
   }, [currentRequest]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 lg:space-y-6">
       <div className="flex justify-between items-center">
         <h1
           className={`text-3xl font-bold ${
@@ -260,20 +260,22 @@ export default function StorePage() {
         </button>
       </div>
 
-      <div
-        className={`${
-          isDarkMode
-            ? "border-y border-white/[0.05]"
-            : "border-y border-slate-300"
-        } overflow-hidden backdrop-blur-sm`}
-      >
-        <DataTable
-          columns={columns}
-          data={stores}
-          searchKey="name"
-          searchPlaceholder="Search stores..."
-        />
+      {/* Responsive Table Container */}
+      <div className="overflow-x-auto -mx-4 sm:mx-0 rounded-lg">
+        <div className="inline-block min-w-full align-middle">
+          <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+            <table className="min-w-full divide-y divide-gray-300">
+              <DataTable
+                columns={columns}
+                data={stores}
+                searchKey="name"
+                searchPlaceholder="Search stores..."
+              />
+            </table>
+          </div>
+        </div>
       </div>
+
       {/* Pending Requests Section */}
       {currentRequest && (
         <div

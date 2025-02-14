@@ -137,220 +137,216 @@ export default function UsersPage() {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <div
-          className={`min-w-[800px] ${
-            isDarkMode
-              ? "border-y border-white/[0.05]"
-              : "border-y border-slate-300"
-          } overflow-hidden backdrop-blur-sm`}
-        >
-          <div
-            className={`p-4 border-b ${
-              isDarkMode ? "border-white/[0.05]" : "border-slate-300"
-            }`}
-          >
-            <div className="relative">
-              <FaSearch
-                className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
-                  isDarkMode ? "text-gray-400" : "text-slate-400"
-                }`}
-              />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search users by name, email, or role..."
-                className={`w-full pl-10 pr-4 py-2 rounded-lg transition-colors duration-300
-                ${
-                  isDarkMode
-                    ? "border-white/10 bg-white/[0.09] text-white focus:border-crystal-blue"
-                    : "border-slate-300 bg-white/[0.04] text-slate-900 focus:border-crystal-blue"
-                } 
-                border focus:outline-none focus:ring-2 focus:ring-crystal-blue`}
-              />
+      <div className="overflow-x-auto -mx-4 sm:mx-0 rounded-lg">
+        <div className="inline-block min-w-full align-middle">
+          <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+            <div
+              className={`p-4 border-b ${
+                isDarkMode ? "border-white/[0.05]" : "border-slate-300"
+              }`}
+            >
+              <div className="relative">
+                <FaSearch
+                  className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
+                    isDarkMode ? "text-gray-400" : "text-slate-400"
+                  }`}
+                />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search users by name, email, or role..."
+                  className={`w-full pl-10 pr-4 py-2 rounded-lg transition-colors duration-300
+                  ${
+                    isDarkMode
+                      ? "border-white/10 bg-white/[0.09] text-white focus:border-crystal-blue"
+                      : "border-slate-300 bg-white/[0.04] text-slate-900 focus:border-crystal-blue"
+                  } 
+                  border focus:outline-none focus:ring-2 focus:ring-crystal-blue`}
+                />
+              </div>
             </div>
-          </div>
 
-          <table className="w-full">
-            <thead>
-              <tr
-                className={`border-b ${
-                  isDarkMode ? "border-white/10" : "border-slate-300"
-                }`}
-              >
-                <th
-                  className={`px-6 py-3 text-left text-sm font-semibold ${
-                    isDarkMode ? "text-white" : "text-slate-900"
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead>
+                <tr
+                  className={`border-b ${
+                    isDarkMode ? "border-white/10" : "border-slate-300"
                   }`}
                 >
-                  User
-                </th>
-                <th
-                  className={`px-6 py-3 text-left text-sm font-semibold ${
-                    isDarkMode ? "text-white" : "text-slate-900"
-                  }`}
-                >
-                  Role
-                </th>
-                <th
-                  className={`px-6 py-3 text-left text-sm font-semibold ${
-                    isDarkMode ? "text-white" : "text-slate-900"
-                  }`}
-                >
-                  Last Active
-                </th>
-                <th
-                  className={`px-6 py-3 text-left text-sm font-semibold ${
-                    isDarkMode ? "text-white" : "text-slate-900"
-                  }`}
-                >
-                  Status
-                </th>
-                {isAdmin && (
                   <th
                     className={`px-6 py-3 text-left text-sm font-semibold ${
                       isDarkMode ? "text-white" : "text-slate-900"
                     }`}
                   >
-                    Actions
+                    User
                   </th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map((user) => (
-                <tr
-                  key={user.id}
-                  className={`border-b last:border-b-0 ${
-                    isDarkMode
-                      ? "border-white/10 hover:bg-white/[0.02]"
-                      : "border-slate-300 hover:bg-slate-50/50"
-                  }`}
-                >
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`w-8 h-8 rounded-full ${
-                          isDarkMode
-                            ? "bg-crystal-blue/20"
-                            : "bg-crystal-blue/10"
-                        } flex items-center justify-center ${
-                          isDarkMode ? "text-white" : "text-slate-900"
-                        }`}
-                      >
-                        {user.name.charAt(0)}
-                      </div>
-                      <div>
-                        <div
-                          className={`font-medium ${
-                            isDarkMode ? "text-white" : "text-slate-900"
-                          }`}
-                        >
-                          {user.name}
-                        </div>
-                        <div className="text-sm text-slate-500">
-                          {user.email}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm 
-                        ${
-                          user.role === "Admin"
-                            ? isDarkMode
-                              ? "bg-crystal-blue/10 text-crystal-blue"
-                              : "bg-crystal-blue/20 text-crystal-blue-700"
-                            : user.role === "Project Manager"
-                            ? isDarkMode
-                              ? "bg-purple-500/10 text-purple-400"
-                              : "bg-purple-500/20 text-purple-700"
-                            : isDarkMode
-                            ? "bg-amber-500/10 text-amber-400"
-                            : "bg-amber-500/20 text-amber-700"
-                        }`}
-                    >
-                      {user.role}
-                    </span>
-                  </td>
-                  <td
-                    className={`px-6 py-4 ${
+                  <th
+                    className={`px-6 py-3 text-left text-sm font-semibold ${
                       isDarkMode ? "text-white" : "text-slate-900"
                     }`}
                   >
-                    {user.lastActive}
-                  </td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm ${
-                        user.status === "online"
-                          ? isDarkMode
-                            ? "bg-emerald-500/10 text-emerald-300"
-                            : "bg-emerald-500/20 text-emerald-700"
-                          : user.status === "away"
-                          ? isDarkMode
-                            ? "bg-amber-500/10 text-amber-300"
-                            : "bg-amber-500/20 text-amber-700"
-                          : isDarkMode
-                          ? "bg-rose-500/10 text-rose-300"
-                          : "bg-rose-500/20 text-rose-700"
+                    Role
+                  </th>
+                  <th
+                    className={`px-6 py-3 text-left text-sm font-semibold ${
+                      isDarkMode ? "text-white" : "text-slate-900"
+                    }`}
+                  >
+                    Last Active
+                  </th>
+                  <th
+                    className={`px-6 py-3 text-left text-sm font-semibold ${
+                      isDarkMode ? "text-white" : "text-slate-900"
+                    }`}
+                  >
+                    Status
+                  </th>
+                  {isAdmin && (
+                    <th
+                      className={`px-6 py-3 text-left text-sm font-semibold ${
+                        isDarkMode ? "text-white" : "text-slate-900"
                       }`}
                     >
-                      {user.status}
-                    </span>
-                  </td>
-                  {isAdmin && (
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleEditUser(user)}
-                          className={`p-2 rounded-lg ${
-                            isDarkMode
-                              ? "hover:bg-white/[0.05]"
-                              : "hover:bg-slate-100"
-                          }`}
-                        >
-                          <FaEdit
-                            className={`w-4 h-4 ${
-                              isDarkMode
-                                ? "text-crystal-blue"
-                                : "text-crystal-blue-600"
-                            }`}
-                          />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteUser(user.id)}
-                          className={`p-2 rounded-lg ${
-                            isDarkMode
-                              ? "hover:bg-white/[0.05]"
-                              : "hover:bg-slate-100"
-                          }`}
-                        >
-                          <FaTrash
-                            className={`w-4 h-4 ${
-                              isDarkMode ? "text-rose-400" : "text-rose-600"
-                            }`}
-                          />
-                        </button>
-                      </div>
-                    </td>
+                      Actions
+                    </th>
                   )}
                 </tr>
-              ))}
-              {filteredUsers.length === 0 && (
-                <tr>
-                  <td
-                    colSpan={isAdmin ? 5 : 4}
-                    className="px-6 py-8 text-center text-slate-500"
+              </thead>
+              <tbody>
+                {filteredUsers.map((user) => (
+                  <tr
+                    key={user.id}
+                    className={`border-b last:border-b-0 ${
+                      isDarkMode
+                        ? "border-white/10 hover:bg-white/[0.02]"
+                        : "border-slate-300 hover:bg-slate-50/50"
+                    }`}
                   >
-                    No users found matching your search.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-8 h-8 rounded-full ${
+                            isDarkMode
+                              ? "bg-crystal-blue/20"
+                              : "bg-crystal-blue/10"
+                          } flex items-center justify-center ${
+                            isDarkMode ? "text-white" : "text-slate-900"
+                          }`}
+                        >
+                          {user.name.charAt(0)}
+                        </div>
+                        <div>
+                          <div
+                            className={`font-medium ${
+                              isDarkMode ? "text-white" : "text-slate-900"
+                            }`}
+                          >
+                            {user.name}
+                          </div>
+                          <div className="text-sm text-slate-500">
+                            {user.email}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm 
+                          ${
+                            user.role === "Admin"
+                              ? isDarkMode
+                                ? "bg-crystal-blue/10 text-crystal-blue"
+                                : "bg-crystal-blue/20 text-crystal-blue-700"
+                              : user.role === "Project Manager"
+                              ? isDarkMode
+                                ? "bg-purple-500/10 text-purple-400"
+                                : "bg-purple-500/20 text-purple-700"
+                              : isDarkMode
+                              ? "bg-amber-500/10 text-amber-400"
+                              : "bg-amber-500/20 text-amber-700"
+                          }`}
+                      >
+                        {user.role}
+                      </span>
+                    </td>
+                    <td
+                      className={`px-6 py-4 ${
+                        isDarkMode ? "text-white" : "text-slate-900"
+                      }`}
+                    >
+                      {user.lastActive}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm ${
+                          user.status === "online"
+                            ? isDarkMode
+                              ? "bg-emerald-500/10 text-emerald-300"
+                              : "bg-emerald-500/20 text-emerald-700"
+                            : user.status === "away"
+                            ? isDarkMode
+                              ? "bg-amber-500/10 text-amber-300"
+                              : "bg-amber-500/20 text-amber-700"
+                            : isDarkMode
+                            ? "bg-rose-500/10 text-rose-300"
+                            : "bg-rose-500/20 text-rose-700"
+                        }`}
+                      >
+                        {user.status}
+                      </span>
+                    </td>
+                    {isAdmin && (
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEditUser(user)}
+                            className={`p-2 rounded-lg ${
+                              isDarkMode
+                                ? "hover:bg-white/[0.05]"
+                                : "hover:bg-slate-100"
+                            }`}
+                          >
+                            <FaEdit
+                              className={`w-4 h-4 ${
+                                isDarkMode
+                                  ? "text-crystal-blue"
+                                  : "text-crystal-blue-600"
+                              }`}
+                            />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteUser(user.id)}
+                            className={`p-2 rounded-lg ${
+                              isDarkMode
+                                ? "hover:bg-white/[0.05]"
+                                : "hover:bg-slate-100"
+                            }`}
+                          >
+                            <FaTrash
+                              className={`w-4 h-4 ${
+                                isDarkMode ? "text-rose-400" : "text-rose-600"
+                              }`}
+                            />
+                          </button>
+                        </div>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+                {filteredUsers.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={isAdmin ? 5 : 4}
+                      className="px-6 py-8 text-center text-slate-500"
+                    >
+                      No users found matching your search.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
