@@ -217,21 +217,21 @@ export default function SchedulesPage() {
               <thead>
                 <tr>
                   <th
-                    className={`px-6 py-4 text-left text-sm font-medium ${
+                    className={`whitespace-nowrap px-6 py-4 text-left text-sm font-medium ${
                       isDarkMode ? "text-white/70" : "text-slate-600"
                     }`}
                   >
                     Company
                   </th>
                   <th
-                    className={`px-6 py-4 text-left text-sm font-medium ${
+                    className={`whitespace-nowrap px-6 py-4 text-left text-sm font-medium ${
                       isDarkMode ? "text-white/70" : "text-slate-600"
                     }`}
                   >
                     Branches
                   </th>
                   <th
-                    className={`px-6 py-4 text-right text-sm font-medium ${
+                    className={`whitespace-nowrap px-6 py-4 text-right text-sm font-medium ${
                       isDarkMode ? "text-white/70" : "text-slate-600"
                     }`}
                   >
@@ -259,7 +259,7 @@ export default function SchedulesPage() {
                       }`}
                     >
                       <td
-                        className={`px-6 py-4 ${
+                        className={`whitespace-nowrap px-6 py-4 ${
                           isDarkMode ? "text-white" : "text-slate-900"
                         }`}
                       >
@@ -269,14 +269,14 @@ export default function SchedulesPage() {
                         </div>
                       </td>
                       <td
-                        className={`px-6 py-4 ${
+                        className={`whitespace-nowrap px-6 py-4 ${
                           isDarkMode ? "text-white/70" : "text-slate-600"
                         }`}
                       >
                         {company.branches.length}{" "}
                         {company.branches.length === 1 ? "branch" : "branches"}
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="whitespace-nowrap px-6 py-4 text-right">
                         {expandedCompany === company.id ? (
                           <FaChevronUp />
                         ) : (
@@ -323,7 +323,7 @@ export default function SchedulesPage() {
                                       });
                                       setIsHolidaysModalOpen(true);
                                     }}
-                                    className={`px-3 py-1 rounded-full text-sm cursor-pointer ${
+                                    className={`whitespace-nowrap px-3 py-1 rounded-full text-sm cursor-pointer ${
                                       branch.takesHolidays
                                         ? isDarkMode
                                           ? "bg-amber-500/10 text-amber-300 hover:bg-amber-500/20"

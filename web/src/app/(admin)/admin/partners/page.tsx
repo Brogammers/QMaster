@@ -217,35 +217,35 @@ export default function PartnersPage() {
                     }`}
                   >
                     <th
-                      className={`px-6 py-3 text-left text-sm font-semibold ${
+                      className={`whitespace-nowrap px-6 py-3 text-left text-sm font-semibold ${
                         isDarkMode ? "text-white" : "text-slate-900"
                       }`}
                     >
                       Partner
                     </th>
                     <th
-                      className={`px-6 py-3 text-left text-sm font-semibold ${
+                      className={`whitespace-nowrap px-6 py-3 text-left text-sm font-semibold ${
                         isDarkMode ? "text-white" : "text-slate-900"
                       }`}
                     >
                       Category
                     </th>
                     <th
-                      className={`px-6 py-3 text-left text-sm font-semibold ${
+                      className={`whitespace-nowrap px-6 py-3 text-left text-sm font-semibold ${
                         isDarkMode ? "text-white" : "text-slate-900"
                       }`}
                     >
                       Locations
                     </th>
                     <th
-                      className={`px-6 py-3 text-left text-sm font-semibold ${
+                      className={`whitespace-nowrap px-6 py-3 text-left text-sm font-semibold ${
                         isDarkMode ? "text-white" : "text-slate-900"
                       }`}
                     >
                       Status
                     </th>
                     <th
-                      className={`px-6 py-3 text-left text-sm font-semibold ${
+                      className={`whitespace-nowrap px-6 py-3 text-left text-sm font-semibold ${
                         isDarkMode ? "text-white" : "text-slate-900"
                       }`}
                     >
@@ -265,7 +265,7 @@ export default function PartnersPage() {
                         } cursor-pointer`}
                         onClick={() => togglePartnerExpansion(partner.id)}
                       >
-                        <td className="px-6 py-4">
+                        <td className="whitespace-nowrap px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div
                               className={`w-8 h-8 rounded-full ${
@@ -294,9 +294,9 @@ export default function PartnersPage() {
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="whitespace-nowrap px-6 py-4">
                           <span
-                            className={`px-3 py-1 rounded-full text-sm 
+                            className={`whitespace-nowrap px-3 py-1 rounded-full text-sm 
                             ${
                               partner.category === "Healthcare"
                                 ? isDarkMode
@@ -310,19 +310,15 @@ export default function PartnersPage() {
                             {partner.category}
                           </span>
                         </td>
-                        <td
-                          className={`px-6 py-4 ${
-                            isDarkMode ? "text-white" : "text-slate-900"
-                          }`}
-                        >
+                        <td className="whitespace-nowrap px-6 py-4">
                           {partner.locations.length}{" "}
                           {partner.locations.length === 1
                             ? "location"
                             : "locations"}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="whitespace-nowrap px-6 py-4">
                           <span
-                            className={`px-3 py-1 rounded-full text-sm ${
+                            className={`whitespace-nowrap px-3 py-1 rounded-full text-sm ${
                               partner.status === "active"
                                 ? isDarkMode
                                   ? "bg-emerald-500/10 text-emerald-300"
@@ -339,11 +335,7 @@ export default function PartnersPage() {
                             {partner.status}
                           </span>
                         </td>
-                        <td
-                          className={`px-6 py-4 ${
-                            isDarkMode ? "text-white" : "text-slate-900"
-                          }`}
-                        >
+                        <td className="whitespace-nowrap px-6 py-4">
                           {partner.joinedDate}
                         </td>
                       </tr>
