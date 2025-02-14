@@ -52,13 +52,8 @@ export default function NotFoundPage() {
     setEntity(entityFromPath)
   }, [])
 
-  const handleGoHome = () => {
-    const token = document.cookie.includes('qmaster-auth')
-    if (token && entity) {
-      router.push(`/${entity}/counter`)
-    } else {
-      router.push('/')
-    }
+  const handleRefresh = () => {
+    window.location.reload()
   }
 
   return (
@@ -136,7 +131,7 @@ export default function NotFoundPage() {
                         {t("Go Home")}
                       </Link>
                       <motion.button
-                        onClick={handleGoHome}
+                        onClick={handleRefresh}
                         className="flex items-center gap-2 px-8 py-4 bg-baby-blue/20 rounded-full text-baby-blue hover:bg-baby-blue/30 transition-all"
                         animate={{
                           scale: [1, 1.1, 1],
@@ -146,8 +141,8 @@ export default function NotFoundPage() {
                           repeat: Infinity,
                         }}
                       >
-                        <FaHome className="w-5 h-5" />
-                        {t("Go Home")}
+                        <FaRedo className="w-5 h-5" />
+                        {t("Refresh")}
                       </motion.button>
                     </div>
                   </motion.div>
