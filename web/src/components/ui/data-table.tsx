@@ -70,7 +70,7 @@ export function DataTable<TData>({
                 headerGroup.headers.map((header) => (
                   <th 
                     key={header.id}
-                    className={`px-6 py-3 text-left text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
+                    className={`whitespace-nowrap px-6 py-3 text-left text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
                   >
                     {header.isPlaceholder
                       ? null
@@ -91,7 +91,7 @@ export function DataTable<TData>({
                   className={`border-b ${isDarkMode ? 'border-white/10 hover:bg-white/[0.02]' : 'border-slate-300 hover:bg-slate-50/50'}`}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-6 py-4">
+                    <td key={cell.id} className="whitespace-nowrap px-6 py-4">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}

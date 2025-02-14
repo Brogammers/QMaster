@@ -7,8 +7,8 @@ import RecentPartners from "@/app/components/admin/RecentPartners";
 
 export default function AdminDashboard() {
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="space-y-4 lg:space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
         <DashboardCard
           title="Total Partners"
           value="1,234"
@@ -39,9 +39,13 @@ export default function AdminDashboard() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DashboardChart />
-        <RecentPartners />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+        <div className="w-full overflow-x-auto">
+          <DashboardChart />
+        </div>
+        <div className="w-full overflow-x-auto">
+          <RecentPartners />
+        </div>
       </div>
     </div>
   );
