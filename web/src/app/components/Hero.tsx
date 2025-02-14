@@ -29,7 +29,7 @@ export default function Hero() {
                 <span className="font-bold">optimize</span>{" "}
                 <span className="double__color--text">wait times</span>
               </h2>
-              <div className="flex gap-4">
+              <div className="flex md:flex-row flex-col gap-4">
                 <Link
                   href="/business"
                   className={`${
@@ -66,7 +66,7 @@ export default function Hero() {
                 with seamless queue{" "}
                 <span className="double__color--text">integration</span>
               </h2>
-              <div className="flex gap-4">
+              <div className="flex md:flex-row flex-col gap-4">
                 <Link
                   href="/business"
                   className={`${
