@@ -72,42 +72,28 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
       ${isDarkMode ? "bg-[#0A0A0A] text-white" : "bg-white text-slate-900"}`}
     >
       {/* Mobile Header */}
-      <div className="lg:hidden flex items-center justify-between p-4 border-b border-white/10">
+      <div className="lg:hidden flex items-center justify-between p-6 border-b border-white/10">
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className={`p-2 rounded-lg 
-          ${
-            isDarkMode
-              ? "text-white hover:bg-white/10"
-              : "text-slate-600 hover:bg-slate-100"
-          }`}
+          ${isDarkMode
+            ? "text-white hover:bg-white/10"
+            : "text-slate-600 hover:bg-slate-100"}`}
         >
           <FaBars className="w-6 h-6" />
         </button>
 
         {pathname === "/admin/dashboard" ? (
           <div className="flex flex-col items-end">
-            <h2
-              className={`text-sm ${
-                isDarkMode ? "text-white/70" : "text-slate-600"
-              }`}
-            >
+            <h2 className={`text-sm ${isDarkMode ? "text-white/70" : "text-slate-600"}`}>
               Welcome back,
             </h2>
-            <h1
-              className={`text-lg font-bold ${
-                isDarkMode ? "text-white" : "text-slate-900"
-              }`}
-            >
+            <h1 className={`text-lg font-bold ${isDarkMode ? "text-white" : "text-slate-900"}`}>
               {admin?.name}
             </h1>
           </div>
         ) : (
-          <h1
-            className={`text-lg font-bold ${
-              isDarkMode ? "text-white" : "text-slate-900"
-            }`}
-          >
+          <h1 className={`text-lg font-bold ${isDarkMode ? "text-white" : "text-slate-900"}`}>
             {getPageTitle(pathname)}
           </h1>
         )}
@@ -124,8 +110,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
       {/* Sidebar */}
       <div
         className={`fixed lg:relative z-40 h-full transition-transform duration-300 lg:translate-x-0
-        ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
-        ${isDarkMode ? "bg-[#0A0A0A]" : "bg-white"}`}
+        ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <AdminSidebar
           isDarkMode={isDarkMode}
@@ -137,11 +122,9 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
       {/* Main Content */}
       <motion.main
         className={`flex-1 overflow-y-auto relative lg:ml-0
-          ${
-            isDarkMode
-              ? "bg-[#0A0A0A] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#141414] via-[#0A0A0A] to-black"
-              : "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-50 via-white to-white"
-          }`}
+          ${isDarkMode
+            ? "bg-[#0A0A0A] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#141414] via-[#0A0A0A] to-black"
+            : "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-50 via-white to-white"}`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -169,64 +152,44 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
           }`}
         />
 
-        {/* Content */}
-        <div className="relative w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-          {/* Hide welcome section on mobile since it's in the header */}
-          {pathname === "/admin/dashboard" && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-6 lg:mb-8 hidden lg:block"
-            >
-              <h2
-                className={`text-base lg:text-lg ${
-                  isDarkMode ? "text-white/70" : "text-slate-600"
-                }`}
+        {/* Content Container */}
+        <div className="relative w-full max-w-[1920px] mx-auto">
+          {/* Content Padding Container */}
+          <div className="p-4 sm:p-6 lg:p-8 xl:p-10">
+            {/* Hide welcome section on mobile since it's in the header */}
+            {pathname === "/admin/dashboard" && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 lg:mb-8 hidden lg:block"
               >
-                Welcome back,
-              </h2>
-              <h1
-                className={`text-2xl lg:text-3xl font-bold 
-                ${
-                  isDarkMode
+                <h2 className={`text-base lg:text-lg ${isDarkMode ? "text-white/70" : "text-slate-600"}`}>
+                  Welcome back,
+                </h2>
+                <h1 className={`text-2xl lg:text-3xl font-bold 
+                  ${isDarkMode
                     ? "text-white bg-clip-text text-transparent bg-gradient-to-r from-crystal-blue via-crystal-blue to-baby-blue"
-                    : "text-slate-900"
-                }`}
-              >
-                {admin?.name}
-              </h1>
-            </motion.div>
-          )}
-          <div className="space-y-4 lg:space-y-6">
-            <PartnerContext.Provider
-              value={{
-                partners,
-                setPartners,
-                getNextPartnerPage,
-              }}
-            >
-              <UsersContext.Provider
-                value={{ users, setUsers, getNextUserPage }}
-              >
-                <CategoriesContext.Provider
-                  value={{
-                    categories,
-                    setCategories,
-                    getNextCategoryPage,
-                  }}
+                    : "text-slate-900"}`}
                 >
-                  <StoresContext.Provider
-                    value={{
-                      stores,
-                      setStores,
-                      getNextStorePage,
-                    }}
-                  >
-                    {children}
-                  </StoresContext.Provider>
-                </CategoriesContext.Provider>
-              </UsersContext.Provider>
-            </PartnerContext.Provider>
+                  {admin?.name}
+                </h1>
+              </motion.div>
+            )}
+
+            {/* Main Content Area with improved spacing */}
+            <div className="space-y-6 sm:space-y-8">
+              <div className="bg-white/[0.02] rounded-xl p-4 sm:p-6 xl:p-8">
+                <PartnerContext.Provider value={{ partners, setPartners, getNextPartnerPage }}>
+                  <UsersContext.Provider value={{ users, setUsers, getNextUserPage }}>
+                    <CategoriesContext.Provider value={{ categories, setCategories, getNextCategoryPage }}>
+                      <StoresContext.Provider value={{ stores, setStores, getNextStorePage }}>
+                        {children}
+                      </StoresContext.Provider>
+                    </CategoriesContext.Provider>
+                  </UsersContext.Provider>
+                </PartnerContext.Provider>
+              </div>
+            </div>
           </div>
         </div>
       </motion.main>

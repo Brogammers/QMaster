@@ -247,33 +247,18 @@ export default function StorePage() {
 
   return (
     <div className="space-y-4 lg:space-y-6">
-      <div className="flex justify-between items-center">
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1
-          className={`text-xl font-bold ${
+          className={`text-xl md:text-3xl font-bold ${
             isDarkMode ? "text-white" : "text-slate-900"
           }`}
         >
           Store Management
         </h1>
-        <button className="flex items-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90">
+        <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-crystal-blue text-black rounded-lg hover:bg-opacity-90">
           <FaPlus /> Add Store
         </button>
-      </div>
-
-      {/* Responsive Table Container */}
-      <div className="overflow-x-auto -mx-4 sm:mx-0 rounded-lg">
-        <div className="inline-block min-w-full align-middle">
-          <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-300">
-              <DataTable
-                columns={columns}
-                data={stores}
-                searchKey="name"
-                searchPlaceholder="Search stores..."
-              />
-            </table>
-          </div>
-        </div>
       </div>
 
       {/* Pending Requests Section */}
@@ -283,8 +268,8 @@ export default function StorePage() {
             isDarkMode ? "bg-slate-900" : "bg-white"
           } rounded-lg border border-slate-200`}
         >
-          <div className="p-6 border-b border-slate-200">
-            <div className="flex flex-col xl:flex-row justify-between items-center">
+          <div className="p-4 sm:p-6 border-b border-slate-200">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
               <div>
                 <h2 className="text-xl font-semibold">
                   Pending Store Requests
@@ -294,19 +279,19 @@ export default function StorePage() {
                   requests
                 </p>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
                 <div className="flex items-center gap-2 text-sm text-slate-500">
                   <span>{currentRequestIndex + 1}</span>
                   <span>/</span>
                   <span>{pendingRequestsState.length}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap gap-2 w-full sm:w-auto">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={handlePrevious}
                     disabled={currentRequestIndex === 0}
-                    className="border-slate-200"
+                    className="border-slate-200 w-full sm:w-auto"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </Button>
@@ -317,7 +302,7 @@ export default function StorePage() {
                     disabled={
                       currentRequestIndex === pendingRequestsState.length - 1
                     }
-                    className="border-slate-200"
+                    className="border-slate-200 w-full sm:w-auto"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </Button>
@@ -325,7 +310,7 @@ export default function StorePage() {
                     variant="outline"
                     size="sm"
                     onClick={() => setShowAllRequests(true)}
-                    className="border-slate-200"
+                    className="border-slate-200 w-full sm:w-auto"
                   >
                     <ListFilter className="w-4 h-4 mr-2" />
                     View All Requests
@@ -335,8 +320,8 @@ export default function StorePage() {
             </div>
           </div>
 
-          <div className="p-6">
-            <div className="flex flex-col xl:flex-row justify-between items-start mb-6">
+          <div className="p-4 sm:p-6">
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-4 mb-6">
               <div>
                 <h3 className="text-lg font-medium">
                   {currentRequest.partnerName}
@@ -346,17 +331,17 @@ export default function StorePage() {
                   <p>Submitted: {currentRequest.submissionDate}</p>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
                 <Button
                   variant="outline"
-                  className="border-slate-200"
+                  className="border-slate-200 w-full sm:w-auto"
                   onClick={() => handleDownloadAll(currentRequest)}
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Download All
                 </Button>
                 <Button
-                  className="bg-crystal-blue hover:bg-opacity-90 text-black"
+                  className="bg-crystal-blue hover:bg-opacity-90 text-black w-full sm:w-auto"
                   onClick={() => {
                     setSelectedDocument(currentRequest.documents[0]);
                     setShowDocumentPreview(true);
@@ -368,7 +353,8 @@ export default function StorePage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-5 gap-4">
+            {/* Documents Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               {currentRequest.documents.map((doc) => (
                 <div
                   key={doc.name}
@@ -406,6 +392,20 @@ export default function StorePage() {
           </div>
         </div>
       )}
+
+      {/* Table Container with proper overflow handling */}
+      <div className="overflow-hidden rounded-lg border border-slate-200">
+        <div className="overflow-x-auto">
+          <div className="min-w-full align-middle inline-block">
+            <DataTable
+              columns={columns}
+              data={stores}
+              searchKey="name"
+              searchPlaceholder="Search stores..."
+            />
+          </div>
+        </div>
+      </div>
 
       {/* View All Requests Modal */}
       <Dialog open={showAllRequests} onOpenChange={setShowAllRequests}>
