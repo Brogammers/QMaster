@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@/hooks/useTranslation";
 import { FaGlobe } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Nav() {
   const pathname = usePathname();
@@ -13,6 +13,28 @@ export default function Nav() {
   const isComingSoon = pathname === "/coming-soon";
   const { currentLanguage, changeLanguage } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Handle body scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+      document.body.style.height = "100%";
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+    };
+  }, [isMenuOpen]);
 
   const toggleLanguage = () => {
     const newLang = currentLanguage === "ar" ? "en" : "ar";
@@ -98,7 +120,7 @@ export default function Nav() {
 
             {/* Mobile Menu Overlay */}
             <div
-              className={`fixed inset-0 w-screen h-screen overflow-hidden bg-black/95 z-40 transition-all duration-300 sm:hidden ${
+              className={`fixed inset-0 w-screen h-screen touch-none bg-black/95 z-40 transition-all duration-300 sm:hidden ${
                 isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
               }`}
             >
