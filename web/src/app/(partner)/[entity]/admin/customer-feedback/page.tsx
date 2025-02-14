@@ -100,19 +100,19 @@ export default function CustomerFeedback() {
   return (
     <Entity>
       <QueueModal title="Customer Feedback Form">
-        <div className="max-w-3xl mx-auto py-8">
+        <div className="w-full max-w-3xl mx-auto p-2 sm:p-4 lg:p-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-8 bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-lg"
+            className="p-4 sm:p-6 lg:p-8 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-white/20 shadow-lg"
           >
             <Form
               form={form}
               layout="vertical"
               onFinish={handleSubmit}
-              className="space-y-6"
+              className="space-y-4 sm:space-y-6"
             >
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <Form.Item
                   label="Ticket Number"
                   name="ticketNumber"
@@ -122,10 +122,11 @@ export default function CustomerFeedback() {
                       message: "Please enter the ticket number",
                     },
                   ]}
+                  className="mb-0"
                 >
                   <Input
                     placeholder="Enter ticket number"
-                    className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
+                    className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base"
                   />
                 </Form.Item>
 
@@ -138,17 +139,18 @@ export default function CustomerFeedback() {
                       message: "Please enter the waiting time",
                     },
                   ]}
+                  className="mb-0"
                 >
                   <Input
                     type="number"
                     placeholder="Enter waiting time"
-                    className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
+                    className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base"
                   />
                 </Form.Item>
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
-              <Form.Item
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <Form.Item
                   label="Service Type"
                   name="serviceType"
                   rules={[
@@ -157,9 +159,11 @@ export default function CustomerFeedback() {
                       message: "Please select the service type",
                     },
                   ]}
+                  className="mb-0"
                 >
                   <Select
                     placeholder="Select service type"
+                    className="!text-sm sm:!text-base"
                     options={[
                       { value: "COUNTER", label: "Counter Service" },
                       { value: "TABLE", label: "Table Service" },
@@ -179,8 +183,10 @@ export default function CustomerFeedback() {
                     },
                   ]}
                   tooltip="How time-sensitive is this issue?"
+                  className="mb-0"
                 >
                   <Select
+                    className="!text-sm sm:!text-base"
                     options={[
                       { value: "LOW", label: "Can be addressed later" },
                       { value: "MEDIUM", label: "Should be addressed soon" },
@@ -190,7 +196,7 @@ export default function CustomerFeedback() {
                 </Form.Item>
               </div>
 
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                 <Form.Item
                   label="Service Quality"
                   name="serviceQuality"
@@ -200,8 +206,9 @@ export default function CustomerFeedback() {
                       message: "Please rate the service quality",
                     },
                   ]}
+                  className="mb-0"
                 >
-                  <Rate />
+                  <Rate className="text-sm sm:text-base" />
                 </Form.Item>
 
                 <Form.Item
@@ -213,8 +220,9 @@ export default function CustomerFeedback() {
                       message: "Please rate the staff behavior",
                     },
                   ]}
+                  className="mb-0"
                 >
-                  <Rate />
+                  <Rate className="text-sm sm:text-base" />
                 </Form.Item>
 
                 <Form.Item
@@ -226,8 +234,9 @@ export default function CustomerFeedback() {
                       message: "Please rate the system usability",
                     },
                   ]}
+                  className="mb-0"
                 >
-                  <Rate />
+                  <Rate className="text-sm sm:text-base" />
                 </Form.Item>
               </div>
 
@@ -237,15 +246,16 @@ export default function CustomerFeedback() {
                 rules={[
                   { required: true, message: "Please describe the issue" },
                 ]}
+                className="mb-0"
               >
                 <TextArea
                   rows={4}
                   placeholder="Describe the issue in detail"
-                  className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
+                  className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base"
                 />
               </Form.Item>
 
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <Form.Item
                   label="Business Impact"
                   name="businessImpact"
@@ -256,8 +266,10 @@ export default function CustomerFeedback() {
                     },
                   ]}
                   tooltip="How does this affect our business operations?"
+                  className="mb-0"
                 >
                   <Select
+                    className="!text-sm sm:!text-base"
                     options={[
                       { value: "LOW", label: "Minor inconvenience" },
                       { value: "MEDIUM", label: "Affects service quality" },
@@ -266,25 +278,6 @@ export default function CustomerFeedback() {
                   />
                 </Form.Item>
 
-                {/* <Form.Item
-                  label="Customer Impact Scope"
-                  name="customerImpact"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select the customer impact scope",
-                    },
-                  ]}
-                  tooltip="How many customers are affected by this issue?"
-                >
-                  <Select
-                    options={[
-                      { value: "INDIVIDUAL", label: "Single customer" },
-                      { value: "GROUP", label: "Group of customers" },
-                      { value: "ALL_CUSTOMERS", label: "All customers" },
-                    ]}
-                  />
-                </Form.Item> */}
                 <Form.Item
                   label="Suggestion Type"
                   name="suggestionType"
@@ -294,9 +287,11 @@ export default function CustomerFeedback() {
                       message: "Please select the suggestion type",
                     },
                   ]}
+                  className="mb-0"
                 >
                   <Select
                     placeholder="Select suggestion type"
+                    className="!text-sm sm:!text-base"
                     options={[
                       { value: "SYSTEM", label: "System Improvement" },
                       { value: "SERVICE", label: "Service Improvement" },
@@ -307,39 +302,38 @@ export default function CustomerFeedback() {
                 </Form.Item>
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
-                <Form.Item
-                  label="Regular Customer"
-                  name="isRegularCustomer"
-                  valuePropName="checked"
-                  tooltip="Is this a frequent/regular customer?"
-                >
-                  <Radio.Group>
-                    <Radio value={true}>Yes</Radio>
-                    <Radio value={false}>No</Radio>
-                  </Radio.Group>
-                </Form.Item>
-              </div>
-
               <Form.Item
-                label="Suggestion"
-                name="suggestion"
-                rules={[
-                  { required: false, message: "Please provide a suggestion" },
-                ]}
+                label="Regular Customer"
+                name="isRegularCustomer"
+                valuePropName="checked"
+                tooltip="Is this a frequent/regular customer?"
+                className="mb-0"
               >
+                <Radio.Group className="flex flex-col sm:flex-row gap-4">
+                  <Radio value={true} className="text-sm sm:text-base">
+                    Yes
+                  </Radio>
+                  <Radio value={false} className="text-sm sm:text-base">
+                    No
+                  </Radio>
+                </Radio.Group>
+              </Form.Item>
+
+              <Form.Item label="Suggestion" name="suggestion" className="mb-0">
                 <TextArea
                   rows={4}
                   placeholder="Enter your suggestion"
-                  className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
+                  className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base"
                 />
               </Form.Item>
 
-              <Form.Item className="mb-0">
+              <Form.Item className="mb-0 pt-2">
                 <Button
                   htmlType="submit"
                   loading={isSubmitting}
-                  className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white !border-0 !rounded-xl w-full !h-12"
+                  className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 
+                    !text-white !border-0 !rounded-lg sm:!rounded-xl w-full !h-10 sm:!h-12
+                    !text-sm sm:!text-base"
                 >
                   Submit Feedback
                 </Button>
