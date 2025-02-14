@@ -119,7 +119,7 @@ export default function UsersPage() {
             isDarkMode ? "text-white" : "text-slate-900"
           }`}
         >
-          Users
+          QMaster Team
         </h1>
         <div className="w-full sm:w-auto">
           <button
@@ -252,7 +252,7 @@ export default function UsersPage() {
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-sm 
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm whitespace-nowrap
                           ${
                             user.role === "Admin"
                               ? isDarkMode
@@ -271,7 +271,7 @@ export default function UsersPage() {
                       </span>
                     </td>
                     <td
-                      className={`px-6 py-4 ${
+                      className={`px-6 py-4 whitespace-nowrap ${
                         isDarkMode ? "text-white" : "text-slate-900"
                       }`}
                     >
