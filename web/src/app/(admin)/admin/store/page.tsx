@@ -249,7 +249,7 @@ export default function StorePage() {
     <div className="space-y-4 lg:space-y-6">
       <div className="flex justify-between items-center">
         <h1
-          className={`text-3xl font-bold ${
+          className={`text-xl font-bold ${
             isDarkMode ? "text-white" : "text-slate-900"
           }`}
         >
