@@ -51,14 +51,13 @@ export default function AdminSidebar({
   };
 
   return (
-    <div className="h-full w-64 flex flex-col">
-      {/* Logo Section */}
-      <div className="p-6 flex items-center justify-between">
-        <Link
-          href="/admin/dashboard"
-          className="flex items-center gap-2"
-          onClick={onClose}
-        >
+    <div className="w-64 bg-gradient-to-b from-concrete-turqouise to-coal-black text-white h-screen relative overflow-hidden">
+      {/* Animated background effect */}
+      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+
+      {/* Logo area */}
+      <div className="relative p-6 border-b border-crystal-blue/20 backdrop-blur-sm flex items-center justify-between">
+        <Link href="/admin/dashboard" className="flex items-center gap-3" onClick={onClose}>
           <Image
             src={QMasterLogo}
             alt="QMaster Logo"
@@ -73,38 +72,57 @@ export default function AdminSidebar({
         {/* Close button for mobile */}
         <button
           onClick={onClose}
-          className="lg:hidden p-2 rounded-lg hover:bg-white/[0.05]"
+          className="lg:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/[0.05]"
         >
           <FaTimes className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Navigation Links */}
-      <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
-        {menuItems.map((item) => (
-          <Link
-            key={item.path}
-            href={item.path}
-            onClick={onClose}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
-                          ${
-                            pathname === item.path
-                              ? isDarkMode
-                                ? "bg-white/[0.05] text-white"
-                                : "bg-slate-100 text-slate-900"
-                              : isDarkMode
-                              ? "text-white/70 hover:bg-white/[0.02] hover:text-white"
-                              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                          }`}
-          >
-            {item.icon}
-            <span>{item.label}</span>
-          </Link>
-        ))}
+      {/* Navigation */}
+      <nav className="relative mt-6 space-y-1 px-3">
+        {menuItems.map((item) => {
+          const isActive = pathname === item.path;
+          const Icon = item.icon;
+
+          return (
+            <Link key={item.path} href={item.path} onClick={onClose}>
+              <motion.div
+                className={`
+                  flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer
+                  transition-all duration-200 group relative
+                  ${isActive ? "text-crystal-blue" : "text-off-white hover:text-crystal-blue"}
+                `}
+                whileHover={{ x: 4 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                {isActive && (
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-concrete-turqouise/50 to-coal-black/50 rounded-xl border border-crystal-blue/20"
+                    layoutId="activeTab"
+                    transition={{
+                      type: "spring",
+                      bounce: 0.2,
+                      duration: 0.6,
+                    }}
+                  />
+                )}
+                <div className="relative flex items-center gap-3">
+                  <Icon
+                    className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110
+                    ${isActive ? "text-crystal-blue" : ""}`}
+                  />
+                  <span className={`font-medium ${isActive ? "text-crystal-blue" : ""}`}>
+                    {item.label}
+                  </span>
+                </div>
+              </motion.div>
+            </Link>
+          );
+        })}
       </nav>
 
-      {/* Bottom Section */}
-      <div className="p-4 border-t border-white/[0.05]">
+      {/* Bottom actions */}
+      <div className="absolute bottom-20 left-0 right-0 px-6 space-y-3">
         <DarkModeToggle
           isDarkMode={isDarkMode}
           onToggle={onDarkModeToggle}
@@ -122,6 +140,9 @@ export default function AdminSidebar({
           <span>Sign Out</span>
         </motion.button>
       </div>
+
+      {/* Bottom gradient overlay */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-coal-black to-transparent pointer-events-none" />
     </div>
   );
 }
