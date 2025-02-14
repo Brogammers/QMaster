@@ -284,7 +284,7 @@ export default function StorePage() {
           } rounded-lg border border-slate-200`}
         >
           <div className="p-6 border-b border-slate-200">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col xl:flex-row justify-between items-center">
               <div>
                 <h2 className="text-xl font-semibold">
                   Pending Store Requests
@@ -336,7 +336,7 @@ export default function StorePage() {
           </div>
 
           <div className="p-6">
-            <div className="flex justify-between items-start mb-6">
+            <div className="flex flex-col xl:flex-row justify-between items-start mb-6">
               <div>
                 <h3 className="text-lg font-medium">
                   {currentRequest.partnerName}
