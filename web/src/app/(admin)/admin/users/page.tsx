@@ -130,7 +130,7 @@ export default function UsersPage() {
                   ? "opacity-50 cursor-not-allowed bg-gray-500"
                   : "bg-crystal-blue hover:bg-opacity-90"
               } text-black`}
-            disabled={!isAdmin}
+            // disabled={!isAdmin}
           >
             <FaPlus /> Add User
           </button>
