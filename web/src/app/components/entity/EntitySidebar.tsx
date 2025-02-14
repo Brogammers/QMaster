@@ -1,8 +1,7 @@
-import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import {
   FaChevronDown,
@@ -12,18 +11,20 @@ import {
   FaPeopleArrows,
   FaSignOutAlt,
   FaUsers,
-  FaStore
+  FaStore,
+  FaTimes
 } from 'react-icons/fa';
 import QMasterLogo from "../../../../public/qmaster-logo.svg";
 import { useBusinessAuth } from '@/lib/auth/AuthContext';
+import axios from 'axios';
 
 interface EntitySidebarProps {
   isDarkMode: boolean;
+  onClose: () => void;
 }
 
-export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
+export default function EntitySidebar({ isDarkMode, onClose }: EntitySidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const { logout } = useBusinessAuth();
   const { entity } = useParams();
   const [isAdminOpen, setIsAdminOpen] = useState(() => pathname.includes('/admin'));
@@ -66,7 +67,7 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
 
   const toggleQueueManagement = () => {
     setIsQueueManagementOpen(!isQueueManagementOpen);
-  }
+  };
 
   return (
     <div className="w-64 bg-gradient-to-b from-baby-blue to-ocean-blue text-white h-screen relative overflow-hidden">
@@ -74,8 +75,12 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
       
       {/* Logo area */}
-      <div className="relative p-6 border-b border-white/20 backdrop-blur-sm">
-        <div className="flex items-center gap-3">
+      <div className="relative p-6 border-b border-white/20 backdrop-blur-sm flex items-center justify-between">
+        <Link
+          href={`/${entity}/admin`}
+          className="flex items-center gap-3"
+          onClick={onClose}
+        >
           <Image
             src={QMasterLogo}
             alt="QMaster Logo"
@@ -86,7 +91,14 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
           <h1 className="text-2xl font-bold text-white">
             QMaster
           </h1>
-        </div>
+        </Link>
+        {/* Close button for mobile */}
+        <button
+          onClick={onClose}
+          className="lg:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/[0.05]"
+        >
+          <FaTimes className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Navigation */}
@@ -99,7 +111,7 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
 
           return (
             <div key={item.path}>
-              {item.isDropdown && item.label == 'Admin' ? (
+              {item.isDropdown && item.label === 'Admin' ? (
                 <div>
                   <motion.div
                     className={`
@@ -136,62 +148,7 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
                         {item.children?.map((child) => {
                           const isChildActive = pathname === child.path;
                           return (
-                            <Link key={child.path} href={child.path}>
-                              <motion.div
-                                className={`
-                                  px-4 py-2 rounded-lg text-sm cursor-pointer
-                                  ${isChildActive ? 'text-white' : 'text-white/70 hover:text-white'}
-                                `}
-                                whileHover={{ x: 2 }}
-                              >
-                                {child.label}
-                              </motion.div>
-                            </Link>
-                          );
-                        })}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ) : 
-              item.isDropdown && item.label == 'Queue Settings' ? (
-              <div>
-                  <motion.div
-                    className={`
-                      flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer
-                      transition-all duration-200 group relative
-                      ${isActive ? 'text-white' : 'text-white/70 hover:text-white'}
-                    `}
-                    onClick={toggleQueueManagement}
-                    whileHover={{ x: 4 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    {isActive && (
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl"
-                        layoutId="activeTab"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                      />
-                    )}
-                    <div className="relative flex items-center gap-3">
-                      <Icon className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110`} />
-                      <span className="font-medium">{item.label}</span>
-                    </div>
-                    {isQueueManagementOpen ? <FaChevronUp className="w-4 h-4" /> : <FaChevronDown className="w-4 h-4" />}
-                  </motion.div>
-                  <AnimatePresence>
-                    {isQueueManagementOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="ml-12 mt-2 space-y-1 overflow-hidden"
-                      >
-                        {item.children?.map((child) => {
-                          const isChildActive = pathname === child.path;
-                          return (
-                            <Link key={child.path} href={child.path}>
+                            <Link key={child.path} href={child.path} onClick={onClose}>
                               <motion.div
                                 className={`
                                   px-4 py-2 rounded-lg text-sm cursor-pointer
@@ -209,7 +166,7 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
                   </AnimatePresence>
                 </div>
               ) : (
-                <Link href={item.path}>
+                <Link href={item.path} onClick={onClose}>
                   <motion.div
                     className={`
                       flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer
@@ -256,4 +213,4 @@ export default function EntitySidebar({ isDarkMode }: EntitySidebarProps) {
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-ocean-blue to-transparent pointer-events-none" />
     </div>
   );
-} 
+}

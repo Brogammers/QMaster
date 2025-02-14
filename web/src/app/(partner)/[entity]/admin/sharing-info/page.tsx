@@ -142,19 +142,19 @@ export default function SharingInfo() {
             <label htmlFor="url" className="text-md font-bold">
               Copy this link or download a QR code to share it anywhere, in any way!
             </label>
-            <div className="w-full my-4 flex items-center gap-4">
+            <div className="w-full my-4 flex flex-col sm:flex-row items-center gap-4">
               <Field
                 placeholder="https://book.qmaster.app/places/gok0IwQodWYLcLxTF9hS"
                 id="url"
                 name="url"
                 type="text"
-                className="w-1/2 border border-gray-300 p-2 rounded"
+                className="w-full sm:w-1/2 border border-gray-300 p-2 rounded"
                 readOnly
               />
               <button
                 type="button"
                 onClick={handleCopyURL}
-                className="bg-baby-blue px-4 py-2 rounded-lg text-white text-md font-bold"
+                className="bg-baby-blue px-4 py-2 rounded-lg text-white text-md font-bold w-full sm:w-auto"
               >
                 Copy URL
               </button>
@@ -165,16 +165,16 @@ export default function SharingInfo() {
         <span className="text-md font-bold">
           Download and print this document and place it where your customers can easily see it.
         </span>
-        <div className="my-4 flex space-x-4">
+        <div className="my-4 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
           <button
             onClick={handlePreview}
-            className="bg-ignite-black px-4 py-2 rounded-lg text-white text-md font-bold"
+            className="bg-ignite-black px-4 py-2 rounded-lg text-white text-md font-bold w-full sm:w-auto"
           >
             Preview
           </button>
           <button
             onClick={handleExportPDF}
-            className="bg-baby-blue px-4 py-2 rounded-lg text-white text-md font-bold"
+            className="bg-baby-blue px-4 py-2 rounded-lg text-white text-md font-bold w-full sm:w-auto"
           >
             Download QR Code
           </button>

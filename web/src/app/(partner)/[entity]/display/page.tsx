@@ -11,6 +11,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import DynamicMediaDisplay from "@/app/components/DynamicMediaDisplay";
 import { QueuedPerson } from "../../../../../types";
+import FullscreenDisplay from "@/app/components/FullscreenDisplay";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,7 +29,8 @@ const queuedPersonsData = [
 
 export default function Display() {
   const [fullscreen, setFullscreen] = useState<boolean>(false);
-  const [queuedPersons, setQueuedPersons] = useState<QueuedPerson[]>(queuedPersonsData);
+  const [queuedPersons, setQueuedPersons] =
+    useState<QueuedPerson[]>(queuedPersonsData);
   const { width, height } = useWindowSize();
 
   useEffect(() => {
@@ -72,53 +74,49 @@ export default function Display() {
     }
   }, [fullscreen]);
 
+  if (fullscreen) {
+    return <FullscreenDisplay queuedPersons={queuedPersons} />;
+  }
+
   return (
-    <>
-      {fullscreen ? (
-        <div className="fixed inset-0 bg-gradient-to-r from-baby-blue to-ocean-blue flex overflow-hidden">
-          <div className="flex-1 h-screen">
-            <DynamicMediaDisplay />
-          </div>
-          <div className="w-1/4 bg-ocean-blue h-screen">
-            <div className="scrollContainer flex flex-col">
-              {queuedPersons.map((person) => (
-                <TicketNumber
-                  key={person.id}
-                  bgColor="ocean-blue"
-                  textColor="white"
-                  fontSize="3xl"
-                  borderRadius="none"
-                  width="full"
-                  maxWidth="16"
-                  ticketNum={person.ticketNumber}
-                  queue={person.counter}
-                />
-              ))}
+    <Entity>
+      <QueueModal width="w-full">
+        <div className="px-4 md:px-8 lg:px-56 text-center flex flex-col justify-center items-center gap-8">
+          <Image
+            src={DisplayImg}
+            alt="Display Image"
+            width={200}
+            className="w-32 lg:w-64"
+          />
+          <h1 className="text-3xl font-bold">Display View</h1>
+          <p className="text-lg hidden lg:block">
+            You have the option to set up a display screen to present the
+            current queue status to your visitors. Simply access this page using
+            the computer connected to the display screen and activate fullscreen
+            mode by clicking the designated button.
+          </p>
+          <div className="flex flex-col gap-4 items-center w-full">
+            <button
+              onClick={handleFullscreen}
+              className="hidden lg:block bg-baby-blue px-4 py-2 rounded-lg text-white text-lg font-bold hover:bg-opacity-90 transition-colors"
+            >
+              Fullscreen
+            </button>
+            <div className="lg:hidden flex flex-col items-center gap-4 w-full px-4">
+              <div className="bg-lava-red/10 border-2 border-lava-red rounded-lg p-4 lg:p-6 w-full max-w-md">
+                <p className="text-lava-red font-bold text-xl mb-2">
+                  ⚠️ Screen Size Alert
+                </p>
+                <p className="text-lava-red font-medium">
+                  QMaster Display View requires a larger screen (minimum 1024px
+                  width) for optimal queue management display. Please switch to
+                  a desktop or larger screen device.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      ) : (
-        <Entity>
-          <QueueModal width="w-full">
-            <div className="px-56 text-center flex flex-col justify-center items-center gap-8">
-              <Image src={DisplayImg} alt="Display Image" width={200} />
-              <h1 className="text-3xl font-bold">Display View</h1>
-              <p className="text-lg">
-                You have the option to set up a display screen to present the
-                current queue status to your visitors. Simply access this page
-                using the computer connected to the display screen and activate
-                fullscreen mode by clicking the designated button.
-              </p>
-              <button
-                onClick={handleFullscreen}
-                className="bg-baby-blue px-4 py-2 rounded-lg text-white text-lg font-bold hover:bg-opacity-90 transition-colors"
-              >
-                Fullscreen
-              </button>
-            </div>
-          </QueueModal>
-        </Entity>
-      )}
-    </>
+      </QueueModal>
+    </Entity>
   );
 }

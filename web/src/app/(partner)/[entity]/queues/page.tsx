@@ -257,41 +257,48 @@ export default function Queues() {
   return (
     <Entity>
       <QueueModal title="Queue Management">
-        <div className="max-w-4xl mx-auto py-8 space-y-8">
+        <div className="w-full max-w-4xl mx-auto p-2 sm:p-4 lg:p-6 space-y-4 sm:space-y-8">
           {/* Queue List */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {queueConfigs.map((queue) => (
               <motion.div
                 key={queue.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-6 bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-lg"
+                className="p-4 sm:p-6 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-white/20 shadow-lg"
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                  {/* Queue Name and Status */}
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <div
-                      className={`w-3 h-3 rounded-full ${
+                      className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${
                         queue.isActive ? "bg-green-500" : "bg-gray-400"
                       }`}
                     />
-                    <h3 className="text-lg font-semibold">{queue.name}</h3>
-                    <span className="px-3 py-1 text-sm rounded-full bg-ocean-blue/20 text-ocean-blue">
+                    <h3 className="text-base sm:text-lg font-semibold">
+                      {queue.name}
+                    </h3>
+                    <span className="px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-full bg-ocean-blue/20 text-ocean-blue">
                       {queue.counterConfig.numberOfCounters} Counters
                     </span>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <FaUsers className="w-4 h-4" />
-                      <span>Max: {queue.maxQueueSize}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <FaClock className="w-4 h-4" />
-                      <span>~{queue.averageServiceTime}min</span>
+
+                  {/* Queue Stats and Edit Button */}
+                  <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 ml-auto">
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-600">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <FaUsers className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <span>Max: {queue.maxQueueSize}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <FaClock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <span>~{queue.averageServiceTime}min</span>
+                      </div>
                     </div>
                     <Button
                       onClick={() => handleEditQueue(queue)}
-                      icon={<FaEdit />}
-                      className="!bg-ocean-blue/20 !text-ocean-blue !border-0 !rounded-xl"
+                      icon={<FaEdit className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+                      className="!bg-ocean-blue/20 !text-ocean-blue !border-0 !rounded-lg sm:!rounded-xl !p-2 sm:!p-3"
                     />
                   </div>
                 </div>
@@ -305,12 +312,13 @@ export default function Queues() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="p-6 bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-lg space-y-6"
+              className="p-4 sm:p-6 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-white/20 shadow-lg space-y-4 sm:space-y-6"
             >
-              <div className="grid grid-cols-2 gap-6">
+              {/* Basic Queue Information */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Queue Name<p className="inline text-red-600">*</p>
+                  <label className="block text-sm font-medium mb-1.5 sm:mb-2">
+                    Queue Name<span className="text-red-600">*</span>
                   </label>
                   <Input
                     placeholder="Enter queue name"
@@ -318,12 +326,13 @@ export default function Queues() {
                     onChange={(e) =>
                       setNewQueue({ ...newQueue, name: e.target.value })
                     }
-                    className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-3"
+                    className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Number of Counters<p className="inline text-red-600">*</p>
+                  <label className="block text-sm font-medium mb-1.5 sm:mb-2">
+                    Number of Counters<span className="text-red-600">*</span>
                   </label>
                   <InputNumber
                     min={1}
@@ -331,11 +340,15 @@ export default function Queues() {
                     onChange={(value) =>
                       handleCounterConfigChange("numberOfCounters", value)
                     }
-                    className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
+                    className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base"
                   />
                 </div>
+              </div>
+
+              {/* Counter Configuration */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium mb-1.5 sm:mb-2">
                     Start Number
                   </label>
                   <InputNumber
@@ -344,11 +357,12 @@ export default function Queues() {
                     onChange={(value) =>
                       handleCounterConfigChange("startNumber", value)
                     }
-                    className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
+                    className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium mb-1.5 sm:mb-2">
                     Increment By
                   </label>
                   <InputNumber
@@ -357,12 +371,16 @@ export default function Queues() {
                     onChange={(value) =>
                       handleCounterConfigChange("increment", value)
                     }
-                    className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
+                    className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base"
                   />
                 </div>
+              </div>
+
+              {/* Queue Capacity and Service Time */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Max Capacity<p className="inline text-red-600">*</p>
+                  <label className="block text-sm font-medium mb-1.5 sm:mb-2">
+                    Max Capacity<span className="text-red-600">*</span>
                   </label>
                   <InputNumber
                     min={1}
@@ -371,11 +389,12 @@ export default function Queues() {
                     onChange={(value) =>
                       setNewQueue({ ...newQueue, maxQueueSize: value! })
                     }
-                    className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
+                    className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium mb-1.5 sm:mb-2">
                     Average Service Time (min)
                   </label>
                   <InputNumber
@@ -385,18 +404,24 @@ export default function Queues() {
                     onChange={(value) =>
                       setNewQueue({ ...newQueue, averageServiceTime: value! })
                     }
-                    className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
+                    className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center gap-6">
+              {/* Switches */}
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
                 <div className="flex items-center gap-2">
                   <Switch
                     checked={newQueue.isActive}
                     onChange={(checked) =>
                       setNewQueue({ ...newQueue, isActive: checked })
                     }
+                    className="!h-5 sm:!h-6 !min-w-[40px] sm:!min-w-[44px] [&>.ant-switch-handle]:!w-4 [&>.ant-switch-handle]:!h-4 
+                      sm:[&>.ant-switch-handle]:!w-5 sm:[&>.ant-switch-handle]:!h-5 
+                      [&>.ant-switch-handle]:!top-0.5 
+                      !bg-gray-300 hover:!bg-gray-400 
+                      [&.ant-switch-checked]:!bg-ocean-blue [&.ant-switch-checked]:hover:!bg-ocean-blue/90"
                   />
                   <span className="text-sm">Active</span>
                 </div>
@@ -406,16 +431,22 @@ export default function Queues() {
                     onChange={(checked) =>
                       handleCounterConfigChange("manualNames", checked)
                     }
+                    className="!h-5 sm:!h-6 !min-w-[40px] sm:!min-w-[44px] [&>.ant-switch-handle]:!w-4 [&>.ant-switch-handle]:!h-4 
+                      sm:[&>.ant-switch-handle]:!w-5 sm:[&>.ant-switch-handle]:!h-5 
+                      [&>.ant-switch-handle]:!top-0.5 
+                      !bg-gray-300 hover:!bg-gray-400 
+                      [&.ant-switch-checked]:!bg-ocean-blue [&.ant-switch-checked]:hover:!bg-ocean-blue/90"
                   />
                   <span className="text-sm">Manual Counter Names</span>
                 </div>
               </div>
 
+              {/* Manual Counter Names */}
               {newQueue.counterConfig?.manualNames && (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {newQueue.counterConfig.counters.map((counter) => (
                     <div key={counter.id}>
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="block text-sm font-medium mb-1.5 sm:mb-2">
                         Counter {counter.id} Name
                       </label>
                       <Input
@@ -423,14 +454,15 @@ export default function Queues() {
                         onChange={(e) =>
                           handleCounterNameChange(counter.id, e.target.value)
                         }
-                        className="border-ocean-blue border-4 w-full bg-white/50 rounded-xl px-4 py-2"
+                        className="border-ocean-blue border-2 sm:border-4 w-full bg-white/50 rounded-lg sm:rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base"
                       />
                     </div>
                   ))}
                 </div>
               )}
 
-              <div className="flex justify-end gap-4">
+              {/* Form Actions */}
+              <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 pt-2">
                 <Button
                   onClick={() => {
                     setIsAddingQueue(false);
@@ -446,13 +478,14 @@ export default function Queues() {
                       },
                     });
                   }}
-                  className="px-6 py-2 rounded-xl border border-gray-300"
+                  className="w-full sm:w-auto px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-gray-300 text-sm sm:text-base"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={isEditingQueue ? handleUpdateQueue : handleAddQueue}
-                  className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white !border-0 !rounded-xl"
+                  className="w-full sm:w-auto !bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 
+                    !text-white !border-0 !rounded-lg sm:!rounded-xl px-4 py-1.5 sm:py-2 text-sm sm:text-base"
                 >
                   {isEditingQueue ? "Update Queue" : "Add Queue"}
                 </Button>
@@ -464,8 +497,10 @@ export default function Queues() {
           {!isAddingQueue && (
             <Button
               onClick={() => setIsAddingQueue(true)}
-              icon={<FaPlus className="mr-2" />}
-              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 !text-white !border-0 !rounded-xl w-full !h-12"
+              icon={<FaPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2" />}
+              className="!bg-gradient-to-r !from-baby-blue !to-ocean-blue hover:!opacity-90 
+                !text-white !border-0 !rounded-lg sm:!rounded-xl w-full !h-10 sm:!h-12 
+                !text-sm sm:!text-base"
             >
               Add New Queue
             </Button>

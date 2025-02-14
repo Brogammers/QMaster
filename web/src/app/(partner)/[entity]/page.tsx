@@ -46,7 +46,7 @@ export default function Entity({ children }: QueueModalProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row items-center justify-between">
         <h2 className="text-2xl font-bold">
           <span className="text-baby-blue">{entityName}</span>
           {page && (
