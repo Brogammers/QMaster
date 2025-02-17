@@ -46,9 +46,7 @@ export default function Partner() {
   const [value, setValue] = useState<number | null>(null);
 
   useEffect(() => {
-
-    AsyncStorage.getItem("TOKEN_KEY")
-    .then((token) => {
+    AsyncStorage.getItem("TOKEN_KEY").then((token) => {
       const url = configConverter(
         "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
       );
@@ -110,6 +108,7 @@ export default function Partner() {
         }}
       >
         <QueueInfoCard image={image} name={brandName} />
+
         <SafeAreaView className="flex-1" edges={["bottom", "left", "right"]}>
           <ScrollView
             showsVerticalScrollIndicator={false}

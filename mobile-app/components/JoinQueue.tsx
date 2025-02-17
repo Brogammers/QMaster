@@ -11,14 +11,21 @@ import { useLocalSearchParams } from "expo-router";
 import OpeningHours from "./OpeningHours";
 import axios, { AxiosError } from "axios";
 import configConverter from "@/api/configConverter";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {
+  faFacebook,
+  faInstagram,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
+
 export interface Queue {
-    id: number;
-    name: string;
-    averageServiceTime: number;
-    currentQueueSize: number;
+  id: number;
+  name: string;
+  averageServiceTime: number;
+  currentQueueSize: number;
 }
 
-export const QueuesContext = createContext<{ 
+export const QueuesContext = createContext<{
   queues: Queue[];
   selectedQueue: Queue | null;
   setQueues: React.Dispatch<React.SetStateAction<Queue[]>>;
@@ -26,8 +33,8 @@ export const QueuesContext = createContext<{
 }>({
   queues: [],
   selectedQueue: null,
-  setQueues: () => {},
-  setSelectedQueue: () => {},
+  setQueues: () => { },
+  setSelectedQueue: () => { },
 });
 
 export default function JoinQueue() {
@@ -40,47 +47,47 @@ export default function JoinQueue() {
   const [queues, setQueues] = useState<Queue[]>([]);
   const [selectedQueue, setSelectedQueue] = useState<Queue | null>(null);
   const [hours, setHours] = useState<{
-      [key: string]: {
-          open: string;
-          close: string;
-          isClosed?: boolean;
-      };
+    [key: string]: {
+      open: string;
+      close: string;
+      isClosed?: boolean;
+    };
   }>({
-      Monday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Tuesday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Wednesday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Thursday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Friday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Saturday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Sunday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
+    Monday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Tuesday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Wednesday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Thursday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Friday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Saturday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Sunday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
   });
 
   const handleSelectService = (service: ServiceProps | null) => {
@@ -91,36 +98,36 @@ export default function JoinQueue() {
     setSelectedQueue(queues.find((queue) => queue.name === service.name) || null);
   };
 
-   useEffect(() => {
-       if (!currentLocation) return;
+  useEffect(() => {
+    if (!currentLocation) return;
 
-       const url = configConverter(
-           "EXPO_PUBLIC_API_BASE_URL_GET_OPENING_HOURS_BY_BUSINESS"
-       );
-       
-       axios
-           .get(`${url}?businessName=${brandName}&locationId=${currentLocation}`)
-           .then((response) => {
-               if (response.status === 200) {
-                   return response.data.hours;
-               } else {
-                   throw new Error("Error");
-               }
-           })
-           .then((data) => {
-               const hoursData = data.map((hour: any) => ({
-                   [hour.day]: {
-                       open: hour.open,
-                       close: hour.close,
-                       isClosed: !hour.isOpen,
-                   },
-               }));
-               setHours(Object.assign({}, ...hoursData));
-           })
-           .catch((error) => {
-               console.log("Error: ", (error as AxiosError).response?.data);
-           });
-   }, [brandName, currentLocation]);
+    const url = configConverter(
+      "EXPO_PUBLIC_API_BASE_URL_GET_OPENING_HOURS_BY_BUSINESS"
+    );
+
+    axios
+      .get(`${url}?businessName=${brandName}&locationId=${currentLocation}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data.hours;
+        } else {
+          throw new Error("Error");
+        }
+      })
+      .then((data) => {
+        const hoursData = data.map((hour: any) => ({
+          [hour.day]: {
+            open: hour.open,
+            close: hour.close,
+            isClosed: !hour.isOpen,
+          },
+        }));
+        setHours(Object.assign({}, ...hoursData));
+      })
+      .catch((error) => {
+        console.log("Error: ", (error as AxiosError).response?.data);
+      });
+  }, [brandName, currentLocation]);
 
   return (
     <QueuesContext.Provider value={{ queues, selectedQueue, setQueues, setSelectedQueue }}>
@@ -140,12 +147,29 @@ export default function JoinQueue() {
                 marginBottom: open ? 150 : 0,
               }}
             >
+              <View className="flex-row justify-center space-x-6 mt-2 mb-2">
+                <FontAwesomeIcon
+                  icon={faFacebook}
+                  size={24}
+                  color={isDarkMode ? "#ffffff" : "#0077B6"}
+                />
+                <FontAwesomeIcon
+                  icon={faInstagram}
+                  size={24}
+                  color={isDarkMode ? "#ffffff" : "#0077B6"}
+                />
+                <FontAwesomeIcon
+                  icon={faTwitter}
+                  size={24}
+                  color={isDarkMode ? "#ffffff" : "#0077B6"}
+                />
+              </View>
               <DropDownPicker
                 open={open}
                 value={currentLocation}
                 items={locationData}
                 setOpen={setOpen}
-                setValue={(value) => {setCurrentLocation(value); handleSelectService(null);}}
+                setValue={(value) => { setCurrentLocation(value); handleSelectService(null); }}
                 style={{
                   width: width,
                   alignSelf: "center",
@@ -285,13 +309,13 @@ export default function JoinQueue() {
               </View>
             )}
             <View
-                style={{
-                  zIndex: Platform.OS === "ios" ? 999 : undefined,
-                  elevation: Platform.OS === "android" ? 999 : undefined,
-                  width: "100%",
-                  alignItems: "center",
-                  marginBottom: open ? 150 : 0,
-                }}
+              style={{
+                zIndex: Platform.OS === "ios" ? 999 : undefined,
+                elevation: Platform.OS === "android" ? 999 : undefined,
+                width: "100%",
+                alignItems: "center",
+                marginBottom: open ? 150 : 0,
+              }}
             >
               {selectedQueue && (
                 <QueueDetails
