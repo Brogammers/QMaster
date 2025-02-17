@@ -11,14 +11,21 @@ import { useLocalSearchParams } from "expo-router";
 import OpeningHours from "./OpeningHours";
 import axios, { AxiosError } from "axios";
 import configConverter from "@/api/configConverter";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {
+  faFacebook,
+  faInstagram,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
+
 export interface Queue {
-    id: number;
-    name: string;
-    averageServiceTime: number;
-    currentQueueSize: number;
+  id: number;
+  name: string;
+  averageServiceTime: number;
+  currentQueueSize: number;
 }
 
-export const QueuesContext = createContext<{ 
+export const QueuesContext = createContext<{
   queues: Queue[];
   selectedQueue: Queue | null;
   setQueues: React.Dispatch<React.SetStateAction<Queue[]>>;
@@ -40,47 +47,47 @@ export default function JoinQueue() {
   const [queues, setQueues] = useState<Queue[]>([]);
   const [selectedQueue, setSelectedQueue] = useState<Queue | null>(null);
   const [hours, setHours] = useState<{
-      [key: string]: {
-          open: string;
-          close: string;
-          isClosed?: boolean;
-      };
+    [key: string]: {
+      open: string;
+      close: string;
+      isClosed?: boolean;
+    };
   }>({
-      Monday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Tuesday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Wednesday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Thursday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Friday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Saturday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
-      Sunday: {
-          open: "08:00",
-          close: "17:00",
-          isClosed: false,
-      },
+    Monday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Tuesday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Wednesday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Thursday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Friday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Saturday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
+    Sunday: {
+      open: "08:00",
+      close: "17:00",
+      isClosed: false,
+    },
   });
 
   const handleSelectService = (service: ServiceProps | null) => {
@@ -88,42 +95,46 @@ export default function JoinQueue() {
       setSelectedQueue(null);
       return;
     }
-    setSelectedQueue(queues.find((queue) => queue.name === service.name) || null);
+    setSelectedQueue(
+      queues.find((queue) => queue.name === service.name) || null
+    );
   };
 
-   useEffect(() => {
-       if (!currentLocation) return;
+  useEffect(() => {
+    if (!currentLocation) return;
 
-       const url = configConverter(
-           "EXPO_PUBLIC_API_BASE_URL_GET_OPENING_HOURS_BY_BUSINESS"
-       );
-       
-       axios
-           .get(`${url}?businessName=${brandName}&locationId=${currentLocation}`)
-           .then((response) => {
-               if (response.status === 200) {
-                   return response.data.hours;
-               } else {
-                   throw new Error("Error");
-               }
-           })
-           .then((data) => {
-               const hoursData = data.map((hour: any) => ({
-                   [hour.day]: {
-                       open: hour.open,
-                       close: hour.close,
-                       isClosed: !hour.isOpen,
-                   },
-               }));
-               setHours(Object.assign({}, ...hoursData));
-           })
-           .catch((error) => {
-               console.log("Error: ", (error as AxiosError).response?.data);
-           });
-   }, [brandName, currentLocation]);
+    const url = configConverter(
+      "EXPO_PUBLIC_API_BASE_URL_GET_OPENING_HOURS_BY_BUSINESS"
+    );
+
+    axios
+      .get(`${url}?businessName=${brandName}&locationId=${currentLocation}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data.hours;
+        } else {
+          throw new Error("Error");
+        }
+      })
+      .then((data) => {
+        const hoursData = data.map((hour: any) => ({
+          [hour.day]: {
+            open: hour.open,
+            close: hour.close,
+            isClosed: !hour.isOpen,
+          },
+        }));
+        setHours(Object.assign({}, ...hoursData));
+      })
+      .catch((error) => {
+        console.log("Error: ", (error as AxiosError).response?.data);
+      });
+  }, [brandName, currentLocation]);
 
   return (
-    <QueuesContext.Provider value={{ queues, selectedQueue, setQueues, setSelectedQueue }}>
+    <QueuesContext.Provider
+      value={{ queues, selectedQueue, setQueues, setSelectedQueue }}
+    >
       <View className="flex-1">
         <ScrollView
           className="flex-1"
@@ -140,12 +151,56 @@ export default function JoinQueue() {
                 marginBottom: open ? 150 : 0,
               }}
             >
+              <View className="flex-row justify-center space-x-8 my-1">
+                <View
+                  className={`p-2.5 rounded-full ${
+                    isDarkMode
+                      ? "bg-[rgba(29,205,254,0.1)] border border-[rgba(29,205,254,0.2)]"
+                      : "bg-white border border-[#E5E7EB] shadow-sm"
+                  }`}
+                >
+                  <FontAwesomeIcon
+                    icon={faFacebook}
+                    size={20}
+                    color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+                  />
+                </View>
+                <View
+                  className={`p-2.5 rounded-full ${
+                    isDarkMode
+                      ? "bg-[rgba(29,205,254,0.1)] border border-[rgba(29,205,254,0.2)]"
+                      : "bg-white border border-[#E5E7EB] shadow-sm"
+                  }`}
+                >
+                  <FontAwesomeIcon
+                    icon={faInstagram}
+                    size={20}
+                    color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+                  />
+                </View>
+                <View
+                  className={`p-2.5 rounded-full ${
+                    isDarkMode
+                      ? "bg-[rgba(29,205,254,0.1)] border border-[rgba(29,205,254,0.2)]"
+                      : "bg-white border border-[#E5E7EB] shadow-sm"
+                  }`}
+                >
+                  <FontAwesomeIcon
+                    icon={faTwitter}
+                    size={20}
+                    color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+                  />
+                </View>
+              </View>
               <DropDownPicker
                 open={open}
                 value={currentLocation}
                 items={locationData}
                 setOpen={setOpen}
-                setValue={(value) => {setCurrentLocation(value); handleSelectService(null);}}
+                setValue={(value) => {
+                  setCurrentLocation(value);
+                  handleSelectService(null);
+                }}
                 style={{
                   width: width,
                   alignSelf: "center",
@@ -155,7 +210,9 @@ export default function JoinQueue() {
                   backgroundColor: isDarkMode
                     ? "rgba(29, 205, 254, 0.1)"
                     : "white",
-                  borderColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5E7EB",
+                  borderColor: isDarkMode
+                    ? "rgba(29, 205, 254, 0.2)"
+                    : "#E5E7EB",
                   minHeight: 50,
                 }}
                 containerStyle={{
@@ -177,7 +234,9 @@ export default function JoinQueue() {
                   borderRadius: 12,
                   borderWidth: 1.5,
                   backgroundColor: isDarkMode ? "#0B1218" : "white",
-                  borderColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5E7EB",
+                  borderColor: isDarkMode
+                    ? "rgba(29, 205, 254, 0.2)"
+                    : "#E5E7EB",
                   shadowColor: "#000",
                   shadowOffset: {
                     width: 0,
@@ -213,7 +272,9 @@ export default function JoinQueue() {
                     : "#F8FAFC",
                   borderRadius: 8,
                   borderWidth: 1,
-                  borderColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5E7EB",
+                  borderColor: isDarkMode
+                    ? "rgba(29, 205, 254, 0.2)"
+                    : "#E5E7EB",
                   height: 40,
                   paddingHorizontal: 12,
                 }}
@@ -277,21 +338,23 @@ export default function JoinQueue() {
                 }}
               >
                 <OpeningHours hours={hours} />
-                {!selectedQueue && <ServiceTypeGrid
-                  businessName={brandName}
-                  locationId={currentLocation}
-                  onSelectService={handleSelectService}
-                />}
+                {!selectedQueue && (
+                  <ServiceTypeGrid
+                    businessName={brandName}
+                    locationId={currentLocation}
+                    onSelectService={handleSelectService}
+                  />
+                )}
               </View>
             )}
             <View
-                style={{
-                  zIndex: Platform.OS === "ios" ? 999 : undefined,
-                  elevation: Platform.OS === "android" ? 999 : undefined,
-                  width: "100%",
-                  alignItems: "center",
-                  marginBottom: open ? 150 : 0,
-                }}
+              style={{
+                zIndex: Platform.OS === "ios" ? 999 : undefined,
+                elevation: Platform.OS === "android" ? 999 : undefined,
+                width: "100%",
+                alignItems: "center",
+                marginBottom: open ? 150 : 0,
+              }}
             >
               {selectedQueue && (
                 <QueueDetails
