@@ -33,8 +33,8 @@ export const QueuesContext = createContext<{
 }>({
   queues: [],
   selectedQueue: null,
-  setQueues: () => { },
-  setSelectedQueue: () => { },
+  setQueues: () => {},
+  setSelectedQueue: () => {},
 });
 
 export default function JoinQueue() {
@@ -95,7 +95,9 @@ export default function JoinQueue() {
       setSelectedQueue(null);
       return;
     }
-    setSelectedQueue(queues.find((queue) => queue.name === service.name) || null);
+    setSelectedQueue(
+      queues.find((queue) => queue.name === service.name) || null
+    );
   };
 
   useEffect(() => {
@@ -130,7 +132,9 @@ export default function JoinQueue() {
   }, [brandName, currentLocation]);
 
   return (
-    <QueuesContext.Provider value={{ queues, selectedQueue, setQueues, setSelectedQueue }}>
+    <QueuesContext.Provider
+      value={{ queues, selectedQueue, setQueues, setSelectedQueue }}
+    >
       <View className="flex-1">
         <ScrollView
           className="flex-1"
@@ -147,29 +151,56 @@ export default function JoinQueue() {
                 marginBottom: open ? 150 : 0,
               }}
             >
-              <View className="flex-row justify-center space-x-6 mt-2 mb-2">
-                <FontAwesomeIcon
-                  icon={faFacebook}
-                  size={24}
-                  color={isDarkMode ? "#ffffff" : "#0077B6"}
-                />
-                <FontAwesomeIcon
-                  icon={faInstagram}
-                  size={24}
-                  color={isDarkMode ? "#ffffff" : "#0077B6"}
-                />
-                <FontAwesomeIcon
-                  icon={faTwitter}
-                  size={24}
-                  color={isDarkMode ? "#ffffff" : "#0077B6"}
-                />
+              <View className="flex-row justify-center space-x-8 my-4">
+                <View
+                  className={`p-2.5 rounded-full ${
+                    isDarkMode
+                      ? "bg-[rgba(29,205,254,0.1)] border border-[rgba(29,205,254,0.2)]"
+                      : "bg-white border border-[#E5E7EB] shadow-sm"
+                  }`}
+                >
+                  <FontAwesomeIcon
+                    icon={faFacebook}
+                    size={20}
+                    color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+                  />
+                </View>
+                <View
+                  className={`p-2.5 rounded-full ${
+                    isDarkMode
+                      ? "bg-[rgba(29,205,254,0.1)] border border-[rgba(29,205,254,0.2)]"
+                      : "bg-white border border-[#E5E7EB] shadow-sm"
+                  }`}
+                >
+                  <FontAwesomeIcon
+                    icon={faInstagram}
+                    size={20}
+                    color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+                  />
+                </View>
+                <View
+                  className={`p-2.5 rounded-full ${
+                    isDarkMode
+                      ? "bg-[rgba(29,205,254,0.1)] border border-[rgba(29,205,254,0.2)]"
+                      : "bg-white border border-[#E5E7EB] shadow-sm"
+                  }`}
+                >
+                  <FontAwesomeIcon
+                    icon={faTwitter}
+                    size={20}
+                    color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+                  />
+                </View>
               </View>
               <DropDownPicker
                 open={open}
                 value={currentLocation}
                 items={locationData}
                 setOpen={setOpen}
-                setValue={(value) => { setCurrentLocation(value); handleSelectService(null); }}
+                setValue={(value) => {
+                  setCurrentLocation(value);
+                  handleSelectService(null);
+                }}
                 style={{
                   width: width,
                   alignSelf: "center",
@@ -179,7 +210,9 @@ export default function JoinQueue() {
                   backgroundColor: isDarkMode
                     ? "rgba(29, 205, 254, 0.1)"
                     : "white",
-                  borderColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5E7EB",
+                  borderColor: isDarkMode
+                    ? "rgba(29, 205, 254, 0.2)"
+                    : "#E5E7EB",
                   minHeight: 50,
                 }}
                 containerStyle={{
@@ -201,7 +234,9 @@ export default function JoinQueue() {
                   borderRadius: 12,
                   borderWidth: 1.5,
                   backgroundColor: isDarkMode ? "#0B1218" : "white",
-                  borderColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5E7EB",
+                  borderColor: isDarkMode
+                    ? "rgba(29, 205, 254, 0.2)"
+                    : "#E5E7EB",
                   shadowColor: "#000",
                   shadowOffset: {
                     width: 0,
@@ -237,7 +272,9 @@ export default function JoinQueue() {
                     : "#F8FAFC",
                   borderRadius: 8,
                   borderWidth: 1,
-                  borderColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5E7EB",
+                  borderColor: isDarkMode
+                    ? "rgba(29, 205, 254, 0.2)"
+                    : "#E5E7EB",
                   height: 40,
                   paddingHorizontal: 12,
                 }}
@@ -301,11 +338,13 @@ export default function JoinQueue() {
                 }}
               >
                 <OpeningHours hours={hours} />
-                {!selectedQueue && <ServiceTypeGrid
-                  businessName={brandName}
-                  locationId={currentLocation}
-                  onSelectService={handleSelectService}
-                />}
+                {!selectedQueue && (
+                  <ServiceTypeGrid
+                    businessName={brandName}
+                    locationId={currentLocation}
+                    onSelectService={handleSelectService}
+                  />
+                )}
               </View>
             )}
             <View
