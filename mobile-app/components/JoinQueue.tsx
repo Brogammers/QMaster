@@ -151,7 +151,7 @@ export default function JoinQueue() {
                 marginBottom: open ? 150 : 0,
               }}
             >
-              <View className="flex-row justify-center space-x-8 my-4">
+              <View className="flex-row justify-center space-x-8 my-1">
                 <View
                   className={`p-2.5 rounded-full ${
                     isDarkMode
