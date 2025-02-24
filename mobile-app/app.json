@@ -50,19 +50,6 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone for voice commands",
           "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to access speech recognition for voice commands"
         }
-      ],
-      [
-        // "react-native-keyboard-controller",
-        {
-          "platforms": {
-            "ios": {
-              "enableKeyboardDismissOnSwipe": true
-            },
-            "android": {
-              "enableKeyboardDismissOnSwipe": true
-            }
-          }
-        }
       ]
     ],
     "experiments": {

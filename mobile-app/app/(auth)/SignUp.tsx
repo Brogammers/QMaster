@@ -30,43 +30,43 @@ import PhoneInput from "react-native-phone-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import i18n from "@/i18n";
 import configConverter from "@/api/configConverter";
-import {
-  KeyboardAwareScrollView,
-  useKeyboardHandler,
-} from "react-native-keyboard-controller";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated";
-import Constants from 'expo-constants';
+// REACT-NATIVE-KEYBOARD-CONTROLLER
+// import {
+//   KeyboardAwareScrollView,
+//   useKeyboardHandler,
+// } from "react-native-keyboard-controller";
+// import Animated, {
+//   useAnimatedStyle,
+//   useSharedValue,
+// } from "react-native-reanimated";
 
 interface ServerError {
   message: string;
 }
 
+/*
+// REACT-NATIVE-KEYBOARD-CONTROLLER
 const PADDING_BOTTOM = 20;
 
 const GradualAnimation = () => {
   const height = useSharedValue(PADDING_BOTTOM);
 
-
-    useKeyboardHandler(
-      {
-        onMove: (event) => {
-          "worklet";
-          height.value = Math.max(event.height, PADDING_BOTTOM);
-        },
-        onEnd: (event) => {
-          "worklet";
-          height.value = event?.height || PADDING_BOTTOM;
-        },
+  useKeyboardHandler(
+    {
+      onMove: (event) => {
+        "worklet";
+        height.value = Math.max(event.height, PADDING_BOTTOM);
       },
-      []
-    );
-  }
-
+      onEnd: (event) => {
+        "worklet";
+        height.value = event?.height || PADDING_BOTTOM;
+      },
+    },
+    []
+  );
   return { height };
 };
+*/
 
 const window = Dimensions.get("window");
 
@@ -113,7 +113,9 @@ export default function SignUp() {
   const auth = useAuth();
   const router = useRouter();
   const windowWidth = window.width * 0.7;
+  /* REACT-NATIVE-KEYBOARD-CONTROLLER
   const { height } = GradualAnimation();
+  */
 
   const [isStateUpdateComplete, setStateUpdateComplete] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -126,12 +128,14 @@ export default function SignUp() {
   const [value, setValue] = useState(null);
   const [isScrollEnabled, setIsScrollEnabled] = useState(true);
 
+  /* REACT-NATIVE-KEYBOARD-CONTROLLER
   const fakeView = useAnimatedStyle(() => {
     return {
       height: Math.abs(height.value),
       marginBottom: height.value > 0 ? 0 : PADDING_BOTTOM,
     };
   }, []);
+  */
 
   const handleSignUp = async (values: any) => {
     // TODO: Remove this hardcoded value
@@ -646,7 +650,7 @@ export default function SignUp() {
               </Formik>
             </ScrollView>
           </View>
-          <Animated.View style={fakeView} />
+          {/* <Animated.View style={fakeView} /> */}
         </ImageBackground>
       )}
     </>
