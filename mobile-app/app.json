@@ -17,9 +17,11 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.qmaster.myapp",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "This app needs access to microphone for voice commands",
-        "NSSpeechRecognitionUsageDescription": "This app needs access to speech recognition for voice commands"
+        "NSSpeechRecognitionUsageDescription": "This app needs access to speech recognition for voice commands",
+        "ExpoLocalization_supportsRTL": true
       }
     },
     "android": {

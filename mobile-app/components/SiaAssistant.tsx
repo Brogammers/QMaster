@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,18 +10,18 @@ import {
   Image,
   Platform,
   Dimensions,
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/app/redux/store';
-import { getGreeting } from '@/utils';
-import { BlurView } from 'expo-blur';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useRoute, useNavigationState } from '@react-navigation/native';
-import { RouteProp } from '@react-navigation/native';
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import { getGreeting } from "@/utils";
+import { BlurView } from "expo-blur";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useRoute, useNavigationState } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 interface AnimatedFlareProps {
   isDarkMode: boolean;
@@ -46,9 +46,16 @@ const suggestionPrompts = [
   "How do I find the best queue for me?",
 ];
 
-const AnimatedFlare: React.FC<AnimatedFlareProps> = ({ isDarkMode, initialPosition }) => {
-  const translateY = useRef(new Animated.Value(initialPosition?.y || 0)).current;
-  const translateX = useRef(new Animated.Value(initialPosition?.x || 0)).current;
+const AnimatedFlare: React.FC<AnimatedFlareProps> = ({
+  isDarkMode,
+  initialPosition,
+}) => {
+  const translateY = useRef(
+    new Animated.Value(initialPosition?.y || 0)
+  ).current;
+  const translateX = useRef(
+    new Animated.Value(initialPosition?.x || 0)
+  ).current;
   const scale = useRef(new Animated.Value(1)).current;
   const opacity = useRef(new Animated.Value(0.3)).current;
 
@@ -117,28 +124,28 @@ const AnimatedFlare: React.FC<AnimatedFlareProps> = ({ isDarkMode, initialPositi
       style={[
         styles.flare,
         {
-          transform: [
-            { translateX },
-            { translateY },
-            { scale },
-          ],
+          transform: [{ translateX }, { translateY }, { scale }],
           opacity,
-          backgroundColor: isDarkMode 
-            ? Math.random() > 0.45 ? '#00FFFF15' : '#87CEEB15'
-            : Math.random() > 0.45 ? '#0077B615' : '#4682B415',
+          backgroundColor: isDarkMode
+            ? Math.random() > 0.45
+              ? "#00FFFF15"
+              : "#87CEEB15"
+            : Math.random() > 0.45
+            ? "#0077B615"
+            : "#4682B415",
         },
       ]}
     />
   );
 };
 
-export const SiaAssistant: React.FC<SiaAssistantProps> = ({ 
+export const SiaAssistant: React.FC<SiaAssistantProps> = ({
   route,
   navigation,
-  isVisible = false, 
-  onClose = () => {}, 
+  isVisible = false,
+  onClose = () => {},
   isDarkMode = false,
-  isScreen = false 
+  isScreen = false,
 }) => {
   // Safely get current route name
   const getCurrentRouteName = () => {
@@ -146,20 +153,22 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
       const currentRoute = useRoute();
       return currentRoute?.name;
     } catch {
-      return '';
+      return "";
     }
   };
 
   const currentRouteName = getCurrentRouteName();
-  
-  // Hide floating button if we're on the Sia tab
-  const shouldShowFloatingButton = currentRouteName !== 'Sia';
 
-  const firstName = useSelector((state: RootState) => state.firstName?.firstName || undefined);
+  // Hide floating button if we're on the Sia tab
+  const shouldShowFloatingButton = currentRouteName !== "Sia";
+
+  const firstName = useSelector(
+    (state: RootState) => state.firstName?.firstName || undefined
+  );
   const [showModal, setShowModal] = useState(isVisible);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
   const [response, setResponse] = useState<string | null>(null);
-  const [displayedResponse, setDisplayedResponse] = useState<string>('');
+  const [displayedResponse, setDisplayedResponse] = useState<string>("");
   const [isTyping, setIsTyping] = useState(false);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const typingOpacity = useRef(new Animated.Value(0)).current;
@@ -168,7 +177,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
   // If we have route params, use those values
   const routeIsDarkMode = route?.params?.isDarkMode;
   const routeIsScreen = route?.params?.isScreen;
-  
+
   // Use route params if available, otherwise use props
   const effectiveIsDarkMode = routeIsDarkMode ?? isDarkMode;
   const effectiveIsScreen = routeIsScreen ?? isScreen;
@@ -183,8 +192,8 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
 
   const resetChat = () => {
     setResponse(null);
-    setDisplayedResponse('');
-    setInputText('');
+    setDisplayedResponse("");
+    setInputText("");
     setIsTyping(false);
     setLastPrompt(null);
   };
@@ -220,10 +229,10 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
   const typeResponse = (fullResponse: string) => {
     setIsTyping(true);
     animateTypingDots();
-    
+
     let currentIndex = 0;
     const typingSpeed = 15; // Reduced from 30 to 15 milliseconds per character
-    
+
     const typeChar = () => {
       if (currentIndex < fullResponse.length) {
         setDisplayedResponse(fullResponse.slice(0, currentIndex + 1));
@@ -240,11 +249,19 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
   const getHardcodedResponse = (prompt: string): string => {
     // Check for thank you variations
     const thankYouPatterns = [
-      'thank', 'thanks', 'thx', 'tysm', 'thank u', 'thankyou',
-      'appreciate', 'grateful', 'gracias', 'merci'
+      "thank",
+      "thanks",
+      "thx",
+      "tysm",
+      "thank u",
+      "thankyou",
+      "appreciate",
+      "grateful",
+      "gracias",
+      "merci",
     ];
 
-    const isThankYou = thankYouPatterns.some(pattern => 
+    const isThankYou = thankYouPatterns.some((pattern) =>
       prompt.toLowerCase().includes(pattern.toLowerCase())
     );
 
@@ -253,37 +270,43 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
         "You're very welcome! Always here to help you skip the Q! 😊",
         "My pleasure! That's what I'm here Q-for! 🌟",
         "Anytime! Let's keep your time in the Q to a minimum! ⏱️",
-        "Happy to help! Q-counting on you to come back if you need more assistance! 🎯",
+        "Happy to help! Q-ounting on you to come back if you need more assistance! 🎯",
         "No problem at all! Q-nsider me your personal queue companion! 🤝",
-        "Glad I could help! Q-ep calm and queue on! ✨"
+        "Glad I could help! Q-ep calm and queue on! ✨",
       ];
       return responses[Math.floor(Math.random() * responses.length)];
     }
 
     switch (prompt) {
       case "How can QMaster help me save time?":
-        return "QMaster helps you save time in several ways:\n\n" +
-               "• Real-time queue predictions to avoid long waits\n" +
-               "• Smart recommendations for the best time to visit\n" +
-               "• Virtual queuing so you can do other things while waiting\n" +
-               "• Instant notifications when it's your turn";
-      
+        return (
+          "QMaster helps you save time in several ways:\n\n" +
+          "• Real-time queue predictions to avoid long waits\n" +
+          "• Smart recommendations for the best time to visit\n" +
+          "• Virtual queuing so you can do other things while waiting\n" +
+          "• Instant notifications when it's your turn"
+        );
+
       case "What features does QMaster offer?":
-        return "QMaster offers several powerful features:\n\n" +
-               "• AI-powered wait time predictions\n" +
-               "• Virtual queue management\n" +
-               "• Smart notifications system\n" +
-               "• Location-based queue recommendations\n" +
-               "• Real-time updates and status tracking";
-      
+        return (
+          "QMaster offers several powerful features:\n\n" +
+          "• AI-powered wait time predictions\n" +
+          "• Virtual queue management\n" +
+          "• Smart notifications system\n" +
+          "• Location-based queue recommendations\n" +
+          "• Real-time updates and status tracking"
+        );
+
       case "How do I find the best queue for me?":
-        return "Finding the best queue is easy with QMaster:\n\n" +
-               "• Share your location or select an area\n" +
-               "• View real-time wait times for nearby queues\n" +
-               "• Check crowd levels and peak times\n" +
-               "• Get personalized recommendations based on your preferences\n" +
-               "• Compare different locations and their current status";
-      
+        return (
+          "Finding the best queue is easy with QMaster:\n\n" +
+          "• Share your location or select an area\n" +
+          "• View real-time wait times for nearby queues\n" +
+          "• Check crowd levels and peak times\n" +
+          "• Get personalized recommendations based on your preferences\n" +
+          "• Compare different locations and their current status"
+        );
+
       default:
         return "I'm here to help you with any questions about QMaster's features, queue management, and how to make the most of your time. Feel free to ask anything!";
     }
@@ -294,9 +317,9 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
     if (messageText.trim() && !isTyping) {
       const responseText = getHardcodedResponse(messageText);
       setResponse(responseText);
-      setDisplayedResponse('');
+      setDisplayedResponse("");
       typeResponse(responseText);
-      setInputText('');
+      setInputText("");
       setLastPrompt(messageText);
     }
   };
@@ -304,7 +327,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
   const handleSuggestionTap = (suggestion: string) => {
     const responseText = getHardcodedResponse(suggestion);
     setResponse(responseText);
-    setDisplayedResponse('');
+    setDisplayedResponse("");
     typeResponse(responseText);
     setLastPrompt(suggestion);
   };
@@ -332,10 +355,10 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
 
     return (
       <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
-        <FontAwesome5 
-          name="times" 
-          size={20} 
-          color={effectiveIsDarkMode ? '#1DCDFE' : '#17222D'} 
+        <FontAwesome5
+          name="times"
+          size={20}
+          color={effectiveIsDarkMode ? "#1DCDFE" : "#17222D"}
         />
       </TouchableOpacity>
     );
@@ -344,20 +367,22 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
   // Don't render floating button if in screen mode
   if (effectiveIsScreen) {
     return (
-      <View style={[
-        styles.modalContainer,
-        { 
-          backgroundColor: effectiveIsDarkMode 
-            ? 'rgba(11, 18, 25, 0.85)' 
-            : 'rgba(245, 245, 245, 0.85)',
-        }
-      ]}>
+      <View
+        style={[
+          styles.modalContainer,
+          {
+            backgroundColor: effectiveIsDarkMode
+              ? "rgba(11, 18, 25, 0.85)"
+              : "rgba(245, 245, 245, 0.85)",
+          },
+        ]}
+      >
         {!effectiveIsDarkMode && (
           <LinearGradient
             colors={[
-              'rgba(0, 119, 182, 0.1)',
-              'rgba(255, 255, 255, 0.05)',
-              'rgba(255, 255, 255, 0)'
+              "rgba(0, 119, 182, 0.1)",
+              "rgba(255, 255, 255, 0.05)",
+              "rgba(255, 255, 255, 0)",
             ]}
             style={styles.lightModeGradient}
             start={{ x: 0, y: 0 }}
@@ -367,59 +392,84 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
         {effectiveIsDarkMode && (
           <LinearGradient
             colors={[
-              'rgba(29, 205, 254, 0.1)',
-              'rgba(29, 205, 254, 0.05)',
-              'rgba(11, 18, 25, 0)'
+              "rgba(29, 205, 254, 0.1)",
+              "rgba(29, 205, 254, 0.05)",
+              "rgba(11, 18, 25, 0)",
             ]}
             style={styles.darkModeGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
           />
         )}
-        <AnimatedFlare isDarkMode={effectiveIsDarkMode} initialPosition={{ x: 0, y: 0 }} />
-        <AnimatedFlare isDarkMode={effectiveIsDarkMode} initialPosition={{ x: 100, y: 100 }} />
+        <AnimatedFlare
+          isDarkMode={effectiveIsDarkMode}
+          initialPosition={{ x: 0, y: 0 }}
+        />
+        <AnimatedFlare
+          isDarkMode={effectiveIsDarkMode}
+          initialPosition={{ x: 100, y: 100 }}
+        />
 
         {renderCloseButton()}
 
         <View style={styles.contentContainer}>
           <View style={styles.headerSection}>
-            <Text style={[styles.greeting, { color: effectiveIsDarkMode ? '#FFFFFF' : '#17222D' }]}>
+            <Text
+              style={[
+                styles.greeting,
+                { color: effectiveIsDarkMode ? "#FFFFFF" : "#17222D" },
+              ]}
+            >
               {getGreeting(firstName)}
             </Text>
           </View>
 
           {(response || isTyping) && (
-            <View style={[
-              styles.responseContainer,
-              { 
-                backgroundColor: effectiveIsDarkMode 
-                  ? 'rgba(23, 34, 45, 0.75)'  // Dark mode: semi-transparent dark blue
-                  : 'rgba(255, 255, 255, 0.75)', // Light mode: semi-transparent white
-                borderColor: effectiveIsDarkMode ? '#1DCDFE' : '#E5E7EB',
-              }
-            ]}>
-              <Text style={[
-                styles.promptText,
-                { color: effectiveIsDarkMode ? '#1DCDFE' : '#0C1824' }
-              ]}>
+            <View
+              style={[
+                styles.responseContainer,
+                {
+                  backgroundColor: effectiveIsDarkMode
+                    ? "rgba(23, 34, 45, 0.75)" // Dark mode: semi-transparent dark blue
+                    : "rgba(255, 255, 255, 0.75)", // Light mode: semi-transparent white
+                  borderColor: effectiveIsDarkMode ? "#1DCDFE" : "#E5E7EB",
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.promptText,
+                  { color: effectiveIsDarkMode ? "#1DCDFE" : "#0C1824" },
+                ]}
+              >
                 {inputText || lastPrompt}
               </Text>
-              <View style={[
-                styles.promptDivider,
-                { backgroundColor: effectiveIsDarkMode ? 'rgba(229, 231, 235, 0.2)' : 'rgba(12, 24, 36, 0.2)' }
-              ]} />
-              <Text style={[
-                styles.responseText,
-                { color: effectiveIsDarkMode ? '#FFFFFF' : '#17222D' }
-              ]}>
+              <View
+                style={[
+                  styles.promptDivider,
+                  {
+                    backgroundColor: effectiveIsDarkMode
+                      ? "rgba(229, 231, 235, 0.2)"
+                      : "rgba(12, 24, 36, 0.2)",
+                  },
+                ]}
+              />
+              <Text
+                style={[
+                  styles.responseText,
+                  { color: effectiveIsDarkMode ? "#FFFFFF" : "#17222D" },
+                ]}
+              >
                 {displayedResponse}
               </Text>
               {isTyping && (
                 <Animated.View style={{ opacity: typingOpacity }}>
-                  <Text style={[
-                    styles.typingIndicator,
-                    { color: effectiveIsDarkMode ? '#1DCDFE' : '#17222D' }
-                  ]}>
+                  <Text
+                    style={[
+                      styles.typingIndicator,
+                      { color: effectiveIsDarkMode ? "#1DCDFE" : "#17222D" },
+                    ]}
+                  >
                     •••
                   </Text>
                 </Animated.View>
@@ -434,17 +484,21 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
                   key={index}
                   style={[
                     styles.suggestionChip,
-                    { 
-                      backgroundColor: effectiveIsDarkMode ? '#17222D' : 'rgba(12, 24, 36, 0.1)',
-                      borderColor: effectiveIsDarkMode ? '#1DCDFE' : '#17222D',
-                    }
+                    {
+                      backgroundColor: effectiveIsDarkMode
+                        ? "#17222D"
+                        : "rgba(12, 24, 36, 0.1)",
+                      borderColor: effectiveIsDarkMode ? "#1DCDFE" : "#17222D",
+                    },
                   ]}
                   onPress={() => handleSuggestionTap(prompt)}
                 >
-                  <Text style={[
-                    styles.suggestionText,
-                    { color: effectiveIsDarkMode ? '#1DCDFE' : '#17222D' }
-                  ]}>
+                  <Text
+                    style={[
+                      styles.suggestionText,
+                      { color: effectiveIsDarkMode ? "#1DCDFE" : "#17222D" },
+                    ]}
+                  >
                     {prompt}
                   </Text>
                 </TouchableOpacity>
@@ -454,17 +508,19 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
         </View>
 
         <View style={styles.inputArea}>
-          <View style={[
-            styles.inputContainer,
-            {
-              backgroundColor: effectiveIsDarkMode ? '#17222D' : '#FFFFFF',
-              borderColor: effectiveIsDarkMode ? '#1DCDFE' : '#E5E7EB',
-              opacity: isTyping ? 0.7 : 1,
-            }
-          ]}>
+          <View
+            style={[
+              styles.inputContainer,
+              {
+                backgroundColor: effectiveIsDarkMode ? "#17222D" : "#FFFFFF",
+                borderColor: effectiveIsDarkMode ? "#1DCDFE" : "#E5E7EB",
+                opacity: isTyping ? 0.7 : 1,
+              },
+            ]}
+          >
             <View style={styles.inputSiaIcon}>
-              <Image 
-                source={require('../assets/images/Sia AI.png')}
+              <Image
+                source={require("../assets/images/Sia AI.png")}
                 style={styles.siaInputIcon}
               />
             </View>
@@ -472,15 +528,17 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
             <TextInput
               style={[
                 styles.input,
-                { color: effectiveIsDarkMode ? '#FFFFFF' : '#17222D' }
+                { color: effectiveIsDarkMode ? "#FFFFFF" : "#17222D" },
               ]}
               placeholder="Ask Sia anything..."
-              placeholderTextColor={effectiveIsDarkMode ? '#1DCDFE80' : '#17222D80'}
+              placeholderTextColor={
+                effectiveIsDarkMode ? "#1DCDFE80" : "#17222D80"
+              }
               value={inputText}
               onChangeText={setInputText}
               onSubmitEditing={() => {
                 const currentText = inputText;
-                setInputText('');
+                setInputText("");
                 if (currentText.trim()) {
                   handleSend(currentText);
                 }
@@ -488,28 +546,28 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
               editable={!isTyping}
             />
 
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[
                 styles.sendButton,
                 {
-                  backgroundColor: effectiveIsDarkMode ? '#17222D' : '#FFFFFF',
-                  borderColor: effectiveIsDarkMode ? '#1DCDFE' : '#17222D',
-                  opacity: (!inputText.trim() || isTyping) ? 0.5 : 1,
-                }
+                  backgroundColor: effectiveIsDarkMode ? "#17222D" : "#FFFFFF",
+                  borderColor: effectiveIsDarkMode ? "#1DCDFE" : "#17222D",
+                  opacity: !inputText.trim() || isTyping ? 0.5 : 1,
+                },
               ]}
               onPress={() => {
                 const currentText = inputText;
-                setInputText('');
+                setInputText("");
                 if (currentText.trim()) {
                   handleSend(currentText);
                 }
               }}
               disabled={!inputText.trim() || isTyping}
             >
-              <FontAwesome5 
-                name="paper-plane" 
-                size={16} 
-                color={effectiveIsDarkMode ? '#1DCDFE' : '#17222D'} 
+              <FontAwesome5
+                name="paper-plane"
+                size={16}
+                color={effectiveIsDarkMode ? "#1DCDFE" : "#17222D"}
               />
             </TouchableOpacity>
           </View>
@@ -520,255 +578,250 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
 
   // Only render floating button and modal if not in screen mode
   return (
-    <>
-      {shouldShowFloatingButton && (
-        <TouchableOpacity
-          style={styles.floatingButton}
-          onPress={handleOpenModal}
-          activeOpacity={0.7}
-        >
-          <Animated.View style={[styles.pulseContainer, { transform: [{ scale: pulseAnim }] }]}>
-            <Image 
-              source={require('../assets/images/Sia AI.png')}
-              style={styles.siaIcon}
-            />
-          </Animated.View>
-        </TouchableOpacity>
-      )}
-
-      <Modal
-        visible={showModal}
-        animationType="fade"
-        transparent
-        onRequestClose={handleCloseModal}
-      >
-        <BlurView
-          intensity={20}
-          tint={effectiveIsDarkMode ? 'dark' : 'light'}
-          style={StyleSheet.absoluteFill}
-        />
-        <View style={[
+    <Modal
+      visible={showModal}
+      animationType="fade"
+      transparent
+      onRequestClose={handleCloseModal}
+    >
+      <BlurView
+        intensity={20}
+        tint={effectiveIsDarkMode ? "dark" : "light"}
+        style={StyleSheet.absoluteFill}
+      />
+      <View
+        style={[
           styles.modalContainer,
-          { 
-            backgroundColor: effectiveIsDarkMode 
-              ? 'rgba(11, 18, 25, 0.85)' 
-              : 'rgba(245, 245, 245, 0.85)',
-          }
-        ]}>
-          {!effectiveIsDarkMode && (
-            <LinearGradient
-              colors={[
-                'rgba(0, 119, 182, 0.1)',
-                'rgba(255, 255, 255, 0.05)',
-                'rgba(255, 255, 255, 0)'
+          {
+            backgroundColor: effectiveIsDarkMode
+              ? "rgba(11, 18, 25, 0.85)"
+              : "rgba(245, 245, 245, 0.85)",
+          },
+        ]}
+      >
+        {!effectiveIsDarkMode && (
+          <LinearGradient
+            colors={[
+              "rgba(0, 119, 182, 0.1)",
+              "rgba(255, 255, 255, 0.05)",
+              "rgba(255, 255, 255, 0)",
+            ]}
+            style={styles.lightModeGradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+          />
+        )}
+        {effectiveIsDarkMode && (
+          <LinearGradient
+            colors={[
+              "rgba(29, 205, 254, 0.1)",
+              "rgba(29, 205, 254, 0.05)",
+              "rgba(11, 18, 25, 0)",
+            ]}
+            style={styles.darkModeGradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+          />
+        )}
+        <AnimatedFlare
+          isDarkMode={effectiveIsDarkMode}
+          initialPosition={{ x: 0, y: 0 }}
+        />
+        <AnimatedFlare
+          isDarkMode={effectiveIsDarkMode}
+          initialPosition={{ x: 100, y: 100 }}
+        />
+
+        {renderCloseButton()}
+
+        <View style={styles.contentContainer}>
+          <View style={styles.headerSection}>
+            <Text
+              style={[
+                styles.greeting,
+                { color: effectiveIsDarkMode ? "#FFFFFF" : "#17222D" },
               ]}
-              style={styles.lightModeGradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-            />
-          )}
-          {effectiveIsDarkMode && (
-            <LinearGradient
-              colors={[
-                'rgba(29, 205, 254, 0.1)',
-                'rgba(29, 205, 254, 0.05)',
-                'rgba(11, 18, 25, 0)'
-              ]}
-              style={styles.darkModeGradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-            />
-          )}
-          <AnimatedFlare isDarkMode={effectiveIsDarkMode} initialPosition={{ x: 0, y: 0 }} />
-          <AnimatedFlare isDarkMode={effectiveIsDarkMode} initialPosition={{ x: 100, y: 100 }} />
-
-          {renderCloseButton()}
-
-          <View style={styles.contentContainer}>
-            <View style={styles.headerSection}>
-              <Text style={[styles.greeting, { color: effectiveIsDarkMode ? '#FFFFFF' : '#17222D' }]}>
-                {getGreeting(firstName)}
-              </Text>
-            </View>
-
-            {(response || isTyping) && (
-              <View style={[
-                styles.responseContainer,
-                { 
-                  backgroundColor: effectiveIsDarkMode 
-                    ? 'rgba(23, 34, 45, 0.75)'  // Dark mode: semi-transparent dark blue
-                    : 'rgba(255, 255, 255, 0.75)', // Light mode: semi-transparent white
-                  borderColor: effectiveIsDarkMode ? '#1DCDFE' : '#E5E7EB',
-                }
-              ]}>
-                <Text style={[
-                  styles.promptText,
-                  { color: effectiveIsDarkMode ? '#1DCDFE' : '#0C1824' }
-                ]}>
-                  {inputText || lastPrompt}
-                </Text>
-                <View style={[
-                  styles.promptDivider,
-                  { backgroundColor: effectiveIsDarkMode ? 'rgba(229, 231, 235, 0.2)' : 'rgba(12, 24, 36, 0.2)' }
-                ]} />
-                <Text style={[
-                  styles.responseText,
-                  { color: effectiveIsDarkMode ? '#FFFFFF' : '#17222D' }
-                ]}>
-                  {displayedResponse}
-                </Text>
-                {isTyping && (
-                  <Animated.View style={{ opacity: typingOpacity }}>
-                    <Text style={[
-                      styles.typingIndicator,
-                      { color: effectiveIsDarkMode ? '#1DCDFE' : '#17222D' }
-                    ]}>
-                      •••
-                    </Text>
-                  </Animated.View>
-                )}
-              </View>
-            )}
-
-            {!response && !isTyping && (
-              <View style={styles.suggestionsSection}>
-                {suggestionPrompts.map((prompt, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={[
-                      styles.suggestionChip,
-                      { 
-                        backgroundColor: effectiveIsDarkMode ? '#17222D' : 'rgba(12, 24, 36, 0.1)',
-                        borderColor: effectiveIsDarkMode ? '#1DCDFE' : '#17222D',
-                      }
-                    ]}
-                    onPress={() => handleSuggestionTap(prompt)}
-                  >
-                    <Text style={[
-                      styles.suggestionText,
-                      { color: effectiveIsDarkMode ? '#1DCDFE' : '#17222D' }
-                    ]}>
-                      {prompt}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
+            >
+              {getGreeting(firstName)}
+            </Text>
           </View>
 
-          <View style={styles.inputArea}>
-            <View style={[
+          {(response || isTyping) && (
+            <View
+              style={[
+                styles.responseContainer,
+                {
+                  backgroundColor: effectiveIsDarkMode
+                    ? "rgba(23, 34, 45, 0.75)" // Dark mode: semi-transparent dark blue
+                    : "rgba(255, 255, 255, 0.75)", // Light mode: semi-transparent white
+                  borderColor: effectiveIsDarkMode ? "#1DCDFE" : "#E5E7EB",
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.promptText,
+                  { color: effectiveIsDarkMode ? "#1DCDFE" : "#0C1824" },
+                ]}
+              >
+                {inputText || lastPrompt}
+              </Text>
+              <View
+                style={[
+                  styles.promptDivider,
+                  {
+                    backgroundColor: effectiveIsDarkMode
+                      ? "rgba(229, 231, 235, 0.2)"
+                      : "rgba(12, 24, 36, 0.2)",
+                  },
+                ]}
+              />
+              <Text
+                style={[
+                  styles.responseText,
+                  { color: effectiveIsDarkMode ? "#FFFFFF" : "#17222D" },
+                ]}
+              >
+                {displayedResponse}
+              </Text>
+              {isTyping && (
+                <Animated.View style={{ opacity: typingOpacity }}>
+                  <Text
+                    style={[
+                      styles.typingIndicator,
+                      { color: effectiveIsDarkMode ? "#1DCDFE" : "#17222D" },
+                    ]}
+                  >
+                    •••
+                  </Text>
+                </Animated.View>
+              )}
+            </View>
+          )}
+
+          {!response && !isTyping && (
+            <View style={styles.suggestionsSection}>
+              {suggestionPrompts.map((prompt, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.suggestionChip,
+                    {
+                      backgroundColor: effectiveIsDarkMode
+                        ? "#17222D"
+                        : "rgba(12, 24, 36, 0.1)",
+                      borderColor: effectiveIsDarkMode ? "#1DCDFE" : "#17222D",
+                    },
+                  ]}
+                  onPress={() => handleSuggestionTap(prompt)}
+                >
+                  <Text
+                    style={[
+                      styles.suggestionText,
+                      { color: effectiveIsDarkMode ? "#1DCDFE" : "#17222D" },
+                    ]}
+                  >
+                    {prompt}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+        </View>
+
+        <View style={styles.inputArea}>
+          <View
+            style={[
               styles.inputContainer,
               {
-                backgroundColor: effectiveIsDarkMode ? '#17222D' : '#FFFFFF',
-                borderColor: effectiveIsDarkMode ? '#1DCDFE' : '#E5E7EB',
+                backgroundColor: effectiveIsDarkMode ? "#17222D" : "#FFFFFF",
+                borderColor: effectiveIsDarkMode ? "#1DCDFE" : "#E5E7EB",
                 opacity: isTyping ? 0.7 : 1,
-              }
-            ]}>
-              <View style={styles.inputSiaIcon}>
-                <Image 
-                  source={require('../assets/images/Sia AI.png')}
-                  style={styles.siaInputIcon}
-                />
-              </View>
-
-              <TextInput
-                style={[
-                  styles.input,
-                  { color: effectiveIsDarkMode ? '#FFFFFF' : '#17222D' }
-                ]}
-                placeholder="Ask Sia anything..."
-                placeholderTextColor={effectiveIsDarkMode ? '#1DCDFE80' : '#17222D80'}
-                value={inputText}
-                onChangeText={setInputText}
-                onSubmitEditing={() => {
-                  const currentText = inputText;
-                  setInputText('');
-                  if (currentText.trim()) {
-                    handleSend(currentText);
-                  }
-                }}
-                editable={!isTyping}
+              },
+            ]}
+          >
+            <View style={styles.inputSiaIcon}>
+              <Image
+                source={require("../assets/images/Sia AI.png")}
+                style={styles.siaInputIcon}
               />
-
-              <TouchableOpacity 
-                style={[
-                  styles.sendButton,
-                  {
-                    backgroundColor: effectiveIsDarkMode ? '#17222D' : '#FFFFFF',
-                    borderColor: effectiveIsDarkMode ? '#1DCDFE' : '#17222D',
-                    opacity: (!inputText.trim() || isTyping) ? 0.5 : 1,
-                  }
-                ]}
-                onPress={() => {
-                  const currentText = inputText;
-                  setInputText('');
-                  if (currentText.trim()) {
-                    handleSend(currentText);
-                  }
-                }}
-                disabled={!inputText.trim() || isTyping}
-              >
-                <FontAwesome5 
-                  name="paper-plane" 
-                  size={16} 
-                  color={effectiveIsDarkMode ? '#1DCDFE' : '#17222D'} 
-                />
-              </TouchableOpacity>
             </View>
+
+            <TextInput
+              style={[
+                styles.input,
+                { color: effectiveIsDarkMode ? "#FFFFFF" : "#17222D" },
+              ]}
+              placeholder="Ask Sia anything..."
+              placeholderTextColor={
+                effectiveIsDarkMode ? "#1DCDFE80" : "#17222D80"
+              }
+              value={inputText}
+              onChangeText={setInputText}
+              onSubmitEditing={() => {
+                const currentText = inputText;
+                setInputText("");
+                if (currentText.trim()) {
+                  handleSend(currentText);
+                }
+              }}
+              editable={!isTyping}
+            />
+
+            <TouchableOpacity
+              style={[
+                styles.sendButton,
+                {
+                  backgroundColor: effectiveIsDarkMode ? "#17222D" : "#FFFFFF",
+                  borderColor: effectiveIsDarkMode ? "#1DCDFE" : "#17222D",
+                  opacity: !inputText.trim() || isTyping ? 0.5 : 1,
+                },
+              ]}
+              onPress={() => {
+                const currentText = inputText;
+                setInputText("");
+                if (currentText.trim()) {
+                  handleSend(currentText);
+                }
+              }}
+              disabled={!inputText.trim() || isTyping}
+            >
+              <FontAwesome5
+                name="paper-plane"
+                size={16}
+                color={effectiveIsDarkMode ? "#1DCDFE" : "#17222D"}
+              />
+            </TouchableOpacity>
           </View>
         </View>
-      </Modal>
-    </>
+      </View>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  floatingButton: {
-    position: 'absolute',
-    right: 20,
-    bottom: Platform.OS === 'ios' ? 90 : 70,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  pulseContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 255, 255, 0.1)',
-  },
-  siaIcon: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain',
-  },
   modalContainer: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   contentContainer: {
     flex: 1,
     padding: 20,
-    paddingTop: Platform.OS === 'ios' ? 100 : 80,
+    paddingTop: Platform.OS === "ios" ? 100 : 80,
   },
   headerSection: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 40,
   },
   greeting: {
     fontSize: 32,
-    fontWeight: '700',
-    textAlign: 'center',
+    fontWeight: "700",
+    textAlign: "center",
   },
   suggestionsSection: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
     gap: 10,
     marginTop: 20,
   },
@@ -781,26 +834,26 @@ const styles = StyleSheet.create({
   },
   suggestionText: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   closeButton: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 50 : 30,
+    position: "absolute",
+    top: Platform.OS === "ios" ? 50 : 30,
     right: 20,
     width: 40,
     height: 40,
     borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     zIndex: 10,
   },
   inputArea: {
     padding: 20,
-    paddingBottom: Platform.OS === 'ios' ? 40 : 20,
+    paddingBottom: Platform.OS === "ios" ? 40 : 20,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1.5,
     borderRadius: 24,
     height: 48,
@@ -808,34 +861,34 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: '100%',
+    height: "100%",
     paddingLeft: 40,
     paddingRight: 40,
     fontSize: 16,
   },
   inputSiaIcon: {
-    position: 'absolute',
+    position: "absolute",
     left: 8,
     width: 30,
     height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   siaInputIcon: {
     width: 30,
     height: 30,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   sendButton: {
     width: 34,
     height: 34,
     borderRadius: 17,
     borderWidth: 1.5,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   flare: {
-    position: 'absolute',
+    position: "absolute",
     width: SCREEN_WIDTH,
     height: SCREEN_WIDTH,
     borderRadius: SCREEN_WIDTH / 2,
@@ -852,13 +905,13 @@ const styles = StyleSheet.create({
   },
   promptText: {
     fontSize: 14,
-    fontWeight: '500',
-    fontStyle: 'italic',
+    fontWeight: "500",
+    fontStyle: "italic",
     marginBottom: 8,
   },
   promptDivider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: "#E5E7EB",
     marginBottom: 12,
     opacity: 0.5,
   },
@@ -872,16 +925,16 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
   },
   lightModeGradient: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
-    width: '100%',
+    width: "100%",
     height: SCREEN_HEIGHT,
     opacity: 0.7,
   },
   darkModeGradient: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
-    width: '100%',
+    width: "100%",
     height: SCREEN_HEIGHT,
     opacity: 0.3,
   },
