@@ -30,8 +30,14 @@ import PhoneInput from "react-native-phone-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import i18n from "@/i18n";
 import configConverter from "@/api/configConverter";
-import { KeyboardAwareScrollView, useKeyboardHandler } from "react-native-keyboard-controller";
-import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+import {
+  KeyboardAwareScrollView,
+  useKeyboardHandler,
+} from "react-native-keyboard-controller";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 
 interface ServerError {
   message: string;
@@ -57,7 +63,7 @@ const GradualAnimation = () => {
   );
 
   return { height };
-}
+};
 
 const window = Dimensions.get("window");
 
@@ -155,9 +161,7 @@ export default function SignUp() {
         console.log("Signup response:", response.data);
 
         if (auth && auth.signIn) {
-          console.log(
-            "This is the type of response: " + typeof response.data
-          );
+          console.log("This is the type of response: " + typeof response.data);
           console.log(
             "This is the email of the user: ",
             response.data.email,
@@ -187,14 +191,8 @@ export default function SignUp() {
         const axiosError = error as AxiosError<ServerError>;
 
         if (axiosError.response) {
-          console.error(
-            "Axios error status:",
-            axiosError.response.status
-          );
-          console.error(
-            "Axios error data:",
-            axiosError.response.data
-          );
+          console.error("Axios error status:", axiosError.response.status);
+          console.error("Axios error data:", axiosError.response.data);
 
           // Map backend error messages to our translation keys
           let errorMessage = axiosError.response.data.message;
@@ -261,12 +259,12 @@ export default function SignUp() {
       }>>;
       (arg0: string, arg1: Date): void;
     }) =>
-      () => {
-        const formattedDate = formatDate(date);
-        setDisplayDate(formattedDate); // Set the display date
-        setFieldValue("dateOfBirth", date); // Use the Date object for Formik
-        toggleDatePicker();
-      };
+    () => {
+      const formattedDate = formatDate(date);
+      setDisplayDate(formattedDate); // Set the display date
+      setFieldValue("dateOfBirth", date); // Use the Date object for Formik
+      toggleDatePicker();
+    };
 
   const formatDate = (rawData: Date | undefined) => {
     if (!rawData) return "";
@@ -299,22 +297,22 @@ export default function SignUp() {
       }>>;
       (arg0: string, arg1: Date): void;
     }) =>
-      ({ type }: any, dateOfBirth: Date | undefined) => {
-        if (type === "set" && dateOfBirth) {
-          const currentDate: Date = dateOfBirth;
-          setDate(currentDate);
+    ({ type }: any, dateOfBirth: Date | undefined) => {
+      if (type === "set" && dateOfBirth) {
+        const currentDate: Date = dateOfBirth;
+        setDate(currentDate);
 
-          const formattedDate = formatDate(currentDate);
-          setDisplayDate(formattedDate); // Set the display date
-          setFieldValue("dateOfBirth", currentDate); // Use the Date object for Formik
+        const formattedDate = formatDate(currentDate);
+        setDisplayDate(formattedDate); // Set the display date
+        setFieldValue("dateOfBirth", currentDate); // Use the Date object for Formik
 
-          if (Platform.OS === "android") {
-            toggleDatePicker();
-          }
-        } else {
+        if (Platform.OS === "android") {
           toggleDatePicker();
         }
-      };
+      } else {
+        toggleDatePicker();
+      }
+    };
 
   return (
     <>
@@ -322,136 +320,276 @@ export default function SignUp() {
         <SplashScreen />
       ) : (
         <ImageBackground source={background} style={styles.container}>
-            <Return href="/Onboarding" size={36} color="white" />
-            <StatusBar
-              translucent
-              backgroundColor="rgba(000, 000, 000, 0.5)"
-              barStyle="light-content"
-            />
-            <View style={styles.row} className="relative">
-              <Text
-                style={styles.title}
-                className="mt-10 mb-4 text-2xl text-white"
+          <Return href="/Onboarding" size={36} color="white" />
+          <StatusBar
+            translucent
+            backgroundColor="rgba(000, 000, 000, 0.5)"
+            barStyle="light-content"
+          />
+          <View style={styles.row} className="relative">
+            <Text
+              style={styles.title}
+              className="mt-10 mb-4 text-2xl text-white"
+            >
+              {i18n.t("signupPage.welcome")}
+            </Text>
+            <Text
+              className="mb-16 text-base text-white"
+              style={styles.subTitle}
+            >
+              {i18n.t("signupPage.welcomeComment")}
+            </Text>
+            <ScrollView
+              horizontal={false}
+              contentContainerStyle={styles.form}
+              keyboardDismissMode="on-drag"
+              keyboardShouldPersistTaps="never"
+              showsVerticalScrollIndicator={false}
+              scrollEnabled={isScrollEnabled}
+              nestedScrollEnabled={true}
+              style={{ width: "100%" }}
+            >
+              <Formik
+                initialValues={{
+                  firstName: "",
+                  lastName: "",
+                  dateOfBirth: "",
+                  countryOfOrigin: "",
+                  email: "",
+                  phoneNumber: "",
+                  password: "",
+                  username: null,
+                  confirmPassword: "",
+                }}
+                validationSchema={SignupSchema}
+                onSubmit={handleSignUp}
               >
-                {i18n.t("signupPage.welcome")}
-              </Text>
-              <Text
-                className="mb-16 text-base text-white"
-                style={styles.subTitle}
-              >
-                {i18n.t("signupPage.welcomeComment")}
-              </Text>
-              <ScrollView
-                horizontal={false}
-                contentContainerStyle={styles.form}
-                keyboardDismissMode="on-drag"
-                keyboardShouldPersistTaps="never"
-                showsVerticalScrollIndicator={false}
-                scrollEnabled={isScrollEnabled}
-                nestedScrollEnabled={true}
-                style={{ width: "100%" }}
-              >
-                <Formik
-                  initialValues={{
-                    firstName: "",
-                    lastName: "",
-                    dateOfBirth: "",
-                    countryOfOrigin: "",
-                    email: "",
-                    phoneNumber: "",
-                    password: "",
-                    username: null,
-                    confirmPassword: "",
-                  }}
-                  validationSchema={SignupSchema}
-                  onSubmit={handleSignUp}
-                >
-                  {({
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    setFieldValue,
-                    values,
-                    touched,
-                    errors,
-                    isValid,
-                  }) => (
-                    <View className="flex items-center justify-center w-3/4 gap-4">
-                      <TextInput
+                {({
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  setFieldValue,
+                  values,
+                  touched,
+                  errors,
+                  isValid,
+                }) => (
+                  <View className="flex items-center justify-center w-3/4 gap-4">
+                    <TextInput
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
+                      placeholder={i18n.t("signupPage.firstName")}
+                      placeholderTextColor={"#515151"}
+                      onChangeText={handleChange("firstName")}
+                      value={values.firstName}
+                      autoCapitalize="words"
+                    />
+                    {errors.firstName && touched.firstName && (
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "red",
+                          textAlign: "center",
+                        }}
+                      >
+                        {errors.firstName}
+                      </Text>
+                    )}
+                    <TextInput
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
+                      placeholder={i18n.t("signupPage.lastName")}
+                      placeholderTextColor={"#515151"}
+                      onChangeText={handleChange("lastName")}
+                      value={values.lastName}
+                      autoCapitalize="words"
+                    />
+                    {errors.lastName && touched.lastName && (
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "red",
+                          textAlign: "center",
+                        }}
+                      >
+                        {errors.lastName}
+                      </Text>
+                    )}
+                    <TextInput
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
+                      placeholder={i18n.t("signupPage.email")}
+                      placeholderTextColor={"#515151"}
+                      onChangeText={handleChange("email")}
+                      keyboardType="email-address"
+                      value={values.email}
+                      autoCapitalize="none"
+                    />
+                    {errors.email && touched.email && (
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "red",
+                          textAlign: "center",
+                        }}
+                      >
+                        {errors.email}
+                      </Text>
+                    )}
+                    <TextInput
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
+                      placeholder={i18n.t("signupPage.password")}
+                      placeholderTextColor={"#515151"}
+                      onChangeText={handleChange("password")}
+                      onBlur={handleBlur("password")}
+                      secureTextEntry
+                      value={values.password}
+                    />
+                    {errors.password && touched.password && (
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "red",
+                          textAlign: "center",
+                        }}
+                      >
+                        {errors.password}
+                      </Text>
+                    )}
+                    <TextInput
+                      style={[
+                        styles.input,
+                        I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
+                      ]}
+                      placeholder={i18n.t("signupPage.confirmPassword")}
+                      placeholderTextColor={"#515151"}
+                      onChangeText={handleChange("confirmPassword")}
+                      onBlur={handleBlur("confirmPassword")}
+                      secureTextEntry
+                      value={values.confirmPassword}
+                    />
+                    {errors.confirmPassword && touched.confirmPassword && (
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "red",
+                          textAlign: "center",
+                        }}
+                      >
+                        {errors.confirmPassword}
+                      </Text>
+                    )}
+                    {showPicker && (
+                      <View style={{ width: "110%" }}>
+                        <DateTimePicker
+                          textColor="white"
+                          mode="date"
+                          display="spinner"
+                          value={date}
+                          onChange={onDateChange(setFieldValue)}
+                          style={styles.datePicker}
+                          maximumDate={new Date()}
+                          minimumDate={new Date(1900, 1, 1)}
+                        />
+                      </View>
+                    )}
+                    {showPicker && Platform.OS === "ios" && (
+                      <View
+                        style={{
+                          width: "100%",
+                          flexDirection: "row",
+                          justifyContent: "space-around",
+                        }}
+                      >
+                        <TextButton
+                          text={"Cancel"}
+                          buttonColor={"white"}
+                          textColor={"#17222D"}
+                          textSize="text-md"
+                          padding={8}
+                          width={100}
+                          onPress={toggleDatePicker}
+                        />
+                        <TextButton
+                          text={"Confirm"}
+                          buttonColor={"#1DCDFE"}
+                          textColor={"white"}
+                          textSize="text-md"
+                          padding={8}
+                          width={100}
+                          onPress={confirmDateIOS(setFieldValue)}
+                        />
+                      </View>
+                    )}
+                    {!showPicker && (
+                      <Pressable onPress={toggleDatePicker}>
+                        <TextInput
+                          style={[
+                            styles.input,
+                            I18nManager.isRTL
+                              ? styles.inputRTL
+                              : styles.inputLTR,
+                          ]}
+                          placeholder={i18n.t("signupPage.dateOfBirth")}
+                          placeholderTextColor={"#515151"}
+                          onChangeText={handleChange("dateOfBirth")}
+                          value={displayDate}
+                          editable={false}
+                          onPressIn={toggleDatePicker}
+                        />
+                      </Pressable>
+                    )}
+                    {errors.dateOfBirth && touched.dateOfBirth && (
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "red",
+                          textAlign: "center",
+                        }}
+                      >
+                        {errors.dateOfBirth}
+                      </Text>
+                    )}
+                    <View>
+                      <DropDownPicker
+                        open={open}
+                        onChangeValue={(value) => {
+                          handleChange("countryOfOrigin")(value || "");
+                          setFieldValue("countryOfOrigin", value || ""); // Update Formik state
+                        }}
+                        value={value}
+                        items={countries}
+                        setOpen={(isOpen) => {
+                          setOpen(isOpen);
+                          setIsScrollEnabled(!isOpen);
+                        }}
+                        setValue={setValue}
                         style={[
-                          styles.input,
-                          I18nManager.isRTL
-                            ? styles.inputRTL
-                            : styles.inputLTR,
+                          styles.dropDownPicker,
+                          {
+                            zIndex: 1000,
+                            height: 56,
+                          },
                         ]}
-                        placeholder={i18n.t(
-                          "signupPage.firstName"
-                        )}
-                        placeholderTextColor={"#515151"}
-                        onChangeText={handleChange(
-                          "firstName"
-                        )}
-                        value={values.firstName}
-                        autoCapitalize="words"
+                        dropDownDirection="TOP"
+                        dropDownContainerStyle={[styles.dropDownPicker]}
+                        placeholder={i18n.t("signupPage.country")}
+                        textStyle={{
+                          color: "#515151",
+                          fontSize: 16,
+                          fontFamily: "JostBold",
+                        }}
                       />
-                      {errors.firstName &&
-                        touched.firstName && (
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: "red",
-                              textAlign: "center",
-                            }}
-                          >
-                            {errors.firstName}
-                          </Text>
-                        )}
-                      <TextInput
-                        style={[
-                          styles.input,
-                          I18nManager.isRTL
-                            ? styles.inputRTL
-                            : styles.inputLTR,
-                        ]}
-                        placeholder={i18n.t(
-                          "signupPage.lastName"
-                        )}
-                        placeholderTextColor={"#515151"}
-                        onChangeText={handleChange(
-                          "lastName"
-                        )}
-                        value={values.lastName}
-                        autoCapitalize="words"
-                      />
-                      {errors.lastName &&
-                        touched.lastName && (
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: "red",
-                              textAlign: "center",
-                            }}
-                          >
-                            {errors.lastName}
-                          </Text>
-                        )}
-                      <TextInput
-                        style={[
-                          styles.input,
-                          I18nManager.isRTL
-                            ? styles.inputRTL
-                            : styles.inputLTR,
-                        ]}
-                        placeholder={i18n.t(
-                          "signupPage.email"
-                        )}
-                        placeholderTextColor={"#515151"}
-                        onChangeText={handleChange("email")}
-                        keyboardType="email-address"
-                        value={values.email}
-                        autoCapitalize="none"
-                      />
-                      {errors.email && touched.email && (
+                      {errors.countryOfOrigin && touched.countryOfOrigin && (
                         <Text
                           style={{
                             fontSize: 12,
@@ -459,266 +597,53 @@ export default function SignUp() {
                             textAlign: "center",
                           }}
                         >
-                          {errors.email}
+                          {errors.countryOfOrigin}
                         </Text>
                       )}
-                      <TextInput
-                        style={[
-                          styles.input,
-                          I18nManager.isRTL
-                            ? styles.inputRTL
-                            : styles.inputLTR,
-                        ]}
-                        placeholder={i18n.t(
-                          "signupPage.password"
-                        )}
-                        placeholderTextColor={"#515151"}
-                        onChangeText={handleChange(
-                          "password"
-                        )}
-                        onBlur={handleBlur("password")}
-                        secureTextEntry
-                        value={values.password}
-                      />
-                      {errors.password &&
-                        touched.password && (
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: "red",
-                              textAlign: "center",
-                            }}
-                          >
-                            {errors.password}
-                          </Text>
-                        )}
-                      <TextInput
-                        style={[
-                          styles.input,
-                          I18nManager.isRTL
-                            ? styles.inputRTL
-                            : styles.inputLTR,
-                        ]}
-                        placeholder={i18n.t(
-                          "signupPage.confirmPassword"
-                        )}
-                        placeholderTextColor={"#515151"}
-                        onChangeText={handleChange(
-                          "confirmPassword"
-                        )}
-                        onBlur={handleBlur(
-                          "confirmPassword"
-                        )}
-                        secureTextEntry
-                        value={values.confirmPassword}
-                      />
-                      {errors.confirmPassword &&
-                        touched.confirmPassword && (
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: "red",
-                              textAlign: "center",
-                            }}
-                          >
-                            {errors.confirmPassword}
-                          </Text>
-                        )}
-                      {showPicker && (
-                        <View style={{ width: "110%" }}>
-                          <DateTimePicker
-                            textColor="white"
-                            mode="date"
-                            display="spinner"
-                            value={date}
-                            onChange={onDateChange(
-                              setFieldValue
-                            )}
-                            style={styles.datePicker}
-                            maximumDate={new Date()}
-                            minimumDate={
-                              new Date(1900, 1, 1)
-                            }
-                          />
-                        </View>
-                      )}
-                      {showPicker &&
-                        Platform.OS === "ios" && (
-                          <View
-                            style={{
-                              width: "100%",
-                              flexDirection: "row",
-                              justifyContent:
-                                "space-around",
-                            }}
-                          >
-                            <TextButton
-                              text={"Cancel"}
-                              buttonColor={"white"}
-                              textColor={"#17222D"}
-                              textSize="text-md"
-                              padding={8}
-                              width={100}
-                              onPress={
-                                toggleDatePicker
-                              }
-                            />
-                            <TextButton
-                              text={"Confirm"}
-                              buttonColor={"#1DCDFE"}
-                              textColor={"white"}
-                              textSize="text-md"
-                              padding={8}
-                              width={100}
-                              onPress={confirmDateIOS(
-                                setFieldValue
-                              )}
-                            />
-                          </View>
-                        )}
-                      {!showPicker && (
-                        <Pressable
-                          onPress={toggleDatePicker}
-                        >
-                          <TextInput
-                            style={[
-                              styles.input,
-                              I18nManager.isRTL
-                                ? styles.inputRTL
-                                : styles.inputLTR,
-                            ]}
-                            placeholder={i18n.t(
-                              "signupPage.dateOfBirth"
-                            )}
-                            placeholderTextColor={
-                              "#515151"
-                            }
-                            onChangeText={handleChange(
-                              "dateOfBirth"
-                            )}
-                            value={displayDate}
-                            editable={false}
-                            onPressIn={toggleDatePicker}
-                          />
-                        </Pressable>
-                      )}
-                      {errors.dateOfBirth &&
-                        touched.dateOfBirth && (
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: "red",
-                              textAlign: "center",
-                            }}
-                          >
-                            {errors.dateOfBirth}
-                          </Text>
-                        )}
-                      <View>
-                        <DropDownPicker
-                          open={open}
-                          onChangeValue={(value) => {
-                            handleChange(
-                              "countryOfOrigin"
-                            )(value || "");
-                            setFieldValue(
-                              "countryOfOrigin",
-                              value || ""
-                            ); // Update Formik state
-                          }}
-                          value={value}
-                          items={countries}
-                          setOpen={(isOpen) => {
-                            setOpen(isOpen);
-                            setIsScrollEnabled(!isOpen);
-                          }}
-                          setValue={setValue}
-                          style={[
-                            styles.dropDownPicker,
-                            {
-                              zIndex: 1000,
-                              height: 56,
-                            },
-                          ]}
-                          dropDownDirection="TOP"
-                          dropDownContainerStyle={[
-                            styles.dropDownPicker,
-                          ]}
-                          placeholder={i18n.t(
-                            "signupPage.country"
-                          )}
-                          textStyle={{
-                            color: "#515151",
-                            fontSize: 16,
-                            fontFamily: "JostBold",
-                          }}
-                        />
-                        {errors.countryOfOrigin &&
-                          touched.countryOfOrigin && (
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                color: "red",
-                                textAlign: "center",
-                              }}
-                            >
-                              {errors.countryOfOrigin}
-                            </Text>
-                          )}
-                      </View>
-                      <PhoneInput
-                        style={styles.input}
-                        onChangePhoneNumber={(value) => {
-                          handleChange("phoneNumber")(
-                            value || ""
-                          );
-                          setFieldValue(
-                            "phoneNumber",
-                            value || ""
-                          ); // Update Formik state
-                        }}
-                        initialValue={values.phoneNumber}
-                      />
-                      {errors.phoneNumber &&
-                        touched.phoneNumber && (
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: "red",
-                              textAlign: "center",
-                            }}
-                          >
-                            {errors.phoneNumber}
-                          </Text>
-                        )}
-                      <View className="my-4" />
-                      <View className="my-16">
-                        <TextButton
-                          text={i18n.t("signup")}
-                          buttonColor={
-                            !isValid
-                              ? "#C5C5C5"
-                              : "#1DCDFE"
-                          }
-                          textColor={"white"}
-                          onPress={handleSubmit}
-                          disabled={!isValid || isLoading}
-                          width={windowWidth}
-                        />
-                        <TextButton
-                          text={i18n.t("googleSignup")}
-                          icon={"google"}
-                          buttonColor={"white"}
-                          textColor={"#17222D"}
-                          width={windowWidth}
-                        />
-                      </View>
                     </View>
-                  )}
-                </Formik>
-              </ScrollView>
-            </View>
-            <Animated.View style={fakeView} />
+                    <PhoneInput
+                      style={styles.input}
+                      onChangePhoneNumber={(value) => {
+                        handleChange("phoneNumber")(value || "");
+                        setFieldValue("phoneNumber", value || ""); // Update Formik state
+                      }}
+                      initialValue={values.phoneNumber}
+                    />
+                    {errors.phoneNumber && touched.phoneNumber && (
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "red",
+                          textAlign: "center",
+                        }}
+                      >
+                        {errors.phoneNumber}
+                      </Text>
+                    )}
+                    <View className="my-4" />
+                    <View className="my-16">
+                      <TextButton
+                        text={i18n.t("signup")}
+                        buttonColor={!isValid ? "#C5C5C5" : "#1DCDFE"}
+                        textColor={"white"}
+                        onPress={handleSubmit}
+                        disabled={!isValid || isLoading}
+                        width={windowWidth}
+                      />
+                      <TextButton
+                        text={i18n.t("googleSignup")}
+                        icon={"google"}
+                        buttonColor={"white"}
+                        textColor={"#17222D"}
+                        width={windowWidth}
+                      />
+                    </View>
+                  </View>
+                )}
+              </Formik>
+            </ScrollView>
+          </View>
+          <Animated.View style={fakeView} />
         </ImageBackground>
       )}
     </>

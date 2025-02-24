@@ -17,19 +17,18 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.qmaster.myapp",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "This app needs access to microphone for voice commands",
         "NSSpeechRecognitionUsageDescription": "This app needs access to speech recognition for voice commands",
         "ExpoLocalization_supportsRTL": true
-      },
-      "bundleIdentifier": "com.qmaster.myapp"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "softwareKeyboardLayoutMode": "pan",
       "package": "com.qmaster.myapp",
       "permissions": [
         "android.permission.RECORD_AUDIO",
@@ -50,6 +49,19 @@
         {
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone for voice commands",
           "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to access speech recognition for voice commands"
+        }
+      ],
+      [
+        "react-native-keyboard-controller",
+        {
+          "platforms": {
+            "ios": {
+              "enableKeyboardDismissOnSwipe": true
+            },
+            "android": {
+              "enableKeyboardDismissOnSwipe": true
+            }
+          }
         }
       ]
     ],
