@@ -52,7 +52,7 @@
         }
       ],
       [
-        "react-native-keyboard-controller",
+        // "react-native-keyboard-controller",
         {
           "platforms": {
             "ios": {

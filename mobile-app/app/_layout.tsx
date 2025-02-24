@@ -9,7 +9,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeProvider } from "@/ctx/ThemeContext";
 import { CartProvider } from '@/ctx/CartContext';
 import { SiaProvider } from '../ctx/SiaContext';
-import { KeyboardProvider } from 'react-native-keyboard-controller';
+// REACT-NATIVE-KEYBOARD-CONTROLLER
+// import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -39,7 +40,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <ThemeProvider>
-          <KeyboardProvider>
+          {/* <KeyboardProvider> */}
             <CartProvider>
               <SessionProvider>
                 <SiaProvider>
@@ -47,7 +48,7 @@ export default function RootLayout() {
                 </SiaProvider>
               </SessionProvider>
             </CartProvider>
-          </KeyboardProvider>
+          {/* </KeyboardProvider> */}
         </ThemeProvider>
       </Provider>
     </GestureHandlerRootView>

@@ -38,6 +38,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
+import Constants from 'expo-constants';
 
 interface ServerError {
   message: string;
@@ -48,19 +49,21 @@ const PADDING_BOTTOM = 20;
 const GradualAnimation = () => {
   const height = useSharedValue(PADDING_BOTTOM);
 
-  useKeyboardHandler(
-    {
-      onMove: (event) => {
-        "worklet";
-        height.value = Math.max(event.height, PADDING_BOTTOM);
+
+    useKeyboardHandler(
+      {
+        onMove: (event) => {
+          "worklet";
+          height.value = Math.max(event.height, PADDING_BOTTOM);
+        },
+        onEnd: (event) => {
+          "worklet";
+          height.value = event?.height || PADDING_BOTTOM;
+        },
       },
-      onEnd: (event) => {
-        "worklet";
-        height.value = event?.height || PADDING_BOTTOM;
-      },
-    },
-    []
-  );
+      []
+    );
+  }
 
   return { height };
 };
