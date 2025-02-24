@@ -27,6 +27,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "softwareKeyboardLayoutMode": "pan",
       "package": "com.qmaster.myapp",
       "permissions": [
         "android.permission.RECORD_AUDIO",
