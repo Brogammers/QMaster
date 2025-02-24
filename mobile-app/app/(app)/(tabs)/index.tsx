@@ -154,10 +154,10 @@ export default function Index() {
       </ScrollView>
       
       {/* Sia Button */}
-      <SiaButton 
+      {/* <SiaButton 
         style={styles.siaButtonPosition}
         showText={false}
-      />
+      /> */}
     </SafeAreaView>
   );
 }
