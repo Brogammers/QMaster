@@ -8,7 +8,6 @@ import {
   Platform,
   Dimensions,
   I18nManager,
-  KeyboardAvoidingView
 } from "react-native";
 import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
@@ -31,9 +30,33 @@ import PhoneInput from "react-native-phone-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import i18n from "@/i18n";
 import configConverter from "@/api/configConverter";
+import { KeyboardAwareScrollView, useKeyboardHandler } from "react-native-keyboard-controller";
+import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 
 interface ServerError {
   message: string;
+}
+
+const PADDING_BOTTOM = 20;
+
+const GradualAnimation = () => {
+  const height = useSharedValue(PADDING_BOTTOM);
+
+  useKeyboardHandler(
+    {
+      onMove: (event) => {
+        "worklet";
+        height.value = Math.max(event.height, PADDING_BOTTOM);
+      },
+      onEnd: (event) => {
+        "worklet";
+        height.value = event?.height || PADDING_BOTTOM;
+      },
+    },
+    []
+  );
+
+  return { height };
 }
 
 const window = Dimensions.get("window");
@@ -81,6 +104,7 @@ export default function SignUp() {
   const auth = useAuth();
   const router = useRouter();
   const windowWidth = window.width * 0.7;
+  const { height } = GradualAnimation();
 
   const [isStateUpdateComplete, setStateUpdateComplete] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -92,6 +116,13 @@ export default function SignUp() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [isScrollEnabled, setIsScrollEnabled] = useState(true);
+
+  const fakeView = useAnimatedStyle(() => {
+    return {
+      height: Math.abs(height.value),
+      marginBottom: height.value > 0 ? 0 : PADDING_BOTTOM,
+    };
+  }, []);
 
   const handleSignUp = async (values: any) => {
     // TODO: Remove this hardcoded value
@@ -291,11 +322,6 @@ export default function SignUp() {
         <SplashScreen />
       ) : (
         <ImageBackground source={background} style={styles.container}>
-          <KeyboardAvoidingView 
-            style={{ flex: 1 }}
-            behavior={Platform.OS === "ios" ? "padding" : undefined}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
-          >
             <Return href="/Onboarding" size={36} color="white" />
             <StatusBar
               translucent
@@ -692,7 +718,7 @@ export default function SignUp() {
                 </Formik>
               </ScrollView>
             </View>
-          </KeyboardAvoidingView>
+            <Animated.View style={fakeView} />
         </ImageBackground>
       )}
     </>

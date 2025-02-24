@@ -19,8 +19,10 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSMicrophoneUsageDescription": "This app needs access to microphone for voice commands",
-        "NSSpeechRecognitionUsageDescription": "This app needs access to speech recognition for voice commands"
-      }
+        "NSSpeechRecognitionUsageDescription": "This app needs access to speech recognition for voice commands",
+        "ExpoLocalization_supportsRTL": true
+      },
+      "bundleIdentifier": "com.qmaster.myapp"
     },
     "android": {
       "adaptiveIcon": {
