@@ -41,9 +41,21 @@ export default function EntitySidebar({
   );
 
   const adminMenuItems = [
-    { path: `/${entity}/admin/details`, label: "Details" },
-    { path: `/${entity}/admin/customer-feedback`, label: "Customer Feedback" },
-    { path: `/${entity}/admin/sharing-info`, label: "Sharing Info" },
+    {
+      path: `/${entity}/admin/details`,
+      label: "Details",
+      permission: "view_details",
+    },
+    {
+      path: `/${entity}/admin/customer-feedback`,
+      label: "Customer Feedback",
+      permission: "view_customer-feedback",
+    },
+    {
+      path: `/${entity}/admin/sharing-info`,
+      label: "Sharing Info",
+      permission: "view_sharing-info",
+    },
   ];
 
   const menuItems = [
@@ -53,7 +65,7 @@ export default function EntitySidebar({
       icon: FaCog,
       isDropdown: true,
       permission: "view_admin",
-      children: adminMenuItems,
+      children: adminMenuItems.filter((item) => hasPermission(item.permission)),
     },
     {
       path: `/${entity}/queues`,
@@ -191,6 +203,7 @@ export default function EntitySidebar({
                       >
                         {item.children?.map((child) => {
                           const isChildActive = pathname === child.path;
+                          if (!hasPermission(child.permission)) return null;
                           return (
                             <Link
                               key={child.path}
