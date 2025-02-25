@@ -16,6 +16,7 @@ import {
 } from "react-icons/fa";
 import Entity from "../../page";
 import { useLocation } from "@/ctx/LocationContext";
+import { withRoleProtection } from "@/lib/auth/withRoleProtection";
 
 const { TextArea } = Input;
 const { TabPane } = Tabs;
@@ -62,7 +63,7 @@ const initialValues: BusinessDetails = {
   category: "",
 };
 
-export default function Details() {
+function DetailsPage() {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
@@ -427,3 +428,5 @@ export default function Details() {
     </Entity>
   );
 }
+
+export default withRoleProtection(DetailsPage, "view_details");

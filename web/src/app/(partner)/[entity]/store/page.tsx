@@ -36,6 +36,7 @@ import {
 import * as Yup from "yup";
 import Entity from "../page";
 import Image from "next/image";
+import { withRoleProtection } from "@/lib/auth/withRoleProtection";
 
 const StoreStatus = {
   NOT_REQUESTED: "NOT_REQUESTED",
@@ -1829,7 +1830,7 @@ const StoreDashboardView = () => {
   );
 };
 
-export default function StorePage() {
+function StorePage() {
   const [storeStatus, setStoreStatus] = useState<StoreStatus>(
     StoreStatus.NOT_REQUESTED
   );
@@ -1865,10 +1866,10 @@ export default function StorePage() {
     //   setStoreStatus(StoreStatus.SETUP_PENDING);
     //   toast.success("Your store has been approved! Let&apos;s set it up.", {
     //     duration: 5000,
-        // style: {
-        //   background: "#17222D",
-        //   color: "#FFF",
-        // },
+    // style: {
+    //   background: "#17222D",
+    //   color: "#FFF",
+    // },
     //     duration: 4000,
     //   });
     // }, 2000);
@@ -1975,3 +1976,5 @@ export default function StorePage() {
     </Entity>
   );
 }
+
+export default withRoleProtection(StorePage, "view_store");
