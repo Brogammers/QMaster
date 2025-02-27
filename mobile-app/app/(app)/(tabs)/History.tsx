@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   useWindowDimensions,
+  ActivityIndicator,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { Skeleton } from "moti/skeleton";
@@ -40,6 +41,8 @@ export default function History() {
   const [isLoading, setIsLoading] = useState(true);
   const windowWidth = useWindowDimensions().width;
   const { isDarkMode } = useTheme();
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [itemsCount, setItemsCount] = useState<number | null>(null);
 
   const userId = useSelector((state: RootState) => state.userId.userId);
 
@@ -61,6 +64,9 @@ export default function History() {
           new Date(historyData.date).getTime() > checkDate.getTime()
         ) {
           setHistoryList(historyData.history);
+          setItemsCount(historyData.history.length);
+          setInitialLoading(false);
+          setIsLoading(false);
         } else {
           const token = await AsyncStorage.getItem("token");
 
@@ -122,6 +128,8 @@ export default function History() {
 
               let combinedHistory = [...historyEnqueue, ...historyDequeue];
               setHistoryList(combinedHistory);
+              setItemsCount(historyEnqueue.length + historyDequeue.length);
+              setInitialLoading(false);
               setIsLoading(false);
 
               const timeoutDate = new Date();
@@ -136,12 +144,15 @@ export default function History() {
                 console.log("History Data Saved");
               });
             } else {
+              setInitialLoading(false);
               setIsLoading(false);
             }
           });
         }
       } catch (error) {
         console.error(error);
+        setInitialLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -158,14 +169,21 @@ export default function History() {
           end={{ x: 0, y: 1 }}
         />
       )}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {isLoading ? (
+      {initialLoading ? (
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator
+            size="large"
+            color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+          />
+        </View>
+      ) : isLoading && itemsCount ? (
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View
             className={`flex flex-col items-center justify-center ${
               isDarkMode ? "bg-ocean-blue" : "bg-off-white"
             }`}
           >
-            {Array(8)
+            {Array(itemsCount)
               .fill(0)
               .map((_, index) => (
                 <React.Fragment key={index}>
@@ -179,29 +197,27 @@ export default function History() {
               ))}
             <View className="mb-5" />
           </View>
-        ) : historyList.length === 0 ? (
-          <View
-            className={`flex flex-col items-center justify-center h-screen ${
-              isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+        </ScrollView>
+      ) : historyList.length === 0 ? (
+        <View className="flex-1 items-center justify-center">
+          <Text
+            className={`text-lg font-bold ${
+              isDarkMode ? "text-baby-blue" : "text-coal-black"
             }`}
           >
-            <Text
-              className={`text-lg font-bold ${
-                isDarkMode ? "text-baby-blue" : "text-coal-black"
-              }`}
-            >
-              {i18n.t("noData")}
-            </Text>
-            <Text
-              className={`text-md ${
-                isDarkMode ? "text-baby-blue" : "text-coal-black"
-              }`}
-            >
-              {i18n.t("noDisplay")}
-            </Text>
-          </View>
-        ) : (
-          historyList.map((item, index) => (
+            {i18n.t("noData")}
+          </Text>
+          <Text
+            className={`text-md ${
+              isDarkMode ? "text-baby-blue" : "text-coal-black"
+            }`}
+          >
+            {i18n.t("noDisplay")}
+          </Text>
+        </View>
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {historyList.map((item, index) => (
             <HistoryComponent
               key={index}
               image={CarrefourLogo}
@@ -213,9 +229,9 @@ export default function History() {
               isHistory={item.isHistory}
               isDarkMode={isDarkMode}
             />
-          ))
-        )}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      )}
     </View>
   );
 }
