@@ -208,5 +208,15 @@
     "waitTime": "What's the wait time?",
     "busyness": "How busy is it?",
     "arrival": "When should I arrive?"
-  }
+  },
+  "permissions": {
+    "camera": "Allow $(PRODUCT_NAME) to access your camera",
+    "microphone": "Allow $(PRODUCT_NAME) to access your microphone"
+  },
+  "qrCodeScanned": "QR Code Scanned",
+  "qrCodeContent": "Content",
+  "done": "Done",
+  "scanAgain": "Scan Again",
+  "permissionRequired": "Camera Permission Required",
+  "ok": "OK"
 }
