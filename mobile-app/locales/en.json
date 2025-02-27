@@ -218,5 +218,8 @@
   "done": "Done",
   "scanAgain": "Scan Again",
   "permissionRequired": "Camera Permission Required",
-  "ok": "OK"
+  "ok": "OK",
+  "currentQueues": "Current Queues",
+  "position": "Position",
+  "minutes": "min"
 }

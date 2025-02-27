@@ -1,50 +1,78 @@
-import React from 'react';
-import { View, Text, useWindowDimensions } from 'react-native';
-import CurrentQueues from '@/shared/components/CurrentQueues';
-import { default as QueueCarousel } from 'react-native-reanimated-carousel';
-import { Current } from '@/constants';
-import { CurrentQueuesProps } from '@/types';
+import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import i18n from "@/i18n";
 
 interface CurrentQueuesListProps {
-  isDarkMode?: boolean;
+  queues: any[];
+  isDarkMode: boolean;
 }
 
-export default function CurrentQueuesList({ isDarkMode }: CurrentQueuesListProps) {
-  const windowWidth = useWindowDimensions().width;
-  const carouselWidth = windowWidth * 0.85; // 85% of the screen width
+type RootStackParamList = {
+  Partner: {
+    brandName: string;
+    currentLocation: string;
+  };
+};
 
-  const renderItem = ({ item, index }: { item: CurrentQueuesProps, index: number }) => (
-    <CurrentQueues
-      image={item.image}
-      name={item.name}
-      people={item.people}
-      time={item.time}
-      key={index}
-      isLeave
-      isCurrent
-      isDarkMode={isDarkMode}
-    />
-  );
+export default function CurrentQueuesList({
+  queues,
+  isDarkMode,
+}: CurrentQueuesListProps) {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const handleQueuePress = (queue: any) => {
+    navigation.navigate("Partner", {
+      brandName: queue.name,
+      currentLocation: queue.location,
+    });
+  };
 
   return (
-    <View>
-      <Text style={{ marginVertical: 10, fontSize: 24, fontWeight: 'bold' }}>Current Queues</Text>
-
-      {/* Here is proof that the merge works  */}
-      <QueueCarousel
-        loop={false}
-        width={carouselWidth}
-        height={166}
-        data={Current}
-        scrollAnimationDuration={1000}
-        renderItem={renderItem}
-        mode="parallax"
-        modeConfig={{
-          parallaxScrollingScale: 0.9,
-          parallaxScrollingOffset: 50,
-          parallaxAdjacentItemScale: 0.8,
-        }}
-      />
+    <View className="w-full mb-6">
+      <Text
+        className={`text-xl font-bold mb-4 ${
+          isDarkMode ? "text-white" : "text-coal-black"
+        }`}
+      >
+        {i18n.t("currentQueues")}
+      </Text>
+      {queues.map((queue, index) => (
+        <TouchableOpacity
+          key={index}
+          onPress={() => handleQueuePress(queue)}
+          className={`p-4 rounded-xl mb-3 ${
+            isDarkMode
+              ? "bg-[rgba(23,34,45,0.7)] border border-[rgba(29,205,254,0.25)]"
+              : "bg-white shadow-sm"
+          }`}
+        >
+          <Text
+            className={`text-lg font-semibold ${
+              isDarkMode ? "text-white" : "text-coal-black"
+            }`}
+          >
+            {queue.name}
+          </Text>
+          <Text
+            className={`text-sm ${
+              isDarkMode ? "text-baby-blue" : "text-ocean-blue"
+            }`}
+          >
+            {queue.serviceType}
+          </Text>
+          <View className="flex-row justify-between mt-2">
+            <Text className={isDarkMode ? "text-white" : "text-coal-black"}>
+              {i18n.t("position")}: {queue.position}
+            </Text>
+            <Text className={isDarkMode ? "text-white" : "text-coal-black"}>
+              ~{queue.estimatedTime} {i18n.t("minutes")}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 }

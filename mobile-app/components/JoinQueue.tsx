@@ -371,6 +371,7 @@ export default function JoinQueue() {
                 <QueueDetails
                   branch={currentLocation ?? -1}
                   serviceType={selectedQueue.name}
+                  brandName={brandName}
                 />
               )}
             </View>
