@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "QMaster",
+    "slug": "qmaster",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/qmaster-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -21,7 +21,8 @@
       "infoPlist": {
         "NSMicrophoneUsageDescription": "This app needs access to microphone for voice commands",
         "NSSpeechRecognitionUsageDescription": "This app needs access to speech recognition for voice commands",
-        "ExpoLocalization_supportsRTL": true
+        "ExpoLocalization_supportsRTL": true,
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera for scanning QR codes"
       }
     },
     "android": {
@@ -32,7 +33,8 @@
       "package": "com.qmaster.myapp",
       "permissions": [
         "android.permission.RECORD_AUDIO",
-        "android.permission.INTERNET"
+        "android.permission.INTERNET",
+        "android.permission.CAMERA"
       ]
     },
     "web": {
@@ -49,6 +51,14 @@
         {
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone for voice commands",
           "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to access speech recognition for voice commands"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": true
         }
       ]
     ],
