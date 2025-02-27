@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View, Dimensions, I18nManager } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  I18nManager,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import Logo from "@/assets/images/Logo.svg";
@@ -7,6 +13,7 @@ import QRCode from "@/assets/images/QrCode.svg";
 import ElipseBackground from "@/assets/images/ElipseBackground.svg";
 import { useLinkTo } from "@react-navigation/native";
 import i18n from "@/i18n";
+import { useCameraPermissions } from "expo-image-picker";
 
 const { width, height } = Dimensions.get("window");
 const twoFifth = (height * 38) / 100;
@@ -16,10 +23,22 @@ interface ScanQRProps {
 }
 
 export default function ScanQR({ isDarkMode }: ScanQRProps) {
+  const [permission, requestPermission] = useCameraPermissions();
   const linkTo = useLinkTo();
+
+  const isPermissionGranted = Boolean(permission?.granted);
 
   const handleNotificationsPress = () => {
     linkTo("/Notifications");
+  };
+
+  const handleScanPress = async () => {
+    if (!isPermissionGranted) {
+      await requestPermission();
+    }
+    if (isPermissionGranted) {
+      linkTo("/Scanner");
+    }
   };
 
   return (
@@ -59,7 +78,7 @@ export default function ScanQR({ isDarkMode }: ScanQRProps) {
           />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleScanPress}>
         <QRCode />
         <Text className="text-3xl text-white mt-2.5 font-semibold">
           {i18n.t("scan")}
