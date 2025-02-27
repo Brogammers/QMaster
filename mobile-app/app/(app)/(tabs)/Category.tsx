@@ -70,8 +70,11 @@ export default function Category() {
 
   return (
     <View className={`flex-1 ${isDarkMode ? "bg-slate-900" : "bg-off-white"}`}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="p-4">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <View className="p-4 flex-1">
           <Text
             className={`text-xl font-bold mb-4 ${
               isDarkMode ? "text-white" : "text-ocean-blue"
@@ -94,7 +97,7 @@ export default function Category() {
               />
             ))}
           {!loading && (error || current.length === 0) && (
-            <View className="items-center justify-center py-8">
+            <View className="flex-1 items-center justify-center">
               <Text
                 className={`text-lg text-center font-bold ${
                   isDarkMode ? "text-white" : "text-coal-black"
