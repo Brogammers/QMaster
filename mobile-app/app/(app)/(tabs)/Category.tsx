@@ -9,13 +9,14 @@ import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import i18n from "@/i18n";
+import { formatCategoryName } from "@/utils";
 
 const page = 1;
 const perPage = 5;
 
 export default function Category() {
   const { name } = useLocalSearchParams<{ name: string }>();
-  const categoryName = name;
+  const categoryName = formatCategoryName(name);
   const linkTo = useLinkTo();
   const { isDarkMode } = useTheme();
   const [current, setCurrent] = useState<CurrentQueuesProps[]>([]);

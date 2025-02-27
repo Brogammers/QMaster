@@ -39,3 +39,10 @@ export const getGreeting = (firstName?: string): string => {
 
   return firstName ? `${greeting}, ${capitalize(firstName)}!` : greeting;
 };
+
+export const formatCategoryName = (name: string) => {
+  return name
+    .replace(/([A-Z])/g, " $1")
+    .trim()
+    .replace(/\s+/g, " ");
+}
