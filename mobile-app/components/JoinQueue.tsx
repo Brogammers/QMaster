@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, createContext } from "react";
-import { View, ScrollView, Platform, Dimensions, Text } from "react-native";
+import { View, ScrollView, Platform, Dimensions, Text, StyleSheet } from "react-native";
 import { useTheme } from "@/ctx/ThemeContext";
 import DropDownPicker from "react-native-dropdown-picker";
 import QueueDetails from "./QueueDetails";
@@ -153,11 +153,10 @@ export default function JoinQueue() {
             >
               <View className="flex-row justify-center gap-3 my-1">
                 <View
-                  className={`p-2.5 rounded-full ${
-                    isDarkMode
-                      ? "bg-[rgba(29,205,254,0.1)] border border-[rgba(29,205,254,0.2)]"
-                      : "bg-white border border-[#E5E7EB] shadow-sm"
-                  }`}
+                  className={`p-2.5 rounded-full border-1 border-1`}
+                  style={[
+                    isDarkMode ? styles.darkContainer : styles.lightContainer,
+                  ]}
                 >
                   <FontAwesomeIcon
                     icon={faFacebook}
@@ -166,11 +165,10 @@ export default function JoinQueue() {
                   />
                 </View>
                 <View
-                  className={`p-2.5 rounded-full ${
-                    isDarkMode
-                      ? "bg-[rgba(29,205,254,0.1)] border border-[rgba(29,205,254,0.2)]"
-                      : "bg-white border border-[#E5E7EB] shadow-sm"
-                  }`}
+                  className={`p-2.5 rounded-full border-1`}
+                  style={[
+                    isDarkMode ? styles.darkContainer : styles.lightContainer,
+                  ]}
                 >
                   <FontAwesomeIcon
                     icon={faInstagram}
@@ -179,11 +177,10 @@ export default function JoinQueue() {
                   />
                 </View>
                 <View
-                  className={`p-2.5 rounded-full ${
-                    isDarkMode
-                      ? "bg-[rgba(29,205,254,0.1)] border border-[rgba(29,205,254,0.2)]"
-                      : "bg-white border border-[#E5E7EB] shadow-sm"
-                  }`}
+                  className={`p-2.5 rounded-full border-1`}
+                  style={[
+                    isDarkMode ? styles.darkContainer : styles.lightContainer,
+                  ]}
                 >
                   <FontAwesomeIcon
                     icon={faTwitter}
@@ -369,3 +366,15 @@ export default function JoinQueue() {
     </QueuesContext.Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  darkContainer: {
+    backgroundColor: "rgba(23, 34, 45, 0.7)",
+    borderColor: "rgba(29, 205, 254, 0.25)",
+  },
+  lightContainer: {
+    backgroundColor: "#FFF",
+    borderColor: "#1DCDFE",
+    color: "#1DCDFE",
+  },
+});
