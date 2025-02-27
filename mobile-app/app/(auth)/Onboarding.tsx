@@ -1,9 +1,9 @@
 import React from 'react';
-import { I18nManager, StatusBar, StyleSheet, View } from 'react-native';
+import { I18nManager, StatusBar, StyleSheet, View, Text } from 'react-native';
 import { Link } from 'expo-router';
 import Carousel from '@/shared/components/Carousel';
 import TextButton from '@/shared/components/TextButton';
-import QLogo from '@/assets/images/logoImage.svg';
+import Logo from "@/assets/images/Logo.svg";
 import Return from '@/shared/components/Return';
 import i18n from '@/i18n';
 
@@ -18,7 +18,15 @@ export default function Onboarding() {
       />
       <View style={styles.row} className='bg-transparent'>
         <View className='my-4' />
-        <QLogo />
+        <View className="flex flex-row justify-center items-center">
+          <Logo width={60} height={60} />
+          <Text
+            className="ml-1 text-3xl text-white"
+            style={{ fontFamily: "JostBold" }}
+          >
+            QMaster
+          </Text>
+        </View>
         <Carousel />
         <View className='mt-10'>
           <Link href='/Login'>
