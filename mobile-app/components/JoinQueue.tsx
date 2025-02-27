@@ -1,5 +1,14 @@
 import React, { useState, useContext, useEffect, createContext } from "react";
-import { View, ScrollView, Platform, Dimensions, Text, StyleSheet } from "react-native";
+import {
+  View,
+  ScrollView,
+  Platform,
+  Dimensions,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { useTheme } from "@/ctx/ThemeContext";
 import DropDownPicker from "react-native-dropdown-picker";
 import QueueDetails from "./QueueDetails";
@@ -16,6 +25,8 @@ import {
   faFacebook,
   faInstagram,
   faTwitter,
+  faXTwitter,
+  faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
 
 export interface Queue {
@@ -36,6 +47,29 @@ export const QueuesContext = createContext<{
   setQueues: () => {},
   setSelectedQueue: () => {},
 });
+
+const companySocialMediaLinks = [
+  {
+    icon: faFacebook,
+    handle: "h4temsoliman",
+    url: "https://facebook.com/h4temsoliman",
+  },
+  {
+    icon: faInstagram,
+    handle: "hatemyasser03",
+    url: "https://instagram.com/hatemyasser03",
+  },
+  {
+    icon: faXTwitter,
+    handle: "h4temsoliman",
+    url: "https://x.com/h4temsoliman",
+  },
+  {
+    icon: faLinkedin,
+    handle: "qmasterapp",
+    url: "https://linkedin.com/company/qmasterapp",
+  },
+];
 
 export default function JoinQueue() {
   const { isDarkMode } = useTheme();
@@ -152,42 +186,22 @@ export default function JoinQueue() {
               }}
             >
               <View className="flex-row justify-center gap-3 my-1">
-                <View
-                  className={`p-2.5 rounded-full border-1 border-1`}
-                  style={[
-                    isDarkMode ? styles.darkContainer : styles.lightContainer,
-                  ]}
-                >
-                  <FontAwesomeIcon
-                    icon={faFacebook}
-                    size={20}
-                    color={isDarkMode ? "#1DCDFE" : "#0077B6"}
-                  />
-                </View>
-                <View
-                  className={`p-2.5 rounded-full border-1`}
-                  style={[
-                    isDarkMode ? styles.darkContainer : styles.lightContainer,
-                  ]}
-                >
-                  <FontAwesomeIcon
-                    icon={faInstagram}
-                    size={20}
-                    color={isDarkMode ? "#1DCDFE" : "#0077B6"}
-                  />
-                </View>
-                <View
-                  className={`p-2.5 rounded-full border-1`}
-                  style={[
-                    isDarkMode ? styles.darkContainer : styles.lightContainer,
-                  ]}
-                >
-                  <FontAwesomeIcon
-                    icon={faTwitter}
-                    size={20}
-                    color={isDarkMode ? "#1DCDFE" : "#0077B6"}
-                  />
-                </View>
+                {companySocialMediaLinks.map((social, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => Linking.openURL(social.url)}
+                    className={`p-2.5 rounded-full border-1`}
+                    style={[
+                      isDarkMode ? styles.darkContainer : styles.lightContainer,
+                    ]}
+                  >
+                    <FontAwesomeIcon
+                      icon={social.icon}
+                      size={20}
+                      color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+                    />
+                  </TouchableOpacity>
+                ))}
               </View>
               <DropDownPicker
                 open={open}
