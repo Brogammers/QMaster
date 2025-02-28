@@ -326,7 +326,6 @@ export default function CurrentQueuesList() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    marginBottom: 24,
   },
   carouselContainer: {
     width: "100%",
