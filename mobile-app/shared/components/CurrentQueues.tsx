@@ -58,7 +58,7 @@ export default function CurrentQueues(props: CurrentQueuesProps) {
             </Text>
             <View>
               <Text className='text-off-white text-sm font-medium'>
-                {String(people)} people remaining
+                {String(people)} {people === 1 ? "person" : "people"} remaining
               </Text>
               <Text className='text-off-white text-xs'>
                 ~{String(time)} min

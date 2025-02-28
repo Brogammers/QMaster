@@ -77,6 +77,36 @@ export default function QueueDetails(props: QueueDetailsProps) {
     });
   }, [branch, serviceType]);
 
+  // Add effect to update queue size
+  useEffect(() => {
+    const updateQueueSize = async () => {
+      try {
+        const token = await AsyncStorage.getItem("TOKEN_KEY");
+        const url = configConverter("EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE");
+        const response = await axios.get(`${url}?queueName=${serviceType}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          setSelectedQueue((prev) => {
+            if (!prev) return prev;
+            return {
+              ...prev,
+              currentQueueSize: response.data.position || prev.currentQueueSize,
+            };
+          });
+        }
+      } catch (error) {
+        console.error("Error updating queue size:", error);
+      }
+    };
+
+    // Update on mount and when leave status changes
+    updateQueueSize();
+  }, [serviceType, leave]);
+
   const handleJoinQueue = async () => {
     const session = await AsyncStorage.getItem("TOKEN_KEY");
     const url = configConverter("EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE");
@@ -289,9 +319,13 @@ export default function QueueDetails(props: QueueDetailsProps) {
                 isDarkMode ? "text-baby-blue" : "text-lava-black"
               }`}
             >
-              {i18n.t("common.queue.peopleCount", {
-                count: selectedQueue!?.currentQueueSize,
-              })}
+              {selectedQueue?.currentQueueSize === 1
+                ? i18n.t("common.queue.peopleCountSingular", {
+                    count: selectedQueue?.currentQueueSize,
+                  })
+                : i18n.t("common.queue.peopleCount", {
+                    count: selectedQueue?.currentQueueSize,
+                  })}
             </Text>
             <View
               className="flex-row items-center mt-3 bg-opacity-10 rounded-full px-3 py-1.5"
@@ -352,9 +386,13 @@ export default function QueueDetails(props: QueueDetailsProps) {
                     isDarkMode ? "text-baby-blue" : "text-lava-black"
                   }`}
                 >
-                  {i18n.t("common.queue.peopleCount", {
-                    count: selectedQueue!?.currentQueueSize,
-                  })}
+                  {selectedQueue?.currentQueueSize === 1
+                    ? i18n.t("common.queue.peopleCountSingular", {
+                        count: selectedQueue?.currentQueueSize,
+                      })
+                    : i18n.t("common.queue.peopleCount", {
+                        count: selectedQueue?.currentQueueSize,
+                      })}
                 </Text>
                 <View
                   className="flex-row items-center mt-3 bg-opacity-10 rounded-full px-3 py-1.5"
