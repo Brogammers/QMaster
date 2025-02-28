@@ -27,6 +27,7 @@ public class AdminUserSerializer extends StdSerializer<AdminUser> {
         gen.writeStringField("location", value.getLocation());
         gen.writeBooleanField("enabled", value.isEnabled());
         gen.writeStringField("userRole", value.getUserRole().toString());
+        gen.writeStringField("lastActive", value.getLastActive());
         gen.writeEndObject();
     }
 
