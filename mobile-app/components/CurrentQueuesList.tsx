@@ -17,7 +17,7 @@ import { faClock, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "@/ctx/ThemeContext";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
-import { removeFromQueue } from "@/app/redux/queueSlice";
+import { removeFromQueue, setActiveQueue } from "@/app/redux/queueSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import configConverter from "@/api/configConverter";
@@ -63,11 +63,9 @@ export default function CurrentQueuesList() {
           style: "destructive",
           onPress: async () => {
             try {
-              // Get the queue details before removing
               const queue = queues.find((q) => q.id === queueId);
               if (!queue) return;
 
-              // Call the leave queue API
               const session = await AsyncStorage.getItem("TOKEN_KEY");
               const url = configConverter(
                 "EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE"
@@ -84,10 +82,9 @@ export default function CurrentQueuesList() {
               );
 
               if (response.status === 200) {
-                // Remove from Redux store
                 dispatch(removeFromQueue(queueId));
+                dispatch(setActiveQueue(null));
 
-                // Update AsyncStorage
                 const existingQueues = await AsyncStorage.getItem(
                   "currentQueues"
                 );
@@ -102,7 +99,6 @@ export default function CurrentQueuesList() {
                   );
                 }
 
-                // Notify JoinQueue component to refresh its state
                 refreshQueueStatus();
               }
             } catch (error) {

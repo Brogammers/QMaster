@@ -13,10 +13,12 @@ export interface QueueItem {
 
 interface QueueState {
   currentQueues: QueueItem[];
+  activeQueue: QueueItem | null;
 }
 
 const initialState: QueueState = {
   currentQueues: [],
+  activeQueue: null,
 };
 
 export const queueSlice = createSlice({
@@ -60,7 +62,10 @@ export const queueSlice = createSlice({
     },
     clearAllQueues: (state) => {
       state.currentQueues = [];
-    }
+    },
+    setActiveQueue: (state, action: PayloadAction<QueueItem | null>) => {
+      state.activeQueue = action.payload;
+    },
   },
 });
 
@@ -69,7 +74,8 @@ export const {
   addToQueue,
   removeFromQueue,
   updateQueuePosition,
-  clearAllQueues
+  clearAllQueues,
+  setActiveQueue,
 } = queueSlice.actions;
 
 export default queueSlice.reducer;

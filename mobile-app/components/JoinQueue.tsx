@@ -29,6 +29,9 @@ import {
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import { setActiveQueue } from "@/app/redux/queueSlice";
 
 export interface Queue {
   id: number;
@@ -131,6 +134,10 @@ export default function JoinQueue() {
     },
   });
   const [leave, setLeave] = useState(false);
+  const dispatch = useDispatch();
+  const activeQueue = useSelector(
+    (state: RootState) => state.queue.activeQueue
+  );
 
   const handleSelectService = (service: ServiceProps | null) => {
     if (!service) {
@@ -172,6 +179,44 @@ export default function JoinQueue() {
         console.log("Error: ", (error as AxiosError).response?.data);
       });
   }, [brandName, currentLocation]);
+
+  useEffect(() => {
+    if (selectedQueue) {
+      const matchingQueue = queues.find((q) => q.name === selectedQueue.name);
+      if (matchingQueue) {
+        dispatch(setActiveQueue(matchingQueue));
+      } else {
+        dispatch(setActiveQueue(null));
+      }
+    }
+  }, [selectedQueue, queues]);
+
+  useEffect(() => {
+    if (!currentLocation || !selectedQueue) return;
+
+    AsyncStorage.getItem("TOKEN_KEY").then((token) => {
+      const url = configConverter("EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE");
+      axios
+        .get(`${url}?queueName=${selectedQueue.name}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setLeave(response.data.isPresent);
+            if (!response.data.isPresent) {
+              setSelectedQueue(null);
+              dispatch(setActiveQueue(null));
+            }
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          setLeave(false);
+        });
+    });
+  }, [currentLocation, selectedQueue]);
 
   const refreshQueueStatus = () => {
     if (!currentLocation || !selectedQueue) return;

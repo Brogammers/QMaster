@@ -13,8 +13,9 @@ import { MotiView } from "moti";
 import React, { useContext, useEffect, useState } from "react";
 import { Alert, Dimensions, Text, TouchableOpacity, View } from "react-native";
 import { QueuesContext } from "./JoinQueue";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToQueue, removeFromQueue } from "@/app/redux/queueSlice";
+import { RootState } from "@/app/redux/store";
 
 interface QueueData {
   id: number;
@@ -37,6 +38,17 @@ export default function QueueDetails(props: QueueDetailsProps) {
   const { isDarkMode } = useTheme();
   const { selectedQueue, setSelectedQueue } = useContext(QueuesContext);
   const dispatch = useDispatch();
+  const activeQueue = useSelector(
+    (state: RootState) => state.queue.activeQueue
+  );
+
+  useEffect(() => {
+    if (activeQueue?.serviceType === serviceType) {
+      setLeave(true);
+    } else {
+      setLeave(false);
+    }
+  }, [activeQueue, serviceType]);
 
   useEffect(() => {
     AsyncStorage.getItem("TOKEN_KEY").then((token) => {
