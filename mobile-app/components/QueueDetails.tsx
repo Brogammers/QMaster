@@ -13,6 +13,8 @@ import { MotiView } from "moti";
 import React, { useContext, useEffect, useState } from "react";
 import { Alert, Dimensions, Text, TouchableOpacity, View } from "react-native";
 import { QueuesContext } from "./JoinQueue";
+import { useDispatch } from "react-redux";
+import { addToQueue, removeFromQueue } from "@/app/redux/queueSlice";
 
 interface QueueData {
   id: number;
@@ -34,6 +36,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
   const { branch, serviceType, brandName } = props;
   const { isDarkMode } = useTheme();
   const { selectedQueue, setSelectedQueue } = useContext(QueuesContext);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     AsyncStorage.getItem("TOKEN_KEY").then((token) => {
@@ -79,6 +82,19 @@ export default function QueueDetails(props: QueueDetailsProps) {
         if (response.status === 200) {
           setLeave(true);
           setShowDetails(false);
+
+          // Dispatch action to add to Redux store
+          dispatch(
+            addToQueue({
+              id: response.data.id,
+              name: brandName || "Unknown",
+              serviceType: serviceType,
+              position: response.data.position,
+              estimatedTime: response.data.estimatedTime,
+              location: branch.toString(),
+            })
+          );
+
           setTimeout(() => {
             setShowDetails(true);
             setSelectedQueue((prev) => {
@@ -143,6 +159,8 @@ export default function QueueDetails(props: QueueDetailsProps) {
         .then((response) => {
           if (response.status === 200) {
             setLeave(false);
+            // Dispatch action to remove from Redux store
+            dispatch(removeFromQueue(response.data.id));
             removeFromCurrentQueues();
           } else {
             throw new Error("Failed to leave the queue");

@@ -8,7 +8,6 @@ import {
   ScrollView,
   useWindowDimensions,
   Text,
-  TouchableOpacity,
 } from "react-native";
 import ScanQr from "@/components/ScanQR";
 import SearchBar from "@/components/SearchBar";
@@ -21,10 +20,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Skeleton } from "moti/skeleton";
 import { useTheme } from "@/ctx/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { useSia } from "@/ctx/SiaContext";
-import { SiaButton } from "@/components/SiaButton";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import { setCurrentQueues } from "@/app/redux/queueSlice";
 
 export default function Index() {
   const { isDarkMode } = useTheme();
@@ -33,23 +33,28 @@ export default function Index() {
   const scanQrRef = useRef<View>(null);
   const [scanQrHeight, setScanQrHeight] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentQueues, setCurrentQueues] = useState<any[]>([]);
   const [recentQueues, setRecentQueues] = useState<number>(0);
   const windowWidth = useWindowDimensions().width;
   const { showSia } = useSia();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  // Get current queues from Redux
+  const currentQueues = useSelector(
+    (state: RootState) => state.queue.currentQueues
+  );
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch current queues
+        // Get current queues from AsyncStorage and update Redux
         const currentQueuesData = await AsyncStorage.getItem("currentQueues");
         if (currentQueuesData) {
           const parsedQueues = JSON.parse(currentQueuesData);
-          setCurrentQueues(parsedQueues);
+          dispatch(setCurrentQueues(parsedQueues));
         }
 
-        // Fetch history data
+        // Get history data
         const historyData = await AsyncStorage.getItem("historyData");
         if (historyData) {
           const parsedData = JSON.parse(historyData);
@@ -65,14 +70,10 @@ export default function Index() {
 
     fetchData();
 
-    // Add interval to check for updates every 5 seconds
-    const interval = setInterval(fetchData, 5000);
-
     // Add listener for when the screen comes into focus
     const unsubscribe = navigation.addListener("focus", fetchData);
 
     return () => {
-      clearInterval(interval);
       unsubscribe();
     };
   }, []);
@@ -180,10 +181,7 @@ export default function Index() {
                 <View className="mb-5" />
               </View>
             ) : currentQueues.length > 0 ? (
-              <CurrentQueuesList
-                queues={currentQueues}
-                isDarkMode={isDarkMode}
-              />
+              <CurrentQueuesList />
             ) : (
               <PromoCard width={"100%"} />
             )}
@@ -193,12 +191,6 @@ export default function Index() {
           </View>
         </View>
       </ScrollView>
-
-      {/* Sia Button */}
-      {/* <SiaButton 
-        style={styles.siaButtonPosition}
-        showText={false}
-      /> */}
     </SafeAreaView>
   );
 }
@@ -212,29 +204,5 @@ const styles = StyleSheet.create({
           ? StatusBar.currentHeight - 1
           : 0
         : 0,
-  },
-  siaButtonPosition: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-  },
-  siaButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 15,
-    borderRadius: 12,
-    gap: 10,
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  siaText: {
-    fontSize: 16,
-    fontWeight: "600",
   },
 });

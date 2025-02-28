@@ -1,26 +1,22 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, useWindowDimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import i18n from '@/i18n';
-import Carousel from 'react-native-reanimated-carousel';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faClock, faUser } from '@fortawesome/free-solid-svg-icons';
-import { useTheme } from '@/ctx/ThemeContext';
-
-interface QueueItem {
-  id: number;
-  name: string;
-  serviceType: string;
-  position: number;
-  estimatedTime: number;
-  image?: string;
-  location: string;
-}
-
-interface CurrentQueuesListProps {
-  queues: QueueItem[];
-}
+import React from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import i18n from "@/i18n";
+import Carousel from "react-native-reanimated-carousel";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faClock, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useTheme } from "@/ctx/ThemeContext";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import { removeFromQueue } from "@/app/redux/queueSlice";
 
 type RootStackParamList = {
   Partner: {
@@ -29,26 +25,29 @@ type RootStackParamList = {
   };
 };
 
-export default function CurrentQueuesList({ queues }: CurrentQueuesListProps) {
+export default function CurrentQueuesList() {
   const { isDarkMode } = useTheme();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { width: windowWidth } = useWindowDimensions();
   const carouselWidth = windowWidth * 0.85; // 85% of screen width
 
-  const handleQueuePress = (queue: QueueItem) => {
-    navigation.navigate('Partner', {
+  const dispatch = useDispatch();
+  const queues = useSelector((state: RootState) => state.queue.currentQueues);
+
+  const handleQueuePress = (queue: (typeof queues)[0]) => {
+    navigation.navigate("Partner", {
       brandName: queue.name,
       currentLocation: queue.location,
     });
   };
 
   const handleLeaveQueue = (queueId: number) => {
-    // Implement leave queue functionality here
-    console.log(`Leaving queue ${queueId}`);
-    // You would typically call an API here and then update state
+    // Remove from Redux store
+    dispatch(removeFromQueue(queueId));
   };
 
-  const renderItem = ({ item }: { item: QueueItem }) => (
+  const renderItem = ({ item }: { item: (typeof queues)[0] }) => (
     <TouchableOpacity
       onPress={() => handleQueuePress(item)}
       style={[
@@ -60,88 +59,88 @@ export default function CurrentQueuesList({ queues }: CurrentQueuesListProps) {
         {item.image ? (
           <Image source={{ uri: item.image }} style={styles.image} />
         ) : (
-          <View 
+          <View
             style={[
-              styles.imagePlaceholder, 
-              { backgroundColor: isDarkMode ? 'rgba(29, 205, 254, 0.2)' : '#E5F7FF' }
+              styles.imagePlaceholder,
+              {
+                backgroundColor: isDarkMode
+                  ? "rgba(29, 205, 254, 0.2)"
+                  : "#E5F7FF",
+              },
             ]}
           >
-            <Text 
+            <Text
               style={[
                 styles.placeholderText,
-                { color: isDarkMode ? '#1DCDFE' : '#0077B6' }
+                { color: isDarkMode ? "#1DCDFE" : "#0077B6" },
               ]}
             >
-              {/* {item.name.charAt(0)} */}
-              asd
+              {item.name ? item.name.charAt(0).toUpperCase() : "?"}
             </Text>
           </View>
         )}
       </View>
-      
+
       <View style={styles.contentContainer}>
         <View style={styles.headerContainer}>
-          <Text 
+          <Text
             style={[
               styles.titleText,
-              { color: isDarkMode ? 'white' : '#17222D' }
+              { color: isDarkMode ? "white" : "#17222D" },
             ]}
           >
             {item.name}
           </Text>
-          <Text 
+          <Text
             style={[
               styles.subtitleText,
-              { color: isDarkMode ? '#1DCDFE' : '#0077B6' }
+              { color: isDarkMode ? "#1DCDFE" : "#0077B6" },
             ]}
           >
             {item.serviceType}
           </Text>
         </View>
-        
+
         <View style={styles.detailsContainer}>
           <View style={styles.detailRow}>
-            <FontAwesomeIcon 
-              icon={faUser} 
-              size={14} 
-              color={isDarkMode ? '#1DCDFE' : '#0077B6'} 
+            <FontAwesomeIcon
+              icon={faUser}
+              size={14}
+              color={isDarkMode ? "#1DCDFE" : "#0077B6"}
             />
-            <Text 
+            <Text
               style={[
                 styles.detailText,
-                { color: isDarkMode ? 'white' : '#17222D' }
+                { color: isDarkMode ? "white" : "#17222D" },
               ]}
             >
-              {i18n.t('position')}: {item.position}
+              {i18n.t("position")}: {item.position}
             </Text>
           </View>
-          
+
           <View style={styles.detailRow}>
-            <FontAwesomeIcon 
-              icon={faClock} 
-              size={14} 
-              color={isDarkMode ? '#1DCDFE' : '#0077B6'} 
+            <FontAwesomeIcon
+              icon={faClock}
+              size={14}
+              color={isDarkMode ? "#1DCDFE" : "#0077B6"}
             />
-            <Text 
+            <Text
               style={[
                 styles.detailText,
-                { color: isDarkMode ? 'white' : '#17222D' }
+                { color: isDarkMode ? "white" : "#17222D" },
               ]}
             >
-              ~{item.estimatedTime} {i18n.t('minutes')}
+              ~{item.estimatedTime} {i18n.t("minutes")}
             </Text>
           </View>
         </View>
-        
+
         <TouchableOpacity
-          style={[
-            styles.leaveButton,
-            { backgroundColor: '#D84315' }
-          ]}
+          style={[styles.leaveButton, { backgroundColor: "#D84315" }]}
           onPress={() => handleLeaveQueue(item.id)}
         >
           <Text style={styles.leaveButtonText}>
-            {i18n.t('common.queue.leave')}
+            {i18n.t("common.queue.leave")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -150,15 +149,15 @@ export default function CurrentQueuesList({ queues }: CurrentQueuesListProps) {
 
   return (
     <View style={styles.container}>
-      <Text 
+      <Text
         style={[
           styles.sectionTitle,
-          { color: isDarkMode ? 'white' : '#17222D' }
+          { color: isDarkMode ? "white" : "#17222D" },
         ]}
       >
-        {i18n.t('currentQueues')}
+        {i18n.t("currentQueues")}
       </Text>
-      
+
       {queues.length > 0 ? (
         <Carousel
           loop={false}
@@ -176,21 +175,25 @@ export default function CurrentQueuesList({ queues }: CurrentQueuesListProps) {
         />
       ) : (
         <View style={styles.emptyContainer}>
-          <Text 
+          <Text
             style={[
               styles.emptyText,
-              { color: isDarkMode ? '#1DCDFE' : '#0077B6' }
+              { color: isDarkMode ? "#1DCDFE" : "#0077B6" },
             ]}
           >
-            {i18n.t('noData')}
+            {i18n.t("noData")}
           </Text>
-          <Text 
+          <Text
             style={[
               styles.emptySubtext,
-              { color: isDarkMode ? 'rgba(255,255,255,0.7)' : 'rgba(23,34,45,0.7)' }
+              {
+                color: isDarkMode
+                  ? "rgba(255,255,255,0.7)"
+                  : "rgba(23,34,45,0.7)",
+              },
             ]}
           >
-            {i18n.t('noDisplay')}
+            {i18n.t("noDisplay")}
           </Text>
         </View>
       )}
@@ -200,68 +203,68 @@ export default function CurrentQueuesList({ queues }: CurrentQueuesListProps) {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: "100%",
     marginBottom: 24,
-    alignItems: 'center',
+    alignItems: "center",
   },
   sectionTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginVertical: 16,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     paddingHorizontal: 20,
   },
   queueCard: {
     height: 160,
     borderRadius: 16,
-    overflow: 'hidden',
-    flexDirection: 'row',
+    overflow: "hidden",
+    flexDirection: "row",
   },
   darkCard: {
-    backgroundColor: 'rgba(23,34,45,0.7)',
+    backgroundColor: "rgba(23,34,45,0.7)",
     borderWidth: 1,
-    borderColor: 'rgba(29,205,254,0.25)',
+    borderColor: "rgba(29,205,254,0.25)",
   },
   lightCard: {
-    backgroundColor: 'white',
-    shadowColor: '#000',
+    backgroundColor: "white",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
   imageContainer: {
-    width: '40%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "40%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   image: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
   imagePlaceholder: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   placeholderText: {
     fontSize: 48,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   contentContainer: {
-    width: '60%',
+    width: "60%",
     padding: 16,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   headerContainer: {
     marginBottom: 8,
   },
   titleText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   subtitleText: {
     fontSize: 14,
@@ -271,8 +274,8 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   detailRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 2,
   },
   detailText: {
@@ -283,28 +286,28 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 8,
   },
   leaveButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   emptyContainer: {
     height: 160,
-    width: '85%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "85%",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 16,
-    backgroundColor: 'rgba(0,0,0,0.05)',
+    backgroundColor: "rgba(0,0,0,0.05)",
   },
   emptyText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   emptySubtext: {
     fontSize: 14,
     marginTop: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
