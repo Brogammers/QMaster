@@ -283,7 +283,7 @@ export default function CurrentQueuesList() {
           <Carousel
             loop={false}
             width={carouselWidth}
-            height={166}
+            height={176}
             data={queues}
             scrollAnimationDuration={1000}
             renderItem={renderItem}
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   queueCard: {
-    height: 160,
+    height: 170,
     borderRadius: 16,
     overflow: "hidden",
     flexDirection: "row",
@@ -382,6 +382,7 @@ const styles = StyleSheet.create({
     width: "60%",
     padding: 16,
     justifyContent: "space-between",
+    paddingBottom: 12,
   },
   headerContainer: {
     marginBottom: 8,
@@ -411,14 +412,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 8,
+    marginTop: 4,
   },
   leaveButtonText: {
     color: "white",
     fontWeight: "bold",
   },
   emptyContainer: {
-    height: 160,
+    height: 170,
     width: "85%",
     justifyContent: "center",
     alignItems: "center",
