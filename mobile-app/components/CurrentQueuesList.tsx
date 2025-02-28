@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   useWindowDimensions,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -17,6 +18,10 @@ import { useTheme } from "@/ctx/ThemeContext";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { removeFromQueue } from "@/app/redux/queueSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import configConverter from "@/api/configConverter";
+import { QueueStatusContext } from "./JoinQueue";
 
 type RootStackParamList = {
   Partner: {
@@ -34,6 +39,7 @@ export default function CurrentQueuesList() {
 
   const dispatch = useDispatch();
   const queues = useSelector((state: RootState) => state.queue.currentQueues);
+  const { refreshQueueStatus } = useContext(QueueStatusContext);
 
   const handleQueuePress = (queue: (typeof queues)[0]) => {
     navigation.navigate("Partner", {
@@ -42,9 +48,73 @@ export default function CurrentQueuesList() {
     });
   };
 
-  const handleLeaveQueue = (queueId: number) => {
-    // Remove from Redux store
-    dispatch(removeFromQueue(queueId));
+  const handleLeaveQueue = async (queueId: number) => {
+    Alert.alert(
+      i18n.t("common.queue.leaveConfirm.title"),
+      i18n.t("common.queue.leaveConfirm.message"),
+      [
+        {
+          text: i18n.t("common.queue.leaveConfirm.cancel"),
+          style: "default",
+          isPreferred: true,
+        },
+        {
+          text: i18n.t("common.queue.leaveConfirm.confirm"),
+          style: "destructive",
+          onPress: async () => {
+            try {
+              // Get the queue details before removing
+              const queue = queues.find((q) => q.id === queueId);
+              if (!queue) return;
+
+              // Call the leave queue API
+              const session = await AsyncStorage.getItem("TOKEN_KEY");
+              const url = configConverter(
+                "EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE"
+              );
+
+              const response = await axios.put(
+                `${url}?queueName=${queue.serviceType}&leave=true`,
+                {},
+                {
+                  headers: {
+                    Authorization: `Bearer ${session}`,
+                  },
+                }
+              );
+
+              if (response.status === 200) {
+                // Remove from Redux store
+                dispatch(removeFromQueue(queueId));
+
+                // Update AsyncStorage
+                const existingQueues = await AsyncStorage.getItem(
+                  "currentQueues"
+                );
+                if (existingQueues) {
+                  const currentQueues = JSON.parse(existingQueues);
+                  const updatedQueues = currentQueues.filter(
+                    (q: any) => q.id !== queueId
+                  );
+                  await AsyncStorage.setItem(
+                    "currentQueues",
+                    JSON.stringify(updatedQueues)
+                  );
+                }
+
+                // Notify JoinQueue component to refresh its state
+                refreshQueueStatus();
+              }
+            } catch (error) {
+              console.error("Error leaving queue:", error);
+            }
+          },
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
   };
 
   const renderItem = ({ item }: { item: (typeof queues)[0] }) => (
