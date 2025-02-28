@@ -6,8 +6,9 @@ export interface QueueItem {
   serviceType: string;
   position: number;
   estimatedTime: number;
-  image?: string;
   location: string;
+  timestamp: string;
+  image?: string;
 }
 
 interface QueueState {
@@ -30,7 +31,7 @@ export const queueSlice = createSlice({
       const existingQueueIndex = state.currentQueues.findIndex(
         queue => queue.id === action.payload.id
       );
-      
+
       if (existingQueueIndex >= 0) {
         // Update existing queue
         state.currentQueues[existingQueueIndex] = action.payload;
@@ -51,7 +52,7 @@ export const queueSlice = createSlice({
       const queueIndex = state.currentQueues.findIndex(
         queue => queue.id === action.payload.id
       );
-      
+
       if (queueIndex >= 0) {
         state.currentQueues[queueIndex].position = action.payload.position;
         state.currentQueues[queueIndex].estimatedTime = action.payload.estimatedTime;

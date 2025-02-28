@@ -25,6 +25,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { setCurrentQueues } from "@/app/redux/queueSlice";
+import axios from "axios";
+import configConverter from "@/api/configConverter";
 
 export default function Index() {
   const { isDarkMode } = useTheme();
@@ -47,11 +49,47 @@ export default function Index() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Get current queues from AsyncStorage and update Redux
+        // Get current queues from AsyncStorage
         const currentQueuesData = await AsyncStorage.getItem("currentQueues");
+
         if (currentQueuesData) {
           const parsedQueues = JSON.parse(currentQueuesData);
-          dispatch(setCurrentQueues(parsedQueues));
+
+          // Verify each queue's status with the backend
+          const token = await AsyncStorage.getItem("TOKEN_KEY");
+          const verifiedQueues = [];
+
+          for (const queue of parsedQueues) {
+            try {
+              const url = configConverter(
+                "EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE"
+              );
+              const response = await axios.get(
+                `${url}?queueName=${queue.serviceType}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+
+              if (response.status === 200 && response.data.isPresent) {
+                verifiedQueues.push(queue);
+              }
+            } catch (error) {
+              console.error(
+                `Error verifying queue ${queue.serviceType}:`,
+                error
+              );
+            }
+          }
+
+          // Update both AsyncStorage and Redux with verified queues
+          await AsyncStorage.setItem(
+            "currentQueues",
+            JSON.stringify(verifiedQueues)
+          );
+          dispatch(setCurrentQueues(verifiedQueues));
         }
 
         // Get history data
