@@ -320,7 +320,9 @@ export default function QueueDetails(props: QueueDetailsProps) {
               }`}
             >
               {selectedQueue?.currentQueueSize === 1
-                ? i18n.t("common.queue.peopleCountSingular")
+                ? i18n.t("common.queue.peopleCountSingular", {
+                    count: selectedQueue?.currentQueueSize,
+                  })
                 : i18n.t("common.queue.peopleCount", {
                     count: selectedQueue?.currentQueueSize,
                   })}
@@ -385,7 +387,9 @@ export default function QueueDetails(props: QueueDetailsProps) {
                   }`}
                 >
                   {selectedQueue?.currentQueueSize === 1
-                    ? i18n.t("common.queue.personCount")
+                    ? i18n.t("common.queue.peopleCountSingular", {
+                        count: selectedQueue?.currentQueueSize,
+                      })
                     : i18n.t("common.queue.peopleCount", {
                         count: selectedQueue?.currentQueueSize,
                       })}
