@@ -46,6 +46,117 @@ export default function CurrentQueuesList() {
   const queues = useSelector((state: RootState) => state.queue.currentQueues);
   const { refreshQueueStatus } = useContext(QueueStatusContext);
 
+  const styles = StyleSheet.create({
+    container: {
+      width: "100%",
+      marginBottom: 24,
+    },
+    sectionTitle: {
+      fontSize: 24,
+      fontWeight: "bold",
+      marginVertical: 16,
+      paddingHorizontal: 20,
+    },
+    queueCard: {
+      width: carouselWidth,
+      minHeight: 120,
+      borderRadius: 16,
+      overflow: "hidden",
+      flexDirection: "row",
+      backgroundColor: "white",
+    },
+    darkCard: {
+      backgroundColor: "rgba(23,34,45,0.7)",
+      borderWidth: 1,
+      borderColor: "rgba(29,205,254,0.25)",
+    },
+    lightCard: {
+      backgroundColor: "white",
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+    },
+    imageContainer: {
+      width: "40%",
+      aspectRatio: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    image: {
+      width: "100%",
+      height: "100%",
+      resizeMode: "cover",
+    },
+    imagePlaceholder: {
+      width: "100%",
+      height: "100%",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    placeholderText: {
+      fontSize: 48,
+      fontWeight: "bold",
+    },
+    contentContainer: {
+      width: "60%",
+      padding: 16,
+      justifyContent: "space-between",
+    },
+    headerContainer: {
+      marginBottom: 8,
+    },
+    titleText: {
+      fontSize: 20,
+      fontWeight: "bold",
+    },
+    subtitleText: {
+      fontSize: 14,
+      marginTop: 2,
+    },
+    detailsContainer: {
+      marginVertical: 8,
+    },
+    detailRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginVertical: 2,
+    },
+    detailText: {
+      fontSize: 14,
+      marginLeft: 8,
+    },
+    leaveButton: {
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+      borderRadius: 8,
+      alignItems: "center",
+      marginTop: 8,
+    },
+    leaveButtonText: {
+      color: "white",
+      fontWeight: "bold",
+    },
+    emptyContainer: {
+      height: 160,
+      width: "85%",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 16,
+      backgroundColor: "rgba(0,0,0,0.05)",
+    },
+    emptyText: {
+      fontSize: 18,
+      fontWeight: "bold",
+    },
+    emptySubtext: {
+      fontSize: 14,
+      marginTop: 8,
+      textAlign: "center",
+    },
+  });
+
   // Add effect to update queue positions
   useEffect(() => {
     const updateQueuePositions = async () => {
@@ -282,7 +393,7 @@ export default function CurrentQueuesList() {
         <Carousel
           loop={false}
           width={carouselWidth}
-          height={166}
+          height={carouselWidth * 0.5}
           data={queues}
           scrollAnimationDuration={1000}
           renderItem={renderItem}
@@ -292,6 +403,7 @@ export default function CurrentQueuesList() {
             parallaxScrollingOffset: 50,
             parallaxAdjacentItemScale: 0.8,
           }}
+          style={{ width: "100%" }}
         />
       ) : (
         <View style={styles.emptyContainer}>
@@ -320,114 +432,3 @@ export default function CurrentQueuesList() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    marginBottom: 24,
-    alignItems: "center",
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginVertical: 16,
-    alignSelf: "flex-start",
-    paddingHorizontal: 20,
-  },
-  queueCard: {
-    height: 160,
-    borderRadius: 16,
-    overflow: "hidden",
-    flexDirection: "row",
-  },
-  darkCard: {
-    backgroundColor: "rgba(23,34,45,0.7)",
-    borderWidth: 1,
-    borderColor: "rgba(29,205,254,0.25)",
-  },
-  lightCard: {
-    backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  imageContainer: {
-    width: "40%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-  },
-  imagePlaceholder: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  placeholderText: {
-    fontSize: 48,
-    fontWeight: "bold",
-  },
-  contentContainer: {
-    width: "60%",
-    padding: 16,
-    justifyContent: "space-between",
-  },
-  headerContainer: {
-    marginBottom: 8,
-  },
-  titleText: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  subtitleText: {
-    fontSize: 14,
-    marginTop: 2,
-  },
-  detailsContainer: {
-    marginVertical: 8,
-  },
-  detailRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 2,
-  },
-  detailText: {
-    fontSize: 14,
-    marginLeft: 8,
-  },
-  leaveButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 8,
-  },
-  leaveButtonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-  emptyContainer: {
-    height: 160,
-    width: "85%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 16,
-    backgroundColor: "rgba(0,0,0,0.05)",
-  },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  emptySubtext: {
-    fontSize: 14,
-    marginTop: 8,
-    textAlign: "center",
-  },
-});
