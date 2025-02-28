@@ -50,6 +50,7 @@ export default function CurrentQueuesList() {
     container: {
       width: "100%",
       marginBottom: 24,
+      minHeight: carouselWidth * 0.5 + 60, // Account for carousel height plus padding
     },
     sectionTitle: {
       fontSize: 24,
@@ -59,7 +60,7 @@ export default function CurrentQueuesList() {
     },
     queueCard: {
       width: carouselWidth,
-      minHeight: 120,
+      height: carouselWidth * 0.5,
       borderRadius: 16,
       overflow: "hidden",
       flexDirection: "row",
@@ -80,9 +81,10 @@ export default function CurrentQueuesList() {
     },
     imageContainer: {
       width: "40%",
-      aspectRatio: 1,
+      height: "100%",
       justifyContent: "center",
       alignItems: "center",
+      backgroundColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5F7FF",
     },
     image: {
       width: "100%",
@@ -288,16 +290,7 @@ export default function CurrentQueuesList() {
         {item.image ? (
           <Image source={{ uri: item.image }} style={styles.image} />
         ) : (
-          <View
-            style={[
-              styles.imagePlaceholder,
-              {
-                backgroundColor: isDarkMode
-                  ? "rgba(29, 205, 254, 0.2)"
-                  : "#E5F7FF",
-              },
-            ]}
-          >
+          <View style={styles.imagePlaceholder}>
             <Text
               style={[
                 styles.placeholderText,
