@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   queueCard: {
-    height: 170,
+    height: 175,
     borderRadius: 16,
     overflow: "hidden",
     flexDirection: "row",
