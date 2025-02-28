@@ -278,45 +278,47 @@ export default function CurrentQueuesList() {
         {i18n.t("currentQueues")}
       </Text>
 
-      {queues.length > 0 ? (
-        <Carousel
-          loop={false}
-          width={carouselWidth}
-          height={166}
-          data={queues}
-          scrollAnimationDuration={1000}
-          renderItem={renderItem}
-          mode="parallax"
-          modeConfig={{
-            parallaxScrollingScale: 0.9,
-            parallaxScrollingOffset: 50,
-            parallaxAdjacentItemScale: 0.8,
-          }}
-        />
-      ) : (
-        <View style={styles.emptyContainer}>
-          <Text
-            style={[
-              styles.emptyText,
-              { color: isDarkMode ? "#1DCDFE" : "#0077B6" },
-            ]}
-          >
-            {i18n.t("noData")}
-          </Text>
-          <Text
-            style={[
-              styles.emptySubtext,
-              {
-                color: isDarkMode
-                  ? "rgba(255,255,255,0.7)"
-                  : "rgba(23,34,45,0.7)",
-              },
-            ]}
-          >
-            {i18n.t("noDisplay")}
-          </Text>
-        </View>
-      )}
+      <View style={styles.carouselContainer}>
+        {queues.length > 0 ? (
+          <Carousel
+            loop={false}
+            width={carouselWidth}
+            height={166}
+            data={queues}
+            scrollAnimationDuration={1000}
+            renderItem={renderItem}
+            mode="parallax"
+            modeConfig={{
+              parallaxScrollingScale: 0.9,
+              parallaxScrollingOffset: 50,
+              parallaxAdjacentItemScale: 0.8,
+            }}
+          />
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Text
+              style={[
+                styles.emptyText,
+                { color: isDarkMode ? "#1DCDFE" : "#0077B6" },
+              ]}
+            >
+              {i18n.t("noData")}
+            </Text>
+            <Text
+              style={[
+                styles.emptySubtext,
+                {
+                  color: isDarkMode
+                    ? "rgba(255,255,255,0.7)"
+                    : "rgba(23,34,45,0.7)",
+                },
+              ]}
+            >
+              {i18n.t("noDisplay")}
+            </Text>
+          </View>
+        )}
+      </View>
     </View>
   );
 }
@@ -325,14 +327,16 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     marginBottom: 24,
+  },
+  carouselContainer: {
+    width: "100%",
     alignItems: "center",
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: "bold",
     marginVertical: 16,
-    alignSelf: "flex-start",
-    paddingHorizontal: 20,
+    textAlign: "left",
   },
   queueCard: {
     height: 160,
