@@ -17,7 +17,11 @@ import { faClock, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "@/ctx/ThemeContext";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
-import { removeFromQueue, setActiveQueue } from "@/app/redux/queueSlice";
+import {
+  removeFromQueue,
+  setActiveQueue,
+  type QueueItem,
+} from "@/app/redux/queueSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import configConverter from "@/api/configConverter";
@@ -82,8 +86,8 @@ export default function CurrentQueuesList() {
               );
 
               if (response.status === 200) {
-                dispatch(removeFromQueue(queueId));
                 dispatch(setActiveQueue(null));
+                dispatch(removeFromQueue(queueId));
 
                 const existingQueues = await AsyncStorage.getItem(
                   "currentQueues"

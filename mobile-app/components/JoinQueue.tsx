@@ -184,39 +184,29 @@ export default function JoinQueue() {
     if (selectedQueue) {
       const matchingQueue = queues.find((q) => q.name === selectedQueue.name);
       if (matchingQueue) {
-        dispatch(setActiveQueue(matchingQueue));
+        if (!activeQueue || activeQueue.serviceType !== matchingQueue.name) {
+          dispatch(
+            setActiveQueue({
+              id: matchingQueue.id,
+              name: matchingQueue.name,
+              serviceType: matchingQueue.name,
+              position: matchingQueue.currentQueueSize,
+              estimatedTime: matchingQueue.averageServiceTime,
+              location: currentLocation?.toString() || "",
+              timestamp: new Date().toISOString(),
+            })
+          );
+          setLeave(true);
+        }
       } else {
         dispatch(setActiveQueue(null));
+        setLeave(false);
       }
+    } else {
+      dispatch(setActiveQueue(null));
+      setLeave(false);
     }
   }, [selectedQueue, queues]);
-
-  useEffect(() => {
-    if (!currentLocation || !selectedQueue) return;
-
-    AsyncStorage.getItem("TOKEN_KEY").then((token) => {
-      const url = configConverter("EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE");
-      axios
-        .get(`${url}?queueName=${selectedQueue.name}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            setLeave(response.data.isPresent);
-            if (!response.data.isPresent) {
-              setSelectedQueue(null);
-              dispatch(setActiveQueue(null));
-            }
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          setLeave(false);
-        });
-    });
-  }, [currentLocation, selectedQueue]);
 
   const refreshQueueStatus = () => {
     if (!currentLocation || !selectedQueue) return;
@@ -231,9 +221,11 @@ export default function JoinQueue() {
         })
         .then((response) => {
           if (response.status === 200) {
-            setLeave(response.data.isPresent);
-            if (!response.data.isPresent) {
+            const isPresent = response.data.isPresent;
+            setLeave(isPresent);
+            if (!isPresent) {
               setSelectedQueue(null);
+              dispatch(setActiveQueue(null));
             }
           }
         })
