@@ -173,7 +173,8 @@
   "common": {
     "locationAccess": "اختر الموقع للانضمام إلى الطابور",
     "queue": {
-      "peopleCount": "{{count}} شخص في الطابور",
+      "peopleCount": "{{count}} أشخاص في الطابور",
+      "peopleCountSingular": "{{count}} شخص في الطابور",
       "waitTime": "~ {{minutes}} دقيقة",
       "joined": "تم الانضمام للطابور!",
       "leave": "مغادرة الطابور",

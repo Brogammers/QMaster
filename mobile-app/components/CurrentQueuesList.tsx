@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -21,6 +21,7 @@ import {
   removeFromQueue,
   setActiveQueue,
   type QueueItem,
+  setCurrentQueues,
 } from "@/app/redux/queueSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -44,6 +45,53 @@ export default function CurrentQueuesList() {
   const dispatch = useDispatch();
   const queues = useSelector((state: RootState) => state.queue.currentQueues);
   const { refreshQueueStatus } = useContext(QueueStatusContext);
+
+  // Add effect to update queue positions
+  useEffect(() => {
+    const updateQueuePositions = async () => {
+      try {
+        const token = await AsyncStorage.getItem("TOKEN_KEY");
+        const updatedQueues = [...queues];
+        let hasUpdates = false;
+
+        for (const queue of updatedQueues) {
+          const url = configConverter(
+            "EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE"
+          );
+          const response = await axios.get(
+            `${url}?queueName=${queue.serviceType}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (response.status === 200 && response.data.isPresent) {
+            queue.position = response.data.position;
+            queue.estimatedTime = response.data.estimatedTime;
+            hasUpdates = true;
+          }
+        }
+
+        if (hasUpdates) {
+          await AsyncStorage.setItem(
+            "currentQueues",
+            JSON.stringify(updatedQueues)
+          );
+          dispatch(setCurrentQueues(updatedQueues));
+        }
+      } catch (error) {
+        console.error("Error updating queue positions:", error);
+      }
+    };
+
+    // Update positions on mount and every 30 seconds
+    updateQueuePositions();
+    const interval = setInterval(updateQueuePositions, 30000);
+
+    return () => clearInterval(interval);
+  }, [queues]);
 
   const handleQueuePress = (queue: (typeof queues)[0]) => {
     navigation.navigate("Partner", {
@@ -184,8 +232,9 @@ export default function CurrentQueuesList() {
                 { color: isDarkMode ? "white" : "#17222D" },
               ]}
             >
-              {item.position} {item.position === 1 ? "person" : "people"}{" "}
-              remaining
+              {item.position === 1
+                ? "1 person remaining"
+                : `${item.position} people remaining`}
             </Text>
           </View>
 

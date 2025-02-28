@@ -57,6 +57,8 @@ export interface CurrentQueuesProps {
   isLeave?: boolean;
   isCurrent?: boolean;
   isDarkMode?: boolean;
+  isJoin?: boolean;
+  isPopular?: boolean;
 }
 
 export interface PaginatorProps {
@@ -148,12 +150,12 @@ export interface QueueInfoCardProps {
 }
 
 export interface UserState {
-    userId: string | null;
-    username: string | null;
-    phoneCode: string | null;
-    phoneNumber: string | null;
-    firstName: string | null;
-    lastName: string | null;
+  userId: string | null;
+  username: string | null;
+  phoneCode: string | null;
+  phoneNumber: string | null;
+  firstName: string | null;
+  lastName: string | null;
 }
 
 export interface NavigationState {
