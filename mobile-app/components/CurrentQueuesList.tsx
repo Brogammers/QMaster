@@ -114,7 +114,8 @@ export default function CurrentQueuesList() {
                 { color: isDarkMode ? "white" : "#17222D" },
               ]}
             >
-              {i18n.t("position")}: {item.position}
+              {item.position} {item.position === 1 ? "person" : "people"}{" "}
+              remaining
             </Text>
           </View>
 

@@ -54,11 +54,10 @@ export default function Index() {
 
         if (currentQueuesData) {
           const parsedQueues = JSON.parse(currentQueuesData);
-
-          // Verify each queue's status with the backend
           const token = await AsyncStorage.getItem("TOKEN_KEY");
           const verifiedQueues = [];
 
+          // Verify each queue's status
           for (const queue of parsedQueues) {
             try {
               const url = configConverter(
@@ -74,7 +73,13 @@ export default function Index() {
               );
 
               if (response.status === 200 && response.data.isPresent) {
-                verifiedQueues.push(queue);
+                // Update queue with latest information
+                verifiedQueues.push({
+                  ...queue,
+                  position: response.data.position || queue.position,
+                  estimatedTime:
+                    response.data.estimatedTime || queue.estimatedTime,
+                });
               }
             } catch (error) {
               console.error(
@@ -84,7 +89,7 @@ export default function Index() {
             }
           }
 
-          // Update both AsyncStorage and Redux with verified queues
+          // Update both AsyncStorage and Redux
           await AsyncStorage.setItem(
             "currentQueues",
             JSON.stringify(verifiedQueues)

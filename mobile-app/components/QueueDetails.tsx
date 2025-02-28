@@ -68,8 +68,9 @@ export default function QueueDetails(props: QueueDetailsProps) {
   const handleJoinQueue = async () => {
     const session = await AsyncStorage.getItem("TOKEN_KEY");
     const url = configConverter("EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE");
-    axios
-      .put(
+
+    try {
+      const response = await axios.put(
         `${url}?queueName=${serviceType}`,
         {},
         {
@@ -77,67 +78,55 @@ export default function QueueDetails(props: QueueDetailsProps) {
             Authorization: `Bearer ${session}`,
           },
         }
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          setLeave(true);
-          setShowDetails(false);
-
-          // Create a single queue object to use in both places
-          const newQueue = {
-            id: response.data.id,
-            name: brandName || "Unknown",
-            serviceType: serviceType,
-            position: response.data.position,
-            estimatedTime: response.data.estimatedTime,
-            location: branch.toString(),
-            timestamp: new Date().toISOString(),
-          };
-
-          // Dispatch to Redux
-          dispatch(addToQueue(newQueue));
-
-          // Save to AsyncStorage
-          saveCurrentQueue(newQueue);
-
-          setTimeout(() => {
-            setShowDetails(true);
-            setSelectedQueue((prev) => {
-              if (!prev) return prev;
-              return { ...prev, currentQueueSize: prev.currentQueueSize + 1 };
-            });
-          }, 1000);
-        } else {
-          setLeave(false);
-          throw new Error("Failed to join the queue");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        setLeave(false);
-      });
-  };
-
-  const saveCurrentQueue = async (newQueue: QueueItem) => {
-    try {
-      const existingQueues = await AsyncStorage.getItem("currentQueues");
-      const currentQueues = existingQueues ? JSON.parse(existingQueues) : [];
-
-      const updatedQueues = [newQueue, ...currentQueues];
-      await AsyncStorage.setItem(
-        "currentQueues",
-        JSON.stringify(updatedQueues)
       );
+
+      if (response.status === 200) {
+        setLeave(true);
+        setShowDetails(false);
+
+        // Create queue object
+        const newQueue = {
+          id: response.data.id,
+          name: brandName,
+          serviceType: serviceType,
+          position: selectedQueue?.currentQueueSize || 1,
+          estimatedTime: selectedQueue?.averageServiceTime || 7,
+          location: branch.toString(),
+          timestamp: new Date().toISOString(),
+        };
+
+        // Update Redux
+        dispatch(addToQueue(newQueue));
+
+        // Update AsyncStorage
+        const existingQueues = await AsyncStorage.getItem("currentQueues");
+        const currentQueues = existingQueues ? JSON.parse(existingQueues) : [];
+        await AsyncStorage.setItem(
+          "currentQueues",
+          JSON.stringify([...currentQueues, newQueue])
+        );
+
+        // Update UI
+        setTimeout(() => {
+          setShowDetails(true);
+          setSelectedQueue((prev) => {
+            if (!prev) return prev;
+            return { ...prev, currentQueueSize: prev.currentQueueSize + 1 };
+          });
+        }, 1000);
+      }
     } catch (error) {
-      console.error("Error saving current queue:", error);
+      console.error(error);
+      setLeave(false);
     }
   };
 
   const handleLeaveQueue = () => {
     const handleLeaveRequest = async () => {
-      const session = await AsyncStorage.getItem("TOKEN_KEY");
-      const url = configConverter("EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE");
       try {
+        const session = await AsyncStorage.getItem("TOKEN_KEY");
+        const url = configConverter("EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE");
+
         const response = await axios.put(
           `${url}?queueName=${serviceType}&leave=true`,
           {},
@@ -151,15 +140,15 @@ export default function QueueDetails(props: QueueDetailsProps) {
         if (response.status === 200) {
           setLeave(false);
 
-          // Remove from Redux
+          // Update Redux
           dispatch(removeFromQueue(response.data.id));
 
-          // Remove from AsyncStorage
+          // Update AsyncStorage
           const existingQueues = await AsyncStorage.getItem("currentQueues");
           if (existingQueues) {
             const currentQueues = JSON.parse(existingQueues);
             const updatedQueues = currentQueues.filter(
-              (queue: any) => queue.id !== response.data.id
+              (queue: any) => queue.serviceType !== serviceType
             );
             await AsyncStorage.setItem(
               "currentQueues",
@@ -169,10 +158,11 @@ export default function QueueDetails(props: QueueDetailsProps) {
 
           setSelectedQueue((prev) => {
             if (!prev) return prev;
-            return { ...prev, currentQueueSize: prev.currentQueueSize - 1 };
+            return {
+              ...prev,
+              currentQueueSize: Math.max(0, prev.currentQueueSize - 1),
+            };
           });
-        } else {
-          throw new Error("Failed to leave the queue");
         }
       } catch (error) {
         console.error(error);
