@@ -1,15 +1,17 @@
+import axios from 'axios';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
   const isLoginPage = request.nextUrl.pathname === '/admin/login'
   const isPartnerRoute = request.nextUrl.pathname.includes('/[entity]/')
   const isBusinessSignIn = request.nextUrl.pathname === '/login'
 
   // Get the maintenance and coming soon settings
-  const isMaintenanceEnabled = false; // Replace with actual logic to get the setting
-  const isComingSoonEnabled = false; // Replace with actual logic to get the setting
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL! + process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS!;
+  const response = await axios.get(url);
+  const { isMaintenanceMode: isMaintenanceEnabled, isComingSoonMode: isComingSoonEnabled } = response.data;
 
   // Skip redirects for maintenance and coming-soon pages themselves
   if (request.nextUrl.pathname === '/maintenance' ||
