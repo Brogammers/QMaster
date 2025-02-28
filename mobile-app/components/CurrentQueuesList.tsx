@@ -252,14 +252,11 @@ export default function CurrentQueuesList() {
                 dispatch(removeFromQueue(queueId));
 
                 setSelectedQueue((prev) => {
-                    if (!prev) return prev;
-                    return {
-                        ...prev,
-                        currentQueueSize: Math.max(
-                            0,
-                            prev.currentQueueSize - 1
-                        ),
-                    };
+                  if (!prev) return prev;
+                  return {
+                    ...prev,
+                    currentQueueSize: Math.max(0, prev.currentQueueSize - 1),
+                  };
                 });
 
                 const existingQueues = await AsyncStorage.getItem(
