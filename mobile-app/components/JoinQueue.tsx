@@ -88,8 +88,7 @@ export default function JoinQueue() {
   const [open, setOpen] = useState(false);
   const { locationData, currentLocation, setCurrentLocation } =
     useContext(LocationContext);
-  const [queues, setQueues] = useState<Queue[]>([]);
-  const [selectedQueue, setSelectedQueue] = useState<Queue | null>(null);
+  const { queues, selectedQueue, setSelectedQueue } = useContext(QueuesContext);
   const [hours, setHours] = useState<{
     [key: string]: {
       open: string;
@@ -237,9 +236,7 @@ export default function JoinQueue() {
   };
 
   return (
-    <QueuesContext.Provider
-      value={{ queues, selectedQueue, setQueues, setSelectedQueue }}
-    >
+    
       <QueueStatusContext.Provider value={{ refreshQueueStatus }}>
         <View className="flex-1">
           <ScrollView
@@ -453,7 +450,6 @@ export default function JoinQueue() {
           </ScrollView>
         </View>
       </QueueStatusContext.Provider>
-    </QueuesContext.Provider>
   );
 }
 

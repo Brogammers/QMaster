@@ -26,7 +26,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import configConverter from "@/api/configConverter";
-import { QueueStatusContext } from "./JoinQueue";
+import { QueuesContext, QueueStatusContext } from "./JoinQueue";
 
 type RootStackParamList = {
   Partner: {
@@ -45,6 +45,7 @@ export default function CurrentQueuesList() {
   const dispatch = useDispatch();
   const queues = useSelector((state: RootState) => state.queue.currentQueues);
   const { refreshQueueStatus } = useContext(QueueStatusContext);
+  const { setSelectedQueue } = useContext(QueuesContext);
 
   const styles = StyleSheet.create({
     container: {
@@ -249,6 +250,17 @@ export default function CurrentQueuesList() {
               if (response.status === 200) {
                 dispatch(setActiveQueue(null));
                 dispatch(removeFromQueue(queueId));
+
+                setSelectedQueue((prev) => {
+                    if (!prev) return prev;
+                    return {
+                        ...prev,
+                        currentQueueSize: Math.max(
+                            0,
+                            prev.currentQueueSize - 1
+                        ),
+                    };
+                });
 
                 const existingQueues = await AsyncStorage.getItem(
                   "currentQueues"
