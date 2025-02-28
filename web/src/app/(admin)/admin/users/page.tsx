@@ -1,20 +1,18 @@
 "use client";
 
-import { useState, useMemo, useContext } from "react";
-import { useAdminAuth } from "@/lib/auth/AuthContext";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import {
-  FaUsers,
-  FaSearch,
-  FaFilter,
-  FaPlus,
-  FaEdit,
-  FaTrash,
-} from "react-icons/fa";
-import { deleteUser, restoreUser } from "@/store/features/userSlice";
-import { toast } from "react-hot-toast";
 import AddUserModal from "@/components/admin/AddUserModal";
+import { useAdminAuth } from "@/lib/auth/AuthContext";
+import { deleteUser, fetchAdminUsers, restoreUser } from "@/store/features/userSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import type { RootState } from "@/store/store";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { toast } from "react-hot-toast";
+import {
+  FaEdit,
+  FaPlus,
+  FaSearch,
+  FaTrash
+} from "react-icons/fa";
 import { UsersContext } from "../../context";
 
 interface User {
@@ -43,9 +41,8 @@ interface User {
 
 export default function UsersPage() {
   const { admin } = useAdminAuth();
-  const { users: allUsers, setUsers } = useContext(UsersContext);
   const dispatch = useAppDispatch();
-  const users = useAppSelector((state: RootState) => state.users.users);
+  const { users, loading, error } = useAppSelector((state: RootState) => state.users);
   const [isDarkMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
@@ -110,6 +107,10 @@ export default function UsersPage() {
       }
     );
   };
+
+  useEffect(() => {
+    dispatch(fetchAdminUsers());
+  }, [dispatch])
 
   return (
     <div className="space-y-4 lg:space-y-6">
