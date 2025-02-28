@@ -3,6 +3,7 @@ package com.que.que.User.AdminUser;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.User.User;
 import com.que.que.User.UserRole;
 
@@ -15,6 +16,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
+@JsonSerialize(using = AdminUserSerializer.class)
 public class AdminUser extends User {
     public AdminUser(
             String firstName,
