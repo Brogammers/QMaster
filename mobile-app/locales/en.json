@@ -222,5 +222,7 @@
   "ok": "OK",
   "currentQueues": "Current Queues",
   "position": "Position",
-  "minutes": "min"
+  "minutes": "min",
+  "waitTime": "Wait time",
+  "yourTurn": "Your turn now!"
 }

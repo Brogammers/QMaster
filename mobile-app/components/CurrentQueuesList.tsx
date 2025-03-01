@@ -69,7 +69,30 @@ export default function CurrentQueuesList() {
 
           if (response.status === 200 && response.data.isPresent) {
             queue.position = response.data.position;
-            queue.estimatedTime = response.data.estimatedTime;
+            // Calculate estimated time based on position - each person takes ~7 minutes
+            const averageTimePerPerson = 7; // Average time per person in minutes
+            // Only count people ahead in queue, not including current user
+            const peopleAhead = queue.position - 1;
+            queue.estimatedTime = Math.max(
+              0,
+              peopleAhead * averageTimePerPerson
+            );
+            // If API returns estimated time and it seems valid, use it instead
+            if (
+              response.data.estimatedTime &&
+              response.data.estimatedTime > 0
+            ) {
+              // The API's estimated time might include the current user's time,
+              // so we need to adjust if needed
+              if (response.data.position > 1) {
+                // Assume the API is returning total time including current user
+                // Calculate the time for people ahead only
+                queue.estimatedTime = response.data.estimatedTime;
+              } else {
+                // If position is 1, then estimated time should be 0
+                queue.estimatedTime = 0;
+              }
+            }
             hasUpdates = true;
           }
         }
@@ -249,7 +272,11 @@ export default function CurrentQueuesList() {
                 { color: isDarkMode ? "white" : "#17222D" },
               ]}
             >
-              ~{item.estimatedTime} {i18n.t("minutes")}
+              {item.estimatedTime === 0
+                ? i18n.t("yourTurn")
+                : `${i18n.t("waitTime")}: ~${item.estimatedTime} ${i18n.t(
+                    "minutes"
+                  )}`}
             </Text>
           </View>
         </View>

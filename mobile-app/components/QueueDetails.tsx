@@ -347,8 +347,12 @@ export default function QueueDetails(props: QueueDetailsProps) {
               >
                 {i18n.t("common.queue.waitTime", {
                   minutes:
-                    selectedQueue!?.averageServiceTime *
-                    selectedQueue!?.currentQueueSize,
+                    selectedQueue &&
+                    selectedQueue.averageServiceTime &&
+                    selectedQueue.currentQueueSize
+                      ? selectedQueue.averageServiceTime *
+                        (selectedQueue.currentQueueSize - 1)
+                      : 0,
                 })}
               </Text>
             </View>
@@ -414,8 +418,12 @@ export default function QueueDetails(props: QueueDetailsProps) {
                   >
                     {i18n.t("common.queue.waitTime", {
                       minutes:
-                        selectedQueue!?.averageServiceTime *
-                        selectedQueue!?.currentQueueSize,
+                        selectedQueue &&
+                        selectedQueue.averageServiceTime &&
+                        selectedQueue.currentQueueSize
+                          ? selectedQueue.averageServiceTime *
+                            (selectedQueue.currentQueueSize - 1)
+                          : 0,
                     })}
                   </Text>
                 </View>

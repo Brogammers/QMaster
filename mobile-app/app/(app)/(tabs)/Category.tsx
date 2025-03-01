@@ -7,7 +7,7 @@ import { useLinkTo } from "@react-navigation/native";
 import axios from "axios";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View, ActivityIndicator } from "react-native";
 import i18n from "@/i18n";
 import { formatCategoryName } from "@/utils";
 
@@ -32,41 +32,56 @@ export default function Category() {
   };
 
   useEffect(() => {
+    let isMounted = true;
     setLoading(true);
     setError(false);
     setCurrent([]);
 
-    const url = configConverter(
-      "EXPO_PUBLIC_API_BASE_URL_GET_BUSINESSES_BY_CATEGORY"
-    );
+    const fetchData = async () => {
+      try {
+        const url = configConverter(
+          "EXPO_PUBLIC_API_BASE_URL_GET_BUSINESSES_BY_CATEGORY"
+        );
 
-    axios
-      .get(`${url}?category=${name}&page=${page}&per-page=${perPage}`)
-      .then((response) => {
+        const response = await axios.get(
+          `${url}?category=${name}&page=${page}&per-page=${perPage}`
+        );
+
+        if (!isMounted) return;
+
         if (response.status === 200 && response.data?.businesses?.content) {
-          return response.data.businesses.content;
-        } else {
-          return [];
-        }
-      })
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          const currentQueues = data.map((business: any) => ({
-            id: business.id,
-            name: business.name,
-            image: arabiata,
-            time: 20,
-            people: 20,
-          }));
-          setCurrent(currentQueues);
+          const data = response.data.businesses.content;
+          if (Array.isArray(data) && data.length > 0) {
+            const currentQueues = data.map((business: any) => ({
+              id: business.id,
+              name: business.name,
+              image: arabiata,
+              time: 20,
+              people: 20,
+            }));
+            setCurrent(currentQueues);
+          }
         }
         setLoading(false);
-      })
-      .catch((error) => {
-        console.log(`Category data fetch error: ${error.message}`);
-        setError(true);
-        setLoading(false);
-      });
+      } catch (error) {
+        // Handle error silently
+        if (isMounted) {
+          console.log(
+            `Category data fetch error: ${
+              error instanceof Error ? error.message : "Unknown error"
+            }`
+          );
+          setError(true);
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [name]);
 
   return (
@@ -83,6 +98,16 @@ export default function Category() {
           >
             {categoryName}
           </Text>
+
+          {loading && (
+            <View className="flex-1 items-center justify-center mt-12">
+              <ActivityIndicator
+                size="large"
+                color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+              />
+            </View>
+          )}
+
           {!loading &&
             !error &&
             current.length > 0 &&
@@ -97,6 +122,7 @@ export default function Category() {
                 isDarkMode={isDarkMode}
               />
             ))}
+
           {!loading && (error || current.length === 0) && (
             <View className="flex-1 items-center justify-center">
               <Text
