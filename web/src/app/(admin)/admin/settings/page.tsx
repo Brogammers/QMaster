@@ -19,6 +19,7 @@ export default function SettingsPage() {
   const [isMaintenanceEnabled, setIsMaintenanceEnabled] = useState(false);
   const [maintenanceHours, setMaintenanceHours] = useState(2);
   const [maintenanceMinutes, setMaintenanceMinutes] = useState(0);
+  const [isDurationChanged, setIsDurationChanged] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: "",
     email: "",
@@ -150,7 +151,7 @@ export default function SettingsPage() {
     if (pendingAction) {
       if (pendingAction.type === "maintenance") {
         const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
-      
+
         // Don't allow enabling maintenance mode with zero duration
         if (pendingAction.value && maintenanceDuration === 0) {
           setPendingAction(null);
@@ -216,6 +217,46 @@ export default function SettingsPage() {
   const handleToggle = (type: "maintenance" | "comingSoon", value: boolean) => {
     setPendingAction({ type, value });
     setIsAuthModalOpen(true);
+  };
+
+  const handleMaintenanceHoursChange = (value: number) => {
+    setMaintenanceHours(value);
+    setIsDurationChanged(true);
+  };
+
+  const handleMaintenanceMinutesChange = (value: number) => {
+    setMaintenanceMinutes(value);
+    setIsDurationChanged(true);
+  };
+
+  const handleSaveDuration = () => {
+    const maintenanceDuration = maintenanceHours * 60 + maintenanceMinutes;
+
+    // Don't allow saving zero duration if maintenance mode is enabled
+    if (isMaintenanceEnabled && maintenanceDuration === 0) {
+      alert("Please set a maintenance duration greater than zero.");
+      return;
+    }
+
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
+    axios
+      .put(url, {
+        isMaintenanceMode: isMaintenanceEnabled,
+        isComingSoonMode: isComingSoonEnabled,
+        maintenanceDuration: maintenanceDuration,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setIsDurationChanged(false);
+          alert("Maintenance duration updated successfully!");
+        } else {
+          throw new Error("Failed to update maintenance duration");
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to update maintenance duration:", error);
+        alert("Failed to update maintenance duration. Please try again.");
+      });
   };
 
   return (
@@ -376,7 +417,9 @@ export default function SettingsPage() {
                         max="99"
                         value={maintenanceHours}
                         onChange={(e) =>
-                          setMaintenanceHours(parseInt(e.target.value) || 0)                          
+                          handleMaintenanceHoursChange(
+                            parseInt(e.target.value) || 0
+                          )
                         }
                         className="appearance-none m-0 w-24 px-2 py-1 rounded-md border-none bg-white text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
                       />
@@ -389,13 +432,23 @@ export default function SettingsPage() {
                         max="59"
                         value={maintenanceMinutes}
                         onChange={(e) =>
-                          setMaintenanceMinutes(parseInt(e.target.value) || 0)
+                          handleMaintenanceMinutesChange(
+                            parseInt(e.target.value) || 0
+                          )
                         }
                         className="appearance-none m-0 w-24 px-2 py-1 rounded-md border-none bg-white text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
                       />
                       <span className="text-sm text-slate-700 font-medium whitespace-nowrap">
                         min
                       </span>
+                      {isDurationChanged && (
+                        <button
+                          onClick={handleSaveDuration}
+                          className="px-3 py-1 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all"
+                        >
+                          Save
+                        </button>
+                      )}
                     </div>
                     <Switch
                       checked={isMaintenanceEnabled}

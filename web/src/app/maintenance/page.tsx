@@ -15,9 +15,8 @@ export default function MaintenancePage() {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchMaintenanceDuration = () => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
-    setIsLoading(true);
 
     axios
       .get(url)
@@ -53,6 +52,20 @@ export default function MaintenancePage() {
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  useEffect(() => {
+    // Initial fetch
+    setIsLoading(true);
+    fetchMaintenanceDuration();
+
+    // Set up polling every 30 seconds to check for updates
+    const intervalId = setInterval(() => {
+      fetchMaintenanceDuration();
+    }, 30000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const containerVariants = {
@@ -157,11 +170,14 @@ export default function MaintenancePage() {
                       }}
                     >
                       <button
-                        onClick={() => window.location.reload()}
+                        onClick={() => {
+                          setIsLoading(true);
+                          fetchMaintenanceDuration();
+                        }}
                         className="flex items-center gap-2 px-6 py-3 bg-baby-blue/20 rounded-full text-baby-blue hover:bg-baby-blue/30 transition-all"
                       >
                         <FaRedo className="w-4 h-4" />
-                        <span>Refresh Page</span>
+                        <span>Refresh</span>
                       </button>
                     </motion.div>
                   </motion.div>
