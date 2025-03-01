@@ -376,7 +376,7 @@ export default function SettingsPage() {
                         onChange={(e) =>
                           setMaintenanceHours(parseInt(e.target.value) || 0)
                         }
-                        className="w-12 px-2 py-1 rounded-md border-none bg-white/20 text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
+                        className="w-12 px-2 py-1 rounded-md border-none bg-white text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
                       />
                       <span className="text-sm text-slate-700 font-medium whitespace-nowrap">
                         hrs
@@ -389,7 +389,7 @@ export default function SettingsPage() {
                         onChange={(e) =>
                           setMaintenanceMinutes(parseInt(e.target.value) || 0)
                         }
-                        className="w-12 px-2 py-1 rounded-md border-none bg-white/20 text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
+                        className="w-12 px-2 py-1 rounded-md border-none bg-white text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
                       />
                       <span className="text-sm text-slate-700 font-medium whitespace-nowrap">
                         min
