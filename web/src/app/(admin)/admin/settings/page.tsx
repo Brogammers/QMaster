@@ -17,6 +17,8 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("general");
   const [isComingSoonEnabled, setIsComingSoonEnabled] = useState(false);
   const [isMaintenanceEnabled, setIsMaintenanceEnabled] = useState(false);
+  const [maintenanceHours, setMaintenanceHours] = useState(2);
+  const [maintenanceMinutes, setMaintenanceMinutes] = useState(0);
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: "",
     email: "",
@@ -86,6 +88,13 @@ export default function SettingsPage() {
       .then((response) => {
         setIsMaintenanceEnabled(response.data.isMaintenanceMode);
         setIsComingSoonEnabled(response.data.isComingSoonMode);
+
+        // Set maintenance duration if available
+        if (response.data.maintenanceDuration) {
+          const totalMinutes = response.data.maintenanceDuration;
+          setMaintenanceHours(Math.floor(totalMinutes / 60));
+          setMaintenanceMinutes(totalMinutes % 60);
+        }
       })
       .catch((error) => {
         console.error("Failed to fetch settings:", error);
@@ -138,10 +147,14 @@ export default function SettingsPage() {
     if (pendingAction) {
       if (pendingAction.type === "maintenance") {
         const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
+        // Calculate total minutes from hours and minutes
+        const maintenanceDuration = maintenanceHours * 60 + maintenanceMinutes;
+
         axios
           .put(url, {
             isMaintenanceMode: pendingAction.value,
             isComingSoonMode: isComingSoonEnabled,
+            maintenanceDuration: pendingAction.value ? maintenanceDuration : 0,
           })
           .then((response) => {
             if (response.status === 200) {
@@ -340,22 +353,62 @@ export default function SettingsPage() {
                       Enable when performing system maintenance or updates
                     </p>
                   </div>
-                  <Switch
-                    checked={isMaintenanceEnabled}
-                    onChange={(checked) => handleToggle("maintenance", checked)}
-                    className={`${
-                      isMaintenanceEnabled ? "bg-crystal-blue" : "bg-gray-200"
-                    } relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
-                  >
-                    <span className="sr-only">Enable maintenance mode</span>
-                    <span
+                  <div className="flex items-center gap-3">
+                    {isMaintenanceEnabled && (
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center">
+                          <input
+                            type="number"
+                            min="0"
+                            max="999"
+                            value={maintenanceHours}
+                            onChange={(e) =>
+                              setMaintenanceHours(parseInt(e.target.value) || 0)
+                            }
+                            className="w-16 px-2 py-1 rounded-md border border-white/10 bg-white/20 text-coal-black font-medium text-center"
+                          />
+                          <span className="text-sm text-slate-700 ml-1">
+                            hrs
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            type="number"
+                            min="0"
+                            max="59"
+                            value={maintenanceMinutes}
+                            onChange={(e) =>
+                              setMaintenanceMinutes(
+                                parseInt(e.target.value) || 0
+                              )
+                            }
+                            className="w-16 px-2 py-1 rounded-md border border-white/10 bg-white/20 text-coal-black font-medium text-center"
+                          />
+                          <span className="text-sm text-slate-700 ml-1">
+                            min
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    <Switch
+                      checked={isMaintenanceEnabled}
+                      onChange={(checked) =>
+                        handleToggle("maintenance", checked)
+                      }
                       className={`${
-                        isMaintenanceEnabled
-                          ? "translate-x-[16px]"
-                          : "translate-x-[2px]"
-                      } pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-                    />
-                  </Switch>
+                        isMaintenanceEnabled ? "bg-crystal-blue" : "bg-gray-200"
+                      } relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                    >
+                      <span className="sr-only">Enable maintenance mode</span>
+                      <span
+                        className={`${
+                          isMaintenanceEnabled
+                            ? "translate-x-[16px]"
+                            : "translate-x-[2px]"
+                        } pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                      />
+                    </Switch>
+                  </div>
                 </div>
               </div>
             </div>

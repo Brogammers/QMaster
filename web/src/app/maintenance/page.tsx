@@ -4,24 +4,65 @@ import { motion } from "framer-motion";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import { FaTools, FaClock, FaRedo } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function MaintenancePage() {
+  const [maintenanceDuration, setMaintenanceDuration] = useState({
+    hours: 2,
+    minutes: 0,
+    displayText: "2 hours",
+  });
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
+    axios
+      .get(url)
+      .then((response) => {
+        if (response.data.maintenanceDuration) {
+          const totalMinutes = response.data.maintenanceDuration;
+          const hours = Math.floor(totalMinutes / 60);
+          const minutes = totalMinutes % 60;
+
+          let displayText = "";
+          if (hours > 0 && minutes > 0) {
+            displayText = `${hours} hour${
+              hours > 1 ? "s" : ""
+            } and ${minutes} minute${minutes > 1 ? "s" : ""}`;
+          } else if (hours > 0) {
+            displayText = `${hours} hour${hours > 1 ? "s" : ""}`;
+          } else {
+            displayText = `${minutes} minute${minutes > 1 ? "s" : ""}`;
+          }
+
+          setMaintenanceDuration({
+            hours,
+            minutes,
+            displayText,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to fetch maintenance duration:", error);
+      });
+  }, []);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.3
-      }
-    }
+        staggerChildren: 0.3,
+      },
+    },
   };
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
-      opacity: 1
-    }
+      opacity: 1,
+    },
   };
 
   const iconVariants = {
@@ -30,9 +71,9 @@ export default function MaintenancePage() {
       transition: {
         duration: 3,
         repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
+        ease: "easeInOut",
+      },
+    },
   };
 
   return (
@@ -60,7 +101,7 @@ export default function MaintenancePage() {
             >
               <div className="row">
                 <div className="max-w-4xl mx-auto text-center">
-                  <motion.div 
+                  <motion.div
                     className="mb-8"
                     variants={iconVariants}
                     animate="rotate"
@@ -68,31 +109,34 @@ export default function MaintenancePage() {
                     <FaTools className="w-20 h-20 text-baby-blue mx-auto" />
                   </motion.div>
 
-                  <motion.h1 
+                  <motion.h1
                     className="text-4xl xsm:text-6xl xl:text-8xl font-bold text-white mb-8"
                     variants={itemVariants}
                   >
                     Under Maintenance
                   </motion.h1>
 
-                  <motion.p 
+                  <motion.p
                     className="text-xl text-white/90 mb-12"
                     variants={itemVariants}
                   >
-                    We&apos;re currently improving our system to serve you better.
+                    We&apos;re currently improving our system to serve you
+                    better.
                     <br />
                     Please check back soon!
                   </motion.p>
 
-                  <motion.div 
+                  <motion.div
                     className="flex flex-col gap-6 items-center"
                     variants={itemVariants}
                   >
                     <div className="flex items-center gap-4 text-white/80">
                       <FaClock className="w-5 h-5" />
-                      <span>Estimated downtime: 2 hours</span>
+                      <span>
+                        Estimated downtime: {maintenanceDuration.displayText}
+                      </span>
                     </div>
-                    
+
                     <motion.div
                       animate={{
                         scale: [1, 1.1, 1],
@@ -102,7 +146,7 @@ export default function MaintenancePage() {
                         repeat: Infinity,
                       }}
                     >
-                      <button 
+                      <button
                         onClick={() => window.location.reload()}
                         className="flex items-center gap-2 px-6 py-3 bg-baby-blue/20 rounded-full text-baby-blue hover:bg-baby-blue/30 transition-all"
                       >
@@ -120,4 +164,4 @@ export default function MaintenancePage() {
       </div>
     </div>
   );
-} 
+}
