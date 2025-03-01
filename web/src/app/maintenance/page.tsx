@@ -8,6 +8,17 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+// Add a global style to ensure the background extends with content
+const globalStyles = `
+  body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, var(--ocean-blue), var(--concrete-turqouise), var(--coal-black));
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+`;
+
 export default function MaintenancePage() {
   const [maintenanceDuration, setMaintenanceDuration] = useState({
     hours: 2,
@@ -100,21 +111,41 @@ export default function MaintenancePage() {
   };
 
   return (
-    <div className="w-full leading-loose scroll-smooth overflow-x-hidden overflow-y-visible relative min-h-screen bg-gradient-to-b from-ocean-blue via-concrete-turqouise to-coal-black">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <>
+      {/* Inject global styles */}
+      <style jsx global>
+        {globalStyles}
+      </style>
+
+      {/* Radial dot pattern */}
+      <div
+        className="fixed top-0 left-0 right-0 bottom-0 w-full h-full overflow-hidden pointer-events-none"
+        style={{ zIndex: 0 }}
+      >
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.5 }}
           transition={{ duration: 2 }}
-          className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--baby-blue)_1px,_transparent_1px)] bg-[length:40px_40px]"
+          className="absolute inset-0 w-full h-full"
+          style={{
+            background:
+              "radial-gradient(circle at center, var(--baby-blue) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+            backgroundAttachment: "fixed",
+          }}
         />
       </div>
 
-      <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none" />
+      {/* Noise overlay */}
+      <div
+        className="fixed top-0 left-0 right-0 bottom-0 w-full h-full bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none"
+        style={{ zIndex: 0 }}
+      />
 
-      <div className="relative z-10">
+      {/* Content */}
+      <div className="relative z-10 min-h-screen flex flex-col">
         <Nav />
-        <main className="w-full">
+        <main className="flex-grow">
           <section className="mt-0 mb-48 min-h-[calc(100vh-160px)] flex items-center justify-center">
             <motion.div
               className="container relative"
@@ -191,6 +222,6 @@ export default function MaintenancePage() {
         </main>
         <Footer />
       </div>
-    </div>
+    </>
   );
 }
