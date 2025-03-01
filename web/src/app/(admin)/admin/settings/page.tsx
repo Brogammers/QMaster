@@ -13,7 +13,7 @@ import { Switch } from "@headlessui/react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 interface UserProfile {
   name: string;
@@ -169,14 +169,7 @@ export default function SettingsPage() {
           setAuthError("");
           setEmail("");
           toast.error(
-            "Please set a maintenance duration before enabling maintenance mode.",
-            {
-              duration: 5000,
-              style: {
-                background: "#17222D",
-                color: "#FFF",
-              },
-            }
+            "Please set a maintenance duration before enabling maintenance mode."
           );
           return;
         }
@@ -189,29 +182,25 @@ export default function SettingsPage() {
           })
           .then((response) => {
             if (response.status === 200) {
-              toast.success(
-                `Maintenance mode ${
-                  pendingAction.value ? "enabled" : "disabled"
-                } successfully!`,
-                {
-                  duration: 5000,
-                  style: {
-                    background: "#17222D",
-                    color: "#FFF",
-                  },
-                }
-              );
+              // Update state first
+              setIsMaintenanceEnabled(response.data.isMaintenanceMode);
 
-              // If we're enabling maintenance mode, make sure coming soon is disabled
+              // If we're enabling maintenance mode and coming soon was enabled, update that state too
               if (pendingAction.value && isComingSoonEnabled) {
                 setIsComingSoonEnabled(false);
-                toast.success("Coming soon mode has been disabled", {
-                  duration: 5000,
-                  style: {
-                    background: "#17222D",
-                    color: "#FFF",
-                  },
-                });
+              }
+
+              // Show a single toast with the complete message
+              if (pendingAction.value && isComingSoonEnabled) {
+                toast.success(
+                  "Maintenance mode enabled and Coming soon mode has been disabled"
+                );
+              } else {
+                toast.success(
+                  `Maintenance mode ${
+                    pendingAction.value ? "enabled" : "disabled"
+                  } successfully!`
+                );
               }
 
               return response.data;
@@ -219,21 +208,9 @@ export default function SettingsPage() {
               throw new Error("Failed to update maintenance mode");
             }
           })
-          .then((data) => {
-            setIsMaintenanceEnabled(data.isMaintenanceMode);
-          })
           .catch((error) => {
             console.error("Failed to update maintenance mode:", error);
-            toast.error(
-              "Failed to update maintenance mode. Please try again.",
-              {
-                duration: 5000,
-                style: {
-                  background: "#17222D",
-                  color: "#FFF",
-                },
-              }
-            );
+            toast.error("Failed to update maintenance mode. Please try again.");
           });
       } else {
         const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
@@ -247,29 +224,25 @@ export default function SettingsPage() {
           })
           .then((response) => {
             if (response.status === 200) {
-              toast.success(
-                `Coming soon mode ${
-                  pendingAction.value ? "enabled" : "disabled"
-                } successfully!`,
-                {
-                  duration: 5000,
-                  style: {
-                    background: "#17222D",
-                    color: "#FFF",
-                  },
-                }
-              );
+              // Update state first
+              setIsComingSoonEnabled(response.data.isComingSoonMode);
 
-              // If we're enabling coming soon mode, make sure maintenance is disabled
+              // If we're enabling coming soon mode and maintenance was enabled, update that state too
               if (pendingAction.value && isMaintenanceEnabled) {
                 setIsMaintenanceEnabled(false);
-                toast.success("Maintenance mode has been disabled", {
-                  duration: 5000,
-                  style: {
-                    background: "#17222D",
-                    color: "#FFF",
-                  },
-                });
+              }
+
+              // Show a single toast with the complete message
+              if (pendingAction.value && isMaintenanceEnabled) {
+                toast.success(
+                  "Coming soon mode enabled and Maintenance mode has been disabled"
+                );
+              } else {
+                toast.success(
+                  `Coming soon mode ${
+                    pendingAction.value ? "enabled" : "disabled"
+                  } successfully!`
+                );
               }
 
               return response.data;
@@ -277,21 +250,9 @@ export default function SettingsPage() {
               throw new Error("Failed to update coming soon mode");
             }
           })
-          .then((data) => {
-            setIsComingSoonEnabled(data.isComingSoonMode);
-          })
           .catch((error) => {
             console.error("Failed to update coming soon mode:", error);
-            toast.error(
-              "Failed to update coming soon mode. Please try again.",
-              {
-                duration: 5000,
-                style: {
-                  background: "#17222D",
-                  color: "#FFF",
-                },
-              }
-            );
+            toast.error("Failed to update coming soon mode. Please try again.");
           });
       }
       setPendingAction(null);
@@ -356,13 +317,7 @@ export default function SettingsPage() {
 
     // Don't allow saving zero duration if maintenance mode is enabled
     if (isMaintenanceEnabled && maintenanceDuration === 0) {
-      toast.error("Please set a maintenance duration greater than zero.", {
-        duration: 5000,
-        style: {
-          background: "#17222D",
-          color: "#FFF",
-        },
-      });
+      toast.error("Please set a maintenance duration greater than zero.");
       return;
     }
 
@@ -376,35 +331,19 @@ export default function SettingsPage() {
       .then((response) => {
         if (response.status === 200) {
           setIsDurationChanged(false);
-          toast.success("Maintenance duration updated successfully!", {
-            duration: 5000,
-            style: {
-              background: "#17222D",
-              color: "#FFF",
-            },
-          });
+          toast.success("Maintenance duration updated successfully!");
         } else {
           throw new Error("Failed to update maintenance duration");
         }
       })
       .catch((error) => {
         console.error("Failed to update maintenance duration:", error);
-        toast.error(
-          "Failed to update maintenance duration. Please try again.",
-          {
-            duration: 5000,
-            style: {
-              background: "#17222D",
-              color: "#FFF",
-            },
-          }
-        );
+        toast.error("Failed to update maintenance duration. Please try again.");
       });
   };
 
   return (
     <div className="space-y-4 lg:space-y-6">
-      <Toaster position="top-right" />
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
         <h1
