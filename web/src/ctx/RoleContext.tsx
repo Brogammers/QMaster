@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useLocation } from "./LocationContext";
+import axios from "axios";
 
 export interface Role {
   id: string;
@@ -29,13 +30,19 @@ export function RoleProvider({ children }: { children: React.ReactNode }) {
   const { selectedLocation } = useLocation();
 
   useEffect(() => {
-    // TODO: Replace with actual API call
     const fetchUserRole = async () => {
       try {
         // Mock API call
-        // const response = await axios.get('/api/user/role');
-        // setUserRole(response.data);
-        setUserRole(MOCK_ROLE);
+        const url =
+            process.env.NEXT_PUBLIC_API_BASE_URL_PERMISSIONS_FOR_BUSINESS!;
+        const response = await axios.get(url);
+        const roleData = {
+          id: response.data.role.id,
+          name: response.data.role.name,
+          permissions: response.data.role.permissions,
+          branches: response.data.role.branches,
+        }
+        setUserRole(roleData);
       } catch (error) {
         console.error("Error fetching user role:", error);
       }
