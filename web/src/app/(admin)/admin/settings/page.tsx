@@ -150,11 +150,24 @@ export default function SettingsPage() {
         // Calculate total minutes from hours and minutes
         const maintenanceDuration = maintenanceHours * 60 + maintenanceMinutes;
 
+        // Don't allow enabling maintenance mode with zero duration
+        if (pendingAction.value && maintenanceDuration === 0) {
+          setPendingAction(null);
+          setIsAuthModalOpen(false);
+          setPassword("");
+          setAuthError("");
+          setEmail("");
+          alert(
+            "Please set a maintenance duration before enabling maintenance mode."
+          );
+          return;
+        }
+
         axios
           .put(url, {
             isMaintenanceMode: pendingAction.value,
             isComingSoonMode: isComingSoonEnabled,
-            maintenanceDuration: pendingAction.value ? maintenanceDuration : 0,
+            maintenanceDuration: maintenanceDuration, // Always send duration regardless of mode
           })
           .then((response) => {
             if (response.status === 200) {
@@ -353,48 +366,51 @@ export default function SettingsPage() {
                       Enable when performing system maintenance or updates
                     </p>
                   </div>
-                  <div className="flex items-center gap-3">
-                    {isMaintenanceEnabled && (
-                      <div className="flex items-center gap-2">
-                        <div className="flex items-center">
-                          <input
-                            type="number"
-                            min="0"
-                            max="999"
-                            value={maintenanceHours}
-                            onChange={(e) =>
-                              setMaintenanceHours(parseInt(e.target.value) || 0)
-                            }
-                            className="w-16 px-2 py-1 rounded-md border border-white/10 bg-white/20 text-coal-black font-medium text-center"
-                          />
-                          <span className="text-sm text-slate-700 ml-1">
-                            hrs
-                          </span>
-                        </div>
-                        <div className="flex items-center">
-                          <input
-                            type="number"
-                            min="0"
-                            max="59"
-                            value={maintenanceMinutes}
-                            onChange={(e) =>
-                              setMaintenanceMinutes(
-                                parseInt(e.target.value) || 0
-                              )
-                            }
-                            className="w-16 px-2 py-1 rounded-md border border-white/10 bg-white/20 text-coal-black font-medium text-center"
-                          />
-                          <span className="text-sm text-slate-700 ml-1">
-                            min
-                          </span>
-                        </div>
-                      </div>
-                    )}
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4">
+                      <input
+                        type="number"
+                        min="0"
+                        max="999"
+                        value={maintenanceHours}
+                        onChange={(e) =>
+                          setMaintenanceHours(parseInt(e.target.value) || 0)
+                        }
+                        className="w-12 px-2 py-1 rounded-md border-none bg-white/20 text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
+                      />
+                      <span className="text-sm text-slate-700 font-medium whitespace-nowrap">
+                        hrs
+                      </span>
+                      <input
+                        type="number"
+                        min="0"
+                        max="59"
+                        value={maintenanceMinutes}
+                        onChange={(e) =>
+                          setMaintenanceMinutes(parseInt(e.target.value) || 0)
+                        }
+                        className="w-12 px-2 py-1 rounded-md border-none bg-white/20 text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
+                      />
+                      <span className="text-sm text-slate-700 font-medium whitespace-nowrap">
+                        min
+                      </span>
+                    </div>
                     <Switch
                       checked={isMaintenanceEnabled}
-                      onChange={(checked) =>
-                        handleToggle("maintenance", checked)
-                      }
+                      onChange={(checked) => {
+                        // Validate that duration is set before enabling
+                        if (
+                          checked &&
+                          maintenanceHours === 0 &&
+                          maintenanceMinutes === 0
+                        ) {
+                          alert(
+                            "Please set a maintenance duration before enabling maintenance mode."
+                          );
+                          return;
+                        }
+                        handleToggle("maintenance", checked);
+                      }}
                       className={`${
                         isMaintenanceEnabled ? "bg-crystal-blue" : "bg-gray-200"
                       } relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
