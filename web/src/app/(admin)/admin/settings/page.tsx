@@ -411,6 +411,14 @@ export default function SettingsPage() {
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-4">
+                      {isDurationChanged && (
+                        <button
+                          onClick={handleSaveDuration}
+                          className="px-3 py-1 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all"
+                        >
+                          Save
+                        </button>
+                      )}
                       <input
                         type="number"
                         min="0"
@@ -441,14 +449,6 @@ export default function SettingsPage() {
                       <span className="text-sm text-slate-700 font-medium whitespace-nowrap">
                         min
                       </span>
-                      {isDurationChanged && (
-                        <button
-                          onClick={handleSaveDuration}
-                          className="px-3 py-1 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all"
-                        >
-                          Save
-                        </button>
-                      )}
                     </div>
                     <Switch
                       checked={isMaintenanceEnabled}
