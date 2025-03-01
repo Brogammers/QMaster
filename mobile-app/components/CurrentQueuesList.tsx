@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -22,16 +22,47 @@ import {
   setActiveQueue,
   type QueueItem,
   setCurrentQueues,
+  updateQueuePosition,
 } from "@/app/redux/queueSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import configConverter from "@/api/configConverter";
 import { QueueStatusContext } from "./JoinQueue";
+// Import business images for matching
+import arabiata from "@/assets/images/arabiata.png";
+
+// Map business names to their images
+const businessImages: Record<string, any> = {
+  arabiata: arabiata,
+  // Add other business images as needed
+};
+
+// Helper function to get the right image for a business
+const getBusinessImage = (businessName: string) => {
+  if (!businessName) return null;
+
+  const lowerName = businessName.toLowerCase();
+
+  // Try exact match
+  if (businessImages[lowerName]) {
+    return businessImages[lowerName];
+  }
+
+  // Try partial match
+  for (const [key, image] of Object.entries(businessImages)) {
+    if (lowerName.includes(key)) {
+      return image;
+    }
+  }
+
+  return null;
+};
 
 type RootStackParamList = {
   Partner: {
     brandName: string;
     currentLocation: string;
+    image?: any;
   };
 };
 
@@ -41,6 +72,7 @@ export default function CurrentQueuesList() {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { width: windowWidth } = useWindowDimensions();
   const carouselWidth = windowWidth * 0.85; // 85% of screen width
+  const [averageServiceTime, setAverageServiceTime] = useState<number>(7); // Default 7 minutes per person
 
   const dispatch = useDispatch();
   const queues = useSelector((state: RootState) => state.queue.currentQueues);
@@ -68,31 +100,38 @@ export default function CurrentQueuesList() {
           );
 
           if (response.status === 200 && response.data.isPresent) {
-            queue.position = response.data.position;
+            const newPosition = response.data.position;
+
             // Calculate estimated time based on position - each person takes ~7 minutes
-            const averageTimePerPerson = 7; // Average time per person in minutes
             // Only count people ahead in queue, not including current user
-            const peopleAhead = queue.position - 1;
-            queue.estimatedTime = Math.max(
+            const peopleAhead = newPosition - 1;
+            const newEstimatedTime = Math.max(
               0,
-              peopleAhead * averageTimePerPerson
+              peopleAhead * averageServiceTime
             );
+
+            // Update queue locally
+            queue.position = newPosition;
+
             // If API returns estimated time and it seems valid, use it instead
             if (
               response.data.estimatedTime &&
               response.data.estimatedTime > 0
             ) {
-              // The API's estimated time might include the current user's time,
-              // so we need to adjust if needed
-              if (response.data.position > 1) {
-                // Assume the API is returning total time including current user
-                // Calculate the time for people ahead only
-                queue.estimatedTime = response.data.estimatedTime;
-              } else {
-                // If position is 1, then estimated time should be 0
-                queue.estimatedTime = 0;
-              }
+              queue.estimatedTime = response.data.estimatedTime;
+            } else {
+              queue.estimatedTime = newEstimatedTime;
             }
+
+            // Also dispatch the update to redux
+            dispatch(
+              updateQueuePosition({
+                id: queue.id,
+                position: newPosition,
+                estimatedTime: queue.estimatedTime,
+              })
+            );
+
             hasUpdates = true;
           }
         }
@@ -114,12 +153,16 @@ export default function CurrentQueuesList() {
     const interval = setInterval(updateQueuePositions, 30000);
 
     return () => clearInterval(interval);
-  }, [queues]);
+  }, [queues, dispatch, averageServiceTime]);
 
   const handleQueuePress = (queue: (typeof queues)[0]) => {
+    // When navigating to Partner screen, also pass the resolved image
+    const businessImage = getBusinessImage(queue.name);
+
     navigation.navigate("Partner", {
       brandName: queue.name,
       currentLocation: queue.location,
+      image: businessImage || queue.image,
     });
   };
 
@@ -157,9 +200,13 @@ export default function CurrentQueuesList() {
               );
 
               if (response.status === 200) {
+                // Clear active queue if it matches this one
                 dispatch(setActiveQueue(null));
+
+                // Remove from Redux queue state
                 dispatch(removeFromQueue(queueId));
 
+                // Update AsyncStorage to keep in sync
                 const existingQueues = await AsyncStorage.getItem(
                   "currentQueues"
                 );
@@ -174,7 +221,10 @@ export default function CurrentQueuesList() {
                   );
                 }
 
-                refreshQueueStatus();
+                // Refresh queue status in context
+                if (refreshQueueStatus) {
+                  refreshQueueStatus();
+                }
               }
             } catch (error) {
               console.error("Error leaving queue:", error);
@@ -188,110 +238,128 @@ export default function CurrentQueuesList() {
     );
   };
 
-  const renderItem = ({ item }: { item: (typeof queues)[0] }) => (
-    <TouchableOpacity
-      onPress={() => handleQueuePress(item)}
-      style={[
-        styles.queueCard,
-        isDarkMode ? styles.darkCard : styles.lightCard,
-      ]}
-    >
-      <View style={styles.imageContainer}>
-        {item.image ? (
-          typeof item.image === "string" ? (
-            <Image source={{ uri: item.image }} style={styles.image} />
+  const renderItem = ({ item }: { item: (typeof queues)[0] }) => {
+    // Determine which image to display
+    let imageSource = item.image;
+
+    // If the item name matches a known business but no valid image is present, use the imported one
+    if (item.name && (!item.image || typeof item.image === "string")) {
+      const businessImage = getBusinessImage(item.name);
+      if (businessImage) {
+        imageSource = businessImage;
+      }
+    }
+
+    return (
+      <TouchableOpacity
+        onPress={() => handleQueuePress(item)}
+        style={[
+          styles.queueCard,
+          isDarkMode ? styles.darkCard : styles.lightCard,
+        ]}
+      >
+        <View style={styles.imageContainer}>
+          {imageSource ? (
+            <Image
+              source={
+                typeof imageSource === "string"
+                  ? { uri: imageSource }
+                  : imageSource
+              }
+              style={styles.image}
+            />
           ) : (
-            <Image source={item.image} style={styles.image} />
-          )
-        ) : (
-          <View
-            style={[
-              styles.imagePlaceholder,
-              {
-                backgroundColor: isDarkMode
-                  ? "rgba(29, 205, 254, 0.2)"
-                  : "#E5F7FF",
-              },
-            ]}
-          >
-            <Text style={[styles.placeholderText, { color: "white" }]}>
-              {item.name ? item.name.charAt(0).toUpperCase() : "?"}
-            </Text>
-          </View>
-        )}
-      </View>
-
-      <View style={styles.contentContainer}>
-        <View style={styles.headerContainer}>
-          <Text
-            style={[
-              styles.titleText,
-              { color: isDarkMode ? "white" : "#17222D" },
-            ]}
-          >
-            {item.name}
-          </Text>
-          <Text
-            style={[
-              styles.subtitleText,
-              { color: isDarkMode ? "#1DCDFE" : "#0077B6" },
-            ]}
-          >
-            {item.serviceType}
-          </Text>
+            <View
+              style={[
+                styles.imagePlaceholder,
+                {
+                  backgroundColor: isDarkMode
+                    ? "rgba(29, 205, 254, 0.2)"
+                    : "#E5F7FF",
+                },
+              ]}
+            >
+              <Text style={[styles.placeholderText, { color: "white" }]}>
+                {item.name ? item.name.charAt(0).toUpperCase() : "?"}
+              </Text>
+            </View>
+          )}
         </View>
 
-        <View style={styles.detailsContainer}>
-          <View style={styles.detailRow}>
-            <FontAwesomeIcon
-              icon={faUser}
-              size={14}
-              color={isDarkMode ? "#1DCDFE" : "#0077B6"}
-            />
+        <View style={styles.contentContainer}>
+          <View style={styles.headerContainer}>
             <Text
               style={[
-                styles.detailText,
+                styles.titleText,
                 { color: isDarkMode ? "white" : "#17222D" },
               ]}
             >
-              {item.position === 1
-                ? "1 person remaining"
-                : `${item.position} people remaining`}
+              {item.name}
             </Text>
-          </View>
-
-          <View style={styles.detailRow}>
-            <FontAwesomeIcon
-              icon={faClock}
-              size={14}
-              color={isDarkMode ? "#1DCDFE" : "#0077B6"}
-            />
             <Text
               style={[
-                styles.detailText,
-                { color: isDarkMode ? "white" : "#17222D" },
+                styles.subtitleText,
+                { color: isDarkMode ? "#1DCDFE" : "#0077B6" },
               ]}
             >
-              {item.estimatedTime === 0
-                ? i18n.t("yourTurn")
-                : `${i18n.t("waitTime")}: ~${item.estimatedTime} ${i18n.t(
-                    "minutes"
-                  )}`}
+              {item.serviceType}
             </Text>
           </View>
-        </View>
 
-        <TouchableOpacity
-          style={[styles.leaveButton, { backgroundColor: "#D84315" }]}
-          onPress={() => handleLeaveQueue(item.id)}
-        >
-          <Text style={styles.leaveButtonText}>
-            {i18n.t("common.queue.leave")}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
-  );
+          <View style={styles.detailsContainer}>
+            <View style={styles.detailRow}>
+              <FontAwesomeIcon
+                icon={faUser}
+                size={14}
+                color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+              />
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: isDarkMode ? "white" : "#17222D" },
+                ]}
+              >
+                {item.position === 1
+                  ? i18n.t("common.queue.peopleCountSingular", { count: 1 })
+                  : i18n.t("common.queue.peopleCount", {
+                      count: item.position,
+                    })}
+              </Text>
+            </View>
+
+            <View style={styles.detailRow}>
+              <FontAwesomeIcon
+                icon={faClock}
+                size={14}
+                color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+              />
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: isDarkMode ? "white" : "#17222D" },
+                ]}
+              >
+                {item.position <= 1 || item.estimatedTime === 0
+                  ? i18n.t("yourTurn")
+                  : i18n.t("common.queue.waitTime", {
+                      minutes: item.estimatedTime,
+                    })}
+              </Text>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={[styles.leaveButton, { backgroundColor: "#D84315" }]}
+            onPress={() => handleLeaveQueue(item.id)}
+          >
+            <Text style={styles.leaveButtonText}>
+              {i18n.t("common.queue.leave")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
