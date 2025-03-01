@@ -178,6 +178,8 @@
       "waitTime": "~ {{minutes}} min",
       "joined": "Queue Joined!",
       "leave": "Leave Queue",
+      "leavingQueue": "Leaving Queue...",
+      "joiningQueue": "Joining Queue...",
       "join": "Join Queue",
       "leaveConfirm": {
         "title": "Leave Queue?",
