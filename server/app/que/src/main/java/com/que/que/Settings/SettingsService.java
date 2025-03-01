@@ -8,22 +8,27 @@ import org.springframework.stereotype.Service;
 public class SettingsService {
     private boolean isMaintenanceMode = false;
     private boolean isComingSoonMode = false;
+    private long maintenanceDuration = 10; // in minutes
 
-    public Map<String, Boolean> getSettings() {
-        Map<String, Boolean> settings = Map.of(
+    public Map<String, Object> getSettings() {
+        Map<String, Object> settings = Map.of(
                 "isMaintenanceMode", isMaintenanceMode,
-                "isComingSoonMode", isComingSoonMode);
+                "isComingSoonMode", isComingSoonMode,
+                "maintenanceDuration", maintenanceDuration);
 
         return settings;
     }
 
-    public Map<String, Boolean> updateSettings(boolean isMaintenanceMode, boolean isComingSoonMode) {
+    public Map<String, Object> updateSettings(boolean isMaintenanceMode, boolean isComingSoonMode,
+            long maintenanceDuration) {
         this.isMaintenanceMode = isMaintenanceMode;
         this.isComingSoonMode = isComingSoonMode;
+        this.maintenanceDuration = maintenanceDuration;
 
-        Map<String, Boolean> settings = Map.of(
+        Map<String, Object> settings = Map.of(
                 "isMaintenanceMode", isMaintenanceMode,
-                "isComingSoonMode", isComingSoonMode);
+                "isComingSoonMode", isComingSoonMode,
+                "maintenanceDuration", maintenanceDuration);
 
         return settings;
     }

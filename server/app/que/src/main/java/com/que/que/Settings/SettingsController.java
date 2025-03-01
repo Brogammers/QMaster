@@ -24,6 +24,6 @@ public class SettingsController {
     @PutMapping
     public ResponseEntity<Object> updateSettings(@RequestBody SettingsRequest settingsRequest) {
         return ResponseEntity.ok(settingsService.updateSettings(settingsRequest.isMaintenanceMode(),
-                settingsRequest.isComingSoonMode()));
+                settingsRequest.isComingSoonMode(), settingsRequest.getMaintenanceDuration()));
     }
 }

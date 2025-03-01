@@ -144,12 +144,13 @@ export default function SettingsPage() {
   };
 
   const handleSuccessfulAuth = () => {
+    // Calculate total minutes from hours and minutes
+    const maintenanceDuration = maintenanceHours * 60 + maintenanceMinutes;
+
     if (pendingAction) {
       if (pendingAction.type === "maintenance") {
         const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
-        // Calculate total minutes from hours and minutes
-        const maintenanceDuration = maintenanceHours * 60 + maintenanceMinutes;
-
+      
         // Don't allow enabling maintenance mode with zero duration
         if (pendingAction.value && maintenanceDuration === 0) {
           setPendingAction(null);
@@ -188,6 +189,7 @@ export default function SettingsPage() {
           .put(url, {
             isMaintenanceMode: isMaintenanceEnabled,
             isComingSoonMode: pendingAction.value,
+            maintenanceDuration: maintenanceDuration,
           })
           .then((response) => {
             if (response.status === 200) {
@@ -371,12 +373,12 @@ export default function SettingsPage() {
                       <input
                         type="number"
                         min="0"
-                        max="999"
+                        max="99"
                         value={maintenanceHours}
                         onChange={(e) =>
-                          setMaintenanceHours(parseInt(e.target.value) || 0)
+                          setMaintenanceHours(parseInt(e.target.value) || 0)                          
                         }
-                        className="w-12 px-2 py-1 rounded-md border-none bg-white text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
+                        className="appearance-none m-0 w-24 px-2 py-1 rounded-md border-none bg-white text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
                       />
                       <span className="text-sm text-slate-700 font-medium whitespace-nowrap">
                         hrs
@@ -389,7 +391,7 @@ export default function SettingsPage() {
                         onChange={(e) =>
                           setMaintenanceMinutes(parseInt(e.target.value) || 0)
                         }
-                        className="w-12 px-2 py-1 rounded-md border-none bg-white text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
+                        className="appearance-none m-0 w-24 px-2 py-1 rounded-md border-none bg-white text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
                       />
                       <span className="text-sm text-slate-700 font-medium whitespace-nowrap">
                         min
