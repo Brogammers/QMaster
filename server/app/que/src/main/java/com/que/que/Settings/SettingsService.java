@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SettingsService {
-    private boolean isMaintenanceMode = true;
+    private boolean isMaintenanceMode = false;
     private boolean isComingSoonMode = false;
 
     public Map<String, Boolean> getSettings() {
