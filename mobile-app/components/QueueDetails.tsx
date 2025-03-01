@@ -41,6 +41,8 @@ export default function QueueDetails(props: QueueDetailsProps) {
   const [leave, setLeave] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
   const { branch, serviceType, brandName } = props;
   const { isDarkMode } = useTheme();
   const { selectedQueue, setSelectedQueue } = useContext(QueuesContext);
@@ -111,14 +113,31 @@ export default function QueueDetails(props: QueueDetailsProps) {
     }
   }, [activeQueue, serviceType]);
 
-  // Handle join queue action with useCallback
+  // Handle join queue action with useCallback - FIXED
   const handleJoinQueue = useCallback(async () => {
-    if (isUpdating) return; // Prevent concurrent actions
+    // Add logging to help debug
+    console.log("Join queue button pressed");
+    console.log("Current states:", { isJoining, isUpdating });
+
+    // Prevent multiple operations
+    if (isJoining) {
+      console.log("Join operation already in progress, ignoring");
+      return;
+    }
+
+    setIsJoining(true); // Set flag immediately to prevent double clicks
 
     try {
-      setIsUpdating(true);
+      console.log("Starting join queue request");
       const session = await AsyncStorage.getItem("TOKEN_KEY");
+      if (!session) {
+        console.error("No session token found");
+        setIsJoining(false);
+        return;
+      }
+
       const url = configConverter("EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE");
+      console.log(`Making API request to: ${url}?queueName=${serviceType}`);
 
       const response = await axios.put(
         `${url}?queueName=${serviceType}`,
@@ -130,7 +149,9 @@ export default function QueueDetails(props: QueueDetailsProps) {
         }
       );
 
+      console.log("API response status:", response.status);
       if (response.status === 200) {
+        console.log("Successfully joined queue");
         setLeave(true);
         setShowDetails(false);
 
@@ -156,19 +177,33 @@ export default function QueueDetails(props: QueueDetailsProps) {
           JSON.stringify([...currentQueues, newQueue])
         );
 
+        console.log("Starting animation sequence");
         // Update UI with animation timing
         setTimeout(() => {
+          console.log("Animation timeout completed, showing details");
           setShowDetails(true);
           setSelectedQueue((prev) => {
             if (!prev) return prev;
             return { ...prev, currentQueueSize: prev.currentQueueSize + 1 };
           });
         }, 1000);
+      } else {
+        console.warn("Unexpected API response:", response);
       }
     } catch (error) {
       console.error("Error joining queue:", error);
+      Alert.alert(i18n.t("common.error"), i18n.t("common.queue.joinError"), [
+        { text: i18n.t("common.ok") },
+      ]);
     } finally {
-      setIsUpdating(false);
+      // Reset joining flag but keep the updating flag set until animation completes
+      console.log("Resetting join operation flag");
+      setIsJoining(false);
+
+      // Allow time for the animation to complete before resetting isUpdating
+      setTimeout(() => {
+        setIsUpdating(false);
+      }, 1500);
     }
   }, [
     branch,
@@ -177,18 +212,38 @@ export default function QueueDetails(props: QueueDetailsProps) {
     selectedQueue,
     serviceType,
     setSelectedQueue,
+    isJoining,
     isUpdating,
   ]);
 
-  // Handle leave queue with useCallback
+  // COMPLETELY FIXED Leave Queue Handler
   const handleLeaveQueue = useCallback(() => {
-    const handleLeaveRequest = async () => {
-      if (isUpdating) return; // Prevent concurrent actions
+    // Clear logging to help troubleshoot
+    console.log("Leave queue button pressed");
+    console.log("Current states:", { isLeaving, isUpdating });
 
+    // Prevent multiple operations
+    if (isLeaving) {
+      console.log("Leave operation already in progress, ignoring");
+      return;
+    }
+
+    setIsLeaving(true); // Set flag immediately to prevent double clicks
+
+    const handleLeaveRequest = async () => {
+      console.log("Starting leave queue request");
       try {
-        setIsUpdating(true);
         const session = await AsyncStorage.getItem("TOKEN_KEY");
+        if (!session) {
+          console.error("No session token found");
+          setIsLeaving(false);
+          return;
+        }
+
         const url = configConverter("EXPO_PUBLIC_API_BASE_URL_JOIN_QUEUE");
+        console.log(
+          `Making API request to: ${url}?queueName=${serviceType}&leave=true`
+        );
 
         const response = await axios.put(
           `${url}?queueName=${serviceType}&leave=true`,
@@ -200,11 +255,22 @@ export default function QueueDetails(props: QueueDetailsProps) {
           }
         );
 
+        console.log("API response status:", response.status);
         if (response.status === 200) {
+          console.log("Successfully left queue");
           setLeave(false);
 
           // Update Redux
-          dispatch(removeFromQueue(response.data.id));
+          if (response.data && response.data.id) {
+            dispatch(removeFromQueue(response.data.id));
+          } else {
+            console.warn(
+              "No queue ID in response, using active queue ID from Redux"
+            );
+            if (activeQueue) {
+              dispatch(removeFromQueue(activeQueue.id));
+            }
+          }
 
           // Update AsyncStorage
           const existingQueues = await AsyncStorage.getItem("currentQueues");
@@ -217,23 +283,38 @@ export default function QueueDetails(props: QueueDetailsProps) {
               "currentQueues",
               JSON.stringify(updatedQueues)
             );
+            console.log("AsyncStorage updated, removed queue");
           }
 
-          setSelectedQueue((prev) => {
-            if (!prev) return prev;
-            return {
-              ...prev,
-              currentQueueSize: Math.max(0, prev.currentQueueSize - 1),
-            };
-          });
+          // Update local queue state if needed
+          if (setSelectedQueue) {
+            setSelectedQueue((prev) => {
+              if (!prev) return prev;
+              return {
+                ...prev,
+                currentQueueSize: Math.max(0, prev.currentQueueSize - 1),
+              };
+            });
+          }
+
+          console.log("All state updates completed");
+        } else {
+          console.warn("Unexpected API response:", response);
         }
       } catch (error) {
         console.error("Error leaving queue:", error);
+        Alert.alert(i18n.t("common.error"), i18n.t("common.queue.leaveError"), [
+          { text: i18n.t("common.ok") },
+        ]);
       } finally {
+        // Always reset flags
+        console.log("Resetting leave operation flags");
+        setIsLeaving(false);
         setIsUpdating(false);
       }
     };
 
+    // Show confirmation dialog
     Alert.alert(
       i18n.t("common.queue.leaveConfirm.title"),
       i18n.t("common.queue.leaveConfirm.message"),
@@ -242,18 +323,36 @@ export default function QueueDetails(props: QueueDetailsProps) {
           text: i18n.t("common.queue.leaveConfirm.cancel"),
           style: "default",
           isPreferred: true,
+          onPress: () => {
+            console.log("Leave operation cancelled by user");
+            setIsLeaving(false);
+          },
         },
         {
           text: i18n.t("common.queue.leaveConfirm.confirm"),
           style: "destructive",
-          onPress: handleLeaveRequest,
+          onPress: () => {
+            console.log("Leave operation confirmed by user");
+            handleLeaveRequest();
+          },
         },
       ],
       {
         cancelable: true,
+        onDismiss: () => {
+          console.log("Leave dialog dismissed");
+          setIsLeaving(false);
+        },
       }
     );
-  }, [dispatch, serviceType, setSelectedQueue, isUpdating]);
+  }, [
+    dispatch,
+    serviceType,
+    setSelectedQueue,
+    activeQueue,
+    isLeaving,
+    isUpdating,
+  ]);
 
   // Memoize components to prevent rerenders
   const CardWrapper = useCallback(
@@ -285,7 +384,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
         from={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.5 }}
-        transition={{ duration: 500 }}
+        transition={{ duration: 700 }}
         className="items-center justify-center w-full"
         style={{ height: 100 }}
       >
@@ -299,10 +398,22 @@ export default function QueueDetails(props: QueueDetailsProps) {
           }}
         >
           <View className="flex-row items-center justify-center">
-            <FontAwesome name="check-circle" size={24} color="#1DCDFE" />
-            <Text className="text-baby-blue text-xl font-bold ml-3">
-              {i18n.t("common.queue.joined")}
-            </Text>
+            <MotiView
+              from={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 200 }}
+            >
+              <FontAwesome name="check-circle" size={24} color="#1DCDFE" />
+            </MotiView>
+            <MotiView
+              from={{ opacity: 0, translateY: 10 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ delay: 400 }}
+            >
+              <Text className="text-baby-blue text-xl font-bold ml-3">
+                {i18n.t("common.queue.joined")}
+              </Text>
+            </MotiView>
           </View>
         </View>
       </MotiView>
@@ -386,18 +497,37 @@ export default function QueueDetails(props: QueueDetailsProps) {
           <TouchableOpacity
             className="mt-8 w-full"
             onPress={handleJoinQueue}
-            disabled={isUpdating}
+            disabled={isJoining}
+            activeOpacity={0.6}
           >
             <View style={{ width: buttonWidth }} className="items-center">
               <LinearGradient
                 colors={["#1DCDFE", "#0077B6"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                className="w-full py-3 rounded-lg items-center px-12"
+                className={`w-full py-3 rounded-lg items-center px-12 ${
+                  isJoining ? "opacity-70" : ""
+                }`}
               >
-                <Text className="text-lg font-bold text-white">
-                  {i18n.t("common.queue.join")}
-                </Text>
+                <View className="flex-row items-center justify-center">
+                  {isJoining ? (
+                    <>
+                      <MaterialCommunityIcons
+                        name="loading"
+                        size={20}
+                        color="white"
+                        style={{ marginRight: 8 }}
+                      />
+                      <Text className="text-lg font-bold text-white">
+                        {i18n.t("common.loading")}
+                      </Text>
+                    </>
+                  ) : (
+                    <Text className="text-lg font-bold text-white">
+                      {i18n.t("common.queue.join")}
+                    </Text>
+                  )}
+                </View>
               </LinearGradient>
             </View>
           </TouchableOpacity>
@@ -485,17 +615,36 @@ export default function QueueDetails(props: QueueDetailsProps) {
                   <TouchableOpacity
                     onPress={handleLeaveQueue}
                     className="w-full"
-                    disabled={isUpdating}
+                    disabled={isLeaving}
+                    activeOpacity={0.6}
                   >
                     <LinearGradient
                       colors={["#EF4444", "#B91C1C"]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
-                      className="py-3 rounded-lg items-center px-12"
+                      className={`py-3 rounded-lg items-center px-12 ${
+                        isLeaving ? "opacity-70" : ""
+                      }`}
                     >
-                      <Text className="text-lg font-bold text-white">
-                        {i18n.t("common.queue.leave")}
-                      </Text>
+                      <View className="flex-row items-center justify-center">
+                        {isLeaving ? (
+                          <>
+                            <MaterialCommunityIcons
+                              name="loading"
+                              size={20}
+                              color="white"
+                              style={{ marginRight: 8 }}
+                            />
+                            <Text className="text-lg font-bold text-white">
+                              {i18n.t("common.loading")}
+                            </Text>
+                          </>
+                        ) : (
+                          <Text className="text-lg font-bold text-white">
+                            {i18n.t("common.queue.leave")}
+                          </Text>
+                        )}
+                      </View>
                     </LinearGradient>
                   </TouchableOpacity>
                 </View>
