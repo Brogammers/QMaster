@@ -47,7 +47,7 @@ public class PermissionsService {
         }
 
         permissions.put("id", businessUser.getId());
-        permissions.put("name", businessUser.getFirstName() + " " + businessUser.getLastName());
+        permissions.put("name", userRole.toString());
 
         Partner partner = businessUser.getPartner();
         List<Location> locations = partner.getLocations();

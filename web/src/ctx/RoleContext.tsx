@@ -36,13 +36,7 @@ export function RoleProvider({ children }: { children: React.ReactNode }) {
         const url =
             process.env.NEXT_PUBLIC_API_BASE_URL_PERMISSIONS_FOR_BUSINESS!;
         const response = await axios.get(url);
-        const roleData = {
-          id: response.data.role.id,
-          name: response.data.role.name,
-          permissions: response.data.role.permissions,
-          branches: response.data.role.branches,
-        }
-        setUserRole(roleData);
+        setUserRole(response.data.role);
       } catch (error) {
         console.error("Error fetching user role:", error);
       }
