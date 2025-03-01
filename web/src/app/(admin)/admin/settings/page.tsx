@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FaCog, FaBell, FaLock, FaGlobe, FaFingerprint } from "react-icons/fa";
+import {
+  FaCog,
+  FaBell,
+  FaLock,
+  FaGlobe,
+  FaFingerprint,
+  FaExclamationTriangle,
+} from "react-icons/fa";
 import { Switch } from "@headlessui/react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
@@ -28,6 +35,7 @@ export default function SettingsPage() {
   const [deviceLanguage, setDeviceLanguage] = useState("");
   const [deviceTimezone, setDeviceTimezone] = useState("");
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isConflictModalOpen, setIsConflictModalOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [authError, setAuthError] = useState("");
@@ -176,7 +184,7 @@ export default function SettingsPage() {
         axios
           .put(url, {
             isMaintenanceMode: pendingAction.value,
-            isComingSoonMode: isComingSoonEnabled,
+            isComingSoonMode: pendingAction.value ? false : isComingSoonEnabled, // Disable coming soon mode if enabling maintenance
             maintenanceDuration: maintenanceDuration, // Always send duration regardless of mode
           })
           .then((response) => {
@@ -193,6 +201,19 @@ export default function SettingsPage() {
                   },
                 }
               );
+
+              // If we're enabling maintenance mode, make sure coming soon is disabled
+              if (pendingAction.value && isComingSoonEnabled) {
+                setIsComingSoonEnabled(false);
+                toast.success("Coming soon mode has been disabled", {
+                  duration: 5000,
+                  style: {
+                    background: "#17222D",
+                    color: "#FFF",
+                  },
+                });
+              }
+
               return response.data;
             } else {
               throw new Error("Failed to update maintenance mode");
@@ -218,7 +239,9 @@ export default function SettingsPage() {
         const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
         axios
           .put(url, {
-            isMaintenanceMode: isMaintenanceEnabled,
+            isMaintenanceMode: pendingAction.value
+              ? false
+              : isMaintenanceEnabled, // Disable maintenance mode if enabling coming soon
             isComingSoonMode: pendingAction.value,
             maintenanceDuration: maintenanceDuration,
           })
@@ -236,6 +259,19 @@ export default function SettingsPage() {
                   },
                 }
               );
+
+              // If we're enabling coming soon mode, make sure maintenance is disabled
+              if (pendingAction.value && isMaintenanceEnabled) {
+                setIsMaintenanceEnabled(false);
+                toast.success("Maintenance mode has been disabled", {
+                  duration: 5000,
+                  style: {
+                    background: "#17222D",
+                    color: "#FFF",
+                  },
+                });
+              }
+
               return response.data;
             } else {
               throw new Error("Failed to update coming soon mode");
@@ -267,8 +303,42 @@ export default function SettingsPage() {
   };
 
   const handleToggle = (type: "maintenance" | "comingSoon", value: boolean) => {
+    // Check if trying to enable a mode while the other is already enabled
+    if (value) {
+      if (type === "maintenance" && isComingSoonEnabled) {
+        // User is trying to enable maintenance mode while coming soon mode is active
+        setPendingAction({ type, value });
+        setIsConflictModalOpen(true);
+        return;
+      } else if (type === "comingSoon" && isMaintenanceEnabled) {
+        // User is trying to enable coming soon mode while maintenance mode is active
+        setPendingAction({ type, value });
+        setIsConflictModalOpen(true);
+        return;
+      }
+    }
+
+    // If no conflict or disabling a mode, proceed to authentication
     setPendingAction({ type, value });
     setIsAuthModalOpen(true);
+  };
+
+  const handleConflictResolution = (shouldDisableOther: boolean) => {
+    setIsConflictModalOpen(false);
+
+    if (shouldDisableOther) {
+      // User chose to disable the other mode
+      if (pendingAction?.type === "maintenance") {
+        // Disable coming soon mode first, then proceed with enabling maintenance mode
+        setIsAuthModalOpen(true);
+      } else if (pendingAction?.type === "comingSoon") {
+        // Disable maintenance mode first, then proceed with enabling coming soon mode
+        setIsAuthModalOpen(true);
+      }
+    } else {
+      // User chose not to proceed
+      setPendingAction(null);
+    }
   };
 
   const handleMaintenanceHoursChange = (value: number) => {
@@ -568,6 +638,90 @@ export default function SettingsPage() {
         )}
       </div>
 
+      {/* Conflict Modal */}
+      <Transition appear show={isConflictModalOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-50"
+          onClose={() => setIsConflictModalOpen(false)}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <div className="flex items-center gap-4 mb-4">
+                    <FaExclamationTriangle className="text-amber-500 w-6 h-6" />
+                    <Dialog.Title
+                      as="h3"
+                      className="text-lg font-medium leading-6 text-gray-900"
+                    >
+                      Mode Conflict
+                    </Dialog.Title>
+                  </div>
+
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      {pendingAction?.type === "maintenance"
+                        ? "Coming Soon mode is currently active. You cannot enable Maintenance mode while Coming Soon mode is active."
+                        : "Maintenance mode is currently active. You cannot enable Coming Soon mode while Maintenance mode is active."}
+                    </p>
+                    <p className="text-sm text-gray-500 mt-2">
+                      Would you like to disable{" "}
+                      {pendingAction?.type === "maintenance"
+                        ? "Coming Soon"
+                        : "Maintenance"}{" "}
+                      mode and enable{" "}
+                      {pendingAction?.type === "maintenance"
+                        ? "Maintenance"
+                        : "Coming Soon"}{" "}
+                      mode instead?
+                    </p>
+                  </div>
+
+                  <div className="mt-6 flex justify-end gap-3">
+                    <button
+                      type="button"
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                      onClick={() => handleConflictResolution(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className="px-4 py-2 text-sm font-medium text-white bg-amber-500 rounded-md hover:bg-amber-600 transition-colors"
+                      onClick={() => handleConflictResolution(true)}
+                    >
+                      Proceed
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+
+      {/* Authentication Modal */}
       <Transition appear show={isAuthModalOpen} as={Fragment}>
         <Dialog
           as="div"
