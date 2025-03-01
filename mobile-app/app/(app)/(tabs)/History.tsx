@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -21,6 +21,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import configConverter from "@/api/configConverter";
+import RefreshableWrapper from "@/components/RefreshableWrapper";
 
 function formatDate(date: any) {
   let day = date.getDate();
@@ -46,6 +47,87 @@ export default function History() {
 
   const userId = useSelector((state: RootState) => state.userId.userId);
 
+  const fetchHistoryData = useCallback(async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+
+      const response = await axios.get(
+        `${configConverter("EXPO_PUBLIC_API_BASE_URL_HISTORY")}?id=${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const data = response.data.history;
+        let historyEnqueue = data.enqueuings.content;
+        let historyDequeue = data.dequeuings.content;
+
+        historyDequeue.forEach(
+          (item: {
+            id: number;
+            isHistory: boolean;
+            status: string;
+            date: string;
+            name: string;
+            time: string;
+            notification: string;
+            location: string;
+          }) => {
+            item.id = item.id;
+            item.isHistory = true;
+            item.status = "Dequeued";
+            item.date = formatDate(new Date(item.time));
+            item.name = item.name;
+            item.location = item.location;
+          }
+        );
+        historyEnqueue.forEach(
+          (item: {
+            id: number;
+            isHistory: boolean;
+            status: string;
+            date: string;
+            name: string;
+            time: string;
+            notification: string;
+            location: string;
+          }) => {
+            item.id = item.id;
+            item.isHistory = true;
+            item.status = "Enqueued";
+            item.date = formatDate(new Date(item.time));
+            item.name = item.name;
+            item.location = item.location;
+          }
+        );
+
+        let combinedHistory = [...historyEnqueue, ...historyDequeue];
+        setHistoryList(combinedHistory);
+        setItemsCount(historyEnqueue.length + historyDequeue.length);
+        setInitialLoading(false);
+        setIsLoading(false);
+
+        const timeoutDate = new Date();
+        timeoutDate.setSeconds(timeoutDate.getSeconds() + 15);
+        await AsyncStorage.setItem(
+          "historyData",
+          JSON.stringify({
+            history: combinedHistory,
+            date: timeoutDate,
+          })
+        );
+        console.log("History Data Saved");
+      }
+    } catch (error) {
+      console.error(error);
+      setInitialLoading(false);
+      setIsLoading(false);
+    }
+  }, [userId]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,6 +143,7 @@ export default function History() {
 
         if (
           historyData &&
+          historyData.date &&
           new Date(historyData.date).getTime() > checkDate.getTime()
         ) {
           setHistoryList(historyData.history);
@@ -68,86 +151,7 @@ export default function History() {
           setInitialLoading(false);
           setIsLoading(false);
         } else {
-          const token = await AsyncStorage.getItem("token");
-
-          const response = axios.get(
-            `${configConverter(
-              "EXPO_PUBLIC_API_BASE_URL_HISTORY"
-            )}?id=${userId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          response.then((res: AxiosResponse) => {
-            if (res.status === 200) {
-              const data = res.data.history;
-              let historyEnqueue = data.enqueuings.content;
-              let historyDequeue = data.dequeuings.content;
-
-              historyDequeue.forEach(
-                (item: {
-                  id: number;
-                  isHistory: boolean;
-                  status: string;
-                  date: string;
-                  name: string;
-                  time: string;
-                  notification: string;
-                  location: string;
-                }) => {
-                  item.id = item.id;
-                  item.isHistory = true;
-                  item.status = "Dequeued";
-                  item.date = formatDate(new Date(item.time));
-                  item.name = item.name;
-                  item.location = item.location;
-                }
-              );
-              historyEnqueue.forEach(
-                (item: {
-                  id: number;
-                  isHistory: boolean;
-                  status: string;
-                  date: string;
-                  name: string;
-                  time: string;
-                  notification: string;
-                  location: string;
-                }) => {
-                  item.id = item.id;
-                  item.isHistory = true;
-                  item.status = "Enqueued";
-                  item.date = formatDate(new Date(item.time));
-                  item.name = item.name;
-                  item.location = item.location;
-                }
-              );
-
-              let combinedHistory = [...historyEnqueue, ...historyDequeue];
-              setHistoryList(combinedHistory);
-              setItemsCount(historyEnqueue.length + historyDequeue.length);
-              setInitialLoading(false);
-              setIsLoading(false);
-
-              const timeoutDate = new Date();
-              timeoutDate.setSeconds(timeoutDate.getSeconds() + 15);
-              AsyncStorage.setItem(
-                "historyData",
-                JSON.stringify({
-                  history: combinedHistory,
-                  date: timeoutDate,
-                })
-              ).then(() => {
-                console.log("History Data Saved");
-              });
-            } else {
-              setInitialLoading(false);
-              setIsLoading(false);
-            }
-          });
+          fetchHistoryData();
         }
       } catch (error) {
         console.error(error);
@@ -157,10 +161,15 @@ export default function History() {
     };
 
     fetchData();
-  }, [isFocused]);
+  }, [isFocused, fetchHistoryData]);
 
   return (
-    <View className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}>
+    <RefreshableWrapper
+      refreshId="history-screen"
+      onRefresh={fetchHistoryData}
+      autoRefreshInterval={300000} // Auto refresh every 5 minutes
+      className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}
+    >
       {!isDarkMode && (
         <LinearGradient
           colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
@@ -177,27 +186,25 @@ export default function History() {
           />
         </View>
       ) : isLoading && itemsCount ? (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View
-            className={`flex flex-col items-center justify-center ${
-              isDarkMode ? "bg-ocean-blue" : "bg-off-white"
-            }`}
-          >
-            {Array(itemsCount)
-              .fill(0)
-              .map((_, index) => (
-                <React.Fragment key={index}>
-                  <View className="mb-4" />
-                  <Skeleton
-                    colorMode={isDarkMode ? "dark" : "light"}
-                    width={(windowWidth * 11) / 12}
-                    height={100}
-                  />
-                </React.Fragment>
-              ))}
-            <View className="mb-5" />
-          </View>
-        </ScrollView>
+        <View
+          className={`flex flex-col items-center justify-center ${
+            isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+          }`}
+        >
+          {Array(itemsCount)
+            .fill(0)
+            .map((_, index) => (
+              <React.Fragment key={index}>
+                <View className="mb-4" />
+                <Skeleton
+                  colorMode={isDarkMode ? "dark" : "light"}
+                  width={(windowWidth * 11) / 12}
+                  height={100}
+                />
+              </React.Fragment>
+            ))}
+          <View className="mb-5" />
+        </View>
       ) : historyList.length === 0 ? (
         <View className="flex-1 items-center justify-center">
           <Text
@@ -216,7 +223,7 @@ export default function History() {
           </Text>
         </View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <View>
           {historyList.map((item, index) => (
             <HistoryComponent
               key={index}
@@ -230,9 +237,9 @@ export default function History() {
               isDarkMode={isDarkMode}
             />
           ))}
-        </ScrollView>
+        </View>
       )}
-    </View>
+    </RefreshableWrapper>
   );
 }
 

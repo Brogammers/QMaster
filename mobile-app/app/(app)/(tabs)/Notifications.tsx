@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -19,6 +19,9 @@ import i18n from "@/i18n";
 import { useTheme } from "@/ctx/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
 import configConverter from "@/api/configConverter";
+import RefreshableWrapper from "@/components/RefreshableWrapper";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
 
 export default function Notifications() {
   const isFocused = useIsFocused();
@@ -30,6 +33,63 @@ export default function Notifications() {
   const { isDarkMode } = useTheme();
   const [initialLoading, setInitialLoading] = useState(true);
   const [itemsCount, setItemsCount] = useState<number | null>(null);
+  const userId = useSelector((state: RootState) => state.userId.userId);
+
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+
+      const response = await axios.get(
+        `${configConverter(
+          "EXPO_PUBLIC_API_BASE_URL_NOTIFICATIONS"
+        )}?id=${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const data = response.data.notifications;
+        let historyEnqueue = data.enqueuings.content;
+        let historyDequeue = data.dequeuings.content;
+
+        historyDequeue.forEach(
+          (item: { isHistory: boolean; status: string; date: string }) => {
+            item.isHistory = true;
+            item.status = "Dequeued";
+            item.date = "Today";
+          }
+        );
+        historyEnqueue.forEach(
+          (item: { isHistory: boolean; status: string; date: string }) => {
+            item.isHistory = true;
+            item.status = "Enqueued";
+            item.date = "Today";
+          }
+        );
+
+        let combinedHistory = [...historyEnqueue, ...historyDequeue];
+        setNotifications(combinedHistory);
+        setItemsCount(combinedHistory.length);
+        setInitialLoading(false);
+        setIsLoading(false);
+
+        await AsyncStorage.setItem(
+          "notificationsData",
+          JSON.stringify(combinedHistory)
+        );
+      } else {
+        setInitialLoading(false);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setInitialLoading(false);
+      setIsLoading(false);
+    }
+  }, [userId]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,61 +102,7 @@ export default function Notifications() {
           setInitialLoading(false);
           setIsLoading(false);
         } else {
-          console.log("History Response ", axios.defaults.headers);
-          const token = await AsyncStorage.getItem("token");
-
-          const timeoutPromise = new Promise((resolve, reject) => {
-            setTimeout(() => reject("Timeout"), 5000);
-          });
-
-          const [response, _] = (await Promise.all([
-            axios.get(
-              `${configConverter(
-                "EXPO_PUBLIC_API_BASE_URL_NOTIFICATIONS"
-              )}?id=1`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            ),
-            timeoutPromise,
-          ])) as [AxiosResponse, unknown];
-
-          if (response.status === 200) {
-            const data = response.data.notifications;
-            let historyEnqueue = data.enqueuings.content;
-            let historyDequeue = data.dequeuings.content;
-
-            historyDequeue.forEach(
-              (item: { isHistory: boolean; status: string; date: string }) => {
-                item.isHistory = true;
-                item.status = "Dequeued";
-                item.date = "Today";
-              }
-            );
-            historyEnqueue.forEach(
-              (item: { isHistory: boolean; status: string; date: string }) => {
-                item.isHistory = true;
-                item.status = "Enqueued";
-                item.date = "Today";
-              }
-            );
-
-            let combinedHistory = [...historyEnqueue, ...historyDequeue];
-            setNotifications(combinedHistory);
-            setItemsCount(combinedHistory.length);
-            setInitialLoading(false);
-            setIsLoading(false);
-
-            await AsyncStorage.setItem(
-              "notificationsData",
-              JSON.stringify(combinedHistory)
-            );
-          } else {
-            setInitialLoading(false);
-            setIsLoading(false);
-          }
+          await fetchNotifications();
         }
       } catch (error) {
         console.error(error);
@@ -112,10 +118,18 @@ export default function Notifications() {
     fetchData();
 
     return () => clearTimeout(fetchDataTimeout);
-  }, [isFocused]);
+  }, [isFocused, fetchNotifications]);
+
+  // Notifications need more frequent updates as they're more time-sensitive
+  const refreshInterval = 120000; // 2 minutes
 
   return (
-    <View className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}>
+    <RefreshableWrapper
+      refreshId="notifications-screen"
+      onRefresh={fetchNotifications}
+      autoRefreshInterval={refreshInterval}
+      className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}
+    >
       {!isDarkMode && (
         <LinearGradient
           colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
@@ -132,27 +146,25 @@ export default function Notifications() {
           />
         </View>
       ) : isLoading && itemsCount ? (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View
-            className={`flex flex-col items-center justify-center ${
-              isDarkMode ? "bg-ocean-blue" : "bg-off-white"
-            }`}
-          >
-            {Array(itemsCount)
-              .fill(0)
-              .map((_, index) => (
-                <React.Fragment key={index}>
-                  <View className="mb-4" />
-                  <Skeleton
-                    colorMode={isDarkMode ? "dark" : "light"}
-                    width={(windowWidth * 11) / 12}
-                    height={100}
-                  />
-                </React.Fragment>
-              ))}
-            <View className="mb-5" />
-          </View>
-        </ScrollView>
+        <View
+          className={`flex flex-col items-center justify-center ${
+            isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+          }`}
+        >
+          {Array(itemsCount)
+            .fill(0)
+            .map((_, index) => (
+              <React.Fragment key={index}>
+                <View className="mb-4" />
+                <Skeleton
+                  colorMode={isDarkMode ? "dark" : "light"}
+                  width={(windowWidth * 11) / 12}
+                  height={100}
+                />
+              </React.Fragment>
+            ))}
+          <View className="mb-5" />
+        </View>
       ) : notifications.length === 0 ? (
         <View className="flex-1 items-center justify-center">
           <Text
@@ -171,7 +183,7 @@ export default function Notifications() {
           </Text>
         </View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <View>
           {notifications.map((item, index) => (
             <HistoryComponent
               key={index}
@@ -185,9 +197,9 @@ export default function Notifications() {
               isDarkMode={isDarkMode}
             />
           ))}
-        </ScrollView>
+        </View>
       )}
-    </View>
+    </RefreshableWrapper>
   );
 }
 
