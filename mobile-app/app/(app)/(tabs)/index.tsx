@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   Platform,
   View,
-  ScrollView,
   useWindowDimensions,
   Text,
 } from "react-native";
