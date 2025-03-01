@@ -1,7 +1,6 @@
 "use client";
 
 import { Noto_Sans } from "next/font/google";
-import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { I18nextProvider } from "react-i18next";
 import i18next from "i18next";
@@ -53,16 +52,6 @@ export default function RootLayout({
       >
         <I18nextProvider i18n={i18next}>
           {children}
-          <Toaster
-            position="bottom-right"
-            toastOptions={{
-              style: {
-                background: "#17222D",
-                color: "#FFF",
-              },
-              duration: 5000,
-            }}
-          />
         </I18nextProvider>
       </body>
     </html>
