@@ -13,13 +13,16 @@ export default function MaintenancePage() {
     minutes: 0,
     displayText: "2 hours",
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
+    setIsLoading(true);
+
     axios
       .get(url)
       .then((response) => {
-        if (response.data.maintenanceDuration) {
+        if (response.data && response.data.maintenanceDuration !== undefined) {
           const totalMinutes = response.data.maintenanceDuration;
           const hours = Math.floor(totalMinutes / 60);
           const minutes = totalMinutes % 60;
@@ -31,8 +34,10 @@ export default function MaintenancePage() {
             } and ${minutes} minute${minutes > 1 ? "s" : ""}`;
           } else if (hours > 0) {
             displayText = `${hours} hour${hours > 1 ? "s" : ""}`;
-          } else {
+          } else if (minutes > 0) {
             displayText = `${minutes} minute${minutes > 1 ? "s" : ""}`;
+          } else {
+            displayText = "a short time"; // Fallback if no duration is set
           }
 
           setMaintenanceDuration({
@@ -44,6 +49,9 @@ export default function MaintenancePage() {
       })
       .catch((error) => {
         console.error("Failed to fetch maintenance duration:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -133,7 +141,9 @@ export default function MaintenancePage() {
                     <div className="flex items-center gap-4 text-white/80">
                       <FaClock className="w-5 h-5" />
                       <span>
-                        Estimated downtime: {maintenanceDuration.displayText}
+                        {isLoading
+                          ? "Estimating downtime..."
+                          : `Estimated downtime: ${maintenanceDuration.displayText}`}
                       </span>
                     </div>
 
