@@ -46,7 +46,7 @@ export default function Category() {
         if (response.status === 200 && response.data?.businesses?.content) {
           return response.data.businesses.content;
         } else {
-          throw new Error("No data available");
+          return [];
         }
       })
       .then((data) => {
@@ -63,7 +63,7 @@ export default function Category() {
         setLoading(false);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(`Category data fetch error: ${error.message}`);
         setError(true);
         setLoading(false);
       });
