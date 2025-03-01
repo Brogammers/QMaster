@@ -209,18 +209,13 @@ export default function Index() {
                   isDarkMode ? "bg-ocean-blue" : "bg-off-white"
                 }`}
               >
-                {Array(8)
-                  .fill(0)
-                  .map((_, index) => (
-                    <React.Fragment key={index}>
-                      <View className="mb-4" />
-                      <Skeleton
-                        colorMode={isDarkMode ? "dark" : "light"}
-                        width={windowWidth * (11 / 12)}
-                        height={100}
-                      />
-                    </React.Fragment>
-                  ))}
+                <View className="mb-4" />
+                <Skeleton
+                  colorMode={isDarkMode ? "dark" : "light"}
+                  width={windowWidth * 0.85}
+                  height={175}
+                  radius={16}
+                />
                 <View className="mb-5" />
               </View>
             ) : currentQueues.length > 0 ? (

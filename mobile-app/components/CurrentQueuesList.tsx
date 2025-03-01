@@ -175,7 +175,11 @@ export default function CurrentQueuesList() {
     >
       <View style={styles.imageContainer}>
         {item.image ? (
-          <Image source={{ uri: item.image }} style={styles.image} />
+          typeof item.image === "string" ? (
+            <Image source={{ uri: item.image }} style={styles.image} />
+          ) : (
+            <Image source={item.image} style={styles.image} />
+          )
         ) : (
           <View
             style={[
@@ -187,12 +191,7 @@ export default function CurrentQueuesList() {
               },
             ]}
           >
-            <Text
-              style={[
-                styles.placeholderText,
-                { color: isDarkMode ? "#1DCDFE" : "#0077B6" },
-              ]}
-            >
+            <Text style={[styles.placeholderText, { color: "white" }]}>
               {item.name ? item.name.charAt(0).toUpperCase() : "?"}
             </Text>
           </View>
