@@ -80,7 +80,7 @@ export default function Partner() {
 
   useEffect(() => {
     fetchLocationData();
-  }, [brandName, fetchLocationData]);
+  }, [brandName]);
 
   // Partner screen refresh should be more frequent if user is actively considering joining a queue
   const refreshInterval = 60000; // 1 minute

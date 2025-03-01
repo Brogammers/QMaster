@@ -120,7 +120,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
   // Initial check when component mounts or dependencies change
   useEffect(() => {
     checkQueueStatus();
-  }, [checkQueueStatus]);
+  }, []);
 
   // Handle join queue action with useCallback
   const handleJoinQueue = useCallback(async () => {

@@ -153,7 +153,7 @@ export default function CurrentQueuesList() {
     const interval = setInterval(updateQueuePositions, 30000);
 
     return () => clearInterval(interval);
-  }, [queues, dispatch, averageServiceTime]);
+  }, [queues, averageServiceTime]);
 
   const handleQueuePress = (queue: (typeof queues)[0]) => {
     // When navigating to Partner screen, also pass the resolved image
