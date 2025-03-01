@@ -7,14 +7,20 @@ export function withRoleProtection(
   requiredPermission: string
 ) {
   return function ProtectedRoute(props: any) {
-    const { hasPermission } = useRole();
+    const { hasPermission, userRole } = useRole();
     const router = useRouter();
 
     useEffect(() => {
-      if (!hasPermission(requiredPermission)) {
-        router.back();
+      console.log(userRole);
+      
+      if (userRole && !hasPermission(requiredPermission)) {
+        console.log("User does not have permission to access this page");
+        router.push("/login");
+      } else if (!userRole) {
+        console.log("User is not authorized or logged in");
+        router.push("/login");
       }
-    }, [hasPermission, router]);
+    }, [hasPermission, router, userRole]);
 
     if (!hasPermission(requiredPermission)) {
       return null;
