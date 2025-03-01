@@ -16,9 +16,6 @@ export function withRoleProtection(
       if (userRole && !hasPermission(requiredPermission)) {
         console.log("User does not have permission to access this page");
         router.push("/login");
-      } else if (!userRole) {
-        console.log("User is not authorized or logged in");
-        router.push("/login");
       }
     }, [hasPermission, router, userRole]);
 
