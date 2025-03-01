@@ -6,6 +6,7 @@ import { Switch } from "@headlessui/react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 interface UserProfile {
   name: string;
@@ -159,8 +160,15 @@ export default function SettingsPage() {
           setPassword("");
           setAuthError("");
           setEmail("");
-          alert(
-            "Please set a maintenance duration before enabling maintenance mode."
+          toast.error(
+            "Please set a maintenance duration before enabling maintenance mode.",
+            {
+              duration: 5000,
+              style: {
+                background: "#17222D",
+                color: "#FFF",
+              },
+            }
           );
           return;
         }
@@ -173,6 +181,18 @@ export default function SettingsPage() {
           })
           .then((response) => {
             if (response.status === 200) {
+              toast.success(
+                `Maintenance mode ${
+                  pendingAction.value ? "enabled" : "disabled"
+                } successfully!`,
+                {
+                  duration: 5000,
+                  style: {
+                    background: "#17222D",
+                    color: "#FFF",
+                  },
+                }
+              );
               return response.data;
             } else {
               throw new Error("Failed to update maintenance mode");
@@ -183,6 +203,16 @@ export default function SettingsPage() {
           })
           .catch((error) => {
             console.error("Failed to update maintenance mode:", error);
+            toast.error(
+              "Failed to update maintenance mode. Please try again.",
+              {
+                duration: 5000,
+                style: {
+                  background: "#17222D",
+                  color: "#FFF",
+                },
+              }
+            );
           });
       } else {
         const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
@@ -194,16 +224,38 @@ export default function SettingsPage() {
           })
           .then((response) => {
             if (response.status === 200) {
+              toast.success(
+                `Coming soon mode ${
+                  pendingAction.value ? "enabled" : "disabled"
+                } successfully!`,
+                {
+                  duration: 5000,
+                  style: {
+                    background: "#17222D",
+                    color: "#FFF",
+                  },
+                }
+              );
               return response.data;
             } else {
-              throw new Error("Failed to update maintenance mode");
+              throw new Error("Failed to update coming soon mode");
             }
           })
           .then((data) => {
             setIsComingSoonEnabled(data.isComingSoonMode);
           })
           .catch((error) => {
-            console.error("Failed to update maintenance mode:", error);
+            console.error("Failed to update coming soon mode:", error);
+            toast.error(
+              "Failed to update coming soon mode. Please try again.",
+              {
+                duration: 5000,
+                style: {
+                  background: "#17222D",
+                  color: "#FFF",
+                },
+              }
+            );
           });
       }
       setPendingAction(null);
@@ -234,7 +286,13 @@ export default function SettingsPage() {
 
     // Don't allow saving zero duration if maintenance mode is enabled
     if (isMaintenanceEnabled && maintenanceDuration === 0) {
-      alert("Please set a maintenance duration greater than zero.");
+      toast.error("Please set a maintenance duration greater than zero.", {
+        duration: 5000,
+        style: {
+          background: "#17222D",
+          color: "#FFF",
+        },
+      });
       return;
     }
 
@@ -248,19 +306,35 @@ export default function SettingsPage() {
       .then((response) => {
         if (response.status === 200) {
           setIsDurationChanged(false);
-          alert("Maintenance duration updated successfully!");
+          toast.success("Maintenance duration updated successfully!", {
+            duration: 5000,
+            style: {
+              background: "#17222D",
+              color: "#FFF",
+            },
+          });
         } else {
           throw new Error("Failed to update maintenance duration");
         }
       })
       .catch((error) => {
         console.error("Failed to update maintenance duration:", error);
-        alert("Failed to update maintenance duration. Please try again.");
+        toast.error(
+          "Failed to update maintenance duration. Please try again.",
+          {
+            duration: 5000,
+            style: {
+              background: "#17222D",
+              color: "#FFF",
+            },
+          }
+        );
       });
   };
 
   return (
     <div className="space-y-4 lg:space-y-6">
+      <Toaster position="top-right" />
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
         <h1
@@ -459,8 +533,15 @@ export default function SettingsPage() {
                           maintenanceHours === 0 &&
                           maintenanceMinutes === 0
                         ) {
-                          alert(
-                            "Please set a maintenance duration before enabling maintenance mode."
+                          toast.error(
+                            "Please set a maintenance duration before enabling maintenance mode.",
+                            {
+                              duration: 5000,
+                              style: {
+                                background: "#17222D",
+                                color: "#FFF",
+                              },
+                            }
                           );
                           return;
                         }

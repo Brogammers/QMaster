@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import { FaTools, FaClock, FaRedo } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function MaintenancePage() {
   const [maintenanceDuration, setMaintenanceDuration] = useState({
@@ -48,6 +49,13 @@ export default function MaintenancePage() {
       })
       .catch((error) => {
         console.error("Failed to fetch maintenance duration:", error);
+        toast.error("Failed to fetch maintenance duration", {
+          duration: 5000,
+          style: {
+            background: "#17222D",
+            color: "#FFF",
+          },
+        });
       })
       .finally(() => {
         setIsLoading(false);
@@ -99,6 +107,7 @@ export default function MaintenancePage() {
 
   return (
     <div className="w-full leading-loose scroll-smooth overflow-x-hidden overflow-y-visible relative min-h-screen bg-gradient-to-b from-ocean-blue via-concrete-turqouise to-coal-black">
+      <Toaster position="top-right" />
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           initial={{ opacity: 0 }}
@@ -173,6 +182,13 @@ export default function MaintenancePage() {
                         onClick={() => {
                           setIsLoading(true);
                           fetchMaintenanceDuration();
+                          toast.success("Maintenance information refreshed", {
+                            duration: 3000,
+                            style: {
+                              background: "#17222D",
+                              color: "#FFF",
+                            },
+                          });
                         }}
                         className="flex items-center gap-2 px-6 py-3 bg-baby-blue/20 rounded-full text-baby-blue hover:bg-baby-blue/30 transition-all"
                       >
