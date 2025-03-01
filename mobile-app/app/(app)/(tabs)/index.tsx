@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   StatusBar,
   StyleSheet,
@@ -27,6 +27,7 @@ import { RootState } from "@/app/redux/store";
 import { setCurrentQueues } from "@/app/redux/queueSlice";
 import axios from "axios";
 import configConverter from "@/api/configConverter";
+import RefreshableWrapper from "@/components/RefreshableWrapper";
 
 export default function Index() {
   const { isDarkMode } = useTheme();
@@ -46,80 +47,79 @@ export default function Index() {
     (state: RootState) => state.queue.currentQueues
   );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Get current queues from AsyncStorage
-        const currentQueuesData = await AsyncStorage.getItem("currentQueues");
+  const fetchHomeData = useCallback(async () => {
+    try {
+      setIsLoading(true);
 
-        if (currentQueuesData) {
-          const parsedQueues = JSON.parse(currentQueuesData);
-          const token = await AsyncStorage.getItem("TOKEN_KEY");
-          const verifiedQueues = [];
+      // Get current queues from AsyncStorage
+      const currentQueuesData = await AsyncStorage.getItem("currentQueues");
 
-          // Verify each queue's status
-          for (const queue of parsedQueues) {
-            try {
-              const url = configConverter(
-                "EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE"
-              );
-              const response = await axios.get(
-                `${url}?queueName=${queue.serviceType}`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                }
-              );
+      if (currentQueuesData) {
+        const parsedQueues = JSON.parse(currentQueuesData);
+        const token = await AsyncStorage.getItem("TOKEN_KEY");
+        const verifiedQueues = [];
 
-              if (response.status === 200 && response.data.isPresent) {
-                // Update queue with latest information
-                verifiedQueues.push({
-                  ...queue,
-                  position: response.data.position || queue.position,
-                  estimatedTime:
-                    response.data.estimatedTime || queue.estimatedTime,
-                });
+        // Verify each queue's status
+        for (const queue of parsedQueues) {
+          try {
+            const url = configConverter(
+              "EXPO_PUBLIC_API_BASE_URL_CHECK_IN_QUEUE"
+            );
+            const response = await axios.get(
+              `${url}?queueName=${queue.serviceType}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
               }
-            } catch (error) {
-              console.error(
-                `Error verifying queue ${queue.serviceType}:`,
-                error
-              );
+            );
+
+            if (response.status === 200 && response.data.isPresent) {
+              // Update queue with latest information
+              verifiedQueues.push({
+                ...queue,
+                position: response.data.position || queue.position,
+                estimatedTime:
+                  response.data.estimatedTime || queue.estimatedTime,
+              });
             }
+          } catch (error) {
+            console.error(`Error verifying queue ${queue.serviceType}:`, error);
           }
-
-          // Update both AsyncStorage and Redux
-          await AsyncStorage.setItem(
-            "currentQueues",
-            JSON.stringify(verifiedQueues)
-          );
-          dispatch(setCurrentQueues(verifiedQueues));
         }
 
-        // Get history data
-        const historyData = await AsyncStorage.getItem("historyData");
-        if (historyData) {
-          const parsedData = JSON.parse(historyData);
-          setRecentQueues(parsedData.length);
-        }
-
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
+        // Update both AsyncStorage and Redux
+        await AsyncStorage.setItem(
+          "currentQueues",
+          JSON.stringify(verifiedQueues)
+        );
+        dispatch(setCurrentQueues(verifiedQueues));
       }
-    };
 
-    fetchData();
+      // Get history data
+      const historyData = await AsyncStorage.getItem("historyData");
+      if (historyData) {
+        const parsedData = JSON.parse(historyData);
+        setRecentQueues(parsedData.length);
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    fetchHomeData();
 
     // Add listener for when the screen comes into focus
-    const unsubscribe = navigation.addListener("focus", fetchData);
+    const unsubscribe = navigation.addListener("focus", fetchHomeData);
 
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [fetchHomeData, navigation]);
 
   const handleScroll = (event: {
     nativeEvent: {
@@ -154,6 +154,9 @@ export default function Index() {
     setScanQrHeight(event.nativeEvent.layout.height);
   };
 
+  // Home screen should refresh more frequently if user is in a queue
+  const autoRefreshInterval = currentQueues.length > 0 ? 60000 : 180000; // 1 minute if in queue, 3 minutes otherwise
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: bgColor }]}>
       <StatusBar
@@ -165,11 +168,16 @@ export default function Index() {
             : "dark-content"
         }
       />
-      <ScrollView
-        className="w-screen"
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={16}
-        onScroll={handleScroll}
+      <RefreshableWrapper
+        refreshId="home-screen"
+        onRefresh={fetchHomeData}
+        autoRefreshInterval={autoRefreshInterval}
+        scrollViewProps={{
+          className: "w-screen",
+          showsVerticalScrollIndicator: false,
+          scrollEventThrottle: 16,
+          onScroll: handleScroll,
+        }}
       >
         <View
           ref={scanQrRef}
@@ -209,18 +217,13 @@ export default function Index() {
                   isDarkMode ? "bg-ocean-blue" : "bg-off-white"
                 }`}
               >
-                {Array(8)
-                  .fill(0)
-                  .map((_, index) => (
-                    <React.Fragment key={index}>
-                      <View className="mb-4" />
-                      <Skeleton
-                        colorMode={isDarkMode ? "dark" : "light"}
-                        width={windowWidth * (11 / 12)}
-                        height={100}
-                      />
-                    </React.Fragment>
-                  ))}
+                <View className="mb-4" />
+                <Skeleton
+                  colorMode={isDarkMode ? "dark" : "light"}
+                  width={windowWidth * 0.85}
+                  height={175}
+                  radius={16}
+                />
                 <View className="mb-5" />
               </View>
             ) : currentQueues.length > 0 ? (
@@ -233,7 +236,7 @@ export default function Index() {
             <FrequentlyAsked isDarkMode={isDarkMode} />
           </View>
         </View>
-      </ScrollView>
+      </RefreshableWrapper>
     </SafeAreaView>
   );
 }
