@@ -454,6 +454,498 @@ export default function SettingsPage() {
           </div>
         )}
 
+        {activeTab === "notifications" && (
+          <div className="space-y-6">
+            {/* Notification Preferences */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">
+                Notification Preferences
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-1 md:p-4 bg-white/[0.02] rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Email Notifications</h4>
+                    <p className="text-sm text-slate-700">
+                      Receive important alerts and updates via email
+                    </p>
+                  </div>
+                  <Switch
+                    checked={true}
+                    onChange={() => {}}
+                    className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                  >
+                    <span className="sr-only">Enable email notifications</span>
+                    <span
+                      className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+
+                <div className="flex items-center justify-between p-1 md:p-4 bg-white/[0.02] rounded-lg">
+                  <div>
+                    <h4 className="font-medium">In-App Notifications</h4>
+                    <p className="text-sm text-slate-700">
+                      Receive notifications within the QMaster portal
+                    </p>
+                  </div>
+                  <Switch
+                    checked={true}
+                    onChange={() => {}}
+                    className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                  >
+                    <span className="sr-only">Enable in-app notifications</span>
+                    <span
+                      className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+
+                <div className="flex items-center justify-between p-1 md:p-4 bg-white/[0.02] rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Push Notifications</h4>
+                    <p className="text-sm text-slate-700">
+                      Receive push notifications on your mobile device
+                    </p>
+                  </div>
+                  <Switch
+                    checked={false}
+                    onChange={() => {}}
+                    className={`bg-gray-200 relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                  >
+                    <span className="sr-only">Enable push notifications</span>
+                    <span
+                      className={`translate-x-[2px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+              </div>
+            </div>
+
+            {/* Notification Categories */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Notification Categories</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-white/[0.02] rounded-lg">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-medium">Queue Alerts</h4>
+                    <Switch
+                      checked={true}
+                      onChange={() => {}}
+                      className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                    >
+                      <span className="sr-only">Enable queue alerts</span>
+                      <span
+                        className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                      />
+                    </Switch>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="queue-threshold"
+                        checked={true}
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="queue-threshold"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        Queue threshold exceeded
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="wait-time"
+                        checked={true}
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="wait-time"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        Wait time above average
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="queue-empty"
+                        checked={false}
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="queue-empty"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        Queue empty for extended period
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-white/[0.02] rounded-lg">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-medium">System Notifications</h4>
+                    <Switch
+                      checked={true}
+                      onChange={() => {}}
+                      className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                    >
+                      <span className="sr-only">
+                        Enable system notifications
+                      </span>
+                      <span
+                        className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                      />
+                    </Switch>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="maintenance"
+                        checked={true}
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="maintenance"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        Scheduled maintenance
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="system-updates"
+                        checked={true}
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="system-updates"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        System updates
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="security-alerts"
+                        checked={true}
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="security-alerts"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        Security alerts
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-white/[0.02] rounded-lg">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-medium">Partner Activity</h4>
+                    <Switch
+                      checked={true}
+                      onChange={() => {}}
+                      className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                    >
+                      <span className="sr-only">
+                        Enable partner activity notifications
+                      </span>
+                      <span
+                        className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                      />
+                    </Switch>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="new-partner"
+                        checked={true}
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="new-partner"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        New partner registration
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="partner-settings"
+                        checked={true}
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="partner-settings"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        Partner settings changes
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="partner-inactivity"
+                        checked={false}
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="partner-inactivity"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        Partner inactivity alerts
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-white/[0.02] rounded-lg">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-medium">Analytics & Reports</h4>
+                    <Switch
+                      checked={false}
+                      onChange={() => {}}
+                      className={`bg-gray-200 relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                    >
+                      <span className="sr-only">
+                        Enable analytics notifications
+                      </span>
+                      <span
+                        className={`translate-x-[2px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                      />
+                    </Switch>
+                  </div>
+                  <div className="space-y-2 opacity-50">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="weekly-report"
+                        checked={false}
+                        disabled
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="weekly-report"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        Weekly performance reports
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="monthly-summary"
+                        checked={false}
+                        disabled
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="monthly-summary"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        Monthly summary
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="custom-metrics"
+                        checked={false}
+                        disabled
+                        className="h-4 w-4 text-crystal-blue rounded border-gray-300 focus:ring-crystal-blue"
+                      />
+                      <label
+                        htmlFor="custom-metrics"
+                        className="ml-2 text-sm text-slate-700"
+                      >
+                        Custom metrics alerts
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Custom Alert Thresholds */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Custom Alert Thresholds</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-white/[0.02] rounded-lg">
+                  <h4 className="font-medium mb-3">Queue Length Threshold</h4>
+                  <div className="flex items-center gap-3">
+                    <p className="text-sm text-slate-700">
+                      Alert when queue exceeds
+                    </p>
+                    <input
+                      type="number"
+                      min="5"
+                      max="100"
+                      defaultValue={25}
+                      className="w-20 px-2 py-1 rounded-md border-none bg-white text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
+                    />
+                    <p className="text-sm text-slate-700">customers</p>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-white/[0.02] rounded-lg">
+                  <h4 className="font-medium mb-3">Wait Time Threshold</h4>
+                  <div className="flex items-center gap-3">
+                    <p className="text-sm text-slate-700">
+                      Alert when wait time exceeds
+                    </p>
+                    <input
+                      type="number"
+                      min="5"
+                      max="60"
+                      defaultValue={15}
+                      className="w-20 px-2 py-1 rounded-md border-none bg-white text-coal-black font-medium text-center focus:outline-none focus:ring-1 focus:ring-baby-blue"
+                    />
+                    <p className="text-sm text-slate-700">minutes</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Recent Notifications */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Recent Notifications</h3>
+                <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                  Mark all as read
+                </button>
+              </div>
+              <div className="space-y-3 max-h-80 overflow-y-auto pr-2">
+                <div className="p-3 bg-white/[0.02] rounded-lg border-l-4 border-crystal-blue">
+                  <div className="flex justify-between items-start">
+                    <h4 className="font-medium">System Update Scheduled</h4>
+                    <span className="text-xs text-slate-700">2 hours ago</span>
+                  </div>
+                  <p className="text-sm text-slate-700 mt-1">
+                    A system update is scheduled for tomorrow at 2:00 AM UTC.
+                    Expected downtime: 30 minutes.
+                  </p>
+                </div>
+
+                <div className="p-3 bg-white/[0.02] rounded-lg border-l-4 border-amber-500">
+                  <div className="flex justify-between items-start">
+                    <h4 className="font-medium">Queue Threshold Exceeded</h4>
+                    <span className="text-xs text-slate-700">5 hours ago</span>
+                  </div>
+                  <p className="text-sm text-slate-700 mt-1">
+                    Partner &quot;City Cafe&quot; has exceeded the queue
+                    threshold with 32 customers in line.
+                  </p>
+                </div>
+
+                <div className="p-3 bg-white/[0.02] rounded-lg border-l-4 border-green-500 opacity-70">
+                  <div className="flex justify-between items-start">
+                    <h4 className="font-medium">New Partner Registration</h4>
+                    <span className="text-xs text-slate-700">Yesterday</span>
+                  </div>
+                  <p className="text-sm text-slate-700 mt-1">
+                    &quot;Urban Bistro&quot; has completed registration and is
+                    awaiting approval.
+                  </p>
+                </div>
+
+                <div className="p-3 bg-white/[0.02] rounded-lg border-l-4 border-red-500 opacity-70">
+                  <div className="flex justify-between items-start">
+                    <h4 className="font-medium">Security Alert</h4>
+                    <span className="text-xs text-slate-700">2 days ago</span>
+                  </div>
+                  <p className="text-sm text-slate-700 mt-1">
+                    Multiple failed login attempts detected for admin account.
+                    IP: 192.168.1.254
+                  </p>
+                </div>
+
+                <div className="p-3 bg-white/[0.02] rounded-lg border-l-4 border-purple-500 opacity-70">
+                  <div className="flex justify-between items-start">
+                    <h4 className="font-medium">Partner Settings Changed</h4>
+                    <span className="text-xs text-slate-700">3 days ago</span>
+                  </div>
+                  <p className="text-sm text-slate-700 mt-1">
+                    &quot;Downtown Deli&quot; has updated their operating hours
+                    and service categories.
+                  </p>
+                </div>
+              </div>
+              <div className="text-center">
+                <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                  View all notifications
+                </button>
+              </div>
+            </div>
+
+            {/* Notification Delivery Schedule */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">
+                Notification Delivery Schedule
+              </h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-medium">Quiet Hours</h4>
+                  <Switch
+                    checked={true}
+                    onChange={() => {}}
+                    className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                  >
+                    <span className="sr-only">Enable quiet hours</span>
+                    <span
+                      className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Start Time
+                    </label>
+                    <input
+                      type="time"
+                      defaultValue="22:00"
+                      className="w-full px-4 py-2 rounded-lg border border-white/10 bg-white/20 focus:outline-none text-coal-black font-medium"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      End Time
+                    </label>
+                    <input
+                      type="time"
+                      defaultValue="08:00"
+                      className="w-full px-4 py-2 rounded-lg border border-white/10 bg-white/20 focus:outline-none text-coal-black font-medium"
+                    />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <p className="text-sm text-slate-700">
+                    During quiet hours, only critical notifications will be
+                    delivered.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Save Button */}
+            <div className="flex justify-end">
+              <button className="px-6 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all">
+                Save Notification Settings
+              </button>
+            </div>
+          </div>
+        )}
+
         {activeTab === "integrations" && (
           <div className="space-y-6">
             <div className="space-y-4">
