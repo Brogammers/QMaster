@@ -54,7 +54,7 @@ export default function RootLayout({
         <I18nextProvider i18n={i18next}>
           {children}
           <Toaster
-            position="top-right"
+            position="bottom-right"
             toastOptions={{
               style: {
                 background: "#17222D",
