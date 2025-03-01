@@ -178,6 +178,8 @@
       "waitTime": "~ {{minutes}} دقيقة",
       "joined": "تم الانضمام للطابور!",
       "leave": "مغادرة الطابور",
+      "leavingQueue": "مغادرة الطابور...",
+      "joiningQueue": "انضمام للطابور...",
       "join": "انضم للطابور",
       "leaveConfirm": {
         "title": "مغادرة الطابور؟",
