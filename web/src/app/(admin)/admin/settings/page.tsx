@@ -946,6 +946,450 @@ export default function SettingsPage() {
           </div>
         )}
 
+        {activeTab === "security" && (
+          <div className="space-y-6">
+            {/* Password Management */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Password Management</h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Current Password
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Enter your current password"
+                      className="w-full px-4 py-2 rounded-lg border border-white/10 bg-white/20 focus:outline-none text-coal-black font-medium"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      New Password
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Enter new password"
+                      className="w-full px-4 py-2 rounded-lg border border-white/10 bg-white/20 focus:outline-none text-coal-black font-medium"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Confirm New Password
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Confirm new password"
+                      className="w-full px-4 py-2 rounded-lg border border-white/10 bg-white/20 focus:outline-none text-coal-black font-medium"
+                    />
+                  </div>
+                  <div className="pt-2">
+                    <button className="px-4 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all">
+                      Update Password
+                    </button>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                      <div className="h-full bg-green-500 w-[85%]"></div>
+                    </div>
+                    <span className="text-sm text-slate-700 whitespace-nowrap">
+                      Strong Password
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-700 mt-2">
+                    Your password should be at least 12 characters long and
+                    include uppercase letters, lowercase letters, numbers, and
+                    special characters.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Two-Factor Authentication */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">
+                Two-Factor Authentication
+              </h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h4 className="font-medium">Enable 2FA</h4>
+                    <p className="text-sm text-slate-700">
+                      Add an extra layer of security to your account
+                    </p>
+                  </div>
+                  <Switch
+                    checked={true}
+                    onChange={() => {}}
+                    className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                  >
+                    <span className="sr-only">
+                      Enable two-factor authentication
+                    </span>
+                    <span
+                      className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex flex-col md:flex-row gap-4 items-start">
+                    <div className="bg-white p-3 rounded-lg">
+                      <div className="w-32 h-32 bg-gray-200 flex items-center justify-center text-sm text-gray-500">
+                        QR Code Placeholder
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <p className="text-sm text-slate-700">
+                        1. Scan this QR code with your authenticator app (Google
+                        Authenticator, Authy, etc.)
+                      </p>
+                      <p className="text-sm text-slate-700">
+                        2. Enter the 6-digit code from your app below to verify
+                        setup
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          placeholder="Enter 6-digit code"
+                          className="px-4 py-2 rounded-lg border border-white/10 bg-white/20 focus:outline-none text-coal-black font-medium"
+                        />
+                        <button className="px-4 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all">
+                          Verify
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pt-2">
+                    <h4 className="font-medium mb-2">Recovery Codes</h4>
+                    <p className="text-sm text-slate-700 mb-2">
+                      Save these recovery codes in a secure place. You can use
+                      them to access your account if you lose your authenticator
+                      device.
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="bg-white/10 p-2 rounded text-sm font-mono">
+                        ABCD-1234-EFGH
+                      </div>
+                      <div className="bg-white/10 p-2 rounded text-sm font-mono">
+                        IJKL-5678-MNOP
+                      </div>
+                      <div className="bg-white/10 p-2 rounded text-sm font-mono">
+                        QRST-9012-UVWX
+                      </div>
+                      <div className="bg-white/10 p-2 rounded text-sm font-mono">
+                        YZ12-3456-7890
+                      </div>
+                    </div>
+                    <button className="mt-3 text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                      Download recovery codes
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Biometric Authentication */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">
+                Biometric Authentication
+              </h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h4 className="font-medium">Enable Biometric Login</h4>
+                    <p className="text-sm text-slate-700">
+                      Use fingerprint, face recognition, or other biometric
+                      methods to log in
+                    </p>
+                  </div>
+                  <Switch
+                    checked={isBiometricAvailable}
+                    onChange={() => {}}
+                    className={`${
+                      isBiometricAvailable ? "bg-crystal-blue" : "bg-gray-200"
+                    } relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                      !isBiometricAvailable && "opacity-50 cursor-not-allowed"
+                    }`}
+                  >
+                    <span className="sr-only">
+                      Enable biometric authentication
+                    </span>
+                    <span
+                      className={`${
+                        isBiometricAvailable
+                          ? "translate-x-[16px]"
+                          : "translate-x-[2px]"
+                      } pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+                {!isBiometricAvailable && (
+                  <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 mt-2">
+                    <p className="text-sm text-amber-600">
+                      Biometric authentication is not available on this device
+                      or browser. Please ensure your device supports biometric
+                      authentication and you&apos;re using a compatible browser.
+                    </p>
+                  </div>
+                )}
+                {isBiometricAvailable && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-crystal-blue/20 flex items-center justify-center">
+                        <FaFingerprint className="w-5 h-5 text-crystal-blue" />
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Fingerprint</h5>
+                        <p className="text-xs text-slate-700">
+                          Registered on this device
+                        </p>
+                      </div>
+                    </div>
+                    <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                      Manage registered biometrics
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Session Management */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Session Management</h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <h4 className="font-medium mb-3">Active Sessions</h4>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-white/[0.05] rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                        <FaLock className="w-4 h-4 text-green-500" />
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Current Session</h5>
+                        <p className="text-xs text-slate-700">
+                          MacOS • Chrome • Last active: Just now
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-xs bg-green-500/20 text-green-500 px-2 py-1 rounded-full">
+                      Current
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-white/[0.05] rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                        <FaLock className="w-4 h-4 text-slate-400" />
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Mobile Session</h5>
+                        <p className="text-xs text-slate-700">
+                          iOS • Safari • Last active: 2 hours ago
+                        </p>
+                      </div>
+                    </div>
+                    <button className="text-xs text-red-500 hover:text-red-600 transition-colors">
+                      Revoke
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-white/[0.05] rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                        <FaLock className="w-4 h-4 text-slate-400" />
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Desktop Session</h5>
+                        <p className="text-xs text-slate-700">
+                          Windows • Firefox • Last active: Yesterday
+                        </p>
+                      </div>
+                    </div>
+                    <button className="text-xs text-red-500 hover:text-red-600 transition-colors">
+                      Revoke
+                    </button>
+                  </div>
+                </div>
+                <div className="mt-4 flex justify-end">
+                  <button className="px-4 py-2 bg-red-500/10 text-red-500 rounded-md text-sm font-medium hover:bg-red-500/20 transition-all">
+                    Revoke All Other Sessions
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Security Logs */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Security Logs</h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-white/10">
+                        <th className="text-left py-2 px-3 text-sm font-medium">
+                          Event
+                        </th>
+                        <th className="text-left py-2 px-3 text-sm font-medium">
+                          IP Address
+                        </th>
+                        <th className="text-left py-2 px-3 text-sm font-medium">
+                          Location
+                        </th>
+                        <th className="text-left py-2 px-3 text-sm font-medium">
+                          Date & Time
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-white/5">
+                        <td className="py-2 px-3 text-sm">Successful login</td>
+                        <td className="py-2 px-3 text-sm">192.168.1.1</td>
+                        <td className="py-2 px-3 text-sm">
+                          San Francisco, USA
+                        </td>
+                        <td className="py-2 px-3 text-sm">Today, 10:23 AM</td>
+                      </tr>
+                      <tr className="border-b border-white/5">
+                        <td className="py-2 px-3 text-sm">Password changed</td>
+                        <td className="py-2 px-3 text-sm">192.168.1.1</td>
+                        <td className="py-2 px-3 text-sm">
+                          San Francisco, USA
+                        </td>
+                        <td className="py-2 px-3 text-sm">
+                          Yesterday, 3:45 PM
+                        </td>
+                      </tr>
+                      <tr className="border-b border-white/5">
+                        <td className="py-2 px-3 text-sm">
+                          Failed login attempt
+                        </td>
+                        <td className="py-2 px-3 text-sm">203.0.113.42</td>
+                        <td className="py-2 px-3 text-sm">Unknown</td>
+                        <td className="py-2 px-3 text-sm">
+                          3 days ago, 11:52 PM
+                        </td>
+                      </tr>
+                      <tr className="border-b border-white/5">
+                        <td className="py-2 px-3 text-sm">2FA enabled</td>
+                        <td className="py-2 px-3 text-sm">192.168.1.1</td>
+                        <td className="py-2 px-3 text-sm">
+                          San Francisco, USA
+                        </td>
+                        <td className="py-2 px-3 text-sm">
+                          Last week, 2:30 PM
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-4 text-center">
+                  <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                    View full security log
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Advanced Security Settings */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">
+                Advanced Security Settings
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-white/[0.02] rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Login Notifications</h4>
+                    <p className="text-sm text-slate-700">
+                      Receive email alerts for new login attempts
+                    </p>
+                  </div>
+                  <Switch
+                    checked={true}
+                    onChange={() => {}}
+                    className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                  >
+                    <span className="sr-only">Enable login notifications</span>
+                    <span
+                      className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-white/[0.02] rounded-lg">
+                  <div>
+                    <h4 className="font-medium">
+                      Suspicious Activity Detection
+                    </h4>
+                    <p className="text-sm text-slate-700">
+                      Automatically detect and block suspicious login attempts
+                    </p>
+                  </div>
+                  <Switch
+                    checked={true}
+                    onChange={() => {}}
+                    className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                  >
+                    <span className="sr-only">
+                      Enable suspicious activity detection
+                    </span>
+                    <span
+                      className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-white/[0.02] rounded-lg">
+                  <div>
+                    <h4 className="font-medium">IP Restrictions</h4>
+                    <p className="text-sm text-slate-700">
+                      Limit access to specific IP addresses or ranges
+                    </p>
+                  </div>
+                  <Switch
+                    checked={false}
+                    onChange={() => {}}
+                    className={`bg-gray-200 relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                  >
+                    <span className="sr-only">Enable IP restrictions</span>
+                    <span
+                      className={`translate-x-[2px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-white/[0.02] rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Auto-Logout</h4>
+                    <p className="text-sm text-slate-700">
+                      Automatically log out after period of inactivity
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <select className="px-3 py-1 rounded-lg border border-white/10 bg-white/20 focus:outline-none text-coal-black font-medium">
+                      <option value="15">15 minutes</option>
+                      <option value="30">30 minutes</option>
+                      <option value="60" selected>
+                        1 hour
+                      </option>
+                      <option value="120">2 hours</option>
+                      <option value="never">Never</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Save Button */}
+            <div className="flex justify-end">
+              <button className="px-6 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all">
+                Save Security Settings
+              </button>
+            </div>
+          </div>
+        )}
+
         {activeTab === "integrations" && (
           <div className="space-y-6">
             <div className="space-y-4">
