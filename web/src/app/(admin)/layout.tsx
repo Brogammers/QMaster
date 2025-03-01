@@ -3,21 +3,19 @@
 import AdminSidebar from "@/app/components/admin/AdminSidebar";
 import SplashScreen from "@/app/shared/SplashScreen";
 import { AdminAuthProvider, useAdminAuth } from "@/lib/auth/AuthContext";
+import { store } from "@/store/store";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Category } from "./admin/categories/page";
-import { Partner } from "./admin/partners/page";
+import { FaBars } from "react-icons/fa";
+import { Provider } from "react-redux";
+import { StoreData } from "./admin/store/columns";
 import {
-  CategoriesContext,
-  PartnerContext,
+  CategoriesProvider,
+  PartnersProvider,
   StoresContext,
   UsersContext,
 } from "./context";
-import { Provider } from "react-redux";
-import { store } from "@/store/store";
-import { StoreData } from "./admin/store/columns";
-import { FaBars } from "react-icons/fa";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -30,8 +28,6 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const { admin, isLoading } = useAdminAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [partners, setPartners] = useState<Partner[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
   const [users, setUsers] = useState([]);
   const [stores, setStores] = useState<StoreData[]>([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -59,8 +55,6 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   };
 
   const getNextPartnerPage = (page: number, perPage: number) => {};
-
-  const getNextCategoryPage = (page: number, perPage: number) => {};
 
   const getNextUserPage = (page: number, perPage: number) => {};
 
@@ -203,27 +197,19 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
               {/* Main Content Area with improved spacing */}
               <div className="space-y-6 sm:space-y-8">
                 <div className="bg-white/[0.02] rounded-xl p-4 sm:p-6 xl:p-8">
-                  <PartnerContext.Provider
-                    value={{ partners, setPartners, getNextPartnerPage }}
-                  >
+                  <PartnersProvider>
                     <UsersContext.Provider
                       value={{ users, setUsers, getNextUserPage }}
                     >
-                      <CategoriesContext.Provider
-                        value={{
-                          categories,
-                          setCategories,
-                          getNextCategoryPage,
-                        }}
-                      >
+                      <CategoriesProvider>
                         <StoresContext.Provider
                           value={{ stores, setStores, getNextStorePage }}
                         >
                           {children}
                         </StoresContext.Provider>
-                      </CategoriesContext.Provider>
+                      </CategoriesProvider>
                     </UsersContext.Provider>
-                  </PartnerContext.Provider>
+                  </PartnersProvider>
                 </div>
               </div>
             </div>
