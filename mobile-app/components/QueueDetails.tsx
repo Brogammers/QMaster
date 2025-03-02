@@ -171,7 +171,9 @@ export default function QueueDetails(props: QueueDetailsProps) {
           name: brandName,
           serviceType: serviceType,
           position: selectedQueue?.currentQueueSize || 1,
-          estimatedTime: selectedQueue?.averageServiceTime && selectedQueue.averageServiceTime * selectedQueue.currentQueueSize,
+          estimatedTime: selectedQueue?.averageServiceTime
+            ? selectedQueue.averageServiceTime * selectedQueue.currentQueueSize
+            : 7,
           location: branch.toString(),
           timestamp: new Date().toISOString(),
         };
