@@ -2493,7 +2493,7 @@ export default function SettingsPage() {
                       <div>
                         <h5 className="font-medium">Ready to Serve</h5>
                         <p className="text-xs text-slate-700">
-                          Sent when it's the customer's turn
+                          Sent when it&apos;s the customer&apos;s turn
                         </p>
                       </div>
                     </button>
