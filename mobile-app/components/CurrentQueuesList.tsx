@@ -104,7 +104,7 @@ export default function CurrentQueuesList() {
 
             // Calculate estimated time based on position - each person takes ~7 minutes
             // Only count people ahead in queue, not including current user
-            const peopleAhead = newPosition - 1;
+            const peopleAhead = Math.max(0, newPosition - 1);
             const newEstimatedTime = Math.max(
               0,
               peopleAhead * averageServiceTime
@@ -115,13 +115,17 @@ export default function CurrentQueuesList() {
 
             // If API returns estimated time and it seems valid, use it instead
             if (
-              response.data.estimatedTime &&
+              response.data.estimatedTime !== undefined &&
               response.data.estimatedTime > 0
             ) {
               queue.estimatedTime = response.data.estimatedTime;
             } else {
               queue.estimatedTime = newEstimatedTime;
             }
+
+            console.log(
+              `Queue ${queue.serviceType}: Position=${newPosition}, PeopleAhead=${peopleAhead}, EstimatedTime=${queue.estimatedTime}`
+            );
 
             // Also dispatch the update to redux
             dispatch(
@@ -242,6 +246,9 @@ export default function CurrentQueuesList() {
     // Determine which image to display
     let imageSource = item.image;
 
+    // Calculate people ahead (for display purposes)
+    const peopleAhead = Math.max(0, item.position - 1);
+
     // If the item name matches a known business but no valid image is present, use the imported one
     if (item.name && (!item.image || typeof item.image === "string")) {
       const businessImage = getBusinessImage(item.name);
@@ -319,11 +326,17 @@ export default function CurrentQueuesList() {
                   { color: isDarkMode ? "white" : "#17222D" },
                 ]}
               >
-                {item.position === 1
-                ? i18n.t("common.queue.peopleCountSingular", { count: 1 })
-                : i18n.t("common.queue.peopleCount", { 
-                    count: item.position - 1 // People ahead
-                  })}
+                {peopleAhead === 0
+                  ? `0 ${
+                      i18n
+                        .t("common.queue.peopleCount", { count: 2 })
+                        .replace("2", "") || "people in queue"
+                    }`
+                  : `${peopleAhead} ${
+                      i18n
+                        .t("common.queue.peopleCount", { count: 2 })
+                        .replace("2", "") || "people in queue"
+                    }`}
               </Text>
             </View>
 
@@ -339,7 +352,7 @@ export default function CurrentQueuesList() {
                   { color: isDarkMode ? "white" : "#17222D" },
                 ]}
               >
-                {item.position <= 1 || item.estimatedTime === 0
+                {peopleAhead === 0 && item.estimatedTime === 0
                   ? i18n.t("yourTurn")
                   : `~ ${item.estimatedTime} ${
                       i18n.t("minutes", { count: 1 }) || "min"
