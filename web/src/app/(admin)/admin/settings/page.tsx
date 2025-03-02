@@ -2120,173 +2120,531 @@ export default function SettingsPage() {
               <h3 className="text-lg font-semibold">Color Scheme</h3>
               <div className="p-4 bg-white/[0.02] rounded-lg">
                 <div className="space-y-6">
-                  {/* Primary Colors */}
+                  {/* Primary Brand Colors */}
                   <div>
-                    <h4 className="font-medium mb-3">Primary Colors</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">
-                          Primary
-                        </label>
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-md bg-ocean-blue"></div>
-                          <input
-                            type="text"
-                            value="#0077B6"
-                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
-                          />
+                    <h4 className="font-medium mb-3">Primary Brand Colors</h4>
+                    <p className="text-sm text-slate-700 mb-4">
+                      These colors define your brand identity and are used
+                      consistently across the platform.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="p-4 bg-white/10 rounded-lg">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 rounded-md bg-ocean-blue"></div>
+                          <div>
+                            <h5 className="font-medium">Ocean Blue</h5>
+                            <p className="text-xs text-slate-700">
+                              Primary brand color
+                            </p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-700">HEX</span>
+                            <input
+                              type="text"
+                              value="#17222D"
+                              className="w-24 px-2 py-1 rounded-md border border-white/10 bg-white/10 focus:outline-none text-xs font-mono"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-700">
+                              Usage
+                            </span>
+                            <span className="text-xs bg-green-500/20 text-green-500 px-2 py-0.5 rounded-full">
+                              High Priority
+                            </span>
+                          </div>
+                          <div className="text-xs text-slate-700 mt-1">
+                            Primary background in dark mode, buttons, headers
+                          </div>
                         </div>
                       </div>
 
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">
-                          Secondary
-                        </label>
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-md bg-crystal-blue"></div>
-                          <input
-                            type="text"
-                            value="#90E0EF"
-                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
-                          />
+                      <div className="p-4 bg-white/10 rounded-lg">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 rounded-md bg-crystal-blue"></div>
+                          <div>
+                            <h5 className="font-medium">Crystal Blue</h5>
+                            <p className="text-xs text-slate-700">
+                              Accent color
+                            </p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-700">HEX</span>
+                            <input
+                              type="text"
+                              value="#34F5C5"
+                              className="w-24 px-2 py-1 rounded-md border border-white/10 bg-white/10 focus:outline-none text-xs font-mono"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-700">
+                              Usage
+                            </span>
+                            <span className="text-xs bg-green-500/20 text-green-500 px-2 py-0.5 rounded-full">
+                              High Priority
+                            </span>
+                          </div>
+                          <div className="text-xs text-slate-700 mt-1">
+                            Primary buttons, active states, toggles, highlights
+                          </div>
                         </div>
                       </div>
 
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">
-                          Accent
-                        </label>
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-md bg-baby-blue"></div>
-                          <input
-                            type="text"
-                            value="#48CAE4"
-                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
-                          />
+                      <div className="p-4 bg-white/10 rounded-lg">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 rounded-md bg-baby-blue"></div>
+                          <div>
+                            <h5 className="font-medium">Baby Blue</h5>
+                            <p className="text-xs text-slate-700">
+                              Secondary accent
+                            </p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-700">HEX</span>
+                            <input
+                              type="text"
+                              value="#1DCDFE"
+                              className="w-24 px-2 py-1 rounded-md border border-white/10 bg-white/10 focus:outline-none text-xs font-mono"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-700">
+                              Usage
+                            </span>
+                            <span className="text-xs bg-green-500/20 text-green-500 px-2 py-0.5 rounded-full">
+                              High Priority
+                            </span>
+                          </div>
+                          <div className="text-xs text-slate-700 mt-1">
+                            Links, icons, secondary buttons in dark mode
+                          </div>
                         </div>
                       </div>
 
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">
-                          Background
-                        </label>
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-md bg-white border border-gray-200"></div>
-                          <input
-                            type="text"
-                            value="#FFFFFF"
-                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
-                          />
+                      <div className="p-4 bg-white/10 rounded-lg">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 rounded-md bg-concrete-turqouise"></div>
+                          <div>
+                            <h5 className="font-medium">Concrete Turquoise</h5>
+                            <p className="text-xs text-slate-700">
+                              Secondary background
+                            </p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-700">HEX</span>
+                            <input
+                              type="text"
+                              value="#13404D"
+                              className="w-24 px-2 py-1 rounded-md border border-white/10 bg-white/10 focus:outline-none text-xs font-mono"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-700">
+                              Usage
+                            </span>
+                            <span className="text-xs bg-amber-500/20 text-amber-500 px-2 py-0.5 rounded-full">
+                              Medium Priority
+                            </span>
+                          </div>
+                          <div className="text-xs text-slate-700 mt-1">
+                            Secondary backgrounds, card backgrounds in dark mode
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* UI Elements */}
-                  <div>
-                    <h4 className="font-medium mb-3">UI Elements</h4>
+                  {/* Neutral Colors */}
+                  <div className="pt-6 border-t border-white/10">
+                    <h4 className="font-medium mb-3">Neutral Colors</h4>
+                    <p className="text-sm text-slate-700 mb-4">
+                      These colors provide balance and structure to the
+                      interface.
+                    </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">
-                          Success
-                        </label>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-off-white"></div>
+                          <div>
+                            <h5 className="text-sm font-medium">Off White</h5>
+                            <p className="text-xs text-slate-700">#D9D9D9</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Light mode backgrounds
+                          <span className="ml-2 inline-block px-1.5 py-0.5 bg-green-500/20 text-green-500 rounded-full text-[10px]">
+                            High
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-lite-grey"></div>
+                          <div>
+                            <h5 className="text-sm font-medium">Lite Grey</h5>
+                            <p className="text-xs text-slate-700">#ADADAD</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Subtle borders, dividers
+                          <span className="ml-2 inline-block px-1.5 py-0.5 bg-blue-500/20 text-blue-500 rounded-full text-[10px]">
+                            Low
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-shark-grey"></div>
+                          <div>
+                            <h5 className="text-sm font-medium">Shark Grey</h5>
+                            <p className="text-xs text-slate-700">#C5C5C5</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Secondary text, icons
+                          <span className="ml-2 inline-block px-1.5 py-0.5 bg-blue-500/20 text-blue-500 rounded-full text-[10px]">
+                            Low
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-slate-grey"></div>
+                          <div>
+                            <h5 className="text-sm font-medium">Slate Grey</h5>
+                            <p className="text-xs text-slate-700">#7D7D7D</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Card backgrounds, sections
+                          <span className="ml-2 inline-block px-1.5 py-0.5 bg-amber-500/20 text-amber-500 rounded-full text-[10px]">
+                            Medium
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-slight-slate-grey"></div>
+                          <div>
+                            <h5 className="text-sm font-medium">
+                              Slight Slate
+                            </h5>
+                            <p className="text-xs text-slate-700">#C3C3C3</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Subtle highlights
+                          <span className="ml-2 inline-block px-1.5 py-0.5 bg-blue-500/20 text-blue-500 rounded-full text-[10px]">
+                            Low
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-dark-grey"></div>
+                          <div>
+                            <h5 className="text-sm font-medium">Dark Grey</h5>
+                            <p className="text-xs text-slate-700">#515151</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Text in light mode
+                          <span className="ml-2 inline-block px-1.5 py-0.5 bg-blue-500/20 text-blue-500 rounded-full text-[10px]">
+                            Low
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-ignite-black"></div>
+                          <div>
+                            <h5 className="text-sm font-medium">
+                              Ignite Black
+                            </h5>
+                            <p className="text-xs text-slate-700">#3E3E3E</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Buttons, dark elements
+                          <span className="ml-2 inline-block px-1.5 py-0.5 bg-blue-500/20 text-blue-500 rounded-full text-[10px]">
+                            Low
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-coal-black"></div>
+                          <div>
+                            <h5 className="text-sm font-medium">Coal Black</h5>
+                            <p className="text-xs text-slate-700">#2F2E41</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Deep backgrounds
+                          <span className="ml-2 inline-block px-1.5 py-0.5 bg-amber-500/20 text-amber-500 rounded-full text-[10px]">
+                            Medium
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Semantic Colors */}
+                  <div className="pt-6 border-t border-white/10">
+                    <h4 className="font-medium mb-3">Semantic Colors</h4>
+                    <p className="text-sm text-slate-700 mb-4">
+                      These colors convey specific meanings and states
+                      throughout the interface.
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <div className="w-8 h-8 rounded-md bg-green-500"></div>
-                          <input
-                            type="text"
-                            value="#10B981"
-                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
-                          />
+                          <div>
+                            <h5 className="text-sm font-medium">Success</h5>
+                            <p className="text-xs text-slate-700">#10B981</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Confirmations, completed states
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">
-                          Warning
-                        </label>
                         <div className="flex items-center gap-2">
                           <div className="w-8 h-8 rounded-md bg-amber-500"></div>
-                          <input
-                            type="text"
-                            value="#F59E0B"
-                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
-                          />
+                          <div>
+                            <h5 className="text-sm font-medium">Warning</h5>
+                            <p className="text-xs text-slate-700">#F59E0B</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Alerts, cautions, pending states
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">
-                          Error
-                        </label>
                         <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-md bg-red-500"></div>
-                          <input
-                            type="text"
-                            value="#EF4444"
-                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
-                          />
+                          <div className="w-8 h-8 rounded-md bg-lava-red"></div>
+                          <div>
+                            <h5 className="text-sm font-medium">Error</h5>
+                            <p className="text-xs text-slate-700">#B41818</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Errors, destructive actions
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">
-                          Info
-                        </label>
                         <div className="flex items-center gap-2">
                           <div className="w-8 h-8 rounded-md bg-blue-500"></div>
-                          <input
-                            type="text"
-                            value="#3B82F6"
-                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
-                          />
+                          <div>
+                            <h5 className="text-sm font-medium">Info</h5>
+                            <p className="text-xs text-slate-700">#3B82F6</p>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-700">
+                          Information, help, neutral states
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Color Usage Analysis */}
+                  <div className="pt-6 border-t border-white/10">
+                    <h4 className="font-medium mb-3">Color Usage Analysis</h4>
+                    <div className="p-4 bg-white/10 rounded-lg">
+                      <div className="space-y-4">
+                        <div>
+                          <h5 className="text-sm font-medium mb-2">
+                            Most Used Colors
+                          </h5>
+                          <div className="flex items-center gap-2">
+                            <div className="flex-grow bg-gray-200 h-6 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-ocean-blue"
+                                style={{ width: "40%" }}
+                              ></div>
+                            </div>
+                            <span className="text-xs">Ocean Blue (40%)</span>
+                          </div>
+                          <div className="flex items-center gap-2 mt-2">
+                            <div className="flex-grow bg-gray-200 h-6 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-crystal-blue"
+                                style={{ width: "30%" }}
+                              ></div>
+                            </div>
+                            <span className="text-xs">Crystal Blue (30%)</span>
+                          </div>
+                          <div className="flex items-center gap-2 mt-2">
+                            <div className="flex-grow bg-gray-200 h-6 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-baby-blue"
+                                style={{ width: "20%" }}
+                              ></div>
+                            </div>
+                            <span className="text-xs">Baby Blue (20%)</span>
+                          </div>
+                          <div className="flex items-center gap-2 mt-2">
+                            <div className="flex-grow bg-gray-200 h-6 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-off-white"
+                                style={{ width: "10%" }}
+                              ></div>
+                            </div>
+                            <span className="text-xs">Other Colors (10%)</span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h5 className="text-sm font-medium mb-2">
+                            Color Usage by Platform
+                          </h5>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <h6 className="text-xs font-medium mb-1">
+                                Web Platform
+                              </h6>
+                              <div className="flex gap-1">
+                                <div className="w-6 h-6 rounded-full bg-crystal-blue"></div>
+                                <div className="w-6 h-6 rounded-full bg-ocean-blue"></div>
+                                <div className="w-6 h-6 rounded-full bg-baby-blue"></div>
+                              </div>
+                              <p className="text-xs text-slate-700 mt-1">
+                                Primary: Crystal Blue
+                                <br />
+                                Secondary: Ocean Blue
+                              </p>
+                            </div>
+
+                            <div>
+                              <h6 className="text-xs font-medium mb-1">
+                                Mobile App
+                              </h6>
+                              <div className="flex gap-1">
+                                <div className="w-6 h-6 rounded-full bg-ocean-blue"></div>
+                                <div className="w-6 h-6 rounded-full bg-baby-blue"></div>
+                                <div className="w-6 h-6 rounded-full bg-off-white"></div>
+                              </div>
+                              <p className="text-xs text-slate-700 mt-1">
+                                Primary: Ocean Blue
+                                <br />
+                                Secondary: Baby Blue
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Theme Preview */}
-                  <div className="pt-4 border-t border-white/10">
+                  <div className="pt-6 border-t border-white/10">
                     <h4 className="font-medium mb-3">Theme Preview</h4>
-                    <div className="bg-white p-4 rounded-lg shadow-sm">
-                      <div className="flex flex-col gap-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-ocean-blue flex items-center justify-center text-white">
-                            Q
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <h5 className="text-sm font-medium mb-2">Light Mode</h5>
+                        <div className="bg-off-white p-4 rounded-lg shadow-sm">
+                          <div className="flex flex-col gap-3">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-full bg-ocean-blue flex items-center justify-center text-white">
+                                Q
+                              </div>
+                              <span className="font-semibold text-coal-black">
+                                QMaster
+                              </span>
+                            </div>
+
+                            <div className="flex gap-2">
+                              <button className="px-3 py-1.5 bg-ocean-blue text-white rounded-md text-sm">
+                                Primary Button
+                              </button>
+                              <button className="px-3 py-1.5 bg-white border border-gray-200 text-gray-800 rounded-md text-sm">
+                                Secondary Button
+                              </button>
+                            </div>
+
+                            <div className="flex gap-2">
+                              <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
+                                Success
+                              </span>
+                              <span className="px-2 py-1 bg-amber-100 text-amber-800 rounded-full text-xs">
+                                Warning
+                              </span>
+                              <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">
+                                Error
+                              </span>
+                              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                                Info
+                              </span>
+                            </div>
                           </div>
-                          <span className="font-semibold text-gray-800">
-                            QMaster
-                          </span>
                         </div>
+                      </div>
 
-                        <div className="flex gap-2">
-                          <button className="px-3 py-1.5 bg-ocean-blue text-white rounded-md text-sm">
-                            Primary Button
-                          </button>
-                          <button className="px-3 py-1.5 bg-white border border-gray-200 text-gray-800 rounded-md text-sm">
-                            Secondary Button
-                          </button>
-                        </div>
+                      <div>
+                        <h5 className="text-sm font-medium mb-2">Dark Mode</h5>
+                        <div className="bg-ocean-blue p-4 rounded-lg shadow-sm">
+                          <div className="flex flex-col gap-3">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-full bg-baby-blue flex items-center justify-center text-ocean-blue">
+                                Q
+                              </div>
+                              <span className="font-semibold text-white">
+                                QMaster
+                              </span>
+                            </div>
 
-                        <div className="flex gap-2">
-                          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
-                            Success
-                          </span>
-                          <span className="px-2 py-1 bg-amber-100 text-amber-800 rounded-full text-xs">
-                            Warning
-                          </span>
-                          <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">
-                            Error
-                          </span>
-                          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                            Info
-                          </span>
+                            <div className="flex gap-2">
+                              <button className="px-3 py-1.5 bg-crystal-blue text-black rounded-md text-sm">
+                                Primary Button
+                              </button>
+                              <button className="px-3 py-1.5 bg-concrete-turqouise/20 border border-white/10 text-white rounded-md text-sm">
+                                Secondary Button
+                              </button>
+                            </div>
+
+                            <div className="flex gap-2">
+                              <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded-full text-xs">
+                                Success
+                              </span>
+                              <span className="px-2 py-1 bg-amber-500/20 text-amber-400 rounded-full text-xs">
+                                Warning
+                              </span>
+                              <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded-full text-xs">
+                                Error
+                              </span>
+                              <span className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded-full text-xs">
+                                Info
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Theme Selector */}
-                  <div className="pt-4 border-t border-white/10">
+                  <div className="pt-6 border-t border-white/10">
                     <h4 className="font-medium mb-3">Preset Themes</h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <button className="p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-all border-2 border-crystal-blue">
@@ -2485,7 +2843,7 @@ export default function SettingsPage() {
                         >
                           <path
                             fillRule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z"
                             clipRule="evenodd"
                           />
                         </svg>
