@@ -362,7 +362,7 @@ export default function SettingsPage() {
             "general",
             "notifications",
             "security",
-            "integrations",
+            "site-status",
             "api",
             "branding",
           ].map((tab) => (
@@ -380,6 +380,8 @@ export default function SettingsPage() {
                 ? "API & Integrations"
                 : tab === "branding"
                 ? "Branding & Customization"
+                : tab === "site-status"
+                ? "Site Status"
                 : tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
           ))}
@@ -1399,7 +1401,7 @@ export default function SettingsPage() {
           </div>
         )}
 
-        {activeTab === "integrations" && (
+        {activeTab === "site-status" && (
           <div className="space-y-6">
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Site Status</h3>
