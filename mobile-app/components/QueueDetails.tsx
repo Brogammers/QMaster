@@ -61,11 +61,22 @@ export default function QueueDetails(props: QueueDetailsProps) {
   // Use memoization to prevent needless recalculation
   const estimatedTime = useMemo(() => {
     if (!selectedQueue) return 0;
-    return (
-      selectedQueue.averageServiceTime *
-      Math.max(0, selectedQueue.currentQueueSize - 1)
-    );
-  }, [selectedQueue?.averageServiceTime, selectedQueue?.currentQueueSize]);
+
+    // Calculate people ahead of you in the queue
+    let peopleAhead = selectedQueue.currentQueueSize;
+
+    // If user is already in the queue (leave is true), subtract 1 to not count themselves
+    if (leave) {
+      peopleAhead = Math.max(0, peopleAhead - 1);
+    }
+
+    // Calculate estimated wait time based on people ahead of you
+    return selectedQueue.averageServiceTime * peopleAhead;
+  }, [
+    selectedQueue?.averageServiceTime,
+    selectedQueue?.currentQueueSize,
+    leave,
+  ]);
 
   // Effect to update when activeQueue changes
   useEffect(() => {
@@ -160,7 +171,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
           name: brandName,
           serviceType: serviceType,
           position: selectedQueue?.currentQueueSize || 1,
-          estimatedTime: selectedQueue?.averageServiceTime || 7,
+          estimatedTime: selectedQueue?.averageServiceTime && selectedQueue.averageServiceTime * selectedQueue.currentQueueSize,
           location: branch.toString(),
           timestamp: new Date().toISOString(),
         };
