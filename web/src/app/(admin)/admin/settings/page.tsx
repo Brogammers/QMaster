@@ -358,24 +358,31 @@ export default function SettingsPage() {
       {/* Tabs Container */}
       <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
         <div className="flex space-x-1 bg-white/[0.02] rounded-lg p-1 w-fit min-w-full sm:min-w-0">
-          {["general", "notifications", "security", "integrations", "api"].map(
-            (tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`text-black px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap
+          {[
+            "general",
+            "notifications",
+            "security",
+            "integrations",
+            "api",
+            "branding",
+          ].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`text-black px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap
                   ${
                     activeTab === tab
                       ? "bg-crystal-blue text-black"
                       : "hover:bg-white/[0.05]"
                   }`}
-              >
-                {tab === "api"
-                  ? "API & Integrations"
-                  : tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            )
-          )}
+            >
+              {tab === "api"
+                ? "API & Integrations"
+                : tab === "branding"
+                ? "Branding & Customization"
+                : tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -2008,6 +2015,526 @@ export default function SettingsPage() {
             <div className="flex justify-end">
               <button className="px-6 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all">
                 Save API & Integration Settings
+              </button>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "branding" && (
+          <div className="space-y-6">
+            {/* Logo & Brand Identity */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Logo & Brand Identity</h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Logo Upload */}
+                  <div className="space-y-3">
+                    <h4 className="font-medium">Company Logo</h4>
+                    <p className="text-sm text-slate-700">
+                      Your logo will appear in the dashboard, customer-facing
+                      pages, and email communications.
+                    </p>
+
+                    <div className="flex items-center gap-4">
+                      <div className="w-24 h-24 bg-white/10 rounded-lg flex items-center justify-center overflow-hidden">
+                        <img
+                          src="/logo.svg"
+                          alt="Company Logo"
+                          className="max-w-full max-h-full object-contain"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <button className="px-4 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all">
+                          Upload New Logo
+                        </button>
+                        <p className="text-xs text-slate-700">
+                          Recommended size: 512x512px, PNG or SVG format
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Favicon Upload */}
+                  <div className="space-y-3">
+                    <h4 className="font-medium">Favicon</h4>
+                    <p className="text-sm text-slate-700">
+                      The icon that appears in browser tabs and bookmarks.
+                    </p>
+
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center overflow-hidden">
+                        <img
+                          src="/favicon.ico"
+                          alt="Favicon"
+                          className="max-w-full max-h-full object-contain"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <button className="px-4 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all">
+                          Upload Favicon
+                        </button>
+                        <p className="text-xs text-slate-700">
+                          Recommended size: 32x32px, ICO or PNG format
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 pt-6 border-t border-white/10">
+                  <div className="space-y-3">
+                    <h4 className="font-medium">Company Information</h4>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                          Company Name
+                        </label>
+                        <input
+                          type="text"
+                          value="QMaster Technologies"
+                          className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                          Tagline
+                        </label>
+                        <input
+                          type="text"
+                          value="Revolutionizing Queue Management"
+                          className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Color Scheme */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Color Scheme</h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="space-y-6">
+                  {/* Primary Colors */}
+                  <div>
+                    <h4 className="font-medium mb-3">Primary Colors</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">
+                          Primary
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-ocean-blue"></div>
+                          <input
+                            type="text"
+                            value="#0077B6"
+                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">
+                          Secondary
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-crystal-blue"></div>
+                          <input
+                            type="text"
+                            value="#90E0EF"
+                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">
+                          Accent
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-baby-blue"></div>
+                          <input
+                            type="text"
+                            value="#48CAE4"
+                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">
+                          Background
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-white border border-gray-200"></div>
+                          <input
+                            type="text"
+                            value="#FFFFFF"
+                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* UI Elements */}
+                  <div>
+                    <h4 className="font-medium mb-3">UI Elements</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">
+                          Success
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-green-500"></div>
+                          <input
+                            type="text"
+                            value="#10B981"
+                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">
+                          Warning
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-amber-500"></div>
+                          <input
+                            type="text"
+                            value="#F59E0B"
+                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">
+                          Error
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-red-500"></div>
+                          <input
+                            type="text"
+                            value="#EF4444"
+                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">
+                          Info
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-blue-500"></div>
+                          <input
+                            type="text"
+                            value="#3B82F6"
+                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue text-sm font-mono"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Theme Preview */}
+                  <div className="pt-4 border-t border-white/10">
+                    <h4 className="font-medium mb-3">Theme Preview</h4>
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                      <div className="flex flex-col gap-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-ocean-blue flex items-center justify-center text-white">
+                            Q
+                          </div>
+                          <span className="font-semibold text-gray-800">
+                            QMaster
+                          </span>
+                        </div>
+
+                        <div className="flex gap-2">
+                          <button className="px-3 py-1.5 bg-ocean-blue text-white rounded-md text-sm">
+                            Primary Button
+                          </button>
+                          <button className="px-3 py-1.5 bg-white border border-gray-200 text-gray-800 rounded-md text-sm">
+                            Secondary Button
+                          </button>
+                        </div>
+
+                        <div className="flex gap-2">
+                          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
+                            Success
+                          </span>
+                          <span className="px-2 py-1 bg-amber-100 text-amber-800 rounded-full text-xs">
+                            Warning
+                          </span>
+                          <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">
+                            Error
+                          </span>
+                          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                            Info
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Theme Selector */}
+                  <div className="pt-4 border-t border-white/10">
+                    <h4 className="font-medium mb-3">Preset Themes</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <button className="p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-all border-2 border-crystal-blue">
+                        <div className="h-12 rounded-md mb-2 bg-gradient-to-r from-ocean-blue to-baby-blue"></div>
+                        <span className="text-sm font-medium">
+                          Ocean Blue (Default)
+                        </span>
+                      </button>
+
+                      <button className="p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-all">
+                        <div className="h-12 rounded-md mb-2 bg-gradient-to-r from-purple-600 to-pink-500"></div>
+                        <span className="text-sm font-medium">
+                          Vibrant Purple
+                        </span>
+                      </button>
+
+                      <button className="p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-all">
+                        <div className="h-12 rounded-md mb-2 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
+                        <span className="text-sm font-medium">Fresh Mint</span>
+                      </button>
+
+                      <button className="p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-all">
+                        <div className="h-12 rounded-md mb-2 bg-gradient-to-r from-gray-800 to-gray-600"></div>
+                        <span className="text-sm font-medium">Dark Mode</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Custom Domain */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Custom Domain</h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h4 className="font-medium">Custom Domain Setup</h4>
+                    <p className="text-sm text-slate-700">
+                      Use your own domain for your QMaster instance
+                    </p>
+                  </div>
+                  <Switch
+                    checked={true}
+                    onChange={() => {}}
+                    className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                  >
+                    <span className="sr-only">Enable custom domain</span>
+                    <span
+                      className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+
+                <div className="space-y-4 mt-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Custom Domain
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value="queue.yourcompany.com"
+                        className="flex-grow px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue"
+                      />
+                      <button className="px-4 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all whitespace-nowrap">
+                        Verify Domain
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-white/10 rounded-lg">
+                    <h5 className="font-medium mb-2">DNS Configuration</h5>
+                    <p className="text-sm text-slate-700 mb-3">
+                      Add the following DNS records to your domain to verify
+                      ownership and enable your custom domain:
+                    </p>
+
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-white/10">
+                            <th className="text-left py-2 px-3 font-medium">
+                              Record Type
+                            </th>
+                            <th className="text-left py-2 px-3 font-medium">
+                              Name
+                            </th>
+                            <th className="text-left py-2 px-3 font-medium">
+                              Value
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="border-b border-white/10">
+                            <td className="py-2 px-3">CNAME</td>
+                            <td className="py-2 px-3">queue</td>
+                            <td className="py-2 px-3 font-mono">
+                              custom.qmaster.app
+                            </td>
+                          </tr>
+                          <tr className="border-b border-white/10">
+                            <td className="py-2 px-3">TXT</td>
+                            <td className="py-2 px-3">
+                              _qmaster-verification.queue
+                            </td>
+                            <td className="py-2 px-3 font-mono">
+                              qm-verify-a1b2c3d4e5f6g7h8i9j0
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 p-3 bg-green-500/10 text-green-500 rounded-lg">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>Domain verified and active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Email Templates */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Email Templates</h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="space-y-4">
+                  <p className="text-sm text-slate-700">
+                    Customize the email templates sent to your customers and
+                    partners.
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button className="p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-all text-left flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-crystal-blue flex items-center justify-center text-black">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Queue Confirmation</h5>
+                        <p className="text-xs text-slate-700">
+                          Sent when a customer joins a queue
+                        </p>
+                      </div>
+                    </button>
+
+                    <button className="p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-all text-left flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-crystal-blue flex items-center justify-center text-black">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Wait Time Update</h5>
+                        <p className="text-xs text-slate-700">
+                          Sent when wait time changes significantly
+                        </p>
+                      </div>
+                    </button>
+
+                    <button className="p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-all text-left flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-crystal-blue flex items-center justify-center text-black">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Ready to Serve</h5>
+                        <p className="text-xs text-slate-700">
+                          Sent when it's the customer's turn
+                        </p>
+                      </div>
+                    </button>
+
+                    <button className="p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-all text-left flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-crystal-blue flex items-center justify-center text-black">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Service Feedback</h5>
+                        <p className="text-xs text-slate-700">
+                          Sent after service to collect feedback
+                        </p>
+                      </div>
+                    </button>
+                  </div>
+
+                  <div className="text-center mt-2">
+                    <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                      View all email templates
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Save Button */}
+            <div className="flex justify-end">
+              <button className="px-6 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all">
+                Save Branding Settings
               </button>
             </div>
           </div>
