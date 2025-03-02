@@ -327,7 +327,7 @@ export default function CurrentQueuesList() {
                 ]}
               >
                 {peopleAhead === 0
-                  ? `0 ${
+                  ? `3 ${
                       i18n
                         .t("common.queue.peopleCount", { count: 2 })
                         .replace("2", "") || "people in queue"
