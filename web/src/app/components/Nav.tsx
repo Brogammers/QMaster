@@ -86,12 +86,10 @@ export default function Nav() {
               <li>
                 <button
                   onClick={toggleLanguage}
-                  className="border-2 border-baby-blue flex items-center gap-2 px-4 py-2 bg-transparent rounded-full text-baby-blue hover:bg-white hover:text-baby-blue transition-colors"
+                  className="border-2 border-baby-blue text-baby-blue text-md font-bold rounded-full py-[0.325rem] px-6 bg-transparent hover:bg-white hover:text-baby-blue transition-colors flex items-center gap-2"
                 >
-                  <FaGlobe className="w-4 h-4" />
-                  <span className="font-medium">
-                    {currentLanguage === "ar" ? "EN" : "عربي"}
-                  </span>
+                  <FaGlobe />
+                  <span>{currentLanguage === "ar" ? "EN" : "عربي"}</span>
                 </button>
               </li>
             </ul>
@@ -150,12 +148,10 @@ export default function Nav() {
                         toggleLanguage();
                         setIsMenuOpen(false);
                       }}
-                      className="border-2 border-baby-blue flex items-center gap-2 px-4 py-2 bg-transparent rounded-full text-baby-blue hover:bg-white hover:text-baby-blue transition-colors"
+                      className="border-2 border-baby-blue text-baby-blue text-xl font-bold rounded-full py-[0.325rem] px-6 bg-transparent hover:bg-white hover:text-baby-blue transition-colors flex items-center gap-2"
                     >
-                      <FaGlobe className="w-4 h-4" />
-                      <span className="font-medium">
-                        {currentLanguage === "ar" ? "EN" : "عربي"}
-                      </span>
+                      <FaGlobe />
+                      <span>{currentLanguage === "ar" ? "EN" : "عربي"}</span>
                     </button>
                   </li>
                 </ul>
