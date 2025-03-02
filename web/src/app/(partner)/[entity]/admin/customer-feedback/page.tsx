@@ -6,6 +6,7 @@ import QueueModal from "@/app/shared/QueueModal";
 import { Form, Input, Select, Rate, Button, Radio } from "antd";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import { withRoleProtection } from "@/lib/auth/withRoleProtection";
 
 const { TextArea } = Input;
 
@@ -26,7 +27,7 @@ interface FeedbackForm {
   calculatedPriority?: string;
 }
 
-export default function CustomerFeedback() {
+function CustomerFeedbackPage() {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -345,3 +346,5 @@ export default function CustomerFeedback() {
     </Entity>
   );
 }
+
+export default withRoleProtection(CustomerFeedbackPage, "view_feedback");

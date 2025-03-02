@@ -3,6 +3,7 @@
 import AdminSidebar from "@/app/components/admin/AdminSidebar";
 import SplashScreen from "@/app/shared/SplashScreen";
 import { AdminAuthProvider, useAdminAuth } from "@/lib/auth/AuthContext";
+import { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -220,6 +221,16 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
                           value={{ stores, setStores, getNextStorePage }}
                         >
                           {children}
+                          <Toaster
+                            position="bottom-right"
+                            toastOptions={{
+                              style: {
+                                background: "#17222D",
+                                color: "#FFF",
+                              },
+                              duration: 5000,
+                            }}
+                          />
                         </StoresContext.Provider>
                       </CategoriesContext.Provider>
                     </UsersContext.Provider>

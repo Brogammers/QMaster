@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 interface User {
   id: number;
@@ -17,52 +18,36 @@ interface User {
 interface UserState {
   users: User[];
   deletedUser: User | null;
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: UserState = {
-  users: [
-    {
-      id: 1,
-      name: 'Hatem Soliman',
-      email: 'hatemthedev@gmail.com',
-      role: 'Admin',
-      lastActive: '2 minutes ago',
-      status: 'online',
-      permissions: {
-        canAddUsers: true,
-        canEditUsers: true,
-        canDeleteUsers: true,
-      }
-    },
-    {
-      id: 2,
-      name: 'Fam Awad',
-      email: 'fam@awadlouis.com',
-      role: 'Admin',
-      lastActive: '5 minutes ago',
-      status: 'online',
-      permissions: {
-        canAddUsers: false,
-        canEditUsers: false,
-        canDeleteUsers: false,
-      }
-    },
-    {
-      id: 3,
-      name: 'Tony Makaryous',
-      email: 'tonymakaryousm@gmail.com',
-      role: 'Project Manager',
-      lastActive: '15 minutes ago',
-      status: 'away',
-      permissions: {
-        canAddUsers: false,
-        canEditUsers: false,
-        canDeleteUsers: false,
-      }
-    },
-  ],
+  users: [],
   deletedUser: null,
+  loading: false,
+  error: null,
 };
+
+export const fetchAdminUsers = createAsyncThunk('users/fetchUsers', async () => {
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_GET_USERS!;
+  const response = await axios.get(url);  
+  const userData = response.data.users.map((user: any) => ({
+    id: user.id,
+    name: `${user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1)} ${user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1)}`,
+    email: user.email,
+    role: user.userRole === "ADMIN" ? "Admin" : "Project Manager",
+    lastActive: "Just now",
+    status: user.enabled ? 'online' : 'offline',
+    permissions: {
+      canAddUsers: user.userRole === 'ADMIN',
+      canEditUsers: user.userRole === 'ADMIN',
+      canDeleteUsers: user.userRole === 'ADMIN'
+    },
+  }));
+
+  return userData;
+});
 
 const userSlice = createSlice({
   name: 'users',
@@ -96,6 +81,20 @@ const userSlice = createSlice({
         state.users[userIndex] = { ...state.users[userIndex], ...action.payload };
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchAdminUsers.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchAdminUsers.fulfilled, (state, action) => {
+      state.loading = false;
+      state.users = action.payload;
+    });
+    builder.addCase(fetchAdminUsers.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || 'Failed to fetch users';
+    });
   },
 });
 

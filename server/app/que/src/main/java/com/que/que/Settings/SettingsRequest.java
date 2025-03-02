@@ -8,4 +8,5 @@ import lombok.Getter;
 public class SettingsRequest {
     private final boolean isMaintenanceMode;
     private final boolean isComingSoonMode;
+    private final long maintenanceDuration;
 }

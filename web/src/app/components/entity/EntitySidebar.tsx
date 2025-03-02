@@ -1,8 +1,8 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useParams, usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   FaChevronDown,
   FaChevronUp,
@@ -12,53 +12,97 @@ import {
   FaSignOutAlt,
   FaUsers,
   FaStore,
-  FaTimes
-} from 'react-icons/fa';
+  FaTimes,
+} from "react-icons/fa";
 import QMasterLogo from "../../../../public/qmaster-logo.svg";
-import { useBusinessAuth } from '@/lib/auth/AuthContext';
-import axios from 'axios';
+import { useBusinessAuth } from "@/lib/auth/AuthContext";
+import axios from "axios";
+import { useRole } from "@/ctx/RoleContext";
 
 interface EntitySidebarProps {
   isDarkMode: boolean;
   onClose: () => void;
 }
 
-export default function EntitySidebar({ isDarkMode, onClose }: EntitySidebarProps) {
+export default function EntitySidebar({
+  isDarkMode,
+  onClose,
+}: EntitySidebarProps) {
   const pathname = usePathname();
   const { logout } = useBusinessAuth();
   const { entity } = useParams();
-  const [isAdminOpen, setIsAdminOpen] = useState(() => pathname.includes('/admin'));
-  const [isQueueManagementOpen, setIsQueueManagementOpen] = useState(() => pathname.includes('/queues'));
+  const { hasPermission } = useRole();
+  const router = useRouter();
+  const [isAdminOpen, setIsAdminOpen] = useState(() =>
+    pathname.includes("/admin")
+  );
+  const [isQueueManagementOpen, setIsQueueManagementOpen] = useState(() =>
+    pathname.includes("/queues")
+  );
 
   const adminMenuItems = [
-    { path: `/${entity}/admin/details`, label: 'Details' },
-    { path: `/${entity}/admin/customer-feedback`, label: 'Customer Feedback' },
-    { path: `/${entity}/admin/sharing-info`, label: 'Sharing Info' },
+    {
+      path: `/${entity}/admin/details`,
+      label: "Details",
+      permission: "view_details",
+    },
+    {
+      path: `/${entity}/admin/customer-feedback`,
+      label: "Customer Feedback",
+      permission: "view_customer-feedback",
+    },
+    {
+      path: `/${entity}/admin/sharing-info`,
+      label: "Sharing Info",
+      permission: "view_sharing-info",
+    },
   ];
-  
+
   const menuItems = [
     {
-      path: `/${entity}/admin`,
-      label: 'Admin',
+      path: `/${entity}/admin/`,
+      label: "Admin",
       icon: FaCog,
       isDropdown: true,
-      children: adminMenuItems,
+      permission: "view_admin",
+      children: adminMenuItems.filter((item) => hasPermission(item.permission)),
     },
-    { 
-      path: `/${entity}/queues`, 
-      label: 'Queues', 
-      icon: FaPeopleArrows, 
+    {
+      path: `/${entity}/queues`,
+      label: "Queues",
+      icon: FaPeopleArrows,
+      permission: "view_queues",
     },
-    { path: `/${entity}/counter`, label: 'Counter', icon: FaUsers },
-    { path: `/${entity}/display`, label: 'Display', icon: FaDesktop },
-    { path: `/${entity}/store`, label: 'Store', icon: FaStore },
+    {
+      path: `/${entity}/counter`,
+      label: "Counter",
+      icon: FaUsers,
+      permission: "view_counter",
+    },
+    {
+      path: `/${entity}/display`,
+      label: "Display",
+      icon: FaDesktop,
+      permission: "view_display",
+    },
+    {
+      path: `/${entity}/store`,
+      label: "Store",
+      icon: FaStore,
+      permission: "view_store",
+    },
   ];
+
+  // Filter menu items based on permissions
+  const authorizedMenuItems = menuItems.filter((item) =>
+    hasPermission(item.permission)
+  );
 
   const handleLogout = () => {
     logout();
-    axios.defaults.headers.common['Authorization'] = '';
-    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    axios.defaults.headers.common["Authorization"] = "";
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   };
 
   const toggleAdmin = () => {
@@ -73,7 +117,7 @@ export default function EntitySidebar({ isDarkMode, onClose }: EntitySidebarProp
     <div className="w-64 bg-gradient-to-b from-baby-blue to-ocean-blue text-white h-screen relative overflow-hidden">
       {/* Animated background effect */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
-      
+
       {/* Logo area */}
       <div className="relative p-6 border-b border-white/20 backdrop-blur-sm flex items-center justify-between">
         <Link
@@ -88,9 +132,7 @@ export default function EntitySidebar({ isDarkMode, onClose }: EntitySidebarProp
             height={40}
             className="w-10 h-10"
           />
-          <h1 className="text-2xl font-bold text-white">
-            QMaster
-          </h1>
+          <h1 className="text-2xl font-bold text-white">QMaster</h1>
         </Link>
         {/* Close button for mobile */}
         <button
@@ -103,21 +145,25 @@ export default function EntitySidebar({ isDarkMode, onClose }: EntitySidebarProp
 
       {/* Navigation */}
       <nav className="relative mt-6 space-y-1 px-3">
-        {menuItems.map((item) => {
-          const isActive = item.isDropdown 
+        {authorizedMenuItems.map((item) => {
+          const isActive = item.isDropdown
             ? pathname.startsWith(item.path)
             : pathname === item.path;
           const Icon = item.icon;
 
           return (
             <div key={item.path}>
-              {item.isDropdown && item.label === 'Admin' ? (
+              {item.isDropdown && item.label === "Admin" ? (
                 <div>
                   <motion.div
                     className={`
                       flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer
                       transition-all duration-200 group relative
-                      ${isActive ? 'text-white' : 'text-white/70 hover:text-white'}
+                      ${
+                        isActive
+                          ? "text-white"
+                          : "text-white/70 hover:text-white"
+                      }
                     `}
                     onClick={toggleAdmin}
                     whileHover={{ x: 4 }}
@@ -127,32 +173,51 @@ export default function EntitySidebar({ isDarkMode, onClose }: EntitySidebarProp
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl"
                         layoutId="activeTab"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        transition={{
+                          type: "spring",
+                          bounce: 0.2,
+                          duration: 0.6,
+                        }}
                       />
                     )}
                     <div className="relative flex items-center gap-3">
-                      <Icon className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110`} />
+                      <Icon
+                        className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110`}
+                      />
                       <span className="font-medium">{item.label}</span>
                     </div>
-                    {isAdminOpen ? <FaChevronUp className="w-4 h-4" /> : <FaChevronDown className="w-4 h-4" />}
+                    {isAdminOpen ? (
+                      <FaChevronUp className="w-4 h-4" />
+                    ) : (
+                      <FaChevronDown className="w-4 h-4" />
+                    )}
                   </motion.div>
                   <AnimatePresence>
                     {isAdminOpen && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
+                        animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.2 }}
                         className="ml-12 mt-2 space-y-1 overflow-hidden"
                       >
                         {item.children?.map((child) => {
                           const isChildActive = pathname === child.path;
+                          if (!hasPermission(child.permission)) return null;
                           return (
-                            <Link key={child.path} href={child.path} onClick={onClose}>
+                            <Link
+                              key={child.path}
+                              href={child.path}
+                              onClick={onClose}
+                            >
                               <motion.div
                                 className={`
                                   px-4 py-2 rounded-lg text-sm cursor-pointer
-                                  ${isChildActive ? 'text-white' : 'text-white/70 hover:text-white'}
+                                  ${
+                                    isChildActive
+                                      ? "text-white"
+                                      : "text-white/70 hover:text-white"
+                                  }
                                 `}
                                 whileHover={{ x: 2 }}
                               >
@@ -171,7 +236,11 @@ export default function EntitySidebar({ isDarkMode, onClose }: EntitySidebarProp
                     className={`
                       flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer
                       transition-all duration-200 group relative
-                      ${isActive ? 'text-white' : 'text-white/70 hover:text-white'}
+                      ${
+                        isActive
+                          ? "text-white"
+                          : "text-white/70 hover:text-white"
+                      }
                     `}
                     whileHover={{ x: 4 }}
                     transition={{ type: "spring", stiffness: 300 }}
@@ -180,11 +249,17 @@ export default function EntitySidebar({ isDarkMode, onClose }: EntitySidebarProp
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl"
                         layoutId="activeTab"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        transition={{
+                          type: "spring",
+                          bounce: 0.2,
+                          duration: 0.6,
+                        }}
                       />
                     )}
                     <div className="relative flex items-center gap-3">
-                      <Icon className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110`} />
+                      <Icon
+                        className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110`}
+                      />
                       <span className="font-medium">{item.label}</span>
                     </div>
                   </motion.div>
@@ -208,7 +283,7 @@ export default function EntitySidebar({ isDarkMode, onClose }: EntitySidebarProp
           <span>Sign Out</span>
         </motion.button>
       </div>
-      
+
       {/* Bottom gradient overlay */}
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-ocean-blue to-transparent pointer-events-none" />
     </div>
