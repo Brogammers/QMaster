@@ -358,7 +358,7 @@ export default function SettingsPage() {
       {/* Tabs Container */}
       <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
         <div className="flex space-x-1 bg-white/[0.02] rounded-lg p-1 w-fit min-w-full sm:min-w-0">
-          {["general", "notifications", "security", "integrations"].map(
+          {["general", "notifications", "security", "integrations", "api"].map(
             (tab) => (
               <button
                 key={tab}
@@ -370,7 +370,9 @@ export default function SettingsPage() {
                       : "hover:bg-white/[0.05]"
                   }`}
               >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                {tab === "api"
+                  ? "API & Integrations"
+                  : tab.charAt(0).toUpperCase() + tab.slice(1)}
               </button>
             )
           )}
@@ -1511,6 +1513,505 @@ export default function SettingsPage() {
             </div>
           </div>
         )}
+
+        {activeTab === "api" && (
+          <div className="space-y-6">
+            {/* API Keys */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">API Keys</h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h4 className="font-medium">API Access</h4>
+                    <p className="text-sm text-slate-700">
+                      Enable API access to integrate QMaster with your systems
+                    </p>
+                  </div>
+                  <Switch
+                    checked={true}
+                    onChange={() => {}}
+                    className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                  >
+                    <span className="sr-only">Enable API access</span>
+                    <span
+                      className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+
+                <div className="space-y-4 mt-4">
+                  <div className="border border-white/10 rounded-lg overflow-hidden">
+                    <div className="bg-white/[0.05] p-3 flex justify-between items-center">
+                      <div>
+                        <h5 className="font-medium">Production API Key</h5>
+                        <p className="text-xs text-slate-700">
+                          Created on Jan 15, 2023
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-green-500/20 text-green-500 px-2 py-1 rounded-full">
+                          Active
+                        </span>
+                        <button className="text-xs text-red-500 hover:text-red-600 transition-colors">
+                          Revoke
+                        </button>
+                      </div>
+                    </div>
+                    <div className="p-3">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="bg-white/10 p-2 rounded font-mono text-sm flex-grow overflow-x-auto whitespace-nowrap">
+                          qm_live_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
+                        </div>
+                        <button className="p-2 bg-white/10 rounded hover:bg-white/20 transition-all">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <p className="text-xs text-slate-700">
+                        This key has full access to your account. Keep it secure
+                        and never share it publicly.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="border border-white/10 rounded-lg overflow-hidden">
+                    <div className="bg-white/[0.05] p-3 flex justify-between items-center">
+                      <div>
+                        <h5 className="font-medium">Development API Key</h5>
+                        <p className="text-xs text-slate-700">
+                          Created on Mar 22, 2023
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-amber-500/20 text-amber-500 px-2 py-1 rounded-full">
+                          Limited
+                        </span>
+                        <button className="text-xs text-red-500 hover:text-red-600 transition-colors">
+                          Revoke
+                        </button>
+                      </div>
+                    </div>
+                    <div className="p-3">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="bg-white/10 p-2 rounded font-mono text-sm flex-grow overflow-x-auto whitespace-nowrap">
+                          qm_test_z9y8x7w6v5u4t3s2r1q0p9o8n7m6l5k4j3h2g1f0
+                        </div>
+                        <button className="p-2 bg-white/10 rounded hover:bg-white/20 transition-all">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <p className="text-xs text-slate-700">
+                        This key has read-only access and rate limits for
+                        development and testing purposes.
+                      </p>
+                    </div>
+                  </div>
+
+                  <button className="px-4 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
+                    </svg>
+                    Generate New API Key
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Webhooks */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Webhooks</h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h4 className="font-medium">Webhook Notifications</h4>
+                    <p className="text-sm text-slate-700">
+                      Receive real-time notifications about events in your
+                      QMaster account
+                    </p>
+                  </div>
+                  <Switch
+                    checked={true}
+                    onChange={() => {}}
+                    className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                  >
+                    <span className="sr-only">
+                      Enable webhook notifications
+                    </span>
+                    <span
+                      className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                  </Switch>
+                </div>
+
+                <div className="space-y-4 mt-4">
+                  <div className="border border-white/10 rounded-lg overflow-hidden">
+                    <div className="bg-white/[0.05] p-3 flex justify-between items-center">
+                      <div>
+                        <h5 className="font-medium">Queue Events Webhook</h5>
+                        <p className="text-xs text-slate-700">
+                          Last triggered 5 minutes ago
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-green-500/20 text-green-500 px-2 py-1 rounded-full">
+                          Active
+                        </span>
+                        <button className="text-xs text-slate-500 hover:text-slate-600 transition-colors">
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                    <div className="p-3">
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block text-xs font-medium text-slate-700 mb-1">
+                            Endpoint URL
+                          </label>
+                          <input
+                            type="text"
+                            value="https://api.yourcompany.com/webhooks/qmaster"
+                            readOnly
+                            className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none text-sm font-mono"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-slate-700 mb-1">
+                            Events
+                          </label>
+                          <div className="flex flex-wrap gap-2">
+                            <span className="text-xs bg-white/10 px-2 py-1 rounded-full">
+                              queue.created
+                            </span>
+                            <span className="text-xs bg-white/10 px-2 py-1 rounded-full">
+                              queue.updated
+                            </span>
+                            <span className="text-xs bg-white/10 px-2 py-1 rounded-full">
+                              customer.added
+                            </span>
+                            <span className="text-xs bg-white/10 px-2 py-1 rounded-full">
+                              customer.served
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button className="px-4 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
+                    </svg>
+                    Add New Webhook
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Third-Party Integrations */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">
+                Third-Party Integrations
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-white/[0.02] rounded-lg">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded bg-white flex items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6 text-[#4285F4]"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                            fill="#4285F4"
+                          />
+                          <path
+                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.976-1.846-1.54-2.941-1.452a2.955 2.955 0 0 1-.021-.36c0-.913.396-1.889 1.103-2.688.352-.404.8-.741 1.343-1.009.542-.264 1.054-.41 1.536-.435.013.128.019.255.019.381z"
+                            fill="#4285F4"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Google Calendar</h5>
+                        <p className="text-xs text-slate-700">
+                          Sync appointments with Google Calendar
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={true}
+                      onChange={() => {}}
+                      className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                    >
+                      <span className="sr-only">
+                        Enable Google Calendar integration
+                      </span>
+                      <span
+                        className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                      />
+                    </Switch>
+                  </div>
+                  <div className="mt-2">
+                    <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                      Configure settings
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-white/[0.02] rounded-lg">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded bg-white flex items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6 text-[#00B2FF]"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M22.675 0h-21.35c-.732 0-1.325.593-1.325v21.351c0 .731.593 1.324 1.325 1.324h21.351c.731 0 1.324-.593 1.324-1.324v-21.351c0-.732-.593-1.325-1.325-1.325zm-11.676 9.303c0-.608.492-1.1 1.1-1.1.608 0 1.1.492 1.1 1.1v2.203h2.202c.608 0 1.1.492 1.1 1.1 0 .608-.492 1.1-1.1 1.1h-2.202v2.202c0 .608-.492 1.1-1.1 1.1-.608 0-1.1-.492-1.1-1.1v-2.202h-2.203c-.608 0-1.1-.492-1.1-1.1 0-.608.492-1.1 1.1-1.1h2.203v-2.203z"
+                            fill="#00B2FF"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Slack</h5>
+                        <p className="text-xs text-slate-700">
+                          Receive notifications in your Slack channels
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={false}
+                      onChange={() => {}}
+                      className={`bg-gray-200 relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                    >
+                      <span className="sr-only">Enable Slack integration</span>
+                      <span
+                        className={`translate-x-[2px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                      />
+                    </Switch>
+                  </div>
+                  <div className="mt-2">
+                    <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                      Connect account
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-white/[0.02] rounded-lg">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded bg-white flex items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6 text-[#FF9900]"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M18.75 9v.75H13.5v4.5h5.25V15H13.5v4.5h5.25v.75H12V9h6.75z"
+                            fill="#FF9900"
+                          />
+                          <path
+                            d="M6.25 19.5v-9.75H8V15h2.25v-5.25h1.75v9.75h-1.75V16.5H8v3h-1.75z"
+                            fill="#FF9900"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Twilio SMS</h5>
+                        <p className="text-xs text-slate-700">
+                          Send SMS notifications to customers
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={true}
+                      onChange={() => {}}
+                      className={`bg-crystal-blue relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                    >
+                      <span className="sr-only">
+                        Enable Twilio SMS integration
+                      </span>
+                      <span
+                        className={`translate-x-[16px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                      />
+                    </Switch>
+                  </div>
+                  <div className="mt-2">
+                    <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                      Configure settings
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-white/[0.02] rounded-lg">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded bg-white flex items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6 text-[#7AB55C]"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M19.665 16.811a10.316 10.316 0 0 1-1.021 1.837c-.537.767-.978 1.297-1.316 1.592-.525.482-1.089.73-1.692.744-.432 0-.954-.123-1.562-.373-.61-.249-1.17-.371-1.683-.371-.537 0-1.113.122-1.73.371-.616.25-1.114.381-1.495.393-.577.019-1.153-.242-1.725-.788-.368-.32-.826-.87-1.377-1.648-.59-.829-1.075-1.794-1.455-2.891-.407-1.187-.611-2.335-.611-3.447 0-1.273.275-2.372.826-3.292a4.857 4.857 0 0 1 1.73-1.751 4.65 4.65 0 0 1 2.34-.662c.46 0 1.063.142 1.563.422s1.227.422 1.436.422c.158 0 .689-.167 1.593-.498.853-.307 1.573-.434 2.163-.384 1.6.129 2.801.759 3.6 1.895-1.43.867-2.137 2.08-2.123 3.637.012 1.213.453 2.222 1.317 3.023a4.33 4.33 0 0 0 1.315.863c-.106.307-.218.6-.336.882z"
+                            fill="#7AB55C"
+                          />
+                          <path
+                            d="M15.998 2.38c0 .95-.348 1.838-1.039 2.659-.836.976-1.846 1.54-2.941 1.452a2.955 2.955 0 0 1-.021-.36c0-.913.396-1.889 1.103-2.688.352-.404.8-.741 1.343-1.009.542-.264 1.054-.41 1.536-.435.013.128.019.255.019.381z"
+                            fill="#7AB55C"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <h5 className="font-medium">Apple Business Chat</h5>
+                        <p className="text-xs text-slate-700">
+                          Chat with customers via iMessage
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={false}
+                      onChange={() => {}}
+                      className={`bg-gray-200 relative inline-flex w-[36px] h-[22px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none`}
+                    >
+                      <span className="sr-only">
+                        Enable Apple Business Chat integration
+                      </span>
+                      <span
+                        className={`translate-x-[2px] pointer-events-none inline-block h-[14px] w-[14px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                      />
+                    </Switch>
+                  </div>
+                  <div className="mt-2">
+                    <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                      Connect account
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="text-center mt-2">
+                <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                  Browse integration marketplace
+                </button>
+              </div>
+            </div>
+
+            {/* API Usage Statistics */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">API Usage Statistics</h3>
+              <div className="p-4 bg-white/[0.02] rounded-lg">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  <div className="p-3 bg-white/[0.05] rounded-lg">
+                    <h5 className="text-sm font-medium text-slate-700">
+                      API Calls (Last 30 days)
+                    </h5>
+                    <p className="text-2xl font-semibold mt-1">24,856</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <span className="text-xs text-green-500">+12.4%</span>
+                      <span className="text-xs text-slate-700">
+                        vs. previous period
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-white/[0.05] rounded-lg">
+                    <h5 className="text-sm font-medium text-slate-700">
+                      Average Response Time
+                    </h5>
+                    <p className="text-2xl font-semibold mt-1">187ms</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <span className="text-xs text-green-500">-23ms</span>
+                      <span className="text-xs text-slate-700">
+                        vs. previous period
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-white/[0.05] rounded-lg">
+                    <h5 className="text-sm font-medium text-slate-700">
+                      Error Rate
+                    </h5>
+                    <p className="text-2xl font-semibold mt-1">0.42%</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <span className="text-xs text-green-500">-0.15%</span>
+                      <span className="text-xs text-slate-700">
+                        vs. previous period
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="h-[200px] bg-white/[0.05] rounded-lg flex items-center justify-center">
+                  <p className="text-sm text-slate-700">
+                    API usage chart will be displayed here
+                  </p>
+                </div>
+
+                <div className="mt-4 text-center">
+                  <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
+                    View detailed API analytics
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Save Button */}
+            <div className="flex justify-end">
+              <button className="px-6 py-2 bg-crystal-blue text-black rounded-md text-sm font-medium hover:bg-opacity-90 transition-all">
+                Save API & Integration Settings
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Conflict Modal */}
@@ -1559,17 +2060,6 @@ export default function SettingsPage() {
                       {pendingAction?.type === "maintenance"
                         ? "Coming Soon mode is currently active. You cannot enable Maintenance mode while Coming Soon mode is active."
                         : "Maintenance mode is currently active. You cannot enable Coming Soon mode while Maintenance mode is active."}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-2">
-                      Would you like to disable{" "}
-                      {pendingAction?.type === "maintenance"
-                        ? "Coming Soon"
-                        : "Maintenance"}{" "}
-                      mode and enable{" "}
-                      {pendingAction?.type === "maintenance"
-                        ? "Maintenance"
-                        : "Coming Soon"}{" "}
-                      mode instead?
                     </p>
                   </div>
 
