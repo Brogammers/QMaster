@@ -56,8 +56,9 @@ export const queueSlice = createSlice({
       );
 
       if (queueIndex >= 0) {
-        state.currentQueues[queueIndex].position = action.payload.position;
-        state.currentQueues[queueIndex].estimatedTime = action.payload.estimatedTime;
+        const newPosition = Number(action.payload.position) || 1;
+      state.currentQueues[queueIndex].position = newPosition;
+      state.currentQueues[queueIndex].estimatedTime = action.payload.estimatedTime;
       }
     },
     clearAllQueues: (state) => {

@@ -320,10 +320,10 @@ export default function CurrentQueuesList() {
                 ]}
               >
                 {item.position === 1
-                  ? i18n.t("common.queue.peopleCountSingular", { count: 1 })
-                  : i18n.t("common.queue.peopleCount", {
-                      count: item.position,
-                    })}
+                ? i18n.t("common.queue.peopleCountSingular", { count: 1 })
+                : i18n.t("common.queue.peopleCount", { 
+                    count: item.position - 1 // People ahead
+                  })}
               </Text>
             </View>
 
@@ -341,9 +341,9 @@ export default function CurrentQueuesList() {
               >
                 {item.position <= 1 || item.estimatedTime === 0
                   ? i18n.t("yourTurn")
-                  : i18n.t("common.queue.waitTime", {
-                      minutes: item.estimatedTime,
-                    })}
+                  : `~ ${item.estimatedTime} ${
+                      i18n.t("minutes", { count: 1 }) || "min"
+                    }`}
               </Text>
             </View>
           </View>

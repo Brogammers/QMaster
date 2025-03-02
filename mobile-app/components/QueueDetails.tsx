@@ -460,12 +460,16 @@ export default function QueueDetails(props: QueueDetailsProps) {
               }`}
             >
               {selectedQueue?.currentQueueSize === 1
-                ? i18n.t("common.queue.peopleCountSingular", {
-                    count: selectedQueue?.currentQueueSize,
-                  })
-                : i18n.t("common.queue.peopleCount", {
-                    count: selectedQueue?.currentQueueSize,
-                  })}
+                ? `1 ${
+                    i18n
+                      .t("common.queue.peopleCountSingular", { count: 1 })
+                      .replace("1", "") || "person in queue"
+                  }`
+                : `${selectedQueue?.currentQueueSize || 0} ${
+                    i18n
+                      .t("common.queue.peopleCount", { count: 2 })
+                      .replace("2", "") || "people in queue"
+                  }`}
             </Text>
             <View
               className="flex-row items-center mt-3 bg-opacity-10 rounded-full px-3 py-1.5"
@@ -485,9 +489,9 @@ export default function QueueDetails(props: QueueDetailsProps) {
                   isDarkMode ? "text-baby-blue" : "text-ocean-blue"
                 }`}
               >
-                {i18n.t("common.queue.waitTime", {
-                  minutes: estimatedTime,
-                })}
+                {`~ ${estimatedTime} ${
+                  i18n.t("minutes", { count: 1 }) || "min"
+                }`}
               </Text>
             </View>
           </View>
@@ -530,12 +534,16 @@ export default function QueueDetails(props: QueueDetailsProps) {
                   }`}
                 >
                   {selectedQueue?.currentQueueSize === 1
-                    ? i18n.t("common.queue.peopleCountSingular", {
-                        count: selectedQueue?.currentQueueSize,
-                      })
-                    : i18n.t("common.queue.peopleCount", {
-                        count: selectedQueue?.currentQueueSize,
-                      })}
+                    ? `1 ${
+                        i18n
+                          .t("common.queue.peopleCountSingular", { count: 1 })
+                          .replace("1", "") || "person in queue"
+                      }`
+                    : `${selectedQueue?.currentQueueSize || 0} ${
+                        i18n
+                          .t("common.queue.peopleCount", { count: 2 })
+                          .replace("2", "") || "people in queue"
+                      }`}
                 </Text>
                 <View
                   className="flex-row items-center mt-3 bg-opacity-10 rounded-full px-3 py-1.5"
@@ -555,9 +563,9 @@ export default function QueueDetails(props: QueueDetailsProps) {
                       isDarkMode ? "text-baby-blue" : "text-ocean-blue"
                     }`}
                   >
-                    {i18n.t("common.queue.waitTime", {
-                      minutes: estimatedTime,
-                    })}
+                    {`~ ${estimatedTime} ${
+                      i18n.t("minutes", { count: 1 }) || "min"
+                    }`}
                   </Text>
                 </View>
               </View>
