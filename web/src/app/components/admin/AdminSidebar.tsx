@@ -51,7 +51,7 @@ export default function AdminSidebar({
   };
 
   return (
-    <div className="w-64 bg-gradient-to-b from-concrete-turqouise to-coal-black text-white h-screen relative overflow-hidden">
+    <div className="w-64 bg-gradient-to-b from-concrete-turqouise to-coal-black text-white h-screen flex flex-col overflow-hidden">
       {/* Animated background effect */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
 
@@ -83,7 +83,7 @@ export default function AdminSidebar({
       </div>
 
       {/* Navigation */}
-      <nav className="relative mt-6 space-y-1 px-3">
+      <nav className="relative mt-6 space-y-1 px-3 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
         {menuItems.map((item) => {
           const isActive = pathname === item.path;
           const Icon = item.icon;
