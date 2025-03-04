@@ -14,7 +14,7 @@ import {
   FaStore,
   FaTimes,
 } from "react-icons/fa";
-import QMasterLogo from "../../../../public/qmaster-logo.svg";
+import QMasterSVG from "../../../../public/QMaster-512.svg";
 import { useBusinessAuth } from "@/lib/auth/AuthContext";
 import axios from "axios";
 import { useRole } from "@/ctx/RoleContext";
@@ -126,13 +126,13 @@ export default function EntitySidebar({
           onClick={onClose}
         >
           <Image
-            src={QMasterLogo}
+            src={QMasterSVG}
             alt="QMaster Logo"
             width={40}
             height={40}
             className="w-10 h-10"
           />
-          <h1 className="text-2xl font-bold text-white">QMaster</h1>
+          <h1 className="text-3xl font-bold text-white jost-font">QMaster</h1>
         </Link>
         {/* Close button for mobile */}
         <button

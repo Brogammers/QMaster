@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import NavLogo from "../../../public/NavigationLogo.svg";
 import { BusinessAuthProvider } from "@/lib/auth/AuthContext";
+import QMasterLogo from "../shared/QMasterLogo";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -30,13 +31,7 @@ export default function Login() {
           <div className="flex-1 flex flex-col px-8 py-4 relative">
             {/* Logo */}
             <Link href="/" className="mb-8">
-              <Image
-                src={NavLogo}
-                alt="QMaster Logo"
-                width={120}
-                height={40}
-                className="w-auto h-auto"
-              />
+              <QMasterLogo displayQMasterText />
             </Link>
 
             {/* Login Form Container */}

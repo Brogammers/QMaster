@@ -5,7 +5,7 @@ import { QMasterLogoProps } from "types";
 export default function QMasterLogo({ className, displayQMasterText = false }: QMasterLogoProps) {
   return (
     <div className="flex items-center gap-5">
-      <figure className="w-[56px]">
+      <figure className="w-[48px]">
         <Image
           src={QMasterSVG}
           alt="QMaster Logo"
