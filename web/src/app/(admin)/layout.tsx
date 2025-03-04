@@ -70,7 +70,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   return (
     <Provider store={store}>
       <div
-        className={`flex flex-col lg:flex-row h-screen overflow-hidden transition-colors duration-300
+        className={`flex flex-col lg:flex-row min-h-screen transition-colors duration-300
         ${isDarkMode ? "bg-[#0A0A0A] text-white" : "bg-white text-slate-900"}`}
       >
         {/* Mobile Header */}
@@ -125,7 +125,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
 
         {/* Sidebar */}
         <div
-          className={`fixed lg:relative z-40 h-full transition-transform duration-300 lg:translate-x-0
+          className={`fixed top-0 left-0 h-screen z-40 transition-transform duration-300 lg:translate-x-0
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
         >
           <AdminSidebar
@@ -134,6 +134,9 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
             onClose={() => setIsMobileMenuOpen(false)}
           />
         </div>
+
+        {/* Main content wrapper - takes up space where sidebar would be on large screens */}
+        <div className="hidden lg:block w-64 flex-shrink-0"></div>
 
         {/* Main Content */}
         <motion.main
@@ -149,12 +152,12 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
         >
           {/* Noise texture overlay */}
           <div
-            className={`absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none`}
+            className={`fixed inset-0 w-full h-full bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none`}
           />
 
           {/* Subtle gradient overlays */}
           <div
-            className={`absolute inset-0 
+            className={`fixed inset-0 w-full h-full 
             ${
               isDarkMode
                 ? "bg-gradient-to-b from-concrete-turqouise/5 via-transparent to-transparent"
@@ -162,7 +165,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
             }`}
           />
           <div
-            className={`absolute inset-0 
+            className={`fixed inset-0 w-full h-full 
             ${
               isDarkMode
                 ? "bg-[radial-gradient(circle_at_top,rgba(19,64,77,0.1),transparent_70%)] pointer-events-none"

@@ -114,7 +114,7 @@ export default function EntitySidebar({
   };
 
   return (
-    <div className="w-64 bg-gradient-to-b from-baby-blue to-ocean-blue text-white h-screen relative overflow-hidden">
+    <div className="w-64 bg-gradient-to-b from-baby-blue to-ocean-blue text-white h-screen flex flex-col overflow-hidden">
       {/* Animated background effect */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
 
