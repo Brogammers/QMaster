@@ -15,7 +15,7 @@ import {
   FaTags,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
-import QMasterLogo from "../../../../public/qmaster-logo.svg";
+import QMasterSVG from "../../../../public/QMaster-512.svg";
 import { useAdminAuth } from "@/lib/auth/AuthContext";
 import DarkModeToggle from "@/components/admin/DarkModeToggle";
 import axios from "axios";
@@ -73,13 +73,13 @@ export default function AdminSidebar({
             onClick={onClose}
           >
             <Image
-              src={QMasterLogo}
+              src={QMasterSVG}
               alt="QMaster Logo"
               width={40}
               height={40}
               className="w-10 h-10"
             />
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-crystal-blue to-baby-blue">
+            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-crystal-blue to-baby-blue jost-font">
               QMaster
             </h1>
           </Link>
