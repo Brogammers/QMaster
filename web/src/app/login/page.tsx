@@ -80,7 +80,7 @@ export default function Login() {
                 is the future.&rdquo;
               </p>
               <p className="text-sm text-gray-500">
-                HR Liaison, Lone Star Bakery
+                Tony Makaryous, ElFady Group
               </p>
             </div>
           </div>
