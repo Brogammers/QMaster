@@ -19,6 +19,7 @@ import QMasterLogo from "../../../../public/qmaster-logo.svg";
 import { useAdminAuth } from "@/lib/auth/AuthContext";
 import DarkModeToggle from "@/components/admin/DarkModeToggle";
 import axios from "axios";
+import { useState } from "react";
 
 const menuItems = [
   { path: "/admin/dashboard", label: "Dashboard", icon: FaChartLine },
@@ -43,12 +44,17 @@ export default function AdminSidebar({
 }: AdminSidebarProps) {
   const pathname = usePathname();
   const { logout } = useAdminAuth();
+  const [themeDisabled, setThemeDisabled] = useState(false);
 
   const handleLogout = () => {
     axios.defaults.headers.common["Authorization"] = "";
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     logout();
+  };
+
+  const toggleThemeDisabled = () => {
+    setThemeDisabled(!themeDisabled);
   };
 
   return (
@@ -149,7 +155,19 @@ export default function AdminSidebar({
           isDarkMode={isDarkMode}
           onToggle={onDarkModeToggle}
           showLabel={true}
+          isDisabled={themeDisabled}
         />
+
+        {/* Toggle for demonstration purposes */}
+        <div className="flex items-center justify-between text-xs text-white/70 px-2 py-1 mb-2">
+          <span>Lock theme:</span>
+          <button
+            onClick={toggleThemeDisabled}
+            className="text-xs px-2 py-1 rounded bg-white/10 hover:bg-white/20"
+          >
+            {themeDisabled ? "Unlock" : "Lock"}
+          </button>
+        </div>
 
         <motion.button
           onClick={handleLogout}
