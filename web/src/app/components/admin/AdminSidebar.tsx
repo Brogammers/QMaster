@@ -51,7 +51,7 @@ export default function AdminSidebar({
   };
 
   return (
-    <div className="w-64 bg-gradient-to-b from-concrete-turqouise to-coal-black text-white h-screen flex flex-col overflow-hidden">
+    <div className="z-[1000] w-64 bg-gradient-to-b from-concrete-turqouise to-coal-black text-white h-screen flex flex-col overflow-hidden">
       {/* Animated background effect */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
 
@@ -76,7 +76,7 @@ export default function AdminSidebar({
         {/* Close button for mobile */}
         <button
           onClick={onClose}
-          className="lg:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/[0.05]"
+          className="lg:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/[0.05] relative z-[1001]"
         >
           <FaTimes className="w-5 h-5" />
         </button>

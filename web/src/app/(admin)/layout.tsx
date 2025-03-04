@@ -74,10 +74,12 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
         ${isDarkMode ? "bg-[#0A0A0A] text-white" : "bg-white text-slate-900"}`}
       >
         {/* Mobile Header */}
-        <div className="lg:hidden flex items-center justify-between p-6 border-b border-white/10">
+        <div className="lg:hidden flex items-center justify-between p-6 border-b border-white/10 relative z-50">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`p-2 rounded-lg 
+            className={`p-2 rounded-lg ${
+              isMobileMenuOpen ? "opacity-0" : "opacity-100"
+            } transition-opacity
             ${
               isDarkMode
                 ? "text-white hover:bg-white/10"
@@ -125,7 +127,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
 
         {/* Sidebar */}
         <div
-          className={`fixed top-0 left-0 h-screen z-40 transition-transform duration-300 lg:translate-x-0
+          className={`fixed top-0 left-0 h-screen z-[45] transition-transform duration-300 lg:translate-x-0
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
         >
           <AdminSidebar
