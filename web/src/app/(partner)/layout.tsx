@@ -8,7 +8,7 @@ import EntitySidebar from "@/app/components/entity/EntitySidebar";
 import SplashScreen from "@/app/shared/SplashScreen";
 import { StoreProvider } from "@/store/StoreProvider";
 import { LocationProvider } from "@/ctx/LocationContext";
-import { FaBars } from 'react-icons/fa';
+import { FaBars } from "react-icons/fa";
 
 interface PrivateLayoutProps {
   children: React.ReactNode;
@@ -47,8 +47,12 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
     <StoreProvider>
       <LocationProvider>
         <div
-          className={`flex h-screen overflow-hidden transition-colors duration-300
-                    ${isDarkMode ? "bg-[#0A0A0A] text-white" : "bg-white text-slate-900"}`}
+          className={`flex min-h-screen transition-colors duration-300
+                    ${
+                      isDarkMode
+                        ? "bg-[#0A0A0A] text-white"
+                        : "bg-white text-slate-900"
+                    }`}
         >
           {/* Mobile overlay */}
           {isSidebarOpen && (
@@ -61,22 +65,30 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
           {/* Sidebar */}
           <div
             className={`
-                            fixed lg:relative z-30
+                            fixed top-0 left-0 h-screen z-30
                             transform transition-transform duration-300 ease-in-out
-                            ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+                            ${
+                              isSidebarOpen
+                                ? "translate-x-0"
+                                : "-translate-x-full lg:translate-x-0"
+                            }
                         `}
           >
             <EntitySidebar isDarkMode={isDarkMode} onClose={closeSidebar} />
           </div>
 
+          {/* Main content wrapper - takes up space where sidebar would be on large screens */}
+          <div className="hidden lg:block w-64 flex-shrink-0"></div>
+
           {/* Mobile header */}
           <div className="lg:hidden fixed top-0 left-0 right-0 z-10 p-4">
             <button
               onClick={toggleSidebar}
-              className={`p-2 rounded-lg transition-colors duration-200 ${isDarkMode
+              className={`p-2 rounded-lg transition-colors duration-200 ${
+                isDarkMode
                   ? "text-white hover:bg-white/10"
                   : "text-slate-900 hover:bg-slate-100"
-                }`}
+              }`}
             >
               <FaBars className="w-6 h-6" />
             </button>
@@ -85,33 +97,36 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
           {/* Main content */}
           <motion.main
             className={`flex-1 overflow-y-auto p-8 relative pt-16 lg:pt-8
-                            ${isDarkMode
-                ? "bg-[#0A0A0A] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#141414] via-[#0A0A0A] to-black"
-                : "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-50 via-white to-white"
-              }`}
+                            ${
+                              isDarkMode
+                                ? "bg-[#0A0A0A] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#141414] via-[#0A0A0A] to-black"
+                                : "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-50 via-white to-white"
+                            }`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             {/* Noise texture overlay */}
             <div
-              className={`absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none`}
+              className={`fixed inset-0 w-full h-full bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none`}
             />
 
             {/* Subtle gradient overlays */}
             <div
-              className={`absolute inset-0 
-                                ${isDarkMode
-                  ? "bg-gradient-to-b from-baby-blue/5 via-transparent to-transparent"
-                  : "bg-[linear-gradient(to_right,#0ea5e9,#06b6d4)] opacity-[0.03]"
-                }`}
+              className={`fixed inset-0 w-full h-full 
+                                ${
+                                  isDarkMode
+                                    ? "bg-gradient-to-b from-baby-blue/5 via-transparent to-transparent"
+                                    : "bg-[linear-gradient(to_right,#0ea5e9,#06b6d4)] opacity-[0.03]"
+                                }`}
             />
             <div
-              className={`absolute inset-0 
-                                ${isDarkMode
-                  ? "bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.1),transparent_70%)] pointer-events-none"
-                  : "bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.1),transparent)]"
-                }`}
+              className={`fixed inset-0 w-full h-full 
+                                ${
+                                  isDarkMode
+                                    ? "bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.1),transparent_70%)] pointer-events-none"
+                                    : "bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.1),transparent)]"
+                                }`}
             />
 
             {/* Content */}
