@@ -44,7 +44,7 @@ export default function AdminSidebar({
 }: AdminSidebarProps) {
   const pathname = usePathname();
   const { logout } = useAdminAuth();
-  const [themeDisabled, setThemeDisabled] = useState(false);
+  const [themeDisabled, setThemeDisabled] = useState(true);
 
   const handleLogout = () => {
     axios.defaults.headers.common["Authorization"] = "";
@@ -54,7 +54,8 @@ export default function AdminSidebar({
   };
 
   const toggleThemeDisabled = () => {
-    setThemeDisabled(!themeDisabled);
+    // Commented out to prevent toggling
+    // setThemeDisabled(!themeDisabled);
   };
 
   return (
@@ -158,14 +159,11 @@ export default function AdminSidebar({
           isDisabled={themeDisabled}
         />
 
-        {/* Toggle for demonstration purposes */}
+        {/* Toggle button is kept but made unclickable */}
         <div className="flex items-center justify-between text-xs text-white/70 px-2 py-1 mb-2">
-          <span>Lock theme:</span>
-          <button
-            onClick={toggleThemeDisabled}
-            className="text-xs px-2 py-1 rounded bg-white/10 hover:bg-white/20"
-          >
-            {themeDisabled ? "Unlock" : "Lock"}
+          <span>Theme options:</span>
+          <button className="text-xs px-2 py-1 rounded bg-white/10 opacity-50 cursor-not-allowed">
+            Coming soon
           </button>
         </div>
 
