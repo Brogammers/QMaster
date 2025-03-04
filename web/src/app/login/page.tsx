@@ -79,9 +79,14 @@ export default function Login() {
                 quality has been a differentiator for us. I do really think this
                 is the future.&rdquo;
               </p>
-              <p className="text-sm text-gray-500">
-                HR Liaison, Lone Star Bakery
-              </p>
+              <div className="flex flex-col">
+                <p className="text-sm font-medium text-gray-700">
+                  Tony Makaryous
+                </p>
+                <p className="text-xs text-gray-500">
+                  Managing Director, ElFady Group Egypt
+                </p>
+              </div>
             </div>
           </div>
         </div>
