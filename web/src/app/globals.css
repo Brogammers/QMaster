@@ -19,6 +19,11 @@
   --cotton-candy: #34F5C5;
 }
 
+.jost-font {
+  font-family: var(--font-jost);
+  font-weight: 600;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
