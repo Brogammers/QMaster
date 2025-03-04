@@ -18,7 +18,7 @@ import {
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import { StoreData } from "./admin/store/columns";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -129,6 +129,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
         <div
           className={`fixed top-0 left-0 h-screen z-[45] transition-transform duration-300 lg:translate-x-0
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+          onClick={(e) => e.stopPropagation()}
         >
           <AdminSidebar
             isDarkMode={isDarkMode}
@@ -136,6 +137,16 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
             onClose={() => setIsMobileMenuOpen(false)}
           />
         </div>
+
+        {/* Separate close button for mobile as fallback */}
+        {isMobileMenuOpen && (
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="lg:hidden fixed top-6 right-6 z-[9999] p-3 rounded-lg bg-coal-black/50 text-white hover:text-white hover:bg-white/[0.15] cursor-pointer"
+          >
+            <FaTimes className="w-5 h-5" />
+          </button>
+        )}
 
         {/* Main content wrapper - takes up space where sidebar would be on large screens */}
         <div className="hidden lg:block w-64 flex-shrink-0"></div>
