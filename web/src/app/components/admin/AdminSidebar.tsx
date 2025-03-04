@@ -12,17 +12,19 @@ import {
   FaCalendarAlt,
   FaSignOutAlt,
   FaTimes,
+  FaTags,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
-import QMasterLogo from "../../../../public/qmaster-logo.svg";
+import QMasterSVG from "../../../../public/QMaster-512.svg";
 import { useAdminAuth } from "@/lib/auth/AuthContext";
 import DarkModeToggle from "@/components/admin/DarkModeToggle";
 import axios from "axios";
+import { useState } from "react";
 
 const menuItems = [
   { path: "/admin/dashboard", label: "Dashboard", icon: FaChartLine },
   { path: "/admin/partners", label: "Partners", icon: FaBuilding },
-  { path: "/admin/categories", label: "Categories", icon: FaStore },
+  { path: "/admin/categories", label: "Categories", icon: FaTags },
   { path: "/admin/users", label: "Users", icon: FaUsers },
   { path: "/admin/schedules", label: "Schedules", icon: FaCalendarAlt },
   { path: "/admin/store", label: "Store", icon: FaStore },
@@ -42,6 +44,7 @@ export default function AdminSidebar({
 }: AdminSidebarProps) {
   const pathname = usePathname();
   const { logout } = useAdminAuth();
+  const [themeDisabled, setThemeDisabled] = useState(true);
 
   const handleLogout = () => {
     axios.defaults.headers.common["Authorization"] = "";
@@ -50,36 +53,50 @@ export default function AdminSidebar({
     logout();
   };
 
+  const toggleThemeDisabled = () => {
+    // Commented out to prevent toggling
+    // setThemeDisabled(!themeDisabled);
+  };
+
   return (
-    <div className="w-64 bg-gradient-to-b from-concrete-turqouise to-coal-black text-white h-screen relative overflow-hidden">
+    <div className="z-[1000] w-64 bg-gradient-to-b from-concrete-turqouise to-coal-black text-white h-screen flex flex-col overflow-hidden">
       {/* Animated background effect */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
 
       {/* Logo area */}
-      <div className="relative p-6 border-b border-crystal-blue/20 backdrop-blur-sm flex items-center justify-between">
-        <Link
-          href="/admin/dashboard"
-          className="flex items-center gap-3"
-          onClick={onClose}
-        >
-          <Image
-            src={QMasterLogo}
-            alt="QMaster Logo"
-            width={40}
-            height={40}
-            className="w-10 h-10"
-          />
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-crystal-blue to-baby-blue">
-            QMaster
-          </h1>
-        </Link>
-        {/* Close button for mobile */}
-        <button
-          onClick={onClose}
-          className="lg:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/[0.05]"
-        >
-          <FaTimes className="w-5 h-5" />
-        </button>
+      <div className="relative p-6 border-b border-crystal-blue/20 backdrop-blur-sm flex items-center">
+        {/* Logo and title */}
+        <div className="flex-1 flex items-center gap-3">
+          <Link
+            href="/admin/dashboard"
+            className="flex items-center gap-3"
+            onClick={onClose}
+          >
+            <Image
+              src={QMasterSVG}
+              alt="QMaster Logo"
+              width={40}
+              height={40}
+              className="w-10 h-10"
+            />
+            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-crystal-blue to-baby-blue jost-font">
+              QMaster
+            </h1>
+          </Link>
+        </div>
+
+        {/* Close button in its own container */}
+        <div className="flex-shrink-0 w-10">
+          <motion.button
+            onClick={onClose}
+            className="lg:hidden flex items-center justify-center p-2 rounded-lg 
+              text-white/70 hover:text-white hover:bg-white/[0.05] transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {/* <FaTimes className="w-5 h-5" /> */}
+          </motion.button>
+        </div>
       </div>
 
       {/* Navigation */}
@@ -139,7 +156,16 @@ export default function AdminSidebar({
           isDarkMode={isDarkMode}
           onToggle={onDarkModeToggle}
           showLabel={true}
+          isDisabled={themeDisabled}
         />
+
+        {/* Toggle button is kept but made unclickable */}
+        <div className="flex items-center justify-between text-xs text-white/70 px-2 py-1 mb-2">
+          <span>Theme options:</span>
+          <button className="text-xs px-2 py-1 rounded bg-white/10 opacity-50 cursor-not-allowed">
+            Coming soon
+          </button>
+        </div>
 
         <motion.button
           onClick={handleLogout}

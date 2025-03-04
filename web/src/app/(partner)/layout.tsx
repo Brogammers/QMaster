@@ -49,7 +49,7 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
       <RoleProvider>
         <LocationProvider>
           <div
-            className={`flex h-screen overflow-hidden transition-colors duration-300
+            className={`flex min-h-screen transition-colors duration-300
                       ${
                         isDarkMode
                           ? "bg-[#0A0A0A] text-white"
@@ -67,7 +67,7 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
             {/* Sidebar */}
             <div
               className={`
-                              fixed lg:relative z-30
+                              fixed top-0 left-0 h-screen z-30
                               transform transition-transform duration-300 ease-in-out
                               ${
                                 isSidebarOpen
@@ -78,6 +78,9 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
             >
               <EntitySidebar isDarkMode={isDarkMode} onClose={closeSidebar} />
             </div>
+
+            {/* Main content wrapper - takes up space where sidebar would be on large screens */}
+            <div className="hidden lg:block w-64 flex-shrink-0"></div>
 
             {/* Mobile header */}
             <div className="lg:hidden fixed top-0 left-0 right-0 z-10 p-4">
@@ -107,12 +110,12 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
             >
               {/* Noise texture overlay */}
               <div
-                className={`absolute inset-0 bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none`}
+                className={`fixed inset-0 w-full h-full bg-[url('/noise.svg')] opacity-[0.15] mix-blend-soft-light pointer-events-none`}
               />
 
               {/* Subtle gradient overlays */}
               <div
-                className={`absolute inset-0 
+                className={`fixed inset-0 w-full h-full 
                                     ${
                                       isDarkMode
                                         ? "bg-gradient-to-b from-baby-blue/5 via-transparent to-transparent"
@@ -120,7 +123,7 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
                                     }`}
               />
               <div
-                className={`absolute inset-0 
+                className={`fixed inset-0 w-full h-full 
                                     ${
                                       isDarkMode
                                         ? "bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.1),transparent_70%)] pointer-events-none"

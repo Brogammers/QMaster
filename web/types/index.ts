@@ -5,6 +5,11 @@ export interface CarouselProps {
   children: ReactNode[];
 }
 
+export interface QMasterLogoProps {
+  className?: string;
+  displayQMasterText?: boolean;
+}
+
 export interface QueueModalProps {
   title?: string;
   description?: string;
