@@ -12,6 +12,7 @@ import {
   FaCalendarAlt,
   FaSignOutAlt,
   FaTimes,
+  FaTags,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import QMasterLogo from "../../../../public/qmaster-logo.svg";
@@ -22,7 +23,7 @@ import axios from "axios";
 const menuItems = [
   { path: "/admin/dashboard", label: "Dashboard", icon: FaChartLine },
   { path: "/admin/partners", label: "Partners", icon: FaBuilding },
-  { path: "/admin/categories", label: "Categories", icon: FaStore },
+  { path: "/admin/categories", label: "Categories", icon: FaTags },
   { path: "/admin/users", label: "Users", icon: FaUsers },
   { path: "/admin/schedules", label: "Schedules", icon: FaCalendarAlt },
   { path: "/admin/store", label: "Store", icon: FaStore },
