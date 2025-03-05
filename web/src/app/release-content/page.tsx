@@ -7,6 +7,8 @@ import { FaDownload, FaImage } from "react-icons/fa";
 import { useTranslation } from "@/hooks/useTranslation";
 import Image from "next/image";
 import QMasterLogo from "../../../public/qmaster-logo.svg";
+import QMasterTrademark from "../../../public/QMaster-Trademark.svg";
+
 export default function ReleaseContentPage() {
   const { t, isRTL } = useTranslation();
 
@@ -102,13 +104,13 @@ export default function ReleaseContentPage() {
               >
                 {/* Logo Marks */}
                 <div className="bg-gray-50 rounded-2xl p-6 shadow-sm">
-                  <div className="aspect-square bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-100">
+                  <figure className="aspect-square bg-gradient-to-r from-concrete-turqouise to-ocean-blue rounded-xl flex items-center justify-center mb-4 p-8 border border-gray-100">
                     <Image
-                      src={QMasterLogo}
+                      src={QMasterTrademark}
                       alt="QMaster Logo"
-                      className="w-24 h-24"
+                      className="w-full"
                     />
-                  </div>
+                  </figure>
                   <h3 className="text-xl font-bold text-coal-black mb-2">
                     Logo Marks
                   </h3>
@@ -123,13 +125,13 @@ export default function ReleaseContentPage() {
 
                 {/* Product Screenshots */}
                 <div className="bg-gray-50 rounded-2xl p-6 shadow-sm">
-                  <div className="aspect-square bg-white rounded-xl flex items-center justify-center mb-4 overflow-hidden border border-gray-100">
+                  <figure className="aspect-square bg-white rounded-xl flex items-center justify-center mb-4 overflow-hidden border border-gray-100">
                     <Image
                       src={QMasterLogo}
                       alt="Product Screenshot"
                       className="w-full h-full object-cover"
                     />
-                  </div>
+                  </figure>
                   <h3 className="text-xl font-bold text-coal-black mb-2">
                     Product Screens
                   </h3>
@@ -144,13 +146,13 @@ export default function ReleaseContentPage() {
 
                 {/* Brand Guidelines */}
                 <div className="bg-gray-50 rounded-2xl p-6 shadow-sm">
-                  <div className="aspect-square bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-100">
+                  <figure className="aspect-square bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-100">
                     <Image
                       src={QMasterLogo}
                       alt="Brand Guidelines"
                       className="w-24 h-24"
                     />
-                  </div>
+                  </figure>
                   <h3 className="text-xl font-bold text-coal-black mb-2">
                     Brand Guidelines
                   </h3>
