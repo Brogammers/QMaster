@@ -62,11 +62,11 @@ export default function ReleaseContentPage() {
         <Nav />
         <div className="container">
           <div className="row">
-            <motion.div
+            <motion.section
               variants={itemVariants}
               initial="hidden"
               animate="visible"
-              className="text-center w-full"
+              className="text-center w-full my-8"
             >
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
                 Press & Media
@@ -80,7 +80,7 @@ export default function ReleaseContentPage() {
                 <FaDownload className="w-5 h-5" />
                 {t("Download our media kit")}
               </button>
-            </motion.div>
+            </motion.section>
           </div>
         </div>
       </div>
@@ -89,16 +89,16 @@ export default function ReleaseContentPage() {
       <main className="w-full py-16">
         <div className="container">
           <div className="row">
-            <motion.div
+            <motion.section
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className="w-full space-y-16"
+              className="w-full space-y-48 mt-0 mb-8"
             >
               {/* Brand Assets Grid */}
-              <motion.div
+              <motion.section
                 variants={itemVariants}
-                className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full"
+                className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mt-0 mb-8"
               >
                 {/* Logo Marks */}
                 <div className="bg-gray-50 rounded-2xl p-6 shadow-sm">
@@ -162,10 +162,10 @@ export default function ReleaseContentPage() {
                     <span>Download PDF</span>
                   </button>
                 </div>
-              </motion.div>
+              </motion.section>
 
               {/* Color Palette Section */}
-              <motion.div variants={itemVariants} className="w-full">
+              <motion.section variants={itemVariants} className="w-full">
                 <h2 className="text-3xl font-bold text-coal-black mb-8">
                   Brand Colors
                 </h2>
@@ -367,10 +367,10 @@ export default function ReleaseContentPage() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </motion.section>
 
               {/* Typography Section */}
-              <motion.div variants={itemVariants} className="w-full">
+              <motion.section variants={itemVariants} className="w-full">
                 <h2 className="text-3xl font-bold text-coal-black mb-8">
                   Typography
                 </h2>
@@ -470,10 +470,10 @@ export default function ReleaseContentPage() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </motion.section>
 
               {/* Usage Guidelines */}
-              <motion.div variants={itemVariants} className="w-full">
+              <motion.section variants={itemVariants} className="w-full">
                 <h2 className="text-3xl font-bold text-coal-black mb-8">
                   Usage Guidelines
                 </h2>
@@ -517,10 +517,10 @@ export default function ReleaseContentPage() {
                     </ul>
                   </div>
                 </div>
-              </motion.div>
+              </motion.section>
 
               {/* Contact Section */}
-              <motion.div
+              <motion.section
                 variants={itemVariants}
                 className="w-full text-center"
               >
@@ -533,12 +533,12 @@ export default function ReleaseContentPage() {
                 </p>
                 <a
                   href="mailto:media@qmaster.com"
-                  className="bg-ocean-blue hover:bg-opacity-90 inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-full transition-all"
+                  className="bg-ocean-blue hover:bg-opacity-90 inline-flex items-center justify-center mb-16 px-8 py-4 text-lg font-bold text-white rounded-full transition-all"
                 >
                   Contact Media Team
                 </a>
-              </motion.div>
-            </motion.div>
+              </motion.section>
+            </motion.section>
           </div>
         </div>
       </main>
