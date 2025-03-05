@@ -176,7 +176,7 @@ export default function ReleaseContentPage() {
                       Ocean Blue
                     </h3>
                     <p className="text-dark-grey text-sm mb-2">#17222D</p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-slate-grey text-sm">
                       Primary brand color, used for main backgrounds and
                       navigation
                     </p>
@@ -188,7 +188,7 @@ export default function ReleaseContentPage() {
                       Concrete Turquoise
                     </h3>
                     <p className="text-dark-grey text-sm mb-2">#13404D</p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-slate-grey text-sm">
                       Secondary background color, used for gradients and cards
                     </p>
                   </div>
@@ -199,7 +199,7 @@ export default function ReleaseContentPage() {
                       Baby Blue
                     </h3>
                     <p className="text-dark-grey text-sm mb-2">#1DCDFE</p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-slate-grey text-sm">
                       Accent color, used for interactive elements and highlights
                     </p>
                   </div>
@@ -210,7 +210,7 @@ export default function ReleaseContentPage() {
                       Dark Grey
                     </h3>
                     <p className="text-dark-grey text-sm mb-2">#515151</p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-slate-grey text-sm">
                       Used for text and form inputs
                     </p>
                   </div>
@@ -223,7 +223,7 @@ export default function ReleaseContentPage() {
                       Off White
                     </h3>
                     <p className="text-dark-grey text-sm mb-2">#D9D9D9</p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-slate-grey text-sm">
                       Light mode backgrounds and subtle accents
                     </p>
                   </div>
@@ -234,7 +234,7 @@ export default function ReleaseContentPage() {
                       Lite Grey
                     </h3>
                     <p className="text-dark-grey text-sm mb-2">#ADADAD</p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-slate-grey text-sm">
                       Used for borders and dividers
                     </p>
                   </div>
@@ -245,7 +245,7 @@ export default function ReleaseContentPage() {
                       Lava Red
                     </h3>
                     <p className="text-dark-grey text-sm mb-2">#B41818</p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-slate-grey text-sm">
                       Used for error states and destructive actions
                     </p>
                   </div>
@@ -256,7 +256,7 @@ export default function ReleaseContentPage() {
                       Coal Black
                     </h3>
                     <p className="text-dark-grey text-sm mb-2">#2F2E41</p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-slate-grey text-sm">
                       Used for deep backgrounds and text
                     </p>
                   </div>
