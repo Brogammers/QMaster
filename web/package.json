@@ -38,6 +38,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "combined-stream": "^1.0.8",
+    "date-fns": "^4.1.0",
     "formik": "^2.4.5",
     "framer-motion": "^11.16.4",
     "gsap": "^3.12.5",

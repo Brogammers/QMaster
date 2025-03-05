@@ -1,19 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import {
-  FaCog,
-  FaBell,
-  FaLock,
-  FaGlobe,
-  FaFingerprint,
-  FaExclamationTriangle,
-} from "react-icons/fa";
-import { Switch } from "@headlessui/react";
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { AdminNotification } from "@/components/admin/notifications/AdminNotification";
+import { Dialog, Switch, Transition } from "@headlessui/react";
 import axios from "axios";
+import { Fragment, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import {
+  FaExclamationTriangle,
+  FaFingerprint,
+  FaLock
+} from "react-icons/fa";
 
 interface UserProfile {
   name: string;
@@ -835,6 +831,14 @@ export default function SettingsPage() {
                   Mark all as read
                 </button>
               </div>
+
+              <AdminNotification 
+                title="System Update Scheduled"
+                timestamp={new Date().toISOString()}
+                message="A system update is scheduled for tomorrow at 2:00 AM UTC. Expected downtime: 30 minutes."
+                type="error"
+              />
+
               <div className="space-y-3 max-h-80 overflow-y-auto pr-2">
                 <div className="p-3 bg-white/[0.02] rounded-lg border-l-4 border-crystal-blue">
                   <div className="flex justify-between items-start">
