@@ -41,7 +41,7 @@ export default function TermsPage() {
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     1. Agreement to Terms
                   </h2>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-dark-grey leading-relaxed">
                     By accessing and using QMaster&apos;s services, you agree to
                     be bound by these Terms of Use, our Privacy Policy, and any
                     additional terms and conditions that may apply. These terms
@@ -55,11 +55,11 @@ export default function TermsPage() {
                     2. Service Description
                   </h2>
                   <div className="space-y-4">
-                    <p className="text-gray-600 leading-relaxed">
+                    <p className="text-dark-grey leading-relaxed">
                       QMaster provides queue management and business
                       optimization services through:
                     </p>
-                    <ul className="list-disc pl-6 space-y-2 text-gray-600">
+                    <ul className="list-disc pl-6 space-y-2 text-dark-grey">
                       <li>Digital queue management systems</li>
                       <li>Business analytics and reporting tools</li>
                       <li>Customer feedback collection and analysis</li>
@@ -78,10 +78,10 @@ export default function TermsPage() {
                       <h3 className="text-xl font-medium text-coal-black">
                         3.1 Business Users
                       </h3>
-                      <p className="text-gray-600 leading-relaxed">
+                      <p className="text-dark-grey leading-relaxed">
                         Business users must:
                       </p>
-                      <ul className="list-disc pl-6 space-y-2 text-gray-600">
+                      <ul className="list-disc pl-6 space-y-2 text-dark-grey">
                         <li>Provide accurate business information</li>
                         <li>Maintain confidentiality of account credentials</li>
                         <li>Comply with local business regulations</li>
@@ -94,10 +94,10 @@ export default function TermsPage() {
                       <h3 className="text-xl font-medium text-coal-black">
                         3.2 End Users (Customers)
                       </h3>
-                      <p className="text-gray-600 leading-relaxed">
+                      <p className="text-dark-grey leading-relaxed">
                         End users must:
                       </p>
-                      <ul className="list-disc pl-6 space-y-2 text-gray-600">
+                      <ul className="list-disc pl-6 space-y-2 text-dark-grey">
                         <li>Provide accurate personal information</li>
                         <li>Use the service responsibly</li>
                         <li>Respect queue positions and business policies</li>
@@ -112,10 +112,10 @@ export default function TermsPage() {
                     4. E-commerce Terms
                   </h2>
                   <div className="space-y-4">
-                    <p className="text-gray-600 leading-relaxed">
+                    <p className="text-dark-grey leading-relaxed">
                       For businesses using our e-commerce features:
                     </p>
-                    <ul className="list-disc pl-6 space-y-2 text-gray-600">
+                    <ul className="list-disc pl-6 space-y-2 text-dark-grey">
                       <li>Must comply with Egyptian e-commerce regulations</li>
                       <li>Responsible for product accuracy and availability</li>
                       <li>
@@ -132,7 +132,7 @@ export default function TermsPage() {
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     5. Data Usage and Privacy
                   </h2>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-dark-grey leading-relaxed">
                     We collect and process data in accordance with our Privacy
                     Policy and applicable data protection laws. Users grant
                     QMaster the right to collect, store, and analyze usage data
@@ -144,7 +144,7 @@ export default function TermsPage() {
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     6. Intellectual Property
                   </h2>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-dark-grey leading-relaxed">
                     All QMaster content, features, and functionality are owned
                     by QMaster and protected by international copyright,
                     trademark, and other intellectual property laws.
@@ -155,7 +155,7 @@ export default function TermsPage() {
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     7. Limitation of Liability
                   </h2>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-dark-grey leading-relaxed">
                     QMaster is not liable for any indirect, incidental, special,
                     consequential, or punitive damages resulting from your use
                     of our services.
@@ -166,7 +166,7 @@ export default function TermsPage() {
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     8. Termination
                   </h2>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-dark-grey leading-relaxed">
                     We reserve the right to terminate or suspend access to our
                     services immediately, without prior notice or liability, for
                     any reason whatsoever.
@@ -177,7 +177,7 @@ export default function TermsPage() {
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     9. Changes to Terms
                   </h2>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-dark-grey leading-relaxed">
                     We reserve the right to modify these terms at any time. We
                     will notify users of any material changes via email or
                     through our platform.
@@ -188,7 +188,7 @@ export default function TermsPage() {
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     10. Contact Information
                   </h2>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-dark-grey leading-relaxed">
                     For any questions about these Terms of Use, please contact
                     us at support@qmaster.com
                   </p>
