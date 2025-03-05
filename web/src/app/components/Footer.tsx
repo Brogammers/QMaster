@@ -8,7 +8,10 @@ import Link from "next/link";
 
 export default function Footer() {
   const pathname = usePathname();
-  const isSpecialPage = pathname === "/coming-soon" || pathname === "/maintenance";
+  const isSpecialPage =
+    pathname === "/coming-soon" ||
+    pathname === "/maintenance" ||
+    pathname === "/unauthorized";
 
   const textColorClass = isSpecialPage ? "text-white" : "text-coal-black";
 
