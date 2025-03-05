@@ -36,8 +36,8 @@ export default function TermsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="w-full"
             >
-              <div className="bg-gray-50 rounded-2xl p-8 md:p-12 shadow-sm">
-                <section className="mt-0 space-y-6">
+              <div className="rounded-2xl p-8 md:p-12 shadow-sm">
+                <section className="mt-0 mb-16 space-y-4">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     1. Agreement to Terms
                   </h2>
@@ -50,7 +50,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     2. Service Description
                   </h2>
@@ -69,7 +69,7 @@ export default function TermsPage() {
                   </div>
                 </section>
 
-                <section className="space-y-8 mt-12">
+                <section className="space-y-8 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     3. User Categories and Obligations
                   </h2>
@@ -107,7 +107,7 @@ export default function TermsPage() {
                   </div>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     4. E-commerce Terms
                   </h2>
@@ -128,7 +128,7 @@ export default function TermsPage() {
                   </div>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     5. Data Usage and Privacy
                   </h2>
@@ -140,7 +140,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     6. Intellectual Property
                   </h2>
@@ -151,7 +151,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     7. Limitation of Liability
                   </h2>
@@ -162,7 +162,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     8. Termination
                   </h2>
@@ -173,7 +173,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     9. Changes to Terms
                   </h2>
@@ -184,7 +184,7 @@ export default function TermsPage() {
                   </p>
                 </section>
 
-                <section className="mb-0 space-y-6 mt-12">
+                <section className="mb-0 space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-4">
                     10. Contact Information
                   </h2>
