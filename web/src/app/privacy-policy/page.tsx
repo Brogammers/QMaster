@@ -35,8 +35,8 @@ export default function PrivacyPage() {
               animate={{ opacity: 1, y: 0 }}
               className="w-full"
             >
-              <div className="bg-gray-50 rounded-2xl p-8 md:p-12 shadow-sm">
-                <section className="mt-0 space-y-6">
+              <div className="rounded-2xl p-8 md:p-12 shadow-sm">
+                <section className="mt-0 mb-16 space-y-4">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     1. Information We Collect
                   </h2>
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
                   </div>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     2. How We Use Your Information
                   </h2>
@@ -89,7 +89,7 @@ export default function PrivacyPage() {
                   </div>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     3. Data Protection
                   </h2>
@@ -106,7 +106,7 @@ export default function PrivacyPage() {
                   </ul>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     4. Data Sharing
                   </h2>
@@ -121,7 +121,7 @@ export default function PrivacyPage() {
                   </ul>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     5. Your Rights
                   </h2>
@@ -138,7 +138,7 @@ export default function PrivacyPage() {
                   </ul>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     6. Cookies and Tracking
                   </h2>
@@ -149,7 +149,7 @@ export default function PrivacyPage() {
                   </p>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     7. Children&apos;s Privacy
                   </h2>
@@ -160,7 +160,7 @@ export default function PrivacyPage() {
                   </p>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     8. International Data Transfers
                   </h2>
@@ -170,7 +170,7 @@ export default function PrivacyPage() {
                   </p>
                 </section>
 
-                <section className="space-y-6 mt-12">
+                <section className="space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     9. Changes to Privacy Policy
                   </h2>
@@ -180,7 +180,7 @@ export default function PrivacyPage() {
                   </p>
                 </section>
 
-                <section className="mb-0 space-y-6 mt-12">
+                <section className="mb-0 space-y-4 my-16">
                   <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     10. Contact Us
                   </h2>
