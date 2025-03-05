@@ -6,9 +6,28 @@ import Footer from "../components/Footer";
 
 export default function PrivacyPage() {
   return (
-    <div className="body-secondary w-full leading-loose scroll-smooth overflow-x-hidden overflow-y-visible">
-      <Nav />
-      <main className="w-full py-24">
+    <div className="w-full leading-loose scroll-smooth overflow-x-hidden overflow-y-visible bg-white">
+      <div className="bg-gradient-to-r from-ocean-blue to-concrete-turqouise">
+        <Nav />
+        <div className="container">
+          <div className="row">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center w-full py-16"
+            >
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+                Privacy Policy
+              </h1>
+              <p className="text-xl text-white/90 max-w-3xl mx-auto">
+                Learn how we collect, use, and protect your personal information
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      <main className="w-full py-16">
         <div className="container">
           <div className="row">
             <motion.div
@@ -16,13 +35,9 @@ export default function PrivacyPage() {
               animate={{ opacity: 1, y: 0 }}
               className="w-full"
             >
-              <h1 className="text-4xl md:text-5xl font-bold double__color--text mb-16">
-                Privacy Policy
-              </h1>
-
-              <div className="text-coal-black bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-lg p-12">
+              <div className="bg-gray-50 rounded-2xl p-8 md:p-12 shadow-sm">
                 <section className="mt-0 space-y-6">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
+                  <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     1. Information We Collect
                   </h2>
                   <div className="space-y-8">
@@ -30,7 +45,7 @@ export default function PrivacyPage() {
                       <h3 className="text-xl font-medium text-coal-black">
                         1.1 Business Users
                       </h3>
-                      <ul className="list-disc pl-6 space-y-2">
+                      <ul className="list-disc pl-6 space-y-2 text-gray-600">
                         <li>Business registration information</li>
                         <li>Contact details and addresses</li>
                         <li>Payment and banking information</li>
@@ -44,7 +59,7 @@ export default function PrivacyPage() {
                       <h3 className="text-xl font-medium text-coal-black">
                         1.2 End Users
                       </h3>
-                      <ul className="list-disc pl-6 space-y-2">
+                      <ul className="list-disc pl-6 space-y-2 text-gray-600">
                         <li>Name and contact information</li>
                         <li>Queue and appointment history</li>
                         <li>Service preferences</li>
@@ -55,15 +70,15 @@ export default function PrivacyPage() {
                   </div>
                 </section>
 
-                <section className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
+                <section className="space-y-6 mt-12">
+                  <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     2. How We Use Your Information
                   </h2>
                   <div className="space-y-4">
-                    <p className="leading-relaxed">
+                    <p className="text-gray-600 leading-relaxed">
                       We use collected information to:
                     </p>
-                    <ul className="list-disc pl-6 space-y-2">
+                    <ul className="list-disc pl-6 space-y-2 text-gray-600">
                       <li>Provide and improve our services</li>
                       <li>Process payments and transactions</li>
                       <li>Send service notifications and updates</li>
@@ -74,15 +89,15 @@ export default function PrivacyPage() {
                   </div>
                 </section>
 
-                <section className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
+                <section className="space-y-6 mt-12">
+                  <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     3. Data Protection
                   </h2>
-                  <p className="leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed">
                     We implement robust security measures to protect your data,
                     including:
                   </p>
-                  <ul className="list-disc pl-6 space-y-2 mt-4">
+                  <ul className="list-disc pl-6 space-y-2 text-gray-600 mt-4">
                     <li>Encryption of sensitive data</li>
                     <li>Regular security audits</li>
                     <li>Access controls and authentication</li>
@@ -91,14 +106,14 @@ export default function PrivacyPage() {
                   </ul>
                 </section>
 
-                <section className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
+                <section className="space-y-6 mt-12">
+                  <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     4. Data Sharing
                   </h2>
-                  <p className="leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed">
                     We may share your information with:
                   </p>
-                  <ul className="list-disc pl-6 space-y-2 mt-4">
+                  <ul className="list-disc pl-6 space-y-2 text-gray-600 mt-4">
                     <li>Service providers and partners</li>
                     <li>Payment processors</li>
                     <li>Analytics providers</li>
@@ -106,12 +121,14 @@ export default function PrivacyPage() {
                   </ul>
                 </section>
 
-                <section className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
+                <section className="space-y-6 mt-12">
+                  <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     5. Your Rights
                   </h2>
-                  <p className="leading-relaxed">You have the right to:</p>
-                  <ul className="list-disc pl-6 space-y-2 mt-4">
+                  <p className="text-gray-600 leading-relaxed">
+                    You have the right to:
+                  </p>
+                  <ul className="list-disc pl-6 space-y-2 text-gray-600 mt-4">
                     <li>Access your personal data</li>
                     <li>Correct inaccurate data</li>
                     <li>Request data deletion</li>
@@ -121,53 +138,53 @@ export default function PrivacyPage() {
                   </ul>
                 </section>
 
-                <section className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
+                <section className="space-y-6 mt-12">
+                  <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     6. Cookies and Tracking
                   </h2>
-                  <p className="leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed">
                     We use cookies and similar technologies to enhance your
                     experience and collect usage data. You can control cookie
                     preferences through your browser settings.
                   </p>
                 </section>
 
-                <section className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
+                <section className="space-y-6 mt-12">
+                  <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     7. Children&apos;s Privacy
                   </h2>
-                  <p className="leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed">
                     Our services are not intended for children under 13. We do
                     not knowingly collect or maintain information from children
                     under 13.
                   </p>
                 </section>
 
-                <section className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
+                <section className="space-y-6 mt-12">
+                  <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     8. International Data Transfers
                   </h2>
-                  <p className="leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed">
                     We may transfer data internationally in compliance with
                     applicable data protection laws and regulations.
                   </p>
                 </section>
 
-                <section className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
+                <section className="space-y-6 mt-12">
+                  <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     9. Changes to Privacy Policy
                   </h2>
-                  <p className="leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed">
                     We may update this policy periodically. We will notify you
                     of any material changes via email or through our platform.
                   </p>
                 </section>
 
-                <section className="mb-0 space-y-6">
-                  <h2 className="text-2xl font-semibold text-baby-blue mb-6">
+                <section className="mb-0 space-y-6 mt-12">
+                  <h2 className="text-2xl font-semibold text-ocean-blue mb-6">
                     10. Contact Us
                   </h2>
-                  <p className="leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed">
                     For privacy-related inquiries, please contact our Data
                     Protection Officer at privacy@qmaster.com
                   </p>

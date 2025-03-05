@@ -112,7 +112,7 @@ export default function ReleaseContentPage() {
                   <h3 className="text-xl font-bold text-coal-black mb-2">
                     Logo Marks
                   </h3>
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-dark-grey mb-4">
                     Download our logo in various formats and sizes
                   </p>
                   <button className="flex items-center gap-2 text-ocean-blue hover:text-baby-blue transition-colors">
@@ -133,7 +133,7 @@ export default function ReleaseContentPage() {
                   <h3 className="text-xl font-bold text-coal-black mb-2">
                     Product Screens
                   </h3>
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-dark-grey mb-4">
                     High-resolution screenshots of our platform
                   </p>
                   <button className="flex items-center gap-2 text-ocean-blue hover:text-baby-blue transition-colors">
@@ -154,7 +154,7 @@ export default function ReleaseContentPage() {
                   <h3 className="text-xl font-bold text-coal-black mb-2">
                     Brand Guidelines
                   </h3>
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-dark-grey mb-4">
                     Complete guide to using our brand elements
                   </p>
                   <button className="flex items-center gap-2 text-ocean-blue hover:text-baby-blue transition-colors">
@@ -181,7 +181,7 @@ export default function ReleaseContentPage() {
                       <h3 className="text-lg font-bold text-coal-black mb-1">
                         {color.name}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-2">{color.hex}</p>
+                      <p className="text-dark-grey text-sm mb-2">{color.hex}</p>
                       <p className="text-gray-500 text-sm">{color.usage}</p>
                     </div>
                   ))}
@@ -202,7 +202,7 @@ export default function ReleaseContentPage() {
                       <p className="text-6xl text-coal-black font-bold mb-4">
                         Aa
                       </p>
-                      <p className="text-gray-600">
+                      <p className="text-dark-grey">
                         Inter
                         <br />
                         <span className="text-gray-500">
@@ -239,7 +239,7 @@ export default function ReleaseContentPage() {
                     <h3 className="text-xl font-bold text-coal-black mb-4">
                       Do&apos;s
                     </h3>
-                    <ul className="space-y-3 text-gray-600">
+                    <ul className="space-y-3 text-dark-grey">
                       <li className="flex items-center gap-2">
                         <span className="text-green-500">✓</span>
                         Use our official logo files
@@ -258,7 +258,7 @@ export default function ReleaseContentPage() {
                     <h3 className="text-xl font-bold text-coal-black mb-4">
                       Don&apos;ts
                     </h3>
-                    <ul className="space-y-3 text-gray-600">
+                    <ul className="space-y-3 text-dark-grey">
                       <li className="flex items-center gap-2">
                         <span className="text-red-500">✕</span>
                         Modify or distort the logo
@@ -284,12 +284,12 @@ export default function ReleaseContentPage() {
                 <h2 className="text-3xl font-bold text-coal-black mb-6">
                   Need Something Else?
                 </h2>
-                <p className="text-gray-600 mb-8">
+                <p className="text-dark-grey mb-8">
                   For press inquiries or additional assets, please contact our
                   media team
                 </p>
                 <a
-                  href="mailto:press@qmaster.com"
+                  href="mailto:media@qmaster.com"
                   className="bg-ocean-blue hover:bg-opacity-90 inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-full transition-all"
                 >
                   Contact Media Team
