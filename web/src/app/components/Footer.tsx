@@ -12,7 +12,7 @@ export default function Footer() {
     pathname === "/coming-soon" ||
     pathname === "/maintenance" ||
     pathname === "/unauthorized";
-
+    
   const textColorClass = isSpecialPage ? "text-white" : "text-coal-black";
 
   const isExternalLink = (url: string) => {
