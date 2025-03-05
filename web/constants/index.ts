@@ -145,7 +145,7 @@ export const footerLinks = [
   {
     title: "Media",
     links: [
-      { title: "Release Content", url: "/" },
+      { title: "Release Content", url: "/release-content" },
     ],
   },
 ];
