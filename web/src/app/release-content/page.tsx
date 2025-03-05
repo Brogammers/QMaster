@@ -8,6 +8,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import Image from "next/image";
 import QMasterLogo from "../../../public/qmaster-logo.svg";
 import QMasterTrademark from "../../../public/QMaster-Trademark.svg";
+import TextButton from "../shared/TextButton";
 
 export default function ReleaseContentPage() {
   const { t, isRTL } = useTranslation();
@@ -68,7 +69,7 @@ export default function ReleaseContentPage() {
               variants={itemVariants}
               initial="hidden"
               animate="visible"
-              className="text-center w-full my-8"
+              className="text-center w-full my-8 flex flex-col items-center justify-center"
             >
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
                 Press & Media
@@ -78,10 +79,17 @@ export default function ReleaseContentPage() {
                   "We've created some guidelines to help you use our brand and assets, including our logo, content and trademarks without having to negotiate legal agreements for each use."
                 )}
               </p>
-              <button className="bg-ocean-blue hover:bg-opacity-90 inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-full transition-all gap-2">
-                <FaDownload className="w-5 h-5" />
-                {t("Download our media kit")}
-              </button>
+              <TextButton
+                text={t("Download our media kit")}
+                className="double__color--btn"
+                buttonColor=""
+                textColor="white"
+                textSize="lg"
+                paddingX="8"
+                paddingY="4"
+                borderRadius="full"
+                icon={<FaDownload className="w-5 h-5" />}
+              />
             </motion.section>
           </div>
         </div>
