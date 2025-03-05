@@ -171,143 +171,200 @@ export default function ReleaseContentPage() {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
-                    <div className="w-16 h-16 rounded-lg mb-4 bg-ocean-blue"></div>
-                    <h3 className="text-lg font-bold text-coal-black mb-1">
-                      Ocean Blue
-                    </h3>
-                    <p className="text-dark-grey text-sm mb-8">#17222D</p>
-                    <div className="space-y-2">
-                      <p className="text-slate-grey text-sm font-semibold">QMaster Usage:</p>
-                      <p className="text-slate-grey text-sm">
-                        Primary brand color, used for main backgrounds and
-                        navigation
-                      </p>
-                      <p className="text-slate-grey text-sm mt-2 font-semibold">
-                        Suggested Uses:
-                      </p>
-                      <ul className="text-slate-grey text-sm list-disc pl-4">
-                        <li>Professional dashboards</li>
-                        <li>Header backgrounds</li>
-                        <li>Primary navigation</li>
-                        <li>Dark mode themes</li>
-                      </ul>
+                    <div className="flex flex-col h-full">
+                      <div>
+                        <div className="w-16 h-16 rounded-lg mb-4 bg-ocean-blue"></div>
+                        <h3 className="text-lg font-bold text-coal-black mb-1">
+                          Ocean Blue
+                        </h3>
+                        <p className="text-dark-grey text-sm mb-4">#17222D</p>
+                        <div className="min-h-[60px]">
+                          <p className="text-slate-grey text-sm font-semibold">
+                            QMaster Usage:
+                          </p>
+                          <p className="text-slate-grey text-sm">
+                            Primary brand color, used for main backgrounds and
+                            navigation
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <p className="text-slate-grey text-sm font-semibold mb-2">
+                          Suggested Uses:
+                        </p>
+                        <ul className="text-slate-grey text-sm list-disc pl-4">
+                          <li>Professional dashboards</li>
+                          <li>Header backgrounds</li>
+                          <li>Primary navigation</li>
+                          <li>Dark mode themes</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
 
                   <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
-                    <div className="w-16 h-16 rounded-lg mb-4 bg-concrete-turqouise"></div>
-                    <h3 className="text-lg font-bold text-coal-black mb-1">
-                      Concrete Turquoise
-                    </h3>
-                    <p className="text-dark-grey text-sm mb-8">#13404D</p>
-                    <div className="space-y-2">
-                      <p className="text-slate-grey text-sm font-semibold">QMaster Usage:</p>
-                      <p className="text-slate-grey text-sm">
-                        Secondary background color, used for gradients and cards
-                      </p>
-                      <p className="text-slate-grey text-sm mt-2 font-semibold">
-                        Suggested Uses:
-                      </p>
-                      <ul className="text-slate-grey text-sm list-disc pl-4">
-                        <li>Gradient transitions</li>
-                        <li>Secondary containers</li>
-                        <li>Section backgrounds</li>
-                        <li>Depth indicators</li>
-                      </ul>
+                    <div className="flex flex-col h-full">
+                      <div>
+                        <div className="w-16 h-16 rounded-lg mb-4 bg-concrete-turqouise"></div>
+                        <h3 className="text-lg font-bold text-coal-black mb-1">
+                          Concrete Turquoise
+                        </h3>
+                        <p className="text-dark-grey text-sm mb-4">#13404D</p>
+                        <div className="min-h-[60px]">
+                          <p className="text-slate-grey text-sm font-semibold">
+                            QMaster Usage:
+                          </p>
+                          <p className="text-slate-grey text-sm">
+                            Secondary background color, used for gradients and
+                            cards
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <p className="text-slate-grey text-sm font-semibold mb-2">
+                          Suggested Uses:
+                        </p>
+                        <ul className="text-slate-grey text-sm list-disc pl-4">
+                          <li>Gradient transitions</li>
+                          <li>Secondary containers</li>
+                          <li>Section backgrounds</li>
+                          <li>Depth indicators</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
 
                   <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
-                    <div className="w-16 h-16 rounded-lg mb-4 bg-baby-blue"></div>
-                    <h3 className="text-lg font-bold text-coal-black mb-1">
-                      Baby Blue
-                    </h3>
-                    <p className="text-dark-grey text-sm mb-8">#1DCDFE</p>
-                    <div className="space-y-2">
-                      <p className="text-slate-grey text-sm font-semibold">QMaster Usage:</p>
-                      <p className="text-slate-grey text-sm">
-                        Accent color, used for interactive elements and
-                        highlights
-                      </p>
-                      <p className="text-slate-grey text-sm mt-2 font-semibold">
-                        Suggested Uses:
-                      </p>
-                      <ul className="text-slate-grey text-sm list-disc pl-4">
-                        <li>Call-to-action buttons</li>
-                        <li>Active states</li>
-                        <li>Progress indicators</li>
-                        <li>Important notifications</li>
-                      </ul>
+                    <div className="flex flex-col h-full">
+                      <div>
+                        <div className="w-16 h-16 rounded-lg mb-4 bg-baby-blue"></div>
+                        <h3 className="text-lg font-bold text-coal-black mb-1">
+                          Baby Blue
+                        </h3>
+                        <p className="text-dark-grey text-sm mb-4">#1DCDFE</p>
+                        <div className="min-h-[60px]">
+                          <p className="text-slate-grey text-sm font-semibold">
+                            QMaster Usage:
+                          </p>
+                          <p className="text-slate-grey text-sm">
+                            Accent color, used for interactive elements and
+                            highlights
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <p className="text-slate-grey text-sm font-semibold mb-2">
+                          Suggested Uses:
+                        </p>
+                        <ul className="text-slate-grey text-sm list-disc pl-4">
+                          <li>Call-to-action buttons</li>
+                          <li>Active states</li>
+                          <li>Progress indicators</li>
+                          <li>Important notifications</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
 
                   <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
-                    <div className="w-16 h-16 rounded-lg mb-4 bg-dark-grey"></div>
-                    <h3 className="text-lg font-bold text-coal-black mb-1">
-                      Dark Grey
-                    </h3>
-                    <p className="text-dark-grey text-sm mb-8">#515151</p>
-                    <div className="space-y-2">
-                      <p className="text-slate-grey text-sm font-semibold">QMaster Usage:</p>
-                      <p className="text-slate-grey text-sm">
-                        Used for text and form inputs
-                      </p>
-                      <p className="text-slate-grey text-sm mt-2 font-semibold">
-                        Suggested Uses:
-                      </p>
-                      <ul className="text-slate-grey text-sm list-disc pl-4">
-                        <li>Body text</li>
-                        <li>Form field text</li>
-                        <li>Secondary information</li>
-                        <li>Subtle UI elements</li>
-                      </ul>
+                    <div className="flex flex-col h-full">
+                      <div>
+                        <div className="w-16 h-16 rounded-lg mb-4 bg-dark-grey"></div>
+                        <h3 className="text-lg font-bold text-coal-black mb-1">
+                          Dark Grey
+                        </h3>
+                        <p className="text-dark-grey text-sm mb-4">#515151</p>
+                        <div className="min-h-[60px]">
+                          <p className="text-slate-grey text-sm font-semibold">
+                            QMaster Usage:
+                          </p>
+                          <p className="text-slate-grey text-sm">
+                            Used for text and form inputs
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <p className="text-slate-grey text-sm font-semibold mb-2">
+                          Suggested Uses:
+                        </p>
+                        <ul className="text-slate-grey text-sm list-disc pl-4">
+                          <li>Body text</li>
+                          <li>Form field text</li>
+                          <li>Secondary information</li>
+                          <li>Subtle UI elements</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
                   <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
-                    <div className="w-16 h-16 rounded-lg mb-4 bg-off-white"></div>
-                    <h3 className="text-lg font-bold text-coal-black mb-1">
-                      Off White
-                    </h3>
-                    <p className="text-dark-grey text-sm mb-8">#D9D9D9</p>
-                    <p className="text-slate-grey text-sm">
-                      Light mode backgrounds and subtle accents
-                    </p>
+                    <div className="flex flex-col h-full">
+                      <div>
+                        <div className="w-16 h-16 rounded-lg mb-4 bg-off-white"></div>
+                        <h3 className="text-lg font-bold text-coal-black mb-1">
+                          Off White
+                        </h3>
+                        <p className="text-dark-grey text-sm mb-4">#D9D9D9</p>
+                        <div className="min-h-[60px]">
+                          <p className="text-slate-grey text-sm">
+                            Light mode backgrounds and subtle accents
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
-                    <div className="w-16 h-16 rounded-lg mb-4 bg-lite-grey"></div>
-                    <h3 className="text-lg font-bold text-coal-black mb-1">
-                      Lite Grey
-                    </h3>
-                    <p className="text-dark-grey text-sm mb-8">#ADADAD</p>
-                    <p className="text-slate-grey text-sm">
-                      Used for borders and dividers
-                    </p>
+                    <div className="flex flex-col h-full">
+                      <div>
+                        <div className="w-16 h-16 rounded-lg mb-4 bg-lite-grey"></div>
+                        <h3 className="text-lg font-bold text-coal-black mb-1">
+                          Lite Grey
+                        </h3>
+                        <p className="text-dark-grey text-sm mb-4">#ADADAD</p>
+                        <div className="min-h-[60px]">
+                          <p className="text-slate-grey text-sm">
+                            Used for borders and dividers
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
-                    <div className="w-16 h-16 rounded-lg mb-4 bg-lava-red"></div>
-                    <h3 className="text-lg font-bold text-coal-black mb-1">
-                      Lava Red
-                    </h3>
-                    <p className="text-dark-grey text-sm mb-8">#B41818</p>
-                    <p className="text-slate-grey text-sm">
-                      Used for error states and destructive actions
-                    </p>
+                    <div className="flex flex-col h-full">
+                      <div>
+                        <div className="w-16 h-16 rounded-lg mb-4 bg-lava-red"></div>
+                        <h3 className="text-lg font-bold text-coal-black mb-1">
+                          Lava Red
+                        </h3>
+                        <p className="text-dark-grey text-sm mb-4">#B41818</p>
+                        <div className="min-h-[60px]">
+                          <p className="text-slate-grey text-sm">
+                            Used for error states and destructive actions
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
-                    <div className="w-16 h-16 rounded-lg mb-4 bg-coal-black"></div>
-                    <h3 className="text-lg font-bold text-coal-black mb-1">
-                      Coal Black
-                    </h3>
-                    <p className="text-dark-grey text-sm mb-8">#2F2E41</p>
-                    <p className="text-slate-grey text-sm">
-                      Used for deep backgrounds and text
-                    </p>
+                    <div className="flex flex-col h-full">
+                      <div>
+                        <div className="w-16 h-16 rounded-lg mb-4 bg-coal-black"></div>
+                        <h3 className="text-lg font-bold text-coal-black mb-1">
+                          Coal Black
+                        </h3>
+                        <p className="text-dark-grey text-sm mb-4">#2F2E41</p>
+                        <div className="min-h-[60px]">
+                          <p className="text-slate-grey text-sm">
+                            Used for deep backgrounds and text
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
