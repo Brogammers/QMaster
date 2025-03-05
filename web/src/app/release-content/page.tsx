@@ -8,6 +8,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import Image from "next/image";
 import QMasterLogo from "../../../public/qmaster-logo.svg";
 import QMasterTrademark from "../../../public/QMaster-Trademark.svg";
+import QMasterProductScreen from "../../../public/Product-Screen.png";
 import TextButton from "../shared/TextButton";
 
 export default function ReleaseContentPage() {
@@ -133,11 +134,11 @@ export default function ReleaseContentPage() {
 
                 {/* Product Screenshots */}
                 <div className="bg-gray-50 rounded-2xl p-6 shadow-sm">
-                  <figure className="aspect-square bg-white rounded-xl flex items-center justify-center mb-4 overflow-hidden border border-gray-100">
+                  <figure className="aspect-square bg-gradient-to-r from-baby-blue to-crystal-blue rounded-xl flex items-end justify-center mb-4 overflow-hidden border border-gray-100">
                     <Image
-                      src={QMasterLogo}
-                      alt="Product Screenshot"
-                      className="w-full h-full object-cover"
+                      src={QMasterProductScreen}
+                      alt="QMaster Product Screenshot - Home Page"
+                      className="w-2/3"
                     />
                   </figure>
                   <h3 className="text-xl font-bold text-coal-black mb-2">
