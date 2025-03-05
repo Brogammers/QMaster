@@ -167,24 +167,99 @@ export default function ReleaseContentPage() {
               {/* Color Palette Section */}
               <motion.div variants={itemVariants} className="w-full">
                 <h2 className="text-3xl font-bold text-coal-black mb-8">
-                  Color Palette
+                  Brand Colors
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {colorPalette.map((color) => (
-                    <div
-                      key={color.name}
-                      className="bg-gray-50 rounded-xl p-6 shadow-sm"
-                    >
-                      <div
-                        className={`w-16 h-16 rounded-lg mb-4 ${color.class}`}
-                      ></div>
-                      <h3 className="text-lg font-bold text-coal-black mb-1">
-                        {color.name}
-                      </h3>
-                      <p className="text-dark-grey text-sm mb-2">{color.hex}</p>
-                      <p className="text-gray-500 text-sm">{color.usage}</p>
-                    </div>
-                  ))}
+                  <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div className="w-16 h-16 rounded-lg mb-4 bg-ocean-blue"></div>
+                    <h3 className="text-lg font-bold text-coal-black mb-1">
+                      Ocean Blue
+                    </h3>
+                    <p className="text-dark-grey text-sm mb-2">#17222D</p>
+                    <p className="text-gray-500 text-sm">
+                      Primary brand color, used for main backgrounds and
+                      navigation
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div className="w-16 h-16 rounded-lg mb-4 bg-concrete-turqouise"></div>
+                    <h3 className="text-lg font-bold text-coal-black mb-1">
+                      Concrete Turquoise
+                    </h3>
+                    <p className="text-dark-grey text-sm mb-2">#13404D</p>
+                    <p className="text-gray-500 text-sm">
+                      Secondary background color, used for gradients and cards
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div className="w-16 h-16 rounded-lg mb-4 bg-baby-blue"></div>
+                    <h3 className="text-lg font-bold text-coal-black mb-1">
+                      Baby Blue
+                    </h3>
+                    <p className="text-dark-grey text-sm mb-2">#1DCDFE</p>
+                    <p className="text-gray-500 text-sm">
+                      Accent color, used for interactive elements and highlights
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div className="w-16 h-16 rounded-lg mb-4 bg-dark-grey"></div>
+                    <h3 className="text-lg font-bold text-coal-black mb-1">
+                      Dark Grey
+                    </h3>
+                    <p className="text-dark-grey text-sm mb-2">#515151</p>
+                    <p className="text-gray-500 text-sm">
+                      Used for text and form inputs
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+                  <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div className="w-16 h-16 rounded-lg mb-4 bg-off-white"></div>
+                    <h3 className="text-lg font-bold text-coal-black mb-1">
+                      Off White
+                    </h3>
+                    <p className="text-dark-grey text-sm mb-2">#D9D9D9</p>
+                    <p className="text-gray-500 text-sm">
+                      Light mode backgrounds and subtle accents
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div className="w-16 h-16 rounded-lg mb-4 bg-lite-grey"></div>
+                    <h3 className="text-lg font-bold text-coal-black mb-1">
+                      Lite Grey
+                    </h3>
+                    <p className="text-dark-grey text-sm mb-2">#ADADAD</p>
+                    <p className="text-gray-500 text-sm">
+                      Used for borders and dividers
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div className="w-16 h-16 rounded-lg mb-4 bg-lava-red"></div>
+                    <h3 className="text-lg font-bold text-coal-black mb-1">
+                      Lava Red
+                    </h3>
+                    <p className="text-dark-grey text-sm mb-2">#B41818</p>
+                    <p className="text-gray-500 text-sm">
+                      Used for error states and destructive actions
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div className="w-16 h-16 rounded-lg mb-4 bg-coal-black"></div>
+                    <h3 className="text-lg font-bold text-coal-black mb-1">
+                      Coal Black
+                    </h3>
+                    <p className="text-dark-grey text-sm mb-2">#2F2E41</p>
+                    <p className="text-gray-500 text-sm">
+                      Used for deep backgrounds and text
+                    </p>
+                  </div>
                 </div>
               </motion.div>
 
@@ -193,36 +268,85 @@ export default function ReleaseContentPage() {
                 <h2 className="text-3xl font-bold text-coal-black mb-8">
                   Typography
                 </h2>
-                <div className="bg-gray-50 rounded-2xl p-8 shadow-sm">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <h3 className="text-xl font-bold text-coal-black mb-4">
-                        Primary Font
-                      </h3>
-                      <p className="text-6xl text-coal-black font-bold mb-4">
-                        Aa
-                      </p>
-                      <p className="text-dark-grey">
-                        Inter
-                        <br />
-                        <span className="text-gray-500">
-                          Used for headings and body text
-                        </span>
-                      </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="bg-gray-50 rounded-2xl p-8 shadow-sm">
+                    <h3 className="text-xl font-bold text-coal-black mb-6">
+                      Primary Fonts
+                    </h3>
+                    <div className="space-y-8">
+                      <div>
+                        <p
+                          className="text-4xl text-coal-black font-bold mb-2"
+                          style={{ fontFamily: "Inter" }}
+                        >
+                          Inter
+                        </p>
+                        <p className="text-dark-grey">
+                          Primary font for web interfaces
+                        </p>
+                      </div>
+                      <div>
+                        <p
+                          className="text-4xl text-coal-black font-bold mb-2"
+                          style={{ fontFamily: "Jost" }}
+                        >
+                          Jost
+                        </p>
+                        <p className="text-dark-grey">
+                          Used for mobile app headings
+                        </p>
+                      </div>
+                      <div>
+                        <p
+                          className="text-4xl text-coal-black font-bold mb-2"
+                          style={{ fontFamily: "Istok Web" }}
+                        >
+                          Istok
+                        </p>
+                        <p className="text-dark-grey">
+                          Used for mobile app buttons
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-coal-black mb-4">
-                        Weights
+                  </div>
+                  <div>
+                    <div className="bg-gray-50 rounded-2xl p-8 shadow-sm mb-8">
+                      <h3 className="text-xl font-bold text-coal-black mb-6">
+                        Font Weights
                       </h3>
                       <div className="space-y-4">
-                        <p className="text-coal-black font-bold">Bold (700)</p>
-                        <p className="text-coal-black font-semibold">
+                        <p className="text-coal-black font-bold text-xl">
+                          Bold (700)
+                        </p>
+                        <p className="text-coal-black font-semibold text-xl">
                           Semibold (600)
                         </p>
-                        <p className="text-coal-black font-medium">
+                        <p className="text-coal-black font-medium text-xl">
                           Medium (500)
                         </p>
-                        <p className="text-coal-black">Regular (400)</p>
+                        <p className="text-coal-black text-xl">Regular (400)</p>
+                      </div>
+                    </div>
+                    <div className="bg-gray-50 rounded-2xl p-8 shadow-sm">
+                      <h3 className="text-xl font-bold text-coal-black mb-6">
+                        Font Sizes
+                      </h3>
+                      <div className="space-y-4">
+                        <p className="text-3xl text-coal-black">
+                          Heading Large - 28px
+                        </p>
+                        <p className="text-2xl text-coal-black">
+                          Heading Medium - 24px
+                        </p>
+                        <p className="text-xl text-coal-black">
+                          Heading Small - 20px
+                        </p>
+                        <p className="text-base text-coal-black">
+                          Body Text - 16px
+                        </p>
+                        <p className="text-sm text-coal-black">
+                          Small Text - 14px
+                        </p>
                       </div>
                     </div>
                   </div>
