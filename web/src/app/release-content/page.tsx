@@ -146,12 +146,39 @@ export default function ReleaseContentPage() {
 
                 {/* Brand Guidelines */}
                 <div className="bg-gray-50 rounded-2xl p-6 shadow-sm">
-                  <figure className="aspect-square bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-100">
-                    <Image
-                      src={QMasterLogo}
-                      alt="Brand Guidelines"
-                      className="w-24 h-24"
-                    />
+                  <figure className="aspect-square bg-white rounded-xl flex items-center justify-center mb-4 border border-gray-100 relative overflow-hidden">
+                    {/* Guidelines-like background pattern */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--baby-blue)_1px,_transparent_1px)] bg-[length:20px_20px] opacity-10" />
+
+                    {/* Stylized "guidelines" visual */}
+                    <div className="relative w-4/5 h-4/5 flex flex-col gap-4">
+                      {/* Header bar */}
+                      <div className="h-3 w-full bg-ocean-blue rounded-full opacity-80" />
+
+                      {/* Content lines */}
+                      <div className="flex gap-3 items-center">
+                        <div className="w-8 h-8 rounded-lg bg-crystal-blue" />
+                        <div className="flex-1 h-2 bg-baby-blue/30 rounded-full" />
+                      </div>
+
+                      <div className="flex gap-3 items-center">
+                        <div className="w-8 h-8 rounded-lg bg-baby-blue" />
+                        <div className="flex-1 h-2 bg-baby-blue/30 rounded-full" />
+                      </div>
+
+                      {/* Typography sample */}
+                      <div className="mt-4 flex flex-col gap-2">
+                        <div className="h-2 w-3/4 bg-ocean-blue/20 rounded-full" />
+                        <div className="h-2 w-1/2 bg-ocean-blue/20 rounded-full" />
+                      </div>
+
+                      {/* Color palette sample */}
+                      <div className="mt-auto flex gap-2">
+                        <div className="w-6 h-6 rounded-full bg-ocean-blue" />
+                        <div className="w-6 h-6 rounded-full bg-crystal-blue" />
+                        <div className="w-6 h-6 rounded-full bg-baby-blue" />
+                      </div>
+                    </div>
                   </figure>
                   <h3 className="text-xl font-bold text-coal-black mb-2">
                     Brand Guidelines
