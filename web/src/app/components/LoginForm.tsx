@@ -153,7 +153,7 @@ export default function LoginForm({ setIsLoading }: any) {
                 >
                   <FontAwesomeIcon
                     size="lg"
-                    className="w-[16px] h-[16px] text-gray-400"
+                    className="w-[16px] h-[16px] text-slate-grey"
                     icon={isPasswordVisible ? faEyeSlash : faEye}
                     fixedWidth
                   />

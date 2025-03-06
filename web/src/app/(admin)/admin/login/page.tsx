@@ -55,7 +55,7 @@ export default function LoginPage() {
               Email
             </label>
             <div className="relative">
-              <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50" />
+              <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-grey" />
               <input
                 type="email"
                 value={email}
@@ -71,7 +71,7 @@ export default function LoginPage() {
               Password
             </label>
             <div className="relative">
-              <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50" />
+              <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-grey" />
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
