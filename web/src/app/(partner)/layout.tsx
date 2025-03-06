@@ -10,6 +10,7 @@ import { StoreProvider } from "@/store/StoreProvider";
 import { LocationProvider } from "@/ctx/LocationContext";
 import { FaBars } from "react-icons/fa";
 import { RoleProvider } from "@/ctx/RoleContext";
+import MaintenanceNotification from "@/components/MaintenanceNotification";
 
 interface PrivateLayoutProps {
   children: React.ReactNode;
@@ -36,7 +37,12 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
 
   // If we're on the login page, just render the children
   if (pathname === "/login") {
-    return children;
+    return (
+      <>
+        {children}
+        <MaintenanceNotification />
+      </>
+    );
   }
 
   // Show loading state while checking auth
@@ -136,6 +142,9 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
                 <div className="space-y-6">{children}</div>
               </div>
             </motion.main>
+
+            {/* Maintenance notification */}
+            <MaintenanceNotification />
           </div>
         </LocationProvider>
       </RoleProvider>

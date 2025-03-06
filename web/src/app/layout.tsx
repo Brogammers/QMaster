@@ -7,6 +7,7 @@ import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
+import { Toaster } from "react-hot-toast";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -56,7 +57,9 @@ export default function RootLayout({
           i18next.language === "ar" ? "rtl" : "ltr"
         }`}
       >
-        <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
+        <I18nextProvider i18n={i18next}>
+          {children}
+        </I18nextProvider>
       </body>
     </html>
   );

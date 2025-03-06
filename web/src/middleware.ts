@@ -12,7 +12,16 @@ export async function middleware(request: NextRequest) {
   // Get the maintenance and coming soon settings
   const url = process.env.NEXT_PUBLIC_API_BASE_URL! + process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS!;
   const response = await axios.get(url);
-  const { isMaintenanceMode: isMaintenanceEnabled, isComingSoonMode: isComingSoonEnabled } = response.data;
+  const {
+    isMaintenanceMode: isMaintenanceEnabled,
+    isComingSoonMode: isComingSoonEnabled,
+    maintenanceScheduledTime
+  } = response.data;
+
+  // Check if maintenance is currently active (scheduled time has passed)
+  const isMaintenanceActive = isMaintenanceEnabled &&
+    maintenanceScheduledTime &&
+    new Date(maintenanceScheduledTime) <= new Date();
 
   // Skip redirects for maintenance and coming-soon pages themselves
   if (request.nextUrl.pathname === '/maintenance' ||
@@ -20,8 +29,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // If maintenance mode is enabled, handle redirects
-  if (isMaintenanceEnabled) {
+  // If maintenance mode is active (scheduled time has passed), handle redirects
+  if (isMaintenanceActive) {
     // If trying to access partner routes or business sign-in, redirect to maintenance
     if (isPartnerRoute || isBusinessSignIn) {
       // Clear the auth cookie if it exists
@@ -38,8 +47,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Regular auth checks (only if maintenance mode is not enabled)
-  if (!isMaintenanceEnabled) {
+  // Regular auth checks (only if maintenance mode is not active)
+  if (!isMaintenanceActive) {
     // Get auth status from cookie
     const isAuthenticated = request.cookies.get('qmaster-auth')?.value
 

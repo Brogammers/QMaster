@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import {
   FaCog,
   FaBell,
@@ -11,7 +11,6 @@ import {
 } from "react-icons/fa";
 import { Switch } from "@headlessui/react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -25,9 +24,13 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("general");
   const [isComingSoonEnabled, setIsComingSoonEnabled] = useState(false);
   const [isMaintenanceEnabled, setIsMaintenanceEnabled] = useState(false);
-  const [maintenanceHours, setMaintenanceHours] = useState(2);
+  const [maintenanceHours, setMaintenanceHours] = useState(1); // Default to 1 hour
   const [maintenanceMinutes, setMaintenanceMinutes] = useState(0);
   const [isDurationChanged, setIsDurationChanged] = useState(false);
+  const [isCountdownModalOpen, setIsCountdownModalOpen] = useState(false);
+  const [maintenanceScheduledTime, setMaintenanceScheduledTime] = useState<
+    string | null
+  >(null);
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: "",
     email: "",
@@ -98,12 +101,19 @@ export default function SettingsPage() {
       .then((response) => {
         setIsMaintenanceEnabled(response.data.isMaintenanceMode);
         setIsComingSoonEnabled(response.data.isComingSoonMode);
+        setMaintenanceScheduledTime(
+          response.data.maintenanceScheduledTime || null
+        );
 
         // Set maintenance duration if available
-        if (response.data.maintenanceDuration) {
-          const totalMinutes = response.data.maintenanceDuration;
+        if (response.data.maintenanceCountdownMinutes) {
+          const totalMinutes = response.data.maintenanceCountdownMinutes;
           setMaintenanceHours(Math.floor(totalMinutes / 60));
           setMaintenanceMinutes(totalMinutes % 60);
+        } else {
+          // Default to 1 hour if not set
+          setMaintenanceHours(1);
+          setMaintenanceMinutes(0);
         }
       })
       .catch((error) => {
@@ -155,14 +165,15 @@ export default function SettingsPage() {
 
   const handleSuccessfulAuth = () => {
     // Calculate total minutes from hours and minutes
-    const maintenanceDuration = maintenanceHours * 60 + maintenanceMinutes;
+    const maintenanceCountdownMinutes =
+      maintenanceHours * 60 + maintenanceMinutes;
 
     if (pendingAction) {
       if (pendingAction.type === "maintenance") {
         const url = process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS || "";
 
         // Don't allow enabling maintenance mode with zero duration
-        if (pendingAction.value && maintenanceDuration === 0) {
+        if (pendingAction.value && maintenanceCountdownMinutes === 0) {
           setPendingAction(null);
           setIsAuthModalOpen(false);
           setPassword("");
@@ -174,33 +185,45 @@ export default function SettingsPage() {
           return;
         }
 
+        // Calculate scheduled time if enabling maintenance
+        const scheduledTime = pendingAction.value
+          ? new Date(
+              Date.now() + maintenanceCountdownMinutes * 60 * 1000
+            ).toISOString()
+          : null;
+
         axios
           .put(url, {
             isMaintenanceMode: pendingAction.value,
             isComingSoonMode: pendingAction.value ? false : isComingSoonEnabled, // Disable coming soon mode if enabling maintenance
-            maintenanceDuration: maintenanceDuration, // Always send duration regardless of mode
+            maintenanceCountdownMinutes: maintenanceCountdownMinutes,
+            maintenanceScheduledTime: scheduledTime,
           })
           .then((response) => {
             if (response.status === 200) {
-              // Update state first
+              // Update state
               setIsMaintenanceEnabled(response.data.isMaintenanceMode);
+              setMaintenanceScheduledTime(
+                response.data.maintenanceScheduledTime
+              );
 
               // If we're enabling maintenance mode and coming soon was enabled, update that state too
               if (pendingAction.value && isComingSoonEnabled) {
                 setIsComingSoonEnabled(false);
               }
 
-              // Show a single toast with the complete message
-              if (pendingAction.value && isComingSoonEnabled) {
+              // Show appropriate toast message
+              if (pendingAction.value) {
                 toast.success(
-                  "Maintenance mode enabled and Coming soon mode has been disabled"
+                  `Maintenance mode scheduled to activate in ${formatCountdown(
+                    maintenanceCountdownMinutes
+                  )}`
                 );
+                if (isComingSoonEnabled) {
+                  toast.success("Coming soon mode has been disabled");
+                }
               } else {
-                toast.success(
-                  `Maintenance mode ${
-                    pendingAction.value ? "enabled" : "disabled"
-                  } successfully!`
-                );
+                toast.success("Maintenance mode disabled successfully!");
               }
 
               return response.data;
@@ -220,7 +243,7 @@ export default function SettingsPage() {
               ? false
               : isMaintenanceEnabled, // Disable maintenance mode if enabling coming soon
             isComingSoonMode: pendingAction.value,
-            maintenanceDuration: maintenanceDuration,
+            maintenanceDuration: maintenanceCountdownMinutes,
           })
           .then((response) => {
             if (response.status === 200) {
@@ -255,33 +278,31 @@ export default function SettingsPage() {
             toast.error("Failed to update coming soon mode. Please try again.");
           });
       }
-      setPendingAction(null);
-      setIsAuthModalOpen(false);
-      setPassword("");
-      setAuthError("");
-      setEmail("");
     }
+
+    // Reset state
+    setPendingAction(null);
+    setIsAuthModalOpen(false);
+    setIsCountdownModalOpen(false);
+    setPassword("");
+    setAuthError("");
+    setEmail("");
   };
 
   const handleToggle = (type: "maintenance" | "comingSoon", value: boolean) => {
-    // Check if trying to enable a mode while the other is already enabled
-    if (value) {
-      if (type === "maintenance" && isComingSoonEnabled) {
-        // User is trying to enable maintenance mode while coming soon mode is active
+    if (type === "maintenance") {
+      if (value) {
+        // If enabling maintenance mode, show the countdown configuration modal
+        setIsCountdownModalOpen(true);
+      } else {
+        // If disabling maintenance mode, proceed with authentication
         setPendingAction({ type, value });
-        setIsConflictModalOpen(true);
-        return;
-      } else if (type === "comingSoon" && isMaintenanceEnabled) {
-        // User is trying to enable coming soon mode while maintenance mode is active
-        setPendingAction({ type, value });
-        setIsConflictModalOpen(true);
-        return;
+        setIsAuthModalOpen(true);
       }
+    } else {
+      // Handle coming soon toggle as before
+      handleConflictResolution(value);
     }
-
-    // If no conflict or disabling a mode, proceed to authentication
-    setPendingAction({ type, value });
-    setIsAuthModalOpen(true);
   };
 
   const handleConflictResolution = (shouldDisableOther: boolean) => {
@@ -340,6 +361,23 @@ export default function SettingsPage() {
         console.error("Failed to update maintenance duration:", error);
         toast.error("Failed to update maintenance duration. Please try again.");
       });
+  };
+
+  // Function to handle saving the countdown configuration
+  const handleSaveCountdown = () => {
+    // Set the pending action and open auth modal
+    setPendingAction({ type: "maintenance", value: true });
+    setIsCountdownModalOpen(false);
+    setIsAuthModalOpen(true);
+  };
+
+  // Helper function to format countdown time
+  const formatCountdown = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours > 0 ? `${hours} hour${hours !== 1 ? "s" : ""}` : ""}${
+      hours > 0 && mins > 0 ? " and " : ""
+    }${mins > 0 ? `${mins} minute${mins !== 1 ? "s" : ""}` : ""}`;
   };
 
   return (
@@ -3074,6 +3112,119 @@ export default function SettingsPage() {
                       </button>
                     </div>
                   </form>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+
+      {/* Countdown Configuration Modal */}
+      <Transition appear show={isCountdownModalOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-50"
+          onClose={() => setIsCountdownModalOpen(false)}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900 mb-4"
+                  >
+                    Configure Maintenance Countdown
+                  </Dialog.Title>
+
+                  <p className="text-sm text-gray-500 mb-6">
+                    Set how long before maintenance mode is activated. Users
+                    will be notified with a countdown.
+                  </p>
+
+                  <div className="space-y-4 mb-6">
+                    <div className="flex items-center gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Hours
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="24"
+                          value={maintenanceHours}
+                          onChange={(e) => {
+                            setMaintenanceHours(parseInt(e.target.value) || 0);
+                            setIsDurationChanged(true);
+                          }}
+                          className="w-24 text-coal-black px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Minutes
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="59"
+                          value={maintenanceMinutes}
+                          onChange={(e) => {
+                            setMaintenanceMinutes(
+                              parseInt(e.target.value) || 0
+                            );
+                            setIsDurationChanged(true);
+                          }}
+                          className="w-24 text-coal-black px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue"
+                        />
+                      </div>
+                    </div>
+
+                    {maintenanceHours === 0 && maintenanceMinutes === 0 && (
+                      <p className="text-amber-500 text-sm">
+                        Please set a duration greater than zero.
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex justify-end gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsCountdownModalOpen(false)}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSaveCountdown}
+                      disabled={
+                        maintenanceHours === 0 && maintenanceMinutes === 0
+                      }
+                      className="px-4 py-2 text-sm font-medium text-white bg-ocean-blue rounded-md hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Schedule Maintenance
+                    </button>
+                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
