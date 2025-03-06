@@ -20,6 +20,7 @@ const LoginSchema = Yup.object().shape({
 export default function LoginForm({ setIsLoading }: any) {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter();
   const { login } = useBusinessAuth();
 
@@ -31,6 +32,7 @@ export default function LoginForm({ setIsLoading }: any) {
     const API_BASE_URL_LOGIN = process.env.NEXT_PUBLIC_API_BASE_URL_LOGIN;
 
     setIsLoading(true);
+    setIsSubmitting(true);
     setErrorMessage(""); // Reset error message at the beginning
 
     console.log("Starting login process...");
@@ -66,6 +68,7 @@ export default function LoginForm({ setIsLoading }: any) {
           // Handle case where the response is not as expected
           setErrorMessage("Invalid login credentials");
           setIsLoading(false);
+          setIsSubmitting(false);
         }
       })
       .catch((error) => {
@@ -92,6 +95,7 @@ export default function LoginForm({ setIsLoading }: any) {
           setErrorMessage("Unexpected error occurred");
         }
         setIsLoading(false);
+        setIsSubmitting(false);
       });
   };
 
@@ -173,9 +177,10 @@ export default function LoginForm({ setIsLoading }: any) {
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full px-4 py-3 bg-baby-blue text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors"
+              className="w-full px-4 py-3 bg-baby-blue text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+              disabled={isSubmitting}
             >
-              Log in
+              {isSubmitting ? "Logging in..." : "Log in"}
             </button>
 
             {/* Error Message */}

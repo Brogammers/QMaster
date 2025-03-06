@@ -45,12 +45,15 @@ export default function AdminSidebar({
   const pathname = usePathname();
   const { logout } = useAdminAuth();
   const [themeDisabled, setThemeDisabled] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = () => {
+    setIsLoggingOut(true);
     axios.defaults.headers.common["Authorization"] = "";
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     logout();
+    // No need to reset isLoggingOut as the component will unmount
   };
 
   const toggleThemeDisabled = () => {
@@ -171,11 +174,12 @@ export default function AdminSidebar({
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
             bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 transition-colors"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: isLoggingOut ? 1 : 1.02 }}
+          whileTap={{ scale: isLoggingOut ? 1 : 0.98 }}
+          disabled={isLoggingOut}
         >
           <FaSignOutAlt className="w-5 h-5" />
-          <span>Sign Out</span>
+          <span>{isLoggingOut ? "Signing out..." : "Sign Out"}</span>
         </motion.button>
       </div>
 
