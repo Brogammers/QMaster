@@ -5,6 +5,7 @@ import type { NextRequest } from 'next/server';
 export async function middleware(request: NextRequest) {
   const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
   const isLoginPage = request.nextUrl.pathname === '/admin/login'
+  const isExactAdminPath = request.nextUrl.pathname === '/admin'
   const isPartnerRoute = request.nextUrl.pathname.includes('/[entity]/')
   const isBusinessSignIn = request.nextUrl.pathname === '/login'
 
@@ -41,6 +42,17 @@ export async function middleware(request: NextRequest) {
   if (!isMaintenanceEnabled) {
     // Get auth status from cookie
     const isAuthenticated = request.cookies.get('qmaster-auth')?.value
+
+    // Handle exact '/admin' path
+    if (isExactAdminPath) {
+      if (isAuthenticated) {
+        return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+      } else {
+        const loginUrl = new URL('/admin/login', request.url);
+        loginUrl.searchParams.set('from', '/admin');
+        return NextResponse.redirect(loginUrl);
+      }
+    }
 
     // If trying to access admin routes (except login) without auth
     if (isAdminRoute && !isAuthenticated && !isLoginPage) {
