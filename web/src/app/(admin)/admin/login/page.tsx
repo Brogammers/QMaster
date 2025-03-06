@@ -96,7 +96,12 @@ export default function LoginPage() {
           {error && <p className="text-rose-400 text-sm">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-crystal-blue text-black font-medium py-2 rounded-lg hover:bg-opacity-90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+            className={`w-full font-medium py-2 rounded-lg transition-colors
+              ${
+                isLoading
+                  ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                  : "bg-crystal-blue text-black hover:bg-opacity-90"
+              }`}
             disabled={isLoading}
           >
             {isLoading ? "Logging in..." : "Sign In"}

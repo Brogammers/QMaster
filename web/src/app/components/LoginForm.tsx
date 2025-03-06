@@ -177,7 +177,12 @@ export default function LoginForm({ setIsLoading }: any) {
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full px-4 py-3 bg-baby-blue text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+              className={`w-full px-4 py-3 rounded-lg font-medium transition-colors
+                ${
+                  isSubmitting
+                    ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                    : "bg-baby-blue text-white hover:bg-opacity-90"
+                }`}
               disabled={isSubmitting}
             >
               {isSubmitting ? "Logging in..." : "Log in"}
