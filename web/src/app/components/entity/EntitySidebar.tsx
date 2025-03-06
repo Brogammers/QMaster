@@ -277,13 +277,19 @@ export default function EntitySidebar({
       <div className="absolute bottom-20 left-0 right-0 px-6">
         <motion.button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
-            bg-red-500/40 text-rose-300 hover:bg-rose-500/20 transition-colors"
+          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl
+            ${
+              isLoggingOut
+                ? "bg-gray-500/30 text-gray-400 cursor-not-allowed"
+                : "bg-red-500/40 text-rose-300 hover:bg-rose-500/20"
+            } transition-colors`}
           whileHover={{ scale: isLoggingOut ? 1 : 1.02 }}
           whileTap={{ scale: isLoggingOut ? 1 : 0.98 }}
           disabled={isLoggingOut}
         >
-          <FaSignOutAlt className="w-5 h-5" />
+          <FaSignOutAlt
+            className={`w-5 h-5 ${isLoggingOut ? "opacity-50" : ""}`}
+          />
           <span>{isLoggingOut ? "Signing out..." : "Sign Out"}</span>
         </motion.button>
       </div>
