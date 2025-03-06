@@ -22,11 +22,13 @@ import { useRole } from "@/ctx/RoleContext";
 interface EntitySidebarProps {
   isDarkMode: boolean;
   onClose: () => void;
+  onNavigate?: () => void;
 }
 
 export default function EntitySidebar({
   isDarkMode,
   onClose,
+  onNavigate,
 }: EntitySidebarProps) {
   const pathname = usePathname();
   const { logout } = useBusinessAuth();
@@ -116,6 +118,13 @@ export default function EntitySidebar({
     setIsQueueManagementOpen(!isQueueManagementOpen);
   };
 
+  const handleNavigation = (path: string) => {
+    // Call the onNavigate callback if provided
+    if (onNavigate) {
+      onNavigate();
+    }
+  };
+
   return (
     <div className="w-64 bg-gradient-to-b from-baby-blue to-ocean-blue text-white h-screen flex flex-col overflow-hidden">
       {/* Animated background effect */}
@@ -126,7 +135,10 @@ export default function EntitySidebar({
         <Link
           href={`/${entity}/admin`}
           className="flex items-center gap-3"
-          onClick={onClose}
+          onClick={() => {
+            onClose();
+            if (onNavigate) onNavigate();
+          }}
         >
           <Image
             src={QMasterSVG}
@@ -211,7 +223,10 @@ export default function EntitySidebar({
                             <Link
                               key={child.path}
                               href={child.path}
-                              onClick={onClose}
+                              onClick={() => {
+                                onClose();
+                                if (onNavigate) onNavigate();
+                              }}
                             >
                               <motion.div
                                 className={`
@@ -234,7 +249,13 @@ export default function EntitySidebar({
                   </AnimatePresence>
                 </div>
               ) : (
-                <Link href={item.path} onClick={onClose}>
+                <Link
+                  href={item.path}
+                  onClick={() => {
+                    onClose();
+                    if (onNavigate) onNavigate();
+                  }}
+                >
                   <motion.div
                     className={`
                       flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer

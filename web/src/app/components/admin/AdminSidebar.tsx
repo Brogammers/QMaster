@@ -35,12 +35,14 @@ interface AdminSidebarProps {
   isDarkMode: boolean;
   onDarkModeToggle: (value: boolean) => void;
   onClose: () => void;
+  onNavigate?: () => void;
 }
 
 export default function AdminSidebar({
   isDarkMode,
   onDarkModeToggle,
   onClose,
+  onNavigate,
 }: AdminSidebarProps) {
   const pathname = usePathname();
   const { logout } = useAdminAuth();
@@ -61,6 +63,13 @@ export default function AdminSidebar({
     // setThemeDisabled(!themeDisabled);
   };
 
+  const handleNavigation = (path: string) => {
+    // Call the onNavigate callback if provided
+    if (onNavigate) {
+      onNavigate();
+    }
+  };
+
   return (
     <div className="z-[1000] w-64 bg-gradient-to-b from-concrete-turqouise to-coal-black text-white h-screen flex flex-col overflow-hidden">
       {/* Animated background effect */}
@@ -73,7 +82,10 @@ export default function AdminSidebar({
           <Link
             href="/admin/dashboard"
             className="flex items-center gap-3"
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+              if (onNavigate) onNavigate();
+            }}
           >
             <Image
               src={QMasterSVG}
@@ -109,7 +121,14 @@ export default function AdminSidebar({
           const Icon = item.icon;
 
           return (
-            <Link key={item.path} href={item.path} onClick={onClose}>
+            <Link
+              key={item.path}
+              href={item.path}
+              onClick={() => {
+                onClose();
+                if (onNavigate) onNavigate();
+              }}
+            >
               <motion.div
                 className={`
                   flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer

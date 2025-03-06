@@ -36,19 +36,25 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   const [users, setUsers] = useState([]);
   const [stores, setStores] = useState<StoreData[]>([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem("qmaster-dark-mode");
     setIsDarkMode(savedDarkMode === "true");
   }, []);
 
+  // Reset navigation state when pathname changes
+  useEffect(() => {
+    setIsNavigating(false);
+  }, [pathname]);
+
   // If we're on the login page, just render the children
   if (pathname === "/admin/login") {
     return children;
   }
 
-  // Show loading state while checking auth
-  if (isLoading) {
+  // Show loading state while checking auth or navigating
+  if (isLoading || isNavigating) {
     return <SplashScreen />;
   }
 
@@ -135,6 +141,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
             isDarkMode={isDarkMode}
             onDarkModeToggle={handleDarkModeToggle}
             onClose={() => setIsMobileMenuOpen(false)}
+            onNavigate={() => setIsNavigating(true)}
           />
         </div>
 
