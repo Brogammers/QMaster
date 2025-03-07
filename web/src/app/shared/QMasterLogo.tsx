@@ -12,7 +12,7 @@ export default function QMasterLogo({ className, displayQMasterText = false }: Q
           className={`w-full ${className}`}
         />
       </figure>
-      {displayQMasterText && <span className="jost-font text-white text-4xl sm:block hidden">QMaster</span>}
+      {displayQMasterText && <span className="jost-font text-white text-4xl sm:block hidden">mstaagl</span>}
     </div>
   );
 }
