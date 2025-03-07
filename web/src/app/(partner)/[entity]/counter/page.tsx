@@ -23,6 +23,7 @@ import {
 import ServiceFactory from "@/components/service/ServiceFactory";
 import Entity from "../page";
 import { motion } from "framer-motion";
+import { withRoleProtection } from "@/lib/auth/withRoleProtection";
 
 interface CounterSetupForm {
   services: ServiceTemplate[];
@@ -36,7 +37,7 @@ const TICKET_DIMENSIONS = {
   indicatorWidth: 250, // Width of the "+N more" indicator ticket
 } as const;
 
-export default function Counter() {
+function CounterPage() {
   const [activeTab1, setActiveTab1] = useState<string>("0");
   const [activeTab2, setActiveTab2] = useState<string>("0");
   const [visibleTickets1, setVisibleTickets1] = useState<any[]>([]);
@@ -388,3 +389,5 @@ export default function Counter() {
     </Entity>
   );
 }
+
+export default withRoleProtection(CounterPage, "view_counter");

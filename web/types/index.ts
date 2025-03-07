@@ -5,6 +5,11 @@ export interface CarouselProps {
   children: ReactNode[];
 }
 
+export interface QMasterLogoProps {
+  className?: string;
+  displayQMasterText?: boolean;
+}
+
 export interface QueueModalProps {
   title?: string;
   description?: string;
@@ -22,12 +27,13 @@ export interface TextButtonProps {
   textSize?: string;
   borderRadius: string;
   width?: string;
-  minWidth: string;
+  minWidth?: string;
   paddingX: string;
   paddingY: string;
   icon?: any;
   onPress?: () => void;
   disabled?: boolean;
+  className?: string;
 }
 
 export interface TicketNumberProps {

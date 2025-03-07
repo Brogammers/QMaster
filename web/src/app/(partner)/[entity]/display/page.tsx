@@ -12,6 +12,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import DynamicMediaDisplay from "@/app/components/DynamicMediaDisplay";
 import { QueuedPerson } from "../../../../../types";
 import FullscreenDisplay from "@/app/components/FullscreenDisplay";
+import { withRoleProtection } from "@/lib/auth/withRoleProtection";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,7 +28,7 @@ const queuedPersonsData = [
   { id: 9, ticketNumber: "O-127", counter: "counter 5" },
 ];
 
-export default function Display() {
+function DisplayPage() {
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [queuedPersons, setQueuedPersons] =
     useState<QueuedPerson[]>(queuedPersonsData);
@@ -120,3 +121,5 @@ export default function Display() {
     </Entity>
   );
 }
+
+export default withRoleProtection(DisplayPage, "view_display");

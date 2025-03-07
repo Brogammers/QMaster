@@ -1,11 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { FaUsers, FaBuilding, FaChartLine, FaClock } from "react-icons/fa";
 import DashboardCard from "@/app/components/admin/DashboardCard";
 import DashboardChart from "@/app/components/admin/DashboardChart";
 import RecentPartners from "@/app/components/admin/RecentPartners";
 
 export default function AdminDashboard() {
+  // You can implement actual dark mode detection or toggle here
+  // For now, we'll use a state variable
+  const [isDarkMode] = useState(false);
+
   return (
     <div className="space-y-4 lg:space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
@@ -41,7 +46,7 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         <div className="w-full overflow-x-auto">
-          <DashboardChart />
+          <DashboardChart isDarkMode={isDarkMode} />
         </div>
         <div className="w-full overflow-x-auto">
           <RecentPartners />

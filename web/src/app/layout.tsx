@@ -1,13 +1,18 @@
 "use client";
 
-import { Noto_Sans } from "next/font/google";
-import { Toaster } from "react-hot-toast";
+import { Noto_Sans, Jost } from "next/font/google";
 import "./globals.css";
 import { I18nextProvider } from "react-i18next";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
+
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-jost",
+});
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -47,14 +52,11 @@ export default function RootLayout({
       dir={i18next.language === "ar" ? "rtl" : "ltr"}
     >
       <body
-        className={`${notoSans.className} ${
+        className={`${notoSans.className} ${jost.variable} ${
           i18next.language === "ar" ? "rtl" : "ltr"
         }`}
       >
-        <I18nextProvider i18n={i18next}>
-          {children}
-          <Toaster position="bottom-right" />
-        </I18nextProvider>
+        <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
       </body>
     </html>
   );

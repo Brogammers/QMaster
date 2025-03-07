@@ -8,9 +8,10 @@ import jsPDF from "jspdf";
 import { useLocation } from "@/ctx/LocationContext";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import { withRoleProtection } from "@/lib/auth/withRoleProtection";
 // import QRCode from "qrcode.react";
 
-export default function SharingInfo() {
+function SharingInfoPage() {
   const { selectedLocation } = useLocation();
   const { entity } = useParams();
   const [url, setUrl] = useState<string>("");
@@ -188,3 +189,5 @@ export default function SharingInfo() {
     </Entity>
   );
 }
+
+export default withRoleProtection(SharingInfoPage, "view_sharing_info");

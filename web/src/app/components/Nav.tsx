@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useTranslation } from "@/hooks/useTranslation";
 import { FaGlobe } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import QMasterLogo from "../shared/QMasterLogo";
 
 export default function Nav() {
   const pathname = usePathname();
@@ -49,20 +50,7 @@ export default function Nav() {
         <div className="row">
           <div className="w-full flex justify-between items-center py-4">
             <Link href="/">
-              <figure>
-                <Image
-                  src={NavLogo}
-                  alt="QMaster Logo"
-                  width={200}
-                  className="hidden sm:block"
-                />
-                <Image
-                  src={MobileNavLogo}
-                  alt="QMaster Logo"
-                  width={49.78}
-                  className="block sm:hidden"
-                />
-              </figure>
+              <QMasterLogo displayQMasterText />
             </Link>
 
             {/* Desktop Menu */}
@@ -86,12 +74,10 @@ export default function Nav() {
               <li>
                 <button
                   onClick={toggleLanguage}
-                  className="border-2 border-baby-blue flex items-center gap-2 px-4 py-2 bg-transparent rounded-full text-baby-blue hover:bg-white hover:text-baby-blue transition-colors"
+                  className="border-2 border-baby-blue text-baby-blue text-md font-bold rounded-full py-[0.325rem] px-6 bg-transparent hover:bg-white hover:text-baby-blue transition-colors flex items-center gap-2"
                 >
-                  <FaGlobe className="w-4 h-4" />
-                  <span className="font-medium">
-                    {currentLanguage === "ar" ? "EN" : "عربي"}
-                  </span>
+                  <FaGlobe />
+                  <span>{currentLanguage === "ar" ? "EN" : "عربي"}</span>
                 </button>
               </li>
             </ul>
@@ -150,12 +136,10 @@ export default function Nav() {
                         toggleLanguage();
                         setIsMenuOpen(false);
                       }}
-                      className="border-2 border-baby-blue flex items-center gap-2 px-4 py-2 bg-transparent rounded-full text-baby-blue hover:bg-white hover:text-baby-blue transition-colors"
+                      className="border-2 border-baby-blue text-baby-blue text-xl font-bold rounded-full py-[0.325rem] px-6 bg-transparent hover:bg-white hover:text-baby-blue transition-colors flex items-center gap-2"
                     >
-                      <FaGlobe className="w-4 h-4" />
-                      <span className="font-medium">
-                        {currentLanguage === "ar" ? "EN" : "عربي"}
-                      </span>
+                      <FaGlobe />
+                      <span>{currentLanguage === "ar" ? "EN" : "عربي"}</span>
                     </button>
                   </li>
                 </ul>

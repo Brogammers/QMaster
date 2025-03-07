@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import NavLogo from "../../../public/NavigationLogo.svg";
 import { BusinessAuthProvider } from "@/lib/auth/AuthContext";
+import QMasterLogo from "../shared/QMasterLogo";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -30,13 +31,7 @@ export default function Login() {
           <div className="flex-1 flex flex-col px-8 py-4 relative">
             {/* Logo */}
             <Link href="/" className="mb-8">
-              <Image
-                src={NavLogo}
-                alt="QMaster Logo"
-                width={120}
-                height={40}
-                className="w-auto h-auto"
-              />
+              <QMasterLogo displayQMasterText />
             </Link>
 
             {/* Login Form Container */}
@@ -79,9 +74,14 @@ export default function Login() {
                 quality has been a differentiator for us. I do really think this
                 is the future.&rdquo;
               </p>
-              <p className="text-sm text-gray-500">
-                HR Liaison, Lone Star Bakery
-              </p>
+              <div className="flex flex-col">
+                <p className="text-sm font-medium text-gray-700">
+                  Tony Makaryous
+                </p>
+                <p className="text-xs text-gray-500">
+                  Managing Director, ElFady Group Egypt
+                </p>
+              </div>
             </div>
           </div>
         </div>

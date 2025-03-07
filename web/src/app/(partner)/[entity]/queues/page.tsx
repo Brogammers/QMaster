@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaClock, FaEdit, FaPlus, FaUsers } from "react-icons/fa";
 import Entity from "../page";
+import { withRoleProtection } from "@/lib/auth/withRoleProtection";
 
 interface Counter {
   id: number;
@@ -33,7 +34,7 @@ interface QueueConfig {
   counterConfig: CounterConfig;
 }
 
-export default function Queues() {
+function QueuesPage() {
   const userId = document.cookie
     .split(";")
     .find((cookie) => cookie.includes("userId"))
@@ -510,3 +511,5 @@ export default function Queues() {
     </Entity>
   );
 }
+
+export default withRoleProtection(QueuesPage, "view_queues");
