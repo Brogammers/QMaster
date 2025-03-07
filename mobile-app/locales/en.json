@@ -174,9 +174,12 @@
     "locationAccess": "Choose location to join the queue",
     "queue": {
       "peopleCount": "{{count}} people in queue",
+      "peopleCountSingular": "{{count}} person in queue",
       "waitTime": "~ {{minutes}} min",
       "joined": "Queue Joined!",
       "leave": "Leave Queue",
+      "leavingQueue": "Leaving Queue...",
+      "joiningQueue": "Joining Queue...",
       "join": "Join Queue",
       "leaveConfirm": {
         "title": "Leave Queue?",
@@ -218,5 +221,10 @@
   "done": "Done",
   "scanAgain": "Scan Again",
   "permissionRequired": "Camera Permission Required",
-  "ok": "OK"
+  "ok": "OK",
+  "currentQueues": "Current Queues",
+  "position": "Position",
+  "minutes": "min",
+  "waitTime": "Wait time",
+  "yourTurn": "Your turn now!"
 }

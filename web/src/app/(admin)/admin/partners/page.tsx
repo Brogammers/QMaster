@@ -14,7 +14,7 @@ import AddPartnerModal from "@/components/admin/AddPartnerModal";
 import axios from "axios";
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "../../layout";
 import toast from "react-hot-toast";
-import { PartnerContext as PartnersContext } from "../../context";
+import { usePartner } from "../../context";
 
 export interface Location {
   id: number;
@@ -34,7 +34,7 @@ export interface Partner {
 }
 
 export default function PartnersPage() {
-  const { partners, setPartners } = useContext(PartnersContext);
+  const { partners, setPartners } = usePartner();
   const [isDarkMode] = useState(false);
   const [expandedPartnerId, setExpandedPartnerId] = useState<number | null>(
     null
@@ -108,50 +108,6 @@ export default function PartnersPage() {
         location.googleMapsUrl.toLowerCase().includes(searchLower)
     );
   });
-
-  // Get partners
-  useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_GET_BUSINESSES;
-    axios
-      .get(`${url}?page=${DEFAULT_PAGE}&per-page=${DEFAULT_PER_PAGE}`)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.data.partners.content;
-        } else {
-          throw new Error("Error fetching partners");
-        }
-      })
-      .then((data) => {
-        console.log(data);
-
-        const partners = data.map((partner: any) => ({
-          id: partner.id,
-          name: partner.name,
-          category: partner.businessCategory,
-          status: partner.status ? "active" : "inactive",
-          joinedDate: new Date(partner.createdAt).toLocaleDateString(),
-          locations: partner.locations.map((location: any) => ({
-            id: location.id,
-            city: "city",
-            stateOrProvince: "state",
-            country: "country",
-            googleMapsUrl: "url",
-          })),
-        }));
-
-        setPartners(partners);
-      })
-      .catch((error) => {
-        console.error("Error fetching partners:", error);
-        toast.error("Error fetching partners", {
-          duration: 5000,
-          style: {
-            background: "#17222D",
-            color: "#FFF",
-          },
-        });
-      });
-  }, [setPartners]);
 
   return (
     <div className="space-y-4 lg:space-y-6">

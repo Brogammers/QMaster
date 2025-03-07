@@ -10,6 +10,8 @@ import {
   FaFingerprint,
   FaLock
 } from "react-icons/fa";
+import { Notification, useNotification } from "../../context";
+import { NotificationProps } from "@/components/admin/notifications/NotificationProps";
 
 interface UserProfile {
   name: string;
@@ -39,6 +41,7 @@ export default function SettingsPage() {
     type: "maintenance" | "comingSoon";
     value: boolean;
   } | null>(null);
+  const { notifications } = useNotification();
 
   // Check if biometric auth is available
   const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
@@ -824,83 +827,28 @@ export default function SettingsPage() {
             </div>
 
             {/* Recent Notifications */}
-            <div className="space-y-4">
+            {notifications.length > 0 && <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">Recent Notifications</h3>
                 <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
                   Mark all as read
                 </button>
               </div>
-
-              <AdminNotification 
-                title="System Update Scheduled"
-                timestamp={new Date().toISOString()}
-                message="A system update is scheduled for tomorrow at 2:00 AM UTC. Expected downtime: 30 minutes."
-                type="error"
-              />
-
-              <div className="space-y-3 max-h-80 overflow-y-auto pr-2">
-                <div className="p-3 bg-white/[0.02] rounded-lg border-l-4 border-crystal-blue">
-                  <div className="flex justify-between items-start">
-                    <h4 className="font-medium">System Update Scheduled</h4>
-                    <span className="text-xs text-slate-700">2 hours ago</span>
-                  </div>
-                  <p className="text-sm text-slate-700 mt-1">
-                    A system update is scheduled for tomorrow at 2:00 AM UTC.
-                    Expected downtime: 30 minutes.
-                  </p>
-                </div>
-
-                <div className="p-3 bg-white/[0.02] rounded-lg border-l-4 border-amber-500">
-                  <div className="flex justify-between items-start">
-                    <h4 className="font-medium">Queue Threshold Exceeded</h4>
-                    <span className="text-xs text-slate-700">5 hours ago</span>
-                  </div>
-                  <p className="text-sm text-slate-700 mt-1">
-                    Partner &quot;City Cafe&quot; has exceeded the queue
-                    threshold with 32 customers in line.
-                  </p>
-                </div>
-
-                <div className="p-3 bg-white/[0.02] rounded-lg border-l-4 border-green-500 opacity-70">
-                  <div className="flex justify-between items-start">
-                    <h4 className="font-medium">New Partner Registration</h4>
-                    <span className="text-xs text-slate-700">Yesterday</span>
-                  </div>
-                  <p className="text-sm text-slate-700 mt-1">
-                    &quot;Urban Bistro&quot; has completed registration and is
-                    awaiting approval.
-                  </p>
-                </div>
-
-                <div className="p-3 bg-white/[0.02] rounded-lg border-l-4 border-red-500 opacity-70">
-                  <div className="flex justify-between items-start">
-                    <h4 className="font-medium">Security Alert</h4>
-                    <span className="text-xs text-slate-700">2 days ago</span>
-                  </div>
-                  <p className="text-sm text-slate-700 mt-1">
-                    Multiple failed login attempts detected for admin account.
-                    IP: 192.168.1.254
-                  </p>
-                </div>
-
-                <div className="p-3 bg-white/[0.02] rounded-lg border-l-4 border-purple-500 opacity-70">
-                  <div className="flex justify-between items-start">
-                    <h4 className="font-medium">Partner Settings Changed</h4>
-                    <span className="text-xs text-slate-700">3 days ago</span>
-                  </div>
-                  <p className="text-sm text-slate-700 mt-1">
-                    &quot;Downtown Deli&quot; has updated their operating hours
-                    and service categories.
-                  </p>
-                </div>
-              </div>
+             {notifications.map((notification: Notification) => (
+                <AdminNotification
+                  key={notification.id}
+                  title={notification.title}
+                  message={notification.message}
+                  timestamp={notification.date}
+                  type={notification.type}
+                />
+              ))}
               <div className="text-center">
                 <button className="text-sm text-baby-blue hover:text-ocean-blue transition-colors">
                   View all notifications
                 </button>
               </div>
-            </div>
+            </div>}
 
             {/* Notification Delivery Schedule */}
             <div className="space-y-4">

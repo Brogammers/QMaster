@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaPlus, FaMinus, FaTimes } from "react-icons/fa";
+import { useCategory } from "@/app/(admin)/context";
+import { motion } from "framer-motion";
+import { useContext, useEffect, useState } from "react";
+import { FaMinus, FaPlus, FaTimes } from "react-icons/fa";
 
 interface Location {
   id: number;
@@ -55,6 +56,8 @@ export default function AddPartnerModal({
       },
     ],
   });
+
+  const { categories } = useCategory();
 
   useEffect(() => {
     if (!isOpen) {
@@ -275,11 +278,11 @@ export default function AddPartnerModal({
                       : "border border-slate-200 bg-white text-slate-900 focus:border-crystal-blue"
                   }`}
               >
-                <option value="Healthcare">Healthcare</option>
-                <option value="Banking">Banking</option>
-                <option value="Education">Education</option>
-                <option value="Retail">Retail</option>
-                <option value="Technology">Technology</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </div>
           )}

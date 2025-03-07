@@ -4,6 +4,7 @@ import Category from '@/shared/components/CategoryPop';
 import { AllCategories as CategoryList } from '@/constants';
 import { useLinkTo } from '@react-navigation/native';
 import { useTheme } from '@/ctx/ThemeContext';
+import { router } from 'expo-router';
 
 interface CategoryProps {
   title: string;
@@ -15,8 +16,9 @@ export default function AllCategories() {
   const linkTo = useLinkTo();
   const { isDarkMode } = useTheme();
 
-  const handleCategoryPress = (category: CategoryProps) => {
-    linkTo(`/Category?name=${category.name}`);
+  const handleCategoryPress = (category: string) => {
+    linkTo(`/Category`);
+      router.setParams({ name: category });
   };
 
   return (
@@ -30,7 +32,7 @@ export default function AllCategories() {
                   name={category.name}
                   title={category.title}
                   image={category.image}
-                  onPress={() => handleCategoryPress(category)}
+                  onPress={() => handleCategoryPress(category.name)}
                   isDarkMode={isDarkMode}
                 />
               </View>
