@@ -14,14 +14,15 @@ export default function TextButton({
   icon,
   onPress,
   disabled,
+  className,
 }: TextButtonProps) {
   return (
     <button
       onClick={onPress}
       disabled={disabled}
-      className={`bg-${buttonColor} text-${textColor} text-${textSize} ${
+      className={`${className} bg-${buttonColor} text-${textColor} text-${textSize} ${
         width && `w-${width}`
-      } px-${paddingX} py-${paddingY} rounded-${borderRadius} min-w-${minWidth} font-bold`}
+      } px-${paddingX} py-${paddingY} rounded-${borderRadius} min-w-${minWidth} font-bold flex items-center justify-center`}
     >
       {icon && <span className="mr-2">{icon}</span>}
       {text}
