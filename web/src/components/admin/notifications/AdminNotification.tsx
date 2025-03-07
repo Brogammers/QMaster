@@ -32,9 +32,8 @@ export const AdminNotification: React.FC<NotificationProps> = ({
 
   return (
     <div
-      className={`p-3 bg-white/[0.02] rounded-lg border-l-4 ${styling} ${
-        blurOut ? "opacity-70" : ""
-      }`}
+      className={`p-3 bg-white/[0.02] rounded-lg border-l-4 ${styling} ${blurOut ? "opacity-70" : ""
+        }`}
     >
       <div className="flex justify-between items-start">
         <h4 className="font-medium">{title}</h4>
