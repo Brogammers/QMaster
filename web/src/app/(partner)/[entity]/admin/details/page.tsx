@@ -2,7 +2,7 @@
 
 import QueueModal from "@/app/shared/QueueModal";
 import { Button, Form, Input, Select, Tabs, TimePicker } from "antd";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -71,11 +71,10 @@ function DetailsPage() {
     useState<BusinessDetails>(initialValues);
   const { selectedLocation } = useLocation();
 
-  const handleModificationRequest = async ({
+  const handleModificationRequest = ({
     value
   }: { value: string}) => {
     setIsSubmitting(true);
-      // Here you would typically send this to your API
       const url = process.env.NEXT_PUBLIC_API_BASE_URL_MODIFY_BUSINESS_DATA || "";
 
       const body = {
@@ -87,9 +86,9 @@ function DetailsPage() {
         .post(url, body)
         .then((response) => {
           if (response.status === 200) {
-            return response.data;
+            return; 
           } else {
-            throw new Error("Failed to submit modification request");
+            throw new Error(response.data.message);
           }
         })
         .then(() => {
@@ -101,9 +100,14 @@ function DetailsPage() {
             },
           });
         })
-        .catch((error) => {
+        .then(() => {
+          setTimeout(() => {
+            setIsSubmitting(false);
+          }, 5000);
+        })
+        .catch((error: AxiosError) => {
           console.error(error);
-          toast.error("Failed to submit modification request", {
+          toast.error(error.message, {
             duration: 5000,
             style: {
               background: "#17222D",
@@ -111,8 +115,6 @@ function DetailsPage() {
             },
           });
         });
-    
-      setIsSubmitting(false);
   };
 
   useEffect(() => {

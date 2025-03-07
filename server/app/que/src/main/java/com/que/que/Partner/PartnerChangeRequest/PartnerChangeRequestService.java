@@ -24,10 +24,12 @@ public class PartnerChangeRequestService {
         Partner partner = partnerRepository.findById(partnerId)
                 .orElseThrow(() -> new IllegalStateException("Partner not found"));
 
-        PartnerChangeRequest checkRequest = partnerChangeRequestRepository.findByPartnerAndTypeAndAccepted(
-                partner, PartnerChangeRequestType.valueOf(type), false).stream().findFirst().orElse(null);
+        boolean checkRequest = partnerChangeRequestRepository.findByPartner(
+                partner).stream()
+                .anyMatch(request -> !request.isApproved()
+                        && request.getType() == PartnerChangeRequestType.valueOf(type));
 
-        if (checkRequest != null) {
+        if (checkRequest) {
             throw new IllegalStateException("Partner change request already exists");
         }
 
@@ -48,17 +50,20 @@ public class PartnerChangeRequestService {
         BusinessUser businessUser = businessUserRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("Business User not found"));
         Partner partner = businessUser.getPartner();
+
+        boolean checkRequest = partnerChangeRequestRepository.findByPartner(
+                partner).stream()
+                .anyMatch(request -> !request.isApproved()
+                        && request.getType() == PartnerChangeRequestType.valueOf(type));
+
+        if (checkRequest) {
+            throw new IllegalStateException("Partner change request already exists");
+        }
+
         PartnerChangeRequest partnerChangeRequest = new PartnerChangeRequest(
                 PartnerChangeRequestType.valueOf(type),
                 partner);
         partnerChangeRequestRepository.save(partnerChangeRequest);
-
-        PartnerChangeRequest checkRequest = partnerChangeRequestRepository.findByPartnerAndTypeAndAccepted(
-                partner, PartnerChangeRequestType.valueOf(type), false).stream().findFirst().orElse(null);
-
-        if (checkRequest != null) {
-            throw new IllegalStateException("Partner change request already exists");
-        }
 
         AdminNotification notification = new AdminNotification(
                 "Partner " + partner.getName() + " has requested a change in " + type.toLowerCase(),

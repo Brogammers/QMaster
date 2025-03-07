@@ -51,7 +51,7 @@ public class PartnerController {
         try {
             String email = jwtUtil.getEmail(token.substring(7));
             if (request.getPartnerId().isPresent())
-                body.put("changeReequest", partnerChangeRequestService.createPartnerChangeRequest(request.getType(),
+                body.put("changeRequest", partnerChangeRequestService.createPartnerChangeRequest(request.getType(),
                         request.getPartnerId().get()));
             else
                 body.put("changeRequest",

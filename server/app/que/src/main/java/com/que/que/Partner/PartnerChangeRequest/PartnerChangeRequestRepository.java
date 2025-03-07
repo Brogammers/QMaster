@@ -8,6 +8,5 @@ import com.que.que.Partner.Partner;
 
 public interface PartnerChangeRequestRepository extends JpaRepository<PartnerChangeRequest, Long> {
 
-    List<PartnerChangeRequest> findByPartnerAndTypeAndAccepted(Partner partner, PartnerChangeRequestType type,
-            boolean accepted);
+    List<PartnerChangeRequest> findByPartner(Partner partner);
 }
