@@ -3,16 +3,13 @@
 import AdminSidebar from "@/app/components/admin/AdminSidebar";
 import SplashScreen from "@/app/shared/SplashScreen";
 import { AdminAuthProvider, useAdminAuth } from "@/lib/auth/AuthContext";
-import { store } from "@/store/store";
 import { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FaBars } from "react-icons/fa";
-import { Provider } from "react-redux";
-import { StoreData } from "./admin/store/columns";
 import {
     CategoriesProvider,
+    NotificationsProvider,
     PartnersProvider,
     StoresContext,
     UsersContext,
@@ -233,26 +230,28 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
                                             }}
                                         >
                                             <CategoriesProvider>
-                                                <StoresContext.Provider
-                                                    value={{
-                                                        stores,
-                                                        setStores,
-                                                        getNextStorePage,
-                                                    }}
-                                                >
-                                                    {children}
-                                                    <Toaster
-                                                        position="bottom-right"
-                                                        toastOptions={{
-                                                            style: {
-                                                                background:
-                                                                    "#17222D",
-                                                                color: "#FFF",
-                                                            },
-                                                            duration: 5000,
+                                                <NotificationsProvider>
+                                                    <StoresContext.Provider
+                                                        value={{
+                                                            stores,
+                                                            setStores,
+                                                            getNextStorePage,
                                                         }}
-                                                    />
-                                                </StoresContext.Provider>
+                                                    >
+                                                        {children}
+                                                        <Toaster
+                                                            position="bottom-right"
+                                                            toastOptions={{
+                                                                style: {
+                                                                    background:
+                                                                        "#17222D",
+                                                                    color: "#FFF",
+                                                                },
+                                                                duration: 5000,
+                                                            }}
+                                                        />
+                                                    </StoresContext.Provider>
+                                                </NotificationsProvider>
                                             </CategoriesProvider>
                                         </UsersContext.Provider>
                                     </PartnersProvider>
