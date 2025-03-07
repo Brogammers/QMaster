@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.que.que.Location.Location;
+import com.que.que.Partner.PartnerChangeRequest.PartnerChangeRequest;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.BusinessUser.BusinessCategory;
 import com.que.que.User.BusinessUser.BusinessUser;
@@ -56,6 +57,9 @@ public class Partner {
     @Column(nullable = false)
     private SubscriptionPlans subscriptionPlan;
 
+    @OneToMany(mappedBy = "partner")
+    private List<PartnerChangeRequest> changeRequests = new ArrayList<>();
+
     private Date createdAt;
 
     public Partner(String name, BusinessCategory businessCategory, SubscriptionPlans subscriptionPlan) {
@@ -71,5 +75,9 @@ public class Partner {
 
     public void addLocation(Location location) {
         locations.add(location);
+    }
+
+    public void addChangeRequest(PartnerChangeRequest changeRequest) {
+        changeRequests.add(changeRequest);
     }
 }

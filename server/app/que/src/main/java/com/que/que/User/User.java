@@ -4,16 +4,20 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.que.que.Notification.UserNotification.UserNotification;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,6 +62,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private boolean enabled = false;
     private String location;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserNotification> userNotifications;
 
     public User(
             UserRole userRole,
@@ -123,6 +130,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.enabled;
+    }
+
+    public void addNotification(UserNotification notification) {
+        this.userNotifications.add(notification);
     }
 
 }
