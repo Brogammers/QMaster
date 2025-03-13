@@ -27,7 +27,7 @@ export default function Search() {
         />
       )}
       <View className='w-10/12 self-center'>
-        <View className={`h-11 border-2 rounded-lg mt-7 mb-4 px-4 py-2 flex-row items-center 
+        <View className={`h-11 border-2 rounded-full mt-7 mb-4 px-4 py-2 flex-row items-center 
           ${isDarkMode ? 'border-baby-blue/20 bg-concrete-turqouise/20' : 'border-rock-stone bg-white/80'} 
           ${I18nManager.isRTL ? "flex-row-reverse" : "flex-row"}`}>
           <FontAwesome 

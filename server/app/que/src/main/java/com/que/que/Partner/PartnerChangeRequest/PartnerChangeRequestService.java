@@ -18,6 +18,10 @@ public class PartnerChangeRequestService {
     private final AdminNotificationRepository adminNotificationRepository;
     private final PartnerRepository partnerRepository;
     private final BusinessUserRepository businessUserRepository;
+    private final String PARTNER_CHANGE_REQUEST_TITLE = "Partner change request";
+    private final String PARTNER_CHANGE_REQUEST_APPROVED = "Partner change request approved";
+    private final String PARTNER_CHANGE_REQUEST_REJECTED = "Partner change request rejected";
+    private final String PARTNER_CHANGE_REQUEST_MESSAGE = "Partner %s has requested a change for %s";
 
     public PartnerChangeRequest createPartnerChangeRequest(String type, Long partnerId) {
 
@@ -40,8 +44,8 @@ public class PartnerChangeRequestService {
 
         // Create notification for admin
         AdminNotification notification = new AdminNotification(
-                "Partner " + partner.getName() + " has requested a change in " + type.toLowerCase(),
-                "Partner Change Request", "REQUEST");
+                String.format(PARTNER_CHANGE_REQUEST_MESSAGE, partner.getName(), type.toLowerCase()),
+                PARTNER_CHANGE_REQUEST_TITLE, "REQUEST");
         adminNotificationRepository.save(notification);
         return partnerChangeRequest;
     }
@@ -66,8 +70,8 @@ public class PartnerChangeRequestService {
         partnerChangeRequestRepository.save(partnerChangeRequest);
 
         AdminNotification notification = new AdminNotification(
-                "Partner " + partner.getName() + " has requested a change in " + type.toLowerCase(),
-                "Partner Change Request", "REQUEST");
+                String.format(PARTNER_CHANGE_REQUEST_MESSAGE, partner.getName(), type.toLowerCase()),
+                PARTNER_CHANGE_REQUEST_TITLE, "REQUEST");
         adminNotificationRepository.save(notification);
         return partnerChangeRequest;
     }

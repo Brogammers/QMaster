@@ -20,7 +20,7 @@ import com.que.que.Security.JwtUtil;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/api/notification")
+@RequestMapping("/api/v1/notification")
 @AllArgsConstructor
 public class NotificationController {
     private final AdminNotificationService adminNotificationService;

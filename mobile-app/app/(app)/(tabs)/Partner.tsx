@@ -7,9 +7,10 @@ import axios, { AxiosError } from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
 import { MotiView } from "moti";
-import React, { createContext, useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
+import React, { createContext, useEffect, useState, useCallback } from "react";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import RefreshableWrapper from "@/components/RefreshableWrapper";
 
 export const LocationContext = createContext<{
   locationData: Array<{
@@ -45,43 +46,44 @@ export default function Partner() {
   >([]);
   const [value, setValue] = useState<number | null>(null);
 
-  useEffect(() => {
-    AsyncStorage.getItem("TOKEN_KEY").then((token) => {
+  const fetchLocationData = useCallback(async () => {
+    try {
+      const token = await AsyncStorage.getItem("TOKEN_KEY");
       const url = configConverter(
         "EXPO_PUBLIC_API_BASE_URL_GET_LOCATIONS_BY_BUSINESS"
       );
 
-      axios
-        .get(`${url}?businessName=${brandName}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      const response = await axios.get(`${url}?businessName=${brandName}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        const data = response.data.locations;
+        const locationData = data.map((store: any) => ({
+          label: store.name,
+          value: store.id,
+          id: store.id,
+          address: store.address,
+          coordinates: {
+            latitude: store.latitude,
+            longitude: store.longitude,
           },
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            return response.data.locations;
-          } else {
-            throw new Error("Error");
-          }
-        })
-        .then((data) => {
-          const locationData = data.map((store: any) => ({
-            label: store.name,
-            value: store.id,
-            id: store.id,
-            address: store.address,
-            coordinates: {
-              latitude: store.latitude,
-              longitude: store.longitude,
-            },
-          }));
-          setLocationData(locationData);
-        })
-        .catch((error) => {
-          console.log("Error: ", (error as AxiosError).response?.data);
-        });
-    });
+        }));
+        setLocationData(locationData);
+      }
+    } catch (error) {
+      console.log("Error: ", (error as AxiosError).response?.data);
+    }
   }, [brandName]);
+
+  useEffect(() => {
+    fetchLocationData();
+  }, [brandName]);
+
+  // Partner screen refresh should be more frequent if user is actively considering joining a queue
+  const refreshInterval = 60000; // 1 minute
 
   return (
     <View className="flex-1">
@@ -110,10 +112,11 @@ export default function Partner() {
         <QueueInfoCard image={image} name={brandName} />
 
         <SafeAreaView className="flex-1" edges={["bottom", "left", "right"]}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
+          <RefreshableWrapper
+            refreshId={`partner-${brandName}`}
+            onRefresh={fetchLocationData}
+            autoRefreshInterval={refreshInterval}
             contentContainerStyle={{ paddingBottom: 40 }}
-            className="flex-1"
           >
             <MotiView
               from={{ opacity: 0, scale: 0.9 }}
@@ -127,7 +130,7 @@ export default function Partner() {
             >
               <JoinQueue />
             </MotiView>
-          </ScrollView>
+          </RefreshableWrapper>
         </SafeAreaView>
       </LocationContext.Provider>
     </View>

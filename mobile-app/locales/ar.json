@@ -173,10 +173,13 @@
   "common": {
     "locationAccess": "اختر الموقع للانضمام إلى الطابور",
     "queue": {
-      "peopleCount": "{{count}} شخص في الطابور",
+      "peopleCount": "{{count}} أشخاص في الطابور",
+      "peopleCountSingular": "{{count}} شخص في الطابور",
       "waitTime": "~ {{minutes}} دقيقة",
       "joined": "تم الانضمام للطابور!",
       "leave": "مغادرة الطابور",
+      "leavingQueue": "مغادرة الطابور...",
+      "joiningQueue": "انضمام للطابور...",
       "join": "انضم للطابور",
       "leaveConfirm": {
         "title": "مغادرة الطابور؟",
@@ -210,5 +213,10 @@
   "done": "مكتمل",
   "scanAgain": "مسح مرة أخرى",
   "permissionRequired": "إذا لم يتم السماح بالوصول إلى الكاميرا",
-  "ok": "موافق"
+  "ok": "موافق",
+  "currentQueues": "الطوابير الحالية",
+  "position": "الموقع",
+  "minutes": "دقيقة",
+  "waitTime": "وقت الانتظار",
+  "yourTurn": "أنت في الطابور الآن!"
 }

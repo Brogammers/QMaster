@@ -1,3 +1,7 @@
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 export function getTimeBasedGreeting() {
   const hour = new Date().getHours();
   if (hour >= 5 && hour < 12) return 'Good morning';
@@ -33,5 +37,12 @@ export const getGreeting = (firstName?: string): string => {
     greeting = 'Good Evening';
   }
 
-  return firstName ? `${greeting}, ${firstName}!` : greeting;
+  return firstName ? `${greeting}, ${capitalize(firstName)}!` : greeting;
 };
+
+export const formatCategoryName = (name: string) => {
+  return name
+    .replace(/([A-Z])/g, " $1")
+    .trim()
+    .replace(/\s+/g, " ");
+}

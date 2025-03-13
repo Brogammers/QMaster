@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   useWindowDimensions,
+  ActivityIndicator,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import HistoryComponent from "@/shared/components/HistoryComponent";
@@ -13,80 +14,100 @@ import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { AxiosResponse } from "axios";
 import { Skeleton } from "moti/skeleton";
-import { HistoryList } from "@/constants";
 import Config from "react-native-config";
 import i18n from "@/i18n";
 import { useTheme } from "@/ctx/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
 import configConverter from "@/api/configConverter";
+import RefreshableWrapper from "@/components/RefreshableWrapper";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
 
-export default function History() {
+export default function Notifications() {
   const isFocused = useIsFocused();
-  const [historyList, setHistoryList] = useState<HistoryComponentProps[]>([]);
+  const [notifications, setNotifications] = useState<HistoryComponentProps[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState(true);
   const windowWidth = useWindowDimensions().width;
   const { isDarkMode } = useTheme();
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [itemsCount, setItemsCount] = useState<number | null>(null);
+  const userId = useSelector((state: RootState) => state.userId.userId);
+
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+
+      const response = await axios.get(
+        `${configConverter(
+          "EXPO_PUBLIC_API_BASE_URL_NOTIFICATIONS"
+        )}?id=${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const data = response.data.notifications;
+        let historyEnqueue = data.enqueuings.content;
+        let historyDequeue = data.dequeuings.content;
+
+        historyDequeue.forEach(
+          (item: { isHistory: boolean; status: string; date: string }) => {
+            item.isHistory = true;
+            item.status = "Dequeued";
+            item.date = "Today";
+          }
+        );
+        historyEnqueue.forEach(
+          (item: { isHistory: boolean; status: string; date: string }) => {
+            item.isHistory = true;
+            item.status = "Enqueued";
+            item.date = "Today";
+          }
+        );
+
+        let combinedHistory = [...historyEnqueue, ...historyDequeue];
+        setNotifications(combinedHistory);
+        setItemsCount(combinedHistory.length);
+        setInitialLoading(false);
+        setIsLoading(false);
+
+        await AsyncStorage.setItem(
+          "notificationsData",
+          JSON.stringify(combinedHistory)
+        );
+      } else {
+        setInitialLoading(false);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setInitialLoading(false);
+      setIsLoading(false);
+    }
+  }, [userId]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let historyData = await AsyncStorage.getItem("historyData");
-        if (historyData) {
-          setHistoryList(JSON.parse(historyData));
+        let notificationsData = await AsyncStorage.getItem("notificationsData");
+        if (notificationsData) {
+          const parsedData = JSON.parse(notificationsData);
+          setNotifications(parsedData);
+          setItemsCount(parsedData.length);
+          setInitialLoading(false);
+          setIsLoading(false);
         } else {
-          console.log("History Response ", axios.defaults.headers);
-          const token = await AsyncStorage.getItem("token");
-
-          const timeoutPromise = new Promise((resolve, reject) => {
-            setTimeout(() => reject("Timeout"), 5000);
-          });
-
-          const [response, _] = (await Promise.all([
-            axios.get(
-              `${configConverter("EXPO_PUBLIC_API_BASE_URL_HISTORY")}?id=1`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            ),
-            timeoutPromise,
-          ])) as [AxiosResponse, unknown];
-
-          if (response.status === 200) {
-            const data = response.data.history;
-            let historyEnqueue = data.enqueuings.content;
-            let historyDequeue = data.dequeuings.content;
-
-            historyDequeue.forEach(
-              (item: { isHistory: boolean; status: string; date: string }) => {
-                item.isHistory = true;
-                item.status = "Dequeued";
-                item.date = "Today";
-              }
-            );
-            historyEnqueue.forEach(
-              (item: { isHistory: boolean; status: string; date: string }) => {
-                item.isHistory = true;
-                item.status = "Enqueued";
-                item.date = "Today";
-              }
-            );
-
-            let combinedHistory = [...historyEnqueue, ...historyDequeue];
-            setHistoryList(combinedHistory);
-            setIsLoading(false);
-
-            await AsyncStorage.setItem(
-              "historyData",
-              JSON.stringify(combinedHistory)
-            );
-          } else {
-            setIsLoading(false);
-          }
+          await fetchNotifications();
         }
       } catch (error) {
         console.error(error);
+        setInitialLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -97,10 +118,18 @@ export default function History() {
     fetchData();
 
     return () => clearTimeout(fetchDataTimeout);
-  }, [isFocused]);
+  }, [isFocused, fetchNotifications]);
+
+  // Notifications need more frequent updates as they're more time-sensitive
+  const refreshInterval = 120000; // 2 minutes
 
   return (
-    <View className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}>
+    <RefreshableWrapper
+      refreshId="notifications-screen"
+      onRefresh={fetchNotifications}
+      autoRefreshInterval={refreshInterval}
+      className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}
+    >
       {!isDarkMode && (
         <LinearGradient
           colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
@@ -109,65 +138,68 @@ export default function History() {
           end={{ x: 0, y: 1 }}
         />
       )}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {isLoading ? (
-          <View
-            className={`flex flex-col items-center justify-center ${
-              isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+      {initialLoading ? (
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator
+            size="large"
+            color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+          />
+        </View>
+      ) : isLoading && itemsCount ? (
+        <View
+          className={`flex flex-col items-center justify-center ${
+            isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+          }`}
+        >
+          {Array(itemsCount)
+            .fill(0)
+            .map((_, index) => (
+              <React.Fragment key={index}>
+                <View className="mb-4" />
+                <Skeleton
+                  colorMode={isDarkMode ? "dark" : "light"}
+                  width={(windowWidth * 11) / 12}
+                  height={100}
+                />
+              </React.Fragment>
+            ))}
+          <View className="mb-5" />
+        </View>
+      ) : notifications.length === 0 ? (
+        <View className="flex-1 items-center justify-center">
+          <Text
+            className={`text-lg font-bold ${
+              isDarkMode ? "text-baby-blue" : "text-coal-black"
             }`}
           >
-            {Array(8)
-              .fill(0)
-              .map((_, index) => (
-                <React.Fragment key={index}>
-                  <View className="mb-4" />
-                  <Skeleton
-                    colorMode={isDarkMode ? "dark" : "light"}
-                    width={(windowWidth * 11) / 12}
-                    height={100}
-                  />
-                </React.Fragment>
-              ))}
-            <View className="mb-5" />
-          </View>
-        ) : historyList.length === 0 ? (
-          <View
-            className={`h-screen flex flex-col justify-center items-center ${
-              isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+            {i18n.t("noData")}
+          </Text>
+          <Text
+            className={`text-md ${
+              isDarkMode ? "text-baby-blue" : "text-coal-black"
             }`}
           >
-            <Text
-              className={`text-lg font-bold ${
-                isDarkMode ? "text-baby-blue" : "text-coal-black"
-              }`}
-            >
-              {i18n.t("noData")}
-            </Text>
-            <Text
-              className={`text-md ${
-                isDarkMode ? "text-baby-blue" : "text-coal-black"
-              }`}
-            >
-              {i18n.t("noDisplay")}
-            </Text>
-          </View>
-        ) : (
-          HistoryList.map((item, index) => (
+            {i18n.t("noDisplay")}
+          </Text>
+        </View>
+      ) : (
+        <View>
+          {notifications.map((item, index) => (
             <HistoryComponent
               key={index}
               image={CarrefourLogo}
               name={item.name}
-              location={"Anything for now"}
+              location={item.location || "Anything for now"}
               date={item.date}
               id={item.id}
               status={item.status}
               isHistory={item.isHistory}
               isDarkMode={isDarkMode}
             />
-          ))
-        )}
-      </ScrollView>
-    </View>
+          ))}
+        </View>
+      )}
+    </RefreshableWrapper>
   );
 }
 

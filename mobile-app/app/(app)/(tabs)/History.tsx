@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   useWindowDimensions,
+  ActivityIndicator,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { Skeleton } from "moti/skeleton";
@@ -20,6 +21,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import configConverter from "@/api/configConverter";
+import RefreshableWrapper from "@/components/RefreshableWrapper";
 
 function formatDate(date: any) {
   let day = date.getDate();
@@ -40,8 +42,91 @@ export default function History() {
   const [isLoading, setIsLoading] = useState(true);
   const windowWidth = useWindowDimensions().width;
   const { isDarkMode } = useTheme();
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [itemsCount, setItemsCount] = useState<number | null>(null);
 
   const userId = useSelector((state: RootState) => state.userId.userId);
+
+  const fetchHistoryData = useCallback(async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+
+      const response = await axios.get(
+        `${configConverter("EXPO_PUBLIC_API_BASE_URL_HISTORY")}?id=${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const data = response.data.history;
+        let historyEnqueue = data.enqueuings.content;
+        let historyDequeue = data.dequeuings.content;
+
+        historyDequeue.forEach(
+          (item: {
+            id: number;
+            isHistory: boolean;
+            status: string;
+            date: string;
+            name: string;
+            time: string;
+            notification: string;
+            location: string;
+          }) => {
+            item.id = item.id;
+            item.isHistory = true;
+            item.status = "Dequeued";
+            item.date = formatDate(new Date(item.time));
+            item.name = item.name;
+            item.location = item.location;
+          }
+        );
+        historyEnqueue.forEach(
+          (item: {
+            id: number;
+            isHistory: boolean;
+            status: string;
+            date: string;
+            name: string;
+            time: string;
+            notification: string;
+            location: string;
+          }) => {
+            item.id = item.id;
+            item.isHistory = true;
+            item.status = "Enqueued";
+            item.date = formatDate(new Date(item.time));
+            item.name = item.name;
+            item.location = item.location;
+          }
+        );
+
+        let combinedHistory = [...historyEnqueue, ...historyDequeue];
+        setHistoryList(combinedHistory);
+        setItemsCount(historyEnqueue.length + historyDequeue.length);
+        setInitialLoading(false);
+        setIsLoading(false);
+
+        const timeoutDate = new Date();
+        timeoutDate.setSeconds(timeoutDate.getSeconds() + 15);
+        await AsyncStorage.setItem(
+          "historyData",
+          JSON.stringify({
+            history: combinedHistory,
+            date: timeoutDate,
+          })
+        );
+        console.log("History Data Saved");
+      }
+    } catch (error) {
+      console.error(error);
+      setInitialLoading(false);
+      setIsLoading(false);
+    }
+  }, [userId]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,98 +143,33 @@ export default function History() {
 
         if (
           historyData &&
+          historyData.date &&
           new Date(historyData.date).getTime() > checkDate.getTime()
         ) {
           setHistoryList(historyData.history);
+          setItemsCount(historyData.history.length);
+          setInitialLoading(false);
+          setIsLoading(false);
         } else {
-          const token = await AsyncStorage.getItem("token");
-
-          const response = axios.get(
-            `${configConverter(
-              "EXPO_PUBLIC_API_BASE_URL_HISTORY"
-            )}?id=${userId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          response.then((res: AxiosResponse) => {
-            if (res.status === 200) {
-              const data = res.data.history;
-              let historyEnqueue = data.enqueuings.content;
-              let historyDequeue = data.dequeuings.content;
-
-              historyDequeue.forEach(
-                (item: {
-                  id: number;
-                  isHistory: boolean;
-                  status: string;
-                  date: string;
-                  name: string;
-                  time: string;
-                  notification: string;
-                  location: string;
-                }) => {
-                  item.id = item.id;
-                  item.isHistory = true;
-                  item.status = "Dequeued";
-                  item.date = formatDate(new Date(item.time));
-                  item.name = item.name;
-                  item.location = item.location;
-                }
-              );
-              historyEnqueue.forEach(
-                (item: {
-                  id: number;
-                  isHistory: boolean;
-                  status: string;
-                  date: string;
-                  name: string;
-                  time: string;
-                  notification: string;
-                  location: string;
-                }) => {
-                  item.id = item.id;
-                  item.isHistory = true;
-                  item.status = "Enqueued";
-                  item.date = formatDate(new Date(item.time));
-                  item.name = item.name;
-                  item.location = item.location;
-                }
-              );
-
-              let combinedHistory = [...historyEnqueue, ...historyDequeue];
-              setHistoryList(combinedHistory);
-              setIsLoading(false);
-
-              const timeoutDate = new Date();
-              timeoutDate.setSeconds(timeoutDate.getSeconds() + 15);
-              AsyncStorage.setItem(
-                "historyData",
-                JSON.stringify({
-                  history: combinedHistory,
-                  date: timeoutDate,
-                })
-              ).then(() => {
-                console.log("History Data Saved");
-              });
-            } else {
-              setIsLoading(false);
-            }
-          });
+          fetchHistoryData();
         }
       } catch (error) {
         console.error(error);
+        setInitialLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [isFocused]);
+  }, [isFocused, fetchHistoryData]);
 
   return (
-    <View className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}>
+    <RefreshableWrapper
+      refreshId="history-screen"
+      onRefresh={fetchHistoryData}
+      autoRefreshInterval={300000} // Auto refresh every 5 minutes
+      className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}
+    >
       {!isDarkMode && (
         <LinearGradient
           colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
@@ -158,50 +178,53 @@ export default function History() {
           end={{ x: 0, y: 1 }}
         />
       )}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {isLoading ? (
-          <View
-            className={`flex flex-col items-center justify-center ${
-              isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+      {initialLoading ? (
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator
+            size="large"
+            color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+          />
+        </View>
+      ) : isLoading && itemsCount ? (
+        <View
+          className={`flex flex-col items-center justify-center ${
+            isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+          }`}
+        >
+          {Array(itemsCount)
+            .fill(0)
+            .map((_, index) => (
+              <React.Fragment key={index}>
+                <View className="mb-4" />
+                <Skeleton
+                  colorMode={isDarkMode ? "dark" : "light"}
+                  width={(windowWidth * 11) / 12}
+                  height={100}
+                />
+              </React.Fragment>
+            ))}
+          <View className="mb-5" />
+        </View>
+      ) : historyList.length === 0 ? (
+        <View className="flex-1 items-center justify-center">
+          <Text
+            className={`text-lg font-bold ${
+              isDarkMode ? "text-baby-blue" : "text-coal-black"
             }`}
           >
-            {Array(8)
-              .fill(0)
-              .map((_, index) => (
-                <React.Fragment key={index}>
-                  <View className="mb-4" />
-                  <Skeleton
-                    colorMode={isDarkMode ? "dark" : "light"}
-                    width={(windowWidth * 11) / 12}
-                    height={100}
-                  />
-                </React.Fragment>
-              ))}
-            <View className="mb-5" />
-          </View>
-        ) : historyList.length === 0 ? (
-          <View
-            className={`flex flex-col items-center justify-center h-screen ${
-              isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+            {i18n.t("noData")}
+          </Text>
+          <Text
+            className={`text-md ${
+              isDarkMode ? "text-baby-blue" : "text-coal-black"
             }`}
           >
-            <Text
-              className={`text-lg font-bold ${
-                isDarkMode ? "text-baby-blue" : "text-coal-black"
-              }`}
-            >
-              {i18n.t("noData")}
-            </Text>
-            <Text
-              className={`text-md ${
-                isDarkMode ? "text-baby-blue" : "text-coal-black"
-              }`}
-            >
-              {i18n.t("noDisplay")}
-            </Text>
-          </View>
-        ) : (
-          historyList.map((item, index) => (
+            {i18n.t("noDisplay")}
+          </Text>
+        </View>
+      ) : (
+        <View>
+          {historyList.map((item, index) => (
             <HistoryComponent
               key={index}
               image={CarrefourLogo}
@@ -213,10 +236,10 @@ export default function History() {
               isHistory={item.isHistory}
               isDarkMode={isDarkMode}
             />
-          ))
-        )}
-      </ScrollView>
-    </View>
+          ))}
+        </View>
+      )}
+    </RefreshableWrapper>
   );
 }
 
