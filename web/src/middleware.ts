@@ -11,7 +11,13 @@ export async function middleware(request: NextRequest) {
 
   // Get the maintenance and coming soon settings
   const url = process.env.NEXT_PUBLIC_API_BASE_URL! + process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS!;
-  const response = await axios.get(url);
+  let response;
+  try {
+    response = await axios.get(url);
+  } catch (error) {
+    // Error while fetching settings, redirect to maintenance
+    return NextResponse.redirect(new URL('/maintenance', request.url));
+  }
   const {
     isMaintenanceMode: isMaintenanceEnabled,
     isComingSoonMode: isComingSoonEnabled,
@@ -23,10 +29,10 @@ export async function middleware(request: NextRequest) {
     maintenanceScheduledTime &&
     new Date(maintenanceScheduledTime) <= new Date();
 
-  // Skip redirects for maintenance and coming-soon pages themselves
-  if (request.nextUrl.pathname === '/maintenance' ||
-    request.nextUrl.pathname === '/coming-soon') {
-    return NextResponse.next();
+  // if maintenance or coming soon is not enabled but attempting to open them, handle redirects
+  if ((request.nextUrl.pathname === '/maintenance' && !isMaintenanceActive) ||
+    (request.nextUrl.pathname === '/coming-soon' && !isComingSoonEnabled)) {
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   // If maintenance mode is active (scheduled time has passed), handle redirects
