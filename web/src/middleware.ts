@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
     response = await axios.get(url);
   } catch (error) {
     // Error while fetching settings, redirect to maintenance
-    return NextResponse.redirect(new URL('/maintenance', request.url));
+    return NextResponse.redirect(new URL('/not-found', request.url));
   }
   const {
     isMaintenanceMode: isMaintenanceEnabled,

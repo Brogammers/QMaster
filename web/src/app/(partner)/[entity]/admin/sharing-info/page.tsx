@@ -190,4 +190,4 @@ function SharingInfoPage() {
   );
 }
 
-export default withRoleProtection(SharingInfoPage, "view_sharing_info");
+export default withRoleProtection(SharingInfoPage, "view_sharing-info");
