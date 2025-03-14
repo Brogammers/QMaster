@@ -35,7 +35,7 @@ public class WebSecurityConfig {
 	public InMemoryUserDetailsManager userDetailsService() {
 		UserDetails admin = User.withUsername("root")
 				.password(bCryptPasswordEncoder.encode("123456789"))
-				.roles("ADMIN")
+				.roles("TAWABIRY_SYSTEM_ADMIN")
 				.build();
 		return new InMemoryUserDetailsManager(admin);
 	}
