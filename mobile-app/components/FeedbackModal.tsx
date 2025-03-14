@@ -40,6 +40,11 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
   const [speedRating, setSpeedRating] = useState(0);
   const [accuracyRating, setAccuracyRating] = useState(0);
   const [feedback, setFeedback] = useState("");
+  const [showError, setShowError] = useState({
+    accuracy: false,
+    service: false,
+  });
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // Animation values
   const slideAnim = useRef(new Animated.Value(MODAL_HEIGHT)).current;
@@ -109,22 +114,40 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
   };
 
   const handleSubmit = () => {
-    // Here you would send the feedback data to your backend
+    // Validate required ratings
+    const newErrorState = {
+      accuracy: accuracyRating === 0,
+      service: speedRating === 0,
+    };
+
+    setShowError(newErrorState);
+
+    if (newErrorState.accuracy || newErrorState.service) {
+      return;
+    }
+
+    // Clear errors and proceed with submission
+    setShowError({ accuracy: false, service: false });
+    setShowSuccess(true);
+
+    // Send feedback data
     console.log({
-      overallRating,
-      speedRating,
       accuracyRating,
+      speedRating,
       feedback,
     });
 
-    // Reset form
-    setOverallRating(0);
-    setSpeedRating(0);
-    setAccuracyRating(0);
-    setFeedback("");
+    // Wait for success message to show before closing
+    setTimeout(() => {
+      // Reset form
+      setAccuracyRating(0);
+      setSpeedRating(0);
+      setFeedback("");
+      setShowSuccess(false);
 
-    // Close modal
-    closeModal();
+      // Close modal
+      closeModal();
+    }, 1500);
   };
 
   const renderStars = (rating: number, setRating: (rating: number) => void) => {
@@ -206,6 +229,29 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 overScrollMode="never"
                 scrollEventThrottle={16}
               >
+                {/* Success Message */}
+                {showSuccess && (
+                  <MotiView
+                    from={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    style={styles.successMessage}
+                  >
+                    <Ionicons
+                      name="checkmark-circle"
+                      size={40}
+                      color="#4CAF50"
+                    />
+                    <Text
+                      style={[
+                        styles.successText,
+                        { color: isDarkMode ? "#4CAF50" : "#2E7D32" },
+                      ]}
+                    >
+                      Thank you for your feedback!
+                    </Text>
+                  </MotiView>
+                )}
+
                 {/* Wait Time Accuracy Rating */}
                 <View style={styles.categorySection}>
                   <Text
@@ -225,7 +271,11 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                     How accurate was your estimated wait time?
                   </Text>
                   {renderStars(accuracyRating, setAccuracyRating)}
-
+                  {showError.accuracy && (
+                    <Text style={styles.fieldError}>
+                      Please rate the wait time accuracy
+                    </Text>
+                  )}
                   <View style={styles.ratingLegend}>
                     <Text
                       style={[
@@ -278,7 +328,11 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                     How well did {businessName} serve you?
                   </Text>
                   {renderStars(speedRating, setSpeedRating)}
-
+                  {showError.service && (
+                    <Text style={styles.fieldError}>
+                      Please rate the service quality
+                    </Text>
+                  )}
                   <View style={styles.ratingLegend}>
                     <Text
                       style={[
@@ -482,14 +536,16 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   categoryTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "600",
     textAlign: "center",
+    marginBottom: 12,
   },
   categorySubtitle: {
-    fontSize: 14,
+    fontSize: 16,
     textAlign: "center",
-    marginBottom: 5,
+    marginBottom: 16,
+    lineHeight: 22,
   },
   divider: {
     height: 1,
@@ -529,6 +585,42 @@ const styles = StyleSheet.create({
   legendText: {
     fontSize: 14,
     textAlign: "center",
+  },
+  errorContainer: {
+    backgroundColor: "rgba(239, 68, 68, 0.1)",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  errorText: {
+    color: "#EF4444",
+    fontSize: 14,
+    textAlign: "center",
+    fontWeight: "500",
+  },
+  successMessage: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+    position: "absolute",
+    top: "40%",
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(11, 18, 24, 0.95)",
+    zIndex: 1000,
+    borderRadius: 16,
+  },
+  successText: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginTop: 8,
+  },
+  fieldError: {
+    color: "#EF4444",
+    fontSize: 14,
+    textAlign: "center",
+    marginTop: 8,
+    fontWeight: "500",
   },
 });
 
