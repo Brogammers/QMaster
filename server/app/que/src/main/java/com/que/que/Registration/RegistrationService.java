@@ -14,15 +14,17 @@ import com.que.que.Partner.PartnerRepository;
 import com.que.que.Registration.Token.ConfirmationToken;
 import com.que.que.Registration.Token.ConfirmationTokenService;
 import com.que.que.Security.PasswordValidator;
+import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.UserRole;
 import com.que.que.User.AdminUser.AdminUser;
 import com.que.que.User.AdminUser.AdminUserService;
 import com.que.que.User.AppUser.AppUser;
 import com.que.que.User.AppUser.AppUserService;
+import com.que.que.User.BusinessUser.BusinessCategory;
+import com.que.que.User.BusinessUser.BusinessCategoryService;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserService;
 
-import kotlin.NotImplementedError;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -34,6 +36,7 @@ public class RegistrationService {
   private final EmailValidator emailValidator;
   private final ConfirmationTokenService confirmationTokenService;
   private final PartnerRepository partnerRepository;
+  private final BusinessCategoryService businessCategoryService;
   private final AdminUserService adminUserService;
   private final PasswordValidator passwordValidator;
   private final EmailSender emailSender;
@@ -137,8 +140,16 @@ public class RegistrationService {
     return token;
   }
 
-  public void registerPartner(PartnerRegisterRequest request) {
-    throw new NotImplementedError("Not implemented");
+  public Partner registerPartner(String name, String category) {
+    BusinessCategory businessCategory = businessCategoryService.getCategory(category);
+
+    boolean checkPartner = partnerRepository.findByName(name).isPresent();
+    if (checkPartner) {
+      throw new IllegalStateException("Partner already exists");
+    }
+
+    Partner partner = new Partner(name, businessCategory, SubscriptionPlans.BASIC);
+    return partnerRepository.save(partner);
   }
 
   public String registerAdminUser(AdminUserRegistrationRequest request) {

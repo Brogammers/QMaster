@@ -7,4 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PartnerRegisterRequest {
     private String name;
+    private String category;
 }

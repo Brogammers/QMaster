@@ -52,16 +52,43 @@ export default function PartnersPage() {
     const url =
       process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_REGISTER_BUSINESS || "";
 
-    const newPartner: Partner = {
-      ...partnerData,
-      id: partners.length + 1,
-      joinedDate: new Date().toISOString().split("T")[0],
-      locations: partnerData.locations.map((location, index) => ({
-        ...location,
-        id: index + 1,
+    const requestBody = {
+      name: partnerData.name,
+      category: partnerData.category,
+      status: partnerData.status,
+      locations: partnerData.locations.map((location) => ({
+        city: location.city,
+        stateOrProvince: location.stateOrProvince,
+        country: location.country,
+        googleMapsUrl: location.googleMapsUrl,
       })),
-    };
-    setPartners((prev: Partner[]) => [...prev, newPartner]);
+    }
+    axios
+    .post(url, requestBody)
+    .then((response) => {
+      if (response.status === 201) {
+        return response.data;
+      } else { 
+        throw new Error("Failed to add partner");
+      }
+    })
+    .then((data) => {
+      console.log(data);
+      const newPartner: Partner = {
+          ...partnerData,
+          id: partners.length + 1,
+          joinedDate: new Date().toISOString().split("T")[0],
+          locations: partnerData.locations.map((location, index) => ({
+              ...location,
+              id: index + 1,
+          })),
+      };
+      setPartners((prev: Partner[]) => [...prev, newPartner]);
+    })
+    .catch((error) => {
+      console.error(error);
+      toast.error("Failed to add partner");
+    });
   };
 
   const handleAddLocation = (

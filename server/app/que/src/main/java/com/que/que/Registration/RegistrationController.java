@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.que.que.Partner.Partner;
+
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -74,8 +76,9 @@ public class RegistrationController {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
     try {
-      registrationService.registerPartner(request);
+      Partner partner = registrationService.registerPartner(request.getName(), request.getCategory());
       body.put("message", "Registered!");
+      body.put("partner", partner);
     } catch (IllegalStateException e) {
       body.put("message", e.getMessage());
       statusCode = HttpStatusCode.valueOf(500);

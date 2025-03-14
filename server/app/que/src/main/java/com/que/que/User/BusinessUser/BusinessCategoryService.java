@@ -25,4 +25,14 @@ public class BusinessCategoryService {
     public void deleteCategory(Long id) {
         businessCategoryRepository.deleteById(id);
     }
+
+    public BusinessCategory getCategory(Long id) {
+        return businessCategoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Category not found"));
+    }
+
+    public BusinessCategory getCategory(String name) {
+        return businessCategoryRepository.findByName(name)
+                .orElseThrow(() -> new IllegalStateException("Category not found"));
+    }
 }
