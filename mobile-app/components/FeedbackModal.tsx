@@ -208,8 +208,35 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
               >
                 {/* Overall Rating */}
                 <View style={styles.ratingSection}>
+                  <Text
+                    style={[
+                      styles.categoryTitle,
+                      { color: isDarkMode ? "#1DCDFE" : "#17222D" },
+                    ]}
+                  >
+                    Overall Experience
+                  </Text>
+                  <Text
+                    style={[
+                      styles.categorySubtitle,
+                      { color: isDarkMode ? "#A0AEC0" : "#718096" },
+                    ]}
+                  >
+                    How was your overall visit?
+                  </Text>
                   {renderStars(overallRating, setOverallRating)}
                 </View>
+
+                <View
+                  style={[
+                    styles.divider,
+                    {
+                      backgroundColor: isDarkMode
+                        ? "rgba(29, 205, 254, 0.1)"
+                        : "#E5E7EB",
+                    },
+                  ]}
+                />
 
                 {/* Speed Rating */}
                 <View style={styles.categorySection}>
@@ -219,7 +246,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                       { color: isDarkMode ? "#1DCDFE" : "#17222D" },
                     ]}
                   >
-                    Speed
+                    Service Quality
                   </Text>
                   <Text
                     style={[
@@ -227,7 +254,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                       { color: isDarkMode ? "#A0AEC0" : "#718096" },
                     ]}
                   >
-                    Served by {businessName}
+                    How well did {businessName} serve you?
                   </Text>
                   {renderStars(speedRating, setSpeedRating)}
                 </View>
@@ -251,7 +278,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                       { color: isDarkMode ? "#1DCDFE" : "#17222D" },
                     ]}
                   >
-                    Accuracy
+                    Wait Time Accuracy
                   </Text>
                   <Text
                     style={[
@@ -259,7 +286,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                       { color: isDarkMode ? "#A0AEC0" : "#718096" },
                     ]}
                   >
-                    {serviceName} by {businessName}
+                    Did you wait the estimated time?
                   </Text>
                   {renderStars(accuracyRating, setAccuracyRating)}
                 </View>
