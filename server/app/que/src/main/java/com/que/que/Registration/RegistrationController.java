@@ -78,7 +78,7 @@ public class RegistrationController {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
     try {
-      Partner partner = partnerService.createPartner(request.getName(), request.getCategory());
+      Partner partner = partnerService.createPartner(request.getName(), request.getCategory(), request.getLocations());
       body.put("message", "Registered!");
       body.put("partner", partner);
     } catch (IllegalStateException e) {

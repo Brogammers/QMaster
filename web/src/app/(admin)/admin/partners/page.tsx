@@ -53,23 +53,25 @@ export default function PartnersPage() {
     const url =
       process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_REGISTER_BUSINESS || "";
 
-    // TODO: Add locations to partner 
     const requestBody = {
       name: partnerData.name,
       category: partnerData.category,
       status: partnerData.status,
-      // locations: partnerData.locations.map((location) => ({
-      //   city: location.city,
-      //   stateOrProvince: location.stateOrProvince,
-      //   country: location.country,
-      //   googleMapsUrl: location.googleMapsUrl,
-      // })),
+      locations: partnerData.locations.map((location) => ({
+        city: location.city,
+        name: location.name,
+        address: location.address,
+        country: location.country,
+        googleMapsUrl: location.googleMapsUrl,
+        logitude: 0, // TODO: Implement location coordinates
+        latitude: 0,
+      })),
     }
     axios
     .post(url, requestBody)
     .then((response) => {
       if (response.status === 201) {
-        return response.data;
+        return response.data.partner;
       } else { 
         throw new Error("Failed to add partner");
       }
@@ -78,11 +80,11 @@ export default function PartnersPage() {
       console.log(data);
       const newPartner: Partner = {
           ...partnerData,
-          id: partners.length + 1,
+          id: data.id,
           joinedDate: new Date().toISOString().split("T")[0],
           locations: partnerData.locations.map((location, index) => ({
               ...location,
-              id: index + 1,
+              id: index + 1, // TODO: Update location id with server
           })),
       };
       setPartners((prev: Partner[]) => [...prev, newPartner]);

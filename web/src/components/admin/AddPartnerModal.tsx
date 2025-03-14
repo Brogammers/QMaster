@@ -325,7 +325,7 @@ export default function AddPartnerModal({
                     </label>
                     <input
                       type="text"
-                      value={location.city}
+                      value={location.name}
                       onChange={(e) =>
                         handleLocationChange(index, "name", e.target.value)
                       }
