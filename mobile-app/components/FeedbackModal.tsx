@@ -5,7 +5,6 @@ import {
   Modal,
   TouchableOpacity,
   TextInput,
-  StyleSheet,
   Dimensions,
   Platform,
   TouchableWithoutFeedback,
@@ -97,6 +96,14 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
   }, [visible, slideAnim, backdropOpacity]);
 
   const closeModal = () => {
+    // Reset all form state
+    setAccuracyRating(0);
+    setSpeedRating(0);
+    setFeedback("");
+    setShowError({ accuracy: false, service: false });
+    setShowSuccess(false);
+
+    // Animate closing
     Animated.parallel([
       Animated.timing(backdropOpacity, {
         toValue: 0,
@@ -152,12 +159,12 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
   const renderStars = (rating: number, setRating: (rating: number) => void) => {
     return (
-      <View style={styles.starsContainer}>
+      <View className="flex-row justify-center mt-2">
         {[1, 2, 3, 4, 5].map((star) => (
           <TouchableOpacity
             key={star}
             onPress={() => setRating(star)}
-            style={styles.starButton}
+            className="p-2"
           >
             <Ionicons
               name={star <= rating ? "star" : "star-outline"}
@@ -183,49 +190,55 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
       onRequestClose={closeModal}
     >
       <TouchableWithoutFeedback onPress={closeModal}>
-        <Animated.View style={[styles.overlay, { opacity: backdropOpacity }]}>
+        <Animated.View
+          className="flex-1 bg-black/50 justify-end items-center"
+          style={{ opacity: backdropOpacity }}
+        >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Animated.View
+              className={`w-full rounded-t-3xl p-6 pt-4 border border-b-0 ${
+                isDarkMode
+                  ? "bg-[#0B1218] border-[#1DCDFE]/20"
+                  : "bg-white border-gray-200"
+              }`}
               style={[
-                styles.modalContainer,
                 {
-                  backgroundColor: isDarkMode ? "#0B1218" : "white",
-                  borderColor: isDarkMode
-                    ? "rgba(29, 205, 254, 0.2)"
-                    : "#E5E7EB",
+                  height: MODAL_HEIGHT,
                   transform: [{ translateY: slideAnim }],
+                  ...Platform.select({
+                    ios: {
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: -2 },
+                      shadowOpacity: 0.1,
+                      shadowRadius: 10,
+                    },
+                    android: {
+                      elevation: 5,
+                    },
+                  }),
                 },
               ]}
             >
               {/* Drag indicator */}
-              <View
-                style={styles.dragIndicatorContainer}
-                {...panResponder.panHandlers}
-              >
+              <View className="w-full items-center py-2">
                 <View
-                  style={[
-                    styles.dragIndicator,
-                    {
-                      backgroundColor: isDarkMode
-                        ? "rgba(255, 255, 255, 0.3)"
-                        : "rgba(0, 0, 0, 0.2)",
-                    },
-                  ]}
+                  className={`w-10 h-1.5 rounded-full ${
+                    isDarkMode ? "bg-white/30" : "bg-black/20"
+                  }`}
                 />
               </View>
 
               <Text
-                style={[
-                  styles.title,
-                  { color: isDarkMode ? "#1DCDFE" : "#17222D" },
-                ]}
+                className={`text-2xl font-bold text-center mb-5 ${
+                  isDarkMode ? "text-[#1DCDFE]" : "text-[#17222D]"
+                }`}
               >
                 How was your experience?
               </Text>
 
               <ScrollView
+                className="pb-10"
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.scrollContent}
                 overScrollMode="never"
                 scrollEventThrottle={16}
               >
@@ -234,7 +247,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                   <MotiView
                     from={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    style={styles.successMessage}
+                    className="absolute top-[40%] left-0 right-0 items-center justify-center p-5 bg-[#0B1218]/95 z-50 rounded-2xl"
                   >
                     <Ionicons
                       name="checkmark-circle"
@@ -242,10 +255,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                       color="#4CAF50"
                     />
                     <Text
-                      style={[
-                        styles.successText,
-                        { color: isDarkMode ? "#4CAF50" : "#2E7D32" },
-                      ]}
+                      className={`text-lg font-semibold mt-2 ${
+                        isDarkMode ? "text-[#4CAF50]" : "text-[#2E7D32]"
+                      }`}
                     >
                       Thank you for your feedback!
                     </Text>
@@ -253,35 +265,34 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 )}
 
                 {/* Wait Time Accuracy Rating */}
-                <View style={styles.categorySection}>
+                <View className="my-1">
                   <Text
-                    style={[
-                      styles.categoryTitle,
-                      { color: isDarkMode ? "#1DCDFE" : "#17222D" },
-                    ]}
+                    className={`text-xl font-semibold text-center mb-2 ${
+                      isDarkMode ? "text-[#1DCDFE]" : "text-[#17222D]"
+                    }`}
                   >
                     Wait Time Accuracy
                   </Text>
                   <Text
-                    style={[
-                      styles.categorySubtitle,
-                      { color: isDarkMode ? "#A0AEC0" : "#718096" },
-                    ]}
+                    className={`text-base text-center leading-[22px] ${
+                      isDarkMode ? "text-[#A0AEC0]" : "text-[#718096]"
+                    }`}
                   >
                     How accurate was your estimated wait time?
                   </Text>
-                  {renderStars(accuracyRating, setAccuracyRating)}
+                  <View className="flex-row justify-center mt-2">
+                    {renderStars(accuracyRating, setAccuracyRating)}
+                  </View>
                   {showError.accuracy && (
-                    <Text style={styles.fieldError}>
+                    <Text className="text-[#EF4444] text-sm text-center mt-2 font-medium">
                       Please rate the wait time accuracy
                     </Text>
                   )}
-                  <View style={styles.ratingLegend}>
+                  <View className="mt-1 items-center">
                     <Text
-                      style={[
-                        styles.legendText,
-                        { color: isDarkMode ? "#A0AEC0" : "#718096" },
-                      ]}
+                      className={`text-sm text-center ${
+                        isDarkMode ? "text-[#A0AEC0]" : "text-[#718096]"
+                      }`}
                     >
                       {accuracyRating === 5
                         ? "Perfect! Waited exactly as estimated"
@@ -299,46 +310,40 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 </View>
 
                 <View
-                  style={[
-                    styles.divider,
-                    {
-                      backgroundColor: isDarkMode
-                        ? "rgba(29, 205, 254, 0.1)"
-                        : "#E5E7EB",
-                    },
-                  ]}
+                  className={`h-px w-full my-4 ${
+                    isDarkMode ? "bg-[#1DCDFE]/10" : "bg-gray-200"
+                  }`}
                 />
 
                 {/* Service Quality Rating */}
-                <View style={styles.categorySection}>
+                <View className="my-1">
                   <Text
-                    style={[
-                      styles.categoryTitle,
-                      { color: isDarkMode ? "#1DCDFE" : "#17222D" },
-                    ]}
+                    className={`text-xl font-semibold text-center mb-2 ${
+                      isDarkMode ? "text-[#1DCDFE]" : "text-[#17222D]"
+                    }`}
                   >
                     Service Quality
                   </Text>
                   <Text
-                    style={[
-                      styles.categorySubtitle,
-                      { color: isDarkMode ? "#A0AEC0" : "#718096" },
-                    ]}
+                    className={`text-base text-center leading-[22px] ${
+                      isDarkMode ? "text-[#A0AEC0]" : "text-[#718096]"
+                    }`}
                   >
                     How well did {businessName} serve you?
                   </Text>
-                  {renderStars(speedRating, setSpeedRating)}
+                  <View className="flex-row justify-center mt-2">
+                    {renderStars(speedRating, setSpeedRating)}
+                  </View>
                   {showError.service && (
-                    <Text style={styles.fieldError}>
+                    <Text className="text-[#EF4444] text-sm text-center mt-2 font-medium">
                       Please rate the service quality
                     </Text>
                   )}
-                  <View style={styles.ratingLegend}>
+                  <View className="mt-1 items-center">
                     <Text
-                      style={[
-                        styles.legendText,
-                        { color: isDarkMode ? "#A0AEC0" : "#718096" },
-                      ]}
+                      className={`text-sm text-center ${
+                        isDarkMode ? "text-[#A0AEC0]" : "text-[#718096]"
+                      }`}
                     >
                       {speedRating === 5
                         ? "Excellent service"
@@ -356,92 +361,26 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 </View>
 
                 <View
-                  style={[
-                    styles.divider,
-                    {
-                      backgroundColor: isDarkMode
-                        ? "rgba(29, 205, 254, 0.1)"
-                        : "#E5E7EB",
-                    },
-                  ]}
+                  className={`h-px w-full my-4 ${
+                    isDarkMode ? "bg-[#1DCDFE]/10" : "bg-gray-200"
+                  }`}
                 />
 
-                {/* Overall Experience Rating */}
-                {/* <View style={styles.categorySection}>
-                  <Text
-                    style={[
-                      styles.categoryTitle,
-                      { color: isDarkMode ? "#1DCDFE" : "#17222D" },
-                    ]}
-                  >
-                    Overall Experience
-                  </Text>
-                  <Text
-                    style={[
-                      styles.categorySubtitle,
-                      { color: isDarkMode ? "#A0AEC0" : "#718096" },
-                    ]}
-                  >
-                    How was your overall visit?
-                  </Text>
-                  {renderStars(overallRating, setOverallRating)}
-
-                  <View style={styles.ratingLegend}>
-                    <Text
-                      style={[
-                        styles.legendText,
-                        { color: isDarkMode ? "#A0AEC0" : "#718096" },
-                      ]}
-                    >
-                      {overallRating === 5
-                        ? "Excellent experience"
-                        : overallRating === 4
-                        ? "Very good experience"
-                        : overallRating === 3
-                        ? "Average experience"
-                        : overallRating === 2
-                        ? "Poor experience"
-                        : overallRating === 1
-                        ? "Very poor experience"
-                        : "Select a rating"}
-                    </Text>
-                  </View>
-                </View> */}
-
-                {/* <View
-                  style={[
-                    styles.divider,
-                    {
-                      backgroundColor: isDarkMode
-                        ? "rgba(29, 205, 254, 0.1)"
-                        : "#E5E7EB",
-                    },
-                  ]}
-                /> */}
-
                 {/* Review Text */}
-                <View style={styles.reviewSection}>
+                <View className="my-1">
                   <Text
-                    style={[
-                      styles.categoryTitle,
-                      { color: isDarkMode ? "#1DCDFE" : "#17222D" },
-                    ]}
+                    className={`text-xl font-semibold text-center mb-2 ${
+                      isDarkMode ? "text-[#1DCDFE]" : "text-[#17222D]"
+                    }`}
                   >
                     Review
                   </Text>
                   <TextInput
-                    style={[
-                      styles.reviewInput,
-                      {
-                        backgroundColor: isDarkMode
-                          ? "rgba(29, 205, 254, 0.05)"
-                          : "#F7FAFC",
-                        color: isDarkMode ? "#1DCDFE" : "#17222D",
-                        borderColor: isDarkMode
-                          ? "rgba(29, 205, 254, 0.1)"
-                          : "#E5E7EB",
-                      },
-                    ]}
+                    className={`border rounded-xl p-3 h-[100px] mt-2.5 ${
+                      isDarkMode
+                        ? "bg-[#1DCDFE]/5 text-[#1DCDFE] border-[#1DCDFE]/10"
+                        : "bg-[#F7FAFC] text-[#17222D] border-gray-200"
+                    }`}
                     placeholder="Tell us about your experience"
                     placeholderTextColor={isDarkMode ? "#4A5568" : "#A0AEC0"}
                     multiline
@@ -452,16 +391,18 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
                 {/* Submit Button */}
                 <TouchableOpacity
-                  style={styles.submitButton}
+                  className="mt-5 rounded-full overflow-hidden"
                   onPress={handleSubmit}
                 >
                   <LinearGradient
                     colors={["#1DCDFE", "#0077B6"]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
-                    style={styles.gradientButton}
+                    className="py-4 items-center justify-center"
                   >
-                    <Text style={styles.submitButtonText}>Submit Feedback</Text>
+                    <Text className="text-white text-lg font-semibold">
+                      Submit Feedback
+                    </Text>
                   </LinearGradient>
                 </TouchableOpacity>
               </ScrollView>
@@ -472,156 +413,5 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "flex-end",
-    alignItems: "center",
-  },
-  modalContainer: {
-    width: "100%",
-    height: MODAL_HEIGHT,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    padding: 24,
-    paddingTop: 16,
-    borderWidth: 1,
-    borderBottomWidth: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: -2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-      },
-      android: {
-        elevation: 5,
-      },
-    }),
-  },
-  dragIndicatorContainer: {
-    width: "100%",
-    alignItems: "center",
-    paddingVertical: 8,
-  },
-  dragIndicator: {
-    width: 40,
-    height: 5,
-    borderRadius: 3,
-  },
-  scrollContent: {
-    paddingBottom: 40,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "700",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  ratingSection: {
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  starsContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 10,
-  },
-  starButton: {
-    padding: 5,
-  },
-  categorySection: {
-    marginVertical: 10,
-  },
-  categoryTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    textAlign: "center",
-    marginBottom: 12,
-  },
-  categorySubtitle: {
-    fontSize: 16,
-    textAlign: "center",
-    marginBottom: 16,
-    lineHeight: 22,
-  },
-  divider: {
-    height: 1,
-    width: "100%",
-    marginVertical: 15,
-  },
-  reviewSection: {
-    marginVertical: 10,
-  },
-  reviewInput: {
-    borderWidth: 1,
-    borderRadius: 12,
-    padding: 12,
-    height: 100,
-    textAlignVertical: "top",
-    marginTop: 10,
-  },
-  submitButton: {
-    marginTop: 20,
-    borderRadius: 50,
-    overflow: "hidden",
-  },
-  gradientButton: {
-    paddingVertical: 16,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  submitButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  ratingLegend: {
-    marginTop: 10,
-    alignItems: "center",
-  },
-  legendText: {
-    fontSize: 14,
-    textAlign: "center",
-  },
-  errorContainer: {
-    backgroundColor: "rgba(239, 68, 68, 0.1)",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-  },
-  errorText: {
-    color: "#EF4444",
-    fontSize: 14,
-    textAlign: "center",
-    fontWeight: "500",
-  },
-  successMessage: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-    position: "absolute",
-    top: "40%",
-    left: 0,
-    right: 0,
-    backgroundColor: "rgba(11, 18, 24, 0.95)",
-    zIndex: 1000,
-    borderRadius: 16,
-  },
-  successText: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginTop: 8,
-  },
-  fieldError: {
-    color: "#EF4444",
-    fontSize: 14,
-    textAlign: "center",
-    marginTop: 8,
-    fontWeight: "500",
-  },
-});
 
 export default FeedbackModal;
