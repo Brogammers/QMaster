@@ -41,8 +41,8 @@ interface SiaAssistantProps {
 }
 
 const suggestionPrompts = [
-  "How can QMaster help me save time?",
-  "What features does QMaster offer?",
+  "How can tawabiry help me save time?",
+  "What features does tawabiry offer?",
   "How do I find the best queue for me?",
 ];
 
@@ -278,18 +278,18 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
     }
 
     switch (prompt) {
-      case "How can QMaster help me save time?":
+      case "How can tawabiry help me save time?":
         return (
-          "QMaster helps you save time in several ways:\n\n" +
+          "tawabiry helps you save time in several ways:\n\n" +
           "• Real-time queue predictions to avoid long waits\n" +
           "• Smart recommendations for the best time to visit\n" +
           "• Virtual queuing so you can do other things while waiting\n" +
           "• Instant notifications when it's your turn"
         );
 
-      case "What features does QMaster offer?":
+      case "What features does tawabiry offer?":
         return (
-          "QMaster offers several powerful features:\n\n" +
+          "tawabiry offers several powerful features:\n\n" +
           "• AI-powered wait time predictions\n" +
           "• Virtual queue management\n" +
           "• Smart notifications system\n" +
@@ -299,7 +299,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
 
       case "How do I find the best queue for me?":
         return (
-          "Finding the best queue is easy with QMaster:\n\n" +
+          "Finding the best queue is easy with tawabiry:\n\n" +
           "• Share your location or select an area\n" +
           "• View real-time wait times for nearby queues\n" +
           "• Check crowd levels and peak times\n" +
@@ -308,7 +308,7 @@ export const SiaAssistant: React.FC<SiaAssistantProps> = ({
         );
 
       default:
-        return "I'm here to help you with any questions about QMaster's features, queue management, and how to make the most of your time. Feel free to ask anything!";
+        return "I'm here to help you with any questions about tawabiry's features, queue management, and how to make the most of your time. Feel free to ask anything!";
     }
   };
 

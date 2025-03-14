@@ -24,7 +24,7 @@ export default function Onboarding() {
             className="ml-1 text-3xl text-white"
             style={{ fontFamily: "JostBold" }}
           >
-            QMaster
+            tawabiry
           </Text>
         </View>
         <Carousel />
