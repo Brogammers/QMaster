@@ -77,6 +77,8 @@ const RefreshableWrapper: React.FC<RefreshableWrapperProps> = ({
       <ScrollView
         {...scrollViewProps}
         contentContainerStyle={mergedContentContainerStyle}
+        overScrollMode="never"
+        scrollEventThrottle={16}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}
