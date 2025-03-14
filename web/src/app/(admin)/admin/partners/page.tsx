@@ -52,6 +52,7 @@ export default function PartnersPage() {
     const url =
       process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_REGISTER_BUSINESS || "";
 
+    // TODO: Add locations to partner 
     const requestBody = {
       name: partnerData.name,
       category: partnerData.category,
