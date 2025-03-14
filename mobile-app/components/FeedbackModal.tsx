@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,9 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Animated,
+  PanResponder,
+  ScrollView,
 } from "react-native";
 import { useTheme } from "@/ctx/ThemeContext";
 import { MotiView } from "moti";
@@ -23,7 +26,8 @@ interface FeedbackModalProps {
   serviceName: string;
 }
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
+const MODAL_HEIGHT = height * 0.85;
 
 const FeedbackModal: React.FC<FeedbackModalProps> = ({
   visible,
@@ -36,6 +40,73 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
   const [speedRating, setSpeedRating] = useState(0);
   const [accuracyRating, setAccuracyRating] = useState(0);
   const [feedback, setFeedback] = useState("");
+
+  // Animation values
+  const slideAnim = useRef(new Animated.Value(MODAL_HEIGHT)).current;
+  const backdropOpacity = useRef(new Animated.Value(0)).current;
+
+  // Pan responder for drag gestures
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return gestureState.dy > 5;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        if (gestureState.dy > 0) {
+          slideAnim.setValue(gestureState.dy);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dy > 100) {
+          // User dragged down enough to dismiss
+          closeModal();
+        } else {
+          // Reset position
+          Animated.spring(slideAnim, {
+            toValue: 0,
+            useNativeDriver: true,
+          }).start();
+        }
+      },
+    })
+  ).current;
+
+  // Open animation
+  React.useEffect(() => {
+    if (visible) {
+      Animated.parallel([
+        Animated.timing(backdropOpacity, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.spring(slideAnim, {
+          toValue: 0,
+          tension: 50,
+          friction: 10,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [visible, slideAnim, backdropOpacity]);
+
+  const closeModal = () => {
+    Animated.parallel([
+      Animated.timing(backdropOpacity, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: MODAL_HEIGHT,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      onClose();
+    });
+  };
 
   const handleSubmit = () => {
     // Here you would send the feedback data to your backend
@@ -53,7 +124,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     setFeedback("");
 
     // Close modal
-    onClose();
+    closeModal();
   };
 
   const renderStars = (rating: number, setRating: (rating: number) => void) => {
@@ -78,159 +149,181 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     );
   };
 
+  if (!visible) return null;
+
   return (
     <Modal
       visible={visible}
       transparent
-      animationType="fade"
+      animationType="none"
       statusBarTranslucent
+      onRequestClose={closeModal}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.overlay}>
-          <MotiView
-            from={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            style={[
-              styles.modalContainer,
-              {
-                backgroundColor: isDarkMode ? "#0B1218" : "white",
-                borderColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5E7EB",
-              },
-            ]}
-          >
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <Ionicons
-                name="close"
-                size={24}
-                color={isDarkMode ? "#1DCDFE" : "#17222D"}
-              />
-            </TouchableOpacity>
-
-            <Text
+      <TouchableWithoutFeedback onPress={closeModal}>
+        <Animated.View style={[styles.overlay, { opacity: backdropOpacity }]}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Animated.View
               style={[
-                styles.title,
-                { color: isDarkMode ? "#1DCDFE" : "#17222D" },
-              ]}
-            >
-              How was your experience?
-            </Text>
-
-            {/* Overall Rating */}
-            <View style={styles.ratingSection}>
-              {renderStars(overallRating, setOverallRating)}
-            </View>
-
-            {/* Speed Rating */}
-            <View style={styles.categorySection}>
-              <Text
-                style={[
-                  styles.categoryTitle,
-                  { color: isDarkMode ? "#1DCDFE" : "#17222D" },
-                ]}
-              >
-                Speed
-              </Text>
-              <Text
-                style={[
-                  styles.categorySubtitle,
-                  { color: isDarkMode ? "#A0AEC0" : "#718096" },
-                ]}
-              >
-                Served by {businessName}
-              </Text>
-              {renderStars(speedRating, setSpeedRating)}
-            </View>
-
-            <View
-              style={[
-                styles.divider,
+                styles.modalContainer,
                 {
-                  backgroundColor: isDarkMode
-                    ? "rgba(29, 205, 254, 0.1)"
+                  backgroundColor: isDarkMode ? "#0B1218" : "white",
+                  borderColor: isDarkMode
+                    ? "rgba(29, 205, 254, 0.2)"
                     : "#E5E7EB",
+                  transform: [{ translateY: slideAnim }],
                 },
               ]}
-            />
-
-            {/* Accuracy Rating */}
-            <View style={styles.categorySection}>
-              <Text
-                style={[
-                  styles.categoryTitle,
-                  { color: isDarkMode ? "#1DCDFE" : "#17222D" },
-                ]}
-              >
-                Accuracy
-              </Text>
-              <Text
-                style={[
-                  styles.categorySubtitle,
-                  { color: isDarkMode ? "#A0AEC0" : "#718096" },
-                ]}
-              >
-                {serviceName} by {businessName}
-              </Text>
-              {renderStars(accuracyRating, setAccuracyRating)}
-            </View>
-
-            <View
-              style={[
-                styles.divider,
-                {
-                  backgroundColor: isDarkMode
-                    ? "rgba(29, 205, 254, 0.1)"
-                    : "#E5E7EB",
-                },
-              ]}
-            />
-
-            {/* Review Text */}
-            <View style={styles.reviewSection}>
-              <Text
-                style={[
-                  styles.categoryTitle,
-                  { color: isDarkMode ? "#1DCDFE" : "#17222D" },
-                ]}
-              >
-                Review
-              </Text>
-              <TextInput
-                style={[
-                  styles.reviewInput,
-                  {
-                    backgroundColor: isDarkMode
-                      ? "rgba(29, 205, 254, 0.05)"
-                      : "#F7FAFC",
-                    color: isDarkMode ? "#1DCDFE" : "#17222D",
-                    borderColor: isDarkMode
-                      ? "rgba(29, 205, 254, 0.1)"
-                      : "#E5E7EB",
-                  },
-                ]}
-                placeholder="Tell us about your experience"
-                placeholderTextColor={isDarkMode ? "#4A5568" : "#A0AEC0"}
-                multiline
-                value={feedback}
-                onChangeText={setFeedback}
-              />
-            </View>
-
-            {/* Submit Button */}
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={handleSubmit}
             >
-              <LinearGradient
-                colors={["#1DCDFE", "#0077B6"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.gradientButton}
+              {/* Drag indicator */}
+              <View
+                style={styles.dragIndicatorContainer}
+                {...panResponder.panHandlers}
               >
-                <Text style={styles.submitButtonText}>Submit Feedback</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          </MotiView>
-        </View>
+                <View
+                  style={[
+                    styles.dragIndicator,
+                    {
+                      backgroundColor: isDarkMode
+                        ? "rgba(255, 255, 255, 0.3)"
+                        : "rgba(0, 0, 0, 0.2)",
+                    },
+                  ]}
+                />
+              </View>
+
+              <Text
+                style={[
+                  styles.title,
+                  { color: isDarkMode ? "#1DCDFE" : "#17222D" },
+                ]}
+              >
+                How was your experience?
+              </Text>
+
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.scrollContent}
+                overScrollMode="never"
+                scrollEventThrottle={16}
+              >
+                {/* Overall Rating */}
+                <View style={styles.ratingSection}>
+                  {renderStars(overallRating, setOverallRating)}
+                </View>
+
+                {/* Speed Rating */}
+                <View style={styles.categorySection}>
+                  <Text
+                    style={[
+                      styles.categoryTitle,
+                      { color: isDarkMode ? "#1DCDFE" : "#17222D" },
+                    ]}
+                  >
+                    Speed
+                  </Text>
+                  <Text
+                    style={[
+                      styles.categorySubtitle,
+                      { color: isDarkMode ? "#A0AEC0" : "#718096" },
+                    ]}
+                  >
+                    Served by {businessName}
+                  </Text>
+                  {renderStars(speedRating, setSpeedRating)}
+                </View>
+
+                <View
+                  style={[
+                    styles.divider,
+                    {
+                      backgroundColor: isDarkMode
+                        ? "rgba(29, 205, 254, 0.1)"
+                        : "#E5E7EB",
+                    },
+                  ]}
+                />
+
+                {/* Accuracy Rating */}
+                <View style={styles.categorySection}>
+                  <Text
+                    style={[
+                      styles.categoryTitle,
+                      { color: isDarkMode ? "#1DCDFE" : "#17222D" },
+                    ]}
+                  >
+                    Accuracy
+                  </Text>
+                  <Text
+                    style={[
+                      styles.categorySubtitle,
+                      { color: isDarkMode ? "#A0AEC0" : "#718096" },
+                    ]}
+                  >
+                    {serviceName} by {businessName}
+                  </Text>
+                  {renderStars(accuracyRating, setAccuracyRating)}
+                </View>
+
+                <View
+                  style={[
+                    styles.divider,
+                    {
+                      backgroundColor: isDarkMode
+                        ? "rgba(29, 205, 254, 0.1)"
+                        : "#E5E7EB",
+                    },
+                  ]}
+                />
+
+                {/* Review Text */}
+                <View style={styles.reviewSection}>
+                  <Text
+                    style={[
+                      styles.categoryTitle,
+                      { color: isDarkMode ? "#1DCDFE" : "#17222D" },
+                    ]}
+                  >
+                    Review
+                  </Text>
+                  <TextInput
+                    style={[
+                      styles.reviewInput,
+                      {
+                        backgroundColor: isDarkMode
+                          ? "rgba(29, 205, 254, 0.05)"
+                          : "#F7FAFC",
+                        color: isDarkMode ? "#1DCDFE" : "#17222D",
+                        borderColor: isDarkMode
+                          ? "rgba(29, 205, 254, 0.1)"
+                          : "#E5E7EB",
+                      },
+                    ]}
+                    placeholder="Tell us about your experience"
+                    placeholderTextColor={isDarkMode ? "#4A5568" : "#A0AEC0"}
+                    multiline
+                    value={feedback}
+                    onChangeText={setFeedback}
+                  />
+                </View>
+
+                {/* Submit Button */}
+                <TouchableOpacity
+                  style={styles.submitButton}
+                  onPress={handleSubmit}
+                >
+                  <LinearGradient
+                    colors={["#1DCDFE", "#0077B6"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.gradientButton}
+                  >
+                    <Text style={styles.submitButtonText}>Submit Feedback</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </ScrollView>
+            </Animated.View>
+          </TouchableWithoutFeedback>
+        </Animated.View>
       </TouchableWithoutFeedback>
     </Modal>
   );
@@ -240,19 +333,22 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
   },
   modalContainer: {
-    width: width * 0.9,
-    maxWidth: 400,
-    borderRadius: 20,
+    width: "100%",
+    height: MODAL_HEIGHT,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
     padding: 24,
+    paddingTop: 16,
     borderWidth: 1,
+    borderBottomWidth: 0,
     ...Platform.select({
       ios: {
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: -2 },
         shadowOpacity: 0.1,
         shadowRadius: 10,
       },
@@ -261,18 +357,24 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  closeButton: {
-    position: "absolute",
-    top: 16,
-    left: 16,
-    zIndex: 10,
+  dragIndicatorContainer: {
+    width: "100%",
+    alignItems: "center",
+    paddingVertical: 8,
+  },
+  dragIndicator: {
+    width: 40,
+    height: 5,
+    borderRadius: 3,
+  },
+  scrollContent: {
+    paddingBottom: 40,
   },
   title: {
     fontSize: 22,
     fontWeight: "700",
     textAlign: "center",
     marginBottom: 20,
-    marginTop: 10,
   },
   ratingSection: {
     alignItems: "center",
