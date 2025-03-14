@@ -8,9 +8,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
 import { MotiView } from "moti";
 import React, { createContext, useEffect, useState, useCallback } from "react";
-import { View } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RefreshableWrapper from "@/components/RefreshableWrapper";
+import FeedbackModal from "@/components/FeedbackModal";
 
 export const LocationContext = createContext<{
   locationData: Array<{
@@ -45,6 +46,7 @@ export default function Partner() {
     }>
   >([]);
   const [value, setValue] = useState<number | null>(null);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   const fetchLocationData = useCallback(async () => {
     try {
@@ -133,6 +135,30 @@ export default function Partner() {
           </RefreshableWrapper>
         </SafeAreaView>
       </LocationContext.Provider>
+
+      {/* Demo button for testing feedback modal - remove in production */}
+      {__DEV__ && (
+        <TouchableOpacity
+          style={{
+            position: "absolute",
+            bottom: 20,
+            right: 20,
+            backgroundColor: isDarkMode ? "#1DCDFE" : "#0077B6",
+            padding: 10,
+            borderRadius: 8,
+          }}
+          onPress={() => setShowFeedbackModal(true)}
+        >
+          <Text style={{ color: "white" }}>Show Feedback</Text>
+        </TouchableOpacity>
+      )}
+
+      <FeedbackModal
+        visible={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
+        businessName={brandName || ""}
+        serviceName="Demo Service"
+      />
     </View>
   );
 }

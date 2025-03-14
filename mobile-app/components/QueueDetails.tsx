@@ -29,6 +29,7 @@ import { QueuesContext } from "./JoinQueue";
 import { useDispatch, useSelector } from "react-redux";
 import { addToQueue, removeFromQueue } from "@/app/redux/queueSlice";
 import { RootState } from "@/app/redux/store";
+import FeedbackModal from "./FeedbackModal";
 
 interface QueueData {
   id: number;
@@ -50,6 +51,7 @@ export default function QueueDetails(props: QueueDetailsProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const { branch, serviceType, brandName } = props;
   const { isDarkMode } = useTheme();
   const { selectedQueue, setSelectedQueue } = useContext(QueuesContext);
@@ -273,6 +275,11 @@ export default function QueueDetails(props: QueueDetailsProps) {
             );
           }
 
+          // Show feedback modal if the user was served (not just leaving the queue)
+          if (activeQueue && activeQueue.position <= 3) {
+            setShowFeedbackModal(true);
+          }
+
           // Update queue size
           setSelectedQueue((prev) => {
             if (!prev) return prev;
@@ -345,7 +352,6 @@ export default function QueueDetails(props: QueueDetailsProps) {
       <MotiView
         from={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 500 }}
         className="items-center justify-center w-full"
         style={{ height: 100 }}
       >
@@ -418,39 +424,43 @@ export default function QueueDetails(props: QueueDetailsProps) {
   );
 
   // Render based on condition - prevent flickering by disabling transitions during updates
-  return (
-    <CardWrapper>
-      {(isJoining || isLeaving) && <GeneralLoader />}
+  const renderContent = () => {
+    if (isJoining || isLeaving) {
+      return <GeneralLoader />;
+    }
 
-      {branch == -1 ? (
+    if (branch == -1) {
+      return (
         <MotiView
           from={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 300 }}
-          className="items-center w-full"
+          className="items-center"
         >
-          <View className="flex-row items-start justify-between w-full">
-            <View className="items-center flex-1">
-              <Entypo
-                name="location-pin"
-                size={40}
-                color={isDarkMode ? "#1DCDFE" : "#B41818"}
-              />
-              <Text
-                className={`text-center mt-2 text-sm ${
-                  isDarkMode ? "text-baby-blue" : "text-lava-black"
-                }`}
-              >
-                {i18n.t("common.locationAccess")}
-              </Text>
-            </View>
+          <View className="items-center">
+            <Text
+              className={`text-lg font-semibold ${
+                isDarkMode ? "text-sky-400" : "text-slate-800"
+              }`}
+            >
+              {i18n.t("queueDetails.noLocation")}
+            </Text>
+            <Text
+              className={`text-sm mt-2 ${
+                isDarkMode ? "text-slate-400" : "text-slate-600"
+              }`}
+            >
+              {i18n.t("queueDetails.selectLocation")}
+            </Text>
           </View>
         </MotiView>
-      ) : !leave ? (
+      );
+    }
+
+    if (!leave) {
+      return (
         <MotiView
           from={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 300 }}
           className="items-center"
         >
           <View className="items-center">
@@ -516,113 +526,126 @@ export default function QueueDetails(props: QueueDetailsProps) {
             </View>
           </TouchableOpacity>
         </MotiView>
-      ) : (
-        <View className="items-center">
-          {!showDetails ? (
-            <QueueJoinedAnimation />
-          ) : (
-            <MotiView
-              from={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 300 }}
-              className="items-center"
-            >
-              <View className="items-center">
+      );
+    }
+
+    return (
+      <View className="items-center">
+        {!showDetails ? (
+          <QueueJoinedAnimation />
+        ) : (
+          <MotiView
+            from={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="items-center"
+          >
+            <View className="items-center">
+              <Text
+                className={`text-2xl font-bold ${
+                  isDarkMode ? "text-baby-blue" : "text-lava-black"
+                }`}
+              >
+                {selectedQueue?.currentQueueSize === 1
+                  ? `1 ${
+                      i18n
+                        .t("common.queue.peopleCountSingular", { count: 1 })
+                        .replace("1", "") || "person in queue"
+                    }`
+                  : `${selectedQueue?.currentQueueSize || 0} ${
+                      i18n
+                        .t("common.queue.peopleCount", { count: 2 })
+                        .replace("2", "") || "people in queue"
+                    }`}
+              </Text>
+              <View
+                className="flex-row items-center mt-3 bg-opacity-10 rounded-full px-3 py-1.5"
+                style={{
+                  backgroundColor: isDarkMode
+                    ? "rgba(29, 205, 254, 0.1)"
+                    : "rgba(0, 119, 182, 0.1)",
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="timer-sand"
+                  size={18}
+                  color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+                />
                 <Text
-                  className={`text-2xl font-bold ${
-                    isDarkMode ? "text-baby-blue" : "text-lava-black"
+                  className={`text-base ml-2 font-medium ${
+                    isDarkMode ? "text-baby-blue" : "text-ocean-blue"
                   }`}
                 >
-                  {selectedQueue?.currentQueueSize === 1
-                    ? `1 ${
-                        i18n
-                          .t("common.queue.peopleCountSingular", { count: 1 })
-                          .replace("1", "") || "person in queue"
-                      }`
-                    : `${selectedQueue?.currentQueueSize || 0} ${
-                        i18n
-                          .t("common.queue.peopleCount", { count: 2 })
-                          .replace("2", "") || "people in queue"
-                      }`}
+                  {`~ ${estimatedTime} ${
+                    i18n.t("minutes", { count: 1 }) || "min"
+                  }`}
                 </Text>
-                <View
-                  className="flex-row items-center mt-3 bg-opacity-10 rounded-full px-3 py-1.5"
+              </View>
+            </View>
+
+            <View className="items-center w-full mt-8">
+              <View className="flex-row items-center justify-center w-full relative h-9 mb-6">
+                <LinearGradient
+                  colors={
+                    isDarkMode
+                      ? ["rgba(29, 205, 254, 0.2)", "rgba(29, 205, 254, 0.1)"]
+                      : ["#F1F5F9", "#F8FAFC"]
+                  }
+                  className="w-full rounded-full h-full flex-row items-center justify-center px-3"
                   style={{
-                    backgroundColor: isDarkMode
-                      ? "rgba(29, 205, 254, 0.1)"
-                      : "rgba(0, 119, 182, 0.1)",
+                    borderWidth: 1.5,
+                    borderColor: isDarkMode
+                      ? "rgba(29, 205, 254, 0.2)"
+                      : "#E5E7EB",
                   }}
                 >
-                  <MaterialCommunityIcons
-                    name="timer-sand"
-                    size={18}
-                    color={isDarkMode ? "#1DCDFE" : "#0077B6"}
-                  />
-                  <Text
-                    className={`text-base ml-2 font-medium ${
-                      isDarkMode ? "text-baby-blue" : "text-ocean-blue"
-                    }`}
-                  >
-                    {`~ ${estimatedTime} ${
-                      i18n.t("minutes", { count: 1 }) || "min"
-                    }`}
-                  </Text>
-                </View>
+                  <View className="flex-row items-center">
+                    <FontAwesome
+                      name="check-circle"
+                      size={18}
+                      color="#1DCDFE"
+                    />
+                    <Text className="text-baby-blue text-base font-medium ml-2">
+                      {i18n.t("common.queue.joined")}
+                    </Text>
+                  </View>
+                </LinearGradient>
               </View>
 
-              <View className="items-center w-full mt-8">
-                <View className="flex-row items-center justify-center w-full relative h-9 mb-6">
+              <View style={{ width: buttonWidth }} className="items-center">
+                <TouchableOpacity
+                  onPress={handleLeaveQueue}
+                  className="w-full"
+                  disabled={isLeaving}
+                  activeOpacity={0.7}
+                >
                   <LinearGradient
-                    colors={
-                      isDarkMode
-                        ? ["rgba(29, 205, 254, 0.2)", "rgba(29, 205, 254, 0.1)"]
-                        : ["#F1F5F9", "#F8FAFC"]
-                    }
-                    className="w-full rounded-full h-full flex-row items-center justify-center px-3"
-                    style={{
-                      borderWidth: 1.5,
-                      borderColor: isDarkMode
-                        ? "rgba(29, 205, 254, 0.2)"
-                        : "#E5E7EB",
-                    }}
+                    colors={["#EF4444", "#B91C1C"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    className="py-3 rounded-lg items-center px-12"
                   >
-                    <View className="flex-row items-center">
-                      <FontAwesome
-                        name="check-circle"
-                        size={18}
-                        color="#1DCDFE"
-                      />
-                      <Text className="text-baby-blue text-base font-medium ml-2">
-                        {i18n.t("common.queue.joined")}
-                      </Text>
-                    </View>
+                    <Text className="text-lg font-bold text-white">
+                      {i18n.t("common.queue.leave")}
+                    </Text>
                   </LinearGradient>
-                </View>
-
-                <View style={{ width: buttonWidth }} className="items-center">
-                  <TouchableOpacity
-                    onPress={handleLeaveQueue}
-                    className="w-full"
-                    disabled={isLeaving}
-                    activeOpacity={0.7}
-                  >
-                    <LinearGradient
-                      colors={["#EF4444", "#B91C1C"]}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      className="py-3 rounded-lg items-center px-12"
-                    >
-                      <Text className="text-lg font-bold text-white">
-                        {i18n.t("common.queue.leave")}
-                      </Text>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
               </View>
-            </MotiView>
-          )}
-        </View>
-      )}
-    </CardWrapper>
+            </View>
+          </MotiView>
+        )}
+      </View>
+    );
+  };
+
+  return (
+    <>
+      <CardWrapper>{renderContent()}</CardWrapper>
+      <FeedbackModal
+        visible={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
+        businessName={brandName}
+        serviceName={serviceType}
+      />
+    </>
   );
 }
