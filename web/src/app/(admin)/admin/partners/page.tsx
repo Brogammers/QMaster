@@ -18,8 +18,9 @@ import { usePartner } from "../../context";
 
 export interface Location {
   id: number;
+  name: string;
+  address: string;
   city: string;
-  stateOrProvince: string;
   country: string;
   googleMapsUrl: string;
 }
@@ -57,12 +58,12 @@ export default function PartnersPage() {
       name: partnerData.name,
       category: partnerData.category,
       status: partnerData.status,
-      locations: partnerData.locations.map((location) => ({
-        city: location.city,
-        stateOrProvince: location.stateOrProvince,
-        country: location.country,
-        googleMapsUrl: location.googleMapsUrl,
-      })),
+      // locations: partnerData.locations.map((location) => ({
+      //   city: location.city,
+      //   stateOrProvince: location.stateOrProvince,
+      //   country: location.country,
+      //   googleMapsUrl: location.googleMapsUrl,
+      // })),
     }
     axios
     .post(url, requestBody)
@@ -131,9 +132,10 @@ export default function PartnersPage() {
     return partner.locations.some(
       (location) =>
         location.city.toLowerCase().includes(searchLower) ||
-        location.stateOrProvince.toLowerCase().includes(searchLower) ||
+        location.name.toLowerCase().includes(searchLower) ||
         location.country.toLowerCase().includes(searchLower) ||
-        location.googleMapsUrl.toLowerCase().includes(searchLower)
+        location.googleMapsUrl.toLowerCase().includes(searchLower) ||
+        location.address.toLowerCase().includes(searchLower)
     );
   });
 
@@ -344,6 +346,24 @@ export default function PartnersPage() {
                                           : "bg-slate-100"
                                       }`}
                                     >
+                                       <th
+                                        className={`px-4 py-2 text-left text-sm font-medium ${
+                                          isDarkMode
+                                            ? "text-white/70"
+                                            : "text-slate-600"
+                                        }`}
+                                      >
+                                        Name
+                                      </th>
+                                      <th
+                                        className={`px-4 py-2 text-left text-sm font-medium ${
+                                          isDarkMode
+                                            ? "text-white/70"
+                                            : "text-slate-600"
+                                        }`}
+                                      >
+                                        Country
+                                      </th>
                                       <th
                                         className={`px-4 py-2 text-left text-sm font-medium ${
                                           isDarkMode
@@ -360,17 +380,9 @@ export default function PartnersPage() {
                                             : "text-slate-600"
                                         }`}
                                       >
-                                        State/Province
+                                        Address
                                       </th>
-                                      <th
-                                        className={`px-4 py-2 text-left text-sm font-medium ${
-                                          isDarkMode
-                                            ? "text-white/70"
-                                            : "text-slate-600"
-                                        }`}
-                                      >
-                                        Country
-                                      </th>
+                                      
                                       <th
                                         className={`px-4 py-2 text-left text-sm font-medium ${
                                           isDarkMode
@@ -399,16 +411,7 @@ export default function PartnersPage() {
                                               : "text-slate-900"
                                           }`}
                                         >
-                                          {location.city}
-                                        </td>
-                                        <td
-                                          className={`px-4 py-2 text-sm ${
-                                            isDarkMode
-                                              ? "text-white"
-                                              : "text-slate-900"
-                                          }`}
-                                        >
-                                          {location.stateOrProvince}
+                                          {location.name}
                                         </td>
                                         <td
                                           className={`px-4 py-2 text-sm ${
@@ -418,6 +421,24 @@ export default function PartnersPage() {
                                           }`}
                                         >
                                           {location.country}
+                                        </td>
+                                        <td
+                                          className={`px-4 py-2 text-sm ${
+                                            isDarkMode
+                                              ? "text-white"
+                                              : "text-slate-900"
+                                          }`}
+                                        >
+                                          {location.city}
+                                        </td>
+                                        <td
+                                          className={`px-4 py-2 text-sm ${
+                                            isDarkMode
+                                              ? "text-white"
+                                              : "text-slate-900"
+                                          }`}
+                                        >
+                                          {location.address}
                                         </td>
                                         <td className={`px-4 py-2 text-sm`}>
                                           <a

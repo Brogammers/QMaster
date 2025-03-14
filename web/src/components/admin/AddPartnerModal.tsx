@@ -1,26 +1,10 @@
 "use client";
 
+import { Location, Partner } from "@/app/(admin)/admin/partners/page";
 import { useCategory } from "@/app/(admin)/context";
 import { motion } from "framer-motion";
 import { useContext, useEffect, useState } from "react";
 import { FaMinus, FaPlus, FaTimes } from "react-icons/fa";
-
-interface Location {
-  id: number;
-  city: string;
-  stateOrProvince: string;
-  country: string;
-  googleMapsUrl: string;
-}
-
-interface Partner {
-  id: number;
-  name: string;
-  category: string;
-  status: "active" | "inactive" | "pending";
-  joinedDate: string;
-  locations: Location[];
-}
 
 interface AddPartnerModalProps {
   isOpen: boolean;
@@ -51,7 +35,8 @@ export default function AddPartnerModal({
     locations: [
       {
         city: "",
-        stateOrProvince: "",
+        name: "",
+        address: "",
         country: "",
         googleMapsUrl: "",
       },
@@ -64,17 +49,18 @@ export default function AddPartnerModal({
       setStep("verify");
       setMatchedPartner(null);
       setFormData({
-        name: "",
-        category: categories[0].name,
-        status: "active",
-        locations: [
-          {
-            city: "",
-            stateOrProvince: "",
-            country: "",
-            googleMapsUrl: "",
-          },
-        ],
+          name: "",
+          category: categories[0].name,
+          status: "active",
+          locations: [
+              {
+                  city: "",
+                  name: "",
+                  address: "",
+                  country: "",
+                  googleMapsUrl: "",
+              },
+          ],
       });
     }
   }, [isOpen]);
@@ -102,16 +88,17 @@ export default function AddPartnerModal({
 
   const handleAddLocation = () => {
     setFormData((prev) => ({
-      ...prev,
-      locations: [
-        ...prev.locations,
-        {
-          city: "",
-          stateOrProvince: "",
-          country: "",
-          googleMapsUrl: "",
-        },
-      ],
+        ...prev,
+        locations: [
+            ...prev.locations,
+            {
+                city: "",
+                name: "",
+                address: "",
+                country: "",
+                googleMapsUrl: "",
+            },
+        ],
     }));
   };
 
@@ -143,7 +130,7 @@ export default function AddPartnerModal({
     // Update Google Maps URL when city, state, or country changes
     if (
       field === "city" ||
-      field === "stateOrProvince" ||
+      field === "address" ||
       field === "country"
     ) {
       const location = formData.locations[index];
@@ -154,7 +141,7 @@ export default function AddPartnerModal({
 
       // Generate Google Maps URL with all location components
       const searchQuery = encodeURIComponent(
-        `${updatedLocation.city} ${updatedLocation.stateOrProvince} ${updatedLocation.country}`.trim()
+        `${updatedLocation.city} ${updatedLocation.address} ${updatedLocation.country}`.trim()
       );
 
       setFormData((prev) => ({
@@ -326,7 +313,33 @@ export default function AddPartnerModal({
                     </button>
                   )}
                 </div>
+                
                 <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-2">
+                    <div>
+                    <label
+                      className={`block text-sm font-medium mb-2 
+                      ${isDarkMode ? "text-white/70" : "text-slate-600"}`}
+                    >
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      value={location.city}
+                      onChange={(e) =>
+                        handleLocationChange(index, "name", e.target.value)
+                      }
+                      placeholder="Name"
+                      className={`w-full px-4 py-2 rounded-lg transition-colors duration-300
+                        ${
+                          isDarkMode
+                            ? "bg-black/20 border border-white/10 text-white focus:border-crystal-blue placeholder:text-white/30"
+                            : "border border-slate-200 bg-white text-slate-900 focus:border-crystal-blue placeholder:text-slate-400"
+                        }`}
+                      required
+                    />
+                  </div>
+                  </div>
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 
@@ -345,6 +358,29 @@ export default function AddPartnerModal({
                         )
                       }
                       placeholder="Maps URL"
+                      className={`w-full px-4 py-2 rounded-lg transition-colors duration-300
+                        ${
+                          isDarkMode
+                            ? "bg-black/20 border border-white/10 text-white focus:border-crystal-blue placeholder:text-white/30"
+                            : "border border-slate-200 bg-white text-slate-900 focus:border-crystal-blue placeholder:text-slate-400"
+                        }`}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      className={`block text-sm font-medium mb-2 
+                      ${isDarkMode ? "text-white/70" : "text-slate-600"}`}
+                    >
+                      Country
+                    </label>
+                    <input
+                      type="text"
+                      value={location.country}
+                      onChange={(e) =>
+                        handleLocationChange(index, "country", e.target.value)
+                      }
+                      placeholder="Country"
                       className={`w-full px-4 py-2 rounded-lg transition-colors duration-300
                         ${
                           isDarkMode
@@ -382,42 +418,19 @@ export default function AddPartnerModal({
                       className={`block text-sm font-medium mb-2 
                       ${isDarkMode ? "text-white/70" : "text-slate-600"}`}
                     >
-                      State/Province
+                      Address
                     </label>
                     <input
                       type="text"
-                      value={location.stateOrProvince}
+                      value={location.address}
                       onChange={(e) =>
                         handleLocationChange(
                           index,
-                          "stateOrProvince",
+                          "address",
                           e.target.value
                         )
                       }
-                      placeholder="State/Province"
-                      className={`w-full px-4 py-2 rounded-lg transition-colors duration-300
-                        ${
-                          isDarkMode
-                            ? "bg-black/20 border border-white/10 text-white focus:border-crystal-blue placeholder:text-white/30"
-                            : "border border-slate-200 bg-white text-slate-900 focus:border-crystal-blue placeholder:text-slate-400"
-                        }`}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label
-                      className={`block text-sm font-medium mb-2 
-                      ${isDarkMode ? "text-white/70" : "text-slate-600"}`}
-                    >
-                      Country
-                    </label>
-                    <input
-                      type="text"
-                      value={location.country}
-                      onChange={(e) =>
-                        handleLocationChange(index, "country", e.target.value)
-                      }
-                      placeholder="Country"
+                      placeholder="Address"
                       className={`w-full px-4 py-2 rounded-lg transition-colors duration-300
                         ${
                           isDarkMode
