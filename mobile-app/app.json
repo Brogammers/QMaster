@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "QMaster",
-    "slug": "qmaster",
+    "name": "tawabiry",
+    "slug": "tawabiry",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/qmaster-icon.png",
@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.qmaster.myapp",
+      "bundleIdentifier": "com.tawabiry.myapp",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "This app needs access to microphone for voice commands",
         "NSSpeechRecognitionUsageDescription": "This app needs access to speech recognition for voice commands",
