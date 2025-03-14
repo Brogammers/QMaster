@@ -18,8 +18,9 @@ import { usePartner } from "../../context";
 
 export interface Location {
   id: number;
+  name: string;
+  address: string;
   city: string;
-  stateOrProvince: string;
   country: string;
   googleMapsUrl: string;
 }
@@ -52,39 +53,99 @@ export default function PartnersPage() {
     const url =
       process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_REGISTER_BUSINESS || "";
 
-    const newPartner: Partner = {
-      ...partnerData,
-      id: partners.length + 1,
-      joinedDate: new Date().toISOString().split("T")[0],
-      locations: partnerData.locations.map((location, index) => ({
-        ...location,
-        id: index + 1,
+    const requestBody = {
+      name: partnerData.name,
+      category: partnerData.category,
+      status: partnerData.status,
+      locations: partnerData.locations.map((location) => ({
+        city: location.city,
+        name: location.name,
+        address: location.address,
+        country: location.country,
+        googleMapsUrl: location.googleMapsUrl,
+        logitude: 0, // TODO: Implement location coordinates
+        latitude: 0,
       })),
-    };
-    setPartners((prev: Partner[]) => [...prev, newPartner]);
+    }
+    axios
+    .post(url, requestBody)
+    .then((response) => {
+      if (response.status === 201) {
+        return response.data.partner;
+      } else { 
+        throw new Error("Failed to add partner");
+      }
+    })
+    .then((data) => {
+      console.log(data);
+      const newPartner: Partner = {
+          ...partnerData,
+          id: data.id,
+          joinedDate: new Date().toISOString().split("T")[0],
+          locations: partnerData.locations.map((location, index) => ({
+              ...location,
+              id: index + 1, // TODO: Update location id with server
+          })),
+      };
+      setPartners((prev: Partner[]) => [...prev, newPartner]);
+    })
+    .catch((error) => {
+      console.error(error);
+      toast.error("Failed to add partner");
+    });
   };
 
   const handleAddLocation = (
     partnerId: number,
     locationData: Omit<Location, "id">
   ) => {
-    setPartners((prev) =>
-      prev.map((partner) => {
-        if (partner.id === partnerId) {
-          return {
-            ...partner,
-            locations: [
-              ...partner.locations,
-              {
-                ...locationData,
-                id: partner.locations.length + 1,
-              },
-            ],
-          };
+
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_LOCATIONS || "";
+    
+    const requestBody = {  
+      id: partnerId,
+      city: locationData.city,
+      name: locationData.name,
+      address: locationData.address,
+      country: locationData.country,
+      googleMapsUrl: locationData.googleMapsUrl,
+      description: "", // TODO: Add description section
+      logitude: 0, // TODO: Implement location coordinates
+      latitude: 0,
+    };
+    axios
+      .post(url, requestBody)
+      .then((response) => {
+        if (response.status === 201) {
+          return response.data.location;
+        } else {
+          throw new Error("Failed to add location");
         }
-        return partner;
       })
-    );
+      .then((data) => {
+        console.log(data);
+        setPartners((prev) =>
+            prev.map((partner) => {
+                if (partner.id === partnerId) {
+                    return {
+                        ...partner,
+                        locations: [
+                            ...partner.locations,
+                            {
+                                ...locationData,
+                                id: data.id,
+                            },
+                        ],
+                    };
+                }
+                return partner;
+            })
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Failed to add location");
+      });
   };
 
   const filteredPartners = partners.filter((partner) => {
@@ -103,9 +164,10 @@ export default function PartnersPage() {
     return partner.locations.some(
       (location) =>
         location.city.toLowerCase().includes(searchLower) ||
-        location.stateOrProvince.toLowerCase().includes(searchLower) ||
+        location.name.toLowerCase().includes(searchLower) ||
         location.country.toLowerCase().includes(searchLower) ||
-        location.googleMapsUrl.toLowerCase().includes(searchLower)
+        location.googleMapsUrl.toLowerCase().includes(searchLower) ||
+        location.address.toLowerCase().includes(searchLower)
     );
   });
 
@@ -316,6 +378,24 @@ export default function PartnersPage() {
                                           : "bg-slate-100"
                                       }`}
                                     >
+                                       <th
+                                        className={`px-4 py-2 text-left text-sm font-medium ${
+                                          isDarkMode
+                                            ? "text-white/70"
+                                            : "text-slate-600"
+                                        }`}
+                                      >
+                                        Name
+                                      </th>
+                                      <th
+                                        className={`px-4 py-2 text-left text-sm font-medium ${
+                                          isDarkMode
+                                            ? "text-white/70"
+                                            : "text-slate-600"
+                                        }`}
+                                      >
+                                        Country
+                                      </th>
                                       <th
                                         className={`px-4 py-2 text-left text-sm font-medium ${
                                           isDarkMode
@@ -332,17 +412,9 @@ export default function PartnersPage() {
                                             : "text-slate-600"
                                         }`}
                                       >
-                                        State/Province
+                                        Address
                                       </th>
-                                      <th
-                                        className={`px-4 py-2 text-left text-sm font-medium ${
-                                          isDarkMode
-                                            ? "text-white/70"
-                                            : "text-slate-600"
-                                        }`}
-                                      >
-                                        Country
-                                      </th>
+                                      
                                       <th
                                         className={`px-4 py-2 text-left text-sm font-medium ${
                                           isDarkMode
@@ -371,16 +443,7 @@ export default function PartnersPage() {
                                               : "text-slate-900"
                                           }`}
                                         >
-                                          {location.city}
-                                        </td>
-                                        <td
-                                          className={`px-4 py-2 text-sm ${
-                                            isDarkMode
-                                              ? "text-white"
-                                              : "text-slate-900"
-                                          }`}
-                                        >
-                                          {location.stateOrProvince}
+                                          {location.name}
                                         </td>
                                         <td
                                           className={`px-4 py-2 text-sm ${
@@ -390,6 +453,24 @@ export default function PartnersPage() {
                                           }`}
                                         >
                                           {location.country}
+                                        </td>
+                                        <td
+                                          className={`px-4 py-2 text-sm ${
+                                            isDarkMode
+                                              ? "text-white"
+                                              : "text-slate-900"
+                                          }`}
+                                        >
+                                          {location.city}
+                                        </td>
+                                        <td
+                                          className={`px-4 py-2 text-sm ${
+                                            isDarkMode
+                                              ? "text-white"
+                                              : "text-slate-900"
+                                          }`}
+                                        >
+                                          {location.address}
                                         </td>
                                         <td className={`px-4 py-2 text-sm`}>
                                           <a

@@ -22,7 +22,6 @@ import com.que.que.User.AppUser.AppUserService;
 import com.que.que.User.BusinessUser.BusinessUser;
 import com.que.que.User.BusinessUser.BusinessUserService;
 
-import kotlin.NotImplementedError;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -135,10 +134,6 @@ public class RegistrationService {
      * "Confirm Email", context);
      */
     return token;
-  }
-
-  public void registerPartner(PartnerRegisterRequest request) {
-    throw new NotImplementedError("Not implemented");
   }
 
   public String registerAdminUser(AdminUserRegistrationRequest request) {

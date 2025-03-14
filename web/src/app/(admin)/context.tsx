@@ -6,6 +6,7 @@ import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { NotificationProps } from "@/components/admin/notifications/NotificationProps";
+import { count } from "console";
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_PER_PAGE = 10;
@@ -56,8 +57,9 @@ export const PartnersProvider = ({
                     locations: partner.locations.map((location: any) => ({
                         id: location.id,
                         city: "city",
-                        stateOrProvince: "state",
+                        name: location.name,
                         country: "country",
+                        address: location.address,
                         googleMapsUrl: "url",
                     })),
                 }));

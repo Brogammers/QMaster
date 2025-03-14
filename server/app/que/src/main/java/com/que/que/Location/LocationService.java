@@ -75,6 +75,47 @@ public class LocationService {
         return locationRepository.save(location);
     }
 
+    public Location createLocation(Partner partner, String name, String description, String address,
+            double latitude,
+            double longitude) {
+
+        List<Location> locations = locationRepository.findByPartner(partner);
+
+        for (Location location : locations) {
+            if (location.getName().equals(name)) {
+                throw new IllegalStateException("Location with name " + name + " already exists");
+            }
+        }
+
+        Location location = new Location(
+                name,
+                address,
+                description,
+                longitude,
+                latitude,
+                partner);
+
+        OpeningHours[] openingHours = new OpeningHours[daysOfTheWeek.length];
+
+        locationRepository.save(location);
+
+        for (int i = 0; i < daysOfTheWeek.length; i++) {
+            String day = daysOfTheWeek[i];
+            openingHours[i] = openingHoursService.createOpeningHours(location, day, "09:00", "17:00", true);
+        }
+
+        try {
+            qrCodeService.createQRCode(partner.getId(), String.format(
+                    "api/v1/queue/user?partnerId=%d&locationId=%d",
+                    partner.getId(),
+                    location.getId()), location.getId());
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to create QR code for partner");
+        }
+
+        return locationRepository.save(location);
+    }
+
     public List<Location> getLocationsByBusinessName(String businessName, String email) {
         if (businessName == null && email == null) {
             throw new IllegalStateException("Business name or email must be provided");
