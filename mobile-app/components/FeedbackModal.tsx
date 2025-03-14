@@ -1,0 +1,392 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  TextInput,
+  StyleSheet,
+  Dimensions,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
+import { useTheme } from "@/ctx/ThemeContext";
+import { MotiView } from "moti";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+
+interface FeedbackModalProps {
+  visible: boolean;
+  onClose: () => void;
+  businessName: string;
+  serviceName: string;
+}
+
+const { width } = Dimensions.get("window");
+
+const FeedbackModal: React.FC<FeedbackModalProps> = ({
+  visible,
+  onClose,
+  businessName,
+  serviceName,
+}) => {
+  const { isDarkMode } = useTheme();
+  const [overallRating, setOverallRating] = useState(0);
+  const [speedRating, setSpeedRating] = useState(0);
+  const [accuracyRating, setAccuracyRating] = useState(0);
+  const [feedback, setFeedback] = useState("");
+  const [tipAmount, setTipAmount] = useState("");
+
+  const handleSubmit = () => {
+    // Here you would send the feedback data to your backend
+    console.log({
+      overallRating,
+      speedRating,
+      accuracyRating,
+      feedback,
+      tipAmount: tipAmount ? parseFloat(tipAmount) : 0,
+    });
+
+    // Reset form
+    setOverallRating(0);
+    setSpeedRating(0);
+    setAccuracyRating(0);
+    setFeedback("");
+    setTipAmount("");
+
+    // Close modal
+    onClose();
+  };
+
+  const renderStars = (rating: number, setRating: (rating: number) => void) => {
+    return (
+      <View style={styles.starsContainer}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <TouchableOpacity
+            key={star}
+            onPress={() => setRating(star)}
+            style={styles.starButton}
+          >
+            <Ionicons
+              name={star <= rating ? "star" : "star-outline"}
+              size={36}
+              color={
+                star <= rating ? "#FF385C" : isDarkMode ? "#4A5568" : "#CBD5E0"
+              }
+            />
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      statusBarTranslucent
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.overlay}>
+          <MotiView
+            from={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            style={[
+              styles.modalContainer,
+              {
+                backgroundColor: isDarkMode ? "#0B1218" : "white",
+                borderColor: isDarkMode ? "rgba(29, 205, 254, 0.2)" : "#E5E7EB",
+              },
+            ]}
+          >
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <Ionicons
+                name="close"
+                size={24}
+                color={isDarkMode ? "#1DCDFE" : "#17222D"}
+              />
+            </TouchableOpacity>
+
+            <Text
+              style={[
+                styles.title,
+                { color: isDarkMode ? "#1DCDFE" : "#17222D" },
+              ]}
+            >
+              How was your experience?
+            </Text>
+
+            {/* Overall Rating */}
+            <View style={styles.ratingSection}>
+              {renderStars(overallRating, setOverallRating)}
+            </View>
+
+            {/* Speed Rating */}
+            <View style={styles.categorySection}>
+              <Text
+                style={[
+                  styles.categoryTitle,
+                  { color: isDarkMode ? "#1DCDFE" : "#17222D" },
+                ]}
+              >
+                Speed
+              </Text>
+              <Text
+                style={[
+                  styles.categorySubtitle,
+                  { color: isDarkMode ? "#A0AEC0" : "#718096" },
+                ]}
+              >
+                Served by {businessName}
+              </Text>
+              {renderStars(speedRating, setSpeedRating)}
+            </View>
+
+            <View
+              style={[
+                styles.divider,
+                {
+                  backgroundColor: isDarkMode
+                    ? "rgba(29, 205, 254, 0.1)"
+                    : "#E5E7EB",
+                },
+              ]}
+            />
+
+            {/* Accuracy Rating */}
+            <View style={styles.categorySection}>
+              <Text
+                style={[
+                  styles.categoryTitle,
+                  { color: isDarkMode ? "#1DCDFE" : "#17222D" },
+                ]}
+              >
+                Accuracy
+              </Text>
+              <Text
+                style={[
+                  styles.categorySubtitle,
+                  { color: isDarkMode ? "#A0AEC0" : "#718096" },
+                ]}
+              >
+                {serviceName} by {businessName}
+              </Text>
+              {renderStars(accuracyRating, setAccuracyRating)}
+            </View>
+
+            <View
+              style={[
+                styles.divider,
+                {
+                  backgroundColor: isDarkMode
+                    ? "rgba(29, 205, 254, 0.1)"
+                    : "#E5E7EB",
+                },
+              ]}
+            />
+
+            {/* Review Text */}
+            <View style={styles.reviewSection}>
+              <Text
+                style={[
+                  styles.categoryTitle,
+                  { color: isDarkMode ? "#1DCDFE" : "#17222D" },
+                ]}
+              >
+                Review
+              </Text>
+              <TextInput
+                style={[
+                  styles.reviewInput,
+                  {
+                    backgroundColor: isDarkMode
+                      ? "rgba(29, 205, 254, 0.05)"
+                      : "#F7FAFC",
+                    color: isDarkMode ? "#1DCDFE" : "#17222D",
+                    borderColor: isDarkMode
+                      ? "rgba(29, 205, 254, 0.1)"
+                      : "#E5E7EB",
+                  },
+                ]}
+                placeholder="Tell us about your experience"
+                placeholderTextColor={isDarkMode ? "#4A5568" : "#A0AEC0"}
+                multiline
+                value={feedback}
+                onChangeText={setFeedback}
+              />
+            </View>
+
+            {/* Tip Section */}
+            <View style={styles.tipSection}>
+              <View style={styles.tipHeader}>
+                <Text
+                  style={[
+                    styles.categoryTitle,
+                    { color: isDarkMode ? "#1DCDFE" : "#17222D" },
+                  ]}
+                >
+                  Give a tip
+                </Text>
+                <Ionicons
+                  name="information-circle-outline"
+                  size={20}
+                  color={isDarkMode ? "#1DCDFE" : "#FF385C"}
+                />
+              </View>
+              <TextInput
+                style={[
+                  styles.tipInput,
+                  {
+                    backgroundColor: isDarkMode
+                      ? "rgba(29, 205, 254, 0.05)"
+                      : "#F7FAFC",
+                    color: isDarkMode ? "#1DCDFE" : "#17222D",
+                    borderColor: isDarkMode
+                      ? "rgba(29, 205, 254, 0.1)"
+                      : "#E5E7EB",
+                  },
+                ]}
+                placeholder="0.00"
+                placeholderTextColor={isDarkMode ? "#4A5568" : "#A0AEC0"}
+                keyboardType="numeric"
+                value={tipAmount}
+                onChangeText={setTipAmount}
+              />
+            </View>
+
+            {/* Submit Button */}
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleSubmit}
+            >
+              <LinearGradient
+                colors={["#FF385C", "#E31B54"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.gradientButton}
+              >
+                <Text style={styles.submitButtonText}>Done</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </MotiView>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+};
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    width: width * 0.9,
+    maxWidth: 400,
+    borderRadius: 20,
+    padding: 24,
+    borderWidth: 1,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  closeButton: {
+    position: "absolute",
+    top: 16,
+    left: 16,
+    zIndex: 10,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  ratingSection: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  starsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  starButton: {
+    padding: 5,
+  },
+  categorySection: {
+    marginVertical: 10,
+  },
+  categoryTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  categorySubtitle: {
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 5,
+  },
+  divider: {
+    height: 1,
+    width: "100%",
+    marginVertical: 15,
+  },
+  reviewSection: {
+    marginVertical: 10,
+  },
+  reviewInput: {
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 12,
+    height: 100,
+    textAlignVertical: "top",
+    marginTop: 10,
+  },
+  tipSection: {
+    marginVertical: 10,
+  },
+  tipHeader: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  tipInput: {
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 12,
+    textAlign: "center",
+    fontSize: 18,
+  },
+  submitButton: {
+    marginTop: 20,
+    borderRadius: 50,
+    overflow: "hidden",
+  },
+  gradientButton: {
+    paddingVertical: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  submitButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "600",
+  },
+});
+
+export default FeedbackModal;
