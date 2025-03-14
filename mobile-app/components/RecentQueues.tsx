@@ -18,7 +18,11 @@ export default function RecentQueues({ isDarkMode }: RecentQueuesProps) {
         const historyData = await AsyncStorage.getItem("historyData");
         setHistoryDataExists(!!historyData);
       } catch (error: any) {
-        Alert.alert("Error", error.response?.data?.message || "An error occurred while checking history data");
+        Alert.alert(
+          "Error",
+          error.response?.data?.message ||
+            "An error occurred while checking history data"
+        );
       }
     };
 
@@ -31,15 +35,31 @@ export default function RecentQueues({ isDarkMode }: RecentQueuesProps) {
 
   return (
     <View>
-      <Text className={`my-3 text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>{i18n.t('recent')}</Text>
+      <Text
+        className={`my-3 text-2xl font-bold ${
+          isDarkMode ? "text-white" : "text-coal-black"
+        }`}
+      >
+        {i18n.t("recent")}
+      </Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         className=""
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 40 }}
+        overScrollMode="never"
+        scrollEventThrottle={16}
       >
         {Current.map((recent, index) => (
           <View className="mr-2.5" key={index}>
-            <Category name={recent.name} title={recent.name} image={recent.image} spacing={8} isDarkMode={isDarkMode} />
+            <Category
+              name={recent.name}
+              title={recent.name}
+              image={recent.image}
+              spacing={8}
+              isDarkMode={isDarkMode}
+            />
           </View>
         ))}
       </ScrollView>
