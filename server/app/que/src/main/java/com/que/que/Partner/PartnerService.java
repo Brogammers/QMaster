@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.que.que.Location.Location;
-import com.que.que.Location.LocationRepository;
+import com.que.que.Location.LocationService;
 import com.que.que.Registration.PartnerLocationCreationRequest;
 import com.que.que.User.SubscriptionPlans;
 import com.que.que.User.BusinessUser.BusinessCategory;
@@ -19,7 +18,7 @@ public class PartnerService {
 
     private final PartnerRepository partnerRepository;
     private final BusinessCategoryRepository businessCategoryRepository;
-    private final LocationRepository locationRepository;
+    private final LocationService locationService;
 
     public Partner createPartner(String name, String businessCategoryName) {
         BusinessCategory businessCategory = businessCategoryRepository.findByName(businessCategoryName)
@@ -44,9 +43,8 @@ public class PartnerService {
         partnerRepository.save(partner);
 
         for (PartnerLocationCreationRequest location : locations) {
-            Location newLocation = new Location(location.getName(), location.getAddress(), location.getLatitude(),
-                    location.getLongitude(), partner);
-            locationRepository.save(newLocation);
+            partner.addLocation(locationService.createLocation(partner, location.getName(), "",
+                    location.getAddress(), location.getLatitude(), location.getLongitude()));
         }
 
         return partnerRepository.save(partner);

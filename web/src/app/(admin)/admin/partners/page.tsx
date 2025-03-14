@@ -99,23 +99,53 @@ export default function PartnersPage() {
     partnerId: number,
     locationData: Omit<Location, "id">
   ) => {
-    setPartners((prev) =>
-      prev.map((partner) => {
-        if (partner.id === partnerId) {
-          return {
-            ...partner,
-            locations: [
-              ...partner.locations,
-              {
-                ...locationData,
-                id: partner.locations.length + 1,
-              },
-            ],
-          };
+
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL_GET_BUSINESS_LOCATIONS || "";
+    
+    const requestBody = {  
+      id: partnerId,
+      city: locationData.city,
+      name: locationData.name,
+      address: locationData.address,
+      country: locationData.country,
+      googleMapsUrl: locationData.googleMapsUrl,
+      description: "", // TODO: Add description section
+      logitude: 0, // TODO: Implement location coordinates
+      latitude: 0,
+    };
+    axios
+      .post(url, requestBody)
+      .then((response) => {
+        if (response.status === 201) {
+          return response.data.location;
+        } else {
+          throw new Error("Failed to add location");
         }
-        return partner;
       })
-    );
+      .then((data) => {
+        console.log(data);
+        setPartners((prev) =>
+            prev.map((partner) => {
+                if (partner.id === partnerId) {
+                    return {
+                        ...partner,
+                        locations: [
+                            ...partner.locations,
+                            {
+                                ...locationData,
+                                id: data.id,
+                            },
+                        ],
+                    };
+                }
+                return partner;
+            })
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Failed to add location");
+      });
   };
 
   const filteredPartners = partners.filter((partner) => {

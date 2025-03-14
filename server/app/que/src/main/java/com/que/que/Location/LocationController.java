@@ -33,8 +33,9 @@ public class LocationController {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
         try {
-            locationService.createLocation(request.getId(), request.getName(), request.getDescription(),
-                    request.getAddress(), request.getLatitude(), request.getLongitude());
+            body.put("location",
+                    locationService.createLocation(request.getId(), request.getName(), request.getDescription(),
+                            request.getAddress(), request.getLatitude(), request.getLongitude()));
             body.put("message", "Location creation was successful");
         } catch (IllegalStateException e) {
             body.put("message", e.getMessage());
