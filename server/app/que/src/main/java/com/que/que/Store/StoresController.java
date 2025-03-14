@@ -25,7 +25,7 @@ public class StoresController {
     private final StoreService storeService;
 
     @GetMapping
-    @Secured("ADMIN")
+    @Secured("TAWABIRY_SYSTEM_ADMIN")
     public ResponseEntity<Object> getStores(@RequestParam("page") int page, @RequestParam("per-page") int perPage) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
@@ -40,7 +40,7 @@ public class StoresController {
     }
 
     @GetMapping("/pending")
-    @Secured("ADMIN")
+    @Secured("TAWABIRY_SYSTEM_ADMIN")
     public ResponseEntity<Object> getPendingStores() {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
@@ -55,7 +55,7 @@ public class StoresController {
     }
 
     @PostMapping("/approve")
-    @Secured("ADMIN")
+    @Secured("TAWABIRY_SYSTEM_ADMIN")
     public ResponseEntity<Object> approveStore(@RequestParam("id") long id) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
