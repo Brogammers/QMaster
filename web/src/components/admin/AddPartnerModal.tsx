@@ -42,10 +42,11 @@ export default function AddPartnerModal({
   const [step, setStep] = useState<"verify" | "new_partner" | "add_location">(
     "verify"
   );
+  const { categories } = useCategory();
   const [matchedPartner, setMatchedPartner] = useState<Partner | null>(null);
   const [formData, setFormData] = useState({
     name: "",
-    category: "Healthcare",
+    category: categories[0].name,
     status: "active" as const,
     locations: [
       {
@@ -57,7 +58,6 @@ export default function AddPartnerModal({
     ],
   });
 
-  const { categories } = useCategory();
 
   useEffect(() => {
     if (!isOpen) {
@@ -65,7 +65,7 @@ export default function AddPartnerModal({
       setMatchedPartner(null);
       setFormData({
         name: "",
-        category: "Healthcare",
+        category: categories[0].name,
         status: "active",
         locations: [
           {
