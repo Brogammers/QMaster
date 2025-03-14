@@ -28,7 +28,7 @@ public class NotificationController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/admin")
-    @Secured("ADMIN")
+    @Secured("TAWABIRY_SYSTEM_ADMIN")
     public ResponseEntity<Object> getAdminNotifications(@RequestParam("page") int page,
             @RequestParam("per-page") int size) {
         Map<String, Object> body = new HashMap<>();

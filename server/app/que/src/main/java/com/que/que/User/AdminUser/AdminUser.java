@@ -33,7 +33,7 @@ public class AdminUser extends User {
             String phoneNumber,
             String location) {
         super(
-                UserRole.ADMIN, firstName, lastName, dateOfRegistration, dateOfBirth, countryOfOrigin,
+                UserRole.TAWABIRY_SYSTEM_ADMIN, firstName, lastName, dateOfRegistration, dateOfBirth, countryOfOrigin,
                 password,
                 email,
                 locked, enabled, phoneCode, phoneNumber, location);
