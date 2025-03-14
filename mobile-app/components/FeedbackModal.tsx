@@ -36,7 +36,6 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
   const [speedRating, setSpeedRating] = useState(0);
   const [accuracyRating, setAccuracyRating] = useState(0);
   const [feedback, setFeedback] = useState("");
-  const [tipAmount, setTipAmount] = useState("");
 
   const handleSubmit = () => {
     // Here you would send the feedback data to your backend
@@ -45,7 +44,6 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
       speedRating,
       accuracyRating,
       feedback,
-      tipAmount: tipAmount ? parseFloat(tipAmount) : 0,
     });
 
     // Reset form
@@ -53,7 +51,6 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     setSpeedRating(0);
     setAccuracyRating(0);
     setFeedback("");
-    setTipAmount("");
 
     // Close modal
     onClose();
@@ -72,7 +69,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
               name={star <= rating ? "star" : "star-outline"}
               size={36}
               color={
-                star <= rating ? "#FF385C" : isDarkMode ? "#4A5568" : "#CBD5E0"
+                star <= rating ? "#1DCDFE" : isDarkMode ? "#4A5568" : "#CBD5E0"
               }
             />
           </TouchableOpacity>
@@ -218,56 +215,18 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
               />
             </View>
 
-            {/* Tip Section */}
-            <View style={styles.tipSection}>
-              <View style={styles.tipHeader}>
-                <Text
-                  style={[
-                    styles.categoryTitle,
-                    { color: isDarkMode ? "#1DCDFE" : "#17222D" },
-                  ]}
-                >
-                  Give a tip
-                </Text>
-                <Ionicons
-                  name="information-circle-outline"
-                  size={20}
-                  color={isDarkMode ? "#1DCDFE" : "#FF385C"}
-                />
-              </View>
-              <TextInput
-                style={[
-                  styles.tipInput,
-                  {
-                    backgroundColor: isDarkMode
-                      ? "rgba(29, 205, 254, 0.05)"
-                      : "#F7FAFC",
-                    color: isDarkMode ? "#1DCDFE" : "#17222D",
-                    borderColor: isDarkMode
-                      ? "rgba(29, 205, 254, 0.1)"
-                      : "#E5E7EB",
-                  },
-                ]}
-                placeholder="0.00"
-                placeholderTextColor={isDarkMode ? "#4A5568" : "#A0AEC0"}
-                keyboardType="numeric"
-                value={tipAmount}
-                onChangeText={setTipAmount}
-              />
-            </View>
-
             {/* Submit Button */}
             <TouchableOpacity
               style={styles.submitButton}
               onPress={handleSubmit}
             >
               <LinearGradient
-                colors={["#FF385C", "#E31B54"]}
+                colors={["#1DCDFE", "#0077B6"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.gradientButton}
               >
-                <Text style={styles.submitButtonText}>Done</Text>
+                <Text style={styles.submitButtonText}>Submit Feedback</Text>
               </LinearGradient>
             </TouchableOpacity>
           </MotiView>
@@ -355,22 +314,6 @@ const styles = StyleSheet.create({
     height: 100,
     textAlignVertical: "top",
     marginTop: 10,
-  },
-  tipSection: {
-    marginVertical: 10,
-  },
-  tipHeader: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  tipInput: {
-    borderWidth: 1,
-    borderRadius: 12,
-    padding: 12,
-    textAlign: "center",
-    fontSize: 18,
   },
   submitButton: {
     marginTop: 20,
