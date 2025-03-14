@@ -322,7 +322,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                       isDarkMode ? "text-[#1DCDFE]" : "text-[#17222D]"
                     }`}
                   >
-                    Service Quality
+                    Overall Service Quality
                   </Text>
                   <Text
                     className={`text-base text-center leading-[22px] ${
