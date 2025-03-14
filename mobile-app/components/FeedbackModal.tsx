@@ -222,9 +222,30 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                       { color: isDarkMode ? "#A0AEC0" : "#718096" },
                     ]}
                   >
-                    Did you wait the estimated time?
+                    How accurate was your estimated wait time?
                   </Text>
                   {renderStars(accuracyRating, setAccuracyRating)}
+
+                  <View style={styles.ratingLegend}>
+                    <Text
+                      style={[
+                        styles.legendText,
+                        { color: isDarkMode ? "#A0AEC0" : "#718096" },
+                      ]}
+                    >
+                      {accuracyRating === 5
+                        ? "Perfect! Waited exactly as estimated"
+                        : accuracyRating === 4
+                        ? "Very close (within 5 minutes)"
+                        : accuracyRating === 3
+                        ? "Somewhat close (within 10 minutes)"
+                        : accuracyRating === 2
+                        ? "Not very close (within 15 minutes)"
+                        : accuracyRating === 1
+                        ? "Not accurate at all (over 15 minutes off)"
+                        : "Select a rating"}
+                    </Text>
+                  </View>
                 </View>
 
                 <View
@@ -257,6 +278,27 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                     How well did {businessName} serve you?
                   </Text>
                   {renderStars(speedRating, setSpeedRating)}
+
+                  <View style={styles.ratingLegend}>
+                    <Text
+                      style={[
+                        styles.legendText,
+                        { color: isDarkMode ? "#A0AEC0" : "#718096" },
+                      ]}
+                    >
+                      {speedRating === 5
+                        ? "Excellent service"
+                        : speedRating === 4
+                        ? "Very good service"
+                        : speedRating === 3
+                        ? "Satisfactory service"
+                        : speedRating === 2
+                        ? "Poor service"
+                        : speedRating === 1
+                        ? "Very poor service"
+                        : "Select a rating"}
+                    </Text>
+                  </View>
                 </View>
 
                 <View
@@ -271,7 +313,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 />
 
                 {/* Overall Experience Rating */}
-                <View style={styles.categorySection}>
+                {/* <View style={styles.categorySection}>
                   <Text
                     style={[
                       styles.categoryTitle,
@@ -289,9 +331,30 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                     How was your overall visit?
                   </Text>
                   {renderStars(overallRating, setOverallRating)}
-                </View>
 
-                <View
+                  <View style={styles.ratingLegend}>
+                    <Text
+                      style={[
+                        styles.legendText,
+                        { color: isDarkMode ? "#A0AEC0" : "#718096" },
+                      ]}
+                    >
+                      {overallRating === 5
+                        ? "Excellent experience"
+                        : overallRating === 4
+                        ? "Very good experience"
+                        : overallRating === 3
+                        ? "Average experience"
+                        : overallRating === 2
+                        ? "Poor experience"
+                        : overallRating === 1
+                        ? "Very poor experience"
+                        : "Select a rating"}
+                    </Text>
+                  </View>
+                </View> */}
+
+                {/* <View
                   style={[
                     styles.divider,
                     {
@@ -300,7 +363,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                         : "#E5E7EB",
                     },
                   ]}
-                />
+                /> */}
 
                 {/* Review Text */}
                 <View style={styles.reviewSection}>
@@ -458,6 +521,14 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "600",
+  },
+  ratingLegend: {
+    marginTop: 10,
+    alignItems: "center",
+  },
+  legendText: {
+    fontSize: 14,
+    textAlign: "center",
   },
 });
 
