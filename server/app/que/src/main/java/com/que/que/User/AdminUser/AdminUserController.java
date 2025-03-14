@@ -20,7 +20,7 @@ public class AdminUserController {
     private final AdminUserService adminUserService;
 
     @GetMapping(path = "/businesses")
-    @Secured("ADMIN")
+    @Secured("TAWABIRY_SYSTEM_ADMIN")
     public ResponseEntity<Object> getBusinesses(@RequestParam("page") int page, @RequestParam("per-page") int perPage) {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
@@ -34,7 +34,7 @@ public class AdminUserController {
     }
 
     @GetMapping(path = "/users")
-    @Secured("ADMIN")
+    @Secured("TAWABIRY_SYSTEM_ADMIN")
     public ResponseEntity<Object> getUsers() {
         Map<String, Object> body = new HashMap<>();
         HttpStatusCode statusCode = HttpStatusCode.valueOf(200);
