@@ -82,53 +82,83 @@ export default function Partner() {
 
   useEffect(() => {
     fetchLocationData();
-  }, [fetchLocationData]);
+  }, [brandName]);
 
   // Partner screen refresh should be more frequent if user is actively considering joining a queue
   const refreshInterval = 60000; // 1 minute
 
   return (
-    <LocationContext.Provider
-      value={{
-        locationData,
-        setLocationData,
-        currentLocation: value,
-        setCurrentLocation: setValue,
-      }}
-    >
-      <SafeAreaView
-        className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}
+    <View className="flex-1">
+      <View
+        className={`absolute top-0 left-0 right-0 bottom-0 ${
+          isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+        }`}
       >
-        <RefreshableWrapper
-          refreshId="partner-screen"
-          onRefresh={fetchLocationData}
-          autoRefreshInterval={300000}
-          className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}
+        {!isDarkMode && (
+          <LinearGradient
+            colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
+            className="absolute top-0 w-full h-64"
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+          />
+        )}
+      </View>
+      <LocationContext.Provider
+        value={{
+          locationData: locationData,
+          setLocationData: setLocationData,
+          currentLocation: value,
+          setCurrentLocation: setValue,
+        }}
+      >
+        <QueueInfoCard image={image} name={brandName} />
+
+        <SafeAreaView className="flex-1" edges={["bottom", "left", "right"]}>
+          <RefreshableWrapper
+            refreshId={`partner-${brandName}`}
+            onRefresh={fetchLocationData}
+            autoRefreshInterval={refreshInterval}
+            contentContainerStyle={{ paddingBottom: 40 }}
+          >
+            <MotiView
+              from={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                mass: 0.8,
+                damping: 15,
+                delay: 200,
+              }}
+              className="w-full px-6"
+            >
+              <JoinQueue />
+            </MotiView>
+          </RefreshableWrapper>
+        </SafeAreaView>
+      </LocationContext.Provider>
+
+      {/* Demo button for testing feedback modal - remove in production */}
+      {__DEV__ && (
+        <TouchableOpacity
+          style={{
+            position: "absolute",
+            bottom: 20,
+            right: 20,
+            backgroundColor: isDarkMode ? "#1DCDFE" : "#0077B6",
+            padding: 10,
+            borderRadius: 8,
+          }}
+          onPress={() => setShowFeedbackModal(true)}
         >
-          {!isDarkMode && (
-            <LinearGradient
-              colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
-              className="absolute top-0 w-full h-64"
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-            />
-          )}
+          <Text style={{ color: "white" }}>Show Feedback</Text>
+        </TouchableOpacity>
+      )}
 
-          <View className="px-4 pt-4">
-            <QueueInfoCard name={brandName || ""} image={image} />
-          </View>
-
-          <View className="px-4 pt-4">
-            <JoinQueue />
-          </View>
-        </RefreshableWrapper>
-        <FeedbackModal
-          visible={showFeedbackModal}
-          onClose={() => setShowFeedbackModal(false)}
-          businessName={brandName || ""}
-          serviceName="General Service"
-        />
-      </SafeAreaView>
-    </LocationContext.Provider>
+      <FeedbackModal
+        visible={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
+        businessName={brandName || ""}
+        serviceName="Demo Service"
+      />
+    </View>
   );
 }

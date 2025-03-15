@@ -8,11 +8,24 @@ import {
 } from "react-native";
 import { useNotification } from "@/ctx/NotificationContext";
 import { useTheme } from "@/ctx/ThemeContext";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import _ from "lodash";
+import { triggerWelcomeNotifications } from "./WelcomeNotifications";
 
 export default function NotificationDebugger() {
   const { addNotification, notifications, currentNotification } =
     useNotification();
   const { isDarkMode } = useTheme();
+  const username = useSelector((state: RootState) => state.username.username);
+
+  // Helper function to capitalize the username (same as in AccountPageProfile)
+  const capitalizeFullName = (name: string) => {
+    return name
+      .split(" ")
+      .map((word) => _.capitalize(word))
+      .join(" ");
+  };
 
   const testNotifications = [
     {
@@ -59,58 +72,43 @@ export default function NotificationDebugger() {
   };
 
   // Function to trigger the welcome notifications sequence
-  const triggerWelcomeSequence = () => {
-    const welcomeNotifications = [
-      {
-        title: "Welcome to QMaster!",
-        message: "Skip the line and manage your queues with ease",
-        type: "info" as const,
-        duration: 4000,
-        emoji: "👋",
-      },
-      {
-        title: "Today Only!",
-        message:
-          "Enjoy an exclusive deal on your favorite brew! Don't miss out!",
-        type: "info" as const,
-        duration: 4000,
-        emoji: "☕",
-      },
-      {
-        title: "Almost Your Turn!",
-        message: 'You\'re next in the queue "Starbucks Coffee"',
-        type: "success" as const,
-        duration: 4000,
-        emoji: "⏱️",
-      },
-      {
-        title: "Limited Time Offer",
-        message: "50% off your next coffee order. Tap to redeem now!",
-        type: "warning" as const,
-        duration: 4000,
-        emoji: "🎁",
-      },
-      {
-        title: "No Wait Time!",
-        message: 'Your favorite place "Cafe Nero" has no queue right now!',
-        type: "info" as const,
-        duration: 4000,
-        emoji: "🚶",
-      },
-    ];
+  const handleTriggerWelcomeSequence = () => {
+    // Use the exported function from WelcomeNotifications
+    triggerWelcomeNotifications(
+      addNotification,
+      username ? capitalizeFullName(username) : undefined
+    );
+  };
 
-    // Show notifications with a delay between them
-    welcomeNotifications.forEach((notification, index) => {
-      setTimeout(() => {
-        console.log(`Triggering welcome notification ${index + 1}`);
-        addNotification({
-          ...notification,
-          actionLabel: "View",
-          onAction: () => {
-            console.log(`${notification.title} action pressed`);
-          },
-        });
-      }, 500 + index * 5000); // Start after 0.5 seconds, then 5 seconds between each
+  // Add a function to test just the personalized welcome notification
+  const testPersonalizedWelcome = () => {
+    if (!username) {
+      // If no username, show a message about it
+      addNotification({
+        title: "No Username Found",
+        message: "Please set up your profile to see personalized notifications",
+        type: "info",
+        duration: 5000,
+        emoji: "👤",
+        actionLabel: "OK",
+        onAction: () => {
+          console.log("No username notification acknowledged");
+        },
+      });
+      return;
+    }
+
+    // Show personalized welcome
+    addNotification({
+      title: `Welcome back, ${capitalizeFullName(username)}!`,
+      message: "We're glad to see you again. Ready to skip some lines today?",
+      type: "info",
+      duration: 5000,
+      emoji: "✨",
+      actionLabel: "View",
+      onAction: () => {
+        console.log("Personalized welcome action pressed");
+      },
     });
   };
 
@@ -127,12 +125,21 @@ export default function NotificationDebugger() {
         Notification Debugger
       </Text>
 
-      <TouchableOpacity
-        style={[styles.welcomeButton, { marginBottom: 16 }]}
-        onPress={triggerWelcomeSequence}
-      >
-        <Text style={styles.welcomeButtonText}>Show Welcome Sequence</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonRow}>
+        <TouchableOpacity
+          style={[styles.welcomeButton, { flex: 1, marginRight: 8 }]}
+          onPress={handleTriggerWelcomeSequence}
+        >
+          <Text style={styles.welcomeButtonText}>Show Welcome Sequence</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.welcomeButton, { flex: 1 }]}
+          onPress={testPersonalizedWelcome}
+        >
+          <Text style={styles.welcomeButtonText}>Personalized Welcome</Text>
+        </TouchableOpacity>
+      </View>
 
       <ScrollView
         horizontal
@@ -175,6 +182,16 @@ export default function NotificationDebugger() {
         >
           Notifications count: {notifications.length}
         </Text>
+        {username && (
+          <Text
+            style={[
+              styles.infoText,
+              isDarkMode ? styles.textDark : styles.textLight,
+            ]}
+          >
+            Current user: {capitalizeFullName(username)}
+          </Text>
+        )}
         <Text
           style={[
             styles.infoText,
@@ -211,6 +228,10 @@ const styles = StyleSheet.create({
   },
   textDark: {
     color: "#FFFFFF",
+  },
+  buttonRow: {
+    flexDirection: "row",
+    marginBottom: 16,
   },
   welcomeButton: {
     backgroundColor: "#007AFF",
