@@ -12,7 +12,6 @@ import { View, TouchableOpacity, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RefreshableWrapper from "@/components/RefreshableWrapper";
 import FeedbackModal from "@/components/FeedbackModal";
-import NotificationTestButtons from "@/components/NotificationTestButtons";
 
 export const LocationContext = createContext<{
   locationData: Array<{
@@ -121,11 +120,6 @@ export default function Partner() {
 
           <View className="px-4 pt-4">
             <JoinQueue />
-          </View>
-
-          {/* Add notification test buttons in a more subtle way */}
-          <View className="px-4 pt-4 pb-8">
-            <NotificationTestButtons compact={true} />
           </View>
         </RefreshableWrapper>
         <FeedbackModal

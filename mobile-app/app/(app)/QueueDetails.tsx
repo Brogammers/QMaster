@@ -16,7 +16,6 @@ import { useTheme } from "@/ctx/ThemeContext";
 import { MotiView } from "moti";
 import i18n from "@/i18n";
 import { updateQueuePosition } from "@/app/redux/queueSlice";
-import NotificationTestButtons from "@/components/NotificationTestButtons";
 
 export default function QueueDetails() {
   const { isDarkMode } = useTheme();
@@ -300,7 +299,6 @@ export default function QueueDetails() {
                 />
               </TouchableOpacity>
             </View>
-            <NotificationTestButtons />
           </View>
         </View>
       </Modal>

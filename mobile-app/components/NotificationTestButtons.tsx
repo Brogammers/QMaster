@@ -101,22 +101,25 @@ export default function NotificationTestButtons({
 
     console.log("Notification to be added:", notification);
 
-    try {
-      addNotification({
-        title: notification.title,
-        message: notification.message,
-        type: "info",
-        duration: 5000,
-        emoji: notification.emoji,
-        actionLabel: "View",
-        onAction: () => {
-          console.log(`${type} notification action pressed`);
-        },
-      });
-      console.log("Notification added successfully");
-    } catch (error) {
-      console.error("Error adding notification:", error);
-    }
+    // Use a direct approach to ensure the notification is added
+    setTimeout(() => {
+      try {
+        addNotification({
+          title: notification.title,
+          message: notification.message,
+          type: "info",
+          duration: 5000,
+          emoji: notification.emoji,
+          actionLabel: "View",
+          onAction: () => {
+            console.log(`${type} notification action pressed`);
+          },
+        });
+        console.log("Notification added successfully");
+      } catch (error) {
+        console.error("Error adding notification:", error);
+      }
+    }, 100);
   };
 
   if (compact) {

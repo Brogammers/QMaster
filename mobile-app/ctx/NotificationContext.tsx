@@ -15,6 +15,7 @@ import {
   Animated,
   Platform,
   Dimensions,
+  PanResponder,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "./ThemeContext";
@@ -66,10 +67,45 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
     useState<InAppNotification | null>(null);
   const [opacity] = useState(new Animated.Value(0));
   const [translateY] = useState(new Animated.Value(-50));
+  const [translateX] = useState(new Animated.Value(0)); // For horizontal swipe
   const { isDarkMode } = useTheme();
   const queueState = useSelector((state: RootState) => state.queue);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const notificationQueueRef = useRef<InAppNotification[]>([]);
+
+  // Create pan responder for swipe to dismiss
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (_, gestureState) => {
+        // Only allow horizontal movement
+        translateX.setValue(gestureState.dx);
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        // If swiped far enough, dismiss the notification
+        if (Math.abs(gestureState.dx) > 100) {
+          // Animate off screen
+          Animated.timing(translateX, {
+            toValue: gestureState.dx > 0 ? width : -width,
+            duration: 200,
+            useNativeDriver: true,
+          }).start(() => {
+            if (currentNotification) {
+              markAsRead(currentNotification.id);
+              removeNotification(currentNotification.id);
+            }
+          });
+        } else {
+          // Spring back to center
+          Animated.spring(translateX, {
+            toValue: 0,
+            friction: 5,
+            useNativeDriver: true,
+          }).start();
+        }
+      },
+    })
+  ).current;
 
   // Add notification
   const addNotification = useCallback(
@@ -323,13 +359,25 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
 
     // Use a simpler approach for debugging
     return (
-      <View
+      <Animated.View
+        {...panResponder.panHandlers}
         style={[
           styles.toastContainer,
           isDarkMode ? styles.toastContainerDark : {},
-          { opacity: 1 }, // Force opacity to 1 for debugging
+          {
+            opacity: 1, // Force opacity to 1 for debugging
+            transform: [{ translateX: translateX }, { translateY: 0 }],
+          },
         ]}
       >
+        <View style={styles.swipeIndicator}>
+          <View
+            style={[
+              styles.swipeIndicatorBar,
+              isDarkMode ? { backgroundColor: "rgba(255, 255, 255, 0.3)" } : {},
+            ]}
+          />
+        </View>
         <View style={styles.toastContent}>
           <View style={styles.iconContainer}>
             {currentNotification.emoji ? (
@@ -362,7 +410,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
             </Text>
           </TouchableOpacity>
         )}
-      </View>
+      </Animated.View>
     );
   };
 
@@ -398,7 +446,7 @@ export const useNotification = () => {
 const styles = StyleSheet.create({
   toastContainer: {
     position: "absolute",
-    top: Platform.OS === "ios" ? 50 : 20,
+    top: Platform.OS === "ios" ? 70 : 40,
     left: 16,
     right: 16,
     maxWidth: 500,
@@ -432,11 +480,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   iconContainer: {
-    width: 24,
-    height: 24,
+    width: 40,
+    height: 40,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 10,
+    marginRight: 16,
+    backgroundColor: "rgba(0, 0, 0, 0.05)",
+    borderRadius: 20,
   },
   textContainer: {
     flex: 1,
@@ -479,6 +529,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   emoji: {
-    fontSize: 20,
+    fontSize: 24,
+  },
+  swipeIndicator: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 6,
+    paddingBottom: 2,
+  },
+  swipeIndicatorBar: {
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
 });
