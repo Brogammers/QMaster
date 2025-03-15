@@ -10,9 +10,22 @@ import {
   InteractionManager,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNotification } from "@/ctx/NotificationContext";
+import { useNotification, NotificationType } from "@/ctx/NotificationContext";
 import { useTheme } from "@/ctx/ThemeContext";
 import { triggerWelcomeNotifications } from "./WelcomeNotifications";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import _ from "lodash";
+
+// Define the notification interface
+interface TestNotification {
+  id: string;
+  title: string;
+  message: string;
+  emoji: string;
+  type?: NotificationType;
+  duration?: number;
+}
 
 /**
  * A floating button that can be added to any screen to test notifications
@@ -22,9 +35,31 @@ export default function GlobalNotificationTester() {
   const [modalVisible, setModalVisible] = useState(false);
   const { addNotification } = useNotification();
   const { isDarkMode } = useTheme();
+  const username = useSelector((state: RootState) => state.username.username);
+  const firstName = useSelector(
+    (state: RootState) => state.firstName.firstName
+  );
+
+  // Helper function to capitalize the first name
+  const capitalizeFirstName = (name: string | null) => {
+    if (!name) return "";
+    return _.capitalize(name);
+  };
+
+  // Get the user's first name from either firstName or username
+  const getUserFirstName = () => {
+    if (firstName) {
+      return capitalizeFirstName(firstName);
+    } else if (username) {
+      // Extract first name from username if available
+      const firstNameFromUsername = username.split(" ")[0];
+      return capitalizeFirstName(firstNameFromUsername);
+    }
+    return "";
+  };
 
   // Test notifications
-  const testNotifications = [
+  const testNotifications: TestNotification[] = [
     {
       id: "coffee",
       title: "Today Only!",
@@ -52,12 +87,12 @@ export default function GlobalNotificationTester() {
   ];
 
   // Function to test a single notification
-  const testNotification = (notification: (typeof testNotifications)[0]) => {
+  const testNotification = (notification: TestNotification) => {
     addNotification({
       title: notification.title,
       message: notification.message,
-      type: "info",
-      duration: 5000,
+      type: notification.type || "info",
+      duration: notification.duration || 5000,
       emoji: notification.emoji,
       actionLabel: "View",
       onAction: () => {
@@ -70,13 +105,35 @@ export default function GlobalNotificationTester() {
   const testAllNotifications = () => {
     // Add notifications with a small delay between each to prevent overwhelming the system
     InteractionManager.runAfterInteractions(() => {
-      testNotifications.forEach((notification, index) => {
+      // Create a new array with welcome notification at the beginning if user has a name
+      const userFirstName = getUserFirstName();
+      const allNotifications: TestNotification[] = [
+        // Add personalized welcome if we have a name
+        ...(userFirstName
+          ? [
+              {
+                id: "welcome",
+                title: `Welcome back, ${userFirstName}!`,
+                message:
+                  "We're glad to see you again. Ready to skip some lines today?",
+                emoji: "✨",
+                type: "info" as NotificationType,
+                duration: 5000,
+              },
+            ]
+          : []),
+        // Then add all the regular test notifications
+        ...testNotifications,
+      ];
+
+      // Send all notifications with a small delay between each
+      allNotifications.forEach((notification, index) => {
         setTimeout(() => {
           addNotification({
             title: notification.title,
             message: notification.message,
-            type: "info",
-            duration: 5000,
+            type: notification.type || "info",
+            duration: notification.duration || 5000,
             emoji: notification.emoji,
             actionLabel: "View",
             onAction: () => {
@@ -236,7 +293,7 @@ export default function GlobalNotificationTester() {
 const styles = StyleSheet.create({
   floatingButton: {
     position: "absolute",
-    bottom: 20,
+    bottom: 80,
     right: 20,
     width: 50,
     height: 50,
