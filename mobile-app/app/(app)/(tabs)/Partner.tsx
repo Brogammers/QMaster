@@ -12,6 +12,7 @@ import { View, TouchableOpacity, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RefreshableWrapper from "@/components/RefreshableWrapper";
 import FeedbackModal from "@/components/FeedbackModal";
+import NotificationTestButtons from "@/components/NotificationTestButtons";
 
 export const LocationContext = createContext<{
   locationData: Array<{
@@ -82,83 +83,58 @@ export default function Partner() {
 
   useEffect(() => {
     fetchLocationData();
-  }, [brandName]);
+  }, [fetchLocationData]);
 
   // Partner screen refresh should be more frequent if user is actively considering joining a queue
   const refreshInterval = 60000; // 1 minute
 
   return (
-    <View className="flex-1">
-      <View
-        className={`absolute top-0 left-0 right-0 bottom-0 ${
-          isDarkMode ? "bg-ocean-blue" : "bg-off-white"
-        }`}
+    <LocationContext.Provider
+      value={{
+        locationData,
+        setLocationData,
+        currentLocation: value,
+        setCurrentLocation: setValue,
+      }}
+    >
+      <SafeAreaView
+        className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}
       >
-        {!isDarkMode && (
-          <LinearGradient
-            colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
-            className="absolute top-0 w-full h-64"
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-          />
-        )}
-      </View>
-      <LocationContext.Provider
-        value={{
-          locationData: locationData,
-          setLocationData: setLocationData,
-          currentLocation: value,
-          setCurrentLocation: setValue,
-        }}
-      >
-        <QueueInfoCard image={image} name={brandName} />
-
-        <SafeAreaView className="flex-1" edges={["bottom", "left", "right"]}>
-          <RefreshableWrapper
-            refreshId={`partner-${brandName}`}
-            onRefresh={fetchLocationData}
-            autoRefreshInterval={refreshInterval}
-            contentContainerStyle={{ paddingBottom: 40 }}
-          >
-            <MotiView
-              from={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                mass: 0.8,
-                damping: 15,
-                delay: 200,
-              }}
-              className="w-full px-6"
-            >
-              <JoinQueue />
-            </MotiView>
-          </RefreshableWrapper>
-        </SafeAreaView>
-      </LocationContext.Provider>
-
-      {/* Demo button for testing feedback modal - remove in production */}
-      {__DEV__ && (
-        <TouchableOpacity
-          style={{
-            position: "absolute",
-            bottom: 20,
-            right: 20,
-            backgroundColor: isDarkMode ? "#1DCDFE" : "#0077B6",
-            padding: 10,
-            borderRadius: 8,
-          }}
-          onPress={() => setShowFeedbackModal(true)}
+        <RefreshableWrapper
+          refreshId="partner-screen"
+          onRefresh={fetchLocationData}
+          autoRefreshInterval={300000}
+          className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}
         >
-          <Text style={{ color: "white" }}>Show Feedback</Text>
-        </TouchableOpacity>
-      )}
+          {!isDarkMode && (
+            <LinearGradient
+              colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
+              className="absolute top-0 w-full h-64"
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+            />
+          )}
 
-      <FeedbackModal
-        visible={showFeedbackModal}
-        onClose={() => setShowFeedbackModal(false)}
-        businessName={brandName || ""}
-        serviceName="Demo Service"
-      />
-    </View>
+          <View className="px-4 pt-4">
+            <QueueInfoCard name={brandName || ""} image={image} />
+          </View>
+
+          <View className="px-4 pt-4">
+            <JoinQueue />
+          </View>
+
+          {/* Add notification test buttons in a more subtle way */}
+          <View className="px-4 pt-4 pb-8">
+            <NotificationTestButtons compact={true} />
+          </View>
+        </RefreshableWrapper>
+        <FeedbackModal
+          visible={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
+          businessName={brandName || ""}
+          serviceName="General Service"
+        />
+      </SafeAreaView>
+    </LocationContext.Provider>
   );
 }

@@ -27,6 +27,7 @@ import { setCurrentQueues } from "@/app/redux/queueSlice";
 import axios from "axios";
 import configConverter from "@/api/configConverter";
 import RefreshableWrapper from "@/components/RefreshableWrapper";
+import NotificationTestButtons from "@/components/NotificationTestButtons";
 
 export default function Index() {
   const { isDarkMode } = useTheme();
@@ -233,6 +234,10 @@ export default function Index() {
             <CategoriesList isDarkMode={isDarkMode} />
             {recentQueues > 0 && <RecentQueues isDarkMode={isDarkMode} />}
             <FrequentlyAsked isDarkMode={isDarkMode} />
+
+            <View className="mt-4 mb-8">
+              <NotificationTestButtons compact={true} />
+            </View>
           </View>
         </View>
       </RefreshableWrapper>

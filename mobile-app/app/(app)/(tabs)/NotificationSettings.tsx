@@ -7,6 +7,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import { Ionicons } from "@expo/vector-icons";
 import { useLinkTo } from "@react-navigation/native";
+import NotificationTestButtons from "@/components/NotificationTestButtons";
 
 export default function NotificationsSettings() {
   const { isDarkMode } = useTheme();
@@ -123,6 +124,9 @@ export default function NotificationsSettings() {
               </View>
             </View>
           </MotiView>
+
+          {/* Test In-App Notifications Section */}
+          {internalNotifications && <NotificationTestButtons />}
         </ScrollView>
       </View>
     </>

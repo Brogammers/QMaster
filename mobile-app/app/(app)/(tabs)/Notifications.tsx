@@ -22,6 +22,39 @@ import configConverter from "@/api/configConverter";
 import RefreshableWrapper from "@/components/RefreshableWrapper";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
+import NotificationCard from "@/components/NotificationCard";
+
+// Mock in-app notifications data
+const mockInAppNotifications = [
+  {
+    id: "1",
+    title: "Today Only!",
+    message: "Enjoy an exclusive deal on your favorite brew! Don't miss out!",
+    timestamp: "now",
+    emoji: "☕",
+  },
+  {
+    id: "2",
+    title: "Almost Your Turn!",
+    message: 'You\'re next in the queue "Starbucks Coffee"',
+    timestamp: "5m ago",
+    emoji: "⏱️",
+  },
+  {
+    id: "3",
+    title: "Limited Time Offer",
+    message: "50% off your next coffee order. Tap to redeem now!",
+    timestamp: "15m ago",
+    emoji: "🎁",
+  },
+  {
+    id: "4",
+    title: "No Wait Time!",
+    message: 'Your favorite place "Cafe Nero" has no queue right now!',
+    timestamp: "30m ago",
+    emoji: "🚶",
+  },
+];
 
 export default function Notifications() {
   const isFocused = useIsFocused();
@@ -145,59 +178,100 @@ export default function Notifications() {
             color={isDarkMode ? "#1DCDFE" : "#0077B6"}
           />
         </View>
-      ) : isLoading && itemsCount ? (
-        <View
-          className={`flex flex-col items-center justify-center ${
-            isDarkMode ? "bg-ocean-blue" : "bg-off-white"
-          }`}
-        >
-          {Array(itemsCount)
-            .fill(0)
-            .map((_, index) => (
-              <React.Fragment key={index}>
-                <View className="mb-4" />
-                <Skeleton
-                  colorMode={isDarkMode ? "dark" : "light"}
-                  width={(windowWidth * 11) / 12}
-                  height={100}
-                />
-              </React.Fragment>
-            ))}
-          <View className="mb-5" />
-        </View>
-      ) : notifications.length === 0 ? (
-        <View className="flex-1 items-center justify-center">
-          <Text
-            className={`text-lg font-bold ${
-              isDarkMode ? "text-baby-blue" : "text-coal-black"
-            }`}
-          >
-            {i18n.t("noData")}
-          </Text>
-          <Text
-            className={`text-md ${
-              isDarkMode ? "text-baby-blue" : "text-coal-black"
-            }`}
-          >
-            {i18n.t("noDisplay")}
-          </Text>
-        </View>
       ) : (
-        <View>
-          {notifications.map((item, index) => (
-            <HistoryComponent
-              key={index}
-              image={CarrefourLogo}
-              name={item.name}
-              location={item.location || "Anything for now"}
-              date={item.date}
-              id={item.id}
-              status={item.status}
-              isHistory={item.isHistory}
-              isDarkMode={isDarkMode}
-            />
-          ))}
-        </View>
+        <ScrollView>
+          {/* In-App Notifications Section */}
+          <View style={styles.sectionContainer}>
+            <Text
+              style={[
+                styles.sectionTitle,
+                isDarkMode ? styles.textDark : styles.textLight,
+              ]}
+            >
+              {i18n.t("recent_notifications") || "Recent Notifications"}
+            </Text>
+
+            {mockInAppNotifications.map((notification) => (
+              <NotificationCard
+                key={notification.id}
+                title={notification.title}
+                message={notification.message}
+                timestamp={notification.timestamp}
+                emoji={notification.emoji}
+                onPress={() =>
+                  console.log(`Notification ${notification.id} pressed`)
+                }
+              />
+            ))}
+          </View>
+
+          {/* History Section */}
+          <View style={styles.sectionContainer}>
+            <Text
+              style={[
+                styles.sectionTitle,
+                isDarkMode ? styles.textDark : styles.textLight,
+              ]}
+            >
+              {i18n.t("history") || "History"}
+            </Text>
+
+            {isLoading && itemsCount ? (
+              <View
+                className={`flex flex-col items-center justify-center ${
+                  isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+                }`}
+              >
+                {Array(itemsCount)
+                  .fill(0)
+                  .map((_, index) => (
+                    <React.Fragment key={index}>
+                      <View className="mb-4" />
+                      <Skeleton
+                        colorMode={isDarkMode ? "dark" : "light"}
+                        width={(windowWidth * 11) / 12}
+                        height={100}
+                      />
+                    </React.Fragment>
+                  ))}
+                <View className="mb-5" />
+              </View>
+            ) : notifications.length === 0 ? (
+              <View className="flex-1 items-center justify-center py-8">
+                <Text
+                  className={`text-lg font-bold ${
+                    isDarkMode ? "text-baby-blue" : "text-coal-black"
+                  }`}
+                >
+                  {i18n.t("noData")}
+                </Text>
+                <Text
+                  className={`text-md ${
+                    isDarkMode ? "text-baby-blue" : "text-coal-black"
+                  }`}
+                >
+                  {i18n.t("noDisplay")}
+                </Text>
+              </View>
+            ) : (
+              <View>
+                {notifications.map((item, index) => (
+                  <HistoryComponent
+                    key={index}
+                    image={CarrefourLogo}
+                    name={item.name}
+                    location={item.location || "Anything for now"}
+                    date={item.date}
+                    id={item.id}
+                    status={item.status}
+                    isHistory={item.isHistory}
+                    isDarkMode={isDarkMode}
+                  />
+                ))}
+              </View>
+            )}
+          </View>
+        </ScrollView>
       )}
     </RefreshableWrapper>
   );
@@ -207,5 +281,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#D9D9D9",
+  },
+  sectionContainer: {
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginHorizontal: 16,
+    marginBottom: 8,
+  },
+  textLight: {
+    color: "#000000",
+  },
+  textDark: {
+    color: "#FFFFFF",
   },
 });
