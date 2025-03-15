@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, InteractionManager } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "@/ctx/ThemeContext";
 import { useNotification, NotificationType } from "@/ctx/NotificationContext";
@@ -68,7 +68,7 @@ export default function NotificationTestButtons({
     }
   };
 
-  // Add a new function to test emoji notifications
+  // Function to test emoji notifications
   const testEmojiNotification = (type: string) => {
     console.log(`testEmojiNotification called with type: ${type}`);
 
@@ -101,25 +101,71 @@ export default function NotificationTestButtons({
 
     console.log("Notification to be added:", notification);
 
-    // Use a direct approach to ensure the notification is added
-    setTimeout(() => {
-      try {
-        addNotification({
-          title: notification.title,
-          message: notification.message,
-          type: "info",
-          duration: 5000,
-          emoji: notification.emoji,
-          actionLabel: "View",
-          onAction: () => {
-            console.log(`${type} notification action pressed`);
-          },
-        });
-        console.log("Notification added successfully");
-      } catch (error) {
-        console.error("Error adding notification:", error);
-      }
-    }, 100);
+    // Add notification directly
+    addNotification({
+      title: notification.title,
+      message: notification.message,
+      type: "info",
+      duration: 5000,
+      emoji: notification.emoji,
+      actionLabel: "View",
+      onAction: () => {
+        console.log(`${type} notification action pressed`);
+      },
+    });
+    console.log("Notification added successfully");
+  };
+
+  // Function to test all notifications in sequence
+  const testAllNotifications = () => {
+    const allTypes = ["coffee", "queue", "offer", "noWait"];
+
+    // Add notifications with a small delay between each to prevent overwhelming the system
+    InteractionManager.runAfterInteractions(() => {
+      allTypes.forEach((type, index) => {
+        setTimeout(() => {
+          const emojiNotifications = {
+            coffee: {
+              title: "Today Only!",
+              message:
+                "Enjoy an exclusive deal on your favorite brew! Don't miss out!",
+              emoji: "☕",
+            },
+            queue: {
+              title: "Almost Your Turn!",
+              message: 'You\'re next in the queue "Starbucks Coffee"',
+              emoji: "⏱️",
+            },
+            offer: {
+              title: "Limited Time Offer",
+              message: "50% off your next coffee order. Tap to redeem now!",
+              emoji: "🎁",
+            },
+            noWait: {
+              title: "No Wait Time!",
+              message:
+                'Your favorite place "Cafe Nero" has no queue right now!',
+              emoji: "🚶",
+            },
+          };
+
+          const notification =
+            emojiNotifications[type as keyof typeof emojiNotifications];
+
+          addNotification({
+            title: notification.title,
+            message: notification.message,
+            type: "info",
+            duration: 5000,
+            emoji: notification.emoji,
+            actionLabel: "View",
+            onAction: () => {
+              console.log(`${type} notification action pressed`);
+            },
+          });
+        }, index * 50); // Small staggered delay to prevent UI thread blocking
+      });
+    });
   };
 
   if (compact) {
@@ -185,6 +231,21 @@ export default function NotificationTestButtons({
             <Text style={{ fontSize: 18 }}>🚶</Text>
           </TouchableOpacity>
         </View>
+
+        <TouchableOpacity
+          onPress={testAllNotifications}
+          className={`mt-3 flex-row items-center justify-center p-2 rounded-lg ${
+            isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
+          }`}
+        >
+          <Text
+            className={`font-medium ${
+              isDarkMode ? "text-white" : "text-gray-800"
+            }`}
+          >
+            Test All Sequentially
+          </Text>
+        </TouchableOpacity>
       </MotiView>
     );
   }
@@ -273,6 +334,14 @@ export default function NotificationTestButtons({
           >
             No Wait Time Alert
           </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={testAllNotifications}
+          className={`flex-row items-center p-3 rounded-lg bg-blue-500`}
+        >
+          <Text style={{ fontSize: 20, marginRight: 10 }}>🔄</Text>
+          <Text className="font-medium text-white">Test All Sequentially</Text>
         </TouchableOpacity>
       </View>
     </MotiView>

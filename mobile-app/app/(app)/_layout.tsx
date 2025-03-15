@@ -8,6 +8,7 @@ import { Queue, QueuesContext } from "@/components/JoinQueue";
 import { NotificationProvider } from "@/ctx/NotificationContext";
 import QueueNotificationMonitor from "@/components/QueueNotificationMonitor";
 import WelcomeNotifications from "@/components/WelcomeNotifications";
+import GlobalNotificationTester from "@/components/GlobalNotificationTester";
 
 export default function AppEntry() {
   const { session, isLoading } = useSession();
@@ -36,6 +37,7 @@ export default function AppEntry() {
           >
             <WelcomeNotifications />
             <QueueNotificationMonitor />
+            <GlobalNotificationTester />
             <Stack>
               <Stack.Screen
                 name="(tabs)"

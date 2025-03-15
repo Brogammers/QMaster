@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  InteractionManager,
 } from "react-native";
 import { useNotification } from "@/ctx/NotificationContext";
 import { useTheme } from "@/ctx/ThemeContext";
@@ -56,19 +57,17 @@ export default function NotificationDebugger() {
 
   const testNotification = (notification: (typeof testNotifications)[0]) => {
     console.log(`Testing notification: ${notification.id}`);
-    setTimeout(() => {
-      addNotification({
-        title: notification.title,
-        message: notification.message,
-        type: "info",
-        duration: 5000,
-        emoji: notification.emoji,
-        actionLabel: "View",
-        onAction: () => {
-          console.log(`${notification.id} notification action pressed`);
-        },
-      });
-    }, 100);
+    addNotification({
+      title: notification.title,
+      message: notification.message,
+      type: "info",
+      duration: 5000,
+      emoji: notification.emoji,
+      actionLabel: "View",
+      onAction: () => {
+        console.log(`${notification.id} notification action pressed`);
+      },
+    });
   };
 
   // Function to trigger the welcome notifications sequence
@@ -112,6 +111,28 @@ export default function NotificationDebugger() {
     });
   };
 
+  // Function to test all notifications in sequence
+  const testAllNotifications = () => {
+    // Add notifications with a small delay between each to prevent overwhelming the system
+    InteractionManager.runAfterInteractions(() => {
+      testNotifications.forEach((notification, index) => {
+        setTimeout(() => {
+          addNotification({
+            title: notification.title,
+            message: notification.message,
+            type: "info",
+            duration: 5000,
+            emoji: notification.emoji,
+            actionLabel: "View",
+            onAction: () => {
+              console.log(`${notification.id} notification action pressed`);
+            },
+          });
+        }, index * 50); // Small staggered delay to prevent UI thread blocking
+      });
+    });
+  };
+
   return (
     <View
       style={[
@@ -140,6 +161,13 @@ export default function NotificationDebugger() {
           <Text style={styles.welcomeButtonText}>Personalized Welcome</Text>
         </TouchableOpacity>
       </View>
+
+      <TouchableOpacity
+        style={[styles.allButton]}
+        onPress={testAllNotifications}
+      >
+        <Text style={styles.welcomeButtonText}>Test All Notifications</Text>
+      </TouchableOpacity>
 
       <ScrollView
         horizontal
@@ -238,6 +266,13 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     alignItems: "center",
+  },
+  allButton: {
+    backgroundColor: "#34C759",
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 16,
   },
   welcomeButtonText: {
     color: "white",

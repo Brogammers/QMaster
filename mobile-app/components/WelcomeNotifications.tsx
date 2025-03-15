@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import _ from "lodash";
+import { InteractionManager } from "react-native";
 
 // Storage key for tracking if welcome notifications have been shown
 const WELCOME_NOTIFICATIONS_SHOWN_KEY = "welcome_notifications_shown";
@@ -81,18 +82,19 @@ export default function WelcomeNotifications() {
       },
     ];
 
-    // Show notifications with a delay between them
-    notifications.forEach((notification, index) => {
-      setTimeout(() => {
-        console.log(`Triggering notification ${index + 1}`);
-        addNotification({
-          ...notification,
-          actionLabel: "View",
-          onAction: () => {
-            console.log(`${notification.title} action pressed`);
-          },
-        });
-      }, 2000 + index * 5000); // Start after 2 seconds, then 5 seconds between each
+    // Add notifications with a small delay between each to prevent overwhelming the system
+    InteractionManager.runAfterInteractions(() => {
+      notifications.forEach((notification, index) => {
+        setTimeout(() => {
+          addNotification({
+            ...notification,
+            actionLabel: "View",
+            onAction: () => {
+              console.log(`${notification.title} action pressed`);
+            },
+          });
+        }, index * 50); // Small staggered delay to prevent UI thread blocking
+      });
     });
 
     // Mark notifications as shown
@@ -190,17 +192,18 @@ export function triggerWelcomeNotifications(
     },
   ];
 
-  // Show notifications with a delay between them
-  notifications.forEach((notification, index) => {
-    setTimeout(() => {
-      console.log(`Triggering notification ${index + 1}`);
-      addNotification({
-        ...notification,
-        actionLabel: "View",
-        onAction: () => {
-          console.log(`${notification.title} action pressed`);
-        },
-      });
-    }, 500 + index * 5000); // Start after 0.5 seconds, then 5 seconds between each
+  // Add notifications with a small delay between each to prevent overwhelming the system
+  InteractionManager.runAfterInteractions(() => {
+    notifications.forEach((notification, index) => {
+      setTimeout(() => {
+        addNotification({
+          ...notification,
+          actionLabel: "View",
+          onAction: () => {
+            console.log(`${notification.title} action pressed`);
+          },
+        });
+      }, index * 50); // Small staggered delay to prevent UI thread blocking
+    });
   });
 }

@@ -6,6 +6,7 @@ import React, {
   ReactNode,
   useRef,
   useCallback,
+  useMemo,
 } from "react";
 import {
   View,
@@ -16,6 +17,7 @@ import {
   Platform,
   Dimensions,
   PanResponder,
+  InteractionManager,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "./ThemeContext";
@@ -72,40 +74,65 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   const queueState = useSelector((state: RootState) => state.queue);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const notificationQueueRef = useRef<InAppNotification[]>([]);
+  const isAnimatingRef = useRef(false);
+  const isProcessingRef = useRef(false);
 
   // Create pan responder for swipe to dismiss
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderMove: (_, gestureState) => {
-        // Only allow horizontal movement
-        translateX.setValue(gestureState.dx);
-      },
-      onPanResponderRelease: (_, gestureState) => {
-        // If swiped far enough, dismiss the notification
-        if (Math.abs(gestureState.dx) > 100) {
-          // Animate off screen
-          Animated.timing(translateX, {
-            toValue: gestureState.dx > 0 ? width : -width,
-            duration: 200,
-            useNativeDriver: true,
-          }).start(() => {
-            if (currentNotification) {
-              markAsRead(currentNotification.id);
-              removeNotification(currentNotification.id);
-            }
-          });
-        } else {
-          // Spring back to center
-          Animated.spring(translateX, {
-            toValue: 0,
-            friction: 5,
-            useNativeDriver: true,
-          }).start();
-        }
-      },
-    })
-  ).current;
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderMove: (_, gestureState) => {
+          // Only allow horizontal movement
+          translateX.setValue(gestureState.dx);
+        },
+        onPanResponderRelease: (_, gestureState) => {
+          // If swiped far enough, dismiss the notification
+          if (Math.abs(gestureState.dx) > 100) {
+            // Animate off screen
+            Animated.timing(translateX, {
+              toValue: gestureState.dx > 0 ? width : -width,
+              duration: 200,
+              useNativeDriver: true,
+            }).start(() => {
+              if (currentNotification) {
+                markAsRead(currentNotification.id);
+                removeNotification(currentNotification.id);
+              }
+            });
+          } else {
+            // Spring back to center
+            Animated.spring(translateX, {
+              toValue: 0,
+              friction: 5,
+              useNativeDriver: true,
+            }).start();
+          }
+        },
+      }),
+    [currentNotification, translateX, width]
+  );
+
+  // Process the next notification in queue
+  const processNextNotification = useCallback(() => {
+    if (isProcessingRef.current) return;
+
+    if (notificationQueueRef.current.length > 0 && !isAnimatingRef.current) {
+      isProcessingRef.current = true;
+
+      // Use InteractionManager to ensure UI thread is not blocked
+      InteractionManager.runAfterInteractions(() => {
+        const nextNotification = notificationQueueRef.current.shift();
+        console.log("Processing next notification:", nextNotification?.title);
+
+        // Small delay to ensure animations don't conflict
+        setTimeout(() => {
+          setCurrentNotification(nextNotification || null);
+          isProcessingRef.current = false;
+        }, 300);
+      });
+    }
+  }, []);
 
   // Add notification
   const addNotification = useCallback(
@@ -121,11 +148,12 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
       };
 
       console.log("Created new notification:", newNotification);
+
+      // Update notifications list
       setNotifications((prev) => [newNotification, ...prev]);
-      console.log("Updated notifications state");
 
       // Add to queue if there's already a notification showing
-      if (currentNotification) {
+      if (currentNotification || isAnimatingRef.current) {
         console.log("Current notification exists, adding to queue");
         notificationQueueRef.current = [
           ...notificationQueueRef.current,
@@ -149,7 +177,8 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
 
       // If the current notification is being removed, set it to null
       if (currentNotification?.id === id) {
-        setCurrentNotification(null);
+        // Mark that we're animating
+        isAnimatingRef.current = true;
 
         // Clear any existing timeout
         if (timeoutRef.current) {
@@ -170,17 +199,19 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
             useNativeDriver: true,
           }),
         ]).start(() => {
-          // Show next notification in queue if available
-          if (notificationQueueRef.current.length > 0) {
-            const nextNotification = notificationQueueRef.current.shift();
-            setTimeout(() => {
-              setCurrentNotification(nextNotification || null);
-            }, 300);
-          }
+          setCurrentNotification(null);
+
+          // Use InteractionManager to ensure UI thread is not blocked
+          InteractionManager.runAfterInteractions(() => {
+            isAnimatingRef.current = false;
+
+            // Process next notification after animation completes
+            processNextNotification();
+          });
         });
       }
     },
-    [currentNotification, opacity, translateY]
+    [currentNotification, opacity, translateY, processNextNotification]
   );
 
   // Mark notification as read
@@ -197,6 +228,8 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
     setNotifications([]);
     setCurrentNotification(null);
     notificationQueueRef.current = [];
+    isAnimatingRef.current = false;
+    isProcessingRef.current = false;
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -237,24 +270,31 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
     if (currentNotification) {
       console.log("Showing notification:", currentNotification.title);
 
-      // Reset position
+      // Reset position and translation
       translateY.setValue(-50);
+      translateX.setValue(0);
 
-      // Fade in and slide down
-      console.log("Starting animation");
-      Animated.parallel([
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(translateY, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        console.log("Animation completed");
+      // Mark that we're animating
+      isAnimatingRef.current = true;
+
+      // Fade in and slide down - use InteractionManager to ensure smooth animation
+      InteractionManager.runAfterInteractions(() => {
+        console.log("Starting animation");
+        Animated.parallel([
+          Animated.timing(opacity, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+          }),
+          Animated.timing(translateY, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true,
+          }),
+        ]).start(() => {
+          console.log("Animation completed");
+          isAnimatingRef.current = false;
+        });
       });
 
       // Set timeout to fade out
@@ -263,9 +303,15 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
         clearTimeout(timeoutRef.current);
       }
 
-      console.log("Setting timeout for", currentNotification.duration, "ms");
+      const duration = currentNotification.duration || 5000;
+      console.log("Setting timeout for", duration, "ms");
+
       timeoutRef.current = setTimeout(() => {
         console.log("Timeout triggered, fading out notification");
+
+        // Mark that we're animating
+        isAnimatingRef.current = true;
+
         // Fade out and slide up
         Animated.parallel([
           Animated.timing(opacity, {
@@ -281,26 +327,19 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
         ]).start(() => {
           console.log("Fade out animation completed");
           markAsRead(currentNotification.id);
-          setCurrentNotification(null);
 
-          // Check if there are more notifications to show
-          if (notificationQueueRef.current.length > 0) {
-            console.log(
-              "More notifications in queue:",
-              notificationQueueRef.current.length
-            );
-            const nextNotification = notificationQueueRef.current.shift();
-            setTimeout(() => {
-              console.log("Setting next notification");
-              setCurrentNotification(nextNotification || null);
-            }, 300);
-          } else {
-            console.log("No more notifications in queue");
-          }
+          // Use InteractionManager to ensure UI thread is not blocked
+          InteractionManager.runAfterInteractions(() => {
+            setCurrentNotification(null);
+            isAnimatingRef.current = false;
+
+            // Process next notification after animation completes
+            processNextNotification();
+          });
         });
 
         timeoutRef.current = null;
-      }, currentNotification.duration);
+      }, duration);
 
       return () => {
         if (timeoutRef.current) {
@@ -312,10 +351,16 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
     } else {
       console.log("No current notification to display");
     }
-  }, [currentNotification, opacity, translateY, markAsRead]);
+  }, [
+    currentNotification,
+    opacity,
+    translateY,
+    markAsRead,
+    processNextNotification,
+  ]);
 
-  // Notification Toast component
-  const NotificationToast = () => {
+  // Notification Toast component - memoize to prevent unnecessary re-renders
+  const NotificationToast = useMemo(() => {
     console.log(
       "NotificationToast render called, currentNotification:",
       currentNotification
@@ -357,7 +402,6 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
       removeNotification(currentNotification.id);
     };
 
-    // Use a simpler approach for debugging
     return (
       <Animated.View
         {...panResponder.panHandlers}
@@ -365,8 +409,8 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
           styles.toastContainer,
           isDarkMode ? styles.toastContainerDark : {},
           {
-            opacity: 1, // Force opacity to 1 for debugging
-            transform: [{ translateX: translateX }, { translateY: 0 }],
+            opacity: opacity, // Use the animated value for proper animations
+            transform: [{ translateX: translateX }, { translateY: translateY }],
           },
         ]}
       >
@@ -412,21 +456,39 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
         )}
       </Animated.View>
     );
-  };
+  }, [
+    currentNotification,
+    opacity,
+    translateY,
+    translateX,
+    isDarkMode,
+    panResponder,
+  ]);
+
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      notifications,
+      addNotification,
+      removeNotification,
+      markAsRead,
+      clearAllNotifications,
+      currentNotification,
+    }),
+    [
+      notifications,
+      addNotification,
+      removeNotification,
+      markAsRead,
+      clearAllNotifications,
+      currentNotification,
+    ]
+  );
 
   return (
-    <NotificationContext.Provider
-      value={{
-        notifications,
-        addNotification,
-        removeNotification,
-        markAsRead,
-        clearAllNotifications,
-        currentNotification,
-      }}
-    >
+    <NotificationContext.Provider value={contextValue}>
       {children}
-      <NotificationToast />
+      {NotificationToast}
     </NotificationContext.Provider>
   );
 };
