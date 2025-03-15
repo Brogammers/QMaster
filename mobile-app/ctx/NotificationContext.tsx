@@ -74,6 +74,8 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   // Add notification
   const addNotification = useCallback(
     (notification: Omit<InAppNotification, "id" | "timestamp" | "read">) => {
+      console.log("addNotification called with:", notification);
+
       const newNotification: InAppNotification = {
         ...notification,
         id: Math.random().toString(36).substring(2, 9),
@@ -82,15 +84,20 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
         duration: notification.duration || 5000, // Default 5 seconds
       };
 
+      console.log("Created new notification:", newNotification);
       setNotifications((prev) => [newNotification, ...prev]);
+      console.log("Updated notifications state");
 
       // Add to queue if there's already a notification showing
       if (currentNotification) {
+        console.log("Current notification exists, adding to queue");
         notificationQueueRef.current = [
           ...notificationQueueRef.current,
           newNotification,
         ];
+        console.log("Queue length:", notificationQueueRef.current.length);
       } else {
+        console.log("No current notification, setting as current");
         setCurrentNotification(newNotification);
       }
     },
@@ -186,11 +193,19 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
 
   // Effect to handle notification display and animation
   useEffect(() => {
+    console.log(
+      "Notification display effect triggered, currentNotification:",
+      currentNotification
+    );
+
     if (currentNotification) {
+      console.log("Showing notification:", currentNotification.title);
+
       // Reset position
       translateY.setValue(-50);
 
       // Fade in and slide down
+      console.log("Starting animation");
       Animated.parallel([
         Animated.timing(opacity, {
           toValue: 1,
@@ -202,14 +217,19 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]).start(() => {
+        console.log("Animation completed");
+      });
 
       // Set timeout to fade out
       if (timeoutRef.current) {
+        console.log("Clearing existing timeout");
         clearTimeout(timeoutRef.current);
       }
 
+      console.log("Setting timeout for", currentNotification.duration, "ms");
       timeoutRef.current = setTimeout(() => {
+        console.log("Timeout triggered, fading out notification");
         // Fade out and slide up
         Animated.parallel([
           Animated.timing(opacity, {
@@ -223,15 +243,23 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
             useNativeDriver: true,
           }),
         ]).start(() => {
+          console.log("Fade out animation completed");
           markAsRead(currentNotification.id);
           setCurrentNotification(null);
 
           // Check if there are more notifications to show
           if (notificationQueueRef.current.length > 0) {
+            console.log(
+              "More notifications in queue:",
+              notificationQueueRef.current.length
+            );
             const nextNotification = notificationQueueRef.current.shift();
             setTimeout(() => {
+              console.log("Setting next notification");
               setCurrentNotification(nextNotification || null);
             }, 300);
+          } else {
+            console.log("No more notifications in queue");
           }
         });
 
@@ -240,15 +268,23 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
 
       return () => {
         if (timeoutRef.current) {
+          console.log("Cleanup: clearing timeout");
           clearTimeout(timeoutRef.current);
           timeoutRef.current = null;
         }
       };
+    } else {
+      console.log("No current notification to display");
     }
   }, [currentNotification, opacity, translateY, markAsRead]);
 
   // Notification Toast component
   const NotificationToast = () => {
+    console.log(
+      "NotificationToast render called, currentNotification:",
+      currentNotification
+    );
+
     if (!currentNotification) return null;
 
     const getIcon = () => {
@@ -285,15 +321,13 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
       removeNotification(currentNotification.id);
     };
 
+    // Use a simpler approach for debugging
     return (
-      <Animated.View
+      <View
         style={[
           styles.toastContainer,
           isDarkMode ? styles.toastContainerDark : {},
-          {
-            opacity,
-            transform: [{ translateY }],
-          },
+          { opacity: 1 }, // Force opacity to 1 for debugging
         ]}
       >
         <View style={styles.toastContent}>
@@ -328,7 +362,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
             </Text>
           </TouchableOpacity>
         )}
-      </Animated.View>
+      </View>
     );
   };
 
@@ -378,6 +412,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
+    zIndex: 9999,
     ...Platform.select({
       ios: {
         // iOS-specific styling

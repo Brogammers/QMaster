@@ -23,6 +23,7 @@ import RefreshableWrapper from "@/components/RefreshableWrapper";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import NotificationCard from "@/components/NotificationCard";
+import NotificationDebugger from "@/components/NotificationDebugger";
 
 // Mock in-app notifications data
 const mockInAppNotifications = [
@@ -180,6 +181,9 @@ export default function Notifications() {
         </View>
       ) : (
         <ScrollView>
+          {/* Notification Debugger */}
+          <NotificationDebugger />
+
           {/* In-App Notifications Section */}
           <View style={styles.sectionContainer}>
             <Text

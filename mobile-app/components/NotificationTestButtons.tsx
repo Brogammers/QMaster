@@ -70,6 +70,8 @@ export default function NotificationTestButtons({
 
   // Add a new function to test emoji notifications
   const testEmojiNotification = (type: string) => {
+    console.log(`testEmojiNotification called with type: ${type}`);
+
     const emojiNotifications = {
       coffee: {
         title: "Today Only!",
@@ -97,17 +99,24 @@ export default function NotificationTestButtons({
     const notification =
       emojiNotifications[type as keyof typeof emojiNotifications];
 
-    addNotification({
-      title: notification.title,
-      message: notification.message,
-      type: "info",
-      duration: 5000,
-      emoji: notification.emoji,
-      actionLabel: "View",
-      onAction: () => {
-        console.log(`${type} notification action pressed`);
-      },
-    });
+    console.log("Notification to be added:", notification);
+
+    try {
+      addNotification({
+        title: notification.title,
+        message: notification.message,
+        type: "info",
+        duration: 5000,
+        emoji: notification.emoji,
+        actionLabel: "View",
+        onAction: () => {
+          console.log(`${type} notification action pressed`);
+        },
+      });
+      console.log("Notification added successfully");
+    } catch (error) {
+      console.error("Error adding notification:", error);
+    }
   };
 
   if (compact) {
