@@ -407,7 +407,6 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
         {...panResponder.panHandlers}
         style={[
           styles.toastContainer,
-          isDarkMode ? styles.toastContainerDark : {},
           {
             opacity: opacity, // Use the animated value for proper animations
             transform: [{ translateX: translateX }, { translateY: translateY }],
@@ -415,12 +414,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
         ]}
       >
         <View style={styles.swipeIndicator}>
-          <View
-            style={[
-              styles.swipeIndicatorBar,
-              isDarkMode ? { backgroundColor: "rgba(255, 255, 255, 0.3)" } : {},
-            ]}
-          />
+          <View style={styles.swipeIndicatorBar} />
         </View>
         <View style={styles.toastContent}>
           <View style={styles.iconContainer}>
@@ -436,14 +430,10 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
           </View>
           <View style={styles.textContainer}>
             <View style={styles.titleRow}>
-              <Text style={[styles.title, isDarkMode && styles.darkTitle]}>
-                {currentNotification.title}
-              </Text>
+              <Text style={styles.title}>{currentNotification.title}</Text>
               <Text style={styles.timeText}>now</Text>
             </View>
-            <Text style={[styles.message, isDarkMode && styles.darkMessage]}>
-              {currentNotification.message}
-            </Text>
+            <Text style={styles.message}>{currentNotification.message}</Text>
           </View>
         </View>
 
@@ -456,14 +446,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
         )}
       </Animated.View>
     );
-  }, [
-    currentNotification,
-    opacity,
-    translateY,
-    translateX,
-    isDarkMode,
-    panResponder,
-  ]);
+  }, [currentNotification, opacity, translateY, translateX, panResponder]);
 
   // Memoize the context value to prevent unnecessary re-renders
   const contextValue = useMemo(
@@ -534,9 +517,6 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  toastContainerDark: {
-    backgroundColor: "rgba(30, 30, 30, 0.95)",
-  },
   toastContent: {
     flexDirection: "row",
     alignItems: "center",
@@ -564,9 +544,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 15,
   },
-  darkTitle: {
-    color: "#FFF",
-  },
   timeText: {
     fontSize: 12,
     color: "#8E8E93",
@@ -575,9 +552,6 @@ const styles = StyleSheet.create({
   message: {
     color: "#666",
     fontSize: 14,
-  },
-  darkMessage: {
-    color: "#CCC",
   },
   actionButton: {
     marginTop: 8,
