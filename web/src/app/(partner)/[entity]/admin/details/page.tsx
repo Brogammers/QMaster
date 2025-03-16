@@ -2,7 +2,7 @@
 
 import QueueModal from "@/app/shared/QueueModal";
 import { Button, Form, Input, Select, Tabs, TimePicker } from "antd";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -71,31 +71,50 @@ function DetailsPage() {
     useState<BusinessDetails>(initialValues);
   const { selectedLocation } = useLocation();
 
-  const handleModificationRequest = async (
-    values: Partial<BusinessDetails>
-  ) => {
+  const handleModificationRequest = ({
+    value
+  }: { value: string}) => {
     setIsSubmitting(true);
-    try {
-      // Here you would typically send this to your API
-      console.log("Modification requested:", values);
-      toast.success("Modification request submitted successfully", {
-        duration: 5000,
-        style: {
-          background: "#17222D",
-          color: "#FFF",
-        },
-      });
-    } catch (error) {
-      toast.error("Failed to submit modification request", {
-        duration: 5000,
-        style: {
-          background: "#17222D",
-          color: "#FFF",
-        },
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+      const url = process.env.NEXT_PUBLIC_API_BASE_URL_MODIFY_BUSINESS_DATA || "";
+
+      const body = {
+        type: value,
+      }
+      console.log("Modification requested:", body);
+      
+      axios
+        .post(url, body)
+        .then((response) => {
+          if (response.status === 200) {
+            return; 
+          } else {
+            throw new Error(response.data.message);
+          }
+        })
+        .then(() => {
+          toast.success("Modification request submitted successfully", {
+            duration: 5000,
+            style: {
+              background: "#17222D",
+              color: "#FFF",
+            },
+          });
+        })
+        .then(() => {
+          setTimeout(() => {
+            setIsSubmitting(false);
+          }, 5000);
+        })
+        .catch((error: AxiosError) => {
+          console.error(error);
+          toast.error(error.message, {
+            duration: 5000,
+            style: {
+              background: "#17222D",
+              color: "#FFF",
+            },
+          });
+        });
   };
 
   useEffect(() => {
@@ -177,7 +196,7 @@ function DetailsPage() {
                           <Button
                             onClick={() =>
                               handleModificationRequest({
-                                name: form.getFieldValue("name"),
+                                value: "NAME",
                               })
                             }
                             className="sm:hidden absolute right-2 top-1/2 -translate-y-1/2 text-xs h-fit w-fit border-0 shadow-none
@@ -189,7 +208,7 @@ function DetailsPage() {
                           <Button
                             onClick={() =>
                               handleModificationRequest({
-                                name: form.getFieldValue("name"),
+                                value: "NAME",
                               })
                             }
                             className="hidden sm:block absolute right-0 -top-7 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
@@ -222,7 +241,7 @@ function DetailsPage() {
                           <Button
                             onClick={() =>
                               handleModificationRequest({
-                                phone: form.getFieldValue("phone"),
+                                value: "PHONE_NUMBER"
                               })
                             }
                             className="sm:hidden absolute right-2 top-1/2 -translate-y-1/2 text-xs h-fit w-fit border-0 shadow-none
@@ -234,7 +253,7 @@ function DetailsPage() {
                           <Button
                             onClick={() =>
                               handleModificationRequest({
-                                phone: form.getFieldValue("phone"),
+                                value: "PHONE_NUMBER"
                               })
                             }
                             className="hidden sm:block absolute right-0 -top-7 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
@@ -269,7 +288,7 @@ function DetailsPage() {
                         <Button
                           onClick={() =>
                             handleModificationRequest({
-                              address: form.getFieldValue("address"),
+                              value: "ADDRESS",
                             })
                           }
                           className="sm:hidden absolute right-2 top-4 text-xs h-fit w-fit border-0 shadow-none
@@ -281,7 +300,7 @@ function DetailsPage() {
                         <Button
                           onClick={() =>
                             handleModificationRequest({
-                              address: form.getFieldValue("address"),
+                              value: "ADDRESS",
                             })
                           }
                           className="hidden sm:block absolute right-0 -top-7 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
@@ -315,7 +334,7 @@ function DetailsPage() {
                           <Button
                             onClick={() =>
                               handleModificationRequest({
-                                website: form.getFieldValue("website"),
+                                value: "WEBSITE",
                               })
                             }
                             className="sm:hidden absolute right-2 top-1/2 -translate-y-1/2 text-xs h-fit w-fit border-0 shadow-none
@@ -327,7 +346,7 @@ function DetailsPage() {
                           <Button
                             onClick={() =>
                               handleModificationRequest({
-                                website: form.getFieldValue("website"),
+                                value: "WEBSITE",
                               })
                             }
                             className="hidden sm:block absolute right-0 -top-7 text-xs sm:text-sm opacity-0 h-fit w-fit border-0 shadow-none group-hover:opacity-100 
@@ -404,9 +423,7 @@ function DetailsPage() {
                           <Button
                             onClick={() =>
                               handleModificationRequest({
-                                openingHours: {
-                                  [day]: businessDetails.openingHours[day],
-                                },
+                                value: `OPENING_HOURS_${day.toUpperCase()}`,
                               })
                             }
                             className="text-xs sm:text-sm ml-auto h-fit w-fit border-0 shadow-none 

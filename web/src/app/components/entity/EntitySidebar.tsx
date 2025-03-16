@@ -147,7 +147,7 @@ export default function EntitySidebar({
             height={40}
             className="w-10 h-10"
           />
-          <h1 className="text-3xl font-bold text-white jost-font">QMaster</h1>
+          <h1 className="text-3xl font-bold text-white jost-font">mstaagl</h1>
         </Link>
         {/* Close button for mobile */}
         <button

@@ -25,7 +25,7 @@ import {
   FaUndo,
 } from "react-icons/fa";
 import AddCategoryModal from "@/components/admin/AddCategoryModal";
-import { CategoriesContext } from "../../context";
+import { useCategory } from "../../context";
 import axios from "axios";
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "../../layout";
 
@@ -61,7 +61,7 @@ export default function CategoriesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
-  const { categories, setCategories } = useContext(CategoriesContext);
+  const { categories, setCategories } = useCategory();
 
   const handleAddCategory = (
     categoryData: Omit<Category, "id" | "partnersCount">
@@ -182,41 +182,6 @@ export default function CategoriesPage() {
         });
     }, 6000);
   };
-
-  useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_API_BASE_URL_ADMIN_CATEGORIES || "";
-
-    axios
-      .get(`${url}?page=${DEFAULT_PAGE}&per-page=${DEFAULT_PER_PAGE}`)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.data.categories.content;
-        } else {
-          throw new Error("Failed to fetch categories");
-        }
-      })
-      .then((data) => {
-        const categories = data.map((category: any) => ({
-          id: category.id,
-          name: category.name,
-          description: category.description,
-          icon: FaSearch,
-          partnersCount: category.partnersCount,
-          status: category.status,
-        }));
-
-        setCategories(categories);
-      })
-      .catch((error) => {
-        toast.error(error.message, {
-          duration: 5000,
-          style: {
-            background: "#17222D",
-            color: "#FFF",
-          },
-        });
-      });
-  }, []);
 
   return (
     <div className="space-y-4 lg:space-y-6">

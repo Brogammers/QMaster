@@ -62,7 +62,7 @@ export default function ScanQR({ isDarkMode }: ScanQRProps) {
             className="ml-1 text-xl text-white"
             style={{ fontFamily: "JostBold" }}
           >
-            QMaster
+            tawabiry
           </Text>
         </View>
         <TouchableOpacity

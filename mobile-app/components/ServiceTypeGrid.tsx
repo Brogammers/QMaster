@@ -36,12 +36,13 @@ export default function ServiceTypeGrid({
         const token = await AsyncStorage.getItem("TOKEN_KEY");
         const url = configConverter("EXPO_PUBLIC_API_BASE_URL_GET_QUEUES");
         const response = await axios.get(
-          `${url}?businessName=${businessName}&locationId=${locationId}`
-        , {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+          `${url}?businessName=${businessName}&locationId=${locationId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           const queueData = response.data.queues.map((queue: any) => ({

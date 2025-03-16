@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.que.que.Partner.Partner;
+import com.que.que.Partner.PartnerService;
+
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -23,6 +26,7 @@ import lombok.AllArgsConstructor;
 public class RegistrationController {
 
   private RegistrationService registrationService;
+  private PartnerService partnerService;
 
   @PostMapping(path = "/user")
   public ResponseEntity<Object> register(@RequestBody AppUserRegistrationRequest request) {
@@ -74,8 +78,9 @@ public class RegistrationController {
     Map<String, Object> body = new HashMap<>();
     HttpStatusCode statusCode = HttpStatusCode.valueOf(201);
     try {
-      registrationService.registerPartner(request);
+      Partner partner = partnerService.createPartner(request.getName(), request.getCategory(), request.getLocations());
       body.put("message", "Registered!");
+      body.put("partner", partner);
     } catch (IllegalStateException e) {
       body.put("message", e.getMessage());
       statusCode = HttpStatusCode.valueOf(500);

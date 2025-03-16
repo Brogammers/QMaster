@@ -566,7 +566,7 @@ export default function SignUp() {
                         {errors.dateOfBirth}
                       </Text>
                     )}
-                    <View>
+                    {/* <View>
                       <DropDownPicker
                         open={open}
                         onChangeValue={(value) => {
@@ -607,7 +607,7 @@ export default function SignUp() {
                           {errors.countryOfOrigin}
                         </Text>
                       )}
-                    </View>
+                    </View> */}
                     <PhoneInput
                       style={styles.input}
                       onChangePhoneNumber={(value) => {

@@ -95,7 +95,7 @@ export default function AdminSidebar({
               className="w-10 h-10"
             />
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-crystal-blue to-baby-blue jost-font">
-              QMaster
+              mstaagl
             </h1>
           </Link>
         </div>

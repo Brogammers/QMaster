@@ -76,7 +76,7 @@
   "findAccountComment": "Already have an account but don't remember the email? Enter it below and we'll check for an existing account.",
   "enterEmail": "Enter your email",
   "findMyAccount": "Find My Account",
-  "exploreQMaster": "Explore QMaster",
+  "exploreQMaster": "Explore tawabiry",
   "sitTight": "Sit tight while we search our database to see if your email has a reservation with us!",
   "accountNotFound": "No account found",
   "accountNotFoundComment": "It seems we couldn't find an account linked to the provided email. Double-check or consider registering if you're new.",
@@ -86,7 +86,7 @@
   "accountFoundComment": "Great news! We found an account linked to this email. Continue to sign in or reset your password if needed.",
   "resetPassword": "Reset Password",
   "goodByeToWaiting": "Say goodbye to waiting in queues to finish a single errand",
-  "finishErrands": "With QMaster, you can finish your errands without waiting a second",
+  "finishErrands": "With tawabiry, you can finish your errands without waiting a second",
   "saveMoney": "Save your money using our exclusive deals and special coupons",
   "spendTime": "Spend your time on the important things in life",
   "signupPage": {
@@ -174,9 +174,12 @@
     "locationAccess": "Choose location to join the queue",
     "queue": {
       "peopleCount": "{{count}} people in queue",
+      "peopleCountSingular": "{{count}} person in queue",
       "waitTime": "~ {{minutes}} min",
       "joined": "Queue Joined!",
       "leave": "Leave Queue",
+      "leavingQueue": "Leaving Queue...",
+      "joiningQueue": "Joining Queue...",
       "join": "Join Queue",
       "leaveConfirm": {
         "title": "Leave Queue?",
@@ -218,5 +221,10 @@
   "done": "Done",
   "scanAgain": "Scan Again",
   "permissionRequired": "Camera Permission Required",
-  "ok": "OK"
+  "ok": "OK",
+  "currentQueues": "Current Queues",
+  "position": "Position",
+  "minutes": "min",
+  "waitTime": "Wait time",
+  "yourTurn": "Your turn now!"
 }

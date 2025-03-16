@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authSlice from './authSlice';
 import userSlice from './userSlice';
+import queueReducer from './queueSlice';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     phoneNumber: userSlice,
     userId: userSlice,
     profileImage: userSlice,
+    queue: queueReducer,
   },
 })
 
