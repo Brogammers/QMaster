@@ -87,7 +87,7 @@ export const features = [
     subtitle: "Effortless Queuing Experience",
     paragraphs: [
       "Check-in at your favorite spots without the hassle of standing in line. Our app allows you to queue virtually, giving you the freedom to manage your time efficiently.",
-      "Receive instant updates on your queue status and estimated wait times directly to your phone. Stay informed and save time with QMaster!",
+      "Receive instant updates on your queue status and estimated wait times directly to your phone. Stay informed and save time with tawabiry!",
     ],
     image: "/featureOne.svg",
     attribution: "Photo by Lisanto 李奕良 on Unsplash",
@@ -96,7 +96,7 @@ export const features = [
     title: "Keep Track of Your Appointments",
     subtitle: "Never Miss a Spot",
     paragraphs: [
-      "Book appointments and secure your place in line for services at your convenience. Whether it's a doctor's appointment, a restaurant reservation, or a salon visit, QMaster has got you covered.",
+      "Book appointments and secure your place in line for services at your convenience. Whether it's a doctor's appointment, a restaurant reservation, or a salon visit, tawabiry has got you covered.",
       "Get reminders and notifications to ensure you never miss your turn. Our app keeps you organized and on schedule.",
     ],
     image: "/featureTwo.svg",
@@ -106,7 +106,7 @@ export const features = [
     title: "Enhanced User Experience",
     subtitle: "User-Friendly and Intuitive",
     paragraphs: [
-      "Navigate the app with ease thanks to its user-friendly design and intuitive interface. Whether you're tech-savvy or a beginner, iQueue is simple and straightforward to use.",
+      "Navigate the app with ease thanks to its user-friendly design and intuitive interface. Whether you're tech-savvy or a beginner, tawabiry is simple and straightforward to use.",
       "Our app is designed to provide a seamless experience, ensuring that all users can enjoy its benefits without any hassle.",
     ],
     image: "/featureThree.svg",

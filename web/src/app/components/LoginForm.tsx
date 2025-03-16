@@ -44,12 +44,12 @@ export default function LoginForm({ setIsLoading }: any) {
       .then((response) => {
         if (response.status === 200 && response.data.token) {
           console.log("Login successful:", response.data);
-          login(values.email, response.data.partnerName);          
+          login(values.email, response.data.partnerName);
           router.push(`/${response.data.partnerName}/counter`);
           // Necessary CORS headers to allow requests from localhost:3000
           document.cookie = `userId=${response.data.userID}; SameSite=None; Secure;`;
           axios.defaults.headers.common[
-              "Authorization"
+            "Authorization"
           ] = `Bearer ${response.data.token}`;
           axios.defaults.headers.common["Content-Type"] = "application/json";
 
@@ -163,7 +163,7 @@ export default function LoginForm({ setIsLoading }: any) {
             {/* Forgot Password Link */}
             <div className="text-right">
               <Link
-                href="mailto:support@qmaster.com"
+                href="mailto:support@tawabiry.com"
                 className="text-sm text-baby-blue hover:underline"
               >
                 Forgot Password?

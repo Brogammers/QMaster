@@ -70,7 +70,7 @@ export default function Login() {
                 Industrial space
               </h3>
               <p className="text-gray-600 mb-4">
-                &ldquo;QMaster has been a true partner to us. Their worker
+                &ldquo;tawabiry has been a true partner to us. Their worker
                 quality has been a differentiator for us. I do really think this
                 is the future.&rdquo;
               </p>

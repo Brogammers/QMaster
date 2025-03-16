@@ -218,7 +218,7 @@ export default function ReleaseContentPage() {
                         <p className="text-dark-grey text-sm mb-4">#17222D</p>
                         <div className="min-h-[60px]">
                           <p className="text-slate-grey text-sm font-semibold">
-                            QMaster Usage:
+                            tawabiry Usage:
                           </p>
                           <p className="text-slate-grey text-sm">
                             Primary brand color, used for main backgrounds and
@@ -250,7 +250,7 @@ export default function ReleaseContentPage() {
                         <p className="text-dark-grey text-sm mb-4">#13404D</p>
                         <div className="min-h-[60px]">
                           <p className="text-slate-grey text-sm font-semibold">
-                            QMaster Usage:
+                            tawabiry Usage:
                           </p>
                           <p className="text-slate-grey text-sm">
                             Secondary background color, used for gradients and
@@ -282,7 +282,7 @@ export default function ReleaseContentPage() {
                         <p className="text-dark-grey text-sm mb-4">#1DCDFE</p>
                         <div className="min-h-[60px]">
                           <p className="text-slate-grey text-sm font-semibold">
-                            QMaster Usage:
+                            tawabiry Usage:
                           </p>
                           <p className="text-slate-grey text-sm">
                             Accent color, used for interactive elements and
@@ -314,7 +314,7 @@ export default function ReleaseContentPage() {
                         <p className="text-dark-grey text-sm mb-4">#515151</p>
                         <div className="min-h-[60px]">
                           <p className="text-slate-grey text-sm font-semibold">
-                            QMaster Usage:
+                            tawabiry Usage:
                           </p>
                           <p className="text-slate-grey text-sm">
                             Used for text and form inputs
@@ -570,7 +570,7 @@ export default function ReleaseContentPage() {
                   media team
                 </p>
                 <a
-                  href="mailto:media@qmaster.com"
+                  href="mailto:media@tawabiry.com"
                   className="bg-ocean-blue hover:bg-opacity-90 inline-flex items-center justify-center mb-16 px-8 py-4 text-lg font-bold text-white rounded-full transition-all"
                 >
                   Contact Media Team

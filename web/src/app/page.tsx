@@ -32,7 +32,7 @@ export default function LandingPage() {
           data-aos="fade-up"
           className="text-coal-black text-md xsm:text-lg text-center py-48 leading-loose"
         >
-          {t("Join QMaster with just a few clicks")}
+          {t("Join tawabiry with just a few clicks")}
           <br />
           {t("and enjoy")}{" "}
           <span className="font-bold underline">{t("wait-free")}</span>{" "}

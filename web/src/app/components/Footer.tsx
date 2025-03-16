@@ -12,7 +12,7 @@ export default function Footer() {
     pathname === "/coming-soon" ||
     pathname === "/maintenance" ||
     pathname === "/unauthorized";
-    
+
   const textColorClass = isSpecialPage ? "text-white" : "text-coal-black";
 
   const isExternalLink = (url: string) => {
@@ -26,7 +26,7 @@ export default function Footer() {
           <div className="mb-24 flex flex-col gap-16 items-start xsm:items-center sm:gap-0 sm:flex-row justify-between sm:items-start">
             <figure>
               <Link href="#nav">
-                <Image src={FooterLogo} alt="QMaster Footer Logo" />
+                <Image src={FooterLogo} alt="tawabiry Footer Logo" />
               </Link>
             </figure>
             <ul className="pl-4 xsm:pl-0 flex flex-col xsm:flex-row justify-between items-start gap-16">
@@ -75,7 +75,7 @@ export default function Footer() {
           </div>
           <h6 className="text-sm text-center xsm:text-start">
             All rights reserved &ndash; {new Date().getFullYear()} &copy;
-            QMaster
+            tawabiry
           </h6>
         </div>
       </div>
