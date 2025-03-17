@@ -27,27 +27,35 @@ export const DEFAULT_PAGE = 1;
 export const DEFAULT_PER_PAGE = 10;
 
 function AdminLayoutContent({ children }: AdminLayoutProps) {
-    const pathname = usePathname();
-    const { admin, isLoading } = useAdminAuth();
-    const [isDarkMode, setIsDarkMode] = useState(false);
-    const [users, setUsers] = useState([]);
-    const [stores, setStores] = useState<StoreData[]>([]);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const { admin, isLoading } = useAdminAuth();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [users, setUsers] = useState([]);
+  const [stores, setStores] = useState<StoreData[]>([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
     useEffect(() => {
         const savedDarkMode = localStorage.getItem("qmaster-dark-mode");
         setIsDarkMode(savedDarkMode === "true");
     }, []);
 
-    // If we're on the login page, just render the children
-    if (pathname === "/admin/login") {
-        return children;
-    }
+  // Reset navigation state when pathname changes
+  useEffect(() => {
+    setIsNavigating(false);
+  }, [pathname]);
 
-    // Show loading state while checking auth
-    if (isLoading) {
-        return <SplashScreen />;
-    }
+  // If we're on the login page, just render the children
+  if (pathname === "/admin/login") {
+    return children;
+  }
+
+  // Show loading state while checking auth or navigating
+  if (isLoading || isNavigating) {
+    return <SplashScreen />;
+  }
 
     const handleDarkModeToggle = (value: boolean) => {
         setIsDarkMode(value);
@@ -128,15 +136,15 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
                 <div
                     className={`fixed top-0 left-0 h-screen z-[45] transition-transform duration-300 lg:translate-x-0
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <AdminSidebar
-                        isDarkMode={isDarkMode}
-                        onDarkModeToggle={handleDarkModeToggle}
-                        onClose={() => setIsMobileMenuOpen(false)}
-                    />
-                </div>
-
+          onClick={(e) => e.stopPropagation()}
+        >
+          <AdminSidebar
+            isDarkMode={isDarkMode}
+            onDarkModeToggle={handleDarkModeToggle}
+            onClose={() => setIsMobileMenuOpen(false)}
+            onNavigate={() => setIsNavigating(true)}
+          />
+        </div>
                 {/* Separate close button for mobile as fallback */}
                 {isMobileMenuOpen && (
                     <button

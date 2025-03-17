@@ -115,7 +115,7 @@ export default function UnauthorizedPage() {
                         className="double__color--btn inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-full hover:opacity-90 transition-all gap-2"
                       >
                         <FaSignInAlt className="w-5 h-5" />
-                        {t("Sign In")}
+                        {t("Business Sign In")}
                       </Link>
                       <Link
                         href="/"

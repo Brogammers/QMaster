@@ -5,22 +5,38 @@ import type { NextRequest } from 'next/server';
 export async function middleware(request: NextRequest) {
   const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
   const isLoginPage = request.nextUrl.pathname === '/admin/login'
+  const isExactAdminPath = request.nextUrl.pathname === '/admin'
   const isPartnerRoute = request.nextUrl.pathname.includes('/[entity]/')
   const isBusinessSignIn = request.nextUrl.pathname === '/login'
 
   // Get the maintenance and coming soon settings
   const url = process.env.NEXT_PUBLIC_API_BASE_URL! + process.env.NEXT_PUBLIC_API_BASE_URL_SETTINGS!;
-  const response = await axios.get(url);
-  const { isMaintenanceMode: isMaintenanceEnabled, isComingSoonMode: isComingSoonEnabled } = response.data;
+  let response;
+  try {
+    response = await axios.get(url);
+  } catch (error) {
+    // Error while fetching settings, redirect to maintenance
+    return NextResponse.redirect(new URL('/not-found', request.url));
+  }
+  const {
+    isMaintenanceMode: isMaintenanceEnabled,
+    isComingSoonMode: isComingSoonEnabled,
+    maintenanceScheduledTime
+  } = response.data;
 
-  // Skip redirects for maintenance and coming-soon pages themselves
-  if (request.nextUrl.pathname === '/maintenance' ||
-    request.nextUrl.pathname === '/coming-soon') {
-    return NextResponse.next();
+  // Check if maintenance is currently active (scheduled time has passed)
+  const isMaintenanceActive = isMaintenanceEnabled &&
+    maintenanceScheduledTime &&
+    new Date(maintenanceScheduledTime) <= new Date();
+
+  // if maintenance or coming soon is not enabled but attempting to open them, handle redirects
+  if ((request.nextUrl.pathname === '/maintenance' && !isMaintenanceActive) ||
+    (request.nextUrl.pathname === '/coming-soon' && !isComingSoonEnabled)) {
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
-  // If maintenance mode is enabled, handle redirects
-  if (isMaintenanceEnabled) {
+  // If maintenance mode is active (scheduled time has passed), handle redirects
+  if (isMaintenanceActive) {
     // If trying to access partner routes or business sign-in, redirect to maintenance
     if (isPartnerRoute || isBusinessSignIn) {
       // Clear the auth cookie if it exists
@@ -37,10 +53,21 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Regular auth checks (only if maintenance mode is not enabled)
-  if (!isMaintenanceEnabled) {
+  // Regular auth checks (only if maintenance mode is not active)
+  if (!isMaintenanceActive) {
     // Get auth status from cookie
     const isAuthenticated = request.cookies.get('qmaster-auth')?.value
+
+    // Handle exact '/admin' path
+    if (isExactAdminPath) {
+      if (isAuthenticated) {
+        return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+      } else {
+        const loginUrl = new URL('/admin/login', request.url);
+        loginUrl.searchParams.set('from', '/admin');
+        return NextResponse.redirect(loginUrl);
+      }
+    }
 
     // If trying to access admin routes (except login) without auth
     if (isAdminRoute && !isAuthenticated && !isLoginPage) {
