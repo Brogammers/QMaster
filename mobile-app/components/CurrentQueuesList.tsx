@@ -272,7 +272,7 @@ export default function CurrentQueuesList() {
 
           <View style={styles.cardBody}>
             <View style={styles.infoItem}>
-              <FontAwesomeIcon icon={faUser} size={14} color="#FF5722" />
+              <FontAwesomeIcon icon={faUser} size={14} color="#1DCDFE" />
               <Text style={styles.infoText}>
                 {peopleAhead === 0
                   ? i18n.t("yourTurn")
@@ -285,7 +285,7 @@ export default function CurrentQueuesList() {
             </View>
 
             <View style={styles.infoItem}>
-              <FontAwesomeIcon icon={faClock} size={14} color="#FF5722" />
+              <FontAwesomeIcon icon={faClock} size={14} color="#1DCDFE" />
               <Text style={styles.infoText}>
                 {peopleAhead === 0 && item.estimatedTime === 0
                   ? i18n.t("yourTurn")
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   leaveButton: {
-    backgroundColor: "#FF5722",
+    backgroundColor: "#1DCDFE",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
@@ -418,12 +418,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 16,
-    backgroundColor: "rgba(255, 87, 34, 0.05)",
+    backgroundColor: "rgba(29, 205, 254, 0.05)",
   },
   emptyText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#FF5722",
+    color: "#1DCDFE",
   },
   emptySubtext: {
     fontSize: 14,

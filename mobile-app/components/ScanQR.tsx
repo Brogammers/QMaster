@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: "#FF5722",
+    backgroundColor: "#1DCDFE",
     justifyContent: "center",
     alignItems: "center",
     elevation: 5,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   scanButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    backgroundColor: "rgba(29, 205, 254, 0.5)",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 12,

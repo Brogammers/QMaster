@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   StatusBar,
   StyleSheet,
@@ -29,7 +29,8 @@ import { setCurrentQueues } from "@/app/redux/queueSlice";
 import axios from "axios";
 import configConverter from "@/api/configConverter";
 import RefreshableWrapper from "@/components/RefreshableWrapper";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 export default function Index() {
   const { isDarkMode } = useTheme();
@@ -131,10 +132,14 @@ export default function Index() {
     setScrollY(currentScrollY);
   };
 
+  const handleNotificationsPress = () => {
+    router.push("/Notifications");
+  };
+
   // Home screen should refresh more frequently if user is in a queue
   const autoRefreshInterval = currentQueues.length > 0 ? 60000 : 180000; // 1 minute if in queue, 3 minutes otherwise
 
-  // Categories for the home screen based on Talabat's design
+  // Categories for the home screen
   const categories = [
     { id: 1, name: "Banking", icon: "university" },
     { id: 2, name: "Health", icon: "heartbeat" },
@@ -144,195 +149,231 @@ export default function Index() {
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.outerContainer}>
       <StatusBar
         translucent
         backgroundColor="transparent"
-        barStyle="dark-content"
+        barStyle="light-content"
       />
 
       {/* Floating ScanQr button */}
       <ScanQr asFloatingButton={true} />
 
-      <RefreshableWrapper
-        refreshId="home-screen"
-        onRefresh={fetchHomeData}
-        autoRefreshInterval={autoRefreshInterval}
-        scrollViewProps={{
-          className: "w-screen",
-          showsVerticalScrollIndicator: false,
-          scrollEventThrottle: 16,
-          onScroll: handleScroll,
-        }}
-      >
-        {/* Header with location and search */}
-        <View style={styles.headerContainer}>
-          <LinearGradient
-            colors={["#FF5722", "#FF7043"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.headerGradient}
-          >
-            <View style={styles.locationContainer}>
-              <Text style={styles.deliverToText}>Deliver to</Text>
-              <View style={styles.locationRow}>
-                <Text style={styles.locationText}>Apartment</Text>
-                <FontAwesome5
-                  name="chevron-down"
-                  size={12}
-                  color="#fff"
-                  style={styles.locationIcon}
-                />
-              </View>
-            </View>
+      <SafeAreaView style={styles.container}>
+        <RefreshableWrapper
+          refreshId="home-screen"
+          onRefresh={fetchHomeData}
+          autoRefreshInterval={autoRefreshInterval}
+          scrollViewProps={{
+            className: "w-screen",
+            showsVerticalScrollIndicator: false,
+            scrollEventThrottle: 16,
+            onScroll: handleScroll,
+          }}
+        >
+          {/* Header with location and search */}
+          <View style={styles.headerContainer}>
+            <LinearGradient
+              colors={["#17222D", "#13404D"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.headerGradient}
+            >
+              <View style={styles.headerTopRow}>
+                <TouchableOpacity
+                  style={styles.notificationButton}
+                  onPress={handleNotificationsPress}
+                >
+                  <Ionicons name="notifications" size={24} color="#1DCDFE" />
+                </TouchableOpacity>
 
-            <View style={styles.searchContainer}>
-              <TouchableOpacity style={styles.searchBar}>
-                <FontAwesome5 name="search" size={16} color="#777" />
-                <Text style={styles.searchPlaceholder}>
-                  Search for services & more
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </LinearGradient>
-        </View>
-
-        {/* Main content */}
-        <View style={styles.contentContainer}>
-          {/* Current Queues Section */}
-          {isLoading ? (
-            <View style={styles.loadingContainer}>
-              <Skeleton
-                colorMode={isDarkMode ? "dark" : "light"}
-                width={windowWidth * 0.85}
-                height={175}
-                radius={16}
-              />
-            </View>
-          ) : currentQueues.length > 0 ? (
-            <CurrentQueuesList />
-          ) : null}
-
-          {/* Categories */}
-          <View style={styles.categoriesSection}>
-            <Text style={styles.sectionTitle}>Categories</Text>
-            <View style={styles.categoriesGrid}>
-              {categories.map((category) => (
-                <TouchableOpacity key={category.id} style={styles.categoryItem}>
-                  <View style={styles.categoryIconContainer}>
+                <View style={styles.locationContainer}>
+                  <Text style={styles.welcomeText}>Your Queues</Text>
+                  <View style={styles.locationRow}>
+                    <Text style={styles.locationText}>Queue Anywhere</Text>
                     <FontAwesome5
-                      name={category.icon}
-                      size={20}
-                      color="#FF5722"
+                      name="chevron-down"
+                      size={12}
+                      color="#1DCDFE"
+                      style={styles.locationIcon}
                     />
                   </View>
-                  <Text style={styles.categoryName}>{category.name}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
+                </View>
 
-          {/* Feature Banner */}
-          <View style={styles.featureBanner}>
-            <LinearGradient
-              colors={["#FF9800", "#FF5722"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.bannerGradient}
-            >
-              <View style={styles.bannerContent}>
-                <Text style={styles.bannerTitle}>Skip the wait!</Text>
-                <Text style={styles.bannerSubtitle}>
-                  Join queues remotely and get notified when it's your turn
-                </Text>
+                <View style={styles.placeholder} />
               </View>
-              <View style={styles.bannerIconContainer}>
-                <FontAwesome5 name="clock" size={36} color="#FFF" />
+
+              <View style={styles.searchContainer}>
+                <TouchableOpacity style={styles.searchBar}>
+                  <FontAwesome5 name="search" size={16} color="#777" />
+                  <Text style={styles.searchPlaceholder}>
+                    Search for services & more
+                  </Text>
+                </TouchableOpacity>
               </View>
             </LinearGradient>
           </View>
 
-          {/* Recent Queues Section - Only show if there are recent queues */}
-          {recentQueues > 0 && <RecentQueues isDarkMode={isDarkMode} />}
+          {/* Main content */}
+          <View style={styles.contentContainer}>
+            {/* Current Queues Section */}
+            {isLoading ? (
+              <View style={styles.loadingContainer}>
+                <Skeleton
+                  colorMode={isDarkMode ? "dark" : "light"}
+                  width={windowWidth * 0.85}
+                  height={175}
+                  radius={16}
+                />
+              </View>
+            ) : currentQueues.length > 0 ? (
+              <CurrentQueuesList />
+            ) : null}
 
-          {/* Featured Services */}
-          <View style={styles.featuredSection}>
-            <Text style={styles.sectionTitle}>Popular Services</Text>
-            <Text style={styles.sectionSubtitle}>
-              Join the most popular queues
-            </Text>
-
-            <View style={styles.servicesContainer}>
-              {Array(4)
-                .fill(0)
-                .map((_, index) => (
-                  <TouchableOpacity key={index} style={styles.serviceItem}>
-                    <View style={styles.serviceImageContainer}>
-                      <View style={styles.servicePlaceholder}>
-                        <FontAwesome5
-                          name={
-                            ["building", "hospital", "university", "store"][
-                              index
-                            ]
-                          }
-                          size={24}
-                          color="#FF5722"
-                        />
-                      </View>
+            {/* Categories */}
+            <View style={styles.categoriesSection}>
+              <Text style={styles.sectionTitle}>Categories</Text>
+              <View style={styles.categoriesGrid}>
+                {categories.map((category) => (
+                  <TouchableOpacity
+                    key={category.id}
+                    style={styles.categoryItem}
+                  >
+                    <View style={styles.categoryIconContainer}>
+                      <FontAwesome5
+                        name={category.icon}
+                        size={20}
+                        color="#1DCDFE"
+                      />
                     </View>
-                    <Text style={styles.serviceRating}>
-                      ★ {(4.1 + index * 0.2).toFixed(1)} (1000+)
-                    </Text>
-                    <Text style={styles.serviceName}>
-                      {
-                        [
-                          "Emirates Bank",
-                          "City Hospital",
-                          "Government Services",
-                          "Mall Services",
-                        ][index]
-                      }
-                    </Text>
-                    <Text style={styles.serviceWaitTime}>
-                      ~ {10 + index * 5} min wait
-                    </Text>
+                    <Text style={styles.categoryName}>{category.name}</Text>
                   </TouchableOpacity>
                 ))}
+              </View>
             </View>
-          </View>
 
-          {/* FAQ Section */}
-          <FrequentlyAsked isDarkMode={false} />
-        </View>
-      </RefreshableWrapper>
-    </SafeAreaView>
+            {/* Feature Banner */}
+            <View style={styles.featureBanner}>
+              <LinearGradient
+                colors={["#1DCDFE", "#34F5C5"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.bannerGradient}
+              >
+                <View style={styles.bannerContent}>
+                  <Text style={styles.bannerTitle}>Skip the wait!</Text>
+                  <Text style={styles.bannerSubtitle}>
+                    Join queues remotely and get notified when it's your turn
+                  </Text>
+                </View>
+                <View style={styles.bannerIconContainer}>
+                  <FontAwesome5 name="clock" size={36} color="#FFF" />
+                </View>
+              </LinearGradient>
+            </View>
+
+            {/* Recent Queues Section - Only show if there are recent queues */}
+            {recentQueues > 0 && <RecentQueues isDarkMode={isDarkMode} />}
+
+            {/* Featured Services */}
+            <View style={styles.featuredSection}>
+              <Text style={styles.sectionTitle}>Popular Services</Text>
+              <Text style={styles.sectionSubtitle}>
+                Join the most popular queues
+              </Text>
+
+              <View style={styles.servicesContainer}>
+                {Array(4)
+                  .fill(0)
+                  .map((_, index) => (
+                    <TouchableOpacity key={index} style={styles.serviceItem}>
+                      <View style={styles.serviceImageContainer}>
+                        <View style={styles.servicePlaceholder}>
+                          <FontAwesome5
+                            name={
+                              ["building", "hospital", "university", "store"][
+                                index
+                              ]
+                            }
+                            size={24}
+                            color="#1DCDFE"
+                          />
+                        </View>
+                      </View>
+                      <Text style={styles.serviceRating}>
+                        ★ {(4.1 + index * 0.2).toFixed(1)} (1000+)
+                      </Text>
+                      <Text style={styles.serviceName}>
+                        {
+                          [
+                            "Emirates Bank",
+                            "City Hospital",
+                            "Government Services",
+                            "Mall Services",
+                          ][index]
+                        }
+                      </Text>
+                      <Text style={styles.serviceWaitTime}>
+                        ~ {10 + index * 5} min wait
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+              </View>
+            </View>
+
+            {/* FAQ Section */}
+            <FrequentlyAsked isDarkMode={false} />
+          </View>
+        </RefreshableWrapper>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  outerContainer: {
+    flex: 1,
+    backgroundColor: "#17222D", // ocean-blue from tailwind config
+  },
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   headerContainer: {
     width: "100%",
   },
   headerGradient: {
-    paddingTop: 16,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight || 16 : 16,
     paddingBottom: 16,
     paddingHorizontal: 20,
   },
-  locationContainer: {
+  headerTopRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: 12,
+  },
+  notificationButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  placeholder: {
+    width: 40, // Same width as notification button for balanced layout
+  },
+  locationContainer: {
+    alignItems: "center",
+  },
+  welcomeText: {
+    color: "rgba(255, 255, 255, 0.8)",
+    fontSize: 12,
   },
   locationRow: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  deliverToText: {
-    color: "rgba(255, 255, 255, 0.8)",
-    fontSize: 12,
   },
   locationText: {
     color: "#FFFFFF",
@@ -395,7 +436,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "rgba(255, 87, 34, 0.1)",
+    backgroundColor: "rgba(29, 205, 254, 0.1)", // baby-blue with opacity
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 8,
@@ -456,13 +497,13 @@ const styles = StyleSheet.create({
   servicePlaceholder: {
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(255, 87, 34, 0.1)",
+    backgroundColor: "rgba(29, 205, 254, 0.1)", // baby-blue with opacity
     justifyContent: "center",
     alignItems: "center",
   },
   serviceRating: {
     fontSize: 12,
-    color: "#FF9800",
+    color: "#1DCDFE", // baby-blue
     marginBottom: 4,
   },
   serviceName: {
