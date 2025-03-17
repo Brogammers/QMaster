@@ -167,7 +167,7 @@ export default function LoginForm({ setIsLoading }: any) {
             {/* Forgot Password Link */}
             <div className="text-right">
               <Link
-                href="mailto:support@qmaster.com"
+                href="mailto:support@tawabiry.com"
                 className="text-sm text-baby-blue hover:underline"
               >
                 Forgot Password?

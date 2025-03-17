@@ -1,4 +1,10 @@
-import { View, Text, ScrollView, StatusBar, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StatusBar,
+  TouchableOpacity,
+} from "react-native";
 import { Href } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import i18n from "@/i18n";
@@ -45,7 +51,7 @@ export default function Settings() {
   ];
 
   return (
-    <View className={`flex-1 ${isDarkMode ? 'bg-slate-900' : 'bg-off-white'}`}>
+    <View className={`flex-1 ${isDarkMode ? "bg-slate-900" : "bg-off-white"}`}>
       <StatusBar barStyle="light-content" />
       <ScrollView className="flex-1 px-4 pt-4">
         <View className="w-full">
@@ -61,9 +67,11 @@ export default function Settings() {
               }}
               className="mb-4"
             >
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={() => linkTo(item.route.toString())}
-                className={`${isDarkMode ? 'bg-concrete-turqouise/20' : 'bg-ocean-blue/5'} rounded-2xl border border-baby-blue/10 py-4 px-4`}
+                className={`${
+                  isDarkMode ? "bg-concrete-turqouise/20" : "bg-ocean-blue/5"
+                } rounded-2xl border border-baby-blue/10 py-4 px-4`}
               >
                 <View className="flex-row items-center justify-between">
                   <View className="flex-row items-center">
@@ -72,7 +80,11 @@ export default function Settings() {
                       size={22}
                       color={isDarkMode ? "#1DCDFE" : "#17222D"}
                     />
-                    <Text className={`ml-5 text-base font-medium ${isDarkMode ? 'text-baby-blue' : 'text-ocean-blue'}`}>
+                    <Text
+                      className={`ml-5 text-base font-medium ${
+                        isDarkMode ? "text-baby-blue" : "text-ocean-blue"
+                      }`}
+                    >
                       {i18n.t(item.title)}
                     </Text>
                   </View>
@@ -89,4 +101,4 @@ export default function Settings() {
       </ScrollView>
     </View>
   );
-} 
+}

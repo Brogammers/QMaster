@@ -42,11 +42,11 @@ export default function TermsPage() {
                     1. Agreement to Terms
                   </h2>
                   <p className="text-dark-grey leading-relaxed">
-                    By accessing and using QMaster&apos;s services, you agree to
-                    be bound by these Terms of Use, our Privacy Policy, and any
-                    additional terms and conditions that may apply. These terms
-                    constitute a legally binding agreement between you and
-                    QMaster.
+                    By accessing and using tawabiry&apos;s services, you agree
+                    to be bound by these Terms of Use, our Privacy Policy, and
+                    any additional terms and conditions that may apply. These
+                    terms constitute a legally binding agreement between you and
+                    tawabiry.
                   </p>
                 </section>
 
@@ -56,7 +56,7 @@ export default function TermsPage() {
                   </h2>
                   <div className="space-y-4">
                     <p className="text-dark-grey leading-relaxed">
-                      QMaster provides queue management and business
+                      tawabiry provides queue management and business
                       optimization services through:
                     </p>
                     <ul className="list-disc pl-6 space-y-2 text-dark-grey">
@@ -135,7 +135,7 @@ export default function TermsPage() {
                   <p className="text-dark-grey leading-relaxed">
                     We collect and process data in accordance with our Privacy
                     Policy and applicable data protection laws. Users grant
-                    QMaster the right to collect, store, and analyze usage data
+                    tawabiry the right to collect, store, and analyze usage data
                     for service improvement and analytics purposes.
                   </p>
                 </section>
@@ -145,8 +145,8 @@ export default function TermsPage() {
                     6. Intellectual Property
                   </h2>
                   <p className="text-dark-grey leading-relaxed">
-                    All QMaster content, features, and functionality are owned
-                    by QMaster and protected by international copyright,
+                    All tawabiry content, features, and functionality are owned
+                    by tawabiry and protected by international copyright,
                     trademark, and other intellectual property laws.
                   </p>
                 </section>
@@ -156,9 +156,9 @@ export default function TermsPage() {
                     7. Limitation of Liability
                   </h2>
                   <p className="text-dark-grey leading-relaxed">
-                    QMaster is not liable for any indirect, incidental, special,
-                    consequential, or punitive damages resulting from your use
-                    of our services.
+                    tawabiry is not liable for any indirect, incidental,
+                    special, consequential, or punitive damages resulting from
+                    your use of our services.
                   </p>
                 </section>
 
@@ -190,7 +190,7 @@ export default function TermsPage() {
                   </h2>
                   <p className="text-dark-grey leading-relaxed">
                     For any questions about these Terms of Use, please contact
-                    us at support@qmaster.com
+                    us at support@tawabiry.com
                   </p>
                 </section>
               </div>
