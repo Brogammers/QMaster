@@ -21,6 +21,7 @@ import { formatCategoryName } from "@/utils";
 import RefreshableWrapper from "@/components/RefreshableWrapper";
 import { FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import BackButton from "@/shared/components/BackButton";
 
 const page = 1;
 const perPage = 5;
@@ -95,10 +96,6 @@ export default function Category() {
     };
   }, [name, fetchCategoryData]);
 
-  const goBack = () => {
-    router.back();
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar
@@ -116,9 +113,11 @@ export default function Category() {
       >
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.headerContent}>
-            <TouchableOpacity onPress={goBack} style={styles.backButton}>
-              <FontAwesome name="chevron-left" size={16} color="white" />
-            </TouchableOpacity>
+            <BackButton
+              color="white"
+              style={styles.backButton}
+              backTo="/(app)/(tabs)"
+            />
             <Text style={styles.headerTitle}>{categoryName}</Text>
             <View style={styles.placeholder} />
           </View>
@@ -185,11 +184,6 @@ const styles = StyleSheet.create({
     height: 56,
   },
   backButton: {
-    width: 32,
-    height: 32,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 16,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
   },
   headerTitle: {

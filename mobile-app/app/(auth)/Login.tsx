@@ -36,6 +36,7 @@ import i18n from "@/i18n";
 import configConverter from "@/api/configConverter";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import BackButton from "@/shared/components/BackButton";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email required"),
@@ -214,19 +215,7 @@ export default function Login() {
           >
             {/* Back button repositioned and aligned with content */}
             <View className="pt-8">
-              <TouchableOpacity
-                onPress={() => router.back()}
-                className="bg-white shadow-sm rounded-full p-3 w-10 h-10 justify-center items-center mb-6"
-              >
-                <Text
-                  style={{
-                    transform: [{ scaleX: I18nManager.isRTL ? 1 : -1 }],
-                    fontWeight: "bold",
-                  }}
-                >
-                  →
-                </Text>
-              </TouchableOpacity>
+              <BackButton />
 
               <Text className="text-2xl font-bold text-ocean-blue mb-4">
                 {i18n.t("loginPage.welcomeBack")}

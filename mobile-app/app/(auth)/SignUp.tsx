@@ -23,6 +23,7 @@ import configConverter from "@/api/configConverter";
 import { MaterialIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { LinearGradient } from "expo-linear-gradient";
+import BackButton from "@/shared/components/BackButton";
 
 // Get the screen dimensions
 const { width } = Dimensions.get("window");
@@ -156,19 +157,7 @@ export default function SignUp() {
       >
         {/* Back button repositioned and aligned with content */}
         <View className="pt-8">
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="bg-white shadow-sm rounded-full p-3 w-10 h-10 justify-center items-center mb-6"
-          >
-            <Text
-              style={{
-                transform: [{ scaleX: I18nManager.isRTL ? 1 : -1 }],
-                fontWeight: "bold",
-              }}
-            >
-              →
-            </Text>
-          </TouchableOpacity>
+          <BackButton className="mb-6" />
 
           <Text className="text-2xl font-bold text-ocean-blue mb-4">
             {i18n.t("signupPage.welcome")}

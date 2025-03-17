@@ -17,6 +17,7 @@ import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome } from "@expo/vector-icons";
 import i18n from "@/i18n";
+import BackButton from "@/shared/components/BackButton";
 
 interface CategoryProps {
   title: string;
@@ -31,10 +32,6 @@ export default function AllCategories() {
   const handleCategoryPress = (category: string) => {
     linkTo(`/Category`);
     router.setParams({ name: category });
-  };
-
-  const goBack = () => {
-    router.back();
   };
 
   return (
@@ -54,9 +51,11 @@ export default function AllCategories() {
       >
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.headerContent}>
-            <TouchableOpacity onPress={goBack} style={styles.backButton}>
-              <FontAwesome name="chevron-left" size={16} color="white" />
-            </TouchableOpacity>
+            <BackButton
+              color="white"
+              style={styles.backButton}
+              backTo="/(app)/(tabs)"
+            />
             <Text style={styles.headerTitle}>{i18n.t("categories")}</Text>
             <View style={styles.placeholder} />
           </View>
@@ -107,11 +106,6 @@ const styles = StyleSheet.create({
     height: 56,
   },
   backButton: {
-    width: 32,
-    height: 32,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 16,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
   },
   headerTitle: {
