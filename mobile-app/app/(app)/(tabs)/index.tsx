@@ -7,6 +7,7 @@ import {
   View,
   useWindowDimensions,
   Text,
+  TouchableOpacity,
 } from "react-native";
 import ScanQr from "@/components/ScanQR";
 import SearchBar from "@/components/SearchBar";
@@ -14,7 +15,7 @@ import CategoriesList from "@/components/CategoriesList";
 import RecentQueues from "@/components/RecentQueues";
 import FrequentlyAsked from "@/components/FrequentlyAsked";
 import CurrentQueuesList from "@/components/CurrentQueuesList";
-import PromoCard from "@/assets/images/promo-card.svg";
+import PromoCardSvg from "@/assets/images/promo-card.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Skeleton } from "moti/skeleton";
 import { useTheme } from "@/ctx/ThemeContext";
@@ -27,6 +28,35 @@ import { setCurrentQueues } from "@/app/redux/queueSlice";
 import axios from "axios";
 import configConverter from "@/api/configConverter";
 import RefreshableWrapper from "@/components/RefreshableWrapper";
+import Logo from "@/shared/icons/logo";
+import i18n from "@/i18n";
+import { FontAwesome5 } from "@expo/vector-icons";
+
+// Define a simple PromoCard component inline to avoid import issues
+const PromoCard = ({ width }: { width: number }) => {
+  return (
+    <TouchableOpacity style={[styles.promoCard, { width }]} activeOpacity={0.9}>
+      <LinearGradient
+        colors={["#0077B6", "#005f92"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.promoGradient}
+      >
+        <View style={styles.promoContent}>
+          <View style={styles.promoTextContainer}>
+            <Text style={styles.promoTitle}>iQueue</Text>
+            <Text style={styles.promoSubtitle}>
+              {i18n.t("bookYourSpot") || "Book your spot now!"}
+            </Text>
+          </View>
+          <View style={styles.promoImageContainer}>
+            <PromoCardSvg height={80} width={120} />
+          </View>
+        </View>
+      </LinearGradient>
+    </TouchableOpacity>
+  );
+};
 
 export default function Index() {
   const { isDarkMode } = useTheme();
@@ -133,9 +163,9 @@ export default function Index() {
 
   useEffect(() => {
     if (scrollY > scanQrHeight) {
-      setBgColor(isDarkMode ? "#0C1824" : "#D9D9D9");
+      setBgColor(isDarkMode ? "#0C1824" : "#F5F5F5");
       if (Platform.OS === "android") {
-        StatusBar.setBackgroundColor(isDarkMode ? "#0C1824" : "#D9D9D9", true);
+        StatusBar.setBackgroundColor(isDarkMode ? "#0C1824" : "#F5F5F5", true);
       }
       StatusBar.setBarStyle(isDarkMode ? "light-content" : "dark-content");
     } else {
@@ -161,78 +191,81 @@ export default function Index() {
       <StatusBar
         translucent
         backgroundColor="#17222D"
-        barStyle={
-          isDarkMode || scrollY <= scanQrHeight
-            ? "light-content"
-            : "dark-content"
-        }
+        barStyle="light-content"
       />
       <RefreshableWrapper
         refreshId="home-screen"
         onRefresh={fetchHomeData}
         autoRefreshInterval={autoRefreshInterval}
         scrollViewProps={{
-          className: "w-screen",
           showsVerticalScrollIndicator: false,
           scrollEventThrottle: 16,
           onScroll: handleScroll,
         }}
       >
-        <View
-          ref={scanQrRef}
-          onLayout={handleLayout}
-          className={`${isDarkMode ? "bg-ocean-blue" : "bg-slate-800"} pb-8`}
-        >
-          <ScanQr isDarkMode={!isDarkMode} />
+        {/* Header Section with Scan QR */}
+        <View ref={scanQrRef} onLayout={handleLayout}>
+          <LinearGradient
+            colors={["#17222D", "#0B3954"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.headerSection}
+          >
+            <View style={styles.headerContent}>
+              <View style={styles.logoContainer}>
+                <Logo width={30} height={30} />
+                <Text style={styles.logoText}>tawabiry</Text>
+              </View>
+              <TouchableOpacity style={styles.notificationButton}>
+                <FontAwesome5 name="bell" size={18} color="#00FFFF" />
+              </TouchableOpacity>
+            </View>
+
+            <ScanQr isDarkMode={true} />
+          </LinearGradient>
         </View>
-        <View
-          className={`relative -mt-6 rounded-t-[30px] overflow-hidden ${
-            isDarkMode ? "bg-slate-900" : "bg-off-white"
-          } shadow-lg border-t ${
-            isDarkMode ? "border-slate-800/50" : "border-slate-200"
-          }`}
-        >
-          <View className="absolute inset-x-0 -top-3 h-6 bg-gradient-to-b from-black/20 to-transparent" />
-          {isDarkMode ? (
-            <LinearGradient
-              colors={["rgba(30, 41, 59, 0.7)", "rgba(15, 23, 42, 0)"]}
-              className="absolute top-0 w-full h-64"
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-            />
-          ) : (
-            <LinearGradient
-              colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
-              className="absolute top-0 w-full h-64"
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-            />
-          )}
-          <View className="w-10/12 self-center">
-            <SearchBar isDarkMode={isDarkMode} />
+
+        {/* Main Content Section */}
+        <View style={styles.mainContent}>
+          {/* Search Bar */}
+          <View style={styles.searchContainer}>
+            <SearchBar isDarkMode={false} />
+          </View>
+
+          {/* Current Queues or Promo */}
+          <View style={styles.sectionContainer}>
             {isLoading ? (
-              <View
-                className={`flex flex-col items-center justify-center ${
-                  isDarkMode ? "bg-ocean-blue" : "bg-off-white"
-                }`}
-              >
-                <View className="mb-4" />
+              <View style={styles.loadingContainer}>
                 <Skeleton
-                  colorMode={isDarkMode ? "dark" : "light"}
-                  width={windowWidth * 0.85}
-                  height={175}
+                  colorMode="light"
+                  width={windowWidth - 32}
+                  height={160}
                   radius={16}
                 />
-                <View className="mb-5" />
               </View>
             ) : currentQueues.length > 0 ? (
               <CurrentQueuesList />
             ) : (
-              <PromoCard width={"100%"} />
+              <PromoCard width={windowWidth - 32} />
             )}
-            <CategoriesList isDarkMode={isDarkMode} />
-            {recentQueues > 0 && <RecentQueues isDarkMode={isDarkMode} />}
-            <FrequentlyAsked isDarkMode={isDarkMode} />
+          </View>
+
+          {/* Categories */}
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>{i18n.t("categories")}</Text>
+            <CategoriesList isDarkMode={false} />
+          </View>
+
+          {/* Recent Queues (if any) */}
+          {recentQueues > 0 && (
+            <View style={styles.sectionContainer}>
+              <RecentQueues isDarkMode={false} />
+            </View>
+          )}
+
+          {/* Frequently Asked */}
+          <View style={[styles.sectionContainer, styles.lastSection]}>
+            <FrequentlyAsked isDarkMode={false} />
           </View>
         </View>
       </RefreshableWrapper>
@@ -243,11 +276,101 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop:
-      Platform.OS === "android"
-        ? StatusBar.currentHeight
-          ? StatusBar.currentHeight - 1
-          : 0
-        : 0,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight || 0 : 0,
+  },
+  headerSection: {
+    paddingBottom: 25,
+  },
+  headerContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  logoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  logoText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white",
+    marginLeft: 8,
+  },
+  notificationButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "rgba(255,255,255,0.15)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  mainContent: {
+    flex: 1,
+    backgroundColor: "white",
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    marginTop: -20,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  searchContainer: {
+    marginBottom: 16,
+  },
+  sectionContainer: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#0077B6",
+    marginBottom: 12,
+  },
+  loadingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 8,
+  },
+  lastSection: {
+    marginBottom: 40,
+  },
+  // PromoCard styles
+  promoCard: {
+    height: 140,
+    borderRadius: 16,
+    overflow: "hidden",
+    marginVertical: 8,
+  },
+  promoGradient: {
+    flex: 1,
+    padding: 16,
+  },
+  promoContent: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  promoTextContainer: {
+    flex: 1,
+  },
+  promoTitle: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: 8,
+  },
+  promoSubtitle: {
+    fontSize: 16,
+    color: "rgba(255, 255, 255, 0.9)",
+    fontWeight: "500",
+  },
+  promoImageContainer: {
+    width: 120,
+    height: 80,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

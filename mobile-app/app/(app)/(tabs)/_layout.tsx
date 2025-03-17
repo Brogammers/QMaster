@@ -38,319 +38,310 @@ export default function AppEntry() {
 
   return (
     <NavigationContainer independent>
-        <Tab.Navigator
-          initialRouteName="Home"
-          screenOptions={{
-            tabBarActiveTintColor: "#00FFFF",
-            tabBarInactiveTintColor: "#FAFAFA",
-            headerShown: false,
-            tabBarStyle: {
-              backgroundColor: "#17222D",
-              height: 65,
-              display: "flex",
-              justifyContent: "space-around",
-              paddingBottom: 18,
-              paddingTop: 12,
-            },
+      <Tab.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          tabBarActiveTintColor: "#00FFFF",
+          tabBarInactiveTintColor: "#FAFAFA",
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: "#17222D",
+            height: 65,
+            display: "flex",
+            justifyContent: "space-around",
+            paddingBottom: 18,
+            paddingTop: 12,
+          },
+        }}
+      >
+        <Tab.Screen
+          name={i18n.t("home")}
+          component={Home}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Entypo
+                name="home"
+                size={24}
+                color={focused ? "#00FFFF" : "#FAFAFA"}
+              />
+            ),
           }}
-        >
-          <Tab.Screen
-            name={i18n.t("home")}
-            component={Home}
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <Entypo
-                  name="home"
-                  size={24}
-                  color={focused ? "#00FFFF" : "#FAFAFA"}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name={i18n.t("history")}
-            component={History}
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <FontAwesome
-                  name="history"
-                  size={24}
-                  color={focused ? "#00FFFF" : "#FAFAFA"}
-                />
-              ),
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTitle: i18n.t("past queues"),
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="Sia"
-            component={EmptyComponent}
-            options={{
-              tabBarButton: ({ accessibilityState }) => (
-                <TouchableOpacity
-                  onPress={showSia}
+        />
+        <Tab.Screen
+          name={i18n.t("history")}
+          component={History}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <FontAwesome
+                name="history"
+                size={24}
+                color={focused ? "#00FFFF" : "#FAFAFA"}
+              />
+            ),
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTitle: i18n.t("past queues"),
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Sia"
+          component={EmptyComponent}
+          options={{
+            tabBarButton: ({ accessibilityState }) => (
+              <TouchableOpacity
+                onPress={showSia}
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Image
+                  source={require("@/assets/images/Sia-icon.png")}
                   style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    width: 14,
+                    height: 24.92,
+                    tintColor: accessibilityState?.selected
+                      ? "#00FFFF"
+                      : "#FAFAFA",
+                  }}
+                />
+                <Text
+                  style={{
+                    color: accessibilityState?.selected ? "#00FFFF" : "#FAFAFA",
+                    fontSize: 10,
                   }}
                 >
-                  <Image
-                    source={require("@/assets/images/Sia-icon.png")}
-                    style={{
-                      width: 14,
-                      height: 24.92,
-                      tintColor: accessibilityState?.selected ? "#00FFFF" : "#FAFAFA"
-                    }}
-                  />
-                  <Text
-                    style={{
-                      color: accessibilityState?.selected ? "#00FFFF" : "#FAFAFA",
-                      fontSize: 10,
-                    }}
-                  >
-                    Sia
-                  </Text>
-                </TouchableOpacity>
-              ),
-            }}
-          />
-          <Tab.Screen
-            name={i18n.t("account")}
-            component={Account}
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <MaterialCommunityIcons
-                  name="account"
-                  size={24}
-                  color={focused ? "#00FFFF" : "#FAFAFA"}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Search"
-            component={Search}
-            options={{
-              tabBarButton: () => null,
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTitle: i18n.t("search queue"),
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="Notifications"
-            component={Notifications}
-            options={{
-              tabBarButton: () => null,
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTitle: i18n.t("notifications"),
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="Partner"
-            component={Partner}
-            options={{
-              tabBarButton: () => null,
-              headerShown: false,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="Store"
-            component={Store}
-            options={{
-              tabBarButton: () => null,
-              headerShown: false,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="Product"
-            component={Product}
-            options={{
-              tabBarButton: () => null,
-              headerShown: false,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="Cart"
-            component={Cart}
-            options={{
-              tabBarButton: () => null,
-              headerShown: false,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="Payment"
-            component={Payment}
-            options={{
-              tabBarButton: () => null,
-              headerShown: false,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="Orders"
-            component={Orders}
-            options={{
-              tabBarButton: () => null,
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTitle: i18n.t("orders"),
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="OrderDetails"
-            component={OrderDetails}
-            options={{
-              tabBarButton: () => null,
-              headerShown: false,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="Category"
-            component={Category}
-            options={{
-              tabBarButton: () => null,
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="AllCategories"
-            component={AllCategories}
-            options={{
-              tabBarButton: () => null,
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTitle: i18n.t("allCategories"),
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="Settings"
-            component={Settings}
-            options={{
-              tabBarButton: () => null,
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTitle: i18n.t("settings"),
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="AccountInfoSettings"
-            component={AccountInfoSettings}
-            options={{
-              tabBarButton: () => null,
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTitle: i18n.t("settings"),
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="NotificationSettings"
-            component={NotificationsSettings}
-            options={{
-              tabBarButton: () => null,
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTitle: i18n.t("settings"),
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="SecuritySettings"
-            component={SecuritySettings}
-            options={{
-              tabBarButton: () => null,
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTitle: i18n.t("settings"),
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Tab.Screen
-            name="RegionLanguageSettings"
-            component={RegionLanguageSettings}
-            options={{
-              tabBarButton: () => null,
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#17222D",
-              },
-              headerTitle: i18n.t("settings"),
-              headerTintColor: "white",
-              headerTitleAlign: "center",
-            }}
-          />
-        </Tab.Navigator>
+                  Sia
+                </Text>
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name={i18n.t("account")}
+          component={Account}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <MaterialCommunityIcons
+                name="account"
+                size={24}
+                color={focused ? "#00FFFF" : "#FAFAFA"}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Search"
+          component={Search}
+          options={{
+            tabBarButton: () => null,
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTitle: i18n.t("search queue"),
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Notifications"
+          component={Notifications}
+          options={{
+            tabBarButton: () => null,
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTitle: i18n.t("notifications"),
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Partner"
+          component={Partner}
+          options={{
+            tabBarButton: () => null,
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Store"
+          component={Store}
+          options={{
+            tabBarButton: () => null,
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Product"
+          component={Product}
+          options={{
+            tabBarButton: () => null,
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Cart"
+          component={Cart}
+          options={{
+            tabBarButton: () => null,
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Payment"
+          component={Payment}
+          options={{
+            tabBarButton: () => null,
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Orders"
+          component={Orders}
+          options={{
+            tabBarButton: () => null,
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTitle: i18n.t("orders"),
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="OrderDetails"
+          component={OrderDetails}
+          options={{
+            tabBarButton: () => null,
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Category"
+          component={Category}
+          options={{
+            tabBarButton: () => null,
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="AllCategories"
+          component={AllCategories}
+          options={{
+            tabBarButton: () => null,
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={Settings}
+          options={{
+            tabBarButton: () => null,
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTitle: i18n.t("settings"),
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="AccountInfoSettings"
+          component={AccountInfoSettings}
+          options={{
+            tabBarButton: () => null,
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTitle: i18n.t("settings"),
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="NotificationSettings"
+          component={NotificationsSettings}
+          options={{
+            tabBarButton: () => null,
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTitle: i18n.t("settings"),
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="SecuritySettings"
+          component={SecuritySettings}
+          options={{
+            tabBarButton: () => null,
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTitle: i18n.t("settings"),
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="RegionLanguageSettings"
+          component={RegionLanguageSettings}
+          options={{
+            tabBarButton: () => null,
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#17222D",
+            },
+            headerTitle: i18n.t("settings"),
+            headerTintColor: "white",
+            headerTitleAlign: "center",
+          }}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }

@@ -28,6 +28,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import configConverter from "@/api/configConverter";
 import { QueueStatusContext } from "./JoinQueue";
+import { LinearGradient } from "expo-linear-gradient";
 // Import business images for matching
 import arabiata from "@/assets/images/arabiata.png";
 
@@ -71,7 +72,7 @@ export default function CurrentQueuesList() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { width: windowWidth } = useWindowDimensions();
-  const carouselWidth = windowWidth * 0.85; // 85% of screen width
+  const carouselWidth = windowWidth - 32; // Full width minus padding
   const [averageServiceTime, setAverageServiceTime] = useState<number>(7); // Default 7 minutes per person
 
   const dispatch = useDispatch();
@@ -260,169 +261,83 @@ export default function CurrentQueuesList() {
     return (
       <TouchableOpacity
         onPress={() => handleQueuePress(item)}
-        style={[
-          styles.queueCard,
-          isDarkMode ? styles.darkCard : styles.lightCard,
-        ]}
+        style={styles.queueCard}
+        activeOpacity={0.9}
       >
-        <View style={styles.imageContainer}>
-          {imageSource ? (
-            <Image
-              source={
-                typeof imageSource === "string"
-                  ? { uri: imageSource }
-                  : imageSource
-              }
-              style={styles.image}
-            />
-          ) : (
-            <View
-              style={[
-                styles.imagePlaceholder,
-                {
-                  backgroundColor: isDarkMode
-                    ? "rgba(29, 205, 254, 0.2)"
-                    : "#E5F7FF",
-                },
-              ]}
-            >
-              <Text style={[styles.placeholderText, { color: "white" }]}>
-                {item.name ? item.name.charAt(0).toUpperCase() : "?"}
-              </Text>
-            </View>
-          )}
-        </View>
-
-        <View style={styles.contentContainer}>
-          <View style={styles.headerContainer}>
-            <Text
-              style={[
-                styles.titleText,
-                { color: isDarkMode ? "white" : "#17222D" },
-              ]}
-            >
-              {item.name}
-            </Text>
-            <Text
-              style={[
-                styles.subtitleText,
-                { color: isDarkMode ? "#1DCDFE" : "#0077B6" },
-              ]}
-            >
-              {item.serviceType}
-            </Text>
+        <LinearGradient
+          colors={["#0077B6", "#004e7a"]}
+          style={styles.cardGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.cardHeader}>
+            <Text style={styles.serviceName}>{item.name}</Text>
+            <Text style={styles.serviceType}>{item.serviceType}</Text>
           </View>
 
-          <View style={styles.detailsContainer}>
-            <View style={styles.detailRow}>
-              <FontAwesomeIcon
-                icon={faUser}
-                size={14}
-                color={isDarkMode ? "#1DCDFE" : "#0077B6"}
-              />
-              <Text
-                style={[
-                  styles.detailText,
-                  { color: isDarkMode ? "white" : "#17222D" },
-                ]}
-              >
+          <View style={styles.cardBody}>
+            <View style={styles.infoItem}>
+              <FontAwesomeIcon icon={faUser} size={14} color="white" />
+              <Text style={styles.infoText}>
                 {peopleAhead === 0
-                  ? `3 ${
-                      i18n
-                        .t("common.queue.peopleCount", { count: 2 })
-                        .replace("2", "") || "people in queue"
-                    }`
+                  ? i18n.t("yourTurn")
                   : `${peopleAhead} ${
-                      i18n
-                        .t("common.queue.peopleCount", { count: 2 })
-                        .replace("2", "") || "people in queue"
+                      i18n.t("common.queue.peopleCount", {
+                        count: peopleAhead,
+                      }) || "people ahead"
                     }`}
               </Text>
             </View>
 
-            <View style={styles.detailRow}>
-              <FontAwesomeIcon
-                icon={faClock}
-                size={14}
-                color={isDarkMode ? "#1DCDFE" : "#0077B6"}
-              />
-              <Text
-                style={[
-                  styles.detailText,
-                  { color: isDarkMode ? "white" : "#17222D" },
-                ]}
-              >
+            <View style={styles.infoItem}>
+              <FontAwesomeIcon icon={faClock} size={14} color="white" />
+              <Text style={styles.infoText}>
                 {peopleAhead === 0 && item.estimatedTime === 0
                   ? i18n.t("yourTurn")
-                  : `~ ${item.estimatedTime} ${
-                      i18n.t("minutes", { count: 1 }) || "min"
+                  : `~${item.estimatedTime} ${
+                      i18n.t("minutes", { count: item.estimatedTime }) || "min"
                     }`}
               </Text>
             </View>
           </View>
 
           <TouchableOpacity
-            style={[styles.leaveButton, { backgroundColor: "#D84315" }]}
+            style={styles.leaveButton}
             onPress={() => handleLeaveQueue(item.id)}
           >
             <Text style={styles.leaveButtonText}>
               {i18n.t("common.queue.leave")}
             </Text>
           </TouchableOpacity>
-        </View>
+        </LinearGradient>
       </TouchableOpacity>
     );
   };
 
   return (
     <View style={styles.container}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          { color: isDarkMode ? "white" : "#17222D" },
-        ]}
-      >
-        {i18n.t("currentQueues")}
-      </Text>
+      <Text style={styles.sectionTitle}>{i18n.t("currentQueues")}</Text>
 
       <View style={styles.carouselContainer}>
         {queues.length > 0 ? (
           <Carousel
             loop={false}
             width={carouselWidth}
-            height={176}
+            height={180}
             data={queues}
             scrollAnimationDuration={1000}
             renderItem={renderItem}
             mode="parallax"
             modeConfig={{
               parallaxScrollingScale: 0.9,
-              parallaxScrollingOffset: 50,
+              parallaxScrollingOffset: 40,
               parallaxAdjacentItemScale: 0.8,
             }}
           />
         ) : (
           <View style={styles.emptyContainer}>
-            <Text
-              style={[
-                styles.emptyText,
-                { color: isDarkMode ? "#1DCDFE" : "#0077B6" },
-              ]}
-            >
-              {i18n.t("noData")}
-            </Text>
-            <Text
-              style={[
-                styles.emptySubtext,
-                {
-                  color: isDarkMode
-                    ? "rgba(255,255,255,0.7)"
-                    : "rgba(23,34,45,0.7)",
-                },
-              ]}
-            >
-              {i18n.t("noDisplay")}
-            </Text>
+            <Text style={styles.emptyText}>{i18n.t("noData")}</Text>
+            <Text style={styles.emptySubtext}>{i18n.t("noDisplay")}</Text>
           </View>
         )}
       </View>
@@ -433,112 +348,84 @@ export default function CurrentQueuesList() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    marginBottom: 16,
   },
   carouselContainer: {
     width: "100%",
     alignItems: "center",
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
-    marginVertical: 16,
-    textAlign: "left",
+    marginBottom: 16,
+    color: "#0077B6",
   },
   queueCard: {
-    height: 175,
+    height: 180,
     borderRadius: 16,
     overflow: "hidden",
-    flexDirection: "row",
   },
-  darkCard: {
-    backgroundColor: "rgba(23,34,45,0.7)",
-    borderWidth: 1,
-    borderColor: "rgba(29,205,254,0.25)",
-  },
-  lightCard: {
-    backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  imageContainer: {
-    width: "40%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-  },
-  imagePlaceholder: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  placeholderText: {
-    fontSize: 48,
-    fontWeight: "bold",
-  },
-  contentContainer: {
-    width: "60%",
+  cardGradient: {
+    flex: 1,
     padding: 16,
-    justifyContent: "space-between",
-    paddingBottom: 12,
   },
-  headerContainer: {
-    marginBottom: 8,
+  cardHeader: {
+    marginBottom: 16,
   },
-  titleText: {
-    fontSize: 20,
+  serviceName: {
+    fontSize: 22,
     fontWeight: "bold",
+    color: "white",
   },
-  subtitleText: {
+  serviceType: {
     fontSize: 14,
-    marginTop: 2,
+    color: "rgba(255, 255, 255, 0.8)",
+    marginTop: 4,
   },
-  detailsContainer: {
-    marginVertical: 8,
+  cardBody: {
+    flex: 1,
+    justifyContent: "center",
   },
-  detailRow: {
+  infoItem: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 2,
+    marginVertical: 6,
   },
-  detailText: {
-    fontSize: 14,
-    marginLeft: 8,
+  infoText: {
+    fontSize: 16,
+    color: "white",
+    marginLeft: 12,
+    fontWeight: "500",
   },
   leaveButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    backgroundColor: "#D84315",
+    paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 4,
+    marginTop: 16,
   },
   leaveButtonText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 16,
   },
   emptyContainer: {
     height: 170,
-    width: "85%",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 16,
-    backgroundColor: "rgba(0,0,0,0.05)",
+    backgroundColor: "rgba(0, 119, 182, 0.05)",
   },
   emptyText: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#0077B6",
   },
   emptySubtext: {
     fontSize: 14,
     marginTop: 8,
     textAlign: "center",
+    color: "#666",
   },
 });
