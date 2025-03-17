@@ -94,6 +94,7 @@ export interface TextButtonProps {
   icon?: any;
   onPress?: () => void;
   disabled?: boolean;
+  border?: string;
 }
 
 export interface LeftArrowProps {
