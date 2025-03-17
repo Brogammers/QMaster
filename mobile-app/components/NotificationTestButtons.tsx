@@ -2,9 +2,13 @@ import React from "react";
 import { View, Text, TouchableOpacity, InteractionManager } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "@/ctx/ThemeContext";
-import { useNotification, NotificationType } from "@/ctx/NotificationContext";
+import { useNotification } from "@/ctx/NotificationContext";
 import i18n from "@/i18n";
 import { MotiView } from "moti";
+import {
+  CORE_NOTIFICATIONS,
+  MockNotification,
+} from "@/shared/data/mockNotifications";
 
 interface NotificationTestButtonsProps {
   compact?: boolean;
@@ -16,151 +20,39 @@ export default function NotificationTestButtons({
   const { isDarkMode } = useTheme();
   const { addNotification } = useNotification();
 
-  // Function to test in-app notifications
-  const testInAppNotification = (type: NotificationType) => {
-    const notificationMessages = {
-      info: {
-        title: "Today Only!",
-        message:
-          "Enjoy an exclusive deal on your favorite brew! Don't miss out!",
-        emoji: "☕",
-      },
-      success: {
-        title: i18n.t("your_turn_notification"),
-        message: i18n.t("next_in_queue") + ' "Starbucks Coffee"',
-        emoji: "⏱️",
-      },
-      warning: {
-        title: "Limited Time Offer",
-        message: "50% off your next coffee order. Tap to redeem now!",
-        emoji: "🎁",
-      },
-      error: {
-        title: "Last Chance!",
-        message:
-          "Your reward points expire today. Use them before they're gone!",
-        emoji: "⚠️",
-      },
-    };
-
-    addNotification({
-      title: notificationMessages[type].title,
-      message: notificationMessages[type].message,
-      type: type,
-      duration: 5000,
-      actionLabel: type === "info" ? "View" : i18n.t("view_queue"),
-      onAction: () => {
-        console.log("Action button pressed");
-      },
-    });
-  };
-
-  const getIconColor = (type: NotificationType) => {
-    switch (type) {
-      case "success":
-        return "#34C759";
-      case "warning":
-        return "#FF9500";
-      case "error":
-        return "#FF3B30";
-      default:
-        return "#007AFF";
-    }
-  };
-
   // Function to test emoji notifications
   const testEmojiNotification = (type: string) => {
-    console.log(`testEmojiNotification called with type: ${type}`);
+    const notification = CORE_NOTIFICATIONS.find((n) => n.id === type);
+    if (!notification) return;
 
-    const emojiNotifications = {
-      coffee: {
-        title: "Today Only!",
-        message:
-          "Enjoy an exclusive deal on your favorite brew! Don't miss out!",
-        emoji: "☕",
-      },
-      queue: {
-        title: "Almost Your Turn!",
-        message: 'You\'re next in the queue "Starbucks Coffee"',
-        emoji: "⏱️",
-      },
-      offer: {
-        title: "Limited Time Offer",
-        message: "50% off your next coffee order. Tap to redeem now!",
-        emoji: "🎁",
-      },
-      noWait: {
-        title: "No Wait Time!",
-        message: 'Your favorite place "Cafe Nero" has no queue right now!',
-        emoji: "🚶",
-      },
-    };
-
-    const notification =
-      emojiNotifications[type as keyof typeof emojiNotifications];
-
-    console.log("Notification to be added:", notification);
-
-    // Add notification directly
     addNotification({
       title: notification.title,
       message: notification.message,
-      type: "info",
-      duration: 5000,
+      type: notification.type || "info",
+      duration: notification.duration || 5000,
       emoji: notification.emoji,
       actionLabel: "View",
       onAction: () => {
         console.log(`${type} notification action pressed`);
       },
     });
-    console.log("Notification added successfully");
   };
 
   // Function to test all notifications in sequence
   const testAllNotifications = () => {
-    const allTypes = ["coffee", "queue", "offer", "noWait"];
-
     // Add notifications with a small delay between each to prevent overwhelming the system
     InteractionManager.runAfterInteractions(() => {
-      allTypes.forEach((type, index) => {
+      CORE_NOTIFICATIONS.forEach((notification, index) => {
         setTimeout(() => {
-          const emojiNotifications = {
-            coffee: {
-              title: "Today Only!",
-              message:
-                "Enjoy an exclusive deal on your favorite brew! Don't miss out!",
-              emoji: "☕",
-            },
-            queue: {
-              title: "Almost Your Turn!",
-              message: 'You\'re next in the queue "Starbucks Coffee"',
-              emoji: "⏱️",
-            },
-            offer: {
-              title: "Limited Time Offer",
-              message: "50% off your next coffee order. Tap to redeem now!",
-              emoji: "🎁",
-            },
-            noWait: {
-              title: "No Wait Time!",
-              message:
-                'Your favorite place "Cafe Nero" has no queue right now!',
-              emoji: "🚶",
-            },
-          };
-
-          const notification =
-            emojiNotifications[type as keyof typeof emojiNotifications];
-
           addNotification({
             title: notification.title,
             message: notification.message,
-            type: "info",
-            duration: 5000,
+            type: notification.type || "info",
+            duration: notification.duration || 5000,
             emoji: notification.emoji,
             actionLabel: "View",
             onAction: () => {
-              console.log(`${type} notification action pressed`);
+              console.log(`${notification.id} notification action pressed`);
             },
           });
         }, index * 50); // Small staggered delay to prevent UI thread blocking
@@ -191,61 +83,19 @@ export default function NotificationTestButtons({
         </Text>
 
         <View className="flex-row justify-between">
-          <TouchableOpacity
-            onPress={() => testEmojiNotification("coffee")}
-            className={`flex-row items-center justify-center p-2 rounded-lg ${
-              isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
-            }`}
-            style={{ width: "23%" }}
-          >
-            <Text style={{ fontSize: 18 }}>☕</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => testEmojiNotification("queue")}
-            className={`flex-row items-center justify-center p-2 rounded-lg ${
-              isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
-            }`}
-            style={{ width: "23%" }}
-          >
-            <Text style={{ fontSize: 18 }}>⏱️</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => testEmojiNotification("offer")}
-            className={`flex-row items-center justify-center p-2 rounded-lg ${
-              isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
-            }`}
-            style={{ width: "23%" }}
-          >
-            <Text style={{ fontSize: 18 }}>🎁</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => testEmojiNotification("noWait")}
-            className={`flex-row items-center justify-center p-2 rounded-lg ${
-              isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
-            }`}
-            style={{ width: "23%" }}
-          >
-            <Text style={{ fontSize: 18 }}>🚶</Text>
-          </TouchableOpacity>
+          {CORE_NOTIFICATIONS.map((notification) => (
+            <TouchableOpacity
+              key={notification.id}
+              onPress={() => testEmojiNotification(notification.id)}
+              className={`flex-row items-center justify-center p-2 rounded-lg ${
+                isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
+              }`}
+              style={{ width: "23%" }}
+            >
+              <Text style={{ fontSize: 18 }}>{notification.emoji}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
-
-        <TouchableOpacity
-          onPress={testAllNotifications}
-          className={`mt-3 flex-row items-center justify-center p-2 rounded-lg ${
-            isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
-          }`}
-        >
-          <Text
-            className={`font-medium ${
-              isDarkMode ? "text-white" : "text-gray-800"
-            }`}
-          >
-            Test All Sequentially
-          </Text>
-        </TouchableOpacity>
       </MotiView>
     );
   }
@@ -272,69 +122,26 @@ export default function NotificationTestButtons({
       </Text>
 
       <View className="space-y-3">
-        <TouchableOpacity
-          onPress={() => testEmojiNotification("coffee")}
-          className={`flex-row items-center p-3 rounded-lg ${
-            isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
-          }`}
-        >
-          <Text style={{ fontSize: 20, marginRight: 10 }}>☕</Text>
-          <Text
-            className={`font-medium ${
-              isDarkMode ? "text-white" : "text-gray-800"
+        {CORE_NOTIFICATIONS.map((notification) => (
+          <TouchableOpacity
+            key={notification.id}
+            onPress={() => testEmojiNotification(notification.id)}
+            className={`flex-row items-center p-3 rounded-lg ${
+              isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
             }`}
           >
-            Today Only! Promotion
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => testEmojiNotification("queue")}
-          className={`flex-row items-center p-3 rounded-lg ${
-            isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
-          }`}
-        >
-          <Text style={{ fontSize: 20, marginRight: 10 }}>⏱️</Text>
-          <Text
-            className={`font-medium ${
-              isDarkMode ? "text-white" : "text-gray-800"
-            }`}
-          >
-            {i18n.t("your_turn_notification")}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => testEmojiNotification("offer")}
-          className={`flex-row items-center p-3 rounded-lg ${
-            isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
-          }`}
-        >
-          <Text style={{ fontSize: 20, marginRight: 10 }}>🎁</Text>
-          <Text
-            className={`font-medium ${
-              isDarkMode ? "text-white" : "text-gray-800"
-            }`}
-          >
-            Limited Time Offer
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => testEmojiNotification("noWait")}
-          className={`flex-row items-center p-3 rounded-lg ${
-            isDarkMode ? "bg-slate-700/40" : "bg-gray-100/80"
-          }`}
-        >
-          <Text style={{ fontSize: 20, marginRight: 10 }}>🚶</Text>
-          <Text
-            className={`font-medium ${
-              isDarkMode ? "text-white" : "text-gray-800"
-            }`}
-          >
-            No Wait Time Alert
-          </Text>
-        </TouchableOpacity>
+            <Text style={{ fontSize: 20, marginRight: 10 }}>
+              {notification.emoji}
+            </Text>
+            <Text
+              className={`font-medium ${
+                isDarkMode ? "text-white" : "text-gray-800"
+              }`}
+            >
+              {notification.title}
+            </Text>
+          </TouchableOpacity>
+        ))}
 
         <TouchableOpacity
           onPress={testAllNotifications}

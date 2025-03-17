@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import _ from "lodash";
 import { InteractionManager } from "react-native";
+import { getWelcomeNotifications } from "@/shared/data/mockNotifications";
 
 // Storage key for tracking if welcome notifications have been shown
 const WELCOME_NOTIFICATIONS_SHOWN_KEY = "welcome_notifications_shown";
@@ -29,58 +30,9 @@ export default function WelcomeNotifications() {
 
   // Function to show the welcome notifications sequence
   const showWelcomeNotifications = () => {
-    // Welcome notification sequence
-    const notifications = [
-      {
-        title: "Welcome to QMaster!",
-        message: "Skip the line and manage your queues with ease",
-        type: "info" as const,
-        duration: 4000,
-        emoji: "👋",
-      },
-      // Add personalized welcome back notification if username exists
-      ...(username
-        ? [
-            {
-              title: `Welcome back, ${capitalizeFullName(username)}!`,
-              message:
-                "We're glad to see you again. Ready to skip some lines today?",
-              type: "info" as const,
-              duration: 4000,
-              emoji: "✨",
-            },
-          ]
-        : []),
-      {
-        title: "Today Only!",
-        message:
-          "Enjoy an exclusive deal on your favorite brew! Don't miss out!",
-        type: "info" as const,
-        duration: 4000,
-        emoji: "☕",
-      },
-      {
-        title: "Almost Your Turn!",
-        message: 'You\'re next in the queue "Starbucks Coffee"',
-        type: "success" as const,
-        duration: 4000,
-        emoji: "⏱️",
-      },
-      {
-        title: "Limited Time Offer",
-        message: "50% off your next coffee order. Tap to redeem now!",
-        type: "warning" as const,
-        duration: 4000,
-        emoji: "🎁",
-      },
-      {
-        title: "No Wait Time!",
-        message: 'Your favorite place "Cafe Nero" has no queue right now!',
-        type: "info" as const,
-        duration: 4000,
-        emoji: "🚶",
-      },
-    ];
+    const notifications = getWelcomeNotifications(
+      username ? capitalizeFullName(username) : undefined
+    );
 
     // Add notifications with a small delay between each to prevent overwhelming the system
     InteractionManager.runAfterInteractions(() => {
@@ -140,57 +92,7 @@ export function triggerWelcomeNotifications(
   addNotification: any,
   username?: string
 ) {
-  // Welcome notification sequence
-  const notifications = [
-    {
-      title: "Welcome to QMaster!",
-      message: "Skip the line and manage your queues with ease",
-      type: "info" as const,
-      duration: 4000,
-      emoji: "👋",
-    },
-    // Add personalized welcome back notification if username exists
-    ...(username
-      ? [
-          {
-            title: `Welcome back, ${username}!`,
-            message:
-              "We're glad to see you again. Ready to skip some lines today?",
-            type: "info" as const,
-            duration: 4000,
-            emoji: "✨",
-          },
-        ]
-      : []),
-    {
-      title: "Today Only!",
-      message: "Enjoy an exclusive deal on your favorite brew! Don't miss out!",
-      type: "info" as const,
-      duration: 4000,
-      emoji: "☕",
-    },
-    {
-      title: "Almost Your Turn!",
-      message: 'You\'re next in the queue "Starbucks Coffee"',
-      type: "success" as const,
-      duration: 4000,
-      emoji: "⏱️",
-    },
-    {
-      title: "Limited Time Offer",
-      message: "50% off your next coffee order. Tap to redeem now!",
-      type: "warning" as const,
-      duration: 4000,
-      emoji: "🎁",
-    },
-    {
-      title: "No Wait Time!",
-      message: 'Your favorite place "Cafe Nero" has no queue right now!',
-      type: "info" as const,
-      duration: 4000,
-      emoji: "🚶",
-    },
-  ];
+  const notifications = getWelcomeNotifications(username);
 
   // Add notifications with a small delay between each to prevent overwhelming the system
   InteractionManager.runAfterInteractions(() => {

@@ -13,6 +13,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import _ from "lodash";
 import { triggerWelcomeNotifications } from "./WelcomeNotifications";
+import {
+  CORE_NOTIFICATIONS,
+  MockNotification,
+} from "@/shared/data/mockNotifications";
 
 export default function NotificationDebugger() {
   const { addNotification, notifications, currentNotification } =
@@ -28,40 +32,12 @@ export default function NotificationDebugger() {
       .join(" ");
   };
 
-  const testNotifications = [
-    {
-      id: "coffee",
-      title: "Today Only!",
-      message: "Enjoy an exclusive deal on your favorite brew! Don't miss out!",
-      emoji: "☕",
-    },
-    {
-      id: "queue",
-      title: "Almost Your Turn!",
-      message: 'You\'re next in the queue "Starbucks Coffee"',
-      emoji: "⏱️",
-    },
-    {
-      id: "offer",
-      title: "Limited Time Offer",
-      message: "50% off your next coffee order. Tap to redeem now!",
-      emoji: "🎁",
-    },
-    {
-      id: "noWait",
-      title: "No Wait Time!",
-      message: 'Your favorite place "Cafe Nero" has no queue right now!',
-      emoji: "🚶",
-    },
-  ];
-
-  const testNotification = (notification: (typeof testNotifications)[0]) => {
-    console.log(`Testing notification: ${notification.id}`);
+  const testNotification = (notification: MockNotification) => {
     addNotification({
       title: notification.title,
       message: notification.message,
-      type: "info",
-      duration: 5000,
+      type: notification.type || "info",
+      duration: notification.duration || 5000,
       emoji: notification.emoji,
       actionLabel: "View",
       onAction: () => {
@@ -115,13 +91,13 @@ export default function NotificationDebugger() {
   const testAllNotifications = () => {
     // Add notifications with a small delay between each to prevent overwhelming the system
     InteractionManager.runAfterInteractions(() => {
-      testNotifications.forEach((notification, index) => {
+      CORE_NOTIFICATIONS.forEach((notification, index) => {
         setTimeout(() => {
           addNotification({
             title: notification.title,
             message: notification.message,
-            type: "info",
-            duration: 5000,
+            type: notification.type || "info",
+            duration: notification.duration || 5000,
             emoji: notification.emoji,
             actionLabel: "View",
             onAction: () => {
@@ -174,7 +150,7 @@ export default function NotificationDebugger() {
         showsHorizontalScrollIndicator={false}
         style={styles.buttonScroll}
       >
-        {testNotifications.map((notification) => (
+        {CORE_NOTIFICATIONS.map((notification) => (
           <TouchableOpacity
             key={notification.id}
             style={styles.notificationButton}

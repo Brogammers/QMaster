@@ -24,38 +24,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import NotificationCard from "@/components/NotificationCard";
 import NotificationDebugger from "@/components/NotificationDebugger";
-
-// Mock in-app notifications data
-const mockInAppNotifications = [
-  {
-    id: "1",
-    title: "Today Only!",
-    message: "Enjoy an exclusive deal on your favorite brew! Don't miss out!",
-    timestamp: "now",
-    emoji: "☕",
-  },
-  {
-    id: "2",
-    title: "Almost Your Turn!",
-    message: 'You\'re next in the queue "Starbucks Coffee"',
-    timestamp: "5m ago",
-    emoji: "⏱️",
-  },
-  {
-    id: "3",
-    title: "Limited Time Offer",
-    message: "50% off your next coffee order. Tap to redeem now!",
-    timestamp: "15m ago",
-    emoji: "🎁",
-  },
-  {
-    id: "4",
-    title: "No Wait Time!",
-    message: 'Your favorite place "Cafe Nero" has no queue right now!',
-    timestamp: "30m ago",
-    emoji: "🚶",
-  },
-];
+import { getNotificationsWithTimestamps } from "@/shared/data/mockNotifications";
 
 export default function Notifications() {
   const isFocused = useIsFocused();
@@ -68,6 +37,9 @@ export default function Notifications() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [itemsCount, setItemsCount] = useState<number | null>(null);
   const userId = useSelector((state: RootState) => state.userId.userId);
+
+  // Get mock notifications with timestamps
+  const mockInAppNotifications = getNotificationsWithTimestamps();
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -200,7 +172,7 @@ export default function Notifications() {
                 key={notification.id}
                 title={notification.title}
                 message={notification.message}
-                timestamp={notification.timestamp}
+                timestamp={notification.timestamp || "now"}
                 emoji={notification.emoji}
                 onPress={() =>
                   console.log(`Notification ${notification.id} pressed`)
