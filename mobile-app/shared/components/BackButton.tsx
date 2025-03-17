@@ -10,26 +10,26 @@ import { useRouter, Href } from "expo-router";
 
 interface BackButtonProps {
   onPress?: () => void;
-  backTo?: Href<string>;
   color?: string;
   className?: string;
   style?: ViewStyle;
+  backTo?: Href<string>;
 }
 
 /**
  * Reusable back button component with consistent styling
  * @param onPress - Optional custom onPress handler. If not provided, defaults to router.back()
- * @param backTo - Optional route to navigate to instead of using back()
  * @param color - Optional text color for the arrow. Defaults to black
  * @param className - Optional additional Tailwind CSS classes
  * @param style - Optional additional StyleSheet styles
+ * @param backTo - Optional destination path to navigate to (e.g. "/"). If provided, will navigate to this path instead of going back.
  */
 export default function BackButton({
   onPress,
-  backTo,
   color = "#000",
   className = "",
   style,
+  backTo,
 }: BackButtonProps) {
   const router = useRouter();
 
@@ -37,10 +37,7 @@ export default function BackButton({
     if (onPress) {
       onPress();
     } else if (backTo) {
-      router.replace(backTo, {
-        // Use horizontal slide animation
-        animation: "slide_from_left",
-      });
+      router.push(backTo);
     } else {
       router.back();
     }
