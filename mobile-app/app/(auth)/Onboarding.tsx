@@ -10,7 +10,7 @@ import {
 import { router } from "expo-router";
 import i18n from "@/i18n";
 import { AntDesign } from "@expo/vector-icons";
-import Logo from "@/shared/icons/logo";
+import AppLogo from "@/shared/icons/logo";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 
@@ -51,10 +51,9 @@ export default function Onboarding() {
       >
         <View className="items-center mb-8">
           <View className="w-60 h- flex flex-row items-center justify-center gap-2 mb-16">
-            <Logo 
+            <AppLogo 
               width={60} 
               height={60} 
-              className="rounded-2xl" 
               background 
             />
             <Text className="text-3xl font-bold text-ocean-blue mt-4">
