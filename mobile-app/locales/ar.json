@@ -161,6 +161,15 @@
   "internal_notifications": "إشعارات التطبيق",
   "external_notifications_desc": "احصل على إشعارات حول حالة الطابور والتحديثات حتى عندما يكون التطبيق مغلقًا",
   "internal_notifications_desc": "تلقي إشعارات حول حالة الطابور والتحديثات أثناء استخدام التطبيق",
+  "test_notifications": "اختبار إشعارات التطبيق",
+  "queue_position_update": "تحديث موقع الطابور",
+  "your_turn_notification": "إشعار دورك",
+  "queue_delay_warning": "تحذير تأخير الطابور",
+  "queue_closed_alert": "تنبيه إغلاق الطابور",
+  "almost_your_turn": "دورك قريباً!",
+  "next_in_queue": "أنت التالي في الطابور",
+  "positions_away": "أنت على بعد {{count}} مواقع في الطابور",
+  "view_queue": "عرض",
   "region_language": "المنطقة واللغة",
   "country": "البلد",
   "security": "الأمان",
@@ -190,7 +199,15 @@
       "fast": "سريع",
       "ratings": "({{count}} تقييم)",
       "chooseBranch": "اختر الفرع",
-      "searchBranches": "البحث عن الفروع..."
+      "searchBranches": "البحث عن الفروع...",
+      "chooseService": "اختر نوع الخدمة",
+      "minutes": "دقيقة",
+      "services": {
+        "cashier": "الكاشير",
+        "returns": "المرتجعات والاستبدال",
+        "pickup": "استلام الطلبات",
+        "support": "خدمة العملاء"
+      }
     }
   },
   "greetings": {

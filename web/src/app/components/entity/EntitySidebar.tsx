@@ -22,11 +22,13 @@ import { useRole } from "@/ctx/RoleContext";
 interface EntitySidebarProps {
   isDarkMode: boolean;
   onClose: () => void;
+  onNavigate?: () => void;
 }
 
 export default function EntitySidebar({
   isDarkMode,
   onClose,
+  onNavigate,
 }: EntitySidebarProps) {
   const pathname = usePathname();
   const { logout } = useBusinessAuth();
@@ -39,6 +41,7 @@ export default function EntitySidebar({
   const [isQueueManagementOpen, setIsQueueManagementOpen] = useState(() =>
     pathname.includes("/queues")
   );
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const adminMenuItems = [
     {
@@ -99,10 +102,12 @@ export default function EntitySidebar({
   );
 
   const handleLogout = () => {
+    setIsLoggingOut(true);
     logout();
     axios.defaults.headers.common["Authorization"] = "";
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    // No need to reset isLoggingOut as the component will unmount
   };
 
   const toggleAdmin = () => {
@@ -111,6 +116,13 @@ export default function EntitySidebar({
 
   const toggleQueueManagement = () => {
     setIsQueueManagementOpen(!isQueueManagementOpen);
+  };
+
+  const handleNavigation = (path: string) => {
+    // Call the onNavigate callback if provided
+    if (onNavigate) {
+      onNavigate();
+    }
   };
 
   return (
@@ -123,7 +135,10 @@ export default function EntitySidebar({
         <Link
           href={`/${entity}/admin`}
           className="flex items-center gap-3"
-          onClick={onClose}
+          onClick={() => {
+            onClose();
+            if (onNavigate) onNavigate();
+          }}
         >
           <Image
             src={QMasterSVG}
@@ -208,7 +223,10 @@ export default function EntitySidebar({
                             <Link
                               key={child.path}
                               href={child.path}
-                              onClick={onClose}
+                              onClick={() => {
+                                onClose();
+                                if (onNavigate) onNavigate();
+                              }}
                             >
                               <motion.div
                                 className={`
@@ -231,7 +249,13 @@ export default function EntitySidebar({
                   </AnimatePresence>
                 </div>
               ) : (
-                <Link href={item.path} onClick={onClose}>
+                <Link
+                  href={item.path}
+                  onClick={() => {
+                    onClose();
+                    if (onNavigate) onNavigate();
+                  }}
+                >
                   <motion.div
                     className={`
                       flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer
@@ -274,13 +298,20 @@ export default function EntitySidebar({
       <div className="absolute bottom-20 left-0 right-0 px-6">
         <motion.button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
-            bg-red-500/40 text-rose-300 hover:bg-rose-500/20 transition-colors"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl
+            ${
+              isLoggingOut
+                ? "bg-gray-500/30 text-gray-400 cursor-not-allowed"
+                : "bg-red-500/40 text-rose-300 hover:bg-rose-500/20"
+            } transition-colors`}
+          whileHover={{ scale: isLoggingOut ? 1 : 1.02 }}
+          whileTap={{ scale: isLoggingOut ? 1 : 0.98 }}
+          disabled={isLoggingOut}
         >
-          <FaSignOutAlt className="w-5 h-5" />
-          <span>Sign Out</span>
+          <FaSignOutAlt
+            className={`w-5 h-5 ${isLoggingOut ? "opacity-50" : ""}`}
+          />
+          <span>{isLoggingOut ? "Signing out..." : "Sign Out"}</span>
         </motion.button>
       </div>
 

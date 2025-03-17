@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useBusinessAuth, BusinessAuthProvider } from "@/lib/auth/AuthContext";
 import EntitySidebar from "@/app/components/entity/EntitySidebar";
@@ -10,6 +10,7 @@ import { StoreProvider } from "@/store/StoreProvider";
 import { LocationProvider } from "@/ctx/LocationContext";
 import { FaBars } from "react-icons/fa";
 import { RoleProvider } from "@/ctx/RoleContext";
+import MaintenanceNotification from "@/components/MaintenanceNotification";
 
 interface PrivateLayoutProps {
   children: React.ReactNode;
@@ -20,11 +21,18 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
   const { isLoading } = useBusinessAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem("qmaster-dark-mode");
     setIsDarkMode(savedDarkMode === "true");
   }, []);
+
+  // This effect will run when the pathname changes
+  // We'll use it to reset the navigation state
+  useEffect(() => {
+    setIsNavigating(false);
+  }, [pathname]);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -36,11 +44,16 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
 
   // If we're on the login page, just render the children
   if (pathname === "/login") {
-    return children;
+    return (
+      <>
+        {children}
+        <MaintenanceNotification />
+      </>
+    );
   }
 
-  // Show loading state while checking auth
-  if (isLoading) {
+  // Show loading state while checking auth or navigating
+  if (isLoading || isNavigating) {
     return <SplashScreen />;
   }
 
@@ -76,7 +89,11 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
                               }
                           `}
             >
-              <EntitySidebar isDarkMode={isDarkMode} onClose={closeSidebar} />
+              <EntitySidebar
+                isDarkMode={isDarkMode}
+                onClose={closeSidebar}
+                onNavigate={() => setIsNavigating(true)}
+              />
             </div>
 
             {/* Main content wrapper - takes up space where sidebar would be on large screens */}
@@ -136,6 +153,9 @@ function PrivateLayoutContent({ children }: PrivateLayoutProps) {
                 <div className="space-y-6">{children}</div>
               </div>
             </motion.main>
+
+            {/* Maintenance notification */}
+            <MaintenanceNotification />
           </div>
         </LocationProvider>
       </RoleProvider>

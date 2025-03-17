@@ -347,4 +347,4 @@ function CustomerFeedbackPage() {
   );
 }
 
-export default withRoleProtection(CustomerFeedbackPage, "view_feedback");
+export default withRoleProtection(CustomerFeedbackPage, "view_customer-feedback");
