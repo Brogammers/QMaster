@@ -7,6 +7,9 @@ import {
   View,
   useWindowDimensions,
   Text,
+  TouchableOpacity,
+  Image,
+  ScrollView,
 } from "react-native";
 import ScanQr from "@/components/ScanQR";
 import SearchBar from "@/components/SearchBar";
@@ -14,7 +17,6 @@ import CategoriesList from "@/components/CategoriesList";
 import RecentQueues from "@/components/RecentQueues";
 import FrequentlyAsked from "@/components/FrequentlyAsked";
 import CurrentQueuesList from "@/components/CurrentQueuesList";
-import PromoCard from "@/assets/images/promo-card.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Skeleton } from "moti/skeleton";
 import { useTheme } from "@/ctx/ThemeContext";
@@ -27,13 +29,11 @@ import { setCurrentQueues } from "@/app/redux/queueSlice";
 import axios from "axios";
 import configConverter from "@/api/configConverter";
 import RefreshableWrapper from "@/components/RefreshableWrapper";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function Index() {
   const { isDarkMode } = useTheme();
-  const [bgColor, setBgColor] = useState("#17222D");
   const [scrollY, setScrollY] = useState(0);
-  const scanQrRef = useRef<View>(null);
-  const [scanQrHeight, setScanQrHeight] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [recentQueues, setRecentQueues] = useState<number>(0);
   const windowWidth = useWindowDimensions().width;
@@ -131,42 +131,29 @@ export default function Index() {
     setScrollY(currentScrollY);
   };
 
-  useEffect(() => {
-    if (scrollY > scanQrHeight) {
-      setBgColor(isDarkMode ? "#0C1824" : "#D9D9D9");
-      if (Platform.OS === "android") {
-        StatusBar.setBackgroundColor(isDarkMode ? "#0C1824" : "#D9D9D9", true);
-      }
-      StatusBar.setBarStyle(isDarkMode ? "light-content" : "dark-content");
-    } else {
-      setBgColor("#17222D");
-      if (Platform.OS === "android") {
-        StatusBar.setBackgroundColor("#17222D", true);
-      }
-      StatusBar.setBarStyle("light-content");
-    }
-  }, [scrollY, scanQrHeight, isDarkMode]);
-
-  const handleLayout = (event: {
-    nativeEvent: { layout: { height: React.SetStateAction<number> } };
-  }) => {
-    setScanQrHeight(event.nativeEvent.layout.height);
-  };
-
   // Home screen should refresh more frequently if user is in a queue
   const autoRefreshInterval = currentQueues.length > 0 ? 60000 : 180000; // 1 minute if in queue, 3 minutes otherwise
 
+  // Categories for the home screen based on Talabat's design
+  const categories = [
+    { id: 1, name: "Banking", icon: "university" },
+    { id: 2, name: "Health", icon: "heartbeat" },
+    { id: 3, name: "Government", icon: "landmark" },
+    { id: 4, name: "Restaurants", icon: "utensils" },
+    { id: 5, name: "Retail", icon: "shopping-bag" },
+  ];
+
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: bgColor }]}>
+    <SafeAreaView style={styles.container}>
       <StatusBar
         translucent
-        backgroundColor="#17222D"
-        barStyle={
-          isDarkMode || scrollY <= scanQrHeight
-            ? "light-content"
-            : "dark-content"
-        }
+        backgroundColor="transparent"
+        barStyle="dark-content"
       />
+
+      {/* Floating ScanQr button */}
+      <ScanQr asFloatingButton={true} />
+
       <RefreshableWrapper
         refreshId="home-screen"
         onRefresh={fetchHomeData}
@@ -178,62 +165,144 @@ export default function Index() {
           onScroll: handleScroll,
         }}
       >
-        <View
-          ref={scanQrRef}
-          onLayout={handleLayout}
-          className={`${isDarkMode ? "bg-ocean-blue" : "bg-slate-800"} pb-8`}
-        >
-          <ScanQr isDarkMode={!isDarkMode} />
-        </View>
-        <View
-          className={`relative -mt-6 rounded-t-[30px] overflow-hidden ${
-            isDarkMode ? "bg-slate-900" : "bg-off-white"
-          } shadow-lg border-t ${
-            isDarkMode ? "border-slate-800/50" : "border-slate-200"
-          }`}
-        >
-          <View className="absolute inset-x-0 -top-3 h-6 bg-gradient-to-b from-black/20 to-transparent" />
-          {isDarkMode ? (
-            <LinearGradient
-              colors={["rgba(30, 41, 59, 0.7)", "rgba(15, 23, 42, 0)"]}
-              className="absolute top-0 w-full h-64"
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-            />
-          ) : (
-            <LinearGradient
-              colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
-              className="absolute top-0 w-full h-64"
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-            />
-          )}
-          <View className="w-10/12 self-center">
-            <SearchBar isDarkMode={isDarkMode} />
-            {isLoading ? (
-              <View
-                className={`flex flex-col items-center justify-center ${
-                  isDarkMode ? "bg-ocean-blue" : "bg-off-white"
-                }`}
-              >
-                <View className="mb-4" />
-                <Skeleton
-                  colorMode={isDarkMode ? "dark" : "light"}
-                  width={windowWidth * 0.85}
-                  height={175}
-                  radius={16}
+        {/* Header with location and search */}
+        <View style={styles.headerContainer}>
+          <LinearGradient
+            colors={["#FF5722", "#FF7043"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.headerGradient}
+          >
+            <View style={styles.locationContainer}>
+              <Text style={styles.deliverToText}>Deliver to</Text>
+              <View style={styles.locationRow}>
+                <Text style={styles.locationText}>Apartment</Text>
+                <FontAwesome5
+                  name="chevron-down"
+                  size={12}
+                  color="#fff"
+                  style={styles.locationIcon}
                 />
-                <View className="mb-5" />
               </View>
-            ) : currentQueues.length > 0 ? (
-              <CurrentQueuesList />
-            ) : (
-              <PromoCard width={"100%"} />
-            )}
-            <CategoriesList isDarkMode={isDarkMode} />
-            {recentQueues > 0 && <RecentQueues isDarkMode={isDarkMode} />}
-            <FrequentlyAsked isDarkMode={isDarkMode} />
+            </View>
+
+            <View style={styles.searchContainer}>
+              <TouchableOpacity style={styles.searchBar}>
+                <FontAwesome5 name="search" size={16} color="#777" />
+                <Text style={styles.searchPlaceholder}>
+                  Search for services & more
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </LinearGradient>
+        </View>
+
+        {/* Main content */}
+        <View style={styles.contentContainer}>
+          {/* Current Queues Section */}
+          {isLoading ? (
+            <View style={styles.loadingContainer}>
+              <Skeleton
+                colorMode={isDarkMode ? "dark" : "light"}
+                width={windowWidth * 0.85}
+                height={175}
+                radius={16}
+              />
+            </View>
+          ) : currentQueues.length > 0 ? (
+            <CurrentQueuesList />
+          ) : null}
+
+          {/* Categories */}
+          <View style={styles.categoriesSection}>
+            <Text style={styles.sectionTitle}>Categories</Text>
+            <View style={styles.categoriesGrid}>
+              {categories.map((category) => (
+                <TouchableOpacity key={category.id} style={styles.categoryItem}>
+                  <View style={styles.categoryIconContainer}>
+                    <FontAwesome5
+                      name={category.icon}
+                      size={20}
+                      color="#FF5722"
+                    />
+                  </View>
+                  <Text style={styles.categoryName}>{category.name}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
+
+          {/* Feature Banner */}
+          <View style={styles.featureBanner}>
+            <LinearGradient
+              colors={["#FF9800", "#FF5722"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.bannerGradient}
+            >
+              <View style={styles.bannerContent}>
+                <Text style={styles.bannerTitle}>Skip the wait!</Text>
+                <Text style={styles.bannerSubtitle}>
+                  Join queues remotely and get notified when it's your turn
+                </Text>
+              </View>
+              <View style={styles.bannerIconContainer}>
+                <FontAwesome5 name="clock" size={36} color="#FFF" />
+              </View>
+            </LinearGradient>
+          </View>
+
+          {/* Recent Queues Section - Only show if there are recent queues */}
+          {recentQueues > 0 && <RecentQueues isDarkMode={isDarkMode} />}
+
+          {/* Featured Services */}
+          <View style={styles.featuredSection}>
+            <Text style={styles.sectionTitle}>Popular Services</Text>
+            <Text style={styles.sectionSubtitle}>
+              Join the most popular queues
+            </Text>
+
+            <View style={styles.servicesContainer}>
+              {Array(4)
+                .fill(0)
+                .map((_, index) => (
+                  <TouchableOpacity key={index} style={styles.serviceItem}>
+                    <View style={styles.serviceImageContainer}>
+                      <View style={styles.servicePlaceholder}>
+                        <FontAwesome5
+                          name={
+                            ["building", "hospital", "university", "store"][
+                              index
+                            ]
+                          }
+                          size={24}
+                          color="#FF5722"
+                        />
+                      </View>
+                    </View>
+                    <Text style={styles.serviceRating}>
+                      ★ {(4.1 + index * 0.2).toFixed(1)} (1000+)
+                    </Text>
+                    <Text style={styles.serviceName}>
+                      {
+                        [
+                          "Emirates Bank",
+                          "City Hospital",
+                          "Government Services",
+                          "Mall Services",
+                        ][index]
+                      }
+                    </Text>
+                    <Text style={styles.serviceWaitTime}>
+                      ~ {10 + index * 5} min wait
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+            </View>
+          </View>
+
+          {/* FAQ Section */}
+          <FrequentlyAsked isDarkMode={false} />
         </View>
       </RefreshableWrapper>
     </SafeAreaView>
@@ -243,11 +312,167 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop:
-      Platform.OS === "android"
-        ? StatusBar.currentHeight
-          ? StatusBar.currentHeight - 1
-          : 0
-        : 0,
+    backgroundColor: "#FFFFFF",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
+  headerContainer: {
+    width: "100%",
+  },
+  headerGradient: {
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingHorizontal: 20,
+  },
+  locationContainer: {
+    marginBottom: 12,
+  },
+  locationRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  deliverToText: {
+    color: "rgba(255, 255, 255, 0.8)",
+    fontSize: 12,
+  },
+  locationText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  locationIcon: {
+    marginLeft: 4,
+  },
+  searchContainer: {
+    marginTop: 4,
+  },
+  searchBar: {
+    backgroundColor: "#FFFFFF",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 24,
+  },
+  searchPlaceholder: {
+    color: "#777777",
+    marginLeft: 8,
+    fontSize: 14,
+  },
+  contentContainer: {
+    flex: 1,
+    padding: 16,
+  },
+  loadingContainer: {
+    alignItems: "center",
+    marginVertical: 16,
+  },
+  categoriesSection: {
+    marginVertical: 16,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 12,
+    color: "#333",
+  },
+  sectionSubtitle: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 16,
+  },
+  categoriesGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginTop: 8,
+  },
+  categoryItem: {
+    width: "18%",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  categoryIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "rgba(255, 87, 34, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  categoryName: {
+    fontSize: 12,
+    textAlign: "center",
+    color: "#333",
+  },
+  featureBanner: {
+    marginVertical: 16,
+    borderRadius: 12,
+    overflow: "hidden",
+  },
+  bannerGradient: {
+    flexDirection: "row",
+    padding: 16,
+    alignItems: "center",
+  },
+  bannerContent: {
+    flex: 1,
+  },
+  bannerTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  bannerSubtitle: {
+    color: "rgba(255, 255, 255, 0.9)",
+    fontSize: 14,
+  },
+  bannerIconContainer: {
+    width: 64,
+    height: 64,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  featuredSection: {
+    marginVertical: 16,
+  },
+  servicesContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  serviceItem: {
+    width: "48%",
+    marginBottom: 16,
+  },
+  serviceImageContainer: {
+    width: "100%",
+    height: 120,
+    borderRadius: 8,
+    overflow: "hidden",
+    marginBottom: 8,
+  },
+  servicePlaceholder: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(255, 87, 34, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  serviceRating: {
+    fontSize: 12,
+    color: "#FF9800",
+    marginBottom: 4,
+  },
+  serviceName: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 4,
+  },
+  serviceWaitTime: {
+    fontSize: 12,
+    color: "#666",
   },
 });

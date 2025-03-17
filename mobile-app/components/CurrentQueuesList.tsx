@@ -264,12 +264,7 @@ export default function CurrentQueuesList() {
         style={styles.queueCard}
         activeOpacity={0.9}
       >
-        <LinearGradient
-          colors={["#0077B6", "#004e7a"]}
-          style={styles.cardGradient}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
+        <View style={styles.cardGradient}>
           <View style={styles.cardHeader}>
             <Text style={styles.serviceName}>{item.name}</Text>
             <Text style={styles.serviceType}>{item.serviceType}</Text>
@@ -277,7 +272,7 @@ export default function CurrentQueuesList() {
 
           <View style={styles.cardBody}>
             <View style={styles.infoItem}>
-              <FontAwesomeIcon icon={faUser} size={14} color="white" />
+              <FontAwesomeIcon icon={faUser} size={14} color="#FF5722" />
               <Text style={styles.infoText}>
                 {peopleAhead === 0
                   ? i18n.t("yourTurn")
@@ -290,7 +285,7 @@ export default function CurrentQueuesList() {
             </View>
 
             <View style={styles.infoItem}>
-              <FontAwesomeIcon icon={faClock} size={14} color="white" />
+              <FontAwesomeIcon icon={faClock} size={14} color="#FF5722" />
               <Text style={styles.infoText}>
                 {peopleAhead === 0 && item.estimatedTime === 0
                   ? i18n.t("yourTurn")
@@ -309,7 +304,7 @@ export default function CurrentQueuesList() {
               {i18n.t("common.queue.leave")}
             </Text>
           </TouchableOpacity>
-        </LinearGradient>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -358,12 +353,20 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 16,
-    color: "#0077B6",
+    color: "#333",
   },
   queueCard: {
     height: 180,
     borderRadius: 16,
     overflow: "hidden",
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#F0F0F0",
   },
   cardGradient: {
     flex: 1,
@@ -375,11 +378,11 @@ const styles = StyleSheet.create({
   serviceName: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "white",
+    color: "#333",
   },
   serviceType: {
     fontSize: 14,
-    color: "rgba(255, 255, 255, 0.8)",
+    color: "#666",
     marginTop: 4,
   },
   cardBody: {
@@ -393,12 +396,12 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 16,
-    color: "white",
+    color: "#333",
     marginLeft: 12,
     fontWeight: "500",
   },
   leaveButton: {
-    backgroundColor: "#D84315",
+    backgroundColor: "#FF5722",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
@@ -415,12 +418,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 16,
-    backgroundColor: "rgba(0, 119, 182, 0.05)",
+    backgroundColor: "rgba(255, 87, 34, 0.05)",
   },
   emptyText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#0077B6",
+    color: "#FF5722",
   },
   emptySubtext: {
     fontSize: 14,

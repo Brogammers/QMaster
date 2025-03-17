@@ -1,40 +1,65 @@
-import React from 'react';
-import { I18nManager, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { View, Text } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import { useLinkTo } from '@react-navigation/native';
-import i18n from '@/i18n';
+import React from "react";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from "react-native";
+import { useRouter } from "expo-router";
+import { FontAwesome5 } from "@expo/vector-icons";
+import i18n from "@/i18n";
 
-interface SearchBarProps {
+type SearchBarProps = {
   isDarkMode?: boolean;
-}
+};
 
-export default function SearchBar({ isDarkMode }: SearchBarProps) {
-  const linkTo = useLinkTo();
+export default function SearchBar({ isDarkMode = false }: SearchBarProps) {
+  const router = useRouter();
 
   const handleSearchPress = () => {
-    linkTo('/Search'); 
+    // For now, just navigate to the search screen
+    router.push("/search");
   };
 
   return (
     <TouchableOpacity
-      className={`h-11 border-2 rounded-3xl mt-7 mb-4 px-4 py-2 flex justify-center ${
-        isDarkMode ? 'border-slate-700' : 'border-rock-stone'
-      }`}
       onPress={handleSearchPress}
+      style={styles.searchContainer}
+      activeOpacity={0.9}
     >
-      <View className={`${I18nManager.isRTL ? `flex-row-reverse justify-between` : `flex-row`} items-center`}>
-        <FontAwesome 
-          name="search" 
-          size={24} 
-          color={isDarkMode ? "#fff" : "#000"} 
-          className={`${I18nManager.isRTL && `pl-4`}`} 
-        />
-        <Text className={`ml-2.5 ${isDarkMode ? 'text-white' : 'text-coal-black'}`}>
-          {i18n.t('search')}
+      <View style={styles.searchBar}>
+        <FontAwesome5 name="search" size={16} color="#777" />
+        <Text style={styles.searchPlaceholder}>
+          {i18n.t("searchPlaceholder") || "Search for services & more"}
         </Text>
       </View>
     </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  searchContainer: {
+    marginVertical: 16,
+  },
+  searchBar: {
+    backgroundColor: "#FFFFFF",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 24,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: "#F0F0F0",
+  },
+  searchPlaceholder: {
+    color: "#777777",
+    marginLeft: 8,
+    fontSize: 14,
+  },
+});
