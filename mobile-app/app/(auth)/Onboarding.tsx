@@ -52,9 +52,10 @@ export default function Onboarding() {
         <View className="items-center mb-8">
           <View className="w-60 h- flex flex-row items-center justify-center gap-2 mb-16">
             <AppLogo 
-              width={60} 
-              height={60} 
-              background 
+              width={60}
+              height={60}
+              background
+              rounded
             />
             <Text className="text-3xl font-bold text-ocean-blue mt-4">
               tawabiry
