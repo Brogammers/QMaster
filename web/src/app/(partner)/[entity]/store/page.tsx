@@ -100,7 +100,7 @@ const StoreRequestView = ({ onRequest }: StoreRequestViewProps) => (
     <h2 className="text-2xl font-semibold mb-4">Start Selling Online</h2>
     <p className="text-muted-foreground mb-6 max-w-md mx-auto">
       Transform your physical store into an online marketplace. Reach more
-      customers and increase your revenue with QMaster&apos;s e-commerce
+      customers and increase your revenue with tawabiry&apos;s e-commerce
       solution.
     </p>
     <Button
@@ -1038,11 +1038,11 @@ const StoreSetupView = ({ onComplete }: { onComplete: () => void }) => {
                     <span className="text-sm text-black/70">
                       I acknowledge and agree that I am solely responsible for
                       fulfilling all orders and delivering products to
-                      customers. QMaster acts solely as an intermediary platform
-                      facilitating the transaction between my business and
-                      customers. I understand that I am liable for ensuring
+                      customers. tawabiry acts solely as an intermediary
+                      platform facilitating the transaction between my business
+                      and customers. I understand that I am liable for ensuring
                       timely delivery, product quality, and handling any
-                      shipping-related issues or returns. QMaster is not
+                      shipping-related issues or returns. tawabiry is not
                       responsible for any delivery delays, damages, or disputes
                       arising from the shipping process.
                     </span>

@@ -50,7 +50,7 @@ export default function BusinessPage() {
                   data-aos-delay="100"
                   className="text-base md:text-xl text-white/90 mb-8 md:mb-12"
                 >
-                  QMaster transforms customer flow with smart queue management,
+                  tawabiry transforms customer flow with smart queue management,
                   powered by advanced technology and hands-on support, ensuring
                   efficiency, control, and full transparency.
                 </p>
@@ -252,7 +252,7 @@ export default function BusinessPage() {
                   data-aos-delay="100"
                   className="text-xl text-white/90 mb-12"
                 >
-                  Join thousands of businesses already using QMaster to optimize
+                  Join thousands of businesses already using tawabiry to optimize
                   their operations and delight customers.
                 </p>
                 <Link

@@ -534,7 +534,7 @@ export default function SettingsPage() {
                   <div>
                     <h4 className="font-medium">In-App Notifications</h4>
                     <p className="text-sm text-slate-700">
-                      Receive notifications within the QMaster portal
+                      Receive notifications within the tawabiry portal
                     </p>
                   </div>
                   <Switch
@@ -1524,7 +1524,7 @@ export default function SettingsPage() {
                   <div>
                     <h4 className="font-medium">API Access</h4>
                     <p className="text-sm text-slate-700">
-                      Enable API access to integrate QMaster with your systems
+                      Enable API access to integrate tawabiry with your systems
                     </p>
                   </div>
                   <Switch
@@ -1662,7 +1662,7 @@ export default function SettingsPage() {
                     <h4 className="font-medium">Webhook Notifications</h4>
                     <p className="text-sm text-slate-700">
                       Receive real-time notifications about events in your
-                      QMaster account
+                      tawabiry account
                     </p>
                   </div>
                   <Switch
@@ -1705,7 +1705,7 @@ export default function SettingsPage() {
                           </label>
                           <input
                             type="text"
-                            value="https://api.yourcompany.com/webhooks/qmaster"
+                            value="https://api.yourcompany.com/webhooks/tawabiry"
                             readOnly
                             className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none text-sm font-mono"
                           />
@@ -2087,7 +2087,7 @@ export default function SettingsPage() {
                         </label>
                         <input
                           type="text"
-                          value="QMaster Technologies"
+                          value="tawabiry Technologies"
                           className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/10 focus:outline-none focus:ring-2 focus:ring-crystal-blue"
                         />
                       </div>
@@ -2563,7 +2563,7 @@ export default function SettingsPage() {
                                 Q
                               </div>
                               <span className="font-semibold text-coal-black">
-                                QMaster
+                                tawabiry
                               </span>
                             </div>
 
@@ -2603,7 +2603,7 @@ export default function SettingsPage() {
                                 Q
                               </div>
                               <span className="font-semibold text-white">
-                                QMaster
+                                tawabiry
                               </span>
                             </div>
 
@@ -2677,7 +2677,7 @@ export default function SettingsPage() {
                   <div>
                     <h4 className="font-medium">Custom Domain Setup</h4>
                     <p className="text-sm text-slate-700">
-                      Use your own domain for your QMaster instance
+                      Use your own domain for your tawabiry instance
                     </p>
                   </div>
                   <Switch
@@ -2736,13 +2736,13 @@ export default function SettingsPage() {
                             <td className="py-2 px-3">CNAME</td>
                             <td className="py-2 px-3">queue</td>
                             <td className="py-2 px-3 font-mono">
-                              custom.qmaster.app
+                              custom.tawabiry.app
                             </td>
                           </tr>
                           <tr className="border-b border-white/10">
                             <td className="py-2 px-3">TXT</td>
                             <td className="py-2 px-3">
-                              _qmaster-verification.queue
+                              _tawabiry-verification.queue
                             </td>
                             <td className="py-2 px-3 font-mono">
                               qm-verify-a1b2c3d4e5f6g7h8i9j0

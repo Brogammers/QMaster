@@ -109,7 +109,7 @@ function DisplayPage() {
                   ⚠️ Screen Size Alert
                 </p>
                 <p className="text-lava-red font-medium">
-                  QMaster Display View requires a larger screen (minimum 1024px
+                  tawabiry Display View requires a larger screen (minimum 1024px
                   width) for optimal queue management display. Please switch to
                   a desktop or larger screen device.
                 </p>

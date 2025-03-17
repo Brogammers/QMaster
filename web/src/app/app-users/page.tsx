@@ -133,7 +133,7 @@ export default function AppUsersPage() {
                 data-aos="fade-up"
                 className="text-4xl font-bold text-center text-coal-black mb-16"
               >
-                Why Use QMaster?
+                Why Use tawabiry?
               </h2>
               <div className="w-full flex flex-wrap max-w-5xl mx-auto">
                 <div
@@ -151,7 +151,7 @@ export default function AppUsersPage() {
                       </h3>
                       <p className="text-coal-black">
                         Find and explore businesses near you that offer virtual
-                        queuing through QMaster.
+                        queuing through tawabiry.
                       </p>
                     </div>
                   </div>
@@ -212,7 +212,7 @@ export default function AppUsersPage() {
                 </h2>
                 <p className="text-xl text-white/90 mb-12">
                   Join millions of users who have already discovered the power
-                  of virtual queuing with QMaster.
+                  of virtual queuing with tawabiry.
                 </p>
                 <Link
                   href="/customer-app"
