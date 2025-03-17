@@ -6,7 +6,6 @@ import TawabiryLogo from "../../assets/images/tawabiry.svg";
 interface TawabiryLogoProps {
   width?: number;
   height?: number;
-  className?: string;
   background?: boolean;
   rounded?: boolean;
 }

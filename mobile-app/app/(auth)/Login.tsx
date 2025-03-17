@@ -9,6 +9,7 @@ import {
   I18nManager,
   TouchableOpacity,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { Formik } from "formik";
@@ -207,132 +208,138 @@ export default function Login() {
             end={{ x: 0, y: 1 }}
           />
 
-          <SafeAreaView className="w-full pt-4 px-4">
-            <TouchableOpacity
-              onPress={() => router.back()}
-              className="bg-white shadow-sm rounded-full p-3 w-10 h-10 justify-center items-center"
-            >
-              <Text
-                style={{
-                  transform: [{ scaleX: I18nManager.isRTL ? 1 : -1 }],
-                  fontWeight: "bold",
-                }}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24 }}
+          >
+            {/* Back button repositioned and aligned with content */}
+            <View className="pt-8">
+              <TouchableOpacity
+                onPress={() => router.back()}
+                className="bg-white shadow-sm rounded-full p-3 w-10 h-10 justify-center items-center mb-6"
               >
-                →
+                <Text
+                  style={{
+                    transform: [{ scaleX: I18nManager.isRTL ? 1 : -1 }],
+                    fontWeight: "bold",
+                  }}
+                >
+                  →
+                </Text>
+              </TouchableOpacity>
+
+              <Text className="text-2xl font-bold text-ocean-blue mb-4">
+                {i18n.t("loginPage.welcomeBack")}
               </Text>
-            </TouchableOpacity>
-          </SafeAreaView>
+              <Text className="text-lg font-medium text-slate-grey mb-8">
+                {i18n.t("loginPage.continueWithEmail")}
+              </Text>
 
-          <View className="px-6 pt-8">
-            <Text className="text-2xl font-bold text-ocean-blue mb-4">
-              {i18n.t("loginPage.welcomeBack")}
-            </Text>
-            <Text className="text-lg font-medium text-slate-grey mb-8">
-              {i18n.t("loginPage.continueWithEmail")}
-            </Text>
+              <Formik<MyFormValues>
+                initialValues={{
+                  email: "",
+                  password: "",
+                  server: "",
+                }}
+                validationSchema={LoginSchema}
+                onSubmit={handleLogin}
+              >
+                {({
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  values,
+                  touched,
+                  errors,
+                  isValid,
+                }) => (
+                  <View className="space-y-4">
+                    <View>
+                      <TextInput
+                        style={styles.input}
+                        placeholder={i18n.t("signupPage.email")}
+                        placeholderTextColor={"#888888"}
+                        onChangeText={handleChange("email")}
+                        keyboardType="email-address"
+                        value={values.email}
+                        autoCapitalize="none"
+                      />
+                      {errors.email && touched.email && (
+                        <Text className="text-red-500 text-xs mt-1 ml-1">
+                          {errors.email}
+                        </Text>
+                      )}
+                    </View>
 
-            <Formik<MyFormValues>
-              initialValues={{
-                email: "",
-                password: "",
-                server: "",
-              }}
-              validationSchema={LoginSchema}
-              onSubmit={handleLogin}
-            >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                values,
-                touched,
-                errors,
-                isValid,
-              }) => (
-                <View className="space-y-4">
-                  <View>
-                    <TextInput
-                      style={styles.input}
-                      placeholder={i18n.t("signupPage.email")}
-                      placeholderTextColor={"#888888"}
-                      onChangeText={handleChange("email")}
-                      keyboardType="email-address"
-                      value={values.email}
-                      autoCapitalize="none"
-                    />
-                    {errors.email && touched.email && (
-                      <Text className="text-red-500 text-xs mt-1 ml-1">
-                        {errors.email}
+                    <View>
+                      <View className="flex-row items-center">
+                        <TextInput
+                          style={[styles.input, { flex: 1 }]}
+                          placeholder={i18n.t("signupPage.password")}
+                          placeholderTextColor={"#888888"}
+                          onChangeText={handleChange("password")}
+                          onBlur={handleBlur("password")}
+                          secureTextEntry={!showPassword}
+                          value={values.password}
+                        />
+                        <TouchableOpacity
+                          style={styles.eyeIcon}
+                          onPress={() => setShowPassword(!showPassword)}
+                        >
+                          <MaterialIcons
+                            name={
+                              showPassword ? "visibility" : "visibility-off"
+                            }
+                            size={24}
+                            color="#888888"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      {errors.password && touched.password && (
+                        <Text className="text-red-500 text-xs mt-1 ml-1">
+                          {errors.password}
+                        </Text>
+                      )}
+                    </View>
+
+                    {errors.server && (
+                      <Text className="text-red-500 text-xs ml-1">
+                        {errors.server}
                       </Text>
                     )}
-                  </View>
 
-                  <View>
-                    <View className="flex-row items-center">
-                      <TextInput
-                        style={[styles.input, { flex: 1 }]}
-                        placeholder={i18n.t("signupPage.password")}
-                        placeholderTextColor={"#888888"}
-                        onChangeText={handleChange("password")}
-                        onBlur={handleBlur("password")}
-                        secureTextEntry={!showPassword}
-                        value={values.password}
-                      />
-                      <TouchableOpacity
-                        style={styles.eyeIcon}
-                        onPress={() => setShowPassword(!showPassword)}
-                      >
-                        <MaterialIcons
-                          name={showPassword ? "visibility" : "visibility-off"}
-                          size={24}
-                          color="#888888"
-                        />
+                    <View className="flex-row justify-between pt-2">
+                      <TouchableOpacity>
+                        <Text className="text-sm text-baby-blue">
+                          {i18n.t("loginPage.forgotPassword")}
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity onPress={() => router.push("/SignUp")}>
+                        <Text className="text-sm text-baby-blue">
+                          {i18n.t("loginPage.createAccount")}
+                        </Text>
                       </TouchableOpacity>
                     </View>
-                    {errors.password && touched.password && (
-                      <Text className="text-red-500 text-xs mt-1 ml-1">
-                        {errors.password}
-                      </Text>
-                    )}
+
+                    <View className="pt-8">
+                      <TouchableOpacity
+                        className={`${
+                          !isValid ? "bg-gray-300" : "bg-baby-blue"
+                        } py-4 rounded-xl items-center my-2 shadow-sm`}
+                        onPress={() => handleSubmit()}
+                        disabled={!isValid || isLoading}
+                      >
+                        <Text className="text-white font-medium">
+                          {i18n.t("login")}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-
-                  {errors.server && (
-                    <Text className="text-red-500 text-xs ml-1">
-                      {errors.server}
-                    </Text>
-                  )}
-
-                  <View className="flex-row justify-between pt-2">
-                    <TouchableOpacity>
-                      <Text className="text-sm text-baby-blue">
-                        {i18n.t("loginPage.forgotPassword")}
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => router.push("/SignUp")}>
-                      <Text className="text-sm text-baby-blue">
-                        {i18n.t("loginPage.createAccount")}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  <View className="pt-8">
-                    <TouchableOpacity
-                      className={`${
-                        !isValid ? "bg-gray-300" : "bg-baby-blue"
-                      } py-4 rounded-xl items-center my-2 shadow-sm`}
-                      onPress={() => handleSubmit()}
-                      disabled={!isValid || isLoading}
-                    >
-                      <Text className="text-white font-medium">
-                        {i18n.t("login")}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )}
-            </Formik>
-          </View>
+                )}
+              </Formik>
+            </View>
+          </ScrollView>
         </SafeAreaView>
       )}
     </>

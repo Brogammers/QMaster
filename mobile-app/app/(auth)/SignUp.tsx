@@ -147,27 +147,29 @@ export default function SignUp() {
         end={{ x: 0, y: 1 }}
       />
 
-      <SafeAreaView className="w-full pt-4 px-4">
-        <TouchableOpacity
-          onPress={() => router.back()}
-          className="bg-white shadow-sm rounded-full p-3 w-10 h-10 justify-center items-center"
-        >
-          <Text
-            style={{
-              transform: [{ scaleX: I18nManager.isRTL ? 1 : -1 }],
-              fontWeight: "bold",
-            }}
-          >
-            →
-          </Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
+        contentContainerStyle={[
+          styles.scrollContainer,
+          { paddingHorizontal: 24 },
+        ]}
       >
-        <View className="px-6 pt-4">
+        {/* Back button repositioned and aligned with content */}
+        <View className="pt-8">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="bg-white shadow-sm rounded-full p-3 w-10 h-10 justify-center items-center mb-6"
+          >
+            <Text
+              style={{
+                transform: [{ scaleX: I18nManager.isRTL ? 1 : -1 }],
+                fontWeight: "bold",
+              }}
+            >
+              →
+            </Text>
+          </TouchableOpacity>
+
           <Text className="text-2xl font-bold text-ocean-blue mb-4">
             {i18n.t("signupPage.welcome")}
           </Text>
