@@ -49,9 +49,17 @@ export default function Onboarding() {
         }}
         className="flex-1 justify-center items-center px-8"
       >
-        <View className="items-center mb-10">
-          <View className="w-60 h-60 items-center justify-center">
-            <Logo />
+        <View className="items-center mb-8">
+          <View className="w-60 h- flex flex-row items-center justify-center gap-2 mb-16">
+            <Logo 
+              width={60} 
+              height={60} 
+              className="rounded-2xl" 
+              background 
+            />
+            <Text className="text-3xl font-bold text-ocean-blue mt-4">
+              tawabiry
+            </Text>
           </View>
           <Text className="text-3xl font-bold text-ocean-blue mt-4">
             {i18n.t("onboardingPage.greeting")}
@@ -72,7 +80,7 @@ export default function Onboarding() {
               color="#DB4437"
               className="mr-2"
             />
-            <Text className="text-coal-black font-medium ml-2">
+            <Text className="text-coal-black font-bold ml-2">
               {i18n.t("onboardingPage.continueWithGoogle")}
             </Text>
           </TouchableOpacity>
@@ -82,7 +90,7 @@ export default function Onboarding() {
             className="flex-row items-center justify-center bg-baby-blue rounded-xl py-4 px-6 shadow-sm"
           >
             <AntDesign name="mail" size={22} color="white" className="mr-2" />
-            <Text className="text-white font-medium ml-2">
+            <Text className="text-white font-bold ml-2">
               {i18n.t("onboardingPage.continueWithEmail")}
             </Text>
           </TouchableOpacity>

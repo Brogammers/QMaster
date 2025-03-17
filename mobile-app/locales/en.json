@@ -98,23 +98,28 @@
   "termsOfUse": "terms of use",
   "onboardingPage": {
     "greeting": "Hey there!",
-    "subtitle": "Log in or sign up for a more personalized queueing experience."
+    "subtitle": "Log in or sign up for a more personalized queueing experience.",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithEmail": "Continue with Email"
   },
   "signupPage": {
     "welcome": "Welcome!",
     "welcomeComment": "Let's help you save more time.",
+    "createAccount": "Create account",
     "firstName": "Enter your first name",
     "lastName": "Enter your last name",
     "email": "Enter your email",
     "password": "Enter your password",
     "confirmPassword": "Confirm your password",
     "dateOfBirth": "Date of birth",
+    "dob": "Date of birth",
     "country": "Choose your country",
     "phoneNumber": "Enter your phone number",
     "failed": "Signup Failed",
     "failedMessage": "Unable to create account. Please try again.",
-    "error": "Signup Error",
-    "errorMessage": "An unexpected error occurred during signup.",
+    "error": {
+      "general": "An unexpected error occurred during signup."
+    },
     "emailInUse": "Email is already in use.",
     "invalidEmail": "Please enter a valid email address.",
     "invalidPassword": "Password must be at least 8 characters with one uppercase, one lowercase, and one number.",
@@ -122,8 +127,33 @@
     "invalidPhone": "Please enter a valid phone number.",
     "continueWithEmail": "Continue with email",
     "passwordRequirements": "Password must be at least 8 characters and should include:",
+    "passwordHint": "Password must include at least one uppercase letter, one lowercase letter, and one number.",
     "receiveOffers": "Yes, I want to receive offers and discounts",
-    "termsIntro": "By creating an account you agree to the"
+    "termsIntro": "By creating an account you agree to the",
+    "acceptTerms": "I accept the Terms of Service and Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "and": "and",
+    "haveAccount": "Already have an account?",
+    "signUp": "Sign Up",
+    "validation": {
+      "firstName": "First name is required",
+      "firstNameFormat": "First name must contain only letters",
+      "lastName": "Last name is required",
+      "lastNameFormat": "Last name must contain only letters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email format",
+      "passwordRequired": "Password is required",
+      "passwordMin": "Password must be at least 8 characters",
+      "passwordFormat": "Password must include uppercase, lowercase and a number",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordMatch": "Passwords must match",
+      "phoneNumberRequired": "Phone number is required",
+      "phoneNumberFormat": "Phone number must be 8 digits",
+      "phoneCodeRequired": "Country code is required",
+      "dobRequired": "Date of birth is required",
+      "acceptTerms": "You must accept the terms and conditions"
+    }
   },
   "loginPage": {
     "welcomeBack": "Welcome back!",
