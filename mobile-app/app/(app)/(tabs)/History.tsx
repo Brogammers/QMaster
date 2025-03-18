@@ -27,6 +27,15 @@ import RefreshableWrapper from "@/components/RefreshableWrapper";
 import BackButton from "@/shared/components/BackButton";
 import { Ionicons } from "@expo/vector-icons";
 
+// Add response status enum for better type safety and readability
+enum ResponseStatus {
+  LOADING = "loading",
+  SUCCESS = "success",
+  NETWORK_ERROR = "network_error",
+  NO_DATA = "no_data",
+  UNAUTHORIZED = "unauthorized",
+}
+
 function formatDate(date: any) {
   let day = date.getDate();
   if (day < 10) {
@@ -48,14 +57,22 @@ export default function History() {
   const { isDarkMode } = useTheme();
   const [initialLoading, setInitialLoading] = useState(true);
   const [itemsCount, setItemsCount] = useState<number | null>(null);
-  const [hasNetworkError, setHasNetworkError] = useState(false);
-
+  const [responseStatus, setResponseStatus] = useState<ResponseStatus>(
+    ResponseStatus.LOADING
+  );
   const userId = useSelector((state: RootState) => state.userId.userId);
 
   const fetchHistoryData = useCallback(async () => {
     try {
-      setHasNetworkError(false);
+      setResponseStatus(ResponseStatus.LOADING);
       const token = await AsyncStorage.getItem("token");
+
+      if (!token) {
+        setResponseStatus(ResponseStatus.UNAUTHORIZED);
+        setInitialLoading(false);
+        setIsLoading(false);
+        return;
+      }
 
       const response = await axios.get(
         `${configConverter("EXPO_PUBLIC_API_BASE_URL_HISTORY")}?id=${userId}`,
@@ -111,8 +128,15 @@ export default function History() {
         );
 
         let combinedHistory = [...historyEnqueue, ...historyDequeue];
-        setHistoryList(combinedHistory);
-        setItemsCount(historyEnqueue.length + historyDequeue.length);
+
+        if (combinedHistory.length === 0) {
+          setResponseStatus(ResponseStatus.NO_DATA);
+        } else {
+          setResponseStatus(ResponseStatus.SUCCESS);
+          setHistoryList(combinedHistory);
+          setItemsCount(historyEnqueue.length + historyDequeue.length);
+        }
+
         setInitialLoading(false);
         setIsLoading(false);
 
@@ -126,10 +150,44 @@ export default function History() {
           })
         );
         console.log("History Data Saved");
+      } else if (response.status === 204) {
+        // No content response
+        setResponseStatus(ResponseStatus.NO_DATA);
+        setInitialLoading(false);
+        setIsLoading(false);
+      } else if (response.status === 401) {
+        // Unauthorized
+        setResponseStatus(ResponseStatus.UNAUTHORIZED);
+        setInitialLoading(false);
+        setIsLoading(false);
       }
     } catch (error) {
-      console.error(error);
-      setHasNetworkError(true);
+      console.error("History fetch error:", error);
+
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+
+        if (axiosError.response) {
+          // Server responded with an error status
+          if (axiosError.response.status === 401) {
+            setResponseStatus(ResponseStatus.UNAUTHORIZED);
+          } else if (axiosError.response.status === 204) {
+            setResponseStatus(ResponseStatus.NO_DATA);
+          } else {
+            setResponseStatus(ResponseStatus.NETWORK_ERROR);
+          }
+        } else if (axiosError.request) {
+          // Request was made but no response received (network error)
+          setResponseStatus(ResponseStatus.NETWORK_ERROR);
+        } else {
+          // Error setting up the request
+          setResponseStatus(ResponseStatus.NETWORK_ERROR);
+        }
+      } else {
+        // Non-Axios error
+        setResponseStatus(ResponseStatus.NETWORK_ERROR);
+      }
+
       setInitialLoading(false);
       setIsLoading(false);
     }
@@ -151,18 +209,21 @@ export default function History() {
         if (
           historyData &&
           historyData.date &&
-          new Date(historyData.date).getTime() > checkDate.getTime()
+          new Date(historyData.date).getTime() > checkDate.getTime() &&
+          historyData.history &&
+          historyData.history.length > 0
         ) {
           setHistoryList(historyData.history);
           setItemsCount(historyData.history.length);
+          setResponseStatus(ResponseStatus.SUCCESS);
           setInitialLoading(false);
           setIsLoading(false);
         } else {
-          fetchHistoryData();
+          await fetchHistoryData();
         }
       } catch (error) {
-        console.error(error);
-        setHasNetworkError(true);
+        console.error("Error loading cached history:", error);
+        setResponseStatus(ResponseStatus.NETWORK_ERROR);
         setInitialLoading(false);
         setIsLoading(false);
       }
@@ -173,8 +234,8 @@ export default function History() {
 
   // Error message component with retry button
   const ErrorMessage = () => (
-    <View style={styles.errorContainer}>
-      <View style={styles.errorIconContainer}>
+    <View style={styles.statusContainer}>
+      <View style={styles.statusIconContainer}>
         <Ionicons
           name="cloud-offline"
           size={50}
@@ -183,7 +244,7 @@ export default function History() {
       </View>
       <Text
         style={[
-          styles.errorTitle,
+          styles.statusTitle,
           isDarkMode ? styles.textDark : styles.textLight,
         ]}
       >
@@ -191,7 +252,7 @@ export default function History() {
       </Text>
       <Text
         style={[
-          styles.errorMessage,
+          styles.statusMessage,
           isDarkMode ? styles.messageTextDark : styles.messageTextLight,
         ]}
       >
@@ -218,10 +279,17 @@ export default function History() {
 
   // No data message component
   const NoDataMessage = () => (
-    <View style={styles.errorContainer}>
+    <View style={styles.statusContainer}>
+      <View style={styles.statusIconContainer}>
+        <Ionicons
+          name="document-text-outline"
+          size={50}
+          color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+        />
+      </View>
       <Text
         style={[
-          styles.errorTitle,
+          styles.statusTitle,
           isDarkMode ? styles.textDark : styles.textLight,
         ]}
       >
@@ -229,7 +297,7 @@ export default function History() {
       </Text>
       <Text
         style={[
-          styles.errorMessage,
+          styles.statusMessage,
           isDarkMode ? styles.messageTextDark : styles.messageTextLight,
         ]}
       >
@@ -237,6 +305,65 @@ export default function History() {
       </Text>
     </View>
   );
+
+  // Unauthorized message component
+  const UnauthorizedMessage = () => (
+    <View style={styles.statusContainer}>
+      <View style={styles.statusIconContainer}>
+        <Ionicons
+          name="lock-closed-outline"
+          size={50}
+          color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+        />
+      </View>
+      <Text
+        style={[
+          styles.statusTitle,
+          isDarkMode ? styles.textDark : styles.textLight,
+        ]}
+      >
+        {i18n.t("unauthorized") || "Session Expired"}
+      </Text>
+      <Text
+        style={[
+          styles.statusMessage,
+          isDarkMode ? styles.messageTextDark : styles.messageTextLight,
+        ]}
+      >
+        {i18n.t("unauthorizedMessage") || "Please sign in again to continue."}
+      </Text>
+      <TouchableOpacity
+        style={[
+          styles.retryButton,
+          isDarkMode ? styles.retryButtonDark : styles.retryButtonLight,
+        ]}
+        onPress={fetchHistoryData}
+      >
+        <Text
+          style={[
+            styles.retryButtonText,
+            isDarkMode ? styles.retryTextDark : styles.retryTextLight,
+          ]}
+        >
+          {i18n.t("retry") || "Retry"}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  // Decide which status component to render
+  const renderStatusMessage = () => {
+    switch (responseStatus) {
+      case ResponseStatus.NETWORK_ERROR:
+        return <ErrorMessage />;
+      case ResponseStatus.NO_DATA:
+        return <NoDataMessage />;
+      case ResponseStatus.UNAUTHORIZED:
+        return <UnauthorizedMessage />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -310,10 +437,8 @@ export default function History() {
                 ))}
               <View className="mb-5" />
             </View>
-          ) : hasNetworkError ? (
-            <ErrorMessage />
-          ) : historyList.length === 0 ? (
-            <NoDataMessage />
+          ) : responseStatus !== ResponseStatus.SUCCESS ? (
+            renderStatusMessage()
           ) : (
             <ScrollView
               showsVerticalScrollIndicator={false}
@@ -369,7 +494,7 @@ const styles = StyleSheet.create({
     width: 32,
   },
   scrollContent: {
-    padding: 16,
+    padding: 4,
     paddingBottom: 24,
   },
   centeredContainer: {
@@ -381,22 +506,22 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 20,
   },
-  errorContainer: {
+  statusContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 32,
   },
-  errorIconContainer: {
+  statusIconContainer: {
     marginBottom: 16,
   },
-  errorTitle: {
+  statusTitle: {
     fontSize: 18,
     fontWeight: "700",
     marginBottom: 8,
     textAlign: "center",
   },
-  errorMessage: {
+  statusMessage: {
     fontSize: 14,
     textAlign: "center",
     marginBottom: 24,
@@ -434,5 +559,26 @@ const styles = StyleSheet.create({
   },
   retryTextDark: {
     color: "#17222D",
+  },
+  // Adding new styles for consistent status messages
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 32,
+  },
+  errorIconContainer: {
+    marginBottom: 16,
+  },
+  errorTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  errorMessage: {
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 24,
   },
 });
