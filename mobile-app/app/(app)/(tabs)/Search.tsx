@@ -56,11 +56,17 @@ export default function Search() {
   }, []);
 
   const categories = [
-    { id: 1, name: "Coffee", icon: "coffee" },
-    { id: 2, name: "Desserts", icon: "birthday-cake" },
-    { id: 3, name: "Bakery", icon: "bread-slice" },
-    { id: 4, name: "Koshaay", icon: "utensils" },
-    { id: 5, name: "Sandwiches", icon: "hamburger" },
+    { id: 1, name: "Banking", icon: "money-bill" },
+    { id: 2, name: "Health", icon: "heartbeat" },
+    { id: 3, name: "Government", icon: "landmark" },
+    { id: 4, name: "Restaurants", icon: "utensils" },
+    { id: 5, name: "Retail", icon: "shopping-bag" },
+    { id: 6, name: "Services", icon: "concierge-bell" },
+    { id: 7, name: "Education", icon: "graduation-cap" },
+    { id: 8, name: "Transportation", icon: "car" },
+    { id: 9, name: "Shopping", icon: "shopping-cart" },
+    { id: 10, name: "Entertainment", icon: "film" },
+    { id: 11, name: "Other", icon: "key" },
   ];
 
   const brands = [
@@ -105,7 +111,6 @@ export default function Search() {
   };
 
   const categoryIcons: Record<string, string> = {
-    Coffee: "coffee",
     Desserts: "birthday-cake",
     Bakery: "bread-slice",
     Koshaay: "utensils",
@@ -174,7 +179,9 @@ export default function Search() {
 
           {/* What are you craving today? */}
           <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>What are you craving today?</Text>
+            <Text style={styles.sectionTitle}>
+              What are you looking for today?
+            </Text>
 
             <ScrollView
               horizontal
@@ -187,7 +194,7 @@ export default function Search() {
                     <FontAwesome5
                       name={categoryIcons[category.name] || "question"}
                       size={24}
-                      color="#1DCDFE"
+                      color="#42c0fb"
                     />
                   </View>
                   <Text style={styles.categoryName}>{category.name}</Text>
@@ -249,7 +256,7 @@ export default function Search() {
 
           {/* Featured vendors */}
           <View style={[styles.sectionContainer, styles.lastSection]}>
-            <Text style={styles.sectionTitle}>Featured vendors</Text>
+            <Text style={styles.sectionTitle}>Featured services</Text>
 
             <View style={styles.vendorsContainer}>
               {vendors.map((vendor) => (
@@ -386,7 +393,7 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f2f9ff",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 8,
