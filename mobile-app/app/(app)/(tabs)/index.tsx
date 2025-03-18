@@ -11,6 +11,7 @@ import {
   Image,
   ScrollView,
   FlatList,
+  Modal,
 } from "react-native";
 import ScanQr from "@/components/ScanQR";
 import SearchBar from "@/components/SearchBar";
@@ -33,6 +34,8 @@ import RefreshableWrapper from "@/components/RefreshableWrapper";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useLinkTo } from "@react-navigation/native";
+import * as Linking from "expo-linking";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 export default function Index() {
   const { isDarkMode } = useTheme();
@@ -45,6 +48,8 @@ export default function Index() {
   const dispatch = useDispatch();
   const isNavigatingRef = useRef(false);
   const linkTo = useLinkTo();
+  const { showActionSheetWithOptions } = useActionSheet();
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   // Get current queues from Redux
   const currentQueues = useSelector(
@@ -261,6 +266,21 @@ export default function Index() {
     bounces: true,
   };
 
+  const handleLocationPress = () => {
+    setIsDropdownVisible(true);
+  };
+
+  const handleOptionSelect = (option: string) => {
+    // Handle selection (future implementation)
+    console.log(`Selected option: ${option}`);
+    // Here you would update state or navigate based on selection
+    setIsDropdownVisible(false);
+  };
+
+  const handleFaqPress = () => {
+    Linking.openURL("https://tawabiry.com/faq");
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -268,6 +288,41 @@ export default function Index() {
         backgroundColor="transparent"
         barStyle="light-content"
       />
+
+      {/* Dropdown Modal */}
+      <Modal
+        visible={isDropdownVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setIsDropdownVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setIsDropdownVisible(false)}
+        >
+          <View style={styles.dropdownContainer}>
+            <View style={styles.dropdownContent}>
+              <Text style={styles.dropdownTitle}>Choose Queue View</Text>
+              {['All Queues', 'Near Me', 'Favorites', 'Recent'].map((option, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.dropdownOption}
+                  onPress={() => handleOptionSelect(option)}
+                >
+                  <Text style={styles.dropdownOptionText}>{option}</Text>
+                </TouchableOpacity>
+              ))}
+              <TouchableOpacity
+                style={[styles.dropdownOption, styles.cancelOption]}
+                onPress={() => setIsDropdownVisible(false)}
+              >
+                <Text style={styles.cancelText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </Modal>
 
       {/* Floating ScanQr button */}
       <ScanQr asFloatingButton={true} />
@@ -298,7 +353,10 @@ export default function Index() {
 
             <View style={styles.locationContainer}>
               <Text style={styles.welcomeText}>Your Queues</Text>
-              <View style={styles.locationRow}>
+              <TouchableOpacity
+                onPress={handleLocationPress}
+                style={styles.locationRow}
+              >
                 <Text style={styles.locationText}>Queue Anywhere</Text>
                 <FontAwesome5
                   name="chevron-down"
@@ -306,7 +364,7 @@ export default function Index() {
                   color="#1DCDFE"
                   style={styles.locationIcon}
                 />
-              </View>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.placeholder} />
@@ -459,7 +517,34 @@ export default function Index() {
             </View>
 
             {/* FAQ Section */}
-            <FrequentlyAsked isDarkMode={false} />
+            <TouchableOpacity
+              style={styles.faqBanner}
+              onPress={handleFaqPress}
+              activeOpacity={0.7}
+            >
+              <LinearGradient
+                colors={["#17222D", "#13404D"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.faqGradient}
+              >
+                <View style={styles.faqContent}>
+                  <Text style={styles.faqTitle}>
+                    Frequently Asked Questions
+                  </Text>
+                  <Text style={styles.faqSubtitle}>
+                    Have questions? Get answers to common queries about our app
+                  </Text>
+                </View>
+                <View style={styles.faqIconContainer}>
+                  <FontAwesome5
+                    name="question-circle"
+                    size={36}
+                    color="#1DCDFE"
+                  />
+                </View>
+              </LinearGradient>
+            </TouchableOpacity>
           </View>
         </RefreshableWrapper>
       </View>
@@ -507,6 +592,7 @@ const styles = StyleSheet.create({
   locationRow: {
     flexDirection: "row",
     alignItems: "center",
+    paddingVertical: 5, // Add padding to increase touch area
   },
   locationText: {
     color: "#FFFFFF",
@@ -659,5 +745,86 @@ const styles = StyleSheet.create({
   serviceWaitTime: {
     fontSize: 12,
     color: "#666",
+  },
+  faqBanner: {
+    marginVertical: 16,
+    borderRadius: 12,
+    overflow: "hidden",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  faqGradient: {
+    flexDirection: "row",
+    padding: 16,
+    alignItems: "center",
+  },
+  faqContent: {
+    flex: 1,
+  },
+  faqTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  faqSubtitle: {
+    color: "rgba(255, 255, 255, 0.9)",
+    fontSize: 14,
+  },
+  faqIconContainer: {
+    width: 64,
+    height: 64,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dropdownContainer: {
+    width: "80%",
+    backgroundColor: "white",
+    borderRadius: 12,
+    overflow: "hidden",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  dropdownContent: {
+    padding: 16,
+  },
+  dropdownTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 12,
+    textAlign: "center",
+  },
+  dropdownOption: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(0, 0, 0, 0.1)",
+  },
+  dropdownOptionText: {
+    fontSize: 16,
+    color: "#333",
+    textAlign: "center",
+  },
+  cancelOption: {
+    marginTop: 8,
+    borderBottomWidth: 0,
+  },
+  cancelText: {
+    color: "#1DCDFE",
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
   },
 });
