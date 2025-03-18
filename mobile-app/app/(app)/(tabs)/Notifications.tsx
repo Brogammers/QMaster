@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   StatusBar,
   SafeAreaView,
+  Platform,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import HistoryComponent from "@/shared/components/HistoryComponent";
@@ -204,21 +205,19 @@ export default function Notifications() {
       {/* Header with gradient background extending under status bar */}
       <LinearGradient
         colors={["#17222D", "#0B3954"]}
-        style={styles.header}
+        style={[styles.header, { paddingTop: StatusBar.currentHeight || 44 }]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
       >
-        <SafeAreaView style={styles.safeArea}>
-          <View style={styles.headerContent}>
-            <BackButton
-              color="white"
-              style={styles.backButton}
-              backTo="/(app)/(tabs)"
-            />
-            <Text style={styles.headerTitle}>Notifications</Text>
-            <View style={styles.placeholder} />
-          </View>
-        </SafeAreaView>
+        <View style={styles.headerContent}>
+          <BackButton
+            color="white"
+            style={styles.backButton}
+            backTo="/(app)/(tabs)"
+          />
+          <Text style={styles.headerTitle}>Notifications</Text>
+          <View style={styles.placeholder} />
+        </View>
       </LinearGradient>
 
       {initialLoading ? (
@@ -315,11 +314,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   header: {
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-  safeArea: {
-    paddingTop: StatusBar.currentHeight || 44,
+    width: "100%",
   },
   headerContent: {
     flexDirection: "row",

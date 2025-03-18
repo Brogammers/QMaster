@@ -148,13 +148,7 @@ export default function AppEntry() {
           component={Notifications}
           options={{
             tabBarButton: () => null,
-            headerShown: true,
-            headerStyle: {
-              backgroundColor: "#17222D",
-            },
-            headerTitle: i18n.t("notifications"),
-            headerTintColor: "white",
-            headerTitleAlign: "center",
+            headerShown: false,
           }}
         />
         <Tab.Screen
