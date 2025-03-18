@@ -153,9 +153,6 @@ export default function Notifications() {
         </View>
       ) : (
         <ScrollView>
-          {/* Notification Debugger */}
-          <NotificationDebugger />
-
           {/* In-App Notifications Section */}
           <View style={styles.sectionContainer}>
             <Text
