@@ -353,7 +353,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 16,
-    height: 56,
+    height: 72,
+    paddingBottom: 16,
   },
   backButton: {
     backgroundColor: "rgba(255, 255, 255, 0.2)",
