@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
   StatusBar,
   StyleSheet,
@@ -42,6 +42,7 @@ export default function Index() {
   const { showSia } = useSia();
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const isNavigatingRef = useRef(false);
 
   // Get current queues from Redux
   const currentQueues = useSelector(
@@ -133,35 +134,91 @@ export default function Index() {
     setScrollY(currentScrollY);
   };
 
-  const handleNotificationsPress = () => {
-    router.push("/Notifications");
-  };
+  const debounceNavigation = useCallback((navigateFunc: () => void) => {
+    if (isNavigatingRef.current) return;
 
-  const handleSearchPress = () => {
-    router.push("/Search");
-  };
+    isNavigatingRef.current = true;
+    navigateFunc();
+
+    // Reset after navigation has likely completed
+    setTimeout(() => {
+      isNavigatingRef.current = false;
+    }, 500);
+  }, []);
+
+  const handleNotificationsPress = useCallback(() => {
+    debounceNavigation(() => {
+      router.push("/(app)/(tabs)/Notifications");
+    });
+  }, [debounceNavigation]);
+
+  const handleSearchPress = useCallback(() => {
+    debounceNavigation(() => {
+      router.push("/(app)/(tabs)/Search");
+    });
+  }, [debounceNavigation]);
+
+  const handleCategoryPress = useCallback(
+    (category: (typeof categories)[0]) => {
+      debounceNavigation(() => {
+        router.push({
+          pathname: "/(app)/(tabs)/Category",
+          params: { name: category.name },
+        });
+      });
+    },
+    [debounceNavigation]
+  );
 
   // Home screen should refresh more frequently if user is in a queue
   const autoRefreshInterval = currentQueues.length > 0 ? 60000 : 180000; // 1 minute if in queue, 3 minutes otherwise
 
   // Categories for the home screen
   const categories = [
-    { id: 1, name: "Banking", icon: "university" },
+    { id: 1, name: "Banking", icon: "money-bill" },
     { id: 2, name: "Health", icon: "heartbeat" },
     { id: 3, name: "Government", icon: "landmark" },
     { id: 4, name: "Restaurants", icon: "utensils" },
     { id: 5, name: "Retail", icon: "shopping-bag" },
     { id: 6, name: "Services", icon: "concierge-bell" },
+    { id: 7, name: "Education", icon: "graduation-cap" },
+    { id: 8, name: "Transportation", icon: "car" },
+    { id: 9, name: "Shopping", icon: "shopping-cart" },
+    { id: 10, name: "Entertainment", icon: "film" },
+    { id: 11, name: "Other", icon: "key" },
   ];
+
+  // Update notification button styles to make it more responsive
+  const notificationButtonStyle = {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    justifyContent: "center" as const,
+    alignItems: "center" as const,
+    zIndex: 10, // Add zIndex to ensure it's above other elements
+  };
+
+  // Update search bar styles to make it more responsive
+  const searchBarStyle = {
+    backgroundColor: "#FFFFFF",
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 24,
+    zIndex: 5, // Add zIndex to ensure it's above other elements
+  };
 
   // Render a category item
   const renderCategoryItem = ({ item }: { item: (typeof categories)[0] }) => (
     <TouchableOpacity
       style={styles.categoryItem}
-      onPress={() => {
-        router.push("/Category");
-        router.setParams({ name: item.name });
-      }}
+      onPress={() => handleCategoryPress(item)}
+      activeOpacity={0.6}
+      hitSlop={{ top: 20, bottom: 20, left: 15, right: 15 }}
+      pressRetentionOffset={{ top: 15, bottom: 15, left: 15, right: 15 }}
+      delayPressIn={0}
     >
       <View style={styles.categoryIconContainer}>
         <FontAwesome5 name={item.icon} size={20} color="#1DCDFE" />
@@ -169,6 +226,39 @@ export default function Index() {
       <Text style={styles.categoryName}>{item.name}</Text>
     </TouchableOpacity>
   );
+
+  // Handler for popular service press
+  const handleServicePress = useCallback(
+    (index: number) => {
+      const serviceNames = [
+        "Emirates Bank",
+        "City Hospital",
+        "Government Services",
+        "Mall Services",
+      ];
+
+      debounceNavigation(() => {
+        router.push({
+          pathname: "/(app)/(tabs)/Partner",
+          params: {
+            brandName: serviceNames[index],
+            serviceType: ["banking", "health", "government", "retail"][index],
+          },
+        });
+      });
+    },
+    [debounceNavigation]
+  );
+
+  // Configure the RefreshableWrapper to be more touch-friendly
+  const refreshableWrapperConfig = {
+    showsVerticalScrollIndicator: false,
+    scrollEventThrottle: 16,
+    onScroll: handleScroll,
+    delaysContentTouches: false,
+    keyboardShouldPersistTaps: "handled",
+    bounces: true,
+  };
 
   return (
     <View style={styles.container}>
@@ -191,8 +281,16 @@ export default function Index() {
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.headerContent}>
             <TouchableOpacity
-              style={styles.notificationButton}
+              style={[styles.notificationButton, notificationButtonStyle]}
               onPress={handleNotificationsPress}
+              activeOpacity={0.6}
+              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+              pressRetentionOffset={{
+                top: 20,
+                bottom: 20,
+                left: 20,
+                right: 20,
+              }}
             >
               <Ionicons name="notifications" size={24} color="#1DCDFE" />
             </TouchableOpacity>
@@ -215,8 +313,17 @@ export default function Index() {
 
           <View style={styles.searchContainer}>
             <TouchableOpacity
-              style={styles.searchBar}
+              style={[styles.searchBar, searchBarStyle]}
               onPress={handleSearchPress}
+              activeOpacity={0.6}
+              hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+              pressRetentionOffset={{
+                top: 15,
+                bottom: 15,
+                left: 15,
+                right: 15,
+              }}
+              delayPressIn={0}
             >
               <FontAwesome5 name="search" size={16} color="#777" />
               <Text style={styles.searchPlaceholder}>
@@ -233,11 +340,7 @@ export default function Index() {
           refreshId="home-screen"
           onRefresh={fetchHomeData}
           autoRefreshInterval={autoRefreshInterval}
-          scrollViewProps={{
-            showsVerticalScrollIndicator: false,
-            scrollEventThrottle: 16,
-            onScroll: handleScroll,
-          }}
+          scrollViewProps={refreshableWrapperConfig}
         >
           <View style={styles.contentContainer}>
             {/* Current Queues Section */}
@@ -264,8 +367,11 @@ export default function Index() {
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.categoryListContainer}
-                snapToInterval={windowWidth / 4 + 10} // Snap to 4 items
+                snapToInterval={windowWidth / 4}
                 decelerationRate="fast"
+                initialNumToRender={6}
+                maxToRenderPerBatch={8}
+                removeClippedSubviews={false}
               />
             </View>
 
@@ -303,7 +409,20 @@ export default function Index() {
                 {Array(4)
                   .fill(0)
                   .map((_, index) => (
-                    <TouchableOpacity key={index} style={styles.serviceItem}>
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.serviceItem}
+                      activeOpacity={0.6}
+                      hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+                      pressRetentionOffset={{
+                        top: 10,
+                        bottom: 10,
+                        left: 10,
+                        right: 10,
+                      }}
+                      delayPressIn={0}
+                      onPress={() => handleServicePress(index)}
+                    >
                       <View style={styles.serviceImageContainer}>
                         <View style={styles.servicePlaceholder}>
                           <FontAwesome5
@@ -430,10 +549,12 @@ const styles = StyleSheet.create({
   },
   categoriesSection: {
     marginVertical: 16,
+    zIndex: 5,
   },
   categoryListContainer: {
     paddingVertical: 8,
     paddingHorizontal: 4,
+    paddingRight: 20,
   },
   sectionTitle: {
     fontSize: 18,
@@ -449,7 +570,8 @@ const styles = StyleSheet.create({
   categoryItem: {
     width: 80,
     alignItems: "center",
-    marginHorizontal: 10,
+    marginHorizontal: 8,
+    padding: 5, // Add some padding to increase the touch area
   },
   categoryIconContainer: {
     width: 48,
@@ -501,10 +623,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    zIndex: 1,
   },
   serviceItem: {
     width: "48%",
     marginBottom: 16,
+    padding: 8,
   },
   serviceImageContainer: {
     width: "100%",

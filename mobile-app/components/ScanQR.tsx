@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useCallback } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -14,10 +14,19 @@ export default function ScanQr({
   asFloatingButton = true,
 }: ScanQrProps) {
   const router = useRouter();
+  const isNavigatingRef = useRef(false);
 
-  const handleScanQrPress = () => {
-    router.push("/Scanner");
-  };
+  const handleScanQrPress = useCallback(() => {
+    if (isNavigatingRef.current) return;
+
+    isNavigatingRef.current = true;
+    router.push("/(app)/Scanner");
+
+    // Reset after navigation has likely completed
+    setTimeout(() => {
+      isNavigatingRef.current = false;
+    }, 500);
+  }, [router]);
 
   if (asFloatingButton) {
     return (

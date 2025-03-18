@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useCallback } from "react";
 import {
   View,
   TextInput,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, router } from "expo-router";
 import { FontAwesome5 } from "@expo/vector-icons";
 import i18n from "@/i18n";
 
@@ -15,12 +15,19 @@ type SearchBarProps = {
 };
 
 export default function SearchBar({ isDarkMode = false }: SearchBarProps) {
-  const router = useRouter();
+  const isNavigatingRef = useRef(false);
 
-  const handleSearchPress = () => {
-    // For now, just navigate to the search screen
-    router.push("/search");
-  };
+  const handleSearchPress = useCallback(() => {
+    if (isNavigatingRef.current) return;
+
+    isNavigatingRef.current = true;
+    router.push("/(app)/(tabs)/Search");
+
+    // Reset after navigation has likely completed
+    setTimeout(() => {
+      isNavigatingRef.current = false;
+    }, 500);
+  }, []);
 
   return (
     <TouchableOpacity
