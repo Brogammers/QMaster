@@ -149,7 +149,7 @@ export default function Index() {
   ];
 
   return (
-    <View style={styles.outerContainer}>
+    <View style={styles.container}>
       <StatusBar
         translucent
         backgroundColor="transparent"
@@ -159,62 +159,61 @@ export default function Index() {
       {/* Floating ScanQr button */}
       <ScanQr asFloatingButton={true} />
 
-      <SafeAreaView style={styles.container}>
+      {/* Header with gradient background extending under status bar */}
+      <LinearGradient
+        colors={["#17222D", "#13404D"]}
+        style={styles.header}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+      >
+        <SafeAreaView style={styles.safeArea}>
+          <View style={styles.headerContent}>
+            <TouchableOpacity
+              style={styles.notificationButton}
+              onPress={handleNotificationsPress}
+            >
+              <Ionicons name="notifications" size={24} color="#1DCDFE" />
+            </TouchableOpacity>
+
+            <View style={styles.locationContainer}>
+              <Text style={styles.welcomeText}>Your Queues</Text>
+              <View style={styles.locationRow}>
+                <Text style={styles.locationText}>Queue Anywhere</Text>
+                <FontAwesome5
+                  name="chevron-down"
+                  size={12}
+                  color="#1DCDFE"
+                  style={styles.locationIcon}
+                />
+              </View>
+            </View>
+
+            <View style={styles.placeholder} />
+          </View>
+
+          <View style={styles.searchContainer}>
+            <TouchableOpacity style={styles.searchBar}>
+              <FontAwesome5 name="search" size={16} color="#777" />
+              <Text style={styles.searchPlaceholder}>
+                Search for services & more
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </LinearGradient>
+
+      {/* Main Content */}
+      <View style={styles.contentWrapper}>
         <RefreshableWrapper
           refreshId="home-screen"
           onRefresh={fetchHomeData}
           autoRefreshInterval={autoRefreshInterval}
           scrollViewProps={{
-            className: "w-screen",
             showsVerticalScrollIndicator: false,
             scrollEventThrottle: 16,
             onScroll: handleScroll,
           }}
         >
-          {/* Header with location and search */}
-          <View style={styles.headerContainer}>
-            <LinearGradient
-              colors={["#17222D", "#13404D"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              style={styles.headerGradient}
-            >
-              <View style={styles.headerTopRow}>
-                <TouchableOpacity
-                  style={styles.notificationButton}
-                  onPress={handleNotificationsPress}
-                >
-                  <Ionicons name="notifications" size={24} color="#1DCDFE" />
-                </TouchableOpacity>
-
-                <View style={styles.locationContainer}>
-                  <Text style={styles.welcomeText}>Your Queues</Text>
-                  <View style={styles.locationRow}>
-                    <Text style={styles.locationText}>Queue Anywhere</Text>
-                    <FontAwesome5
-                      name="chevron-down"
-                      size={12}
-                      color="#1DCDFE"
-                      style={styles.locationIcon}
-                    />
-                  </View>
-                </View>
-
-                <View style={styles.placeholder} />
-              </View>
-
-              <View style={styles.searchContainer}>
-                <TouchableOpacity style={styles.searchBar}>
-                  <FontAwesome5 name="search" size={16} color="#777" />
-                  <Text style={styles.searchPlaceholder}>
-                    Search for services & more
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </LinearGradient>
-          </View>
-
-          {/* Main content */}
           <View style={styles.contentContainer}>
             {/* Current Queues Section */}
             {isLoading ? (
@@ -325,33 +324,29 @@ export default function Index() {
             <FrequentlyAsked isDarkMode={false} />
           </View>
         </RefreshableWrapper>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  outerContainer: {
+  container: {
     flex: 1,
     backgroundColor: "#17222D", // ocean-blue from tailwind config
   },
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
+  header: {
+    paddingTop: 0,
+    paddingBottom: 0,
   },
-  headerContainer: {
-    width: "100%",
+  safeArea: {
+    paddingTop: StatusBar.currentHeight || 44,
   },
-  headerGradient: {
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight || 16 : 16,
-    paddingBottom: 16,
-    paddingHorizontal: 20,
-  },
-  headerTopRow: {
+  headerContent: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 12,
+    alignItems: "center",
+    paddingHorizontal: 20,
+    height: 56,
   },
   notificationButton: {
     width: 40,
@@ -384,7 +379,9 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   searchContainer: {
-    marginTop: 4,
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+    paddingTop: 8,
   },
   searchBar: {
     backgroundColor: "#FFFFFF",
@@ -399,8 +396,14 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 14,
   },
-  contentContainer: {
+  contentWrapper: {
     flex: 1,
+    backgroundColor: "#FFFFFF",
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    overflow: "hidden",
+  },
+  contentContainer: {
     padding: 16,
   },
   loadingContainer: {
