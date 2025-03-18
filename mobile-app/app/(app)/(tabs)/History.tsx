@@ -6,6 +6,9 @@ import {
   ScrollView,
   useWindowDimensions,
   ActivityIndicator,
+  StatusBar,
+  TouchableOpacity,
+  Platform,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { Skeleton } from "moti/skeleton";
@@ -21,6 +24,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import configConverter from "@/api/configConverter";
 import RefreshableWrapper from "@/components/RefreshableWrapper";
+import BackButton from "@/shared/components/BackButton";
 
 function formatDate(date: any) {
   let day = date.getDate();
@@ -163,31 +167,32 @@ export default function History() {
   }, [isFocused, fetchHistoryData]);
 
   return (
-    <RefreshableWrapper
-      refreshId="history-screen"
-      onRefresh={fetchHistoryData}
-      autoRefreshInterval={300000} // Auto refresh every 5 minutes
-      className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}
-    >
-      {!isDarkMode && (
-        <LinearGradient
-          colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
-          className="absolute top-0 w-full h-64"
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-        />
-      )}
+    <View style={styles.container}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
 
-      <View style={styles.headerContainer}>
-        <Text
-          style={[
-            styles.pageTitle,
-            isDarkMode ? styles.textDark : styles.textLight,
-          ]}
-        >
-          {i18n.t("past_queues") || "Past Queues"}
-        </Text>
-      </View>
+      {/* Header with gradient background extending under status bar */}
+      <LinearGradient
+        colors={["#17222D", "#0B3954"]}
+        style={[styles.header, { paddingTop: StatusBar.currentHeight || 44 }]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+      >
+        <View style={styles.headerContent}>
+          <BackButton
+            color="white"
+            style={styles.backButton}
+            backTo="/(app)/(tabs)"
+          />
+          <Text style={styles.headerTitle}>
+            {i18n.t("pastQueues") || "Past Queues"}
+          </Text>
+          <View style={styles.placeholder} />
+        </View>
+      </LinearGradient>
 
       {initialLoading ? (
         <View className="flex-1 items-center justify-center">
@@ -196,85 +201,120 @@ export default function History() {
             color={isDarkMode ? "#1DCDFE" : "#0077B6"}
           />
         </View>
-      ) : isLoading && itemsCount ? (
-        <View
-          className={`flex flex-col items-center justify-center ${
-            isDarkMode ? "bg-ocean-blue" : "bg-off-white"
-          }`}
-        >
-          {Array(itemsCount)
-            .fill(0)
-            .map((_, index) => (
-              <React.Fragment key={index}>
-                <View className="mb-4" />
-                <Skeleton
-                  colorMode={isDarkMode ? "dark" : "light"}
-                  width={(windowWidth * 11) / 12}
-                  height={100}
-                />
-              </React.Fragment>
-            ))}
-          <View className="mb-5" />
-        </View>
-      ) : historyList.length === 0 ? (
-        <View className="flex-1 items-center justify-center">
-          <Text
-            className={`text-lg font-bold ${
-              isDarkMode ? "text-baby-blue" : "text-coal-black"
-            }`}
-          >
-            {i18n.t("noData") || "No Data Found"}
-          </Text>
-          <Text
-            className={`text-md ${
-              isDarkMode ? "text-baby-blue" : "text-coal-black"
-            }`}
-          >
-            {i18n.t("noDisplay") || "There is no data to display at the moment"}
-          </Text>
-        </View>
       ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
+        <RefreshableWrapper
+          refreshId="history-screen"
+          onRefresh={fetchHistoryData}
+          autoRefreshInterval={300000} // Auto refresh every 5 minutes
+          className={`flex-1 ${isDarkMode ? "bg-ocean-blue" : "bg-off-white"}`}
         >
-          {historyList.map((item, index) => (
-            <HistoryComponent
-              key={index}
-              image={CarrefourLogo}
-              name={item.name}
-              location={item.location}
-              date={item.date}
-              id={item.id}
-              status={item.status}
-              isHistory={item.isHistory}
-              isDarkMode={isDarkMode}
+          {!isDarkMode && (
+            <LinearGradient
+              colors={["rgba(0, 119, 182, 0.1)", "rgba(255, 255, 255, 0)"]}
+              className="absolute top-0 w-full h-64"
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
             />
-          ))}
-        </ScrollView>
+          )}
+
+          {isLoading && itemsCount ? (
+            <View
+              className={`flex flex-col items-center justify-center ${
+                isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+              }`}
+            >
+              {Array(itemsCount)
+                .fill(0)
+                .map((_, index) => (
+                  <React.Fragment key={index}>
+                    <View className="mb-4" />
+                    <Skeleton
+                      colorMode={isDarkMode ? "dark" : "light"}
+                      width={(windowWidth * 11) / 12}
+                      height={100}
+                    />
+                  </React.Fragment>
+                ))}
+              <View className="mb-5" />
+            </View>
+          ) : historyList.length === 0 ? (
+            <View className="flex-1 items-center justify-center p-4">
+              <Text
+                className={`text-lg font-bold ${
+                  isDarkMode ? "text-baby-blue" : "text-coal-black"
+                }`}
+              >
+                {i18n.t("noData") || "No Data Found"}
+              </Text>
+              <Text
+                className={`text-md ${
+                  isDarkMode ? "text-baby-blue" : "text-coal-black"
+                }`}
+              >
+                {i18n.t("noDisplay") ||
+                  "There is no data to display at the moment"}
+              </Text>
+            </View>
+          ) : (
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.scrollContent}
+            >
+              {historyList.map((item, index) => (
+                <HistoryComponent
+                  key={index}
+                  image={CarrefourLogo}
+                  name={item.name}
+                  location={item.location}
+                  date={item.date}
+                  id={item.id}
+                  status={item.status}
+                  isHistory={item.isHistory}
+                  isDarkMode={isDarkMode}
+                />
+              ))}
+            </ScrollView>
+          )}
+        </RefreshableWrapper>
       )}
-    </RefreshableWrapper>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 8,
-    marginBottom: 8,
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
   },
-  pageTitle: {
-    fontSize: 24,
-    fontWeight: "700",
+  header: {
+    width: "100%",
+  },
+  headerContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    height: 56,
+  },
+  backButton: {
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white",
+  },
+  placeholder: {
+    width: 32,
+  },
+  scrollContent: {
+    padding: 16,
+    paddingBottom: 24,
   },
   textLight: {
     color: "#000000",
   },
   textDark: {
     color: "#FFFFFF",
-  },
-  scrollContent: {
-    paddingBottom: 24,
   },
 });

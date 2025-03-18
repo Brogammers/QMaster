@@ -78,13 +78,7 @@ export default function AppEntry() {
                 color={focused ? "#00FFFF" : "#FAFAFA"}
               />
             ),
-            headerShown: true,
-            headerStyle: {
-              backgroundColor: "#17222D",
-            },
-            headerTitle: i18n.t("past queues"),
-            headerTintColor: "white",
-            headerTitleAlign: "center",
+            headerShown: false,
           }}
         />
         <Tab.Screen
