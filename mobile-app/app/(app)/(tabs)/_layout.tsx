@@ -140,13 +140,7 @@ export default function AppEntry() {
           component={Search}
           options={{
             tabBarButton: () => null,
-            headerShown: true,
-            headerStyle: {
-              backgroundColor: "#17222D",
-            },
-            headerTitle: i18n.t("search queue"),
-            headerTintColor: "white",
-            headerTitleAlign: "center",
+            headerShown: false,
           }}
         />
         <Tab.Screen
