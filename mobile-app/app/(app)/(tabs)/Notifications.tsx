@@ -16,7 +16,7 @@ import HistoryComponent from "@/shared/components/HistoryComponent";
 import { HistoryComponentProps } from "@/types";
 import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Skeleton } from "moti/skeleton";
 import i18n from "@/i18n";
 import { useTheme } from "@/ctx/ThemeContext";
@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { MotiView } from "moti";
 import BackButton from "@/shared/components/BackButton";
+import { Ionicons } from "@expo/vector-icons";
 
 // Interface for notification item
 interface NotificationItem {
@@ -48,10 +49,12 @@ export default function Notifications() {
   const { isDarkMode } = useTheme();
   const [initialLoading, setInitialLoading] = useState(true);
   const [itemsCount, setItemsCount] = useState<number | null>(null);
+  const [hasNetworkError, setHasNetworkError] = useState(false);
   const userId = useSelector((state: RootState) => state.userId.userId);
 
   const fetchNotifications = useCallback(async () => {
     try {
+      setHasNetworkError(false);
       const token = await AsyncStorage.getItem("token");
 
       const response = await axios.get(
@@ -101,6 +104,7 @@ export default function Notifications() {
       }
     } catch (error) {
       console.error(error);
+      setHasNetworkError(true);
       setInitialLoading(false);
       setIsLoading(false);
     }
@@ -121,6 +125,7 @@ export default function Notifications() {
         }
       } catch (error) {
         console.error(error);
+        setHasNetworkError(true);
         setInitialLoading(false);
         setIsLoading(false);
       }
@@ -194,6 +199,73 @@ export default function Notifications() {
     );
   };
 
+  // Error message component with retry button
+  const ErrorMessage = () => (
+    <View style={styles.errorContainer}>
+      <View style={styles.errorIconContainer}>
+        <Ionicons
+          name="cloud-offline"
+          size={50}
+          color={isDarkMode ? "#1DCDFE" : "#0077B6"}
+        />
+      </View>
+      <Text
+        style={[
+          styles.errorTitle,
+          isDarkMode ? styles.textDark : styles.textLight,
+        ]}
+      >
+        {i18n.t("networkError")}
+      </Text>
+      <Text
+        style={[
+          styles.errorMessage,
+          isDarkMode ? styles.messageTextDark : styles.messageTextLight,
+        ]}
+      >
+        {i18n.t("networkErrorMessage")}
+      </Text>
+      <TouchableOpacity
+        style={[
+          styles.retryButton,
+          isDarkMode ? styles.retryButtonDark : styles.retryButtonLight,
+        ]}
+        onPress={fetchNotifications}
+      >
+        <Text
+          style={[
+            styles.retryButtonText,
+            isDarkMode ? styles.retryTextDark : styles.retryTextLight,
+          ]}
+        >
+          {i18n.t("retry") || "Retry"}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  // No data message component
+  const NoDataMessage = () => (
+    <View style={styles.errorContainer}>
+      <Text
+        style={[
+          styles.errorTitle,
+          isDarkMode ? styles.textDark : styles.textLight,
+        ]}
+      >
+        {i18n.t("noData")}
+      </Text>
+      <Text
+        style={[
+          styles.errorMessage,
+          isDarkMode ? styles.messageTextDark : styles.messageTextLight,
+        ]}
+      >
+        {i18n.t("noDisplay")}
+      </Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -215,13 +287,13 @@ export default function Notifications() {
             style={styles.backButton}
             backTo="/(app)/(tabs)"
           />
-          <Text style={styles.headerTitle}>Notifications</Text>
+          <Text style={styles.headerTitle}>{i18n.t("notifications")}</Text>
           <View style={styles.placeholder} />
         </View>
       </LinearGradient>
 
       {initialLoading ? (
-        <View className="flex-1 items-center justify-center">
+        <View style={styles.centeredContainer}>
           <ActivityIndicator
             size="large"
             color={isDarkMode ? "#1DCDFE" : "#0077B6"}
@@ -243,65 +315,48 @@ export default function Notifications() {
             />
           )}
 
-          <ScrollView>
-            <View style={styles.contentContainer}>
-              {isLoading ? (
-                <View
-                  className={`flex flex-col items-center justify-center ${
-                    isDarkMode ? "bg-ocean-blue" : "bg-off-white"
-                  }`}
-                >
-                  {Array(4)
-                    .fill(0)
-                    .map((_, index) => (
-                      <React.Fragment key={index}>
-                        <View className="mb-4" />
-                        <Skeleton
-                          colorMode={isDarkMode ? "dark" : "light"}
-                          width={(windowWidth * 11) / 12}
-                          height={100}
-                        />
-                      </React.Fragment>
-                    ))}
-                  <View className="mb-5" />
-                </View>
-              ) : notifications.length === 0 ? (
-                <View className="flex-1 items-center justify-center py-8">
-                  <Text
-                    className={`text-lg font-bold ${
-                      isDarkMode ? "text-baby-blue" : "text-coal-black"
-                    }`}
-                  >
-                    {i18n.t("noData") || "No Data Found"}
-                  </Text>
-                  <Text
-                    className={`text-md ${
-                      isDarkMode ? "text-baby-blue" : "text-coal-black"
-                    }`}
-                  >
-                    {i18n.t("noDisplay") ||
-                      "There is no data to display at the moment"}
-                  </Text>
-                </View>
-              ) : (
-                <View>
-                  {notifications.map((item, index) => (
-                    <HistoryComponent
-                      key={index}
-                      image={CarrefourLogo}
-                      name={item.name}
-                      location={item.location || "Anything for now"}
-                      date={item.date}
-                      id={item.id}
-                      status={item.status}
-                      isHistory={item.isHistory}
-                      isDarkMode={isDarkMode}
+          {isLoading ? (
+            <View
+              className={`flex flex-col items-center justify-center ${
+                isDarkMode ? "bg-ocean-blue" : "bg-off-white"
+              }`}
+              style={styles.loadingContainer}
+            >
+              {Array(4)
+                .fill(0)
+                .map((_, index) => (
+                  <React.Fragment key={index}>
+                    <View className="mb-4" />
+                    <Skeleton
+                      colorMode={isDarkMode ? "dark" : "light"}
+                      width={(windowWidth * 11) / 12}
+                      height={100}
                     />
-                  ))}
-                </View>
-              )}
+                  </React.Fragment>
+                ))}
+              <View className="mb-5" />
             </View>
-          </ScrollView>
+          ) : hasNetworkError ? (
+            <ErrorMessage />
+          ) : notifications.length === 0 ? (
+            <NoDataMessage />
+          ) : (
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+              {notifications.map((item, index) => (
+                <HistoryComponent
+                  key={index}
+                  image={CarrefourLogo}
+                  name={item.name}
+                  location={item.location || "Anything for now"}
+                  date={item.date}
+                  id={item.id}
+                  status={item.status}
+                  isHistory={item.isHistory}
+                  isDarkMode={isDarkMode}
+                />
+              ))}
+            </ScrollView>
+          )}
         </RefreshableWrapper>
       )}
     </View>
@@ -401,6 +456,61 @@ const styles = StyleSheet.create({
   },
   messageTextDark: {
     color: "#CCCCCC",
+  },
+  centeredContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingContainer: {
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 32,
+  },
+  errorIconContainer: {
+    marginBottom: 16,
+  },
+  errorTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  errorMessage: {
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 24,
+  },
+  retryButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    marginTop: 8,
+  },
+  retryButtonLight: {
+    backgroundColor: "#0077B6",
+  },
+  retryButtonDark: {
+    backgroundColor: "#1DCDFE",
+  },
+  retryButtonText: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  retryTextLight: {
+    color: "#FFFFFF",
+  },
+  retryTextDark: {
+    color: "#17222D",
+  },
+  scrollContent: {
+    padding: 16,
+    paddingBottom: 24,
   },
   noDataContainer: {
     alignItems: "center",

@@ -283,5 +283,8 @@
   "position": "Position",
   "minutes": "min",
   "waitTime": "Wait time",
-  "yourTurn": "Your turn now!"
+  "yourTurn": "Your turn now!",
+  "networkError": "Network Error",
+  "networkErrorMessage": "Unable to connect to the server. Please check your internet connection and try again.",
+  "retry": "Retry"
 }
