@@ -101,7 +101,7 @@ export default function Search() {
   ];
 
   const handleBack = () => {
-    router.back();
+    router.push("/(app)/(tabs)/");
   };
 
   const categoryIcons: Record<string, string> = {
