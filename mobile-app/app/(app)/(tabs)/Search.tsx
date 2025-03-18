@@ -142,7 +142,7 @@ export default function Search() {
         <View style={styles.searchInputContainer}>
           <FontAwesome name="search" size={18} color="#777" />
           <TextInput
-            placeholder="Search food, groceries and more"
+            placeholder="Search services, queues and more"
             value={input}
             onChangeText={(text) => setInput(text)}
             style={styles.searchInput}
