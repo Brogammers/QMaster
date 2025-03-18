@@ -17,7 +17,6 @@ import ScanQr from "@/components/ScanQR";
 import SearchBar from "@/components/SearchBar";
 import CategoriesList from "@/components/CategoriesList";
 import RecentQueues from "@/components/RecentQueues";
-import FrequentlyAsked from "@/components/FrequentlyAsked";
 import CurrentQueuesList from "@/components/CurrentQueuesList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Skeleton } from "moti/skeleton";
@@ -35,7 +34,6 @@ import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useLinkTo } from "@react-navigation/native";
 import * as Linking from "expo-linking";
-import { useActionSheet } from "@expo/react-native-action-sheet";
 
 export default function Index() {
   const { isDarkMode } = useTheme();
@@ -48,7 +46,6 @@ export default function Index() {
   const dispatch = useDispatch();
   const isNavigatingRef = useRef(false);
   const linkTo = useLinkTo();
-  const { showActionSheetWithOptions } = useActionSheet();
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   // Get current queues from Redux
@@ -304,15 +301,17 @@ export default function Index() {
           <View style={styles.dropdownContainer}>
             <View style={styles.dropdownContent}>
               <Text style={styles.dropdownTitle}>Choose Queue View</Text>
-              {['All Queues', 'Near Me', 'Favorites', 'Recent'].map((option, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.dropdownOption}
-                  onPress={() => handleOptionSelect(option)}
-                >
-                  <Text style={styles.dropdownOptionText}>{option}</Text>
-                </TouchableOpacity>
-              ))}
+              {["All Queues", "Near Me", "Favorites", "Recent"].map(
+                (option, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.dropdownOption}
+                    onPress={() => handleOptionSelect(option)}
+                  >
+                    <Text style={styles.dropdownOptionText}>{option}</Text>
+                  </TouchableOpacity>
+                )
+              )}
               <TouchableOpacity
                 style={[styles.dropdownOption, styles.cancelOption]}
                 onPress={() => setIsDropdownVisible(false)}
