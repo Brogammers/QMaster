@@ -47,7 +47,7 @@ export default function CategoriesList({ isDarkMode }: CategoriesListProps) {
             name={category.name}
             key={index}
             title={category.title}
-            image={category.image}
+            icon={category.icon}
             onPress={() => handleCategoryPress(category.name)}
             isDarkMode={isDarkMode}
           />

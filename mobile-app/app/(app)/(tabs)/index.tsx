@@ -162,32 +162,8 @@ export default function Index() {
     });
   }, [debounceNavigation, linkTo]);
 
-  const handleCategoryPress = useCallback(
-    (category: (typeof categories)[0]) => {
-      debounceNavigation(() => {
-        linkTo(`/Category?name=${category.name}`);
-      });
-    },
-    [debounceNavigation, linkTo]
-  );
-
   // Home screen should refresh more frequently if user is in a queue
   const autoRefreshInterval = currentQueues.length > 0 ? 60000 : 180000; // 1 minute if in queue, 3 minutes otherwise
-
-  // Categories for the home screen
-  const categories = [
-    { id: 1, name: "Banking", icon: "money-bill" },
-    { id: 2, name: "Health", icon: "heartbeat" },
-    { id: 3, name: "Government", icon: "landmark" },
-    { id: 4, name: "Restaurants", icon: "utensils" },
-    { id: 5, name: "Retail", icon: "shopping-bag" },
-    { id: 6, name: "Services", icon: "concierge-bell" },
-    { id: 7, name: "Education", icon: "graduation-cap" },
-    { id: 8, name: "Transportation", icon: "car" },
-    { id: 9, name: "Shopping", icon: "shopping-cart" },
-    { id: 10, name: "Entertainment", icon: "film" },
-    { id: 11, name: "Other", icon: "key" },
-  ];
 
   // Update notification button styles to make it more responsive
   const notificationButtonStyle = {
@@ -210,23 +186,6 @@ export default function Index() {
     borderRadius: 24,
     zIndex: 5, // Add zIndex to ensure it's above other elements
   };
-
-  // Render a category item
-  const renderCategoryItem = ({ item }: { item: (typeof categories)[0] }) => (
-    <TouchableOpacity
-      style={styles.categoryItem}
-      onPress={() => handleCategoryPress(item)}
-      activeOpacity={0.6}
-      hitSlop={{ top: 20, bottom: 20, left: 15, right: 15 }}
-      pressRetentionOffset={{ top: 15, bottom: 15, left: 15, right: 15 }}
-      delayPressIn={0}
-    >
-      <View style={styles.categoryIconContainer}>
-        <FontAwesome5 name={item.icon} size={20} color="#1DCDFE" />
-      </View>
-      <Text style={styles.categoryName}>{item.name}</Text>
-    </TouchableOpacity>
-  );
 
   // Handler for popular service press
   const handleServicePress = useCallback(
@@ -415,23 +374,8 @@ export default function Index() {
               <CurrentQueuesList />
             ) : null}
 
-            {/* Categories */}
-            <View style={styles.categoriesSection}>
-              <Text style={styles.sectionTitle}>Categories</Text>
-              <FlatList
-                data={categories}
-                renderItem={renderCategoryItem}
-                keyExtractor={(item) => item.id.toString()}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.categoryListContainer}
-                snapToInterval={windowWidth / 4}
-                decelerationRate="fast"
-                initialNumToRender={6}
-                maxToRenderPerBatch={8}
-                removeClippedSubviews={false}
-              />
-            </View>
+            {/* Categories - REPLACED with CategoriesList component */}
+            <CategoriesList isDarkMode={isDarkMode} />
 
             {/* Feature Banner */}
             <View style={styles.featureBanner}>
@@ -633,15 +577,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 16,
   },
-  categoriesSection: {
-    marginVertical: 16,
-    zIndex: 5,
-  },
-  categoryListContainer: {
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-    paddingRight: 20,
-  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
@@ -652,26 +587,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666",
     marginBottom: 16,
-  },
-  categoryItem: {
-    width: 80,
-    alignItems: "center",
-    marginHorizontal: 8,
-    padding: 5, // Add some padding to increase the touch area
-  },
-  categoryIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 32,
-    backgroundColor: "rgba(29, 205, 254, 0.1)", // baby-blue with opacity
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  categoryName: {
-    fontSize: 12,
-    textAlign: "center",
-    color: "#333",
   },
   featureBanner: {
     marginVertical: 16,
