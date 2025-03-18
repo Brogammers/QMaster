@@ -47,6 +47,7 @@ export interface CategoryProps {
   onPress?: any;
   spacing?: number;
   isDarkMode?: boolean;
+  icon?: string;
 }
 
 export interface CurrentQueuesProps {
@@ -94,6 +95,7 @@ export interface TextButtonProps {
   icon?: any;
   onPress?: () => void;
   disabled?: boolean;
+  border?: string;
 }
 
 export interface LeftArrowProps {

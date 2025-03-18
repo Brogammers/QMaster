@@ -1,102 +1,116 @@
-import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  I18nManager,
-} from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Ionicons } from "@expo/vector-icons";
-import Logo from "@/assets/images/Logo.svg";
-import QRCode from "@/assets/images/QrCode.svg";
-import ElipseBackground from "@/assets/images/ElipseBackground.svg";
-import { useLinkTo } from "@react-navigation/native";
+import React, { useRef, useCallback } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useRouter } from "expo-router";
+import { FontAwesome5 } from "@expo/vector-icons";
 import i18n from "@/i18n";
-import { useCameraPermissions } from "expo-image-picker";
 
-const { width, height } = Dimensions.get("window");
-const twoFifth = (height * 38) / 100;
-
-interface ScanQRProps {
+type ScanQrProps = {
   isDarkMode?: boolean;
-}
+  asFloatingButton?: boolean;
+};
 
-export default function ScanQR({ isDarkMode }: ScanQRProps) {
-  const [permission, requestPermission] = useCameraPermissions();
-  const linkTo = useLinkTo();
+export default function ScanQr({
+  isDarkMode = false,
+  asFloatingButton = true,
+}: ScanQrProps) {
+  const router = useRouter();
+  const isNavigatingRef = useRef(false);
 
-  const isPermissionGranted = Boolean(permission?.granted);
+  const handleScanQrPress = useCallback(() => {
+    if (isNavigatingRef.current) return;
 
-  const handleNotificationsPress = () => {
-    linkTo("/Notifications");
-  };
+    isNavigatingRef.current = true;
+    router.push("/(app)/Scanner");
 
-  const handleScanPress = async () => {
-    if (!isPermissionGranted) {
-      await requestPermission();
-    }
-    if (isPermissionGranted) {
-      linkTo("/Scanner");
-    }
-  };
+    // Reset after navigation has likely completed
+    setTimeout(() => {
+      isNavigatingRef.current = false;
+    }, 500);
+  }, [router]);
+
+  if (asFloatingButton) {
+    return (
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={handleScanQrPress}
+        activeOpacity={0.8}
+      >
+        <FontAwesome5 name="qrcode" size={24} color="#fff" />
+      </TouchableOpacity>
+    );
+  }
 
   return (
-    <View
-      className="items-center justify-around pb-9"
-      style={{ height: twoFifth }}
-    >
-      <View style={styles.imageContainer}>
-        <ElipseBackground width={width} />
-      </View>
-      <View
-        className={`${
-          I18nManager.isRTL ? `flex-row-reverse` : `flex-row`
-        } items-center justify-between w-full px-5 h-max`}
-      >
-        <View
-          className={`${I18nManager.isRTL ? `flex-row-reverse` : `flex-row`}`}
-        >
-          <Logo />
-          <Text
-            className="ml-1 text-xl text-white"
-            style={{ fontFamily: "JostBold" }}
-          >
-            tawabiry
-          </Text>
-        </View>
-        <TouchableOpacity
-          onPress={handleNotificationsPress}
-          className={`w-10 h-10 rounded-xl items-center justify-center ${
-            isDarkMode ? "bg-slate-500/40" : "bg-white/20"
-          }`}
-        >
-          <Ionicons
-            name="notifications"
-            size={22}
-            color={isDarkMode ? "#1DCDFE" : "white"}
+    <View style={styles.container}>
+      <View style={styles.contentContainer}>
+        <Text style={styles.title}>{i18n.t("scanQR")}</Text>
+        <Text style={styles.subtitle}>{i18n.t("scanQRDescription")}</Text>
+        <TouchableOpacity style={styles.scanButton} onPress={handleScanQrPress}>
+          <FontAwesome5
+            name="qrcode"
+            size={20}
+            color="#fff"
+            style={styles.scanIcon}
           />
+          <Text style={styles.scanButtonText}>{i18n.t("scan")}</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={handleScanPress}>
-        <QRCode />
-        <Text className="text-3xl text-white mt-2.5 font-semibold">
-          {i18n.t("scan")}
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  imageContainer: {
+  floatingButton: {
     position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    width: "100%",
-    alignItems: "center",
+    right: 20,
+    bottom: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "#1DCDFE",
     justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    zIndex: 999,
+  },
+  container: {
+    width: "100%",
+    paddingVertical: 24,
+    paddingHorizontal: 20,
+  },
+  contentContainer: {
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "rgba(255, 255, 255, 0.8)",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  scanButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(29, 205, 254, 0.5)",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+  },
+  scanIcon: {
+    marginRight: 8,
+  },
+  scanButtonText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 16,
   },
 });

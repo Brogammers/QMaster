@@ -31,6 +31,7 @@
   "dependencies": {
     "@expo/config-plugins": "^8.0.0",
     "@expo/prebuild-config": "^7.0.6",
+    "@expo/react-native-action-sheet": "^4.1.1",
     "@expo/vector-icons": "^14.0.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",

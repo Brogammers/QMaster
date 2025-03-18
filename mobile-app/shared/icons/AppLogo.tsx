@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#17222D", // ocean-blue background
   },
   rounded: {
-    borderRadius: 12,
+    borderRadius: 16,
     overflow: "hidden",
   },
   roundedXl: {

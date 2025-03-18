@@ -23,6 +23,7 @@ import alSalamHospital from '@/assets/images/alsalam.png';
 import profile from '@/assets/images/Profile.png';
 import CarrefourLogo from '@/assets/images/CarrefourLogo.png';
 import i18n from '@/i18n';
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 
 import {
   AccountInfoProps,
@@ -60,32 +61,38 @@ export const Categories: CategoryProps[] = [
   {
     image: AutoRepair,
     title: i18n.t('autoRepair'),
-    name: "AutoRepair"
+    name: "AutoRepair",
+    icon: "wrench"
   },
   {
     image: Bank,
     title: i18n.t('banks'),
-    name: "Banks"
+    name: "Banks",
+    icon: "money-bill"
   },
   {
     image: Clinic,
     title: i18n.t('clinics'),
-    name: "Clinics"
+    name: "Clinics",
+    icon: "heart"
   },
   {
     image: Restaurant,
     title: i18n.t('restaurants'),
-    name: "Restaurants"
+    name: "Restaurants",
+    icon: "utensils"
   },
   {
     image: Government,
     title: i18n.t('government'),
-    name: "Government"
+    name: "Government",
+    icon: "building"
   },
   {
     image: Other,
     title: i18n.t('others'),
-    name: "Others"
+    name: "Others",
+    icon: "ellipsis-h"
   },
 ];
 
@@ -94,63 +101,74 @@ export const AllCategories: CategoryProps[] = [
   {
     image: AutoRepair,
     title: i18n.t('autoRepair'),
-    name: "AutoRepair"
+    name: "AutoRepair",
+    icon: "wrench"
   },
   {
     image: CarDealerships,
     title: i18n.t('carDealerships'),
-    name: "Car Dealerships"
+    name: "Car Dealerships",
+    icon: "car"
   },
   {
     image: MotoDealerships,
     title: i18n.t('motoDealerships'),
-    name: "Moto Dealerships"
+    name: "Moto Dealerships",
+    icon: "motorcycle"
   },
 
   // Food & Dining (Second Wave)
   {
     image: Restaurant,
     title: i18n.t('restaurants'),
-    name: "Restaurants"
+    name: "Restaurants",
+    icon: "utensils"
   },
   {
     image: PrivateCatering,
     title: i18n.t('privateCatering'),
-    name: "Private Catering"
+    name: "Private Catering",
+    icon: "chef-hat"
   },
 
   // Essential Services
   {
     image: Bank,
     title: i18n.t('banks'),
-    name: "Banks"
+    name: "Banks",
+    icon: "money-bill"
   },
   {
     image: Government,
     title: i18n.t('government'),
-    name: "Government"
+    name: "Government",
+    icon: "building"
   },
   {
     image: Clinic,
     title: i18n.t('clinics'),
-    name: "Clinics"
+    name: "Clinics",
+    icon: "heart"
   },
 
   // Travel & Events
   {
     image: FlightTickets,
     title: i18n.t('flightTickets'),
-    name: "Flight Tickets"
+    name: "Flight Tickets",
+    icon: "plane"
   },
   {
     image: Hotels,
     title: i18n.t('hotels'),
-    name: "Hotels"
+    name: "Hotels",
+    icon: "hotel"
   },
   {
     image: CeremonyHalls,
     title: i18n.t('ceremonyHalls'),
-    name: "Ceremony Halls"
+    name: "Ceremony Halls",
+    icon: "party-popper"
   }
 ];
 

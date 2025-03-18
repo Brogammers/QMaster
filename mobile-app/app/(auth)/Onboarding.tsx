@@ -1,67 +1,105 @@
-import React from 'react';
-import { I18nManager, StatusBar, StyleSheet, View, Text } from 'react-native';
-import { Link } from 'expo-router';
-import Carousel from '@/shared/components/Carousel';
-import TextButton from '@/shared/components/TextButton';
-import Logo from "@/assets/images/Logo.svg";
-import Return from '@/shared/components/Return';
-import i18n from '@/i18n';
+import React from "react";
+import {
+  View,
+  Text,
+  Dimensions,
+  SafeAreaView,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { router } from "expo-router";
+import i18n from "@/i18n";
+import { AntDesign } from "@expo/vector-icons";
+import AppLogo from "@/shared/icons/logo";
+import { LinearGradient } from "expo-linear-gradient";
+import { MotiView } from "moti";
+
+const { width } = Dimensions.get("window");
 
 export default function Onboarding() {
+  const handleGoogleSignIn = () => {
+    // Google sign-in logic
+    console.log("Google sign-in");
+  };
+
+  const handleEmailSignIn = () => {
+    router.push("/Login");
+  };
+
   return (
-    <View className='items-center justify-center h-screen bg-ocean-blue' style={styles.container}>
-      {/* <Return size={36} color='white' href='/EmailVerification' /> */}
-      <StatusBar
-        translucent
-        backgroundColor='rgba(000, 000, 000, 0.5)'
-        barStyle='light-content'
+    <SafeAreaView className="flex-1 bg-white">
+      <LinearGradient
+        colors={[
+          "rgba(29, 205, 254, 0.15)",
+          "rgba(29, 205, 254, 0.05)",
+          "rgba(255, 255, 255, 0)",
+        ]}
+        locations={[0, 0.5, 1]}
+        className="absolute top-0 w-full h-full"
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
       />
-      <View style={styles.row} className='bg-transparent'>
-        <View className='my-4' />
-        <View className="flex flex-row justify-center items-center">
-          <Logo width={60} height={60} />
-          <Text
-            className="ml-1 text-3xl text-white"
-            style={{ fontFamily: "JostBold" }}
-          >
-            tawabiry
+
+      <MotiView
+        from={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+          delay: 100,
+          duration: 500,
+        }}
+        className="flex-1 justify-center items-center px-8"
+      >
+        <View className="items-center mb-8">
+          <View className="w-60 h- flex flex-row items-center justify-center gap-2 mb-16">
+            <AppLogo width={56} height={56} background rounded />
+            <Text className="text-2xl font-bold text-ocean-blue mt-4">
+              tawabiry
+            </Text>
+          </View>
+          <Text className="text-3xl font-bold text-ocean-blue mt-4">
+            {i18n.t("onboardingPage.greeting")}
+          </Text>
+          <Text className="text-lg text-slate-grey text-center mt-2 max-w-xs">
+            {i18n.t("onboardingPage.subtitle")}
           </Text>
         </View>
-        <Carousel />
-        <View className='mt-10'>
-          <Link href='/Login'>
-            <TextButton text={i18n.t('login')} buttonColor={'#1DCDFE'} textColor={'white'} />
-          </Link>
-          <Link href='/SignUp'>
-            <TextButton text={i18n.t('signup')} buttonColor={'white'} textColor={'black'} />
-          </Link>
+
+        <View className="w-full space-y-4 mt-10">
+          <TouchableOpacity
+            onPress={handleGoogleSignIn}
+            className="flex-row items-center justify-center bg-white border border-gray-200 rounded-xl py-4 px-6 shadow-sm"
+          >
+            <AntDesign
+              name="google"
+              size={22}
+              color="#DB4437"
+              className="mr-2"
+            />
+            <Text className="text-coal-black font-bold ml-2">
+              {i18n.t("onboardingPage.continueWithGoogle")}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleEmailSignIn}
+            className="flex-row items-center justify-center bg-baby-blue rounded-xl py-4 px-6 shadow-sm"
+          >
+            <AntDesign name="mail" size={22} color="white" className="mr-2" />
+            <Text className="text-white font-bold ml-2">
+              {i18n.t("onboardingPage.continueWithEmail")}
+            </Text>
+          </TouchableOpacity>
         </View>
-      </View>
-    </View>
-  )
+      </MotiView>
+    </SafeAreaView>
+  );
 }
 
-
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#17222D',
-    color: '#FFF',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  row: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  returnButton: {
-    position: 'absolute',
-    zIndex: 10,
-    top: 60,
-    left: 18,
-    transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

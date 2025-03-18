@@ -1,35 +1,42 @@
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
-  ImageBackground,
-  Image,
   View,
   Text,
   TextInput,
   Alert,
   StatusBar,
   I18nManager,
+  TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
 } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import TextButton from "@/shared/components/TextButton";
-import Return from "@/shared/components/Return";
 import { MyFormValues, ServerError } from "@/types";
-import background from "@/assets/images/background.png";
-import LoginImg from "@/assets/images/login.png";
 import axios, { AxiosError } from "axios";
 import { useAuth } from "@/ctx/AuthContext";
-// import { API_BASE_URL_LOGIN } from "@env";
 
 import { useDispatch } from "react-redux";
 import { setEmail, setToken } from "../redux/authSlice";
 import { isEmpty } from "lodash";
-import { setFirstName, setLastName, setPhoneCode, setPhoneNumber, setUserId, setUsername } from "../redux/userSlice";
+import {
+  setFirstName,
+  setLastName,
+  setPhoneCode,
+  setPhoneNumber,
+  setUserId,
+  setUsername,
+} from "../redux/userSlice";
 import SplashScreen from "../SplashScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import i18n from "@/i18n";
 import configConverter from "@/api/configConverter";
+import { MaterialIcons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import BackButton from "@/shared/components/BackButton";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email required"),
@@ -39,9 +46,11 @@ const LoginSchema = Yup.object().shape({
 export default function Login() {
   const dispatch = useDispatch();
   const auth = useAuth();
+  const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleLogin = async (
     values: any,
     { setErrors }: { setErrors: Function }
@@ -51,27 +60,6 @@ export default function Login() {
 
     try {
       setIsLoading(true);
-      // IOS Simulator
-      // const response = await axios.post(
-      //   `${Config.EXPO_PUBLIC_API_BASE_URL_LOGIN || "http://localhost:8080/api/v1/login/user"}`,
-      //   values
-      // );
-      // Android Emulator
-      // const response = await axios.post(
-      //   "http://10.0.2.2:8080/api/v1/login/user",
-      //   values
-      // );
-
-    //   axios.defaults.headers.common.Authorization = "";
-    //   axios.interceptors.request.use(
-    //      (config) => {
-    //          config.headers["Authorization"] = "";
-    //          return config;
-    //      },
-    //      (error) => {
-    //          return Promise.reject(error);
-    //      }
-    //  );
 
       const response = await axios.post(
         configConverter("EXPO_PUBLIC_API_BASE_URL_LOGIN"),
@@ -104,17 +92,12 @@ export default function Login() {
             dispatch(setPhoneNumber(response.data.phoneNumber));
 
             await AsyncStorage.setItem("token", response.data.token);
-            // creating an Axios instance
-            // iOS Simulator
 
-            // Android Simulator
-            // http://10.0.2.2:8080/api/v1
-            // Setting the default headers
             axios.defaults.headers.common[
               "Authorization"
             ] = `Bearer ${response.data.token}`;
             axios.defaults.headers.common["Content-Type"] = "application/json";
-            
+
             axios.interceptors.request.use(
               (config) => {
                 config.headers[
@@ -134,7 +117,10 @@ export default function Login() {
         }
       } else {
         console.error("Login failed", response.data);
-        Alert.alert(i18n.t("loginPage.failed"), i18n.t("loginPage.failedMessage"));
+        Alert.alert(
+          i18n.t("loginPage.failed"),
+          i18n.t("loginPage.failedMessage")
+        );
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -145,7 +131,7 @@ export default function Login() {
         if (axiosError.response) {
           console.error("Axios error status:", axiosError.response.status);
           console.error("Axios error data:", axiosError.response.data);
-          
+
           // Map backend error messages to our translation keys
           let errorMessage = axiosError.response.data.message;
           if (errorMessage.includes("Invalid credentials")) {
@@ -155,12 +141,12 @@ export default function Login() {
           } else if (errorMessage.includes("locked")) {
             errorMessage = i18n.t("loginPage.accountLocked");
           }
-          
+
           Alert.alert(
             i18n.t("loginPage.failed"),
             errorMessage || i18n.t("loginPage.failedMessage")
           );
-          
+
           setErrors({
             server: errorMessage,
           });
@@ -208,207 +194,162 @@ export default function Login() {
       {isLoading ? (
         <SplashScreen />
       ) : (
-        <ImageBackground source={background} style={styles.container}>
-          <Return href="/Onboarding" size={36} color="white" />
+        <SafeAreaView className="flex-1 bg-white">
           <StatusBar
             translucent
-            backgroundColor="rgba(000, 000, 000, 0.5)"
-            barStyle="light-content"
+            backgroundColor="transparent"
+            barStyle="dark-content"
           />
-          <View style={styles.row}>
-            <Text
-              style={styles.title}
-              className="mb-10 text-2xl text-white mt-14"
-            >
-              {i18n.t("loginPage.welcomeBack")}
-            </Text>
-            <Image source={LoginImg} className="mt-6 mb-12" />
-            <Formik<MyFormValues>
-              initialValues={{
-                email: "",
-                password: "",
-                server: "",
-              }}
-              validationSchema={LoginSchema}
-              onSubmit={handleLogin}
-            >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                values,
-                touched,
-                errors,
-                isValid,
-              }) => (
-                <View className="flex items-center justify-center w-full gap-4">
-                  <TextInput
-                    style={[
-                      styles.input,
-                      I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
-                    ]}
-                    placeholder={i18n.t("signupPage.email")}
-                    placeholderTextColor={"#515151"}
-                    onChangeText={handleChange("email")}
-                    keyboardType="email-address"
-                    value={values.email}
-                    autoCapitalize="none"
-                  />
-                  {errors.email && touched.email && (
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "red",
-                        textAlign: "center",
-                      }}
-                    >
-                      {errors.email}
-                    </Text>
-                  )}
-                  <TextInput
-                    style={[
-                      styles.input,
-                      I18nManager.isRTL ? styles.inputRTL : styles.inputLTR,
-                    ]}
-                    placeholder={i18n.t("signupPage.password")}
-                    placeholderTextColor={"#515151"}
-                    onChangeText={handleChange("password")}
-                    onBlur={handleBlur("password")}
-                    secureTextEntry
-                    value={values.password}
-                  />
-                  {errors.password && touched.password && (
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "red",
-                        textAlign: "center",
-                      }}
-                    >
-                      {errors.password}
-                    </Text>
-                  )}
-                  {errors.server && (
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "red",
-                        textAlign: "center",
-                      }}
-                    >
-                      {errors.server}
-                    </Text>
-                  )}
-                  <Text className="mt-2 text-sm underline text-baby-blue">
-                    {i18n.t("loginPage.forgotPassword")}
-                  </Text>
-                  <View className="mt-8">
-                    <TextButton
-                      text={i18n.t("login")}
-                      buttonColor={!isValid ? "#C5C5C5" : "#1DCDFE"}
-                      textColor={"white"}
-                      disabled={!isValid || isLoading}
-                      onPress={handleSubmit}
-                    />
-                    <TextButton
-                      text={i18n.t("googleLogin")}
-                      icon={"google"}
-                      buttonColor={"white"}
-                      textColor={"#17222D"}
-                    />
+
+          {/* Gradient background */}
+          <LinearGradient
+            colors={["rgba(29, 205, 254, 0.1)", "rgba(255, 255, 255, 0)"]}
+            className="absolute top-0 w-full h-64"
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+          />
+
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24 }}
+          >
+            {/* Back button repositioned and aligned with content */}
+            <View className="pt-8">
+              <BackButton />
+
+              <Text className="text-2xl font-bold text-ocean-blue mb-4">
+                {i18n.t("loginPage.welcomeBack")}
+              </Text>
+              <Text className="text-lg font-medium text-slate-grey mb-8">
+                {i18n.t("loginPage.continueWithEmail")}
+              </Text>
+
+              <Formik<MyFormValues>
+                initialValues={{
+                  email: "",
+                  password: "",
+                  server: "",
+                }}
+                validationSchema={LoginSchema}
+                onSubmit={handleLogin}
+              >
+                {({
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  values,
+                  touched,
+                  errors,
+                  isValid,
+                }) => (
+                  <View className="space-y-4">
+                    <View>
+                      <TextInput
+                        style={styles.input}
+                        placeholder={i18n.t("signupPage.email")}
+                        placeholderTextColor={"#888888"}
+                        onChangeText={handleChange("email")}
+                        keyboardType="email-address"
+                        value={values.email}
+                        autoCapitalize="none"
+                      />
+                      {errors.email && touched.email && (
+                        <Text className="text-red-500 text-xs mt-1 ml-1">
+                          {errors.email}
+                        </Text>
+                      )}
+                    </View>
+
+                    <View>
+                      <View className="flex-row items-center">
+                        <TextInput
+                          style={[styles.input, { flex: 1 }]}
+                          placeholder={i18n.t("signupPage.password")}
+                          placeholderTextColor={"#888888"}
+                          onChangeText={handleChange("password")}
+                          onBlur={handleBlur("password")}
+                          secureTextEntry={!showPassword}
+                          value={values.password}
+                        />
+                        <TouchableOpacity
+                          style={styles.eyeIcon}
+                          onPress={() => setShowPassword(!showPassword)}
+                        >
+                          <MaterialIcons
+                            name={
+                              showPassword ? "visibility" : "visibility-off"
+                            }
+                            size={24}
+                            color="#888888"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      {errors.password && touched.password && (
+                        <Text className="text-red-500 text-xs mt-1 ml-1">
+                          {errors.password}
+                        </Text>
+                      )}
+                    </View>
+
+                    {errors.server && (
+                      <Text className="text-red-500 text-xs ml-1">
+                        {errors.server}
+                      </Text>
+                    )}
+
+                    <View className="flex-row justify-between pt-2">
+                      <TouchableOpacity>
+                        <Text className="text-sm text-baby-blue">
+                          {i18n.t("loginPage.forgotPassword")}
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity onPress={() => router.push("/SignUp")}>
+                        <Text className="text-sm text-baby-blue">
+                          {i18n.t("loginPage.createAccount")}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    <View className="pt-8">
+                      <TouchableOpacity
+                        className={`${
+                          !isValid ? "bg-gray-300" : "bg-baby-blue"
+                        } py-4 rounded-xl items-center my-2 shadow-sm`}
+                        onPress={() => handleSubmit()}
+                        disabled={!isValid || isLoading}
+                      >
+                        <Text className="text-white font-medium">
+                          {i18n.t("login")}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-              )}
-            </Formik>
-          </View>
-        </ImageBackground>
+                )}
+              </Formik>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
       )}
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#17222D",
-    color: "#FFF",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  row: {
-    width: "80%",
-    display: "flex",
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  returnButton: {
-    position: "absolute",
-    top: 60,
-    left: 18,
-    transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
-  },
-  title: {
-    fontFamily: "InterBold",
-    fontSize: 28,
-    color: "#FFF",
-    marginBottom: 16,
-  },
-  baseText: {
-    fontSize: 16,
-    color: "#FFF",
-    marginBottom: 40,
-  },
   input: {
-    backgroundColor: "#DFDFDF",
-    color: "#515151",
-    fontSize: 16,
-    fontFamily: "InterBold",
-    borderRadius: 42,
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 12,
     height: 56,
-    marginBottom: 5,
-    paddingVertical: 4,
-    paddingHorizontal: 24,
-    width: "100%",
-  },
-  inputRTL: {
-    textAlign: "right", // Align text to the right for RTL languages
-  },
-  inputLTR: {
-    textAlign: "left", // Align text to the left for LTR languages
-  },
-  button: {
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  signUpButton: {
-    backgroundColor: "#1DCDFE",
-    marginTop: 10,
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  signUpButtonText: {
+    paddingHorizontal: 16,
     fontSize: 16,
-    color: "#FFF",
-    textAlign: "center",
+    color: "#333",
   },
-  googleButton: {
-    backgroundColor: "#FFF",
-    color: "#17222D",
-    marginTop: 10,
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    flexDirection: "row",
+  eyeIcon: {
+    position: "absolute",
+    right: 16,
+    height: 56,
     justifyContent: "center",
-    alignItems: "center",
-  },
-  googleButtonText: {
-    fontSize: 16,
-    color: "#17222D",
-    textAlign: "center",
   },
 });
