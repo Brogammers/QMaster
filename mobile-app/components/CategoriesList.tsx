@@ -1,8 +1,9 @@
-import React, { useRef, useCallback } from "react";
+import React from "react";
 import { Text, View } from "react-native";
 import CategoryPop from "@/shared/components/CategoryPop";
 import { Categories } from "@/constants";
 import i18n from "@/i18n";
+import { useLinkTo } from "@react-navigation/native";
 import { router } from "expo-router";
 
 interface CategoriesListProps {
@@ -10,27 +11,16 @@ interface CategoriesListProps {
 }
 
 export default function CategoriesList({ isDarkMode }: CategoriesListProps) {
-  const isNavigatingRef = useRef(false);
+  const linkTo = useLinkTo();
 
-  const handleCategoryPress = useCallback((category: string) => {
-    if (isNavigatingRef.current) return;
-
-    isNavigatingRef.current = true;
-
+  const handleCategoryPress = (category: string) => {
     if (category === i18n.t("others")) {
-      router.push("/(app)/(tabs)/AllCategories");
+      linkTo("/AllCategories");
     } else {
-      router.push({
-        pathname: "/(app)/(tabs)/Category",
-        params: { name: category },
-      });
+      linkTo(`/Category`);
+      router.setParams({ name: category });
     }
-
-    // Reset after navigation has likely completed
-    setTimeout(() => {
-      isNavigatingRef.current = false;
-    }, 500);
-  }, []);
+  };
 
   return (
     <View className="flex flex-col">

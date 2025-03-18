@@ -23,6 +23,7 @@ interface CategoryProps {
   title: string;
   image: any;
   name: string;
+  icon?: string;
 }
 
 export default function AllCategories() {
@@ -74,7 +75,7 @@ export default function AllCategories() {
               <Category
                 name={category.name}
                 title={category.title}
-                image={category.image}
+                icon={category.icon || "question"}
                 onPress={() => handleCategoryPress(category.name)}
                 isDarkMode={false}
               />
