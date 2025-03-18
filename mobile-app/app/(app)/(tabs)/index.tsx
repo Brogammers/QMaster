@@ -31,7 +31,8 @@ import axios from "axios";
 import configConverter from "@/api/configConverter";
 import RefreshableWrapper from "@/components/RefreshableWrapper";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { Link } from "expo-router";
+import { useLinkTo } from "@react-navigation/native";
 
 export default function Index() {
   const { isDarkMode } = useTheme();
@@ -43,6 +44,7 @@ export default function Index() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const isNavigatingRef = useRef(false);
+  const linkTo = useLinkTo();
 
   // Get current queues from Redux
   const currentQueues = useSelector(
@@ -148,26 +150,23 @@ export default function Index() {
 
   const handleNotificationsPress = useCallback(() => {
     debounceNavigation(() => {
-      router.push("/(app)/(tabs)/Notifications");
+      linkTo("/Notifications");
     });
-  }, [debounceNavigation]);
+  }, [debounceNavigation, linkTo]);
 
   const handleSearchPress = useCallback(() => {
     debounceNavigation(() => {
-      router.push("/(app)/(tabs)/Search");
+      linkTo("/Search");
     });
-  }, [debounceNavigation]);
+  }, [debounceNavigation, linkTo]);
 
   const handleCategoryPress = useCallback(
     (category: (typeof categories)[0]) => {
       debounceNavigation(() => {
-        router.push({
-          pathname: "/(app)/(tabs)/Category",
-          params: { name: category.name },
-        });
+        linkTo(`/Category?name=${category.name}`);
       });
     },
-    [debounceNavigation]
+    [debounceNavigation, linkTo]
   );
 
   // Home screen should refresh more frequently if user is in a queue
@@ -238,16 +237,18 @@ export default function Index() {
       ];
 
       debounceNavigation(() => {
-        router.push({
-          pathname: "/(app)/(tabs)/Partner",
-          params: {
-            brandName: serviceNames[index],
-            serviceType: ["banking", "health", "government", "retail"][index],
-          },
-        });
+        const brandName = serviceNames[index];
+        const serviceType = ["banking", "health", "government", "retail"][
+          index
+        ];
+        linkTo(
+          `/(app)/(tabs)/Partner?brandName=${encodeURIComponent(
+            brandName
+          )}&serviceType=${serviceType}`
+        );
       });
     },
-    [debounceNavigation]
+    [debounceNavigation, linkTo]
   );
 
   // Configure the RefreshableWrapper to be more touch-friendly
