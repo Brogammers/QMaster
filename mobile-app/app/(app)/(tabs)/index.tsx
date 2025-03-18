@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  FlatList,
 } from "react-native";
 import ScanQr from "@/components/ScanQR";
 import SearchBar from "@/components/SearchBar";
@@ -136,6 +137,10 @@ export default function Index() {
     router.push("/Notifications");
   };
 
+  const handleSearchPress = () => {
+    router.push("/Search");
+  };
+
   // Home screen should refresh more frequently if user is in a queue
   const autoRefreshInterval = currentQueues.length > 0 ? 60000 : 180000; // 1 minute if in queue, 3 minutes otherwise
 
@@ -146,7 +151,24 @@ export default function Index() {
     { id: 3, name: "Government", icon: "landmark" },
     { id: 4, name: "Restaurants", icon: "utensils" },
     { id: 5, name: "Retail", icon: "shopping-bag" },
+    { id: 6, name: "Services", icon: "concierge-bell" },
   ];
+
+  // Render a category item
+  const renderCategoryItem = ({ item }: { item: (typeof categories)[0] }) => (
+    <TouchableOpacity
+      style={styles.categoryItem}
+      onPress={() => {
+        router.push("/Category");
+        router.setParams({ name: item.name });
+      }}
+    >
+      <View style={styles.categoryIconContainer}>
+        <FontAwesome5 name={item.icon} size={20} color="#1DCDFE" />
+      </View>
+      <Text style={styles.categoryName}>{item.name}</Text>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
@@ -192,7 +214,10 @@ export default function Index() {
           </View>
 
           <View style={styles.searchContainer}>
-            <TouchableOpacity style={styles.searchBar}>
+            <TouchableOpacity
+              style={styles.searchBar}
+              onPress={handleSearchPress}
+            >
               <FontAwesome5 name="search" size={16} color="#777" />
               <Text style={styles.searchPlaceholder}>
                 Search for services & more
@@ -232,23 +257,16 @@ export default function Index() {
             {/* Categories */}
             <View style={styles.categoriesSection}>
               <Text style={styles.sectionTitle}>Categories</Text>
-              <View style={styles.categoriesGrid}>
-                {categories.map((category) => (
-                  <TouchableOpacity
-                    key={category.id}
-                    style={styles.categoryItem}
-                  >
-                    <View style={styles.categoryIconContainer}>
-                      <FontAwesome5
-                        name={category.icon}
-                        size={20}
-                        color="#1DCDFE"
-                      />
-                    </View>
-                    <Text style={styles.categoryName}>{category.name}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
+              <FlatList
+                data={categories}
+                renderItem={renderCategoryItem}
+                keyExtractor={(item) => item.id.toString()}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.categoryListContainer}
+                snapToInterval={windowWidth / 4 + 10} // Snap to 4 items
+                decelerationRate="fast"
+              />
             </View>
 
             {/* Feature Banner */}
@@ -413,6 +431,10 @@ const styles = StyleSheet.create({
   categoriesSection: {
     marginVertical: 16,
   },
+  categoryListContainer: {
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
@@ -424,21 +446,15 @@ const styles = StyleSheet.create({
     color: "#666",
     marginBottom: 16,
   },
-  categoriesGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginTop: 8,
-  },
   categoryItem: {
-    width: "18%",
+    width: 80,
     alignItems: "center",
-    marginBottom: 16,
+    marginHorizontal: 10,
   },
   categoryIconContainer: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 32,
     backgroundColor: "rgba(29, 205, 254, 0.1)", // baby-blue with opacity
     justifyContent: "center",
     alignItems: "center",
