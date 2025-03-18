@@ -12,9 +12,8 @@ import { Skeleton } from "moti/skeleton";
 import HistoryComponent from "@/shared/components/HistoryComponent";
 import { HistoryComponentProps } from "@/types";
 import CarrefourLogo from "@/assets/images/CarrefourLogo.png";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Config from "react-native-config";
 import i18n from "@/i18n";
 import { useTheme } from "@/ctx/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
@@ -178,6 +177,18 @@ export default function History() {
           end={{ x: 0, y: 1 }}
         />
       )}
+
+      <View style={styles.headerContainer}>
+        <Text
+          style={[
+            styles.pageTitle,
+            isDarkMode ? styles.textDark : styles.textLight,
+          ]}
+        >
+          {i18n.t("past_queues") || "Past Queues"}
+        </Text>
+      </View>
+
       {initialLoading ? (
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator
@@ -212,18 +223,21 @@ export default function History() {
               isDarkMode ? "text-baby-blue" : "text-coal-black"
             }`}
           >
-            {i18n.t("noData")}
+            {i18n.t("noData") || "No Data Found"}
           </Text>
           <Text
             className={`text-md ${
               isDarkMode ? "text-baby-blue" : "text-coal-black"
             }`}
           >
-            {i18n.t("noDisplay")}
+            {i18n.t("noDisplay") || "There is no data to display at the moment"}
           </Text>
         </View>
       ) : (
-        <View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
           {historyList.map((item, index) => (
             <HistoryComponent
               key={index}
@@ -237,15 +251,30 @@ export default function History() {
               isDarkMode={isDarkMode}
             />
           ))}
-        </View>
+        </ScrollView>
       )}
     </RefreshableWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#D9D9D9",
+  headerContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
+    marginBottom: 8,
+  },
+  pageTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+  },
+  textLight: {
+    color: "#000000",
+  },
+  textDark: {
+    color: "#FFFFFF",
+  },
+  scrollContent: {
+    paddingBottom: 24,
   },
 });
