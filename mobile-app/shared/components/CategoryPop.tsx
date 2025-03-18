@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Ellipse from "assets/images/Ellipse.svg";
 import { Dimensions } from "react-native";
 import { CategoryProps } from "@/types";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 const { width } = Dimensions.get("window");
 const wide = (width * 27) / 100;
@@ -25,20 +25,20 @@ export default function CategoryPop(props: ExtendedCategoryProps) {
       onPress={onPress}
     >
       <View>
-        <View className="absolute self-center">
-          <Ellipse />
-        </View>
-        <View className="w-12 h-12 flex items-center justify-center">
+        <LinearGradient
+          colors={["rgba(29, 205, 254, 0.15)", "rgba(23, 34, 45, 0.08)"]}
+          className="w-12 h-12 rounded-full flex items-center justify-center"
+        >
           <FontAwesome5
             name={icon}
-            size={24}
-            color={isDarkMode ? "#1DCDFE" : "#1DCDFE"}
+            size={22}
+            color="#1DCDFE"
             style={{ marginBottom: spacing }}
           />
-        </View>
+        </LinearGradient>
       </View>
       <Text
-        className={`px-2 text-center ${
+        className={`px-2 text-center mt-2 ${
           isDarkMode ? "text-white" : "text-coal-black"
         }`}
       >
