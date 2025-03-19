@@ -1,0 +1,12 @@
+[submodule "mobile-app"]
+	path = mobile-app
+	url = https://github.com/tawabiry/tawabiry-mobile-app.git
+[submodule "server"]
+	path = server
+	url = https://github.com/tawabiry/tawabiry-server.git
+[submodule "project-sia"]
+	path = project-sia
+	url = https://github.com/tawabiry/tawabiry-project-sia.git
+[submodule "web"]
+	path = web
+	url = https://github.com/tawabiry/tawabiry-web-portals.git
