@@ -1,6 +1,6 @@
 # QMaster - Enterprise Queue Management System
 
-![QMaster Logo](/web/public/FooterLogo.svg)
+![QMaster Logo](https://media.licdn.com/dms/image/v2/D4D0BAQEq5Bhq-q9kyA/company-logo_100_100/company-logo_100_100/0/1714815402703?e=1747872000&v=beta&t=ilxX11w3y5LXWQGCeZ09wQZdZ5C1cT2tYO3eFJFD1pM)
 
 **Modern Queue Management for Modern Businesses**
 
